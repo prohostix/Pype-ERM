@@ -1,0 +1,96 @@
+import React, { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Building2 } from 'lucide-react';
+
+
+
+export function Login() {
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    const success = await login(email, password);
+    if (!success) {
+      setError('Invalid email or password');
+    }
+
+    setIsLoading(false);
+  };
+
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <div className="w-12 h-12 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg">
+            <Building2 className="w-7 h-7 text-white" />
+          </div>
+          <span className="text-3xl font-bold text-[#0F172A] tracking-tight">PYPE ERM</span>
+        </div>
+
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold text-[#0F172A] mb-2">Sign in to your account</h2>
+            <p className="text-sm text-slate-500">Enter your credentials to access the system</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1.5">
+                Email address
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 border-slate-300 focus:border-[#0F172A] focus:ring-[#0F172A]"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-11 border-slate-300 focus:border-[#0F172A] focus:ring-[#0F172A]"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full h-11 bg-[#0F172A] hover:bg-[#1E293B] text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign in'}
+            </Button>
+          </form>
+
+
+        </div>
+      </div>
+  );
+}
