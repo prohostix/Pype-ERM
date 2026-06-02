@@ -81,6 +81,7 @@ echo "🛠️  Building Backend Server..."
 npm install
 npx prisma generate
 npm run build
+cp -R src/generated dist/
 
 # 9. Start Server via PM2
 echo "🚀 Starting backend server with PM2..."
