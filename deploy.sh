@@ -132,6 +132,7 @@ if [ -f "/etc/nginx/sites-enabled/default" ]; then
     sudo rm /etc/nginx/sites-enabled/default || true
 fi
 sudo ln -sf /etc/nginx/sites-available/pype-erm /etc/nginx/sites-enabled/pype-erm
+sudo chmod -R 755 /var/www/pype-erm
 sudo nginx -t
 sudo systemctl restart nginx
 
