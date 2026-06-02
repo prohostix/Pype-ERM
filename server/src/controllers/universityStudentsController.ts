@@ -65,7 +65,7 @@ export const getUniversityStudents = asyncHandler(async (req: AuthRequest, res: 
     recentEnrollments: enrollments.slice(0, 5).length
   };
 
-  enrollments.forEach(e => {
+  enrollments.forEach((e: any) => {
     const progName = e.program.name;
     const centerName = e.studyCenter.name;
     stats.byProgram[progName] = (stats.byProgram[progName] || 0) + 1;

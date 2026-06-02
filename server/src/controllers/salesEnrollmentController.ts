@@ -234,11 +234,11 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   // Build pipeline summary
   const summary = {
     total: enrollments.length,
-    document_review: enrollments.filter(e => e.status === 'document_review').length,
-    finance_review: enrollments.filter(e => e.status === 'finance_review').length,
-    enrolled: enrollments.filter(e => e.status === 'enrolled').length,
-    ops_rejected: enrollments.filter(e => e.status === 'ops_rejected').length,
-    rejected: enrollments.filter(e => e.status === 'rejected').length,
+    document_review: enrollments.filter((e: any) => e.status === 'document_review').length,
+    finance_review: enrollments.filter((e: any) => e.status === 'finance_review').length,
+    enrolled: enrollments.filter((e: any) => e.status === 'enrolled').length,
+    ops_rejected: enrollments.filter((e: any) => e.status === 'ops_rejected').length,
+    rejected: enrollments.filter((e: any) => e.status === 'rejected').length,
   };
 
   res.status(200).json({ success: true, count: enrollments.length, summary, data: enrollments });
