@@ -7,11 +7,15 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
 import { createServer } from 'http';
+import dns from 'dns';
 import { connectDatabase, prisma } from './config/database.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { startEscalationCron } from './services/escalationService.js';
 import { initializeSocket } from './config/socket.js';
 import { startAllCronJobs } from './services/cronService.js';
+
+// Force DNS resolution to prefer IPv4 to avoid Supabase IPv6 ENETUNREACH errors on IPv4-only AWS instances
+dns.setDefaultResultOrder('ipv4first');
 
 // Load env vars
 dotenv.config();
@@ -48,6 +52,9 @@ import publicRoutes from './routes/publicRoutes.js';
 import enrollmentRoutes from './routes/enrollmentRoutes.js';
 
 const app: Application = express();
+
+// Trust reverse proxy (Nginx) headers for rate limiting
+app.set('trust proxy', 1);
 
 // Connect to database
 connectDatabase();
