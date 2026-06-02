@@ -3,6 +3,9 @@
 # Exit on any error
 set -e
 
+# Increase Node memory limit to prevent Vite compiler OOM on 1GB RAM instances
+export NODE_OPTIONS="--max-old-space-size=2048"
+
 echo "=================================================="
 echo "🚀 Starting Pype-ERM Production Deployment Script"
 echo "=================================================="
