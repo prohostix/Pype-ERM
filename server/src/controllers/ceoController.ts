@@ -36,8 +36,16 @@ export const getDepartmentManagers = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const assignTask = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { assigneeId, ...rest } = req.body;
-  const task = await prisma.task.create({ data: { ...rest, assigneeId, organizationId: req.user.organizationId, creatorId: req.user.id } });
+  const { assigneeId, assignedTo, deadline, ...rest } = req.body;
+  const task = await prisma.task.create({
+    data: {
+      ...rest,
+      assignedTo: assignedTo || assigneeId,
+      createdBy: req.user.id,
+      deadline: deadline ? new Date(deadline) : new Date(),
+      organizationId: req.user.organizationId!
+    }
+  });
   res.status(201).json({ success: true, data: task });
 });
 
