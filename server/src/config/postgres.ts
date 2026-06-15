@@ -8,8 +8,15 @@ dotenv.config();
 import { parse as parseConnectionString } from 'pg-connection-string';
 
 const pgConfig = parseConnectionString(process.env.DATABASE_URL || '');
-pgConfig.ssl = { rejectUnauthorized: false };
-const pool = new pg.Pool(pgConfig);
+const poolConfig: pg.PoolConfig = {
+  host: pgConfig.host || undefined,
+  port: pgConfig.port ? parseInt(pgConfig.port, 10) : undefined,
+  database: pgConfig.database || undefined,
+  user: pgConfig.user || undefined,
+  password: pgConfig.password || undefined,
+  ssl: { rejectUnauthorized: false }
+};
+const pool = new pg.Pool(poolConfig);
 const adapter = new PrismaPg(pool as any);
 const prisma = new PrismaClient({ adapter: adapter as any });
 
