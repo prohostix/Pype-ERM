@@ -5,12 +5,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const pool = new pg.Pool({ 
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+import { parse as parseConnectionString } from 'pg-connection-string';
+
+const pgConfig = parseConnectionString(process.env.DATABASE_URL || '');
+pgConfig.ssl = { rejectUnauthorized: false };
+const pool = new pg.Pool(pgConfig);
 
 const adapter = new PrismaPg(pool as any);
 
