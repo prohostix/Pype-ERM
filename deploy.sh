@@ -106,7 +106,7 @@ echo "🌐 Configuring Nginx Reverse Proxy..."
 sudo tee /etc/nginx/sites-available/pype-erm > /dev/null <<'EOT'
 server {
     listen 80;
-    server_name 13.232.188.79;
+    server_name pypeerm.com www.pypeerm.com 13.232.188.79;
 
     location / {
         root /var/www/pype-erm/client/dist;
