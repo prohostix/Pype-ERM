@@ -82,6 +82,7 @@ fi
 # 8. Build Server
 echo "🛠️  Building Backend Server..."
 npm install
+npx prisma db push
 npx prisma generate
 npm run build
 cp -R src/generated dist/
