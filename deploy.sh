@@ -147,7 +147,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 
 # Automatically re-apply Certbot SSL configuration if certificate exists
-if [ -d "/etc/letsencrypt/live/pypeerm.com" ]; then
+if sudo test -d "/etc/letsencrypt/live/pypeerm.com"; then
     echo "🔒 SSL Certificates found. Re-applying Certbot SSL configuration..."
     sudo certbot --nginx -d pypeerm.com -d www.pypeerm.com --non-interactive --agree-tos -m dilshadbvoc@gmail.com --redirect
     sudo systemctl restart nginx
