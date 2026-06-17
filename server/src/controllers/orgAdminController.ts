@@ -82,17 +82,35 @@ export const getDesignations = asyncHandler(async (req: AuthRequest, res: Respon
     branchId: d.branch ? d.branch.id : null,
     parentDesignationId: d.parentDesignation ? d.parentDesignation.id : null,
     departmentId: d.department ? d.department.id : null,
-    subDepartmentId: d.subDepartment ? d.subDepartment.id : null
+    subDepartmentId: d.subDepartment ? d.subDepartment.id : null,
+    allowedDeptIds: d.allowedDeptIds || [],
+    allowedBranchIds: d.allowedBranchIds || []
   }));
 
   res.json({ success: true, count: mapped.length, data: mapped });
 });
 export const createDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const designation = await prisma.designation.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const { allowedDeptIds, allowedBranchIds, ...rest } = req.body;
+  const designation = await prisma.designation.create({
+    data: {
+      ...rest,
+      organizationId: req.user.organizationId,
+      allowedDeptIds: allowedDeptIds || [],
+      allowedBranchIds: allowedBranchIds || []
+    }
+  });
   res.status(201).json({ success: true, data: designation });
 });
 export const updateDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const designation = await prisma.designation.update({ where: { id: req.params.id }, data: req.body });
+  const { allowedDeptIds, allowedBranchIds, ...rest } = req.body;
+  const designation = await prisma.designation.update({
+    where: { id: req.params.id },
+    data: {
+      ...rest,
+      allowedDeptIds: allowedDeptIds !== undefined ? allowedDeptIds : undefined,
+      allowedBranchIds: allowedBranchIds !== undefined ? allowedBranchIds : undefined
+    }
+  });
   res.json({ success: true, data: designation });
 });
 export const deleteDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {

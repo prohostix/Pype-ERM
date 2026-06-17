@@ -29,6 +29,8 @@ interface DesignationNode {
   parentDesignationId?: { id: string; title: string };
   filledBy: OrgUser[];
   status: string;
+  allowedDeptIds?: string[];
+  allowedBranchIds?: string[];
 }
 
 const ROLE_COLORS: Record<string, string> = {
@@ -374,6 +376,8 @@ export function OrgHierarchyPanel() {
   const [designForm, setDesignForm] = useState({
     title: '', departmentId: '', subDepartmentId: '', branchId: '',
     level: '1', maxHeadcount: '1', parentDesignationId: '',
+    allowedDeptIds: [] as string[],
+    allowedBranchIds: [] as string[],
   });
 
   // ── Create sub-department dialog ──
@@ -428,6 +432,8 @@ export function OrgHierarchyPanel() {
       level: parent ? String((parent.level || 1) + 1) : '1',
       maxHeadcount: '1',
       parentDesignationId: parent?.id || '',
+      allowedDeptIds: parent?.departmentId?.id ? [parent.departmentId.id] : [],
+      allowedBranchIds: parent?.branchId?.id ? [parent.branchId.id] : [],
     });
     setDesignDialog(true);
   };
@@ -443,6 +449,8 @@ export function OrgHierarchyPanel() {
       level: '2',
       maxHeadcount: '1',
       parentDesignationId: '',
+      allowedDeptIds: [],
+      allowedBranchIds: [branch.id],
     });
     setDesignDialog(true);
   };
@@ -457,6 +465,8 @@ export function OrgHierarchyPanel() {
       level: String(node.level),
       maxHeadcount: String(node.maxHeadcount),
       parentDesignationId: node.parentDesignationId?.id || '',
+      allowedDeptIds: node.allowedDeptIds || [],
+      allowedBranchIds: node.allowedBranchIds || [],
     });
     setDesignDialog(true);
   };
@@ -473,6 +483,8 @@ export function OrgHierarchyPanel() {
         level: Number(designForm.level),
         maxHeadcount: Number(designForm.maxHeadcount),
         parentDesignationId: designForm.parentDesignationId || null,
+        allowedDeptIds: designForm.allowedDeptIds,
+        allowedBranchIds: designForm.allowedBranchIds,
       };
       if (editingNode) {
         await api.patch(`/org/designations/${editingNode.id}`, payload);
@@ -737,6 +749,58 @@ export function OrgHierarchyPanel() {
                 )}
               </div>
             )}
+
+            {/* Multi-branch access checkboxes */}
+            <div className="space-y-1">
+              <Label>Accessible Branches (Multiple)</Label>
+              <div className="max-h-24 overflow-y-auto border rounded p-2 grid grid-cols-1 gap-1">
+                {allBranches.map(b => {
+                  const checked = designForm.allowedBranchIds.includes(b.id);
+                  return (
+                    <label key={b.id} className="flex items-center space-x-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={e => {
+                          const updated = e.target.checked
+                            ? [...designForm.allowedBranchIds, b.id]
+                            : designForm.allowedBranchIds.filter(id => id !== b.id);
+                          setDesignForm(p => ({ ...p, allowedBranchIds: updated }));
+                        }}
+                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <span>{b.name} [{b.code}]</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Multi-department access checkboxes */}
+            <div className="space-y-1">
+              <Label>Accessible Departments (Multiple)</Label>
+              <div className="max-h-24 overflow-y-auto border rounded p-2 grid grid-cols-1 gap-1">
+                {allDepts.map(d => {
+                  const checked = designForm.allowedDeptIds.includes(d.id);
+                  return (
+                    <label key={d.id} className="flex items-center space-x-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={e => {
+                          const updated = e.target.checked
+                            ? [...designForm.allowedDeptIds, d.id]
+                            : designForm.allowedDeptIds.filter(id => id !== d.id);
+                          setDesignForm(p => ({ ...p, allowedDeptIds: updated }));
+                        }}
+                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <span>{d.name}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="space-y-1">
               <Label>Reports To (parent position)</Label>
