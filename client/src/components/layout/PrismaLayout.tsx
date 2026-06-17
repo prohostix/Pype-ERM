@@ -229,7 +229,7 @@ export function PrismaLayout({
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 space-y-1 pb-4">
+        <nav className="flex-1 overflow-y-auto premium-scrollbar px-2 space-y-1 pb-4">
           <div className="px-3 mb-2">
             <span className="text-[10px] font-bold text-sidebar-foreground/40 uppercase tracking-widest">Main Navigation</span>
           </div>
