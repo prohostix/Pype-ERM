@@ -4,7 +4,10 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 export const getOrganizations = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const organizations = await prisma.organization.findMany();
+  const whereClause = req.user.role === 'superadmin' ? {} : { id: req.user.organizationId };
+  const organizations = await prisma.organization.findMany({
+    where: whereClause
+  });
   res.status(200).json({ success: true, count: organizations.length, data: organizations });
 });
 
