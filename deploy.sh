@@ -146,6 +146,13 @@ sudo chmod -R 755 /var/www/pype-erm
 sudo nginx -t
 sudo systemctl restart nginx
 
+# Automatically re-apply Certbot SSL configuration if certificate exists
+if [ -d "/etc/letsencrypt/live/pypeerm.com" ]; then
+    echo "🔒 SSL Certificates found. Re-applying Certbot SSL configuration..."
+    sudo certbot --nginx -d pypeerm.com -d www.pypeerm.com --non-interactive --agree-tos -m dilshadbvoc@gmail.com --redirect
+    sudo systemctl restart nginx
+fi
+
 # 12. Setup PM2 Startup script
 echo "🔄 Configuring PM2 to launch on system boot..."
 sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu || true
