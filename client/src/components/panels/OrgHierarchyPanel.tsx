@@ -233,7 +233,7 @@ function BranchSection({
   if (branch.operationsDeptId) controlledDepts.push({ ...branch.operationsDeptId, type: 'operations' });
   if (branch.additionalDeptIds) {
     branch.additionalDeptIds
-      .filter(d => BRANCH_CONTROLLED_TYPES.has(d.type))
+      .filter(d => d && BRANCH_CONTROLLED_TYPES.has(d.type))
       .forEach(d => {
         if (!controlledDepts.find(x => x.id === d.id)) controlledDepts.push(d);
       });

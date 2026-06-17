@@ -154,7 +154,7 @@ export function BranchesPanel() {
   const openAssignManager = (b: Branch) => {
     setManagerTarget(b);
     setManagerUserId(b.branchManagerId?.id || '');
-    setSelectedDeptIds((b.additionalDeptIds || []).map(d => d.id));
+    setSelectedDeptIds((b.additionalDeptIds || []).filter(Boolean).map(d => d.id));
     setManagerDialog(true);
   };
 
@@ -179,7 +179,7 @@ export function BranchesPanel() {
   // ── Manage Departments (no manager change) ──
   const openManageDepts = (b: Branch) => {
     setDeptTarget(b);
-    setDeptSelection((b.additionalDeptIds || []).map(d => d.id));
+    setDeptSelection((b.additionalDeptIds || []).filter(Boolean).map(d => d.id));
     setDeptDialog(true);
   };
 
@@ -325,9 +325,9 @@ export function BranchesPanel() {
                 </div>
 
                 {/* Additional depts */}
-                {(b.additionalDeptIds || []).length > 0 && (
+                {(b.additionalDeptIds || []).filter(Boolean).length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {(b.additionalDeptIds || []).map(d => (
+                    {(b.additionalDeptIds || []).filter(Boolean).map(d => (
                       <span key={d.id} className="text-[10px] px-2 py-0.5 rounded-full border font-medium"
                         style={{
                           borderColor: (DEPT_TYPE_COLORS[d.type] || '#6366f1') + '55',
