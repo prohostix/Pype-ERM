@@ -15,10 +15,35 @@ export const comparePassword = async (password: string, hashed: string): Promise
   return await bcrypt.compare(password, hashed);
 };
 
-/**
- * Generate a unique userId in the format PYPEERM0001
- */
 export const generateUserId = async (): Promise<string> => {
-  const count = await prisma.user.count();
-  return `PYPEERM${String(count + 1).padStart(4, '0')}`;
+  const lastUser = await prisma.user.findFirst({
+    where: {
+      userId: {
+        startsWith: 'PYPEERM',
+      },
+    },
+    orderBy: {
+      userId: 'desc',
+    },
+  });
+
+  let nextNum = 1;
+  if (lastUser && lastUser.userId) {
+    const numPart = lastUser.userId.replace('PYPEERM', '');
+    const num = parseInt(numPart, 10);
+    if (!isNaN(num)) {
+      nextNum = num + 1;
+    }
+  }
+
+  // Fallback / safety loop to prevent collisions
+  let userId = `PYPEERM${String(nextNum).padStart(4, '0')}`;
+  let exists = await prisma.user.findUnique({ where: { userId } });
+  while (exists) {
+    nextNum++;
+    userId = `PYPEERM${String(nextNum).padStart(4, '0')}`;
+    exists = await prisma.user.findUnique({ where: { userId } });
+  }
+
+  return userId;
 };
