@@ -527,7 +527,9 @@ exports.Prisma.DesignationScalarFieldEnum = {
   maxHeadcount: 'maxHeadcount',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  allowedDeptIds: 'allowedDeptIds',
+  allowedBranchIds: 'allowedBranchIds'
 };
 
 exports.Prisma.VacancyScalarFieldEnum = {

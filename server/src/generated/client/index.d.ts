@@ -41514,6 +41514,8 @@ export namespace Prisma {
     status: number
     createdAt: number
     updatedAt: number
+    allowedDeptIds: number
+    allowedBranchIds: number
     _all: number
   }
 
@@ -41571,6 +41573,8 @@ export namespace Prisma {
     status?: true
     createdAt?: true
     updatedAt?: true
+    allowedDeptIds?: true
+    allowedBranchIds?: true
     _all?: true
   }
 
@@ -41673,6 +41677,8 @@ export namespace Prisma {
     status: string
     createdAt: Date
     updatedAt: Date
+    allowedDeptIds: JsonValue | null
+    allowedBranchIds: JsonValue | null
     _count: DesignationCountAggregateOutputType | null
     _avg: DesignationAvgAggregateOutputType | null
     _sum: DesignationSumAggregateOutputType | null
@@ -41707,6 +41713,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowedDeptIds?: boolean
+    allowedBranchIds?: boolean
     branch?: boolean | Designation$branchArgs<ExtArgs>
     department?: boolean | Designation$departmentArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -41730,6 +41738,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowedDeptIds?: boolean
+    allowedBranchIds?: boolean
     branch?: boolean | Designation$branchArgs<ExtArgs>
     department?: boolean | Designation$departmentArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -41750,6 +41760,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowedDeptIds?: boolean
+    allowedBranchIds?: boolean
     branch?: boolean | Designation$branchArgs<ExtArgs>
     department?: boolean | Designation$departmentArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -41770,9 +41782,11 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    allowedDeptIds?: boolean
+    allowedBranchIds?: boolean
   }
 
-  export type DesignationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "departmentId" | "subDepartmentId" | "branchId" | "title" | "level" | "parentDesignationId" | "maxHeadcount" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["designation"]>
+  export type DesignationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "departmentId" | "subDepartmentId" | "branchId" | "title" | "level" | "parentDesignationId" | "maxHeadcount" | "status" | "createdAt" | "updatedAt" | "allowedDeptIds" | "allowedBranchIds", ExtArgs["result"]["designation"]>
   export type DesignationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | Designation$branchArgs<ExtArgs>
     department?: boolean | Designation$departmentArgs<ExtArgs>
@@ -41822,6 +41836,8 @@ export namespace Prisma {
       status: string
       createdAt: Date
       updatedAt: Date
+      allowedDeptIds: Prisma.JsonValue | null
+      allowedBranchIds: Prisma.JsonValue | null
     }, ExtArgs["result"]["designation"]>
     composites: {}
   }
@@ -42264,6 +42280,8 @@ export namespace Prisma {
     readonly status: FieldRef<"Designation", 'String'>
     readonly createdAt: FieldRef<"Designation", 'DateTime'>
     readonly updatedAt: FieldRef<"Designation", 'DateTime'>
+    readonly allowedDeptIds: FieldRef<"Designation", 'Json'>
+    readonly allowedBranchIds: FieldRef<"Designation", 'Json'>
   }
     
 
@@ -80771,7 +80789,9 @@ export namespace Prisma {
     maxHeadcount: 'maxHeadcount',
     status: 'status',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    allowedDeptIds: 'allowedDeptIds',
+    allowedBranchIds: 'allowedBranchIds'
   };
 
   export type DesignationScalarFieldEnum = (typeof DesignationScalarFieldEnum)[keyof typeof DesignationScalarFieldEnum]
@@ -84827,6 +84847,8 @@ export namespace Prisma {
     status?: StringFilter<"Designation"> | string
     createdAt?: DateTimeFilter<"Designation"> | Date | string
     updatedAt?: DateTimeFilter<"Designation"> | Date | string
+    allowedDeptIds?: JsonNullableFilter<"Designation">
+    allowedBranchIds?: JsonNullableFilter<"Designation">
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -84849,6 +84871,8 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowedDeptIds?: SortOrderInput | SortOrder
+    allowedBranchIds?: SortOrderInput | SortOrder
     branch?: BranchOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
@@ -84874,6 +84898,8 @@ export namespace Prisma {
     status?: StringFilter<"Designation"> | string
     createdAt?: DateTimeFilter<"Designation"> | Date | string
     updatedAt?: DateTimeFilter<"Designation"> | Date | string
+    allowedDeptIds?: JsonNullableFilter<"Designation">
+    allowedBranchIds?: JsonNullableFilter<"Designation">
     branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -84896,6 +84922,8 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowedDeptIds?: SortOrderInput | SortOrder
+    allowedBranchIds?: SortOrderInput | SortOrder
     _count?: DesignationCountOrderByAggregateInput
     _avg?: DesignationAvgOrderByAggregateInput
     _max?: DesignationMaxOrderByAggregateInput
@@ -84919,6 +84947,8 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"Designation"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Designation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Designation"> | Date | string
+    allowedDeptIds?: JsonNullableWithAggregatesFilter<"Designation">
+    allowedBranchIds?: JsonNullableWithAggregatesFilter<"Designation">
   }
 
   export type VacancyWhereInput = {
@@ -91376,6 +91406,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
@@ -91398,6 +91430,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -91410,6 +91444,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
@@ -91432,6 +91468,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -91449,6 +91487,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationUpdateManyMutationInput = {
@@ -91459,6 +91499,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationUncheckedUpdateManyInput = {
@@ -91474,6 +91516,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type VacancyCreateInput = {
@@ -97180,6 +97224,8 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    allowedDeptIds?: SortOrder
+    allowedBranchIds?: SortOrder
   }
 
   export type DesignationAvgOrderByAggregateInput = {
@@ -110394,6 +110440,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     parentDesignation?: DesignationCreateNestedOneWithoutChildDesignationsInput
@@ -110414,6 +110462,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -112723,6 +112773,8 @@ export namespace Prisma {
     status?: StringFilter<"Designation"> | string
     createdAt?: DateTimeFilter<"Designation"> | Date | string
     updatedAt?: DateTimeFilter<"Designation"> | Date | string
+    allowedDeptIds?: JsonNullableFilter<"Designation">
+    allowedBranchIds?: JsonNullableFilter<"Designation">
   }
 
   export type EditDeleteRequestUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -115007,6 +115059,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
     parentDesignation?: DesignationCreateNestedOneWithoutChildDesignationsInput
@@ -115027,6 +115081,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -120388,6 +120444,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
@@ -120409,6 +120467,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
   }
 
@@ -141617,6 +141677,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
     parentDesignation?: DesignationCreateNestedOneWithoutChildDesignationsInput
@@ -141637,6 +141699,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -142520,6 +142584,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
@@ -142540,6 +142606,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -144076,6 +144144,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
@@ -144097,6 +144167,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
 
@@ -144113,6 +144185,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchCreateNestedOneWithoutDesignationsInput
     department?: DepartmentCreateNestedOneWithoutDesignationsInput
     organization: OrganizationCreateNestedOneWithoutDesignationsInput
@@ -144133,6 +144207,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedCreateNestedManyWithoutParentDesignationInput
     filledBy?: UserUncheckedCreateNestedManyWithoutDesignationsInput
   }
@@ -144659,6 +144735,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
@@ -144680,6 +144758,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
 
@@ -172781,6 +172861,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EditDeleteRequestCreateManyOrganizationInput = {
@@ -173831,6 +173913,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     parentDesignation?: DesignationUpdateOneWithoutChildDesignationsNestedInput
@@ -173851,6 +173935,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -173867,6 +173953,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EditDeleteRequestUpdateWithoutOrganizationInput = {
@@ -176178,6 +176266,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LeaveRequestCreateManyDepartmentInput = {
@@ -176399,6 +176489,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
     parentDesignation?: DesignationUpdateOneWithoutChildDesignationsNestedInput
@@ -176419,6 +176511,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -176435,6 +176529,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type LeaveRequestUpdateWithoutDepartmentInput = {
@@ -181908,6 +182004,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
@@ -181929,6 +182027,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
   }
 
@@ -181945,6 +182045,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProgramMaterialUpdateWithoutUploaderInput = {
@@ -184587,6 +184689,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterInviteCreateManyBranchInput = {
@@ -184635,6 +184739,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
     parentDesignation?: DesignationUpdateOneWithoutChildDesignationsNestedInput
@@ -184655,6 +184761,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -184671,6 +184779,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterInviteUpdateWithoutBranchInput = {
@@ -185007,6 +185117,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserCreateManySubDepartmentInput = {
@@ -185097,6 +185209,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
@@ -185117,6 +185231,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -185133,6 +185249,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateWithoutSubDepartmentInput = {
@@ -185584,6 +185702,8 @@ export namespace Prisma {
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationUpdateWithoutParentDesignationInput = {
@@ -185594,6 +185714,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     branch?: BranchUpdateOneWithoutDesignationsNestedInput
     department?: DepartmentUpdateOneWithoutDesignationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutDesignationsNestedInput
@@ -185614,6 +185736,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     childDesignations?: DesignationUncheckedUpdateManyWithoutParentDesignationNestedInput
     filledBy?: UserUncheckedUpdateManyWithoutDesignationsNestedInput
   }
@@ -185630,6 +185754,8 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateWithoutDesignationsInput = {

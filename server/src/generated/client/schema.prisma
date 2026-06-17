@@ -740,6 +740,8 @@ model Designation {
   childDesignations   Designation[]  @relation("DesignationHierarchy")
   subDepartment       SubDepartment? @relation(fields: [subDepartmentId], references: [id])
   filledBy            User[]         @relation("DesignationFilledBy")
+  allowedDeptIds      Json?          @default("[]")
+  allowedBranchIds    Json?          @default("[]")
 
   @@index([organizationId, departmentId])
   @@index([parentDesignationId])
