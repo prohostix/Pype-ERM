@@ -215,7 +215,7 @@ export function UsersPanel() {
                   <div>
                     <CardTitle className="text-lg">{user.name}</CardTitle>
                     <Badge className={`mt-1 ${getRoleBadgeColor(user.role)} text-white border-none`}>
-                      {user.role.replace('_', ' ')}
+                      {(user.role || '').replace('_', ' ')}
                     </Badge>
                   </div>
                 </div>

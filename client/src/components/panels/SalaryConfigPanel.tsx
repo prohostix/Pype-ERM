@@ -245,7 +245,7 @@ export function SalaryConfigPanel() {
                   <SelectContent>
                     {unconfiguredUsers.map(u => (
                       <SelectItem key={u.id} value={u.id}>
-                        {u.name} — {u.role.replace(/_/g, ' ')}
+                        {u.name} — {(u.role || '').replace(/_/g, ' ')}
                       </SelectItem>
                     ))}
                   </SelectContent>
