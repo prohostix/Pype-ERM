@@ -91,6 +91,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   // Common
   escalations: 'escalations',
   audit_logs: 'overview',
+  collections: 'collections',
 };
 
 function App() {
@@ -219,6 +220,7 @@ function App() {
         { id: 'escalations', label: 'Escalations' },
         { id: 'students', label: 'Students' },
         { id: 'invoices', label: 'Invoices' },
+        { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
         { id: 'center_onboarding', label: 'Centers & Enrollment' },
       ];
@@ -240,6 +242,7 @@ function App() {
         { id: 'invoices', label: 'Invoices' },
         { id: 'payments', label: 'Payments' },
         { id: 'expenses', label: 'Expenses' },
+        { id: 'collections', label: 'Collections' },
         { id: 'employees', label: 'Employees' },
         { id: 'leave_requests', label: 'Leave Requests' },
         { id: 'leads', label: 'Leads' },

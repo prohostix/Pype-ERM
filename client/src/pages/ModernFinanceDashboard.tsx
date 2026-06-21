@@ -24,6 +24,7 @@ import { TasksPanel } from '@/components/panels/TasksPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
+import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
@@ -105,6 +106,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'payroll': return <PayrollPanel />;
       case 'payroll-batches': return <PayrollBatchesPanel />;
       case 'students': return <StudentsPanel />;
+      case 'collections': return <CollectionsPanel />;
       case 'study_centers': return <StudyCentersPanel />;
       case 'admission_sessions': return <AdmissionSessionsPanel />;
       case 'auth_fees': return <FinanceAuthFeePanel />;
@@ -148,6 +150,7 @@ export function getFinanceNavItems() {
     { id: 'payroll', label: 'Payroll' },
     { id: 'payroll-batches', label: 'Payroll Batches' },
     { id: 'students', label: 'Students' },
+    { id: 'collections', label: 'Collections' },
     { id: 'study_centers', label: 'Study Centers' },
     { id: 'admission_sessions', label: 'Admissions' },
     { id: 'auth_fees', label: 'Auth Fees' },

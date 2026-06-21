@@ -22,6 +22,7 @@ import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { InternalMarksPanel } from '@/components/panels/InternalMarksPanel';
+import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { OpsCenterVerificationPanel } from '@/components/panels/OpsCenterVerificationPanel';
@@ -65,6 +66,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       );
       case 'my_subdept': return <SubOpsPortalPanel />;
       case 'students': return <StudentsPanel />;
+      case 'collections': return <CollectionsPanel />;
       case 'universities': return <UniversitiesPanel />;
       case 'programs': return <ProgramsPanel />;
       case 'centers': return <StudyCentersPanel />;
@@ -98,6 +100,7 @@ export function getOpsNavItems(isSubDeptManager: boolean) {
     { id: 'overview', label: 'Overview' },
     ...(isSubDeptManager ? [{ id: 'my_subdept', label: 'My Sub-Dept' }] : []),
     { id: 'students', label: 'Students' },
+    { id: 'collections', label: 'Collections' },
     { id: 'universities', label: 'Universities' },
     { id: 'programs', label: 'Programs' },
     { id: 'centers', label: 'Study Centers' },

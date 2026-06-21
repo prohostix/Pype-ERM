@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { hashPassword, generateUserId } from '../utils/authUtils.js';
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
@@ -27,6 +28,27 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const createStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { email, name, phone } = req.body;
+  
+  let studentUser = await prisma.user.findUnique({ where: { email } });
+  if (!studentUser) {
+    const generatedUid = await generateUserId();
+    const defaultPassword = `Student@${Math.floor(1000 + Math.random() * 9000)}`;
+    const hashedPassword = await hashPassword(defaultPassword);
+    studentUser = await prisma.user.create({
+      data: {
+        userId: generatedUid,
+        organizationId: req.user.organizationId,
+        email,
+        password: hashedPassword,
+        name,
+        role: 'staff', // Fallback role for student in UserRole enum
+        phone,
+        status: 'active',
+      },
+    });
+  }
+
   const student = await prisma.student.create({
     data: {
       ...req.body,
@@ -73,7 +95,145 @@ export const approveStudent = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.status(200).json({ success: true, message: 'Bulk import logic not implemented' });
+  const { students, isPrevious } = req.body;
+  if (!Array.isArray(students)) {
+    res.status(400).json({ success: false, message: 'Invalid data format. Expected an array of students.' });
+    return;
+  }
+
+  const organizationId = req.user.organizationId;
+  const results = {
+    imported: 0,
+    skipped: 0,
+    errors: [] as string[]
+  };
+
+  for (const s of students) {
+    try {
+      if (!s.email || !s.name) {
+        results.skipped++;
+        results.errors.push(`Skipped record missing email or name`);
+        continue;
+      }
+
+      // Check if student email is already registered
+      const existingStudent = await prisma.student.findUnique({ where: { email: s.email } });
+      if (existingStudent) {
+        results.skipped++;
+        results.errors.push(`Student with email ${s.email} already exists`);
+        continue;
+      }
+
+      // Resolve program
+      const program = await prisma.program.findFirst({
+        where: {
+          OR: [
+            { id: s.programId },
+            { code: s.programCode },
+            { name: s.programName }
+          ],
+          organizationId
+        }
+      });
+      if (!program) {
+        results.skipped++;
+        results.errors.push(`Program not found for student ${s.name} (${s.email})`);
+        continue;
+      }
+
+      // Resolve study center
+      const center = await prisma.studyCenter.findFirst({
+        where: {
+          OR: [
+            { id: s.centerId },
+            { code: s.centerCode },
+            { name: s.centerName }
+          ],
+          organizationId
+        }
+      });
+      if (!center) {
+        results.skipped++;
+        results.errors.push(`Study Center not found for student ${s.name} (${s.email})`);
+        continue;
+      }
+
+      // Ensure user account exists
+      let studentUser = await prisma.user.findUnique({ where: { email: s.email } });
+      let generatedUid = s.enrollmentNo;
+      if (!studentUser) {
+        if (!generatedUid) {
+          generatedUid = await generateUserId();
+        }
+        const defaultPassword = `Student@${Math.floor(1000 + Math.random() * 9000)}`;
+        const hashedPassword = await hashPassword(defaultPassword);
+        studentUser = await prisma.user.create({
+          data: {
+            userId: generatedUid,
+            organizationId,
+            email: s.email,
+            password: hashedPassword,
+            name: s.name,
+            role: 'staff',
+            phone: s.phone || '',
+            status: 'active',
+          },
+        });
+      } else {
+        if (!generatedUid) {
+          generatedUid = studentUser.userId || await generateUserId();
+        }
+      }
+
+      // Create student record
+      await prisma.student.create({
+        data: {
+          name: s.name,
+          email: s.email,
+          phone: s.phone || '',
+          address: s.address || '',
+          enrollmentNo: generatedUid,
+          programId: program.id,
+          centerId: center.id,
+          sessionId: s.sessionId || null,
+          status: s.status || 'active',
+          isPrevious: isPrevious || s.isPrevious || false,
+          organizationId
+        }
+      });
+
+      results.imported++;
+    } catch (err: any) {
+      results.skipped++;
+      results.errors.push(`Failed to import student ${s.name || 'Unknown'}: ${err.message}`);
+    }
+  }
+
+  res.status(200).json({ success: true, data: results });
+});
+
+export const notifyStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await prisma.student.findUnique({ where: { id: req.params.id } });
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  const studentUser = await prisma.user.findUnique({ where: { email: student.email } });
+  if (!studentUser) {
+    res.status(404).json({ success: false, message: 'Student user account not found' });
+    return;
+  }
+  const notification = await prisma.notification.create({
+    data: {
+      organizationId: req.user.organizationId,
+      userId: studentUser.id,
+      title: req.body.title || 'Student Notification',
+      message: req.body.message,
+      type: req.body.type || 'general',
+      priority: req.body.priority || 'medium'
+    }
+  });
+  res.status(201).json({ success: true, data: notification });
 });
 
 export const getInternalMarks = asyncHandler(async (req: AuthRequest, res: Response) => {

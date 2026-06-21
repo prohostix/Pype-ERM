@@ -314,7 +314,8 @@ exports.Prisma.StudentScalarFieldEnum = {
   reregStatus: 'reregStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  referredBy: 'referredBy'
+  referredBy: 'referredBy',
+  isPrevious: 'isPrevious'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {
@@ -992,6 +993,20 @@ exports.Prisma.ProgramMaterialScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentScheduleScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  title: 'title',
+  amount: 'amount',
+  dueDate: 'dueDate',
+  status: 'status',
+  paidAt: 'paidAt',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1249,7 +1264,8 @@ exports.Prisma.ModelName = {
   EnrollmentPayment: 'EnrollmentPayment',
   IncentiveStructure: 'IncentiveStructure',
   ProgramFeeStructure: 'ProgramFeeStructure',
-  ProgramMaterial: 'ProgramMaterial'
+  ProgramMaterial: 'ProgramMaterial',
+  PaymentSchedule: 'PaymentSchedule'
 };
 
 /**

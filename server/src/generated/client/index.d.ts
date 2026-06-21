@@ -288,6 +288,11 @@ export type ProgramFeeStructure = $Result.DefaultSelection<Prisma.$ProgramFeeStr
  * 
  */
 export type ProgramMaterial = $Result.DefaultSelection<Prisma.$ProgramMaterialPayload>
+/**
+ * Model PaymentSchedule
+ * 
+ */
+export type PaymentSchedule = $Result.DefaultSelection<Prisma.$PaymentSchedulePayload>
 
 /**
  * Enums
@@ -1298,6 +1303,16 @@ export class PrismaClient<
     * ```
     */
   get programMaterial(): Prisma.ProgramMaterialDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.paymentSchedule`: Exposes CRUD operations for the **PaymentSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PaymentSchedules
+    * const paymentSchedules = await prisma.paymentSchedule.findMany()
+    * ```
+    */
+  get paymentSchedule(): Prisma.PaymentScheduleDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1786,7 +1801,8 @@ export namespace Prisma {
     EnrollmentPayment: 'EnrollmentPayment',
     IncentiveStructure: 'IncentiveStructure',
     ProgramFeeStructure: 'ProgramFeeStructure',
-    ProgramMaterial: 'ProgramMaterial'
+    ProgramMaterial: 'ProgramMaterial',
+    PaymentSchedule: 'PaymentSchedule'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1802,7 +1818,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "enrollmentPayment" | "incentiveStructure" | "programFeeStructure" | "programMaterial"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "enrollmentPayment" | "incentiveStructure" | "programFeeStructure" | "programMaterial" | "paymentSchedule"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5876,6 +5892,80 @@ export namespace Prisma {
           }
         }
       }
+      PaymentSchedule: {
+        payload: Prisma.$PaymentSchedulePayload<ExtArgs>
+        fields: Prisma.PaymentScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PaymentScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PaymentScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.PaymentScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PaymentScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.PaymentScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.PaymentScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.PaymentScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PaymentScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.PaymentScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          update: {
+            args: Prisma.PaymentScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.PaymentScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PaymentScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PaymentScheduleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>[]
+          }
+          upsert: {
+            args: Prisma.PaymentScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.PaymentScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePaymentSchedule>
+          }
+          groupBy: {
+            args: Prisma.PaymentScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PaymentScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PaymentScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<PaymentScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6039,6 +6129,7 @@ export namespace Prisma {
     incentiveStructure?: IncentiveStructureOmit
     programFeeStructure?: ProgramFeeStructureOmit
     programMaterial?: ProgramMaterialOmit
+    paymentSchedule?: PaymentScheduleOmit
   }
 
   /* Types for Logging */
@@ -6170,6 +6261,7 @@ export namespace Prisma {
     vacancies: number
     walletTopUps: number
     programMaterials: number
+    paymentSchedules: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6224,6 +6316,7 @@ export namespace Prisma {
     vacancies?: boolean | OrganizationCountOutputTypeCountVacanciesArgs
     walletTopUps?: boolean | OrganizationCountOutputTypeCountWalletTopUpsArgs
     programMaterials?: boolean | OrganizationCountOutputTypeCountProgramMaterialsArgs
+    paymentSchedules?: boolean | OrganizationCountOutputTypeCountPaymentSchedulesArgs
   }
 
   // Custom InputTypes
@@ -6592,6 +6685,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountProgramMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProgramMaterialWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountPaymentSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentScheduleWhereInput
   }
 
 
@@ -7702,12 +7802,14 @@ export namespace Prisma {
     enrollments: number
     internalMarks: number
     invoices: number
+    paymentSchedules: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | StudentCountOutputTypeCountEnrollmentsArgs
     internalMarks?: boolean | StudentCountOutputTypeCountInternalMarksArgs
     invoices?: boolean | StudentCountOutputTypeCountInvoicesArgs
+    paymentSchedules?: boolean | StudentCountOutputTypeCountPaymentSchedulesArgs
   }
 
   // Custom InputTypes
@@ -7740,6 +7842,13 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InvoiceWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountPaymentSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentScheduleWhereInput
   }
 
 
@@ -8314,6 +8423,7 @@ export namespace Prisma {
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     programMaterials?: boolean | Organization$programMaterialsArgs<ExtArgs>
+    paymentSchedules?: boolean | Organization$paymentSchedulesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -8419,6 +8529,7 @@ export namespace Prisma {
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     programMaterials?: boolean | Organization$programMaterialsArgs<ExtArgs>
+    paymentSchedules?: boolean | Organization$paymentSchedulesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8484,6 +8595,7 @@ export namespace Prisma {
       vacancies: Prisma.$VacancyPayload<ExtArgs>[]
       walletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
       programMaterials: Prisma.$ProgramMaterialPayload<ExtArgs>[]
+      paymentSchedules: Prisma.$PaymentSchedulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8945,6 +9057,7 @@ export namespace Prisma {
     vacancies<T extends Organization$vacanciesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     walletTopUps<T extends Organization$walletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$walletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programMaterials<T extends Organization$programMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$programMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    paymentSchedules<T extends Organization$paymentSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$paymentSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10646,6 +10759,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProgramMaterialScalarFieldEnum | ProgramMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.paymentSchedules
+   */
+  export type Organization$paymentSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    where?: PaymentScheduleWhereInput
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    cursor?: PaymentScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PaymentScheduleScalarFieldEnum | PaymentScheduleScalarFieldEnum[]
   }
 
   /**
@@ -25149,6 +25286,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     referredBy: string | null
+    isPrevious: boolean | null
   }
 
   export type StudentMaxAggregateOutputType = {
@@ -25168,6 +25306,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     referredBy: string | null
+    isPrevious: boolean | null
   }
 
   export type StudentCountAggregateOutputType = {
@@ -25188,6 +25327,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     referredBy: number
+    isPrevious: number
     _all: number
   }
 
@@ -25209,6 +25349,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     referredBy?: true
+    isPrevious?: true
   }
 
   export type StudentMaxAggregateInputType = {
@@ -25228,6 +25369,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     referredBy?: true
+    isPrevious?: true
   }
 
   export type StudentCountAggregateInputType = {
@@ -25248,6 +25390,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     referredBy?: true
+    isPrevious?: true
     _all?: true
   }
 
@@ -25341,6 +25484,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     referredBy: string | null
+    isPrevious: boolean
     _count: StudentCountAggregateOutputType | null
     _min: StudentMinAggregateOutputType | null
     _max: StudentMaxAggregateOutputType | null
@@ -25378,6 +25522,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    isPrevious?: boolean
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
@@ -25386,6 +25531,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     referrer?: boolean | Student$referrerArgs<ExtArgs>
+    paymentSchedules?: boolean | Student$paymentSchedulesArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -25407,6 +25553,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    isPrevious?: boolean
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -25432,6 +25579,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    isPrevious?: boolean
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -25457,9 +25605,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    isPrevious?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
@@ -25469,6 +25618,7 @@ export namespace Prisma {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     referrer?: boolean | Student$referrerArgs<ExtArgs>
+    paymentSchedules?: boolean | Student$paymentSchedulesArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25497,6 +25647,7 @@ export namespace Prisma {
       organization: Prisma.$OrganizationPayload<ExtArgs>
       program: Prisma.$ProgramPayload<ExtArgs>
       referrer: Prisma.$UserPayload<ExtArgs> | null
+      paymentSchedules: Prisma.$PaymentSchedulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -25516,6 +25667,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       referredBy: string | null
+      isPrevious: boolean
     }, ExtArgs["result"]["student"]>
     composites: {}
   }
@@ -25918,6 +26070,7 @@ export namespace Prisma {
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     referrer<T extends Student$referrerArgs<ExtArgs> = {}>(args?: Subset<T, Student$referrerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    paymentSchedules<T extends Student$paymentSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Student$paymentSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -25964,6 +26117,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Student", 'DateTime'>
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
     readonly referredBy: FieldRef<"Student", 'String'>
+    readonly isPrevious: FieldRef<"Student", 'Boolean'>
   }
     
 
@@ -26453,6 +26607,30 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * Student.paymentSchedules
+   */
+  export type Student$paymentSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    where?: PaymentScheduleWhereInput
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    cursor?: PaymentScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PaymentScheduleScalarFieldEnum | PaymentScheduleScalarFieldEnum[]
   }
 
   /**
@@ -80300,6 +80478,1189 @@ export namespace Prisma {
 
 
   /**
+   * Model PaymentSchedule
+   */
+
+  export type AggregatePaymentSchedule = {
+    _count: PaymentScheduleCountAggregateOutputType | null
+    _avg: PaymentScheduleAvgAggregateOutputType | null
+    _sum: PaymentScheduleSumAggregateOutputType | null
+    _min: PaymentScheduleMinAggregateOutputType | null
+    _max: PaymentScheduleMaxAggregateOutputType | null
+  }
+
+  export type PaymentScheduleAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PaymentScheduleSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PaymentScheduleMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    title: string | null
+    amount: number | null
+    dueDate: Date | null
+    status: string | null
+    paidAt: Date | null
+    remarks: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PaymentScheduleMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    title: string | null
+    amount: number | null
+    dueDate: Date | null
+    status: string | null
+    paidAt: Date | null
+    remarks: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PaymentScheduleCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    studentId: number
+    title: number
+    amount: number
+    dueDate: number
+    status: number
+    paidAt: number
+    remarks: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PaymentScheduleAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PaymentScheduleSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PaymentScheduleMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    title?: true
+    amount?: true
+    dueDate?: true
+    status?: true
+    paidAt?: true
+    remarks?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PaymentScheduleMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    title?: true
+    amount?: true
+    dueDate?: true
+    status?: true
+    paidAt?: true
+    remarks?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PaymentScheduleCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    title?: true
+    amount?: true
+    dueDate?: true
+    status?: true
+    paidAt?: true
+    remarks?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PaymentScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PaymentSchedule to aggregate.
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PaymentSchedules to fetch.
+     */
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PaymentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PaymentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PaymentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PaymentSchedules
+    **/
+    _count?: true | PaymentScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PaymentScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PaymentScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PaymentScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PaymentScheduleMaxAggregateInputType
+  }
+
+  export type GetPaymentScheduleAggregateType<T extends PaymentScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregatePaymentSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePaymentSchedule[P]>
+      : GetScalarType<T[P], AggregatePaymentSchedule[P]>
+  }
+
+
+
+
+  export type PaymentScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentScheduleWhereInput
+    orderBy?: PaymentScheduleOrderByWithAggregationInput | PaymentScheduleOrderByWithAggregationInput[]
+    by: PaymentScheduleScalarFieldEnum[] | PaymentScheduleScalarFieldEnum
+    having?: PaymentScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PaymentScheduleCountAggregateInputType | true
+    _avg?: PaymentScheduleAvgAggregateInputType
+    _sum?: PaymentScheduleSumAggregateInputType
+    _min?: PaymentScheduleMinAggregateInputType
+    _max?: PaymentScheduleMaxAggregateInputType
+  }
+
+  export type PaymentScheduleGroupByOutputType = {
+    id: string
+    organizationId: string
+    studentId: string
+    title: string
+    amount: number
+    dueDate: Date
+    status: string
+    paidAt: Date | null
+    remarks: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PaymentScheduleCountAggregateOutputType | null
+    _avg: PaymentScheduleAvgAggregateOutputType | null
+    _sum: PaymentScheduleSumAggregateOutputType | null
+    _min: PaymentScheduleMinAggregateOutputType | null
+    _max: PaymentScheduleMaxAggregateOutputType | null
+  }
+
+  type GetPaymentScheduleGroupByPayload<T extends PaymentScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PaymentScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PaymentScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PaymentScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], PaymentScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PaymentScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    title?: boolean
+    amount?: boolean
+    dueDate?: boolean
+    status?: boolean
+    paidAt?: boolean
+    remarks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["paymentSchedule"]>
+
+  export type PaymentScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    title?: boolean
+    amount?: boolean
+    dueDate?: boolean
+    status?: boolean
+    paidAt?: boolean
+    remarks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["paymentSchedule"]>
+
+  export type PaymentScheduleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    title?: boolean
+    amount?: boolean
+    dueDate?: boolean
+    status?: boolean
+    paidAt?: boolean
+    remarks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["paymentSchedule"]>
+
+  export type PaymentScheduleSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    title?: boolean
+    amount?: boolean
+    dueDate?: boolean
+    status?: boolean
+    paidAt?: boolean
+    remarks?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PaymentScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "title" | "amount" | "dueDate" | "status" | "paidAt" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentSchedule"]>
+  export type PaymentScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type PaymentScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type PaymentScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+
+  export type $PaymentSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PaymentSchedule"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      student: Prisma.$StudentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      studentId: string
+      title: string
+      amount: number
+      dueDate: Date
+      status: string
+      paidAt: Date | null
+      remarks: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["paymentSchedule"]>
+    composites: {}
+  }
+
+  type PaymentScheduleGetPayload<S extends boolean | null | undefined | PaymentScheduleDefaultArgs> = $Result.GetResult<Prisma.$PaymentSchedulePayload, S>
+
+  type PaymentScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PaymentScheduleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PaymentScheduleCountAggregateInputType | true
+    }
+
+  export interface PaymentScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PaymentSchedule'], meta: { name: 'PaymentSchedule' } }
+    /**
+     * Find zero or one PaymentSchedule that matches the filter.
+     * @param {PaymentScheduleFindUniqueArgs} args - Arguments to find a PaymentSchedule
+     * @example
+     * // Get one PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PaymentScheduleFindUniqueArgs>(args: SelectSubset<T, PaymentScheduleFindUniqueArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PaymentSchedule that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PaymentScheduleFindUniqueOrThrowArgs} args - Arguments to find a PaymentSchedule
+     * @example
+     * // Get one PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PaymentScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, PaymentScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PaymentSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleFindFirstArgs} args - Arguments to find a PaymentSchedule
+     * @example
+     * // Get one PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PaymentScheduleFindFirstArgs>(args?: SelectSubset<T, PaymentScheduleFindFirstArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PaymentSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleFindFirstOrThrowArgs} args - Arguments to find a PaymentSchedule
+     * @example
+     * // Get one PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PaymentScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, PaymentScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PaymentSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PaymentSchedules
+     * const paymentSchedules = await prisma.paymentSchedule.findMany()
+     * 
+     * // Get first 10 PaymentSchedules
+     * const paymentSchedules = await prisma.paymentSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const paymentScheduleWithIdOnly = await prisma.paymentSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PaymentScheduleFindManyArgs>(args?: SelectSubset<T, PaymentScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PaymentSchedule.
+     * @param {PaymentScheduleCreateArgs} args - Arguments to create a PaymentSchedule.
+     * @example
+     * // Create one PaymentSchedule
+     * const PaymentSchedule = await prisma.paymentSchedule.create({
+     *   data: {
+     *     // ... data to create a PaymentSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends PaymentScheduleCreateArgs>(args: SelectSubset<T, PaymentScheduleCreateArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PaymentSchedules.
+     * @param {PaymentScheduleCreateManyArgs} args - Arguments to create many PaymentSchedules.
+     * @example
+     * // Create many PaymentSchedules
+     * const paymentSchedule = await prisma.paymentSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PaymentScheduleCreateManyArgs>(args?: SelectSubset<T, PaymentScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PaymentSchedules and returns the data saved in the database.
+     * @param {PaymentScheduleCreateManyAndReturnArgs} args - Arguments to create many PaymentSchedules.
+     * @example
+     * // Create many PaymentSchedules
+     * const paymentSchedule = await prisma.paymentSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PaymentSchedules and only return the `id`
+     * const paymentScheduleWithIdOnly = await prisma.paymentSchedule.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PaymentScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, PaymentScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PaymentSchedule.
+     * @param {PaymentScheduleDeleteArgs} args - Arguments to delete one PaymentSchedule.
+     * @example
+     * // Delete one PaymentSchedule
+     * const PaymentSchedule = await prisma.paymentSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one PaymentSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PaymentScheduleDeleteArgs>(args: SelectSubset<T, PaymentScheduleDeleteArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PaymentSchedule.
+     * @param {PaymentScheduleUpdateArgs} args - Arguments to update one PaymentSchedule.
+     * @example
+     * // Update one PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PaymentScheduleUpdateArgs>(args: SelectSubset<T, PaymentScheduleUpdateArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PaymentSchedules.
+     * @param {PaymentScheduleDeleteManyArgs} args - Arguments to filter PaymentSchedules to delete.
+     * @example
+     * // Delete a few PaymentSchedules
+     * const { count } = await prisma.paymentSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PaymentScheduleDeleteManyArgs>(args?: SelectSubset<T, PaymentScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PaymentSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PaymentSchedules
+     * const paymentSchedule = await prisma.paymentSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PaymentScheduleUpdateManyArgs>(args: SelectSubset<T, PaymentScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PaymentSchedules and returns the data updated in the database.
+     * @param {PaymentScheduleUpdateManyAndReturnArgs} args - Arguments to update many PaymentSchedules.
+     * @example
+     * // Update many PaymentSchedules
+     * const paymentSchedule = await prisma.paymentSchedule.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PaymentSchedules and only return the `id`
+     * const paymentScheduleWithIdOnly = await prisma.paymentSchedule.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PaymentScheduleUpdateManyAndReturnArgs>(args: SelectSubset<T, PaymentScheduleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PaymentSchedule.
+     * @param {PaymentScheduleUpsertArgs} args - Arguments to update or create a PaymentSchedule.
+     * @example
+     * // Update or create a PaymentSchedule
+     * const paymentSchedule = await prisma.paymentSchedule.upsert({
+     *   create: {
+     *     // ... data to create a PaymentSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PaymentSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PaymentScheduleUpsertArgs>(args: SelectSubset<T, PaymentScheduleUpsertArgs<ExtArgs>>): Prisma__PaymentScheduleClient<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PaymentSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleCountArgs} args - Arguments to filter PaymentSchedules to count.
+     * @example
+     * // Count the number of PaymentSchedules
+     * const count = await prisma.paymentSchedule.count({
+     *   where: {
+     *     // ... the filter for the PaymentSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends PaymentScheduleCountArgs>(
+      args?: Subset<T, PaymentScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PaymentScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PaymentSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PaymentScheduleAggregateArgs>(args: Subset<T, PaymentScheduleAggregateArgs>): Prisma.PrismaPromise<GetPaymentScheduleAggregateType<T>>
+
+    /**
+     * Group by PaymentSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PaymentScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PaymentScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: PaymentScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PaymentScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPaymentScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PaymentSchedule model
+   */
+  readonly fields: PaymentScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PaymentSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PaymentScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PaymentSchedule model
+   */
+  interface PaymentScheduleFieldRefs {
+    readonly id: FieldRef<"PaymentSchedule", 'String'>
+    readonly organizationId: FieldRef<"PaymentSchedule", 'String'>
+    readonly studentId: FieldRef<"PaymentSchedule", 'String'>
+    readonly title: FieldRef<"PaymentSchedule", 'String'>
+    readonly amount: FieldRef<"PaymentSchedule", 'Float'>
+    readonly dueDate: FieldRef<"PaymentSchedule", 'DateTime'>
+    readonly status: FieldRef<"PaymentSchedule", 'String'>
+    readonly paidAt: FieldRef<"PaymentSchedule", 'DateTime'>
+    readonly remarks: FieldRef<"PaymentSchedule", 'String'>
+    readonly createdAt: FieldRef<"PaymentSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"PaymentSchedule", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PaymentSchedule findUnique
+   */
+  export type PaymentScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which PaymentSchedule to fetch.
+     */
+    where: PaymentScheduleWhereUniqueInput
+  }
+
+  /**
+   * PaymentSchedule findUniqueOrThrow
+   */
+  export type PaymentScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which PaymentSchedule to fetch.
+     */
+    where: PaymentScheduleWhereUniqueInput
+  }
+
+  /**
+   * PaymentSchedule findFirst
+   */
+  export type PaymentScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which PaymentSchedule to fetch.
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PaymentSchedules to fetch.
+     */
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PaymentSchedules.
+     */
+    cursor?: PaymentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PaymentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PaymentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PaymentSchedules.
+     */
+    distinct?: PaymentScheduleScalarFieldEnum | PaymentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * PaymentSchedule findFirstOrThrow
+   */
+  export type PaymentScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which PaymentSchedule to fetch.
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PaymentSchedules to fetch.
+     */
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PaymentSchedules.
+     */
+    cursor?: PaymentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PaymentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PaymentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PaymentSchedules.
+     */
+    distinct?: PaymentScheduleScalarFieldEnum | PaymentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * PaymentSchedule findMany
+   */
+  export type PaymentScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which PaymentSchedules to fetch.
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PaymentSchedules to fetch.
+     */
+    orderBy?: PaymentScheduleOrderByWithRelationInput | PaymentScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PaymentSchedules.
+     */
+    cursor?: PaymentScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PaymentSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PaymentSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PaymentSchedules.
+     */
+    distinct?: PaymentScheduleScalarFieldEnum | PaymentScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * PaymentSchedule create
+   */
+  export type PaymentScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PaymentSchedule.
+     */
+    data: XOR<PaymentScheduleCreateInput, PaymentScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * PaymentSchedule createMany
+   */
+  export type PaymentScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PaymentSchedules.
+     */
+    data: PaymentScheduleCreateManyInput | PaymentScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PaymentSchedule createManyAndReturn
+   */
+  export type PaymentScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to create many PaymentSchedules.
+     */
+    data: PaymentScheduleCreateManyInput | PaymentScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PaymentSchedule update
+   */
+  export type PaymentScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PaymentSchedule.
+     */
+    data: XOR<PaymentScheduleUpdateInput, PaymentScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which PaymentSchedule to update.
+     */
+    where: PaymentScheduleWhereUniqueInput
+  }
+
+  /**
+   * PaymentSchedule updateMany
+   */
+  export type PaymentScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PaymentSchedules.
+     */
+    data: XOR<PaymentScheduleUpdateManyMutationInput, PaymentScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which PaymentSchedules to update
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * Limit how many PaymentSchedules to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PaymentSchedule updateManyAndReturn
+   */
+  export type PaymentScheduleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to update PaymentSchedules.
+     */
+    data: XOR<PaymentScheduleUpdateManyMutationInput, PaymentScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which PaymentSchedules to update
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * Limit how many PaymentSchedules to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PaymentSchedule upsert
+   */
+  export type PaymentScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PaymentSchedule to update in case it exists.
+     */
+    where: PaymentScheduleWhereUniqueInput
+    /**
+     * In case the PaymentSchedule found by the `where` argument doesn't exist, create a new PaymentSchedule with this data.
+     */
+    create: XOR<PaymentScheduleCreateInput, PaymentScheduleUncheckedCreateInput>
+    /**
+     * In case the PaymentSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PaymentScheduleUpdateInput, PaymentScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * PaymentSchedule delete
+   */
+  export type PaymentScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+    /**
+     * Filter which PaymentSchedule to delete.
+     */
+    where: PaymentScheduleWhereUniqueInput
+  }
+
+  /**
+   * PaymentSchedule deleteMany
+   */
+  export type PaymentScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PaymentSchedules to delete
+     */
+    where?: PaymentScheduleWhereInput
+    /**
+     * Limit how many PaymentSchedules to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PaymentSchedule without action
+   */
+  export type PaymentScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PaymentSchedule
+     */
+    select?: PaymentScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PaymentSchedule
+     */
+    omit?: PaymentScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentScheduleInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -80537,7 +81898,8 @@ export namespace Prisma {
     reregStatus: 'reregStatus',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    referredBy: 'referredBy'
+    referredBy: 'referredBy',
+    isPrevious: 'isPrevious'
   };
 
   export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -81350,6 +82712,23 @@ export namespace Prisma {
   export type ProgramMaterialScalarFieldEnum = (typeof ProgramMaterialScalarFieldEnum)[keyof typeof ProgramMaterialScalarFieldEnum]
 
 
+  export const PaymentScheduleScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    studentId: 'studentId',
+    title: 'title',
+    amount: 'amount',
+    dueDate: 'dueDate',
+    status: 'status',
+    paidAt: 'paidAt',
+    remarks: 'remarks',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PaymentScheduleScalarFieldEnum = (typeof PaymentScheduleScalarFieldEnum)[keyof typeof PaymentScheduleScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -81874,6 +83253,7 @@ export namespace Prisma {
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     programMaterials?: ProgramMaterialListRelationFilter
+    paymentSchedules?: PaymentScheduleListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -81942,6 +83322,7 @@ export namespace Prisma {
     vacancies?: VacancyOrderByRelationAggregateInput
     walletTopUps?: WalletTopUpOrderByRelationAggregateInput
     programMaterials?: ProgramMaterialOrderByRelationAggregateInput
+    paymentSchedules?: PaymentScheduleOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -82013,6 +83394,7 @@ export namespace Prisma {
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     programMaterials?: ProgramMaterialListRelationFilter
+    paymentSchedules?: PaymentScheduleListRelationFilter
   }, "id" | "email">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -83430,6 +84812,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    isPrevious?: BoolFilter<"Student"> | boolean
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -83438,6 +84821,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
     referrer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    paymentSchedules?: PaymentScheduleListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -83458,6 +84842,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
+    isPrevious?: SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
     internalMarks?: InternalMarkOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
@@ -83466,6 +84851,7 @@ export namespace Prisma {
     organization?: OrganizationOrderByWithRelationInput
     program?: ProgramOrderByWithRelationInput
     referrer?: UserOrderByWithRelationInput
+    paymentSchedules?: PaymentScheduleOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -83489,6 +84875,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    isPrevious?: BoolFilter<"Student"> | boolean
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -83497,6 +84884,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
     referrer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    paymentSchedules?: PaymentScheduleListRelationFilter
   }, "id" | "enrollmentNo" | "email">
 
   export type StudentOrderByWithAggregationInput = {
@@ -83517,6 +84905,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
+    isPrevious?: SortOrder
     _count?: StudentCountOrderByAggregateInput
     _max?: StudentMaxOrderByAggregateInput
     _min?: StudentMinOrderByAggregateInput
@@ -83543,6 +84932,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     referredBy?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    isPrevious?: BoolWithAggregatesFilter<"Student"> | boolean
   }
 
   export type InvoiceWhereInput = {
@@ -87970,6 +89360,96 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ProgramMaterial"> | Date | string
   }
 
+  export type PaymentScheduleWhereInput = {
+    AND?: PaymentScheduleWhereInput | PaymentScheduleWhereInput[]
+    OR?: PaymentScheduleWhereInput[]
+    NOT?: PaymentScheduleWhereInput | PaymentScheduleWhereInput[]
+    id?: StringFilter<"PaymentSchedule"> | string
+    organizationId?: StringFilter<"PaymentSchedule"> | string
+    studentId?: StringFilter<"PaymentSchedule"> | string
+    title?: StringFilter<"PaymentSchedule"> | string
+    amount?: FloatFilter<"PaymentSchedule"> | number
+    dueDate?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    status?: StringFilter<"PaymentSchedule"> | string
+    paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
+    remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
+    createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }
+
+  export type PaymentScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    title?: SortOrder
+    amount?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    student?: StudentOrderByWithRelationInput
+  }
+
+  export type PaymentScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PaymentScheduleWhereInput | PaymentScheduleWhereInput[]
+    OR?: PaymentScheduleWhereInput[]
+    NOT?: PaymentScheduleWhereInput | PaymentScheduleWhereInput[]
+    organizationId?: StringFilter<"PaymentSchedule"> | string
+    studentId?: StringFilter<"PaymentSchedule"> | string
+    title?: StringFilter<"PaymentSchedule"> | string
+    amount?: FloatFilter<"PaymentSchedule"> | number
+    dueDate?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    status?: StringFilter<"PaymentSchedule"> | string
+    paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
+    remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
+    createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }, "id">
+
+  export type PaymentScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    title?: SortOrder
+    amount?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PaymentScheduleCountOrderByAggregateInput
+    _avg?: PaymentScheduleAvgOrderByAggregateInput
+    _max?: PaymentScheduleMaxOrderByAggregateInput
+    _min?: PaymentScheduleMinOrderByAggregateInput
+    _sum?: PaymentScheduleSumOrderByAggregateInput
+  }
+
+  export type PaymentScheduleScalarWhereWithAggregatesInput = {
+    AND?: PaymentScheduleScalarWhereWithAggregatesInput | PaymentScheduleScalarWhereWithAggregatesInput[]
+    OR?: PaymentScheduleScalarWhereWithAggregatesInput[]
+    NOT?: PaymentScheduleScalarWhereWithAggregatesInput | PaymentScheduleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PaymentSchedule"> | string
+    organizationId?: StringWithAggregatesFilter<"PaymentSchedule"> | string
+    studentId?: StringWithAggregatesFilter<"PaymentSchedule"> | string
+    title?: StringWithAggregatesFilter<"PaymentSchedule"> | string
+    amount?: FloatWithAggregatesFilter<"PaymentSchedule"> | number
+    dueDate?: DateTimeWithAggregatesFilter<"PaymentSchedule"> | Date | string
+    status?: StringWithAggregatesFilter<"PaymentSchedule"> | string
+    paidAt?: DateTimeNullableWithAggregatesFilter<"PaymentSchedule"> | Date | string | null
+    remarks?: StringNullableWithAggregatesFilter<"PaymentSchedule"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PaymentSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PaymentSchedule"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -88035,6 +89515,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -88102,6 +89583,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -88169,6 +89651,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -88236,6 +89719,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -89871,6 +91355,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -89879,6 +91364,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -89899,9 +91385,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -89917,6 +91405,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -89925,6 +91414,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -89945,9 +91435,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -89968,6 +91460,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
   }
 
   export type StudentUpdateManyMutationInput = {
@@ -89983,6 +91476,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudentUncheckedUpdateManyInput = {
@@ -90003,6 +91497,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type InvoiceCreateInput = {
@@ -94657,6 +96152,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PaymentScheduleCreateInput = {
+    id?: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
+    student: StudentCreateNestedOneWithoutPaymentSchedulesInput
+  }
+
+  export type PaymentScheduleUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
+    student?: StudentUpdateOneRequiredWithoutPaymentSchedulesNestedInput
+  }
+
+  export type PaymentScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentScheduleCreateManyInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -95055,6 +96646,12 @@ export namespace Prisma {
     none?: ProgramMaterialWhereInput
   }
 
+  export type PaymentScheduleListRelationFilter = {
+    every?: PaymentScheduleWhereInput
+    some?: PaymentScheduleWhereInput
+    none?: PaymentScheduleWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -95261,6 +96858,10 @@ export namespace Prisma {
   }
 
   export type ProgramMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PaymentScheduleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -96384,6 +97985,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrder
+    isPrevious?: SortOrder
   }
 
   export type StudentMaxOrderByAggregateInput = {
@@ -96403,6 +98005,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrder
+    isPrevious?: SortOrder
   }
 
   export type StudentMinOrderByAggregateInput = {
@@ -96422,6 +98025,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrder
+    isPrevious?: SortOrder
   }
 
   export type InvoiceCountOrderByAggregateInput = {
@@ -98909,6 +100513,56 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type PaymentScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    title?: SortOrder
+    amount?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    paidAt?: SortOrder
+    remarks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentScheduleAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PaymentScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    title?: SortOrder
+    amount?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    paidAt?: SortOrder
+    remarks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    title?: SortOrder
+    amount?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    paidAt?: SortOrder
+    remarks?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentScheduleSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type AdmissionSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -99278,6 +100932,13 @@ export namespace Prisma {
     connect?: ProgramMaterialWhereUniqueInput | ProgramMaterialWhereUniqueInput[]
   }
 
+  export type PaymentScheduleCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput> | PaymentScheduleCreateWithoutOrganizationInput[] | PaymentScheduleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutOrganizationInput | PaymentScheduleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: PaymentScheduleCreateManyOrganizationInputEnvelope
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -99639,6 +101300,13 @@ export namespace Prisma {
     connectOrCreate?: ProgramMaterialCreateOrConnectWithoutOrganizationInput | ProgramMaterialCreateOrConnectWithoutOrganizationInput[]
     createMany?: ProgramMaterialCreateManyOrganizationInputEnvelope
     connect?: ProgramMaterialWhereUniqueInput | ProgramMaterialWhereUniqueInput[]
+  }
+
+  export type PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput> | PaymentScheduleCreateWithoutOrganizationInput[] | PaymentScheduleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutOrganizationInput | PaymentScheduleCreateOrConnectWithoutOrganizationInput[]
+    createMany?: PaymentScheduleCreateManyOrganizationInputEnvelope
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -100395,6 +102063,20 @@ export namespace Prisma {
     deleteMany?: ProgramMaterialScalarWhereInput | ProgramMaterialScalarWhereInput[]
   }
 
+  export type PaymentScheduleUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput> | PaymentScheduleCreateWithoutOrganizationInput[] | PaymentScheduleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutOrganizationInput | PaymentScheduleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: PaymentScheduleUpsertWithWhereUniqueWithoutOrganizationInput | PaymentScheduleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: PaymentScheduleCreateManyOrganizationInputEnvelope
+    set?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    disconnect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    delete?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    update?: PaymentScheduleUpdateWithWhereUniqueWithoutOrganizationInput | PaymentScheduleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: PaymentScheduleUpdateManyWithWhereWithoutOrganizationInput | PaymentScheduleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -101117,6 +102799,20 @@ export namespace Prisma {
     update?: ProgramMaterialUpdateWithWhereUniqueWithoutOrganizationInput | ProgramMaterialUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: ProgramMaterialUpdateManyWithWhereWithoutOrganizationInput | ProgramMaterialUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: ProgramMaterialScalarWhereInput | ProgramMaterialScalarWhereInput[]
+  }
+
+  export type PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput> | PaymentScheduleCreateWithoutOrganizationInput[] | PaymentScheduleUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutOrganizationInput | PaymentScheduleCreateOrConnectWithoutOrganizationInput[]
+    upsert?: PaymentScheduleUpsertWithWhereUniqueWithoutOrganizationInput | PaymentScheduleUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: PaymentScheduleCreateManyOrganizationInputEnvelope
+    set?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    disconnect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    delete?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    update?: PaymentScheduleUpdateWithWhereUniqueWithoutOrganizationInput | PaymentScheduleUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: PaymentScheduleUpdateManyWithWhereWithoutOrganizationInput | PaymentScheduleUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -106398,6 +108094,13 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type PaymentScheduleCreateNestedManyWithoutStudentInput = {
+    create?: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput> | PaymentScheduleCreateWithoutStudentInput[] | PaymentScheduleUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutStudentInput | PaymentScheduleCreateOrConnectWithoutStudentInput[]
+    createMany?: PaymentScheduleCreateManyStudentInputEnvelope
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<EnrollmentCreateWithoutStudentInput, EnrollmentUncheckedCreateWithoutStudentInput> | EnrollmentCreateWithoutStudentInput[] | EnrollmentUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutStudentInput | EnrollmentCreateOrConnectWithoutStudentInput[]
@@ -106417,6 +108120,13 @@ export namespace Prisma {
     connectOrCreate?: InvoiceCreateOrConnectWithoutStudentInput | InvoiceCreateOrConnectWithoutStudentInput[]
     createMany?: InvoiceCreateManyStudentInputEnvelope
     connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
+  export type PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput> | PaymentScheduleCreateWithoutStudentInput[] | PaymentScheduleUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutStudentInput | PaymentScheduleCreateOrConnectWithoutStudentInput[]
+    createMany?: PaymentScheduleCreateManyStudentInputEnvelope
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
   }
 
   export type EnrollmentUpdateManyWithoutStudentNestedInput = {
@@ -106503,6 +108213,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferredStudentsInput, UserUpdateWithoutReferredStudentsInput>, UserUncheckedUpdateWithoutReferredStudentsInput>
   }
 
+  export type PaymentScheduleUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput> | PaymentScheduleCreateWithoutStudentInput[] | PaymentScheduleUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutStudentInput | PaymentScheduleCreateOrConnectWithoutStudentInput[]
+    upsert?: PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput | PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: PaymentScheduleCreateManyStudentInputEnvelope
+    set?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    disconnect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    delete?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    update?: PaymentScheduleUpdateWithWhereUniqueWithoutStudentInput | PaymentScheduleUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: PaymentScheduleUpdateManyWithWhereWithoutStudentInput | PaymentScheduleUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutStudentNestedInput = {
     create?: XOR<EnrollmentCreateWithoutStudentInput, EnrollmentUncheckedCreateWithoutStudentInput> | EnrollmentCreateWithoutStudentInput[] | EnrollmentUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutStudentInput | EnrollmentCreateOrConnectWithoutStudentInput[]
@@ -106543,6 +108267,20 @@ export namespace Prisma {
     update?: InvoiceUpdateWithWhereUniqueWithoutStudentInput | InvoiceUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: InvoiceUpdateManyWithWhereWithoutStudentInput | InvoiceUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
+  export type PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput> | PaymentScheduleCreateWithoutStudentInput[] | PaymentScheduleUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: PaymentScheduleCreateOrConnectWithoutStudentInput | PaymentScheduleCreateOrConnectWithoutStudentInput[]
+    upsert?: PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput | PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: PaymentScheduleCreateManyStudentInputEnvelope
+    set?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    disconnect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    delete?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    connect?: PaymentScheduleWhereUniqueInput | PaymentScheduleWhereUniqueInput[]
+    update?: PaymentScheduleUpdateWithWhereUniqueWithoutStudentInput | PaymentScheduleUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: PaymentScheduleUpdateManyWithWhereWithoutStudentInput | PaymentScheduleUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
   }
 
   export type StudyCenterCreateNestedOneWithoutInvoicesInput = {
@@ -109384,6 +111122,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadedMaterialsInput, UserUpdateWithoutUploadedMaterialsInput>, UserUncheckedUpdateWithoutUploadedMaterialsInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutPaymentSchedulesInput = {
+    create?: XOR<OrganizationCreateWithoutPaymentSchedulesInput, OrganizationUncheckedCreateWithoutPaymentSchedulesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutPaymentSchedulesInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type StudentCreateNestedOneWithoutPaymentSchedulesInput = {
+    create?: XOR<StudentCreateWithoutPaymentSchedulesInput, StudentUncheckedCreateWithoutPaymentSchedulesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutPaymentSchedulesInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput = {
+    create?: XOR<OrganizationCreateWithoutPaymentSchedulesInput, OrganizationUncheckedCreateWithoutPaymentSchedulesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutPaymentSchedulesInput
+    upsert?: OrganizationUpsertWithoutPaymentSchedulesInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutPaymentSchedulesInput, OrganizationUpdateWithoutPaymentSchedulesInput>, OrganizationUncheckedUpdateWithoutPaymentSchedulesInput>
+  }
+
+  export type StudentUpdateOneRequiredWithoutPaymentSchedulesNestedInput = {
+    create?: XOR<StudentCreateWithoutPaymentSchedulesInput, StudentUncheckedCreateWithoutPaymentSchedulesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutPaymentSchedulesInput
+    upsert?: StudentUpsertWithoutPaymentSchedulesInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutPaymentSchedulesInput, StudentUpdateWithoutPaymentSchedulesInput>, StudentUncheckedUpdateWithoutPaymentSchedulesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -111707,6 +113473,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -111714,6 +113481,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutStudentProfileInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutOrganizationInput = {
@@ -111733,9 +113501,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutOrganizationInput = {
@@ -112431,6 +114201,42 @@ export namespace Prisma {
 
   export type ProgramMaterialCreateManyOrganizationInputEnvelope = {
     data: ProgramMaterialCreateManyOrganizationInput | ProgramMaterialCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PaymentScheduleCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutPaymentSchedulesInput
+  }
+
+  export type PaymentScheduleUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    studentId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentScheduleCreateOrConnectWithoutOrganizationInput = {
+    where: PaymentScheduleWhereUniqueInput
+    create: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type PaymentScheduleCreateManyOrganizationInputEnvelope = {
+    data: PaymentScheduleCreateManyOrganizationInput | PaymentScheduleCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -113872,6 +115678,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    isPrevious?: BoolFilter<"Student"> | boolean
   }
 
   export type StudyCenterUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -114296,6 +116103,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProgramMaterial"> | Date | string
   }
 
+  export type PaymentScheduleUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: PaymentScheduleWhereUniqueInput
+    update: XOR<PaymentScheduleUpdateWithoutOrganizationInput, PaymentScheduleUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<PaymentScheduleCreateWithoutOrganizationInput, PaymentScheduleUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type PaymentScheduleUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: PaymentScheduleWhereUniqueInput
+    data: XOR<PaymentScheduleUpdateWithoutOrganizationInput, PaymentScheduleUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type PaymentScheduleUpdateManyWithWhereWithoutOrganizationInput = {
+    where: PaymentScheduleScalarWhereInput
+    data: XOR<PaymentScheduleUpdateManyMutationInput, PaymentScheduleUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type PaymentScheduleScalarWhereInput = {
+    AND?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
+    OR?: PaymentScheduleScalarWhereInput[]
+    NOT?: PaymentScheduleScalarWhereInput | PaymentScheduleScalarWhereInput[]
+    id?: StringFilter<"PaymentSchedule"> | string
+    organizationId?: StringFilter<"PaymentSchedule"> | string
+    studentId?: StringFilter<"PaymentSchedule"> | string
+    title?: StringFilter<"PaymentSchedule"> | string
+    amount?: FloatFilter<"PaymentSchedule"> | number
+    dueDate?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    status?: StringFilter<"PaymentSchedule"> | string
+    paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
+    remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
+    createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -114360,6 +116200,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -114426,6 +116267,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -114859,6 +116701,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -114925,6 +116768,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -116108,6 +117952,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -116174,6 +118019,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -118832,6 +120678,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -118839,6 +120686,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -118858,9 +120706,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUserInput = {
@@ -118881,6 +120731,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -118888,6 +120739,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutReferrerInput = {
@@ -118907,9 +120759,11 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutReferrerInput = {
@@ -119698,6 +121552,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -119764,6 +121619,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -121567,6 +123423,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -121574,6 +123431,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -121593,9 +123451,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUpsertWithWhereUniqueWithoutReferrerInput = {
@@ -121963,6 +123823,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -122029,6 +123890,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -122567,6 +124429,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -122633,6 +124496,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -122910,6 +124774,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -122976,6 +124841,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -123929,6 +125795,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -123995,6 +125862,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -124759,6 +126627,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -124825,6 +126694,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -125086,6 +126956,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -125152,6 +127023,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -125435,6 +127307,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -125501,6 +127374,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AdmissionSessionCreateWithoutUniversityInput = {
@@ -125671,6 +127545,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -125737,6 +127612,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -126256,6 +128132,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -126322,6 +128199,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -126613,6 +128491,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -126679,6 +128558,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -126827,6 +128707,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -126834,6 +128715,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutProgramInput = {
@@ -126853,9 +128735,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutProgramInput = {
@@ -127176,6 +129060,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -127242,6 +129127,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -127725,6 +129611,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -127732,6 +129619,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCenterInput = {
@@ -127751,9 +129639,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCenterInput = {
@@ -128025,6 +129915,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -128091,6 +129982,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -129344,6 +131236,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -129410,6 +131303,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -130437,6 +132331,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -130503,6 +132398,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -130754,6 +132650,42 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutReferredStudentsInput, UserUncheckedCreateWithoutReferredStudentsInput>
+  }
+
+  export type PaymentScheduleCreateWithoutStudentInput = {
+    id?: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
+  }
+
+  export type PaymentScheduleUncheckedCreateWithoutStudentInput = {
+    id?: string
+    organizationId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentScheduleCreateOrConnectWithoutStudentInput = {
+    where: PaymentScheduleWhereUniqueInput
+    create: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput>
+  }
+
+  export type PaymentScheduleCreateManyStudentInputEnvelope = {
+    data: PaymentScheduleCreateManyStudentInput | PaymentScheduleCreateManyStudentInput[]
+    skipDuplicates?: boolean
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutStudentInput = {
@@ -131177,6 +133109,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -131243,6 +133176,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -131503,6 +133437,22 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
   }
 
+  export type PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput = {
+    where: PaymentScheduleWhereUniqueInput
+    update: XOR<PaymentScheduleUpdateWithoutStudentInput, PaymentScheduleUncheckedUpdateWithoutStudentInput>
+    create: XOR<PaymentScheduleCreateWithoutStudentInput, PaymentScheduleUncheckedCreateWithoutStudentInput>
+  }
+
+  export type PaymentScheduleUpdateWithWhereUniqueWithoutStudentInput = {
+    where: PaymentScheduleWhereUniqueInput
+    data: XOR<PaymentScheduleUpdateWithoutStudentInput, PaymentScheduleUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type PaymentScheduleUpdateManyWithWhereWithoutStudentInput = {
+    where: PaymentScheduleScalarWhereInput
+    data: XOR<PaymentScheduleUpdateManyMutationInput, PaymentScheduleUncheckedUpdateManyWithoutStudentInput>
+  }
+
   export type StudyCenterCreateWithoutInvoicesInput = {
     id?: string
     name: string
@@ -131658,6 +133608,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -131724,6 +133675,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -131744,6 +133696,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -131751,6 +133704,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInvoicesInput = {
@@ -131771,8 +133725,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInvoicesInput = {
@@ -131988,6 +133944,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -132054,6 +134011,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInvoicesInput = {
@@ -132080,6 +134038,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -132087,6 +134046,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInvoicesInput = {
@@ -132107,8 +134067,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PaymentEntryUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -132191,6 +134153,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -132257,6 +134220,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -132534,6 +134498,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -132600,6 +134565,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -133062,6 +135028,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -133128,6 +135095,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -133411,6 +135379,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -133477,6 +135446,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -133543,6 +135513,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -133609,6 +135580,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -133886,6 +135858,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -133952,6 +135925,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -134219,6 +136193,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -134285,6 +136260,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -134562,6 +136538,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -134628,6 +136605,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -134952,6 +136930,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -135018,6 +136997,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -135358,6 +137338,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -135424,6 +137405,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -135691,6 +137673,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -135757,6 +137740,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -135839,6 +137823,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -135905,6 +137890,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -136613,6 +138599,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -136679,6 +138666,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -137427,6 +139415,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -137493,6 +139482,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -137949,6 +139939,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -138015,6 +140006,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -138694,6 +140686,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -138760,6 +140753,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -139612,6 +141606,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -139678,6 +141673,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -140753,6 +142749,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -140819,6 +142816,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -141539,6 +143537,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -141605,6 +143604,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -142333,6 +144333,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -142399,6 +144400,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -142881,6 +144883,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -142947,6 +144950,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -143702,6 +145706,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -143768,6 +145773,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -144063,6 +146069,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -144129,6 +146136,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -144648,6 +146656,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -144714,6 +146723,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -144963,6 +146973,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -145029,6 +147040,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -145174,6 +147186,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -145240,6 +147253,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutApprovedSessionsInput = {
@@ -145696,6 +147710,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -145762,6 +147777,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -146538,6 +148554,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -146604,6 +148621,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -147519,6 +149537,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -147585,6 +149604,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -147699,6 +149719,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -147706,6 +149727,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutEnrollmentsInput = {
@@ -147726,8 +149748,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutEnrollmentsInput = {
@@ -148724,6 +150748,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -148790,6 +150815,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -148922,6 +150948,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -148929,6 +150956,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
@@ -148949,8 +150977,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutEnrollmentsInput = {
@@ -149736,6 +151766,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -149802,6 +151833,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -150286,6 +152318,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -150352,6 +152385,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -150448,6 +152482,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -150514,6 +152549,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -150703,6 +152739,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -150769,6 +152806,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -150932,6 +152970,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -150998,6 +153037,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -151366,6 +153406,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -151432,6 +153473,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -151835,6 +153877,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -151901,6 +153944,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -152223,6 +154267,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -152289,6 +154334,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -152751,6 +154797,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -152817,6 +154864,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -153100,6 +155148,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -153166,6 +155215,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -153232,6 +155282,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -153298,6 +155349,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -153575,6 +155627,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -153641,6 +155694,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -153908,6 +155962,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -153974,6 +156029,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -154056,6 +156112,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -154122,6 +156179,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -154188,6 +156246,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -154254,6 +156313,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -154531,6 +156591,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -154597,6 +156658,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -154864,6 +156926,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -154930,6 +156993,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -155402,6 +157466,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -155468,6 +157533,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -155936,6 +158002,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -156002,6 +158069,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -156474,6 +158542,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -156540,6 +158609,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -157593,6 +159663,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -157659,6 +159730,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -158616,6 +160688,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -158682,6 +160755,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -159061,6 +161135,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -159127,6 +161202,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -159254,6 +161330,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -159320,6 +161397,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -159581,6 +161659,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -159647,6 +161726,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -159667,6 +161747,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -159674,6 +161755,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInternalMarksInput = {
@@ -159694,8 +161776,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInternalMarksInput = {
@@ -160070,6 +162154,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -160136,6 +162221,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -160162,6 +162248,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -160169,6 +162256,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInternalMarksInput = {
@@ -160189,8 +162277,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutInternalMarksInput = {
@@ -160549,6 +162639,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -160615,6 +162706,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -161093,6 +163185,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -161159,6 +163252,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -161621,6 +163715,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -161687,6 +163782,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -162360,6 +164456,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -162426,6 +164523,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -163089,6 +165187,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -163155,6 +165254,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -163438,6 +165538,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -163504,6 +165605,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -163856,6 +165958,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -163922,6 +166025,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -164353,6 +166457,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -164419,6 +166524,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -164542,6 +166648,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -164608,6 +166715,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -164885,6 +166993,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -164951,6 +167060,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -165218,6 +167328,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -165284,6 +167395,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -165417,6 +167529,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -165483,6 +167596,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -165892,6 +168006,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -165958,6 +168073,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -166533,6 +168649,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -166599,6 +168716,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -166911,6 +169029,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -166977,6 +169096,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -167305,6 +169425,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -167371,6 +169492,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -167981,6 +170103,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -168047,6 +170170,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -168490,6 +170614,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -168556,6 +170681,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -168817,6 +170943,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -168883,6 +171010,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -169207,6 +171335,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -169273,6 +171402,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -169386,6 +171516,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -169452,6 +171583,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -169585,6 +171717,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -169651,6 +171784,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructureInput = {
@@ -170536,6 +172670,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -170602,6 +172737,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -171086,6 +173222,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -171152,6 +173289,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutCreatedProgramFeesInput = {
@@ -171413,6 +173551,7 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramFeeStructuresInput = {
@@ -171479,6 +173618,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramFeeStructuresInput = {
@@ -171813,6 +173953,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramFeeStructuresInput = {
@@ -171879,6 +174020,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramFeeStructureInput = {
@@ -172002,6 +174144,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -172068,6 +174211,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -172396,6 +174540,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -172462,6 +174607,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -172720,6 +174866,402 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+  }
+
+  export type OrganizationCreateWithoutPaymentSchedulesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programFeeStructures?: ProgramFeeStructureCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programFeeStructures?: ProgramFeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutPaymentSchedulesInput, OrganizationUncheckedCreateWithoutPaymentSchedulesInput>
+  }
+
+  export type StudentCreateWithoutPaymentSchedulesInput = {
+    id?: string
+    enrollmentNo: string
+    name: string
+    phone: string
+    address: string
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isPrevious?: boolean
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+  }
+
+  export type StudentUncheckedCreateWithoutPaymentSchedulesInput = {
+    id?: string
+    centerId: string
+    organizationId: string
+    enrollmentNo: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    programId: string
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    isPrevious?: boolean
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutPaymentSchedulesInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutPaymentSchedulesInput, StudentUncheckedCreateWithoutPaymentSchedulesInput>
+  }
+
+  export type OrganizationUpsertWithoutPaymentSchedulesInput = {
+    update: XOR<OrganizationUpdateWithoutPaymentSchedulesInput, OrganizationUncheckedUpdateWithoutPaymentSchedulesInput>
+    create: XOR<OrganizationCreateWithoutPaymentSchedulesInput, OrganizationUncheckedCreateWithoutPaymentSchedulesInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutPaymentSchedulesInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutPaymentSchedulesInput, OrganizationUncheckedUpdateWithoutPaymentSchedulesInput>
+  }
+
+  export type OrganizationUpdateWithoutPaymentSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programFeeStructures?: ProgramFeeStructureUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programFeeStructures?: ProgramFeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type StudentUpsertWithoutPaymentSchedulesInput = {
+    update: XOR<StudentUpdateWithoutPaymentSchedulesInput, StudentUncheckedUpdateWithoutPaymentSchedulesInput>
+    create: XOR<StudentCreateWithoutPaymentSchedulesInput, StudentUncheckedCreateWithoutPaymentSchedulesInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutPaymentSchedulesInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutPaymentSchedulesInput, StudentUncheckedUpdateWithoutPaymentSchedulesInput>
+  }
+
+  export type StudentUpdateWithoutPaymentSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutPaymentSchedulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AdmissionSessionCreateManyOrganizationInput = {
@@ -173306,6 +175848,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
   }
 
   export type StudyCenterCreateManyOrganizationInput = {
@@ -173486,6 +176029,19 @@ export namespace Prisma {
     fileUrl: string
     uploadedBy: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentScheduleCreateManyOrganizationInput = {
+    id?: string
+    studentId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -175268,6 +177824,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -175275,6 +177832,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutOrganizationInput = {
@@ -175294,9 +177852,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -175316,6 +177876,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudyCenterUpdateWithoutOrganizationInput = {
@@ -176066,6 +178627,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PaymentScheduleUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutPaymentSchedulesNestedInput
+  }
+
+  export type PaymentScheduleUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentScheduleUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganizationCreateManyLicenseInput = {
     id?: string
     name: string
@@ -176144,6 +178744,7 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -176210,6 +178811,7 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -178072,6 +180674,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    isPrevious?: boolean
   }
 
   export type StudyCenterCreateManyApproverInput = {
@@ -180909,6 +183512,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -180916,6 +183520,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutReferrerInput = {
@@ -180935,9 +183540,11 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutReferrerInput = {
@@ -180957,6 +183564,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudyCenterUpdateWithoutApproverInput = {
@@ -182875,6 +185483,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
   }
 
   export type ProgramMaterialCreateManyProgramInput = {
@@ -183104,6 +185713,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -183111,6 +185721,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutProgramInput = {
@@ -183130,9 +185741,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutProgramInput = {
@@ -183152,6 +185765,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudyCenterUpdateWithoutAllowedProgramsInput = {
@@ -183479,6 +186093,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    isPrevious?: boolean
   }
 
   export type TargetCreateManyCenterInput = {
@@ -183879,6 +186494,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -183886,6 +186502,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCenterInput = {
@@ -183905,9 +186522,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutCenterInput = {
@@ -183927,6 +186546,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TargetUpdateWithoutCenterInput = {
@@ -184450,6 +187070,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type PaymentScheduleCreateManyStudentInput = {
+    id?: string
+    organizationId: string
+    title: string
+    amount: number
+    dueDate: Date | string
+    status?: string
+    paidAt?: Date | string | null
+    remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type EnrollmentUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184621,6 +187254,45 @@ export namespace Prisma {
     items?: JsonNullValueInput | InputJsonValue
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentScheduleUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
+  }
+
+  export type PaymentScheduleUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentScheduleUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

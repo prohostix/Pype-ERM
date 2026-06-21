@@ -73,6 +73,7 @@ model Organization {
   vacancies            Vacancy[]
   walletTopUps         WalletTopUp[]
   programMaterials     ProgramMaterial[]
+  paymentSchedules     PaymentSchedule[]
 
   @@index([status])
 }
@@ -433,6 +434,8 @@ model Student {
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program        Program        @relation(fields: [programId], references: [id])
   referrer       User?          @relation("StudentReferredBy", fields: [referredBy], references: [id])
+  isPrevious     Boolean        @default(false)
+  paymentSchedules PaymentSchedule[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -1530,4 +1533,23 @@ model ProgramMaterial {
 
   @@index([programId])
   @@index([organizationId])
+}
+
+model PaymentSchedule {
+  id             String       @id @default(uuid())
+  organizationId String
+  studentId      String
+  title          String
+  amount         Float
+  dueDate        DateTime
+  status         String       @default("pending") // pending, paid, overdue
+  paidAt         DateTime?
+  remarks        String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+  @@index([studentId])
 }

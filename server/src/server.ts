@@ -50,6 +50,7 @@ import incentiveRoutes from './routes/incentiveRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
 import enrollmentRoutes from './routes/enrollmentRoutes.js';
+import paymentScheduleRoutes from './routes/paymentScheduleRoutes.js';
 
 const app: Application = express();
 
@@ -127,6 +128,7 @@ app.use(`/api/${API_VERSION}/incentives`, incentiveRoutes);
 app.use(`/api/${API_VERSION}/notifications`, notificationRoutes);
 app.use(`/api/${API_VERSION}/public`, publicRoutes);
 app.use(`/api/${API_VERSION}/enrollment`, enrollmentRoutes);
+app.use(`/api/${API_VERSION}/payment-schedules`, paymentScheduleRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

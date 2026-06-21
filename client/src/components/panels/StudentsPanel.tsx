@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 export function StudentsPanel() {
   const { user } = useAuth();
@@ -20,6 +23,40 @@ export function StudentsPanel() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  
+  // Bulk Import State
+  const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
+  const [bulkData, setBulkData] = useState('');
+  const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
+  const [bulkProgramId, setBulkProgramId] = useState('');
+  const [bulkCenterId, setBulkCenterId] = useState('');
+  const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
+
+  // Notification Dialog State
+  const [notifDialogOpen, setNotifDialogOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [notifType, setNotifType] = useState('fee_reminder');
+  const [notifTitle, setNotifTitle] = useState('Outstanding Fee Reminder');
+  const [notifMessage, setNotifMessage] = useState('');
+
+  // WhatsApp Dialog State
+  const [waDialogOpen, setWaDialogOpen] = useState(false);
+  const [waStudent, setWaStudent] = useState<any>(null);
+  const [waType, setWaType] = useState('fee_reminder');
+  const [waMessage, setWaMessage] = useState('');
+
+  // Payment Schedule Dialog State
+  const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
+  const [scheduleStudent, setScheduleStudent] = useState<any>(null);
+  const [schedules, setSchedules] = useState<any[]>([]);
+  const [newSchedule, setNewSchedule] = useState({
+    title: 'Tuition Fee Installment',
+    amount: '',
+    dueDate: ''
+  });
+
+  const [activeFilter, setActiveFilter] = useState<'all' | 'current' | 'previous'>('all');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,7 +65,8 @@ export function StudentsPanel() {
     enrollmentNo: '',
     programId: '',
     centerId: '',
-    status: 'pending'
+    status: 'pending',
+    isPrevious: false
   });
 
   useEffect(() => {
@@ -72,26 +110,24 @@ export function StudentsPanel() {
     try {
       if (editingId) {
         await api.put(`/students/${editingId}`, formData);
+        toast.success('Student updated successfully');
       } else {
         await api.post('/students', formData);
+        toast.success('Student added successfully');
       }
       setDialogOpen(false);
       resetForm();
       fetchStudents();
     } catch (error: any) {
       console.error('Failed to save student:', error);
-      alert(error.response?.data?.message || 'Failed to save student');
+      toast.error(error.response?.data?.message || 'Failed to save student');
     }
   };
 
   const handleEdit = (student: any) => {
-    const studentId = student.id || student.id;
-    const programId = typeof student.programId === 'object'
-      ? (student.programId?.id || student.programId?.id)
-      : student.programId;
-    const centerId = typeof student.centerId === 'object'
-      ? (student.centerId?.id || student.centerId?.id)
-      : student.centerId;
+    const studentId = student.id;
+    const programId = typeof student.programId === 'object' ? student.programId?.id : student.programId;
+    const centerId = typeof student.centerId === 'object' ? student.centerId?.id : student.centerId;
     setEditingId(studentId);
     setFormData({
       name: student.name || '',
@@ -101,7 +137,8 @@ export function StudentsPanel() {
       enrollmentNo: student.enrollmentNo || '',
       programId: programId?.toString() || '',
       centerId: centerId?.toString() || '',
-      status: student.status || 'active'
+      status: student.status || 'active',
+      isPrevious: student.isPrevious || false
     });
     setDialogOpen(true);
   };
@@ -110,9 +147,11 @@ export function StudentsPanel() {
     if (!confirm('Are you sure you want to delete this student?')) return;
     try {
       await api.delete(`/students/${id}`);
+      toast.success('Student deleted successfully');
       fetchStudents();
     } catch (error) {
       console.error('Failed to delete student:', error);
+      toast.error('Failed to delete student');
     }
   };
 
@@ -126,136 +165,383 @@ export function StudentsPanel() {
       enrollmentNo: '',
       programId: '',
       centerId: '',
-      status: 'pending'
+      status: 'pending',
+      isPrevious: false
     });
   };
+
+  // Bulk Import Parser & Submitter
+  const handleBulkImport = async () => {
+    if (!bulkProgramId || !bulkCenterId) {
+      toast.error('Please select both a program and a study center for the bulk import');
+      return;
+    }
+
+    let parsedStudents: any[] = [];
+    try {
+      if (bulkFormat === 'json') {
+        parsedStudents = JSON.parse(bulkData);
+      } else {
+        // Simple CSV Parser
+        const lines = bulkData.split('\n').map(l => l.trim()).filter(Boolean);
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        parsedStudents = lines.slice(1).map(line => {
+          const cols = line.split(',').map(c => c.trim());
+          const obj: any = {};
+          headers.forEach((header, index) => {
+            obj[header] = cols[index] || '';
+          });
+          return obj;
+        });
+      }
+    } catch (err) {
+      toast.error('Invalid bulk data formatting. Please check your JSON or CSV formatting.');
+      return;
+    }
+
+    if (parsedStudents.length === 0) {
+      toast.error('No student records found to import.');
+      return;
+    }
+
+    // Attach program and center details
+    const studentPayload = parsedStudents.map(s => ({
+      name: s.name || s.fullname || '',
+      email: s.email || '',
+      phone: s.phone || '',
+      address: s.address || '',
+      enrollmentNo: s.enrollmentno || s.enrollment_no || '',
+      programId: bulkProgramId,
+      centerId: bulkCenterId,
+      status: s.status || 'active',
+      isPrevious: bulkIsPrevious
+    }));
+
+    try {
+      const res = await api.post('/students/bulk-import', {
+        students: studentPayload,
+        isPrevious: bulkIsPrevious
+      });
+      toast.success(`Successfully imported ${res.data.data.imported} students! (${res.data.data.skipped} skipped)`);
+      setBulkDialogOpen(false);
+      setBulkData('');
+      fetchStudents();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Bulk import failed');
+    }
+  };
+
+  // Notification Handler
+  const handleOpenNotif = (student: any) => {
+    setSelectedStudent(student);
+    setNotifType('fee_reminder');
+    setNotifTitle('Outstanding Fee Reminder');
+    setNotifMessage(`Dear ${student.name},\n\nThis is a friendly reminder that you have an outstanding fee installment due. Please arrange to settle it at your earliest convenience to avoid interruptions.\n\nBest regards,\nAccounts Office`);
+    setNotifDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (!selectedStudent) return;
+    if (notifType === 'fee_reminder') {
+      setNotifTitle('Outstanding Fee Reminder');
+      setNotifMessage(`Dear ${selectedStudent.name},\n\nThis is a friendly reminder that you have an outstanding fee installment due. Please arrange to settle it at your earliest convenience to avoid interruptions.\n\nBest regards,\nAccounts Office`);
+    } else if (notifType === 'exam') {
+      setNotifTitle('Upcoming Examination Schedule');
+      setNotifMessage(`Dear ${selectedStudent.name},\n\nYour upcoming term examination schedule has been published. Please log in to your portal to download the exam admit card and check the date sheet.\n\nBest regards,\nOperations Desk`);
+    } else if (notifType === 'result') {
+      setNotifTitle('Academic Term Results Published');
+      setNotifMessage(`Dear ${selectedStudent.name},\n\nWe are pleased to inform you that your academic term results are now available. You can review them online via your student portal dashboard.\n\nBest regards,\nController of Examinations`);
+    }
+  }, [notifType, selectedStudent]);
+
+  const handleSendNotification = async () => {
+    if (!notifMessage.trim()) {
+      toast.error('Notification message body cannot be empty');
+      return;
+    }
+    try {
+      await api.post(`/students/${selectedStudent.id}/notify`, {
+        title: notifTitle,
+        message: notifMessage,
+        type: notifType
+      });
+      toast.success('System notification sent to student successfully');
+      setNotifDialogOpen(false);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to dispatch notification');
+    }
+  };
+
+  // WhatsApp Dialog Handler
+  const handleOpenWhatsApp = (student: any) => {
+    setWaStudent(student);
+    setWaType('fee_reminder');
+    setWaMessage(`Hello ${student.name}, this is a reminder from Accounts regarding your outstanding fee payment. Please clear it at your earliest convenience. Thank you!`);
+    setWaDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (!waStudent) return;
+    if (waType === 'fee_reminder') {
+      setWaMessage(`Hello ${waStudent.name}, this is a reminder from Accounts regarding your outstanding fee payment. Please clear it at your earliest convenience. Thank you!`);
+    } else if (waType === 'exam') {
+      setWaMessage(`Hello ${waStudent.name}, your exam schedule is now published. Please visit your portal for detail datesheets. Good luck!`);
+    } else if (waType === 'result') {
+      setWaMessage(`Hello ${waStudent.name}, your term results are now out! Please check your portal to view your scorecard.`);
+    }
+  }, [waType, waStudent]);
+
+  const handleSendWhatsApp = () => {
+    if (!waStudent?.phone) {
+      toast.error('This student does not have a valid phone number');
+      return;
+    }
+    const cleanPhone = waStudent.phone.replace(/[^0-9]/g, '');
+    const url = `https://wa.me/${cleanPhone.startsWith('91') || cleanPhone.length > 10 ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(waMessage)}`;
+    window.open(url, '_blank');
+    setWaDialogOpen(false);
+  };
+
+  // Payment Schedule Handlers
+  const handleOpenSchedule = async (student: any) => {
+    setScheduleStudent(student);
+    setScheduleDialogOpen(true);
+    setNewSchedule({ title: 'Tuition Fee Installment', amount: '', dueDate: '' });
+    fetchSchedules(student.id);
+  };
+
+  const fetchSchedules = async (studentId: string) => {
+    try {
+      const res = await api.get(`/payment-schedules?studentId=${studentId}`);
+      setSchedules(res.data.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load payment schedules');
+    }
+  };
+
+  const handleCreateSchedule = async () => {
+    if (!newSchedule.amount || !newSchedule.dueDate) {
+      toast.error('Please input both amount and installment due date');
+      return;
+    }
+    try {
+      await api.post('/payment-schedules', {
+        studentId: scheduleStudent.id,
+        ...newSchedule
+      });
+      toast.success('New payment milestone added successfully');
+      setNewSchedule({ title: 'Tuition Fee Installment', amount: '', dueDate: '' });
+      fetchSchedules(scheduleStudent.id);
+    } catch (err) {
+      toast.error('Failed to create payment schedule');
+    }
+  };
+
+  const handleMarkPaid = async (scheduleId: string) => {
+    try {
+      await api.put(`/payment-schedules/${scheduleId}`, { status: 'paid' });
+      toast.success('Milestone marked as paid');
+      fetchSchedules(scheduleStudent.id);
+    } catch (err) {
+      toast.error('Failed to update schedule status');
+    }
+  };
+
+  const handleDeleteSchedule = async (scheduleId: string) => {
+    if (!confirm('Are you sure you want to remove this schedule milestone?')) return;
+    try {
+      await api.delete(`/payment-schedules/${scheduleId}`);
+      toast.success('Schedule milestone removed');
+      fetchSchedules(scheduleStudent.id);
+    } catch (err) {
+      toast.error('Failed to remove schedule');
+    }
+  };
+
+  const filteredStudents = students.filter(s => {
+    if (!s) return false;
+    if (activeFilter === 'current') return !s.isPrevious;
+    if (activeFilter === 'previous') return s.isPrevious;
+    return true;
+  });
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Student Management</h2>
-          <p className="text-muted-foreground">Manage student records and enrollments</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Student Management</h2>
+          <p className="text-muted-foreground text-sm">Manage student records, bulk imports, communications, and installment schedules</p>
         </div>
-        {canWrite && (
-          <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-            <DialogTrigger asChild>
-              <Button><Plus className="w-4 h-4 mr-2" />Add Student</Button>
-            </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Student' : 'Add New Student'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>Full Name</Label>
-                <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Email</Label>
-                  <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-                </div>
-                <div>
-                  <Label>Phone</Label>
-                  <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
-                </div>
-              </div>
-              <div>
-                <Label>Address</Label>
-                <Input value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required />
-              </div>
-              <div>
-                <Label>Enrollment Number</Label>
-                <Input value={formData.enrollmentNo} onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})} required />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Program</Label>
-                  <Select value={formData.programId} onValueChange={(value) => setFormData({...formData, programId: value})}>
-                    <SelectTrigger><SelectValue placeholder="Select program" /></SelectTrigger>
-                    <SelectContent>
-                      {programs.filter(p => p && (p.id || p.id)).map((prog) => (
-                        <SelectItem key={prog.id || prog.id} value={(prog.id || prog.id).toString()}>
-                          {prog.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Study Center</Label>
-                  <Select value={formData.centerId} onValueChange={(value) => setFormData({...formData, centerId: value})}>
-                    <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
-                    <SelectContent>
-                      {centers.filter(c => c && (c.id || c.id)).map((center) => (
-                        <SelectItem key={center.id || center.id} value={(center.id || center.id).toString()}>
-                          {center.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div>
-                <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-        )}
+        
+        <div className="flex items-center gap-2">
+          {canWrite && (
+            <>
+              {/* Bulk Import Button */}
+              <Button variant="outline" onClick={() => setBulkDialogOpen(true)}>
+                <Upload className="w-4 h-4 mr-2" /> Bulk Import
+              </Button>
+
+              <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+                <DialogTrigger asChild>
+                  <Button><Plus className="w-4 h-4 mr-2" />Add Student</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>{editingId ? 'Edit Student Details' : 'Add New Student Record'}</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label>Full Name</Label>
+                      <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Email</Label>
+                        <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+                      </div>
+                      <div>
+                        <Label>Phone</Label>
+                        <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Address</Label>
+                      <Input value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required />
+                    </div>
+                    <div>
+                      <Label>Enrollment Number</Label>
+                      <Input value={formData.enrollmentNo} onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})} required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Program</Label>
+                        <Select value={formData.programId} onValueChange={(value) => setFormData({...formData, programId: value})}>
+                          <SelectTrigger><SelectValue placeholder="Select program" /></SelectTrigger>
+                          <SelectContent>
+                            {programs.filter(p => p && p.id).map((prog) => (
+                              <SelectItem key={prog.id} value={prog.id.toString()}>
+                                {prog.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Study Center</Label>
+                        <Select value={formData.centerId} onValueChange={(value) => setFormData({...formData, centerId: value})}>
+                          <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
+                          <SelectContent>
+                            {centers.filter(c => c && c.id).map((center) => (
+                              <SelectItem key={center.id} value={center.id.toString()}>
+                                {center.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 items-center">
+                      <div>
+                        <Label>Status</Label>
+                        <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex items-center gap-2 mt-6">
+                        <input
+                          type="checkbox"
+                          id="isPrevious"
+                          checked={formData.isPrevious}
+                          onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <Label htmlFor="isPrevious" className="cursor-pointer">Mark as Previous Student</Label>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 pt-4">
+                      <Button type="submit" className="flex-1">Save</Button>
+                      <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* Tabs / Filtering Option */}
+      <Tabs defaultValue="all" onValueChange={(val) => setActiveFilter(val as any)}>
+        <TabsList>
+          <TabsTrigger value="all">All Students ({students.length})</TabsTrigger>
+          <TabsTrigger value="current">Current Students ({students.filter(s => s && !s.isPrevious).length})</TabsTrigger>
+          <TabsTrigger value="previous">Previous Students ({students.filter(s => s && s.isPrevious).length})</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <Card>
         <CardHeader><CardTitle>Student Directory</CardTitle></CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
-          ) : students.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No students found</div>
+            <div className="text-center py-8">Loading students database...</div>
+          ) : filteredStudents.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">No students found matching this criteria</div>
           ) : (
-            <div className="space-y-2">
-              {students.filter(s => s && (s.id || s.id)).map((student) => {
-                const studentId = student.id || student.id;
+            <div className="space-y-3">
+              {filteredStudents.map((student) => {
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : '';
                 return (
-                  <div key={studentId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                  <div key={student.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <GraduationCap className="w-6 h-6 text-primary" />
+                      <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                       </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{student.name}</div>
-                        <div className="text-sm text-muted-foreground">
+                      <div>
+                        <div className="font-semibold text-slate-850 dark:text-slate-100 flex items-center gap-2">
+                          {student.name}
+                          {student.isPrevious && <Badge variant="secondary" className="text-xs">Previous</Badge>}
+                        </div>
+                        <div className="text-sm text-muted-foreground font-medium mt-0.5">
                           {student.enrollmentNo}{programName ? ` • ${programName}` : ''}{centerName ? ` • ${centerName}` : ''}
                         </div>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {student.email}</span>
-                          {student.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {student.phone}</span>}
+                        <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                          <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> {student.email}</span>
+                          {student.phone && <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> {student.phone}</span>}
                         </div>
                       </div>
                     </div>
+                    
                     <div className="flex items-center gap-2">
-                      <Badge>{student.status}</Badge>
+                      <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
+                      
+                      {/* Send system notification */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenNotif(student)} title="Send Notification">
+                        <Bell className="w-4 h-4 text-amber-500" />
+                      </Button>
+
+                      {/* Send WhatsApp Click to chat */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenWhatsApp(student)} title="WhatsApp Message">
+                        <MessageSquare className="w-4 h-4 text-emerald-500" />
+                      </Button>
+
+                      {/* Manage Payment Schedule */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenSchedule(student)} title="Payment Schedule">
+                        <CalendarDays className="w-4 h-4 text-indigo-500" />
+                      </Button>
+
                       {canWrite && (
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(student)}><Edit className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => handleEdit(student)}><Edit className="w-4 h-4" /></Button>
                       )}
                       {canDelete && (
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(studentId)}><Trash2 className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="icon" className="w-8 h-8 text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20" onClick={() => handleDelete(student.id)}><Trash2 className="w-4 h-4" /></Button>
                       )}
                     </div>
                   </div>
@@ -265,6 +551,210 @@ export function StudentsPanel() {
           )}
         </CardContent>
       </Card>
+
+      {/* Bulk Import Dialog */}
+      <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Bulk Import Student Records</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Target Program</Label>
+                <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
+                  <SelectTrigger><SelectValue placeholder="Select Program" /></SelectTrigger>
+                  <SelectContent>
+                    {programs.map(p => (
+                      <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Target Study Center</Label>
+                <Select value={bulkCenterId} onValueChange={setBulkCenterId}>
+                  <SelectTrigger><SelectValue placeholder="Select Center" /></SelectTrigger>
+                  <SelectContent>
+                    {centers.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 items-center">
+              <div>
+                <Label>Input Data Format</Label>
+                <Select value={bulkFormat} onValueChange={(val: any) => setBulkFormat(val)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="csv">CSV (Comma Separated)</SelectItem>
+                    <SelectItem value="json">JSON Array</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2 mt-6">
+                <input
+                  type="checkbox"
+                  id="bulkIsPrevious"
+                  checked={bulkIsPrevious}
+                  onChange={(e) => setBulkIsPrevious(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                />
+                <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
+              </div>
+            </div>
+
+            <div>
+              <Label>Paste Data Content</Label>
+              <Textarea
+                rows={8}
+                value={bulkData}
+                onChange={(e) => setBulkData(e.target.value)}
+                placeholder={
+                  bulkFormat === 'csv'
+                    ? "name,email,phone,address,enrollmentNo\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001"
+                    : '[\n  {\n    "name": "John Doe",\n    "email": "john@example.com",\n    "phone": "9876543210",\n    "address": "Mumbai",\n    "enrollmentNo": "PYPEER001"\n  }\n]'
+                }
+                className="font-mono text-sm"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button onClick={handleBulkImport} className="flex-1">Start Import Process</Button>
+              <Button variant="outline" onClick={() => setBulkDialogOpen(false)}>Close</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Notifications Dialog */}
+      <Dialog open={notifDialogOpen} onOpenChange={setNotifDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Send Notification — {selectedStudent?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label>Notification Category</Label>
+              <Select value={notifType} onValueChange={setNotifType}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fee_reminder">Fee Reminder</SelectItem>
+                  <SelectItem value="exam">Examination Alert</SelectItem>
+                  <SelectItem value="result">Result Publication</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Message Title</Label>
+              <Input value={notifTitle} onChange={(e) => setNotifTitle(e.target.value)} required />
+            </div>
+            <div>
+              <Label>Message Body</Label>
+              <Textarea rows={6} value={notifMessage} onChange={(e) => setNotifMessage(e.target.value)} required />
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleSendNotification} className="flex-1">Send System Notification</Button>
+              <Button variant="outline" onClick={() => setNotifDialogOpen(false)}>Cancel</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* WhatsApp Dialog */}
+      <Dialog open={waDialogOpen} onOpenChange={setWaDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Compose WhatsApp Message — {waStudent?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label>Message Template</Label>
+              <Select value={waType} onValueChange={setWaType}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fee_reminder">Fee Reminder Template</SelectItem>
+                  <SelectItem value="exam">Examination Alert Template</SelectItem>
+                  <SelectItem value="result">Result Publication Template</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Message Text</Label>
+              <Textarea rows={4} value={waMessage} onChange={(e) => setWaMessage(e.target.value)} required />
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleSendWhatsApp} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2">
+                Open WhatsApp Web <ExternalLink className="w-4 h-4" />
+              </Button>
+              <Button variant="outline" onClick={() => setWaDialogOpen(false)}>Cancel</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Payment Schedule Dialog */}
+      <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Payment Installment Schedule — {scheduleStudent?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="border rounded-xl p-4 bg-slate-50 dark:bg-slate-900/20">
+              <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm">Add New Installment/Milestone</h4>
+              <div className="grid grid-cols-3 gap-3 items-end">
+                <div>
+                  <Label>Installment Title</Label>
+                  <Input value={newSchedule.title} onChange={(e) => setNewSchedule({...newSchedule, title: e.target.value})} />
+                </div>
+                <div>
+                  <Label>Amount (₹)</Label>
+                  <Input type="number" value={newSchedule.amount} onChange={(e) => setNewSchedule({...newSchedule, amount: e.target.value})} />
+                </div>
+                <div>
+                  <Label>Due Date</Label>
+                  <Input type="date" value={newSchedule.dueDate} onChange={(e) => setNewSchedule({...newSchedule, dueDate: e.target.value})} />
+                </div>
+              </div>
+              <Button size="sm" onClick={handleCreateSchedule} className="mt-4 w-full">Create Milestone</Button>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm">Milestones List</h4>
+              {schedules.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">No payment schedule configured for this student</p>
+              ) : (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {schedules.map((sc) => (
+                    <div key={sc.id} className="flex items-center justify-between p-3 border rounded-lg text-sm bg-white dark:bg-slate-800/40">
+                      <div>
+                        <span className="font-semibold text-slate-700 dark:text-slate-350">{sc.title}</span>
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          Due: {new Date(sc.dueDate).toLocaleDateString()} • Amount: ₹{sc.amount}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={sc.status === 'paid' ? 'default' : 'secondary'} className={sc.status === 'paid' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' : ''}>
+                          {sc.status}
+                        </Badge>
+                        {sc.status !== 'paid' && (
+                          <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => handleMarkPaid(sc.id)}>Mark Paid</Button>
+                        )}
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-rose-500 hover:text-rose-600 hover:bg-rose-50" onClick={() => handleDeleteSchedule(sc.id)}>
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

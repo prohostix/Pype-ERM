@@ -6,6 +6,8 @@ import {
   updateStudent,
   approveStudent,
   deleteStudent,
+  bulkImportStudents,
+  notifyStudent,
   getInternalMarks,
   getInternalMark,
   createInternalMark,
@@ -23,6 +25,9 @@ router.route('/marks').get(getInternalMarks).post(authorize('ops_admin', 'employ
 router.route('/marks/:id').get(getInternalMark).put(authorize('ops_admin', 'employee'), updateInternalMark).delete(authorize('ops_admin'), deleteInternalMark);
 
 // Student routes
+router.post('/bulk-import', authorize('org_admin', 'superadmin', 'center_admin'), bulkImportStudents);
+router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'employee'), notifyStudent);
+
 router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin'), createStudent);
 router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/approve', authorize('finance_admin', 'ops_admin'), approveStudent);

@@ -16,6 +16,7 @@ import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { BranchesPanel } from '@/components/panels/BranchesPanel';
 import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
+import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 import api from '@/lib/api';
@@ -61,6 +62,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
             <TabsTrigger value="employees" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Employees</TabsTrigger>
             <TabsTrigger value="leaves" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leave Requests</TabsTrigger>
             <TabsTrigger value="leads" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leads</TabsTrigger>
+            <TabsTrigger value="collections" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Collections</TabsTrigger>
           </TabsList>
         </div>
 
@@ -91,6 +93,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
         <TabsContent value="invoices"><InvoicesPanel /></TabsContent>
         <TabsContent value="payments"><PaymentsPanel /></TabsContent>
         <TabsContent value="expenses"><ExpensesPanel /></TabsContent>
+        <TabsContent value="collections"><CollectionsPanel /></TabsContent>
         <TabsContent value="employees"><EmployeesPanel /></TabsContent>
         <TabsContent value="leaves"><LeavesPanel /></TabsContent>
         <TabsContent value="leads"><LeadsPanel /></TabsContent>
