@@ -254,7 +254,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
         {!isCollapsed && (
           <div className="mb-4 px-2">
             <p className="text-sm font-medium text-white">{user.name}</p>
-            <p className="text-xs text-slate-400 capitalize">{user.role.replace('_', ' ')}</p>
+            <p className="text-xs text-slate-400 capitalize">{(user?.role || '').replace('_', ' ')}</p>
           </div>
         )}
         <Button

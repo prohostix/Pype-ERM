@@ -294,7 +294,7 @@ function BranchSection({
                   </span>
                   <p className="font-bold text-sm text-gray-800">{mgr.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    {mgr.designation || mgr.role.replace(/_/g, ' ')}
+                    {mgr.designation || (mgr.role || '').replace(/_/g, ' ')}
                   </p>
                   <div className="mt-2 flex items-center justify-center gap-1">
                     <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
@@ -660,7 +660,7 @@ export function OrgHierarchyPanel() {
                   {u.name.charAt(0)}
                 </span>
                 {u.name}
-                <span className="text-gray-400">({(u.designation || u.role).replace(/_/g, ' ')})</span>
+                <span className="text-gray-400">({(u.designation || u.role || '').replace(/_/g, ' ')})</span>
               </span>
             ))}
           </div>
@@ -887,7 +887,7 @@ export function OrgHierarchyPanel() {
                     .filter(u => !assignTarget?.filledBy?.find(f => f.id === u.id))
                     .map(u => (
                       <SelectItem key={u.id} value={u.id}>
-                        {u.name} — {u.designation || u.role.replace(/_/g, ' ')} {u.userId ? `(${u.userId})` : ''}
+                        {u.name} — {u.designation || (u.role || '').replace(/_/g, ' ')} {u.userId ? `(${u.userId})` : ''}
                       </SelectItem>
                     ))}
                 </SelectContent>

@@ -351,7 +351,7 @@ export function ManagerAssignmentPanel() {
                     <SelectItem key={user.id} value={user.id}>
                       {user.name}
                       {' — '}
-                      {user.designation || user.role.replace(/_/g, ' ')}
+                      {user.designation || (user.role || '').replace(/_/g, ' ')}
                     </SelectItem>
                   ))}
                 </SelectContent>
