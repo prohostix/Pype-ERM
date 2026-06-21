@@ -231,6 +231,62 @@ export function StudentsPanel() {
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+    if (fileExtension === 'csv') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target?.result as string;
+        setBulkData(text);
+        setBulkFormat('csv');
+        toast.success('CSV file loaded successfully! Review the pasted content below.');
+      };
+      reader.readAsText(file);
+    } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const XLSX = await import('xlsx');
+          const data = new Uint8Array(event.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          // Convert sheet to JSON array
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          
+          if (jsonData.length === 0) {
+            toast.error('No data found in the Excel sheet.');
+            return;
+          }
+          
+          // Format keys to lowercase to match our parser
+          const formattedData = jsonData.map((row: any) => {
+            const newRow: any = {};
+            Object.keys(row).forEach(key => {
+              const cleanedKey = key.trim().toLowerCase();
+              newRow[cleanedKey] = row[key];
+            });
+            return newRow;
+          });
+
+          setBulkData(JSON.stringify(formattedData, null, 2));
+          setBulkFormat('json');
+          toast.success('Excel sheet loaded and converted to JSON successfully! Review the content below.');
+        } catch (err) {
+          console.error(err);
+          toast.error('Failed to parse Excel file. Make sure it is not corrupted.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      toast.error('Unsupported file format. Please upload a .csv, .xlsx, or .xls file.');
+    }
+  };
+
   // Notification Handler
   const handleOpenNotif = (student: any) => {
     setSelectedStudent(student);
@@ -605,6 +661,25 @@ export function StudentsPanel() {
                 />
                 <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
               </div>
+            </div>
+
+            <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50">
+              <Label className="block mb-2 font-medium">Or Upload Excel/CSV File</Label>
+              <input
+                type="file"
+                accept=".xlsx,.xls,.csv"
+                onChange={handleFileUpload}
+                className="block w-full text-sm text-slate-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-md file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-primary file:text-primary-foreground
+                  hover:file:bg-primary/95
+                  cursor-pointer"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1.5">
+                Supported formats: Microsoft Excel (.xlsx, .xls) and CSV. Columns should include: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>.
+              </p>
             </div>
 
             <div>
