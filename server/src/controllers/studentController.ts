@@ -29,8 +29,35 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const createStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { email, name, phone } = req.body;
+  const { email, name, phone, centerId, programId } = req.body;
   
+  if (!centerId || centerId.trim() === '') {
+    res.status(400).json({ success: false, message: 'Study Center is required' });
+    return;
+  }
+  if (!programId || programId.trim() === '') {
+    res.status(400).json({ success: false, message: 'Program is required' });
+    return;
+  }
+
+  // Verify that the referenced center exists
+  const centerExists = await prisma.studyCenter.findFirst({
+    where: { id: centerId, organizationId: req.user.organizationId }
+  });
+  if (!centerExists) {
+    res.status(400).json({ success: false, message: 'Selected Study Center does not exist' });
+    return;
+  }
+
+  // Verify that the referenced program exists
+  const programExists = await prisma.program.findFirst({
+    where: { id: programId, organizationId: req.user.organizationId }
+  });
+  if (!programExists) {
+    res.status(400).json({ success: false, message: 'Selected Program does not exist' });
+    return;
+  }
+
   let studentUser = await prisma.user.findUnique({ where: { email } });
   const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
   if (!studentUser) {

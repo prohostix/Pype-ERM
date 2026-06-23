@@ -140,6 +140,14 @@ export function StudentsPanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.programId || formData.programId.trim() === '') {
+      toast.error('Please select a Program');
+      return;
+    }
+    if (!formData.centerId || formData.centerId.trim() === '') {
+      toast.error('Please select a Study Center');
+      return;
+    }
     try {
       if (editingId) {
         await api.put(`/students/${editingId}`, formData);
