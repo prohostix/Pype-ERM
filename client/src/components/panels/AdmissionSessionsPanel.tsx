@@ -12,7 +12,9 @@ import { useAuth } from '@/hooks/useAuth';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const canWrite = ['org_admin', 'superadmin', 'ops_admin'].includes(user?.role || '');
+  const isFinance = user?.role === 'finance_admin';
+  const isOps = user?.role === 'ops_admin';
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,7 +49,6 @@ export function AdmissionSessionsPanel() {
   const fetchDepartments = async () => {
     try {
       const res = await api.get('/departments');
-      // Filter to operations-type departments only, as AdmissionSession.subDepartmentId refs Department
       const all = res.data.data || [];
       setDepartments(all.filter((d: any) => d.type === 'operations'));
     } catch (err) {
@@ -63,7 +64,7 @@ export function AdmissionSessionsPanel() {
         subDepartmentId: formData.subDepartmentId,
         startDate: formData.startDate,
         endDate: formData.endDate,
-        status: formData.status
+        status: isOps ? 'pending' : formData.status
       };
       if (formData.examDate) payload.examDate = formData.examDate;
 
@@ -94,6 +95,15 @@ export function AdmissionSessionsPanel() {
       status: s.status || 'pending'
     });
     setDialogOpen(true);
+  };
+
+  const handleApprove = async (id: string) => {
+    try {
+      await api.put(`/operations/sessions/${id}/approve`);
+      fetchSessions();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to approve session');
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -159,18 +169,20 @@ export function AdmissionSessionsPanel() {
                 <Label>Exam Date (optional)</Label>
                 <Input type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
               </div>
-              <div>
-                <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="approved">Approved</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="closed">Closed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {!isOps && (
+                <div>
+                  <Label>Status</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="closed">Closed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <div className="flex gap-2">
                 <Button type="submit" className="flex-1">Save</Button>
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
@@ -212,6 +224,11 @@ export function AdmissionSessionsPanel() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge>{s.status}</Badge>
+                      {isFinance && s.status === 'pending' && (
+                        <Button size="sm" variant="outline" className="text-green-600 border-green-600 hover:bg-green-50" onClick={() => handleApprove(sid)}>
+                          Approve
+                        </Button>
+                      )}
                       {canWrite && (
                         <>
                           <Button variant="ghost" size="sm" onClick={() => handleEdit(s)}><Edit className="w-4 h-4" /></Button>

@@ -163,11 +163,17 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
 
 // Fee Structures
 export const getFeeStructures = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fees = await prisma.feeStructure.findMany({ where: { organizationId: req.user.organizationId } });
+  const fees = await prisma.feeStructure.findMany({
+    where: { organizationId: req.user.organizationId },
+    include: { program: true, session: true }
+  });
   res.json({ success: true, count: fees.length, data: fees });
 });
 export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fee = await prisma.feeStructure.findUnique({ where: { id: req.params.id } });
+  const fee = await prisma.feeStructure.findUnique({
+    where: { id: req.params.id },
+    include: { program: true, session: true }
+  });
   if (!fee) {
     res.status(404).json({ success: false, message: 'Fee structure not found' });
     return;
@@ -175,7 +181,11 @@ export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Respon
   res.json({ success: true, data: fee });
 });
 export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fee = await prisma.feeStructure.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const data = { ...req.body, organizationId: req.user.organizationId };
+  if (data.sessionId === '' || !data.sessionId) {
+    data.sessionId = null;
+  }
+  const fee = await prisma.feeStructure.create({ data });
   res.status(201).json({ success: true, data: fee });
 });
 export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -184,7 +194,11 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     res.status(404).json({ success: false, message: 'Fee structure not found' });
     return;
   }
-  const fee = await prisma.feeStructure.update({ where: { id: req.params.id }, data: req.body });
+  const data = { ...req.body };
+  if (data.sessionId === '' || data.sessionId === undefined) {
+    data.sessionId = null;
+  }
+  const fee = await prisma.feeStructure.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: fee });
 });
 export const deleteFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {

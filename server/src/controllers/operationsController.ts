@@ -187,11 +187,19 @@ export const getAdmissionSession = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const session = await prisma.admissionSession.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const data = { ...req.body, organizationId: req.user.organizationId };
+  if (req.user.role === 'ops_admin') {
+    data.status = 'pending';
+  }
+  const session = await prisma.admissionSession.create({ data });
   res.status(201).json({ success: true, data: session });
 });
 export const updateAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data: req.body });
+  const data = { ...req.body };
+  if (req.user.role === 'ops_admin') {
+    delete data.status;
+  }
+  const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: session });
 });
 export const deleteAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {

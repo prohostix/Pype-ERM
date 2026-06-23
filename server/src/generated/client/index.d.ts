@@ -7559,6 +7559,7 @@ export namespace Prisma {
   export type ProgramCountOutputType = {
     admissionSessions: number
     enrollments: number
+    feeStructures: number
     programAllocations: number
     reregRules: number
     students: number
@@ -7570,6 +7571,7 @@ export namespace Prisma {
   export type ProgramCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | ProgramCountOutputTypeCountAdmissionSessionsArgs
     enrollments?: boolean | ProgramCountOutputTypeCountEnrollmentsArgs
+    feeStructures?: boolean | ProgramCountOutputTypeCountFeeStructuresArgs
     programAllocations?: boolean | ProgramCountOutputTypeCountProgramAllocationsArgs
     reregRules?: boolean | ProgramCountOutputTypeCountReregRulesArgs
     students?: boolean | ProgramCountOutputTypeCountStudentsArgs
@@ -7601,6 +7603,13 @@ export namespace Prisma {
    */
   export type ProgramCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnrollmentWhereInput
+  }
+
+  /**
+   * ProgramCountOutputType without action
+   */
+  export type ProgramCountOutputTypeCountFeeStructuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeeStructureWhereInput
   }
 
   /**
@@ -8063,10 +8072,12 @@ export namespace Prisma {
 
   export type AdmissionSessionCountOutputType = {
     enrollments: number
+    feeStructures: number
   }
 
   export type AdmissionSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | AdmissionSessionCountOutputTypeCountEnrollmentsArgs
+    feeStructures?: boolean | AdmissionSessionCountOutputTypeCountFeeStructuresArgs
   }
 
   // Custom InputTypes
@@ -8085,6 +8096,13 @@ export namespace Prisma {
    */
   export type AdmissionSessionCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnrollmentWhereInput
+  }
+
+  /**
+   * AdmissionSessionCountOutputType without action
+   */
+  export type AdmissionSessionCountOutputTypeCountFeeStructuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeeStructureWhereInput
   }
 
 
@@ -22242,7 +22260,7 @@ export namespace Prisma {
     status?: boolean
     admissionSessions?: boolean | Program$admissionSessionsArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
-    feeStructure?: boolean | Program$feeStructureArgs<ExtArgs>
+    feeStructures?: boolean | Program$feeStructuresArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     university?: boolean | UniversityDefaultArgs<ExtArgs>
     programAllocations?: boolean | Program$programAllocationsArgs<ExtArgs>
@@ -22305,7 +22323,7 @@ export namespace Prisma {
   export type ProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | Program$admissionSessionsArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
-    feeStructure?: boolean | Program$feeStructureArgs<ExtArgs>
+    feeStructures?: boolean | Program$feeStructuresArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     university?: boolean | UniversityDefaultArgs<ExtArgs>
     programAllocations?: boolean | Program$programAllocationsArgs<ExtArgs>
@@ -22331,7 +22349,7 @@ export namespace Prisma {
     objects: {
       admissionSessions: Prisma.$AdmissionSessionPayload<ExtArgs>[]
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
-      feeStructure: Prisma.$FeeStructurePayload<ExtArgs> | null
+      feeStructures: Prisma.$FeeStructurePayload<ExtArgs>[]
       organization: Prisma.$OrganizationPayload<ExtArgs>
       university: Prisma.$UniversityPayload<ExtArgs>
       programAllocations: Prisma.$ProgramAllocationPayload<ExtArgs>[]
@@ -22750,7 +22768,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     admissionSessions<T extends Program$admissionSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Program$admissionSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     enrollments<T extends Program$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Program$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    feeStructure<T extends Program$feeStructureArgs<ExtArgs> = {}>(args?: Subset<T, Program$feeStructureArgs<ExtArgs>>): Prisma__FeeStructureClient<$Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    feeStructures<T extends Program$feeStructuresArgs<ExtArgs> = {}>(args?: Subset<T, Program$feeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     university<T extends UniversityDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UniversityDefaultArgs<ExtArgs>>): Prisma__UniversityClient<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     programAllocations<T extends Program$programAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Program$programAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -23249,9 +23267,9 @@ export namespace Prisma {
   }
 
   /**
-   * Program.feeStructure
+   * Program.feeStructures
    */
-  export type Program$feeStructureArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Program$feeStructuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the FeeStructure
      */
@@ -23265,6 +23283,11 @@ export namespace Prisma {
      */
     include?: FeeStructureInclude<ExtArgs> | null
     where?: FeeStructureWhereInput
+    orderBy?: FeeStructureOrderByWithRelationInput | FeeStructureOrderByWithRelationInput[]
+    cursor?: FeeStructureWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FeeStructureScalarFieldEnum | FeeStructureScalarFieldEnum[]
   }
 
   /**
@@ -25278,6 +25301,10 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     programId: string | null
     sessionId: string | null
     status: string | null
@@ -25298,6 +25325,10 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     programId: string | null
     sessionId: string | null
     status: string | null
@@ -25318,6 +25349,10 @@ export namespace Prisma {
     email: number
     phone: number
     address: number
+    fatherName: number
+    dob: number
+    altPhone: number
+    pinCode: number
     programId: number
     sessionId: number
     status: number
@@ -25327,6 +25362,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     referredBy: number
+    documents: number
     isPrevious: number
     credentials: number
     _all: number
@@ -25342,6 +25378,10 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     programId?: true
     sessionId?: true
     status?: true
@@ -25362,6 +25402,10 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     programId?: true
     sessionId?: true
     status?: true
@@ -25382,6 +25426,10 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     programId?: true
     sessionId?: true
     status?: true
@@ -25391,6 +25439,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     referredBy?: true
+    documents?: true
     isPrevious?: true
     credentials?: true
     _all?: true
@@ -25470,13 +25519,17 @@ export namespace Prisma {
 
   export type StudentGroupByOutputType = {
     id: string
-    centerId: string
+    centerId: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     programId: string
     sessionId: string | null
     status: string
@@ -25486,6 +25539,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     referredBy: string | null
+    documents: JsonValue | null
     isPrevious: boolean
     credentials: JsonValue | null
     _count: StudentCountAggregateOutputType | null
@@ -25516,6 +25570,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     programId?: boolean
     sessionId?: boolean
     status?: boolean
@@ -25525,12 +25583,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25548,6 +25607,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     programId?: boolean
     sessionId?: boolean
     status?: boolean
@@ -25557,9 +25620,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25575,6 +25639,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     programId?: boolean
     sessionId?: boolean
     status?: boolean
@@ -25584,9 +25652,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25602,6 +25671,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     programId?: boolean
     sessionId?: boolean
     status?: boolean
@@ -25611,16 +25684,17 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     referredBy?: boolean
+    documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "fatherName" | "dob" | "altPhone" | "pinCode" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "documents" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25629,14 +25703,14 @@ export namespace Prisma {
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
     referrer?: boolean | Student$referrerArgs<ExtArgs>
   }
   export type StudentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    center?: boolean | StudyCenterDefaultArgs<ExtArgs>
+    center?: boolean | Student$centerArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25649,7 +25723,7 @@ export namespace Prisma {
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       internalMarks: Prisma.$InternalMarkPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
-      center: Prisma.$StudyCenterPayload<ExtArgs>
+      center: Prisma.$StudyCenterPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
       organization: Prisma.$OrganizationPayload<ExtArgs>
       program: Prisma.$ProgramPayload<ExtArgs>
@@ -25658,13 +25732,17 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      centerId: string
+      centerId: string | null
       organizationId: string
       enrollmentNo: string
       name: string
       email: string
       phone: string
       address: string
+      fatherName: string | null
+      dob: Date | null
+      altPhone: string | null
+      pinCode: string | null
       programId: string
       sessionId: string | null
       status: string
@@ -25674,6 +25752,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       referredBy: string | null
+      documents: Prisma.JsonValue | null
       isPrevious: boolean
       credentials: Prisma.JsonValue | null
     }, ExtArgs["result"]["student"]>
@@ -26073,7 +26152,7 @@ export namespace Prisma {
     enrollments<T extends Student$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Student$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     internalMarks<T extends Student$internalMarksArgs<ExtArgs> = {}>(args?: Subset<T, Student$internalMarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InternalMarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Student$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Student$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    center<T extends StudyCenterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterDefaultArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    center<T extends Student$centerArgs<ExtArgs> = {}>(args?: Subset<T, Student$centerArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -26116,6 +26195,10 @@ export namespace Prisma {
     readonly email: FieldRef<"Student", 'String'>
     readonly phone: FieldRef<"Student", 'String'>
     readonly address: FieldRef<"Student", 'String'>
+    readonly fatherName: FieldRef<"Student", 'String'>
+    readonly dob: FieldRef<"Student", 'DateTime'>
+    readonly altPhone: FieldRef<"Student", 'String'>
+    readonly pinCode: FieldRef<"Student", 'String'>
     readonly programId: FieldRef<"Student", 'String'>
     readonly sessionId: FieldRef<"Student", 'String'>
     readonly status: FieldRef<"Student", 'String'>
@@ -26125,6 +26208,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Student", 'DateTime'>
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
     readonly referredBy: FieldRef<"Student", 'String'>
+    readonly documents: FieldRef<"Student", 'Json'>
     readonly isPrevious: FieldRef<"Student", 'Boolean'>
     readonly credentials: FieldRef<"Student", 'Json'>
   }
@@ -26597,6 +26681,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Student.center
+   */
+  export type Student$centerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudyCenter
+     */
+    select?: StudyCenterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudyCenter
+     */
+    omit?: StudyCenterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudyCenterInclude<ExtArgs> | null
+    where?: StudyCenterWhereInput
   }
 
   /**
@@ -44467,6 +44570,7 @@ export namespace Prisma {
     subDepartment?: boolean | AdmissionSession$subDepartmentArgs<ExtArgs>
     university?: boolean | AdmissionSession$universityArgs<ExtArgs>
     enrollments?: boolean | AdmissionSession$enrollmentsArgs<ExtArgs>
+    feeStructures?: boolean | AdmissionSession$feeStructuresArgs<ExtArgs>
     _count?: boolean | AdmissionSessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admissionSession"]>
 
@@ -44551,6 +44655,7 @@ export namespace Prisma {
     subDepartment?: boolean | AdmissionSession$subDepartmentArgs<ExtArgs>
     university?: boolean | AdmissionSession$universityArgs<ExtArgs>
     enrollments?: boolean | AdmissionSession$enrollmentsArgs<ExtArgs>
+    feeStructures?: boolean | AdmissionSession$feeStructuresArgs<ExtArgs>
     _count?: boolean | AdmissionSessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AdmissionSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -44583,6 +44688,7 @@ export namespace Prisma {
       subDepartment: Prisma.$SubDepartmentPayload<ExtArgs> | null
       university: Prisma.$UniversityPayload<ExtArgs> | null
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+      feeStructures: Prisma.$FeeStructurePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -45003,6 +45109,7 @@ export namespace Prisma {
     subDepartment<T extends AdmissionSession$subDepartmentArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$subDepartmentArgs<ExtArgs>>): Prisma__SubDepartmentClient<$Result.GetResult<Prisma.$SubDepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     university<T extends AdmissionSession$universityArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$universityArgs<ExtArgs>>): Prisma__UniversityClient<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     enrollments<T extends AdmissionSession$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    feeStructures<T extends AdmissionSession$feeStructuresArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$feeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -45587,6 +45694,30 @@ export namespace Prisma {
   }
 
   /**
+   * AdmissionSession.feeStructures
+   */
+  export type AdmissionSession$feeStructuresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeeStructure
+     */
+    select?: FeeStructureSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeeStructure
+     */
+    omit?: FeeStructureOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeeStructureInclude<ExtArgs> | null
+    where?: FeeStructureWhereInput
+    orderBy?: FeeStructureOrderByWithRelationInput | FeeStructureOrderByWithRelationInput[]
+    cursor?: FeeStructureWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FeeStructureScalarFieldEnum | FeeStructureScalarFieldEnum[]
+  }
+
+  /**
    * AdmissionSession without action
    */
   export type AdmissionSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -45627,6 +45758,10 @@ export namespace Prisma {
     studentEmail: string | null
     studentPhone: string | null
     studentAddress: string | null
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     status: string | null
     departmentRemarks: string | null
     financeRemarks: string | null
@@ -45655,6 +45790,10 @@ export namespace Prisma {
     studentEmail: string | null
     studentPhone: string | null
     studentAddress: string | null
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     status: string | null
     departmentRemarks: string | null
     financeRemarks: string | null
@@ -45683,6 +45822,10 @@ export namespace Prisma {
     studentEmail: number
     studentPhone: number
     studentAddress: number
+    fatherName: number
+    dob: number
+    altPhone: number
+    pinCode: number
     status: number
     departmentRemarks: number
     financeRemarks: number
@@ -45714,6 +45857,10 @@ export namespace Prisma {
     studentEmail?: true
     studentPhone?: true
     studentAddress?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     status?: true
     departmentRemarks?: true
     financeRemarks?: true
@@ -45742,6 +45889,10 @@ export namespace Prisma {
     studentEmail?: true
     studentPhone?: true
     studentAddress?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     status?: true
     departmentRemarks?: true
     financeRemarks?: true
@@ -45770,6 +45921,10 @@ export namespace Prisma {
     studentEmail?: true
     studentPhone?: true
     studentAddress?: true
+    fatherName?: true
+    dob?: true
+    altPhone?: true
+    pinCode?: true
     status?: true
     departmentRemarks?: true
     financeRemarks?: true
@@ -45872,6 +46027,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName: string | null
+    dob: Date | null
+    altPhone: string | null
+    pinCode: string | null
     status: string
     departmentRemarks: string | null
     financeRemarks: string | null
@@ -45918,6 +46077,10 @@ export namespace Prisma {
     studentEmail?: boolean
     studentPhone?: boolean
     studentAddress?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     status?: boolean
     departmentRemarks?: boolean
     financeRemarks?: boolean
@@ -45957,6 +46120,10 @@ export namespace Prisma {
     studentEmail?: boolean
     studentPhone?: boolean
     studentAddress?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     status?: boolean
     departmentRemarks?: boolean
     financeRemarks?: boolean
@@ -45995,6 +46162,10 @@ export namespace Prisma {
     studentEmail?: boolean
     studentPhone?: boolean
     studentAddress?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     status?: boolean
     departmentRemarks?: boolean
     financeRemarks?: boolean
@@ -46033,6 +46204,10 @@ export namespace Prisma {
     studentEmail?: boolean
     studentPhone?: boolean
     studentAddress?: boolean
+    fatherName?: boolean
+    dob?: boolean
+    altPhone?: boolean
+    pinCode?: boolean
     status?: boolean
     departmentRemarks?: boolean
     financeRemarks?: boolean
@@ -46050,7 +46225,7 @@ export namespace Prisma {
     salesUserId?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "fatherName" | "dob" | "altPhone" | "pinCode" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
@@ -46112,6 +46287,10 @@ export namespace Prisma {
       studentEmail: string
       studentPhone: string
       studentAddress: string
+      fatherName: string | null
+      dob: Date | null
+      altPhone: string | null
+      pinCode: string | null
       status: string
       departmentRemarks: string | null
       financeRemarks: string | null
@@ -46571,6 +46750,10 @@ export namespace Prisma {
     readonly studentEmail: FieldRef<"Enrollment", 'String'>
     readonly studentPhone: FieldRef<"Enrollment", 'String'>
     readonly studentAddress: FieldRef<"Enrollment", 'String'>
+    readonly fatherName: FieldRef<"Enrollment", 'String'>
+    readonly dob: FieldRef<"Enrollment", 'DateTime'>
+    readonly altPhone: FieldRef<"Enrollment", 'String'>
+    readonly pinCode: FieldRef<"Enrollment", 'String'>
     readonly status: FieldRef<"Enrollment", 'String'>
     readonly departmentRemarks: FieldRef<"Enrollment", 'String'>
     readonly financeRemarks: FieldRef<"Enrollment", 'String'>
@@ -74656,6 +74839,7 @@ export namespace Prisma {
   export type FeeStructureMinAggregateOutputType = {
     id: string | null
     programId: string | null
+    sessionId: string | null
     organizationId: string | null
     registrationFee: number | null
     tuitionFee: number | null
@@ -74668,6 +74852,7 @@ export namespace Prisma {
   export type FeeStructureMaxAggregateOutputType = {
     id: string | null
     programId: string | null
+    sessionId: string | null
     organizationId: string | null
     registrationFee: number | null
     tuitionFee: number | null
@@ -74680,6 +74865,7 @@ export namespace Prisma {
   export type FeeStructureCountAggregateOutputType = {
     id: number
     programId: number
+    sessionId: number
     organizationId: number
     registrationFee: number
     tuitionFee: number
@@ -74709,6 +74895,7 @@ export namespace Prisma {
   export type FeeStructureMinAggregateInputType = {
     id?: true
     programId?: true
+    sessionId?: true
     organizationId?: true
     registrationFee?: true
     tuitionFee?: true
@@ -74721,6 +74908,7 @@ export namespace Prisma {
   export type FeeStructureMaxAggregateInputType = {
     id?: true
     programId?: true
+    sessionId?: true
     organizationId?: true
     registrationFee?: true
     tuitionFee?: true
@@ -74733,6 +74921,7 @@ export namespace Prisma {
   export type FeeStructureCountAggregateInputType = {
     id?: true
     programId?: true
+    sessionId?: true
     organizationId?: true
     registrationFee?: true
     tuitionFee?: true
@@ -74833,6 +75022,7 @@ export namespace Prisma {
   export type FeeStructureGroupByOutputType = {
     id: string
     programId: string
+    sessionId: string | null
     organizationId: string
     registrationFee: number
     tuitionFee: number
@@ -74865,6 +75055,7 @@ export namespace Prisma {
   export type FeeStructureSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     programId?: boolean
+    sessionId?: boolean
     organizationId?: boolean
     registrationFee?: boolean
     tuitionFee?: boolean
@@ -74875,11 +75066,13 @@ export namespace Prisma {
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }, ExtArgs["result"]["feeStructure"]>
 
   export type FeeStructureSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     programId?: boolean
+    sessionId?: boolean
     organizationId?: boolean
     registrationFee?: boolean
     tuitionFee?: boolean
@@ -74890,11 +75083,13 @@ export namespace Prisma {
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }, ExtArgs["result"]["feeStructure"]>
 
   export type FeeStructureSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     programId?: boolean
+    sessionId?: boolean
     organizationId?: boolean
     registrationFee?: boolean
     tuitionFee?: boolean
@@ -74905,11 +75100,13 @@ export namespace Prisma {
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }, ExtArgs["result"]["feeStructure"]>
 
   export type FeeStructureSelectScalar = {
     id?: boolean
     programId?: boolean
+    sessionId?: boolean
     organizationId?: boolean
     registrationFee?: boolean
     tuitionFee?: boolean
@@ -74920,18 +75117,21 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "otherCharges" | "gstPercentage" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
+  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "sessionId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "otherCharges" | "gstPercentage" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
   export type FeeStructureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }
   export type FeeStructureIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }
   export type FeeStructureIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
+    session?: boolean | FeeStructure$sessionArgs<ExtArgs>
   }
 
   export type $FeeStructurePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -74939,10 +75139,12 @@ export namespace Prisma {
     objects: {
       organization: Prisma.$OrganizationPayload<ExtArgs>
       program: Prisma.$ProgramPayload<ExtArgs>
+      session: Prisma.$AdmissionSessionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       programId: string
+      sessionId: string | null
       organizationId: string
       registrationFee: number
       tuitionFee: number
@@ -75347,6 +75549,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    session<T extends FeeStructure$sessionArgs<ExtArgs> = {}>(args?: Subset<T, FeeStructure$sessionArgs<ExtArgs>>): Prisma__AdmissionSessionClient<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -75378,6 +75581,7 @@ export namespace Prisma {
   interface FeeStructureFieldRefs {
     readonly id: FieldRef<"FeeStructure", 'String'>
     readonly programId: FieldRef<"FeeStructure", 'String'>
+    readonly sessionId: FieldRef<"FeeStructure", 'String'>
     readonly organizationId: FieldRef<"FeeStructure", 'String'>
     readonly registrationFee: FieldRef<"FeeStructure", 'Float'>
     readonly tuitionFee: FieldRef<"FeeStructure", 'Float'>
@@ -75784,6 +75988,25 @@ export namespace Prisma {
      * Limit how many FeeStructures to delete.
      */
     limit?: number
+  }
+
+  /**
+   * FeeStructure.session
+   */
+  export type FeeStructure$sessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionSession
+     */
+    select?: AdmissionSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionSession
+     */
+    omit?: AdmissionSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdmissionSessionInclude<ExtArgs> | null
+    where?: AdmissionSessionWhereInput
   }
 
   /**
@@ -81899,6 +82122,10 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
+    fatherName: 'fatherName',
+    dob: 'dob',
+    altPhone: 'altPhone',
+    pinCode: 'pinCode',
     programId: 'programId',
     sessionId: 'sessionId',
     status: 'status',
@@ -81908,6 +82135,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     referredBy: 'referredBy',
+    documents: 'documents',
     isPrevious: 'isPrevious',
     credentials: 'credentials'
   };
@@ -82218,6 +82446,10 @@ export namespace Prisma {
     studentEmail: 'studentEmail',
     studentPhone: 'studentPhone',
     studentAddress: 'studentAddress',
+    fatherName: 'fatherName',
+    dob: 'dob',
+    altPhone: 'altPhone',
+    pinCode: 'pinCode',
     status: 'status',
     departmentRemarks: 'departmentRemarks',
     financeRemarks: 'financeRemarks',
@@ -82643,6 +82875,7 @@ export namespace Prisma {
   export const FeeStructureScalarFieldEnum: {
     id: 'id',
     programId: 'programId',
+    sessionId: 'sessionId',
     organizationId: 'organizationId',
     registrationFee: 'registrationFee',
     tuitionFee: 'tuitionFee',
@@ -84483,7 +84716,7 @@ export namespace Prisma {
     status?: StringFilter<"Program"> | string
     admissionSessions?: AdmissionSessionListRelationFilter
     enrollments?: EnrollmentListRelationFilter
-    feeStructure?: XOR<FeeStructureNullableScalarRelationFilter, FeeStructureWhereInput> | null
+    feeStructures?: FeeStructureListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     university?: XOR<UniversityScalarRelationFilter, UniversityWhereInput>
     programAllocations?: ProgramAllocationListRelationFilter
@@ -84509,7 +84742,7 @@ export namespace Prisma {
     status?: SortOrder
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
-    feeStructure?: FeeStructureOrderByWithRelationInput
+    feeStructures?: FeeStructureOrderByRelationAggregateInput
     organization?: OrganizationOrderByWithRelationInput
     university?: UniversityOrderByWithRelationInput
     programAllocations?: ProgramAllocationOrderByRelationAggregateInput
@@ -84538,7 +84771,7 @@ export namespace Prisma {
     status?: StringFilter<"Program"> | string
     admissionSessions?: AdmissionSessionListRelationFilter
     enrollments?: EnrollmentListRelationFilter
-    feeStructure?: XOR<FeeStructureNullableScalarRelationFilter, FeeStructureWhereInput> | null
+    feeStructures?: FeeStructureListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     university?: XOR<UniversityScalarRelationFilter, UniversityWhereInput>
     programAllocations?: ProgramAllocationListRelationFilter
@@ -84806,13 +85039,17 @@ export namespace Prisma {
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
     id?: StringFilter<"Student"> | string
-    centerId?: StringFilter<"Student"> | string
+    centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringFilter<"Student"> | string
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
+    altPhone?: StringNullableFilter<"Student"> | string | null
+    pinCode?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -84822,12 +85059,13 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
-    center?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
+    center?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -84837,13 +85075,17 @@ export namespace Prisma {
 
   export type StudentOrderByWithRelationInput = {
     id?: SortOrder
-    centerId?: SortOrder
+    centerId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
     programId?: SortOrder
     sessionId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -84853,6 +85095,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
+    documents?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrderInput | SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
@@ -84873,11 +85116,15 @@ export namespace Prisma {
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
-    centerId?: StringFilter<"Student"> | string
+    centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     name?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
+    altPhone?: StringNullableFilter<"Student"> | string | null
+    pinCode?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -84887,12 +85134,13 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
-    center?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
+    center?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -84902,13 +85150,17 @@ export namespace Prisma {
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
-    centerId?: SortOrder
+    centerId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
     programId?: SortOrder
     sessionId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -84918,6 +85170,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
+    documents?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrderInput | SortOrder
     _count?: StudentCountOrderByAggregateInput
@@ -84930,13 +85183,17 @@ export namespace Prisma {
     OR?: StudentScalarWhereWithAggregatesInput[]
     NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Student"> | string
-    centerId?: StringWithAggregatesFilter<"Student"> | string
+    centerId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     organizationId?: StringWithAggregatesFilter<"Student"> | string
     enrollmentNo?: StringWithAggregatesFilter<"Student"> | string
     name?: StringWithAggregatesFilter<"Student"> | string
     email?: StringWithAggregatesFilter<"Student"> | string
     phone?: StringWithAggregatesFilter<"Student"> | string
     address?: StringWithAggregatesFilter<"Student"> | string
+    fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    dob?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
+    altPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    pinCode?: StringNullableWithAggregatesFilter<"Student"> | string | null
     programId?: StringWithAggregatesFilter<"Student"> | string
     sessionId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     status?: StringWithAggregatesFilter<"Student"> | string
@@ -84946,6 +85203,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     referredBy?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    documents?: JsonNullableWithAggregatesFilter<"Student">
     isPrevious?: BoolWithAggregatesFilter<"Student"> | boolean
     credentials?: JsonNullableWithAggregatesFilter<"Student">
   }
@@ -86464,6 +86722,7 @@ export namespace Prisma {
     subDepartment?: XOR<SubDepartmentNullableScalarRelationFilter, SubDepartmentWhereInput> | null
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     enrollments?: EnrollmentListRelationFilter
+    feeStructures?: FeeStructureListRelationFilter
   }
 
   export type AdmissionSessionOrderByWithRelationInput = {
@@ -86491,6 +86750,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentOrderByWithRelationInput
     university?: UniversityOrderByWithRelationInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
+    feeStructures?: FeeStructureOrderByRelationAggregateInput
   }
 
   export type AdmissionSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -86521,6 +86781,7 @@ export namespace Prisma {
     subDepartment?: XOR<SubDepartmentNullableScalarRelationFilter, SubDepartmentWhereInput> | null
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     enrollments?: EnrollmentListRelationFilter
+    feeStructures?: FeeStructureListRelationFilter
   }, "id">
 
   export type AdmissionSessionOrderByWithAggregationInput = {
@@ -86584,6 +86845,10 @@ export namespace Prisma {
     studentEmail?: StringFilter<"Enrollment"> | string
     studentPhone?: StringFilter<"Enrollment"> | string
     studentAddress?: StringFilter<"Enrollment"> | string
+    fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    altPhone?: StringNullableFilter<"Enrollment"> | string | null
+    pinCode?: StringNullableFilter<"Enrollment"> | string | null
     status?: StringFilter<"Enrollment"> | string
     departmentRemarks?: StringNullableFilter<"Enrollment"> | string | null
     financeRemarks?: StringNullableFilter<"Enrollment"> | string | null
@@ -86623,6 +86888,10 @@ export namespace Prisma {
     studentEmail?: SortOrder
     studentPhone?: SortOrder
     studentAddress?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
     status?: SortOrder
     departmentRemarks?: SortOrderInput | SortOrder
     financeRemarks?: SortOrderInput | SortOrder
@@ -86666,6 +86935,10 @@ export namespace Prisma {
     studentEmail?: StringFilter<"Enrollment"> | string
     studentPhone?: StringFilter<"Enrollment"> | string
     studentAddress?: StringFilter<"Enrollment"> | string
+    fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    altPhone?: StringNullableFilter<"Enrollment"> | string | null
+    pinCode?: StringNullableFilter<"Enrollment"> | string | null
     status?: StringFilter<"Enrollment"> | string
     departmentRemarks?: StringNullableFilter<"Enrollment"> | string | null
     financeRemarks?: StringNullableFilter<"Enrollment"> | string | null
@@ -86705,6 +86978,10 @@ export namespace Prisma {
     studentEmail?: SortOrder
     studentPhone?: SortOrder
     studentAddress?: SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    altPhone?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
     status?: SortOrder
     departmentRemarks?: SortOrderInput | SortOrder
     financeRemarks?: SortOrderInput | SortOrder
@@ -86740,6 +87017,10 @@ export namespace Prisma {
     studentEmail?: StringWithAggregatesFilter<"Enrollment"> | string
     studentPhone?: StringWithAggregatesFilter<"Enrollment"> | string
     studentAddress?: StringWithAggregatesFilter<"Enrollment"> | string
+    fatherName?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    dob?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+    altPhone?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    pinCode?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     status?: StringWithAggregatesFilter<"Enrollment"> | string
     departmentRemarks?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     financeRemarks?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
@@ -88938,6 +89219,7 @@ export namespace Prisma {
     NOT?: FeeStructureWhereInput | FeeStructureWhereInput[]
     id?: StringFilter<"FeeStructure"> | string
     programId?: StringFilter<"FeeStructure"> | string
+    sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     organizationId?: StringFilter<"FeeStructure"> | string
     registrationFee?: FloatFilter<"FeeStructure"> | number
     tuitionFee?: FloatFilter<"FeeStructure"> | number
@@ -88948,11 +89230,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FeeStructure"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
+    session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
   }
 
   export type FeeStructureOrderByWithRelationInput = {
     id?: SortOrder
     programId?: SortOrder
+    sessionId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     registrationFee?: SortOrder
     tuitionFee?: SortOrder
@@ -88963,14 +89247,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
     program?: ProgramOrderByWithRelationInput
+    session?: AdmissionSessionOrderByWithRelationInput
   }
 
   export type FeeStructureWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    programId?: string
+    programId_sessionId?: FeeStructureProgramIdSessionIdCompoundUniqueInput
     AND?: FeeStructureWhereInput | FeeStructureWhereInput[]
     OR?: FeeStructureWhereInput[]
     NOT?: FeeStructureWhereInput | FeeStructureWhereInput[]
+    programId?: StringFilter<"FeeStructure"> | string
+    sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     organizationId?: StringFilter<"FeeStructure"> | string
     registrationFee?: FloatFilter<"FeeStructure"> | number
     tuitionFee?: FloatFilter<"FeeStructure"> | number
@@ -88981,11 +89268,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FeeStructure"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
-  }, "id" | "programId">
+    session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
+  }, "id" | "programId_sessionId">
 
   export type FeeStructureOrderByWithAggregationInput = {
     id?: SortOrder
     programId?: SortOrder
+    sessionId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     registrationFee?: SortOrder
     tuitionFee?: SortOrder
@@ -89007,6 +89296,7 @@ export namespace Prisma {
     NOT?: FeeStructureScalarWhereWithAggregatesInput | FeeStructureScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"FeeStructure"> | string
     programId?: StringWithAggregatesFilter<"FeeStructure"> | string
+    sessionId?: StringNullableWithAggregatesFilter<"FeeStructure"> | string | null
     organizationId?: StringWithAggregatesFilter<"FeeStructure"> | string
     registrationFee?: FloatWithAggregatesFilter<"FeeStructure"> | number
     tuitionFee?: FloatWithAggregatesFilter<"FeeStructure"> | number
@@ -90974,7 +91264,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -91000,7 +91290,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -91022,7 +91312,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -91048,7 +91338,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -91363,6 +91653,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -91370,12 +91664,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -91385,13 +91680,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -91401,6 +91700,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -91415,6 +91715,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91422,12 +91726,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -91437,13 +91742,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -91453,6 +91762,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -91463,13 +91773,17 @@ export namespace Prisma {
 
   export type StudentCreateManyInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -91479,6 +91793,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -91489,6 +91804,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91496,19 +91815,24 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -91518,6 +91842,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -93137,6 +93462,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateInput = {
@@ -93157,6 +93483,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUpdateInput = {
@@ -93177,6 +93504,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateInput = {
@@ -93197,6 +93525,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionCreateManyInput = {
@@ -93256,6 +93585,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -93291,6 +93624,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -93316,6 +93653,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93351,6 +93692,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93381,6 +93726,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -93405,6 +93754,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93430,6 +93783,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -95729,12 +96086,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutFeeStructuresInput
-    program: ProgramCreateNestedOneWithoutFeeStructureInput
+    program: ProgramCreateNestedOneWithoutFeeStructuresInput
+    session?: AdmissionSessionCreateNestedOneWithoutFeeStructuresInput
   }
 
   export type FeeStructureUncheckedCreateInput = {
     id?: string
     programId: string
+    sessionId?: string | null
     organizationId: string
     registrationFee?: number
     tuitionFee?: number
@@ -95755,12 +96114,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
-    program?: ProgramUpdateOneRequiredWithoutFeeStructureNestedInput
+    program?: ProgramUpdateOneRequiredWithoutFeeStructuresNestedInput
+    session?: AdmissionSessionUpdateOneWithoutFeeStructuresNestedInput
   }
 
   export type FeeStructureUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     registrationFee?: FloatFieldUpdateOperationsInput | number
     tuitionFee?: FloatFieldUpdateOperationsInput | number
@@ -95774,6 +96135,7 @@ export namespace Prisma {
   export type FeeStructureCreateManyInput = {
     id?: string
     programId: string
+    sessionId?: string | null
     organizationId: string
     registrationFee?: number
     tuitionFee?: number
@@ -95798,6 +96160,7 @@ export namespace Prisma {
   export type FeeStructureUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     registrationFee?: FloatFieldUpdateOperationsInput | number
     tuitionFee?: FloatFieldUpdateOperationsInput | number
@@ -97803,11 +98166,6 @@ export namespace Prisma {
     not?: NestedEnumCourseTypeFilter<$PrismaModel> | $Enums.CourseType
   }
 
-  export type FeeStructureNullableScalarRelationFilter = {
-    is?: FeeStructureWhereInput | null
-    isNot?: FeeStructureWhereInput | null
-  }
-
   export type UniversityScalarRelationFilter = {
     is?: UniversityWhereInput
     isNot?: UniversityWhereInput
@@ -97979,11 +98337,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type StudyCenterScalarRelationFilter = {
-    is?: StudyCenterWhereInput
-    isNot?: StudyCenterWhereInput
-  }
-
   export type ProgramScalarRelationFilter = {
     is?: ProgramWhereInput
     isNot?: ProgramWhereInput
@@ -97998,6 +98351,10 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     programId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
@@ -98007,6 +98364,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     referredBy?: SortOrder
+    documents?: SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrder
   }
@@ -98020,6 +98378,10 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     programId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
@@ -98040,6 +98402,10 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     programId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
@@ -98049,6 +98415,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referredBy?: SortOrder
     isPrevious?: SortOrder
+  }
+
+  export type StudyCenterScalarRelationFilter = {
+    is?: StudyCenterWhereInput
+    isNot?: StudyCenterWhereInput
   }
 
   export type InvoiceCountOrderByAggregateInput = {
@@ -99066,6 +99437,10 @@ export namespace Prisma {
     studentEmail?: SortOrder
     studentPhone?: SortOrder
     studentAddress?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     status?: SortOrder
     departmentRemarks?: SortOrder
     financeRemarks?: SortOrder
@@ -99095,6 +99470,10 @@ export namespace Prisma {
     studentEmail?: SortOrder
     studentPhone?: SortOrder
     studentAddress?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     status?: SortOrder
     departmentRemarks?: SortOrder
     financeRemarks?: SortOrder
@@ -99123,6 +99502,10 @@ export namespace Prisma {
     studentEmail?: SortOrder
     studentPhone?: SortOrder
     studentAddress?: SortOrder
+    fatherName?: SortOrder
+    dob?: SortOrder
+    altPhone?: SortOrder
+    pinCode?: SortOrder
     status?: SortOrder
     departmentRemarks?: SortOrder
     financeRemarks?: SortOrder
@@ -100301,9 +100684,20 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type AdmissionSessionNullableScalarRelationFilter = {
+    is?: AdmissionSessionWhereInput | null
+    isNot?: AdmissionSessionWhereInput | null
+  }
+
+  export type FeeStructureProgramIdSessionIdCompoundUniqueInput = {
+    programId: string
+    sessionId: string
+  }
+
   export type FeeStructureCountOrderByAggregateInput = {
     id?: SortOrder
     programId?: SortOrder
+    sessionId?: SortOrder
     organizationId?: SortOrder
     registrationFee?: SortOrder
     tuitionFee?: SortOrder
@@ -100324,6 +100718,7 @@ export namespace Prisma {
   export type FeeStructureMaxOrderByAggregateInput = {
     id?: SortOrder
     programId?: SortOrder
+    sessionId?: SortOrder
     organizationId?: SortOrder
     registrationFee?: SortOrder
     tuitionFee?: SortOrder
@@ -100336,6 +100731,7 @@ export namespace Prisma {
   export type FeeStructureMinOrderByAggregateInput = {
     id?: SortOrder
     programId?: SortOrder
+    sessionId?: SortOrder
     organizationId?: SortOrder
     registrationFee?: SortOrder
     tuitionFee?: SortOrder
@@ -106968,10 +107364,11 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
-  export type FeeStructureCreateNestedOneWithoutProgramInput = {
-    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput
-    connect?: FeeStructureWhereUniqueInput
+  export type FeeStructureCreateNestedManyWithoutProgramInput = {
+    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput> | FeeStructureCreateWithoutProgramInput[] | FeeStructureUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput | FeeStructureCreateOrConnectWithoutProgramInput[]
+    createMany?: FeeStructureCreateManyProgramInputEnvelope
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutProgramsInput = {
@@ -107046,10 +107443,11 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
-  export type FeeStructureUncheckedCreateNestedOneWithoutProgramInput = {
-    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput
-    connect?: FeeStructureWhereUniqueInput
+  export type FeeStructureUncheckedCreateNestedManyWithoutProgramInput = {
+    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput> | FeeStructureCreateWithoutProgramInput[] | FeeStructureUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput | FeeStructureCreateOrConnectWithoutProgramInput[]
+    createMany?: FeeStructureCreateManyProgramInputEnvelope
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
   }
 
   export type ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput = {
@@ -107130,14 +107528,18 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
-  export type FeeStructureUpdateOneWithoutProgramNestedInput = {
-    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput
-    upsert?: FeeStructureUpsertWithoutProgramInput
-    disconnect?: FeeStructureWhereInput | boolean
-    delete?: FeeStructureWhereInput | boolean
-    connect?: FeeStructureWhereUniqueInput
-    update?: XOR<XOR<FeeStructureUpdateToOneWithWhereWithoutProgramInput, FeeStructureUpdateWithoutProgramInput>, FeeStructureUncheckedUpdateWithoutProgramInput>
+  export type FeeStructureUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput> | FeeStructureCreateWithoutProgramInput[] | FeeStructureUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput | FeeStructureCreateOrConnectWithoutProgramInput[]
+    upsert?: FeeStructureUpsertWithWhereUniqueWithoutProgramInput | FeeStructureUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: FeeStructureCreateManyProgramInputEnvelope
+    set?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    disconnect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    delete?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    update?: FeeStructureUpdateWithWhereUniqueWithoutProgramInput | FeeStructureUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: FeeStructureUpdateManyWithWhereWithoutProgramInput | FeeStructureUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
   }
 
   export type OrganizationUpdateOneRequiredWithoutProgramsNestedInput = {
@@ -107276,14 +107678,18 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
-  export type FeeStructureUncheckedUpdateOneWithoutProgramNestedInput = {
-    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
-    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput
-    upsert?: FeeStructureUpsertWithoutProgramInput
-    disconnect?: FeeStructureWhereInput | boolean
-    delete?: FeeStructureWhereInput | boolean
-    connect?: FeeStructureWhereUniqueInput
-    update?: XOR<XOR<FeeStructureUpdateToOneWithWhereWithoutProgramInput, FeeStructureUpdateWithoutProgramInput>, FeeStructureUncheckedUpdateWithoutProgramInput>
+  export type FeeStructureUncheckedUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput> | FeeStructureCreateWithoutProgramInput[] | FeeStructureUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutProgramInput | FeeStructureCreateOrConnectWithoutProgramInput[]
+    upsert?: FeeStructureUpsertWithWhereUniqueWithoutProgramInput | FeeStructureUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: FeeStructureCreateManyProgramInputEnvelope
+    set?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    disconnect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    delete?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    update?: FeeStructureUpdateWithWhereUniqueWithoutProgramInput | FeeStructureUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: FeeStructureUpdateManyWithWhereWithoutProgramInput | FeeStructureUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
   }
 
   export type ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput = {
@@ -108194,10 +108600,12 @@ export namespace Prisma {
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
-  export type StudyCenterUpdateOneRequiredWithoutStudentsNestedInput = {
+  export type StudyCenterUpdateOneWithoutStudentsNestedInput = {
     create?: XOR<StudyCenterCreateWithoutStudentsInput, StudyCenterUncheckedCreateWithoutStudentsInput>
     connectOrCreate?: StudyCenterCreateOrConnectWithoutStudentsInput
     upsert?: StudyCenterUpsertWithoutStudentsInput
+    disconnect?: StudyCenterWhereInput | boolean
+    delete?: StudyCenterWhereInput | boolean
     connect?: StudyCenterWhereUniqueInput
     update?: XOR<XOR<StudyCenterUpdateToOneWithWhereWithoutStudentsInput, StudyCenterUpdateWithoutStudentsInput>, StudyCenterUncheckedUpdateWithoutStudentsInput>
   }
@@ -109571,11 +109979,25 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
+  export type FeeStructureCreateNestedManyWithoutSessionInput = {
+    create?: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput> | FeeStructureCreateWithoutSessionInput[] | FeeStructureUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutSessionInput | FeeStructureCreateOrConnectWithoutSessionInput[]
+    createMany?: FeeStructureCreateManySessionInputEnvelope
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutSessionInput = {
     create?: XOR<EnrollmentCreateWithoutSessionInput, EnrollmentUncheckedCreateWithoutSessionInput> | EnrollmentCreateWithoutSessionInput[] | EnrollmentUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSessionInput | EnrollmentCreateOrConnectWithoutSessionInput[]
     createMany?: EnrollmentCreateManySessionInputEnvelope
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type FeeStructureUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput> | FeeStructureCreateWithoutSessionInput[] | FeeStructureUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutSessionInput | FeeStructureCreateOrConnectWithoutSessionInput[]
+    createMany?: FeeStructureCreateManySessionInputEnvelope
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -109668,6 +110090,20 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
+  export type FeeStructureUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput> | FeeStructureCreateWithoutSessionInput[] | FeeStructureUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutSessionInput | FeeStructureCreateOrConnectWithoutSessionInput[]
+    upsert?: FeeStructureUpsertWithWhereUniqueWithoutSessionInput | FeeStructureUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: FeeStructureCreateManySessionInputEnvelope
+    set?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    disconnect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    delete?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    update?: FeeStructureUpdateWithWhereUniqueWithoutSessionInput | FeeStructureUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: FeeStructureUpdateManyWithWhereWithoutSessionInput | FeeStructureUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutSessionNestedInput = {
     create?: XOR<EnrollmentCreateWithoutSessionInput, EnrollmentUncheckedCreateWithoutSessionInput> | EnrollmentCreateWithoutSessionInput[] | EnrollmentUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSessionInput | EnrollmentCreateOrConnectWithoutSessionInput[]
@@ -109680,6 +110116,20 @@ export namespace Prisma {
     update?: EnrollmentUpdateWithWhereUniqueWithoutSessionInput | EnrollmentUpdateWithWhereUniqueWithoutSessionInput[]
     updateMany?: EnrollmentUpdateManyWithWhereWithoutSessionInput | EnrollmentUpdateManyWithWhereWithoutSessionInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type FeeStructureUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput> | FeeStructureCreateWithoutSessionInput[] | FeeStructureUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: FeeStructureCreateOrConnectWithoutSessionInput | FeeStructureCreateOrConnectWithoutSessionInput[]
+    upsert?: FeeStructureUpsertWithWhereUniqueWithoutSessionInput | FeeStructureUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: FeeStructureCreateManySessionInputEnvelope
+    set?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    disconnect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    delete?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
+    update?: FeeStructureUpdateWithWhereUniqueWithoutSessionInput | FeeStructureUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: FeeStructureUpdateManyWithWhereWithoutSessionInput | FeeStructureUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSalesLedEnrollmentsInput = {
@@ -110953,10 +111403,16 @@ export namespace Prisma {
     connect?: OrganizationWhereUniqueInput
   }
 
-  export type ProgramCreateNestedOneWithoutFeeStructureInput = {
-    create?: XOR<ProgramCreateWithoutFeeStructureInput, ProgramUncheckedCreateWithoutFeeStructureInput>
-    connectOrCreate?: ProgramCreateOrConnectWithoutFeeStructureInput
+  export type ProgramCreateNestedOneWithoutFeeStructuresInput = {
+    create?: XOR<ProgramCreateWithoutFeeStructuresInput, ProgramUncheckedCreateWithoutFeeStructuresInput>
+    connectOrCreate?: ProgramCreateOrConnectWithoutFeeStructuresInput
     connect?: ProgramWhereUniqueInput
+  }
+
+  export type AdmissionSessionCreateNestedOneWithoutFeeStructuresInput = {
+    create?: XOR<AdmissionSessionCreateWithoutFeeStructuresInput, AdmissionSessionUncheckedCreateWithoutFeeStructuresInput>
+    connectOrCreate?: AdmissionSessionCreateOrConnectWithoutFeeStructuresInput
+    connect?: AdmissionSessionWhereUniqueInput
   }
 
   export type OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput = {
@@ -110967,12 +111423,22 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutFeeStructuresInput, OrganizationUpdateWithoutFeeStructuresInput>, OrganizationUncheckedUpdateWithoutFeeStructuresInput>
   }
 
-  export type ProgramUpdateOneRequiredWithoutFeeStructureNestedInput = {
-    create?: XOR<ProgramCreateWithoutFeeStructureInput, ProgramUncheckedCreateWithoutFeeStructureInput>
-    connectOrCreate?: ProgramCreateOrConnectWithoutFeeStructureInput
-    upsert?: ProgramUpsertWithoutFeeStructureInput
+  export type ProgramUpdateOneRequiredWithoutFeeStructuresNestedInput = {
+    create?: XOR<ProgramCreateWithoutFeeStructuresInput, ProgramUncheckedCreateWithoutFeeStructuresInput>
+    connectOrCreate?: ProgramCreateOrConnectWithoutFeeStructuresInput
+    upsert?: ProgramUpsertWithoutFeeStructuresInput
     connect?: ProgramWhereUniqueInput
-    update?: XOR<XOR<ProgramUpdateToOneWithWhereWithoutFeeStructureInput, ProgramUpdateWithoutFeeStructureInput>, ProgramUncheckedUpdateWithoutFeeStructureInput>
+    update?: XOR<XOR<ProgramUpdateToOneWithWhereWithoutFeeStructuresInput, ProgramUpdateWithoutFeeStructuresInput>, ProgramUncheckedUpdateWithoutFeeStructuresInput>
+  }
+
+  export type AdmissionSessionUpdateOneWithoutFeeStructuresNestedInput = {
+    create?: XOR<AdmissionSessionCreateWithoutFeeStructuresInput, AdmissionSessionUncheckedCreateWithoutFeeStructuresInput>
+    connectOrCreate?: AdmissionSessionCreateOrConnectWithoutFeeStructuresInput
+    upsert?: AdmissionSessionUpsertWithoutFeeStructuresInput
+    disconnect?: AdmissionSessionWhereInput | boolean
+    delete?: AdmissionSessionWhereInput | boolean
+    connect?: AdmissionSessionWhereUniqueInput
+    update?: XOR<XOR<AdmissionSessionUpdateToOneWithWhereWithoutFeeStructuresInput, AdmissionSessionUpdateWithoutFeeStructuresInput>, AdmissionSessionUncheckedUpdateWithoutFeeStructuresInput>
   }
 
   export type EnrollmentCreateNestedOneWithoutPaymentInput = {
@@ -111860,6 +112326,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutOrganizationInput = {
@@ -111879,6 +112346,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutOrganizationInput = {
@@ -112426,6 +112894,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -112459,6 +112931,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -112608,12 +113084,14 @@ export namespace Prisma {
     gstPercentage?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    program: ProgramCreateNestedOneWithoutFeeStructureInput
+    program: ProgramCreateNestedOneWithoutFeeStructuresInput
+    session?: AdmissionSessionCreateNestedOneWithoutFeeStructuresInput
   }
 
   export type FeeStructureUncheckedCreateWithoutOrganizationInput = {
     id?: string
     programId: string
+    sessionId?: string | null
     registrationFee?: number
     tuitionFee?: number
     examFee?: number
@@ -113243,7 +113721,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureCreateNestedOneWithoutProgramInput
@@ -113267,7 +113745,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -113489,6 +113967,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -113496,12 +113978,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -113510,12 +113993,16 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutOrganizationInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -113525,6 +114012,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -114760,6 +115248,10 @@ export namespace Prisma {
     studentEmail?: StringFilter<"Enrollment"> | string
     studentPhone?: StringFilter<"Enrollment"> | string
     studentAddress?: StringFilter<"Enrollment"> | string
+    fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    altPhone?: StringNullableFilter<"Enrollment"> | string | null
+    pinCode?: StringNullableFilter<"Enrollment"> | string | null
     status?: StringFilter<"Enrollment"> | string
     departmentRemarks?: StringNullableFilter<"Enrollment"> | string | null
     financeRemarks?: StringNullableFilter<"Enrollment"> | string | null
@@ -114899,6 +115391,7 @@ export namespace Prisma {
     NOT?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
     id?: StringFilter<"FeeStructure"> | string
     programId?: StringFilter<"FeeStructure"> | string
+    sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     organizationId?: StringFilter<"FeeStructure"> | string
     registrationFee?: FloatFilter<"FeeStructure"> | number
     tuitionFee?: FloatFilter<"FeeStructure"> | number
@@ -115687,13 +116180,17 @@ export namespace Prisma {
     OR?: StudentScalarWhereInput[]
     NOT?: StudentScalarWhereInput | StudentScalarWhereInput[]
     id?: StringFilter<"Student"> | string
-    centerId?: StringFilter<"Student"> | string
+    centerId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringFilter<"Student"> | string
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    dob?: DateTimeNullableFilter<"Student"> | Date | string | null
+    altPhone?: StringNullableFilter<"Student"> | string | null
+    pinCode?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -115703,6 +116200,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
+    documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
   }
@@ -118272,6 +118770,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutApproverInput = {
@@ -118291,6 +118790,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutApproverInput = {
@@ -118320,6 +118820,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutCreatorInput = {
@@ -118339,6 +118840,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutCreatorInput = {
@@ -118896,6 +119398,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -118930,6 +119436,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -118964,6 +119474,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -118998,6 +119512,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -119032,6 +119550,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -119066,6 +119588,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -119100,6 +119626,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -119134,6 +119664,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -120697,6 +121231,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -120704,12 +121242,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -120718,12 +121257,16 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutUserInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -120733,6 +121276,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -120752,6 +121296,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -120759,12 +121307,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -120773,13 +121322,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutReferrerInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -120788,6 +121341,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -123446,6 +124000,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -123453,12 +124011,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -123467,12 +124026,16 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -123482,6 +124045,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -127426,6 +127990,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutAdmissionSessionsInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutUniversityInput = {
@@ -127445,6 +128010,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutUniversityInput = {
@@ -127469,7 +128035,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureCreateNestedOneWithoutProgramInput
@@ -127493,7 +128059,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -128331,6 +128897,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutProgramInput = {
@@ -128350,6 +128917,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutProgramInput = {
@@ -128369,6 +128937,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -128402,6 +128974,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -128440,10 +129016,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutFeeStructuresInput
+    session?: AdmissionSessionCreateNestedOneWithoutFeeStructuresInput
   }
 
   export type FeeStructureUncheckedCreateWithoutProgramInput = {
     id?: string
+    sessionId?: string | null
     organizationId: string
     registrationFee?: number
     tuitionFee?: number
@@ -128457,6 +129035,11 @@ export namespace Prisma {
   export type FeeStructureCreateOrConnectWithoutProgramInput = {
     where: FeeStructureWhereUniqueInput
     create: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
+  }
+
+  export type FeeStructureCreateManyProgramInputEnvelope = {
+    data: FeeStructureCreateManyProgramInput | FeeStructureCreateManyProgramInput[]
+    skipDuplicates?: boolean
   }
 
   export type OrganizationCreateWithoutProgramsInput = {
@@ -128732,6 +129315,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -128739,12 +129326,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -128753,13 +129341,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutProgramInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -128768,6 +129360,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -128984,39 +129577,20 @@ export namespace Prisma {
     data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutProgramInput>
   }
 
-  export type FeeStructureUpsertWithoutProgramInput = {
+  export type FeeStructureUpsertWithWhereUniqueWithoutProgramInput = {
+    where: FeeStructureWhereUniqueInput
     update: XOR<FeeStructureUpdateWithoutProgramInput, FeeStructureUncheckedUpdateWithoutProgramInput>
     create: XOR<FeeStructureCreateWithoutProgramInput, FeeStructureUncheckedCreateWithoutProgramInput>
-    where?: FeeStructureWhereInput
   }
 
-  export type FeeStructureUpdateToOneWithWhereWithoutProgramInput = {
-    where?: FeeStructureWhereInput
+  export type FeeStructureUpdateWithWhereUniqueWithoutProgramInput = {
+    where: FeeStructureWhereUniqueInput
     data: XOR<FeeStructureUpdateWithoutProgramInput, FeeStructureUncheckedUpdateWithoutProgramInput>
   }
 
-  export type FeeStructureUpdateWithoutProgramInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    registrationFee?: FloatFieldUpdateOperationsInput | number
-    tuitionFee?: FloatFieldUpdateOperationsInput | number
-    examFee?: FloatFieldUpdateOperationsInput | number
-    otherCharges?: JsonNullValueInput | InputJsonValue
-    gstPercentage?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
-  }
-
-  export type FeeStructureUncheckedUpdateWithoutProgramInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    registrationFee?: FloatFieldUpdateOperationsInput | number
-    tuitionFee?: FloatFieldUpdateOperationsInput | number
-    examFee?: FloatFieldUpdateOperationsInput | number
-    otherCharges?: JsonNullValueInput | InputJsonValue
-    gstPercentage?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type FeeStructureUpdateManyWithWhereWithoutProgramInput = {
+    where: FeeStructureScalarWhereInput
+    data: XOR<FeeStructureUpdateManyMutationInput, FeeStructureUncheckedUpdateManyWithoutProgramInput>
   }
 
   export type OrganizationUpsertWithoutProgramsInput = {
@@ -129357,6 +129931,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutStudyCenterInput = {
@@ -129376,6 +129951,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutStudyCenterInput = {
@@ -129395,6 +129971,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -129428,6 +130008,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -129638,6 +130222,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -129645,6 +130233,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
@@ -129665,6 +130254,10 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -129674,6 +130267,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -130733,7 +131327,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -130758,7 +131352,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -131876,6 +132470,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -131909,6 +132507,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -132454,7 +133056,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -132479,7 +133081,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -133238,7 +133840,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -133263,7 +133865,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -133725,6 +134327,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -133732,11 +134338,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -133746,13 +134353,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutInvoicesInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -133762,6 +134373,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -134069,6 +134681,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134076,11 +134692,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -134090,13 +134707,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -134106,6 +134727,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -144587,6 +145209,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
     enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutSubDepartmentInput = {
@@ -144606,6 +145229,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutSubDepartmentInput = {
@@ -145358,7 +145982,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -145383,7 +146007,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -147836,7 +148460,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: string
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -147861,7 +148485,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -148056,6 +148680,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -148089,6 +148717,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -148114,6 +148746,42 @@ export namespace Prisma {
 
   export type EnrollmentCreateManySessionInputEnvelope = {
     data: EnrollmentCreateManySessionInput | EnrollmentCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FeeStructureCreateWithoutSessionInput = {
+    id?: string
+    registrationFee?: number
+    tuitionFee?: number
+    examFee?: number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutFeeStructuresInput
+    program: ProgramCreateNestedOneWithoutFeeStructuresInput
+  }
+
+  export type FeeStructureUncheckedCreateWithoutSessionInput = {
+    id?: string
+    programId: string
+    organizationId: string
+    registrationFee?: number
+    tuitionFee?: number
+    examFee?: number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FeeStructureCreateOrConnectWithoutSessionInput = {
+    where: FeeStructureWhereUniqueInput
+    create: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput>
+  }
+
+  export type FeeStructureCreateManySessionInputEnvelope = {
+    data: FeeStructureCreateManySessionInput | FeeStructureCreateManySessionInput[]
     skipDuplicates?: boolean
   }
 
@@ -148686,7 +149354,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -148711,7 +149379,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -148926,6 +149594,22 @@ export namespace Prisma {
   export type EnrollmentUpdateManyWithWhereWithoutSessionInput = {
     where: EnrollmentScalarWhereInput
     data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type FeeStructureUpsertWithWhereUniqueWithoutSessionInput = {
+    where: FeeStructureWhereUniqueInput
+    update: XOR<FeeStructureUpdateWithoutSessionInput, FeeStructureUncheckedUpdateWithoutSessionInput>
+    create: XOR<FeeStructureCreateWithoutSessionInput, FeeStructureUncheckedCreateWithoutSessionInput>
+  }
+
+  export type FeeStructureUpdateWithWhereUniqueWithoutSessionInput = {
+    where: FeeStructureWhereUniqueInput
+    data: XOR<FeeStructureUpdateWithoutSessionInput, FeeStructureUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type FeeStructureUpdateManyWithWhereWithoutSessionInput = {
+    where: FeeStructureScalarWhereInput
+    data: XOR<FeeStructureUpdateManyMutationInput, FeeStructureUncheckedUpdateManyWithoutSessionInput>
   }
 
   export type UserCreateWithoutSalesLedEnrollmentsInput = {
@@ -149663,7 +150347,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -149688,7 +150372,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -149720,6 +150404,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterCreateNestedOneWithoutAdmissionSessionsInput
     subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
     university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionUncheckedCreateWithoutEnrollmentsInput = {
@@ -149739,6 +150424,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
   export type AdmissionSessionCreateOrConnectWithoutEnrollmentsInput = {
@@ -149752,6 +150438,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -149759,11 +150449,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -149773,13 +150464,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -149789,6 +150484,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
@@ -150882,7 +151578,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -150907,7 +151603,7 @@ export namespace Prisma {
     semesters?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -150945,6 +151641,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutAdmissionSessionsNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutEnrollmentsInput = {
@@ -150964,6 +151661,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type StudentUpsertWithoutEnrollmentsInput = {
@@ -150983,6 +151681,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150990,11 +151692,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -151004,13 +151707,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -151020,6 +151727,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
@@ -161784,6 +162492,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -161791,11 +162503,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -161805,13 +162518,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutInternalMarksInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -161821,6 +162538,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -162287,6 +163005,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -162294,11 +163016,12 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -162308,13 +163031,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutInternalMarksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -162324,6 +163051,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -166093,7 +166821,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programFeeStructure?: ProgramFeeStructureCreateNestedOneWithoutProgramInput
@@ -166118,7 +166846,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
     students?: StudentUncheckedCreateNestedManyWithoutProgramInput
@@ -166598,7 +167326,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programFeeStructure?: ProgramFeeStructureUpdateOneWithoutProgramNestedInput
@@ -166623,7 +167351,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
     students?: StudentUncheckedUpdateManyWithoutProgramNestedInput
@@ -167463,7 +168191,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -167488,7 +168216,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     students?: StudentUncheckedCreateNestedManyWithoutProgramInput
@@ -167670,7 +168398,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -167695,7 +168423,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     students?: StudentUncheckedUpdateManyWithoutProgramNestedInput
@@ -171639,7 +172367,7 @@ export namespace Prisma {
     create: XOR<OrganizationCreateWithoutFeeStructuresInput, OrganizationUncheckedCreateWithoutFeeStructuresInput>
   }
 
-  export type ProgramCreateWithoutFeeStructureInput = {
+  export type ProgramCreateWithoutFeeStructuresInput = {
     id?: string
     subDepartmentId?: string | null
     name: string
@@ -171662,7 +172390,7 @@ export namespace Prisma {
     materials?: ProgramMaterialCreateNestedManyWithoutProgramInput
   }
 
-  export type ProgramUncheckedCreateWithoutFeeStructureInput = {
+  export type ProgramUncheckedCreateWithoutFeeStructuresInput = {
     id?: string
     universityId: string
     organizationId: string
@@ -171685,9 +172413,54 @@ export namespace Prisma {
     materials?: ProgramMaterialUncheckedCreateNestedManyWithoutProgramInput
   }
 
-  export type ProgramCreateOrConnectWithoutFeeStructureInput = {
+  export type ProgramCreateOrConnectWithoutFeeStructuresInput = {
     where: ProgramWhereUniqueInput
-    create: XOR<ProgramCreateWithoutFeeStructureInput, ProgramUncheckedCreateWithoutFeeStructureInput>
+    create: XOR<ProgramCreateWithoutFeeStructuresInput, ProgramUncheckedCreateWithoutFeeStructuresInput>
+  }
+
+  export type AdmissionSessionCreateWithoutFeeStructuresInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    capacity?: number | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approver?: UserCreateNestedOneWithoutApprovedSessionsInput
+    creator?: UserCreateNestedOneWithoutCreatedSessionsInput
+    organization: OrganizationCreateNestedOneWithoutSessionsInput
+    program?: ProgramCreateNestedOneWithoutAdmissionSessionsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutAdmissionSessionsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
+    university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
+    enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+  }
+
+  export type AdmissionSessionUncheckedCreateWithoutFeeStructuresInput = {
+    id?: string
+    organizationId: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    programId?: string | null
+    universityId?: string | null
+    studyCenterId?: string | null
+    capacity?: number | null
+    createdBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    subDepartmentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type AdmissionSessionCreateOrConnectWithoutFeeStructuresInput = {
+    where: AdmissionSessionWhereUniqueInput
+    create: XOR<AdmissionSessionCreateWithoutFeeStructuresInput, AdmissionSessionUncheckedCreateWithoutFeeStructuresInput>
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -171835,18 +172608,18 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
-  export type ProgramUpsertWithoutFeeStructureInput = {
-    update: XOR<ProgramUpdateWithoutFeeStructureInput, ProgramUncheckedUpdateWithoutFeeStructureInput>
-    create: XOR<ProgramCreateWithoutFeeStructureInput, ProgramUncheckedCreateWithoutFeeStructureInput>
+  export type ProgramUpsertWithoutFeeStructuresInput = {
+    update: XOR<ProgramUpdateWithoutFeeStructuresInput, ProgramUncheckedUpdateWithoutFeeStructuresInput>
+    create: XOR<ProgramCreateWithoutFeeStructuresInput, ProgramUncheckedCreateWithoutFeeStructuresInput>
     where?: ProgramWhereInput
   }
 
-  export type ProgramUpdateToOneWithWhereWithoutFeeStructureInput = {
+  export type ProgramUpdateToOneWithWhereWithoutFeeStructuresInput = {
     where?: ProgramWhereInput
-    data: XOR<ProgramUpdateWithoutFeeStructureInput, ProgramUncheckedUpdateWithoutFeeStructureInput>
+    data: XOR<ProgramUpdateWithoutFeeStructuresInput, ProgramUncheckedUpdateWithoutFeeStructuresInput>
   }
 
-  export type ProgramUpdateWithoutFeeStructureInput = {
+  export type ProgramUpdateWithoutFeeStructuresInput = {
     id?: StringFieldUpdateOperationsInput | string
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -171869,7 +172642,7 @@ export namespace Prisma {
     materials?: ProgramMaterialUpdateManyWithoutProgramNestedInput
   }
 
-  export type ProgramUncheckedUpdateWithoutFeeStructureInput = {
+  export type ProgramUncheckedUpdateWithoutFeeStructuresInput = {
     id?: StringFieldUpdateOperationsInput | string
     universityId?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -171892,6 +172665,57 @@ export namespace Prisma {
     materials?: ProgramMaterialUncheckedUpdateManyWithoutProgramNestedInput
   }
 
+  export type AdmissionSessionUpsertWithoutFeeStructuresInput = {
+    update: XOR<AdmissionSessionUpdateWithoutFeeStructuresInput, AdmissionSessionUncheckedUpdateWithoutFeeStructuresInput>
+    create: XOR<AdmissionSessionCreateWithoutFeeStructuresInput, AdmissionSessionUncheckedCreateWithoutFeeStructuresInput>
+    where?: AdmissionSessionWhereInput
+  }
+
+  export type AdmissionSessionUpdateToOneWithWhereWithoutFeeStructuresInput = {
+    where?: AdmissionSessionWhereInput
+    data: XOR<AdmissionSessionUpdateWithoutFeeStructuresInput, AdmissionSessionUncheckedUpdateWithoutFeeStructuresInput>
+  }
+
+  export type AdmissionSessionUpdateWithoutFeeStructuresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
+    creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
+    program?: ProgramUpdateOneWithoutAdmissionSessionsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutAdmissionSessionsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
+    university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+  }
+
+  export type AdmissionSessionUncheckedUpdateWithoutFeeStructuresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    programId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
   export type EnrollmentCreateWithoutPaymentInput = {
     id?: string
     enrollmentNumber?: string | null
@@ -171899,6 +172723,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -171933,6 +172761,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -172087,6 +172919,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -172121,6 +172957,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -173686,7 +174526,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -173711,7 +174551,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
     students?: StudentUncheckedCreateNestedManyWithoutProgramInput
@@ -174094,7 +174934,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -174119,7 +174959,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
     students?: StudentUncheckedUpdateManyWithoutProgramNestedInput
@@ -174279,7 +175119,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
     organization: OrganizationCreateNestedOneWithoutProgramsInput
     university: UniversityCreateNestedOneWithoutProgramsInput
     programAllocations?: ProgramAllocationCreateNestedManyWithoutProgramInput
@@ -174304,7 +175144,7 @@ export namespace Prisma {
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
-    feeStructure?: FeeStructureUncheckedCreateNestedOneWithoutProgramInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
     programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutProgramInput
     programFeeStructure?: ProgramFeeStructureUncheckedCreateNestedOneWithoutProgramInput
     reregRules?: ReregRuleUncheckedCreateNestedManyWithoutProgramInput
@@ -174681,7 +175521,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -174706,7 +175546,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -175061,6 +175901,10 @@ export namespace Prisma {
     name: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -175068,12 +175912,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
-    center: StudyCenterCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -175082,13 +175927,17 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutPaymentSchedulesInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -175098,6 +175947,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -175272,6 +176122,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175279,12 +176133,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -175293,13 +176148,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutPaymentSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -175309,6 +176168,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -175531,6 +176391,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -175591,6 +176455,7 @@ export namespace Prisma {
   export type FeeStructureCreateManyOrganizationInput = {
     id?: string
     programId: string
+    sessionId?: string | null
     registrationFee?: number
     tuitionFee?: number
     examFee?: number
@@ -175885,12 +176750,16 @@ export namespace Prisma {
 
   export type StudentCreateManyOrganizationInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -175900,6 +176769,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -176116,6 +176986,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutOrganizationInput = {
@@ -176135,6 +177006,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutOrganizationInput = {
@@ -176756,6 +177628,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -176789,6 +177665,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -176818,6 +177698,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -176966,12 +177850,14 @@ export namespace Prisma {
     gstPercentage?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    program?: ProgramUpdateOneRequiredWithoutFeeStructureNestedInput
+    program?: ProgramUpdateOneRequiredWithoutFeeStructuresNestedInput
+    session?: AdmissionSessionUpdateOneWithoutFeeStructuresNestedInput
   }
 
   export type FeeStructureUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     registrationFee?: FloatFieldUpdateOperationsInput | number
     tuitionFee?: FloatFieldUpdateOperationsInput | number
     examFee?: FloatFieldUpdateOperationsInput | number
@@ -176984,6 +177870,7 @@ export namespace Prisma {
   export type FeeStructureUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     registrationFee?: FloatFieldUpdateOperationsInput | number
     tuitionFee?: FloatFieldUpdateOperationsInput | number
     examFee?: FloatFieldUpdateOperationsInput | number
@@ -177613,7 +178500,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUpdateOneWithoutProgramNestedInput
@@ -177637,7 +178524,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -177870,6 +178757,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -177877,12 +178768,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -177891,12 +178783,16 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -177906,6 +178802,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -177916,12 +178813,16 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -177931,6 +178832,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -180047,6 +180949,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -180075,6 +180981,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -180103,6 +181013,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -180131,6 +181045,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -180715,13 +181633,17 @@ export namespace Prisma {
 
   export type StudentCreateManyReferrerInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -180730,6 +181652,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -181003,6 +181926,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutApproverInput = {
@@ -181022,6 +181946,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutApproverInput = {
@@ -181059,6 +181984,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutCreatorInput = {
@@ -181078,6 +182004,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutCreatorInput = {
@@ -181513,6 +182440,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181547,6 +182478,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181576,6 +182511,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181599,6 +182538,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181633,6 +182576,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181662,6 +182609,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181685,6 +182636,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181719,6 +182674,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181748,6 +182707,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181771,6 +182734,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181805,6 +182772,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181834,6 +182805,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -183562,6 +184537,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183569,12 +184548,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -183583,13 +184563,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -183598,6 +184582,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -183608,13 +184593,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -183623,6 +184612,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -184900,6 +185890,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutAdmissionSessionsNestedInput
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutUniversityInput = {
@@ -184919,6 +185910,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutUniversityInput = {
@@ -184951,7 +185943,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUpdateOneWithoutProgramNestedInput
@@ -184975,7 +185967,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -185489,6 +186481,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -185504,6 +186500,19 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+  }
+
+  export type FeeStructureCreateManyProgramInput = {
+    id?: string
+    sessionId?: string | null
+    organizationId: string
+    registrationFee?: number
+    tuitionFee?: number
+    examFee?: number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ProgramAllocationCreateManyProgramInput = {
@@ -185528,13 +186537,17 @@ export namespace Prisma {
 
   export type StudentCreateManyProgramInput = {
     id?: string
-    centerId: string
+    centerId?: string | null
     organizationId: string
     enrollmentNo: string
     name: string
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -185543,6 +186556,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -185576,6 +186590,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutProgramInput = {
@@ -185595,6 +186610,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutProgramInput = {
@@ -185622,6 +186638,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185655,6 +186675,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185684,6 +186708,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185699,6 +186727,45 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FeeStructureUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
+    session?: AdmissionSessionUpdateOneWithoutFeeStructuresNestedInput
+  }
+
+  export type FeeStructureUncheckedUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeeStructureUncheckedUpdateManyWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProgramAllocationUpdateWithoutProgramInput = {
@@ -185767,6 +186834,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185774,12 +186845,13 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
-    center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -185788,13 +186860,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185803,6 +186879,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -185813,13 +186890,17 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
-    centerId?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185828,6 +186909,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -186061,6 +187143,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -186148,6 +187234,10 @@ export namespace Prisma {
     email: string
     phone: string
     address: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     programId: string
     sessionId?: string | null
     status?: string
@@ -186157,6 +187247,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -186233,6 +187324,7 @@ export namespace Prisma {
     subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutStudyCenterInput = {
@@ -186252,6 +187344,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -186279,6 +187372,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -186312,6 +187409,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -186341,6 +187442,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -186552,6 +187657,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -186559,6 +187668,7 @@ export namespace Prisma {
     reregStatus?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
@@ -186579,6 +187689,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -186588,6 +187702,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -186604,6 +187719,10 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -186613,6 +187732,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
   }
@@ -186936,7 +188056,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -186961,7 +188081,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -187092,6 +188212,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -187158,6 +188282,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187191,6 +188319,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187220,6 +188352,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187902,6 +189038,7 @@ export namespace Prisma {
     studyCenter?: StudyCenterUpdateOneWithoutAdmissionSessionsNestedInput
     university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateWithoutSubDepartmentInput = {
@@ -187921,6 +189058,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -188334,7 +189472,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramsNestedInput
     university?: UniversityUpdateOneRequiredWithoutProgramsNestedInput
     programAllocations?: ProgramAllocationUpdateManyWithoutProgramNestedInput
@@ -188359,7 +189497,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
-    feeStructure?: FeeStructureUncheckedUpdateOneWithoutProgramNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
     programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutProgramNestedInput
     programFeeStructure?: ProgramFeeStructureUncheckedUpdateOneWithoutProgramNestedInput
     reregRules?: ReregRuleUncheckedUpdateManyWithoutProgramNestedInput
@@ -188724,6 +189862,10 @@ export namespace Prisma {
     studentEmail: string
     studentPhone: string
     studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
     status?: string
     departmentRemarks?: string | null
     financeRemarks?: string | null
@@ -188741,6 +189883,19 @@ export namespace Prisma {
     salesUserId?: string | null
   }
 
+  export type FeeStructureCreateManySessionInput = {
+    id?: string
+    programId: string
+    organizationId: string
+    registrationFee?: number
+    tuitionFee?: number
+    examFee?: number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type EnrollmentUpdateWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188748,6 +189903,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188781,6 +189940,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188810,6 +189973,10 @@ export namespace Prisma {
     studentEmail?: StringFieldUpdateOperationsInput | string
     studentPhone?: StringFieldUpdateOperationsInput | string
     studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188825,6 +189992,45 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FeeStructureUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
+    program?: ProgramUpdateOneRequiredWithoutFeeStructuresNestedInput
+  }
+
+  export type FeeStructureUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeeStructureUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    registrationFee?: FloatFieldUpdateOperationsInput | number
+    tuitionFee?: FloatFieldUpdateOperationsInput | number
+    examFee?: FloatFieldUpdateOperationsInput | number
+    otherCharges?: JsonNullValueInput | InputJsonValue
+    gstPercentage?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EnrollmentPaymentCreateManyWalletInput = {

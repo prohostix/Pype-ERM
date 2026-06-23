@@ -11,11 +11,13 @@ import api from '@/lib/api';
 export function FeeStructuresPanel() {
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     programId: '',
+    sessionId: 'standard_all',
     registrationFee: '0',
     tuitionFee: '0',
     examFee: '0',
@@ -25,6 +27,7 @@ export function FeeStructuresPanel() {
   useEffect(() => {
     fetchFees();
     fetchPrograms();
+    fetchSessions();
   }, []);
 
   const fetchFees = async () => {
@@ -48,10 +51,20 @@ export function FeeStructuresPanel() {
     }
   };
 
+  const fetchSessions = async () => {
+    try {
+      const res = await api.get('/operations/sessions');
+      setSessions(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch sessions:', err);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const payload = {
       programId: formData.programId,
+      sessionId: formData.sessionId === 'standard_all' || !formData.sessionId ? null : formData.sessionId,
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
       examFee: Number(formData.examFee),
@@ -73,9 +86,11 @@ export function FeeStructuresPanel() {
 
   const handleEdit = (f: any) => {
     const progId = typeof f.programId === 'object' ? (f.programId?.id || f.programId?.id) : f.programId;
+    const sessId = typeof f.sessionId === 'object' ? (f.sessionId?.id || f.sessionId?.id) : f.sessionId;
     setEditingId(f.id || f.id);
     setFormData({
       programId: progId?.toString() || '',
+      sessionId: sessId?.toString() || 'standard_all',
       registrationFee: f.registrationFee?.toString() || '0',
       tuitionFee: f.tuitionFee?.toString() || '0',
       examFee: f.examFee?.toString() || '0',
@@ -96,7 +111,7 @@ export function FeeStructuresPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ programId: '', registrationFee: '0', tuitionFee: '0', examFee: '0', gstPercentage: '18' });
+    setFormData({ programId: '', sessionId: 'standard_all', registrationFee: '0', tuitionFee: '0', examFee: '0', gstPercentage: '18' });
   };
 
   return (
@@ -123,6 +138,20 @@ export function FeeStructuresPanel() {
                     {programs.filter(p => p && (p.id || p.id)).map((p) => (
                       <SelectItem key={p.id || p.id} value={(p.id || p.id).toString()}>
                         {p.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Admission Session</Label>
+                <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v })}>
+                  <SelectTrigger><SelectValue placeholder="Standard / All Sessions" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="standard_all">Standard / All Sessions</SelectItem>
+                    {sessions.filter(s => s && s.id).map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.name} ({s.status})
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -168,7 +197,8 @@ export function FeeStructuresPanel() {
             <div className="space-y-2">
               {fees.filter(f => f && (f.id || f.id)).map((f) => {
                 const fid = f.id || f.id;
-                const progName = typeof f.programId === 'object' ? f.programId?.name : '';
+                const progName = typeof f.programId === 'object' ? f.programId?.name : (f.program?.name || '');
+                const sessionName = f.session?.name || '';
                 const total = (f.registrationFee || 0) + (f.tuitionFee || 0) + (f.examFee || 0);
                 return (
                   <div key={fid} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
@@ -177,7 +207,14 @@ export function FeeStructuresPanel() {
                         <DollarSign className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <div className="font-medium">{progName || 'Unknown Program'}</div>
+                        <div className="font-medium">
+                          {progName || 'Unknown Program'}
+                          {sessionName && (
+                            <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 ml-2 font-normal">
+                              {sessionName}
+                            </span>
+                          )}
+                        </div>
                         <div className="text-sm text-muted-foreground">
                           Reg: ${f.registrationFee} • Tuition: ${f.tuitionFee} • Exam: ${f.examFee} • GST: {f.gstPercentage}%
                         </div>

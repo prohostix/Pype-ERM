@@ -306,6 +306,10 @@ exports.Prisma.StudentScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
+  fatherName: 'fatherName',
+  dob: 'dob',
+  altPhone: 'altPhone',
+  pinCode: 'pinCode',
   programId: 'programId',
   sessionId: 'sessionId',
   status: 'status',
@@ -315,6 +319,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referredBy: 'referredBy',
+  documents: 'documents',
   isPrevious: 'isPrevious',
   credentials: 'credentials'
 };
@@ -577,6 +582,10 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   studentEmail: 'studentEmail',
   studentPhone: 'studentPhone',
   studentAddress: 'studentAddress',
+  fatherName: 'fatherName',
+  dob: 'dob',
+  altPhone: 'altPhone',
+  pinCode: 'pinCode',
   status: 'status',
   departmentRemarks: 'departmentRemarks',
   financeRemarks: 'financeRemarks',
@@ -930,6 +939,7 @@ exports.Prisma.UniversityAuthFeeScalarFieldEnum = {
 exports.Prisma.FeeStructureScalarFieldEnum = {
   id: 'id',
   programId: 'programId',
+  sessionId: 'sessionId',
   organizationId: 'organizationId',
   registrationFee: 'registrationFee',
   tuitionFee: 'tuitionFee',

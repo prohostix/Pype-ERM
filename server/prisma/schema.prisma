@@ -342,7 +342,7 @@ model Program {
   status              String               @default("active")
   admissionSessions   AdmissionSession[]
   enrollments         Enrollment[]
-  feeStructure        FeeStructure?
+  feeStructures       FeeStructure[]
   organization        Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   university          University           @relation(fields: [universityId], references: [id])
   programAllocations  ProgramAllocation[]
@@ -798,6 +798,7 @@ model AdmissionSession {
   subDepartment   SubDepartment? @relation(fields: [subDepartmentId], references: [id])
   university      University?    @relation(fields: [universityId], references: [id])
   enrollments     Enrollment[]
+  feeStructures   FeeStructure[]
 
   @@index([organizationId])
 }
@@ -1281,19 +1282,22 @@ model UniversityAuthFee {
 }
 
 model FeeStructure {
-  id              String       @id @default(uuid())
-  programId       String       @unique
+  id              String            @id @default(uuid())
+  programId       String
+  sessionId       String?
   organizationId  String
-  registrationFee Float        @default(0)
-  tuitionFee      Float        @default(0)
-  examFee         Float        @default(0)
-  otherCharges    Json         @default("{}")
-  gstPercentage   Float        @default(18)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program         Program      @relation(fields: [programId], references: [id])
+  registrationFee Float             @default(0)
+  tuitionFee      Float             @default(0)
+  examFee         Float             @default(0)
+  otherCharges    Json              @default("{}")
+  gstPercentage   Float             @default(18)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program         Program           @relation(fields: [programId], references: [id])
+  session         AdmissionSession? @relation(fields: [sessionId], references: [id])
 
+  @@unique([programId, sessionId])
   @@index([organizationId])
 }
 
