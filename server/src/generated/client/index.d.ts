@@ -25328,6 +25328,7 @@ export namespace Prisma {
     updatedAt: number
     referredBy: number
     isPrevious: number
+    credentials: number
     _all: number
   }
 
@@ -25391,6 +25392,7 @@ export namespace Prisma {
     updatedAt?: true
     referredBy?: true
     isPrevious?: true
+    credentials?: true
     _all?: true
   }
 
@@ -25485,6 +25487,7 @@ export namespace Prisma {
     updatedAt: Date
     referredBy: string | null
     isPrevious: boolean
+    credentials: JsonValue | null
     _count: StudentCountAggregateOutputType | null
     _min: StudentMinAggregateOutputType | null
     _max: StudentMaxAggregateOutputType | null
@@ -25523,6 +25526,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referredBy?: boolean
     isPrevious?: boolean
+    credentials?: boolean
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
@@ -25554,6 +25558,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referredBy?: boolean
     isPrevious?: boolean
+    credentials?: boolean
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -25580,6 +25585,7 @@ export namespace Prisma {
     updatedAt?: boolean
     referredBy?: boolean
     isPrevious?: boolean
+    credentials?: boolean
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -25606,9 +25612,10 @@ export namespace Prisma {
     updatedAt?: boolean
     referredBy?: boolean
     isPrevious?: boolean
+    credentials?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
@@ -25668,6 +25675,7 @@ export namespace Prisma {
       updatedAt: Date
       referredBy: string | null
       isPrevious: boolean
+      credentials: Prisma.JsonValue | null
     }, ExtArgs["result"]["student"]>
     composites: {}
   }
@@ -26118,6 +26126,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
     readonly referredBy: FieldRef<"Student", 'String'>
     readonly isPrevious: FieldRef<"Student", 'Boolean'>
+    readonly credentials: FieldRef<"Student", 'Json'>
   }
     
 
@@ -81899,7 +81908,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     referredBy: 'referredBy',
-    isPrevious: 'isPrevious'
+    isPrevious: 'isPrevious',
+    credentials: 'credentials'
   };
 
   export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -84813,6 +84823,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
     isPrevious?: BoolFilter<"Student"> | boolean
+    credentials?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -84843,6 +84854,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
+    credentials?: SortOrderInput | SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
     internalMarks?: InternalMarkOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
@@ -84876,6 +84888,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
     isPrevious?: BoolFilter<"Student"> | boolean
+    credentials?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -84906,6 +84919,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referredBy?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
+    credentials?: SortOrderInput | SortOrder
     _count?: StudentCountOrderByAggregateInput
     _max?: StudentMaxOrderByAggregateInput
     _min?: StudentMinOrderByAggregateInput
@@ -84933,6 +84947,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     referredBy?: StringNullableWithAggregatesFilter<"Student"> | string | null
     isPrevious?: BoolWithAggregatesFilter<"Student"> | boolean
+    credentials?: JsonNullableWithAggregatesFilter<"Student">
   }
 
   export type InvoiceWhereInput = {
@@ -91356,6 +91371,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -91386,6 +91402,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -91406,6 +91423,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -91436,6 +91454,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -91461,6 +91480,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUpdateManyMutationInput = {
@@ -91477,6 +91497,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUncheckedUpdateManyInput = {
@@ -91498,6 +91519,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type InvoiceCreateInput = {
@@ -97986,6 +98008,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     referredBy?: SortOrder
     isPrevious?: SortOrder
+    credentials?: SortOrder
   }
 
   export type StudentMaxOrderByAggregateInput = {
@@ -113474,6 +113497,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -113502,6 +113526,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -115679,6 +115704,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     referredBy?: StringNullableFilter<"Student"> | string | null
     isPrevious?: BoolFilter<"Student"> | boolean
+    credentials?: JsonNullableFilter<"Student">
   }
 
   export type StudyCenterUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -120679,6 +120705,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -120707,6 +120734,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -120732,6 +120760,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -120760,6 +120789,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -123424,6 +123454,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -123452,6 +123483,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -128708,6 +128740,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -128736,6 +128769,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -129612,6 +129646,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -129640,6 +129675,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -133697,6 +133733,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -133726,6 +133763,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -134039,6 +134077,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -134068,6 +134107,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -149720,6 +149760,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -149749,6 +149790,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -150949,6 +150991,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -150978,6 +151021,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -161748,6 +161792,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -161777,6 +161822,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -162249,6 +162295,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutStudentsNestedInput
@@ -162278,6 +162325,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -175021,6 +175069,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -175050,6 +175099,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -175230,6 +175280,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -175259,6 +175310,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -175849,6 +175901,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterCreateManyOrganizationInput = {
@@ -177825,6 +177878,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -177853,6 +177907,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -177877,6 +177932,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutOrganizationInput = {
@@ -180675,6 +180731,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterCreateManyApproverInput = {
@@ -183513,6 +183570,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -183541,6 +183599,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -183565,6 +183624,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutApproverInput = {
@@ -185484,6 +185544,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProgramMaterialCreateManyProgramInput = {
@@ -185714,6 +185775,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -185742,6 +185804,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -185766,6 +185829,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutAllowedProgramsInput = {
@@ -186094,6 +186158,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     referredBy?: string | null
     isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TargetCreateManyCenterInput = {
@@ -186495,6 +186560,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -186523,6 +186589,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -186547,6 +186614,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     referredBy?: NullableStringFieldUpdateOperationsInput | string | null
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TargetUpdateWithoutCenterInput = {

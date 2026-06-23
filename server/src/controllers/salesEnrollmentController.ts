@@ -1,8 +1,10 @@
+import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import { prisma } from '../config/postgres.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { sendEmail } from '../utils/emailService.js';
 
 // ─── Public: Validate invite token and get form data ─────────────────────────
 
@@ -343,7 +345,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
     let studentUser = await prisma.user.findUnique({ where: { email: enrollment.studentEmail } });
 
     if (!studentUser) {
-      generatedPassword = Math.random().toString(36).substring(2, 10);
+      generatedPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
       const hashedPassword = await hashPassword(generatedPassword);
       generatedUid = await generateUserId();
 
@@ -380,10 +382,21 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           sessionId: enrollment.sessionId,
           status: 'active',
           referredBy: enrollment.salesUserId,
+          ...(generatedPassword !== '(Existing student account)' ? { credentials: { email: enrollment.studentEmail, password: generatedPassword } } : {})
         },
       });
     }
     studentRecordId = studentRecord.id;
+
+    // Send credentials email
+    if (generatedPassword && generatedPassword !== '(Existing student account)') {
+      await sendEmail(
+        enrollment.studentEmail,
+        'Your Student Portal Credentials',
+        `Hello ${enrollment.studentName},\n\nYour enrollment has been approved and account created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${enrollment.studentEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+        `<p>Hello <strong>${enrollment.studentName}</strong>,</p><p>Your enrollment has been approved and account created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${enrollment.studentEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
+      );
+    }
   } catch (err) {
     console.error('Error auto-generating student credentials:', err);
   }

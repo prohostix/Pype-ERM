@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -56,6 +56,39 @@ export function StudentsPanel() {
   });
 
   const [activeFilter, setActiveFilter] = useState<'all' | 'current' | 'previous'>('all');
+
+  // Credentials Dialog State
+  const [credDialogOpen, setCredDialogOpen] = useState(false);
+  const [credTarget, setCredTarget] = useState<any>(null);
+  const [credPassword, setCredPassword] = useState('');
+  const [savingCred, setSavingCred] = useState(false);
+
+  const handleOpenCredentials = (student: any) => {
+    setCredTarget(student);
+    setCredPassword(student.credentials?.password || '');
+    setCredDialogOpen(true);
+  };
+
+  const handleSaveCredentials = async () => {
+    if (!credTarget) return;
+    setSavingCred(true);
+    try {
+      const updatedCreds = {
+        email: credTarget.email,
+        password: credPassword
+      };
+      await api.put(`/students/${credTarget.id}`, {
+        credentials: updatedCreds
+      });
+      toast.success('Credentials updated successfully');
+      setCredDialogOpen(false);
+      fetchStudents();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update credentials');
+    } finally {
+      setSavingCred(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -593,6 +626,11 @@ export function StudentsPanel() {
                         <CalendarDays className="w-4 h-4 text-indigo-500" />
                       </Button>
 
+                      {/* View/Change Credentials */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenCredentials(student)} title="View/Edit Credentials">
+                        <Key className="w-4 h-4 text-cyan-500" />
+                      </Button>
+
                       {canWrite && (
                         <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => handleEdit(student)}><Edit className="w-4 h-4" /></Button>
                       )}
@@ -826,6 +864,36 @@ export function StudentsPanel() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View/Edit Credentials Dialog */}
+      <Dialog open={credDialogOpen} onOpenChange={setCredDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Login Credentials — {credTarget?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label>Username (Email)</Label>
+              <Input value={credTarget?.email || ''} readOnly className="bg-muted text-muted-foreground" />
+            </div>
+            <div>
+              <Label>Password</Label>
+              <Input
+                type="text"
+                value={credPassword}
+                onChange={(e) => setCredPassword(e.target.value)}
+                placeholder="Enter new password"
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button onClick={handleSaveCredentials} disabled={savingCred || !credPassword}>
+                {savingCred ? 'Saving...' : 'Update Password'}
+              </Button>
+              <Button variant="outline" onClick={() => setCredDialogOpen(false)}>Close</Button>
             </div>
           </div>
         </DialogContent>

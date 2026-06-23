@@ -315,7 +315,8 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referredBy: 'referredBy',
-  isPrevious: 'isPrevious'
+  isPrevious: 'isPrevious',
+  credentials: 'credentials'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {

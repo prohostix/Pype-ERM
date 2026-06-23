@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { sendEmail } from '../utils/emailService.js';
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
@@ -31,9 +32,9 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
   const { email, name, phone } = req.body;
   
   let studentUser = await prisma.user.findUnique({ where: { email } });
+  const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
   if (!studentUser) {
     const generatedUid = await generateUserId();
-    const defaultPassword = `Student@${Math.floor(1000 + Math.random() * 9000)}`;
     const hashedPassword = await hashPassword(defaultPassword);
     studentUser = await prisma.user.create({
       data: {
@@ -52,9 +53,19 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
   const student = await prisma.student.create({
     data: {
       ...req.body,
-      organizationId: req.user.organizationId
+      organizationId: req.user.organizationId,
+      credentials: { email, password: defaultPassword }
     }
   });
+
+  // Send credentials email
+  await sendEmail(
+    email,
+    'Your Student Portal Credentials',
+    `Hello ${name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
+    `<p>Hello <strong>${name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
+  );
+
   res.status(201).json({ success: true, data: student });
 });
 
@@ -64,6 +75,16 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
   }
+
+  // If credentials.password is updated, hash it and update corresponding User record
+  if (req.body.credentials && req.body.credentials.password) {
+    const hashedPassword = await hashPassword(req.body.credentials.password);
+    await prisma.user.update({
+      where: { email: studentExists.email },
+      data: { password: hashedPassword }
+    });
+  }
+
   const student = await prisma.student.update({
     where: { id: req.params.id },
     data: req.body
@@ -161,11 +182,11 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
       // Ensure user account exists
       let studentUser = await prisma.user.findUnique({ where: { email: s.email } });
       let generatedUid = s.enrollmentNo;
+      const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
       if (!studentUser) {
         if (!generatedUid) {
           generatedUid = await generateUserId();
         }
-        const defaultPassword = `Student@${Math.floor(1000 + Math.random() * 9000)}`;
         const hashedPassword = await hashPassword(defaultPassword);
         studentUser = await prisma.user.create({
           data: {
@@ -198,9 +219,18 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           sessionId: s.sessionId || null,
           status: s.status || 'active',
           isPrevious: isPrevious || s.isPrevious || false,
-          organizationId
+          organizationId,
+          credentials: { email: s.email, password: defaultPassword }
         }
       });
+
+      // Send credentials email
+      await sendEmail(
+        s.email,
+        'Your Student Portal Credentials',
+        `Hello ${s.name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${s.email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
+        `<p>Hello <strong>${s.name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${s.email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
+      );
 
       results.imported++;
     } catch (err: any) {

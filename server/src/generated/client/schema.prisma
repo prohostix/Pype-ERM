@@ -436,6 +436,7 @@ model Student {
   referrer         User?             @relation("StudentReferredBy", fields: [referredBy], references: [id])
   isPrevious       Boolean           @default(false)
   paymentSchedules PaymentSchedule[]
+  credentials      Json?
 
   @@index([organizationId, status])
   @@index([centerId])

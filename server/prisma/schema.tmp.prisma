@@ -50,12 +50,14 @@ model Organization {
   notifications        Notification[]
   license              License?              @relation(fields: [licenseId], references: [id])
   payments             PaymentEntry[]
+  paymentSchedules     PaymentSchedule[]
   payrolls             Payroll[]
   payrollBatches       PayrollBatch[]
   polls                Poll[]
   programs             Program[]
   programAllocations   ProgramAllocation[]
   programFeeStructures ProgramFeeStructure[]
+  programMaterials     ProgramMaterial[]
   referralLinks        ReferralLink[]
   reregRules           ReregRule[]
   salaryConfigs        SalaryConfig[]
@@ -72,8 +74,6 @@ model Organization {
   users                User[]
   vacancies            Vacancy[]
   walletTopUps         WalletTopUp[]
-  programMaterials     ProgramMaterial[]
-  paymentSchedules     PaymentSchedule[]
 
   @@index([status])
 }
@@ -166,8 +166,8 @@ model User {
   employeeProfileDetail         EmployeeProfile?
   deptReviewedEnrollments       Enrollment[]          @relation("DeptReviewedBy")
   financeReviewedEnrollments    Enrollment[]          @relation("FinanceReviewedBy")
-  universityReviewedEnrollments Enrollment[]          @relation("UniversityReviewedBy")
   salesLedEnrollments           Enrollment[]          @relation("SalesUserEnrollments")
+  universityReviewedEnrollments Enrollment[]          @relation("UniversityReviewedBy")
   deptAdminEscalations          Escalation[]          @relation("EscalationDeptAdmin")
   employeeEscalations           Escalation[]          @relation("EscalationEmployee")
   handledEscalations            Escalation[]          @relation("EscalationHandledBy")
@@ -197,6 +197,7 @@ model User {
   createdPolls                  Poll[]                @relation("PollCreatedBy")
   programAllocations            ProgramAllocation[]   @relation("AllocatedBy")
   createdProgramFees            ProgramFeeStructure[] @relation("ProgramFeeCreatedBy")
+  uploadedMaterials             ProgramMaterial[]     @relation("MaterialUploadedBy")
   referralLink                  ReferralLink?
   salaryApproved                SalaryConfig[]        @relation("SalaryApprovedBy")
   salaryCreated                 SalaryConfig[]        @relation("SalaryCreatedBy")
@@ -226,7 +227,6 @@ model User {
   verifiedWalletTopUps          WalletTopUp[]         @relation("TopUpVerifiedBy")
   assistantManagedDepartments   Department[]          @relation("AssistantManagers")
   designations                  Designation[]         @relation("DesignationFilledBy")
-  uploadedMaterials             ProgramMaterial[]     @relation("MaterialUploadedBy")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -347,11 +347,11 @@ model Program {
   university          University           @relation(fields: [universityId], references: [id])
   programAllocations  ProgramAllocation[]
   programFeeStructure ProgramFeeStructure?
+  materials           ProgramMaterial[]
   reregRules          ReregRule[]
   students            Student[]
   studyCenters        StudyCenter[]        @relation("ProgramToStudyCenter")
   assignedSubDepts    SubDepartment[]      @relation("SubDeptToProgram")
-  materials           ProgramMaterial[]
 
   @@index([universityId])
   @@index([organizationId])
@@ -409,34 +409,33 @@ model StudyCenter {
 }
 
 model Student {
-  id             String         @id @default(uuid())
-  centerId       String
-  organizationId String
-  enrollmentNo   String         @unique
-  name           String
-  email          String         @unique
-  phone          String
-  address        String
-  programId      String
-  sessionId      String?
-  status         String         @default("pending")
-  joinDate       DateTime       @default(now())
-  enrolledAt     DateTime?
-  reregStatus    Json?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  referredBy     String?
-  enrollments    Enrollment[]
-  internalMarks  InternalMark[]
-  invoices       Invoice[]
-  center         StudyCenter    @relation(fields: [centerId], references: [id])
-  user           User           @relation(fields: [email], references: [email])
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program        Program        @relation(fields: [programId], references: [id])
-  referrer       User?          @relation("StudentReferredBy", fields: [referredBy], references: [id])
-  isPrevious     Boolean        @default(false)
+  id               String            @id @default(uuid())
+  centerId         String
+  organizationId   String
+  enrollmentNo     String            @unique
+  name             String
+  email            String            @unique
+  phone            String
+  address          String
+  programId        String
+  sessionId        String?
+  status           String            @default("pending")
+  joinDate         DateTime          @default(now())
+  enrolledAt       DateTime?
+  reregStatus      Json?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  referredBy       String?
+  isPrevious       Boolean           @default(false)
+  enrollments      Enrollment[]
+  internalMarks    InternalMark[]
+  invoices         Invoice[]
   paymentSchedules PaymentSchedule[]
-  credentials    Json?
+  center           StudyCenter       @relation(fields: [centerId], references: [id])
+  user             User              @relation(fields: [email], references: [email])
+  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program          Program           @relation(fields: [programId], references: [id])
+  referrer         User?             @relation("StudentReferredBy", fields: [referredBy], references: [id])
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -737,6 +736,8 @@ model Designation {
   status              String         @default("active")
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
+  allowedBranchIds    Json?          @default("[]")
+  allowedDeptIds      Json?          @default("[]")
   branch              Branch?        @relation(fields: [branchId], references: [id])
   department          Department?    @relation(fields: [departmentId], references: [id])
   organization        Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -744,8 +745,6 @@ model Designation {
   childDesignations   Designation[]  @relation("DesignationHierarchy")
   subDepartment       SubDepartment? @relation(fields: [subDepartmentId], references: [id])
   filledBy            User[]         @relation("DesignationFilledBy")
-  allowedDeptIds      Json?          @default("[]")
-  allowedBranchIds    Json?          @default("[]")
 
   @@index([organizationId, departmentId])
   @@index([parentDesignationId])
@@ -824,11 +823,11 @@ model Enrollment {
   universityReviewedAt DateTime?
   universityReviewedBy String?
   salesUserId          String?
-  salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
   departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program              Program            @relation(fields: [programId], references: [id])
+  salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
   session              AdmissionSession   @relation(fields: [sessionId], references: [id])
   student              Student?           @relation(fields: [studentId], references: [id])
   studyCenter          StudyCenter        @relation(fields: [studyCenterId], references: [id])
@@ -1344,6 +1343,44 @@ model ProgramFeeStructure {
   @@index([organizationId])
 }
 
+model ProgramMaterial {
+  id             String       @id @default(uuid())
+  programId      String
+  organizationId String
+  title          String
+  description    String?
+  fileUrl        String
+  uploadedBy     String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program        Program      @relation(fields: [programId], references: [id])
+  uploader       User         @relation("MaterialUploadedBy", fields: [uploadedBy], references: [id])
+
+  @@index([programId])
+  @@index([organizationId])
+}
+
+model PaymentSchedule {
+  id             String       @id @default(uuid())
+  organizationId String
+  studentId      String
+  title          String
+  amount         Float
+  dueDate        DateTime
+  status         String       @default("pending")
+  paidAt         DateTime?
+  remarks        String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+  @@index([studentId])
+}
+
 enum OrganizationStatus {
   active
   inactive
@@ -1515,42 +1552,4 @@ enum PayrollBatchStatus {
   rejected
   payment_in_progress
   completed
-}
-
-model ProgramMaterial {
-  id             String       @id @default(uuid())
-  programId      String
-  organizationId String
-  title          String
-  description    String?
-  fileUrl        String
-  uploadedBy     String
-  isActive       Boolean      @default(true)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program        Program      @relation(fields: [programId], references: [id])
-  uploader       User         @relation("MaterialUploadedBy", fields: [uploadedBy], references: [id])
-
-  @@index([programId])
-  @@index([organizationId])
-}
-
-model PaymentSchedule {
-  id             String       @id @default(uuid())
-  organizationId String
-  studentId      String
-  title          String
-  amount         Float
-  dueDate        DateTime
-  status         String       @default("pending") // pending, paid, overdue
-  paidAt         DateTime?
-  remarks        String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@index([organizationId, status])
-  @@index([studentId])
 }

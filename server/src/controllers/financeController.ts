@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { sendEmail } from '../utils/emailService.js';
 
 // Invoices
 export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -219,6 +220,8 @@ export const financeVerifyCenter = asyncHandler(async (req: AuthRequest, res: Re
 
 export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { name, code, email, contact, ...rest } = req.body;
+  const targetEmail = email || `admin.${code}@example.com`;
+  const generatedPassword = `Center@${Math.floor(100000 + Math.random() * 900000)}`;
   
   const center = await prisma.studyCenter.create({
     data: {
@@ -230,11 +233,12 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
       organizationId: req.user.organizationId,
       status: 'active',
       financeApprovedBy: req.user.id,
-      financeApprovedAt: new Date()
+      financeApprovedAt: new Date(),
+      credentials: { email: targetEmail, password: generatedPassword }
     }
   });
 
-  const hashedPassword = await hashPassword('admin123');
+  const hashedPassword = await hashPassword(generatedPassword);
   const userId = await generateUserId();
 
   const user = await prisma.user.create({
@@ -242,7 +246,7 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
       userId,
       organizationId: req.user.organizationId,
       studyCenterId: center.id,
-      email: email || `admin.${code}@example.com`,
+      email: targetEmail,
       password: hashedPassword,
       name: `${name} Admin`,
       role: 'center_admin',
@@ -250,6 +254,14 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
       status: 'active'
     }
   });
+
+  // Send credentials email
+  await sendEmail(
+    targetEmail,
+    'Your Study Center Portal Credentials',
+    `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+    `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
+  );
 
   res.status(201).json({ success: true, data: { center, user } });
 });

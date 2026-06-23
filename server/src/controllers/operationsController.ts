@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { sendEmail } from '../utils/emailService.js';
 
 // Universities
 export const getUniversities = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -97,18 +99,68 @@ export const getStudyCenter = asyncHandler(async (req: AuthRequest, res: Respons
 });
 export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
   const isSales = req.user.role === 'sales_admin' || req.user.role === 'bde' || req.user.role === 'employee';
+  const { name, code, email, contact, ...rest } = req.body;
+  const targetEmail = email || `admin.${code}@example.com`;
+  const generatedPassword = `Center@${Math.floor(100000 + Math.random() * 900000)}`;
 
   const center = await prisma.studyCenter.create({ 
     data: { 
-      ...req.body, 
+      ...rest,
+      name,
+      code,
+      email,
+      contact,
       organizationId: req.user.organizationId,
       status: isSales ? 'pending' : (req.body.status || 'pending'),
-      referredBy: isSales ? req.user.id : (req.body.referredBy || null)
+      referredBy: isSales ? req.user.id : (req.body.referredBy || null),
+      credentials: { email: targetEmail, password: generatedPassword }
     } 
   });
+
+  const hashedPassword = await hashPassword(generatedPassword);
+  const userId = await generateUserId();
+
+  const user = await prisma.user.create({
+    data: {
+      userId,
+      organizationId: req.user.organizationId,
+      studyCenterId: center.id,
+      email: targetEmail,
+      password: hashedPassword,
+      name: `${name} Admin`,
+      role: 'center_admin',
+      phone: contact,
+      status: 'active'
+    }
+  });
+
+  // Send credentials email
+  await sendEmail(
+    targetEmail,
+    'Your Study Center Portal Credentials',
+    `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+    `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
+  );
+
   res.status(201).json({ success: true, data: center });
 });
+
 export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const centerExists = await prisma.studyCenter.findUnique({ where: { id: req.params.id } });
+  if (!centerExists) {
+    res.status(404).json({ success: false, message: 'Study center not found' });
+    return;
+  }
+
+  // If credentials.password is updated, hash it and update corresponding User record
+  if (req.body.credentials && req.body.credentials.password) {
+    const hashedPassword = await hashPassword(req.body.credentials.password);
+    await prisma.user.updateMany({
+      where: { studyCenterId: req.params.id, role: 'center_admin' },
+      data: { password: hashedPassword }
+    });
+  }
+
   const center = await prisma.studyCenter.update({ where: { id: req.params.id }, data: req.body });
   res.json({ success: true, data: center });
 });

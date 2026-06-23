@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, MapPin } from 'lucide-react';
+import { Plus, Edit, Trash2, MapPin, Key } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -25,6 +25,39 @@ export function StudyCentersPanel() {
     email: '',
     status: 'pending'
   });
+
+  // Credentials Dialog State
+  const [credDialogOpen, setCredDialogOpen] = useState(false);
+  const [credTarget, setCredTarget] = useState<any>(null);
+  const [credPassword, setCredPassword] = useState('');
+  const [savingCred, setSavingCred] = useState(false);
+
+  const handleOpenCredentials = (c: any) => {
+    setCredTarget(c);
+    setCredPassword(c.credentials?.password || '');
+    setCredDialogOpen(true);
+  };
+
+  const handleSaveCredentials = async () => {
+    if (!credTarget) return;
+    setSavingCred(true);
+    try {
+      const updatedCreds = {
+        email: credTarget.email,
+        password: credPassword
+      };
+      await api.put(`/operations/centers/${credTarget.id}`, {
+        credentials: updatedCreds
+      });
+      alert('Credentials updated successfully');
+      setCredDialogOpen(false);
+      fetchCenters();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to update credentials');
+    } finally {
+      setSavingCred(false);
+    }
+  };
 
   useEffect(() => { fetchCenters(); }, []);
 
@@ -174,6 +207,9 @@ export function StudyCentersPanel() {
                       <Badge>{c.status}</Badge>
                       {canWrite && (
                         <>
+                          <Button variant="outline" size="sm" onClick={() => handleOpenCredentials(c)} title="View/Edit Credentials">
+                            <Key className="w-4 h-4 text-cyan-500" />
+                          </Button>
                           <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}><Edit className="w-4 h-4" /></Button>
                           <Button variant="ghost" size="sm" onClick={() => handleDelete(cid)}><Trash2 className="w-4 h-4" /></Button>
                         </>
@@ -186,6 +222,36 @@ export function StudyCentersPanel() {
           )}
         </CardContent>
       </Card>
+
+      {/* View/Edit Credentials Dialog */}
+      <Dialog open={credDialogOpen} onOpenChange={setCredDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Login Credentials — {credTarget?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label>Username (Email)</Label>
+              <Input value={credTarget?.credentials?.email || credTarget?.email || ''} readOnly className="bg-muted text-muted-foreground" />
+            </div>
+            <div>
+              <Label>Password</Label>
+              <Input
+                type="text"
+                value={credPassword}
+                onChange={(e) => setCredPassword(e.target.value)}
+                placeholder="Enter new password"
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button onClick={handleSaveCredentials} disabled={savingCred || !credPassword}>
+                {savingCred ? 'Saving...' : 'Update Password'}
+              </Button>
+              <Button variant="outline" onClick={() => setCredDialogOpen(false)}>Close</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
