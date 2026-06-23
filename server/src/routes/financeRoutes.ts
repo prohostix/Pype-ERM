@@ -115,7 +115,7 @@ router.put('/auth-fees/:id', authorize('finance_admin'), updateAuthFee);
 
 // Study Center Payment Verification & Creation
 router.get('/centers/pending-payment', authorize('finance_admin'), getPendingPaymentCenters);
-router.post('/centers', authorize('finance_admin', 'org_admin', 'superadmin'), createStudyCenter);
+router.post('/centers', authorize('org_admin', 'superadmin'), createStudyCenter);
 router.put('/centers/:id/finance-verify', authorize('finance_admin'), financeVerifyCenter);
 
 // Program Fee Structures

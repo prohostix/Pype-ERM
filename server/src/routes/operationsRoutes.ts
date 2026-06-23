@@ -77,7 +77,7 @@ router.put('/centers/:id/verify', authorize('ops_admin', 'ops_sub_admin', 'emplo
 // Study Centers
 router.route('/centers')
   .get(getStudyCenters)
-  .post(authorize('org_admin', 'superadmin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'), createStudyCenter);
+  .post(authorize('org_admin', 'superadmin'), createStudyCenter);
 router.route('/centers/:id')
   .get(getStudyCenter)
   .put(authorize('org_admin', 'superadmin'), updateStudyCenter)

@@ -20,7 +20,6 @@ import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 
-import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { 
@@ -88,7 +87,6 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'invite_links': return <SalesInvitePanel />;
       case 'student_applications': return <SalesStudentPipelinePanel />;
       case 'my_team': return <TeamPerformancePanel />;
-      case 'study_centers': return <StudyCentersPanel />;
       case 'tasks': return <TasksPanel />;
       case 'my_leaves': return <LeavesPanel />;
       case 'my_attendance': return <AttendancePanel />;
@@ -116,7 +114,6 @@ export function getSalesNavItems() {
     { id: 'invite_links', label: 'Invite Links' },
     { id: 'student_applications', label: 'Student Pipeline' },
     { id: 'my_team', label: 'My Team' },
-    { id: 'study_centers', label: 'Manual Center Creation' },
     { id: 'tasks', label: 'Tasks' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
     { id: 'my_leaves', label: 'My Leaves' },
@@ -539,7 +536,6 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
           case 'invite_links': return <SalesInvitePanel />;
           case 'student_applications': return <SalesStudentPipelinePanel />;
           case 'my_team': return <TeamPerformancePanel />;
-          case 'study_centers': return <StudyCentersPanel />;
           case 'my_attendance': return <AttendancePanel />;
           case 'my_leaves': return <LeavesPanel />;
           case 'my_payslips': return <PayrollPanel />;
