@@ -25,7 +25,8 @@ interface DesignationNode {
   maxHeadcount: number;
   departmentId?: Dept;
   subDepartmentId?: SubDept;
-  branchId?: { id: string; name: string; code: string };
+  branchId?: string | null;
+  branch?: { id: string; name: string; code: string } | null;
   parentDesignationId?: { id: string; title: string };
   filledBy: OrgUser[];
   status: string;
@@ -75,16 +76,16 @@ function OrgNode({
           style={{ borderColor: boxColor, minWidth: 190 }}>
 
           {/* Branch badge */}
-          {node.branchId && (
+          {node.branch && (
             <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-flex items-center gap-1"
               style={{ background: '#0891b222', color: '#0891b2' }}>
               <Building2 className="h-2.5 w-2.5" />
-              {node.branchId.name} [{node.branchId.code}]
+              {node.branch.name} [{node.branch.code}]
             </span>
           )}
 
           {/* Dept badge */}
-          {node.departmentId && !node.branchId && (
+          {node.departmentId && !node.branch && (
             <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 inline-block"
               style={{ background: boxColor + '22', color: boxColor }}>
               {node.departmentId.name}
@@ -428,12 +429,12 @@ export function OrgHierarchyPanel() {
       title: '',
       departmentId: parent?.departmentId?.id || '',
       subDepartmentId: '',
-      branchId: parent?.branchId?.id || '',
+      branchId: parent?.branch?.id || parent?.branchId || '',
       level: parent ? String((parent.level || 1) + 1) : '1',
       maxHeadcount: '1',
       parentDesignationId: parent?.id || '',
       allowedDeptIds: parent?.departmentId?.id ? [parent.departmentId.id] : [],
-      allowedBranchIds: parent?.branchId?.id ? [parent.branchId.id] : [],
+      allowedBranchIds: parent?.branch?.id ? [parent.branch.id] : (parent?.branchId ? [parent.branchId] : []),
     });
     setDesignDialog(true);
   };
@@ -461,7 +462,7 @@ export function OrgHierarchyPanel() {
       title: node.title,
       departmentId: node.departmentId?.id || '',
       subDepartmentId: node.subDepartmentId?.id || '',
-      branchId: node.branchId?.id || '',
+      branchId: node.branch?.id || node.branchId || '',
       level: String(node.level),
       maxHeadcount: String(node.maxHeadcount),
       parentDesignationId: node.parentDesignationId?.id || '',
@@ -813,7 +814,7 @@ export function OrgHierarchyPanel() {
                     .filter(n => n.id !== editingNode?.id)
                     .map(n => (
                       <SelectItem key={n.id} value={n.id}>
-                        {n.title}{n.branchId ? ` [${n.branchId.code}]` : ''}
+                        {n.title}{n.branch ? ` [${n.branch.code}]` : ''}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -867,9 +868,9 @@ export function OrgHierarchyPanel() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Assign to "{assignTarget?.title}"
-              {assignTarget?.branchId && (
+              {assignTarget?.branch && (
                 <span className="text-sm font-normal text-cyan-600 ml-2">
-                  [{assignTarget.branchId.code}]
+                  [{assignTarget.branch.code}]
                 </span>
               )}
             </DialogTitle>
