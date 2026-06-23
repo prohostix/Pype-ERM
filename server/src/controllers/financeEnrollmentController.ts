@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
 
 export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollments = await prisma.enrollment.findMany({
@@ -29,7 +30,17 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
     where: { id: req.params.id },
     data: { status: 'enrolled', financeReviewedBy: req.user.id, financeReviewedAt: new Date() }
   });
-  res.json({ success: true, data: enrollment });
+  
+  // Provision student/user account post-approval
+  await provisionStudentAfterApproval(enrollment.id);
+  
+  // Refetch the updated enrollment with provisioned student info
+  const updatedEnrollment = await prisma.enrollment.findUnique({
+    where: { id: enrollment.id },
+    include: { program: true, studyCenter: true }
+  });
+
+  res.json({ success: true, data: updatedEnrollment || enrollment });
 });
 
 export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {

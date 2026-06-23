@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import { prisma } from '../config/postgres.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { provisionStudentAfterApproval } from '../utils/studentProvisioning.js';
 
 // GET /enrollment/university-review
 // Returns all enrollments with status university_review for the requesting university_admin's university
@@ -76,6 +77,9 @@ export const approveUniversityEnrollment = asyncHandler(async (req: AuthRequest,
     } as any,
   });
 
+  // Provision student/user account post-approval
+  await provisionStudentAfterApproval(updatedEnrollment.id);
+
   // Notify center_admin users of the partner portal
   try {
     const centerAdmins = await prisma.user.findMany({
@@ -102,7 +106,17 @@ export const approveUniversityEnrollment = asyncHandler(async (req: AuthRequest,
     }
   } catch (_) { /* non-critical */ }
 
-  res.status(200).json({ success: true, data: updatedEnrollment });
+  // Refetch the final updated enrollment (to get new student details if needed)
+  const finalEnrollment = await prisma.enrollment.findUnique({
+    where: { id: updatedEnrollment.id },
+    include: {
+      program: { select: { id: true, name: true, code: true, courseType: true } },
+      studyCenter: { select: { id: true, name: true, code: true } },
+      session: { select: { id: true, name: true } },
+    }
+  });
+
+  res.status(200).json({ success: true, data: finalEnrollment || updatedEnrollment });
 });
 
 // PUT /enrollment/university-review/:id/reject
