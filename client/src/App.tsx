@@ -77,7 +77,6 @@ const TABLE_TO_TAB: Record<string, string> = {
   sub_departments: 'subdepartments',
   // CEO
   performance: 'performance',
-  center_onboarding: 'center_onboarding',
   // Center Admin
   center_wallet: 'wallet',
   enroll_student: 'enroll',
@@ -222,7 +221,6 @@ function App() {
         { id: 'invoices', label: 'Invoices' },
         { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
-        { id: 'center_onboarding', label: 'Centers & Enrollment' },
       ];
     }
 

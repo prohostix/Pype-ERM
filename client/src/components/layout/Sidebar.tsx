@@ -141,7 +141,6 @@ const navItems: NavItem[] = [
     children: [
       { id: 'leads', label: 'Leads', icon: Users, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
       { id: 'study_centers', label: 'Manual Center Creation', icon: Building, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
-      { id: 'center_onboarding', label: 'Center Onboarding Status', icon: LayoutDashboard, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
       { id: 'deals', label: 'Deals', icon: CheckSquare, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
       { id: 'referrals', label: 'Referrals', icon: UserPlus, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
       { id: 'quotations', label: 'Quotations', icon: FileText, roles: ['sales_admin', 'bde', 'ceo', 'employee'] },
