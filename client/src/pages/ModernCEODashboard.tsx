@@ -59,6 +59,7 @@ import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { PerformancePanel } from '@/components/panels/PerformancePanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
+import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
@@ -128,6 +129,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
           <TabsTrigger value="escalations">Escalations</TabsTrigger>
           <TabsTrigger value="students">Students</TabsTrigger>
+          <TabsTrigger value="enrollment_review">Enrollment Review</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
           <TabsTrigger value="leads">Leads</TabsTrigger>
           <TabsTrigger value="activity_report">Activity Report</TabsTrigger>
@@ -331,6 +333,10 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
 
         <TabsContent value="students">
           <StudentsPanel />
+        </TabsContent>
+
+        <TabsContent value="enrollment_review">
+          <DeptEnrollmentReviewPanel />
         </TabsContent>
 
         <TabsContent value="invoices">

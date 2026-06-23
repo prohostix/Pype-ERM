@@ -18,6 +18,7 @@ import { BranchesPanel } from '@/components/panels/BranchesPanel';
 import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
+import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 import api from '@/lib/api';
@@ -64,6 +65,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
             <TabsTrigger value="leaves" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leave Requests</TabsTrigger>
             <TabsTrigger value="leads" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leads</TabsTrigger>
             <TabsTrigger value="sessions" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Sessions</TabsTrigger>
+            <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Enrollment Review</TabsTrigger>
             <TabsTrigger value="collections" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Collections</TabsTrigger>
           </TabsList>
         </div>
@@ -100,6 +102,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
         <TabsContent value="leaves"><LeavesPanel /></TabsContent>
         <TabsContent value="leads"><LeadsPanel /></TabsContent>
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
+        <TabsContent value="enrollment_review"><DeptEnrollmentReviewPanel /></TabsContent>
       </Tabs>
     </div>
   );
