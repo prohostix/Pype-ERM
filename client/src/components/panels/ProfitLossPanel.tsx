@@ -55,14 +55,14 @@ export function ProfitLossPanel() {
 
   useEffect(() => { fetchReport(); }, []);
 
-  const isProfit = (data?.totals.netProfit ?? 0) >= 0;
+  const isProfit = (data?.totals?.netProfit ?? 0) >= 0;
 
-  const chartData = data?.monthly.map(m => ({
+  const chartData = (data?.monthly || []).map(m => ({
     name: fmtMonth(m.month),
-    Revenue: m.income.total,
-    Costs: m.expenditure.total,
-    'Net P&L': m.net,
-  })) || [];
+    Revenue: m.income?.total ?? 0,
+    Costs: m.expenditure?.total ?? 0,
+    'Net P&L': m.net ?? 0,
+  }));
 
   return (
     <div className="space-y-6">
@@ -94,7 +94,7 @@ export function ProfitLossPanel() {
                 : <TrendingDown className="w-5 h-5 text-red-500" />}
               Profit & Loss Statement
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                {new Date(data.period.from).toLocaleDateString()} – {new Date(data.period.to).toLocaleDateString()}
+                {data.period?.from ? new Date(data.period.from).toLocaleDateString() : ''} – {data.period?.to ? new Date(data.period.to).toLocaleDateString() : ''}
               </span>
             </CardTitle>
           </CardHeader>
@@ -102,19 +102,19 @@ export function ProfitLossPanel() {
             <div className="space-y-0 divide-y divide-border">
               {/* INCOME section */}
               <PLSection title="INCOME" isHeader />
-              <PLRow label="Invoice Revenue" amount={data.incomeBreakdown.invoices} indent={1} />
-              <PLRow label="Enrollment Fees" amount={data.incomeBreakdown.enrollments} indent={1} />
-              <PLRow label="Payment Entries" amount={data.incomeBreakdown.payments} indent={1} />
-              <PLRow label="Gross Income" amount={data.totals.income} bold positive />
+              <PLRow label="Invoice Revenue" amount={data.incomeBreakdown?.invoices ?? 0} indent={1} />
+              <PLRow label="Enrollment Fees" amount={data.incomeBreakdown?.enrollments ?? 0} indent={1} />
+              <PLRow label="Payment Entries" amount={data.incomeBreakdown?.payments ?? 0} indent={1} />
+              <PLRow label="Gross Income" amount={data.totals?.income ?? 0} bold positive />
 
               {/* EXPENDITURE section */}
               <PLSection title="EXPENDITURE" isHeader />
-              <PLRow label="Salaries & Payroll" amount={data.expenditureBreakdown.salaries} indent={1} />
-              <PLRow label="Operational Expenses" amount={data.expenditureBreakdown.expenses} indent={1} />
-              {data.expenditureBreakdown.byCategory.map(c => (
-                <PLRow key={c.id} label={c.id} amount={c.amount} indent={2} muted />
+              <PLRow label="Salaries & Payroll" amount={data.expenditureBreakdown?.salaries ?? 0} indent={1} />
+              <PLRow label="Operational Expenses" amount={data.expenditureBreakdown?.expenses ?? 0} indent={1} />
+              {(data.expenditureBreakdown?.byCategory || []).map(c => (
+                <PLRow key={c.id} label={c.id} amount={c.amount ?? 0} indent={2} muted />
               ))}
-              <PLRow label="Total Expenditure" amount={data.totals.expenditure} bold negative />
+              <PLRow label="Total Expenditure" amount={data.totals?.expenditure ?? 0} bold negative />
 
               {/* NET */}
               <div className={cn(
@@ -125,10 +125,10 @@ export function ProfitLossPanel() {
                   <p className={cn('text-lg font-bold', isProfit ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
                     {isProfit ? 'Net Profit' : 'Net Loss'}
                   </p>
-                  <p className="text-xs text-muted-foreground">Profit margin: {data.totals.profitMargin}%</p>
+                  <p className="text-xs text-muted-foreground">Profit margin: {data.totals?.profitMargin ?? 0}%</p>
                 </div>
                 <p className={cn('text-3xl font-bold', isProfit ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
-                  {isProfit ? '+' : '-'}{fmt(Math.abs(data.totals.netProfit))}
+                  {isProfit ? '+' : '-'}{fmt(Math.abs(data.totals?.netProfit ?? 0))}
                 </p>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function ProfitLossPanel() {
       </Card>
 
       {/* Monthly P&L table */}
-      {data && data.monthly.length > 0 && (
+      {data && (data.monthly || []).length > 0 && (
         <Card>
           <CardHeader><CardTitle>Monthly P&L Summary</CardTitle></CardHeader>
           <CardContent className="p-0">
@@ -193,15 +193,15 @@ export function ProfitLossPanel() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {data.monthly.map(row => {
-                    const margin = row.income.total > 0 ? Math.round((row.net / row.income.total) * 100) : 0;
+                  {(data.monthly || []).map(row => {
+                    const margin = (row.income?.total ?? 0) > 0 ? Math.round(((row.net ?? 0) / (row.income?.total ?? 1)) * 100) : 0;
                     return (
                       <tr key={row.month} className="hover:bg-muted/30 transition-colors">
                         <td className="p-3 font-medium">{fmtMonth(row.month)}</td>
-                        <td className="p-3 text-right text-green-600 font-medium">{fmt(row.income.total)}</td>
-                        <td className="p-3 text-right text-red-500 font-medium">{fmt(row.expenditure.total)}</td>
-                        <td className={cn('p-3 text-right font-bold', row.net >= 0 ? 'text-green-600' : 'text-red-500')}>
-                          {row.net >= 0 ? '+' : ''}{fmt(row.net)}
+                        <td className="p-3 text-right text-green-600 font-medium">{fmt(row.income?.total ?? 0)}</td>
+                        <td className="p-3 text-right text-red-500 font-medium">{fmt(row.expenditure?.total ?? 0)}</td>
+                        <td className={cn('p-3 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                          {(row.net ?? 0) >= 0 ? '+' : ''}{fmt(row.net ?? 0)}
                         </td>
                         <td className={cn('p-3 text-right text-sm', margin >= 0 ? 'text-green-600' : 'text-red-500')}>
                           {margin}%

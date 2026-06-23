@@ -61,12 +61,12 @@ export function IncomeExpenditurePanel() {
 
   useEffect(() => { fetchReport(); }, []);
 
-  const chartData = data?.monthly.map(m => ({
+  const chartData = (data?.monthly || []).map(m => ({
     name: fmtMonth(m.month),
-    Income: m.income.total,
-    Expenditure: m.expenditure.total,
-    Net: m.net,
-  })) || [];
+    Income: m.income?.total ?? 0,
+    Expenditure: m.expenditure?.total ?? 0,
+    Net: m.net ?? 0,
+  }));
 
   return (
     <div className="space-y-6">
@@ -93,24 +93,24 @@ export function IncomeExpenditurePanel() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <SummaryCard
             label="Total Income"
-            value={fmt(data.totals.income)}
+            value={fmt(data.totals?.income ?? 0)}
             icon={<TrendingUp className="w-5 h-5" />}
             color="text-green-600 bg-green-50 dark:bg-green-900/20"
-            sub={`${data.monthly.length} months`}
+            sub={`${data.monthly?.length ?? 0} months`}
           />
           <SummaryCard
             label="Total Expenditure"
-            value={fmt(data.totals.expenditure)}
+            value={fmt(data.totals?.expenditure ?? 0)}
             icon={<TrendingDown className="w-5 h-5" />}
             color="text-red-500 bg-red-50 dark:bg-red-900/20"
             sub="Salaries + Expenses"
           />
           <SummaryCard
             label="Net Surplus / Deficit"
-            value={fmt(Math.abs(data.totals.netProfit))}
-            icon={data.totals.netProfit >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
-            color={data.totals.netProfit >= 0 ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-red-500 bg-red-50 dark:bg-red-900/20'}
-            sub={`${data.totals.profitMargin}% margin`}
+            value={fmt(Math.abs(data.totals?.netProfit ?? 0))}
+            icon={(data.totals?.netProfit ?? 0) >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+            color={(data.totals?.netProfit ?? 0) >= 0 ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-red-500 bg-red-50 dark:bg-red-900/20'}
+            sub={`${data.totals?.profitMargin ?? 0}% margin`}
           />
         </div>
       )}
@@ -172,7 +172,7 @@ export function IncomeExpenditurePanel() {
       </Card>
 
       {/* Monthly Table */}
-      {data && data.monthly.length > 0 && (
+      {data && (data.monthly || []).length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Monthly Statement</CardTitle>
@@ -193,17 +193,17 @@ export function IncomeExpenditurePanel() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {data.monthly.map(row => (
+                  {(data.monthly || []).map(row => (
                     <tr key={row.month} className="hover:bg-muted/30 transition-colors">
                       <td className="p-3 font-medium">{fmtMonth(row.month)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income.invoices)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income.enrollments)}</td>
-                      <td className="p-3 text-right font-semibold text-green-600">{fmt(row.income.total)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure.salaries)}</td>
-                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure.expenses)}</td>
-                      <td className="p-3 text-right font-semibold text-red-500">{fmt(row.expenditure.total)}</td>
-                      <td className={cn('p-3 text-right font-bold', row.net >= 0 ? 'text-green-600' : 'text-red-500')}>
-                        {row.net >= 0 ? '+' : ''}{fmt(row.net)}
+                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income?.invoices ?? 0)}</td>
+                      <td className="p-3 text-right text-muted-foreground">{fmt(row.income?.enrollments ?? 0)}</td>
+                      <td className="p-3 text-right font-semibold text-green-600">{fmt(row.income?.total ?? 0)}</td>
+                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure?.salaries ?? 0)}</td>
+                      <td className="p-3 text-right text-muted-foreground">{fmt(row.expenditure?.expenses ?? 0)}</td>
+                      <td className="p-3 text-right font-semibold text-red-500">{fmt(row.expenditure?.total ?? 0)}</td>
+                      <td className={cn('p-3 text-right font-bold', (row.net ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                        {(row.net ?? 0) >= 0 ? '+' : ''}{fmt(row.net ?? 0)}
                       </td>
                     </tr>
                   ))}
@@ -211,14 +211,14 @@ export function IncomeExpenditurePanel() {
                 <tfoot className="border-t-2 border-border bg-muted/30">
                   <tr>
                     <td className="p-3 font-bold">Total</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown.invoices)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown.enrollments)}</td>
-                    <td className="p-3 text-right font-bold text-green-600">{fmt(data.totals.income)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown.salaries)}</td>
-                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown.expenses)}</td>
-                    <td className="p-3 text-right font-bold text-red-500">{fmt(data.totals.expenditure)}</td>
-                    <td className={cn('p-3 text-right font-bold text-lg', data.totals.netProfit >= 0 ? 'text-green-600' : 'text-red-500')}>
-                      {data.totals.netProfit >= 0 ? '+' : ''}{fmt(data.totals.netProfit)}
+                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown?.invoices ?? 0)}</td>
+                    <td className="p-3 text-right font-bold">{fmt(data.incomeBreakdown?.enrollments ?? 0)}</td>
+                    <td className="p-3 text-right font-bold text-green-600">{fmt(data.totals?.income ?? 0)}</td>
+                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown?.salaries ?? 0)}</td>
+                    <td className="p-3 text-right font-bold">{fmt(data.expenditureBreakdown?.expenses ?? 0)}</td>
+                    <td className="p-3 text-right font-bold text-red-500">{fmt(data.totals?.expenditure ?? 0)}</td>
+                    <td className={cn('p-3 text-right font-bold text-lg', (data.totals?.netProfit ?? 0) >= 0 ? 'text-green-600' : 'text-red-500')}>
+                      {(data.totals?.netProfit ?? 0) >= 0 ? '+' : ''}{fmt(data.totals?.netProfit ?? 0)}
                     </td>
                   </tr>
                 </tfoot>
@@ -234,18 +234,18 @@ export function IncomeExpenditurePanel() {
           <Card>
             <CardHeader><CardTitle className="text-base">Income Sources</CardTitle></CardHeader>
             <CardContent className="space-y-3">
-              <BreakdownRow label="Invoices" amount={data.incomeBreakdown.invoices} total={data.totals.income} color="bg-green-500" />
-              <BreakdownRow label="Enrollment Fees" amount={data.incomeBreakdown.enrollments} total={data.totals.income} color="bg-emerald-400" />
-              <BreakdownRow label="Payment Entries" amount={data.incomeBreakdown.payments} total={data.totals.income} color="bg-teal-400" />
+              <BreakdownRow label="Invoices" amount={data.incomeBreakdown?.invoices ?? 0} total={data.totals?.income ?? 0} color="bg-green-500" />
+              <BreakdownRow label="Enrollment Fees" amount={data.incomeBreakdown?.enrollments ?? 0} total={data.totals?.income ?? 0} color="bg-emerald-400" />
+              <BreakdownRow label="Payment Entries" amount={data.incomeBreakdown?.payments ?? 0} total={data.totals?.income ?? 0} color="bg-teal-400" />
             </CardContent>
           </Card>
           <Card>
             <CardHeader><CardTitle className="text-base">Expenditure Breakdown</CardTitle></CardHeader>
             <CardContent className="space-y-3">
-              <BreakdownRow label="Salaries (Payroll)" amount={data.expenditureBreakdown.salaries} total={data.totals.expenditure} color="bg-red-500" />
-              <BreakdownRow label="Expense Claims" amount={data.expenditureBreakdown.expenses} total={data.totals.expenditure} color="bg-orange-400" />
-              {data.expenditureBreakdown.byCategory.slice(0, 4).map(c => (
-                <BreakdownRow key={c.id} label={`  └ ${c.id}`} amount={c.amount} total={data.expenditureBreakdown.expenses} color="bg-orange-200" />
+              <BreakdownRow label="Salaries (Payroll)" amount={data.expenditureBreakdown?.salaries ?? 0} total={data.totals?.expenditure ?? 0} color="bg-red-500" />
+              <BreakdownRow label="Expense Claims" amount={data.expenditureBreakdown?.expenses ?? 0} total={data.totals?.expenditure ?? 0} color="bg-orange-400" />
+              {(data.expenditureBreakdown?.byCategory || []).slice(0, 4).map(c => (
+                <BreakdownRow key={c.id} label={`  └ ${c.id}`} amount={c.amount ?? 0} total={data.expenditureBreakdown?.expenses ?? 0} color="bg-orange-200" />
               ))}
             </CardContent>
           </Card>
