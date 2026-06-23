@@ -430,6 +430,7 @@ model Student {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   referredBy     String?
+  documents      Json?          @default("[]")
   enrollments    Enrollment[]
   internalMarks  InternalMark[]
   invoices       Invoice[]

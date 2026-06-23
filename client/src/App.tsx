@@ -74,6 +74,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   enrollment_review: 'enrollment_review',
   // Sales
   leads: 'leads',
+  enrolled_students: 'enrolled_students',
   invite_links: 'invite_links',
   sub_departments: 'subdepartments',
   // CEO

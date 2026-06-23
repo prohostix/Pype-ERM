@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { 
   TrendingUp, 
   Target, 
-  Users, 
+  GraduationCap, 
   Zap, 
   ArrowUpRight,
   BarChart3,
+  Users
 } from 'lucide-react';
-import { LeadsPanel } from '@/components/panels/LeadsPanel';
+import { SalesEnrolledStudentsPanel } from '@/components/panels/SalesEnrolledStudentsPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -47,7 +48,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
 
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>({});
-  const [leads, setLeads] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [targets, setTargets] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
@@ -57,13 +58,13 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [metricsRes, leadsRes, targetsRes] = await Promise.all([
+      const [metricsRes, studentsRes, targetsRes] = await Promise.all([
         api.get('/dashboard/metrics'),
-        api.get('/sales/leads').catch(() => ({ data: { data: [] } })),
+        api.get('/students').catch(() => ({ data: { data: [] } })),
         api.get('/sales/targets').catch(() => ({ data: { data: [] } })),
       ]);
       setMetrics(metricsRes.data.data || {});
-      setLeads(leadsRes.data.data || []);
+      setStudents(studentsRes.data.data || []);
       setTargets(targetsRes.data.data || []);
     } catch (e) {
       console.error('Sales fetch error:', e);
@@ -80,9 +81,9 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
   const renderContent = () => {
     switch (activeTab) {
       case 'overview': return (
-        <OverviewContent metrics={metrics} leads={leads} targets={targets} loading={loading} onNavigate={setActiveTab} />
+        <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
       );
-      case 'leads': return <LeadsPanel />;
+      case 'enrolled_students': return <SalesEnrolledStudentsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
       case 'invite_links': return <SalesInvitePanel />;
       case 'student_applications': return <SalesStudentPipelinePanel />;
@@ -109,7 +110,7 @@ export function getSalesNavItems() {
   return [
     { id: '__sales_section', label: 'Sales Management', isSection: true },
     { id: 'overview', label: 'Overview' },
-    { id: 'leads', label: 'Leads' },
+    { id: 'enrolled_students', label: 'Total Student Enrolled' },
     { id: 'targets', label: 'Targets' },
     { id: 'invite_links', label: 'Invite Links' },
     { id: 'student_applications', label: 'Student Pipeline' },
@@ -125,21 +126,20 @@ export function getSalesNavItems() {
   ];
 }
 
-function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) {
+function OverviewContent({ metrics, students, targets, loading, onNavigate }: any) {
   // Compute live stats
-  const totalLeads = leads.length;
-  const newLeads = leads.filter((l: any) => l.status === 'new').length;
-  const convertedLeads = leads.filter((l: any) => l.status === 'converted').length;
-  const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
+  const totalStudents = students.length;
+  const activeStudents = students.filter((s: any) => s.status === 'active').length;
+  const pendingStudents = students.filter((s: any) => s.status === 'pending').length;
 
-  // Lead source breakdown from real data
-  const sourceCounts: Record<string, number> = {};
-  leads.forEach((l: any) => {
-    const src = l.source || 'Direct';
-    sourceCounts[src] = (sourceCounts[src] || 0) + 1;
+  // Student Program breakdown from real data
+  const programCounts: Record<string, number> = {};
+  students.forEach((s: any) => {
+    const prog = s.program?.name || 'Unknown Program';
+    programCounts[prog] = (programCounts[prog] || 0) + 1;
   });
   const COLORS = ['hsl(var(--primary))', 'hsl(var(--info))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--error))'];
-  const sourceData = Object.entries(sourceCounts).map(([name, value], i) => ({
+  const programData = Object.entries(programCounts).map(([name, value], i) => ({
     name, value, color: COLORS[i % COLORS.length],
   }));
 
@@ -152,17 +152,15 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
       }, 0) / activeTargets.length)
     : 0;
 
-  // Lead status bar chart
+  // Student status bar chart
   const statusData = [
-    { label: 'New', value: leads.filter((l: any) => l.status === 'new').length, color: 'hsl(var(--primary))' },
-    { label: 'Contacted', value: leads.filter((l: any) => l.status === 'contacted').length, color: 'hsl(var(--info))' },
-    { label: 'Qualified', value: leads.filter((l: any) => l.status === 'qualified').length, color: 'hsl(var(--warning))' },
-    { label: 'Converted', value: convertedLeads, color: 'hsl(var(--success))' },
-    { label: 'Lost', value: leads.filter((l: any) => l.status === 'lost').length, color: 'hsl(var(--error))' },
+    { label: 'Active', value: activeStudents, color: 'hsl(var(--success))' },
+    { label: 'Pending', value: pendingStudents, color: 'hsl(var(--warning))' },
+    { label: 'Inactive', value: students.filter((s: any) => s.status === 'inactive').length, color: 'hsl(var(--error))' },
+    { label: 'Completed', value: students.filter((s: any) => s.status === 'completed').length, color: 'hsl(var(--info))' },
   ];
 
-  const hotLeads = [...leads]
-    .filter((l: any) => l.status !== 'converted' && l.status !== 'lost')
+  const recentStudents = [...students]
     .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 4);
 
@@ -171,20 +169,20 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
       {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SalesMetric
-          title="Total Leads"
-          value={loading ? '...' : totalLeads}
-          trend={newLeads > 0 ? `${newLeads} new` : 'No new leads'}
-          icon={<Users className="w-5 h-5" />}
+          title="Total Students Enrolled"
+          value={loading ? '...' : totalStudents}
+          trend={`${activeStudents} active`}
+          icon={<GraduationCap className="w-5 h-5" />}
           color="primary"
-          onClick={() => onNavigate('leads')}
+          onClick={() => onNavigate('enrolled_students')}
         />
         <SalesMetric
-          title="Conversions"
-          value={loading ? '...' : convertedLeads}
-          trend={`${conversionRate}% rate`}
-          icon={<TrendingUp className="w-5 h-5" />}
+          title="Pending Verification"
+          value={loading ? '...' : pendingStudents}
+          trend="Awaiting review"
+          icon={<Clock className="w-5 h-5" />}
           color="success"
-          onClick={() => onNavigate('leads')}
+          onClick={() => onNavigate('enrolled_students')}
         />
         <SalesMetric
           title="Active Targets"
@@ -205,20 +203,20 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Lead Status Chart */}
+        {/* Student Status Chart */}
         <Card
           className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-          onClick={() => onNavigate('leads')}
+          onClick={() => onNavigate('enrolled_students')}
         >
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Lead Pipeline</CardTitle>
-              <CardDescription>Live status breakdown — click to manage leads</CardDescription>
+              <CardTitle>Student Status Distribution</CardTitle>
+              <CardDescription>Live database breakdown — click to manage students</CardDescription>
             </div>
             <BarChart3 className="w-5 h-5 text-muted-foreground" />
           </CardHeader>
           <CardContent className="h-[260px]">
-            {leads.length > 0 ? (
+            {students.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={statusData} margin={{ top: 5, right: 20, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
@@ -234,33 +232,30 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <Users className="w-10 h-10 opacity-20" />
-                <p className="text-sm">No leads yet</p>
-                <Button size="sm" variant="outline" onClick={e => { e.stopPropagation(); onNavigate('leads'); }}>
-                  Add Lead
-                </Button>
+                <GraduationCap className="w-10 h-10 opacity-20" />
+                <p className="text-sm">No students registered yet</p>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Lead Sources */}
+        {/* Student Programs */}
         <Card
           className="border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-          onClick={() => onNavigate('leads')}
+          onClick={() => onNavigate('enrolled_students')}
         >
           <CardHeader>
-            <CardTitle>Lead Sources</CardTitle>
-            <CardDescription>Acquisition channel breakdown</CardDescription>
+            <CardTitle>Program Distribution</CardTitle>
+            <CardDescription>Academic course breakdown</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
-            {sourceData.length > 0 ? (
+            {programData.length > 0 ? (
               <>
                 <div className="h-[160px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-                      <Pie data={sourceData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={4} dataKey="value">
-                        {sourceData.map((entry, index) => (
+                      <Pie data={programData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={4} dataKey="value">
+                        {programData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
@@ -269,7 +264,7 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
                   </ResponsiveContainer>
                 </div>
                 <div className="w-full grid grid-cols-2 gap-2 mt-2">
-                  {sourceData.map(item => (
+                  {programData.map(item => (
                     <div key={item.name} className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                       <span className="text-xs text-muted-foreground truncate">{item.name}</span>
@@ -280,8 +275,8 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
               </>
             ) : (
               <div className="h-[200px] flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <Users className="w-8 h-8 opacity-20" />
-                <p className="text-sm">No source data yet</p>
+                <GraduationCap className="w-8 h-8 opacity-20" />
+                <p className="text-sm">No course data yet</p>
               </div>
             )}
           </CardContent>
@@ -289,35 +284,35 @@ function OverviewContent({ metrics, leads, targets, loading, onNavigate }: any) 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Hot Leads */}
-        <Card className="cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('leads')}>
+        {/* Recent Students */}
+        <Card className="cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('enrolled_students')}>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Recent Leads</CardTitle>
-            <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={e => { e.stopPropagation(); onNavigate('leads'); }}>
+            <CardTitle className="text-lg">Recent Enrollments</CardTitle>
+            <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={e => { e.stopPropagation(); onNavigate('enrolled_students'); }}>
               View All <ArrowUpRight className="ml-1 w-3 h-3" />
             </Button>
           </CardHeader>
           <CardContent className="space-y-3">
             {loading ? (
               [1,2,3].map(i => <div key={i} className="h-12 bg-muted rounded-lg animate-pulse" />)
-            ) : hotLeads.length === 0 ? (
+            ) : recentStudents.length === 0 ? (
               <div className="py-6 text-center text-muted-foreground">
-                <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">No active leads</p>
+                <GraduationCap className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                <p className="text-sm">No active students</p>
               </div>
             ) : (
-              hotLeads.map((lead: any) => (
-                <div key={lead.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
+              recentStudents.map((student: any) => (
+                <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                      {(lead.name || lead.contactName || '?')[0].toUpperCase()}
+                      {(student.name || '?')[0].toUpperCase()}
                     </div>
                     <div>
-                      <h5 className="text-sm font-bold">{lead.name || lead.contactName || 'Unknown'}</h5>
-                      <p className="text-[10px] text-muted-foreground">{lead.source || 'Direct'} · {new Date(lead.createdAt).toLocaleDateString()}</p>
+                      <h5 className="text-sm font-bold">{student.name || 'Unknown'}</h5>
+                      <p className="text-[10px] text-muted-foreground">{student.program?.name || 'N/A'} · {new Date(student.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-[10px] uppercase font-bold">{lead.status}</Badge>
+                  <Badge variant="outline" className="text-[10px] uppercase font-bold bg-green-50 text-green-700 border-green-200">{student.status}</Badge>
                 </div>
               ))
             )}
@@ -399,7 +394,7 @@ function SalesMetric({ title, value, trend, icon, color, onClick }: any) {
 function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: any }) {
   const isSubDeptManager = Boolean(user?.subDepartmentId);
   const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
-  const [leads, setLeads] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [targets, setTargets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -410,10 +405,10 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      api.get('/sales/leads').catch(() => ({ data: { data: [] } })),
+      api.get('/students').catch(() => ({ data: { data: [] } })),
       api.get('/sales/targets').catch(() => ({ data: { data: [] } })),
-    ]).then(([leadsRes, targetsRes]) => {
-      setLeads(leadsRes.data.data || []);
+    ]).then(([studentsRes, targetsRes]) => {
+      setStudents(studentsRes.data.data || []);
       setTargets(targetsRes.data.data || []);
     }).finally(() => setLoading(false));
   }, []);
@@ -422,8 +417,8 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
     ? user.subDepartmentId?.name
     : user?.designation || 'Sales';
 
-  const myLeads = leads.filter((l: any) => {
-    const refId = typeof l.referredBy === 'object' ? l.referredBy?.id : l.referredBy;
+  const myStudents = students.filter((s: any) => {
+    const refId = typeof s.referredBy === 'object' ? s.referredBy?.id : s.referredBy;
     return refId?.toString() === (user?.id || user?.id)?.toString();
   });
 
@@ -444,16 +439,18 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
       {/* Quick stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">My Leads</p>
-          <p className="text-3xl font-bold mt-1">{loading ? '...' : myLeads.length}</p>
-          <p className="text-[10px] text-muted-foreground mt-1">{myLeads.filter((l:any) => l.status === 'new').length} new</p>
+          <p className="text-xs text-muted-foreground uppercase font-medium">My Enrolled Students</p>
+          <p className="text-3xl font-bold mt-1">{loading ? '...' : myStudents.length}</p>
+          <p className="text-[10px] text-muted-foreground mt-1">
+            {myStudents.filter((s: any) => s.status === 'active').length} active
+          </p>
         </CardContent></Card>
         <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">Converted</p>
-          <p className="text-3xl font-bold mt-1 text-success">{loading ? '...' : myLeads.filter((l:any) => l.status === 'converted').length}</p>
-          <p className="text-[10px] text-muted-foreground mt-1">
-            {myLeads.length > 0 ? Math.round((myLeads.filter((l:any) => l.status === 'converted').length / myLeads.length) * 100) : 0}% rate
+          <p className="text-xs text-muted-foreground uppercase font-medium">Pending Verification</p>
+          <p className="text-3xl font-bold mt-1 text-warning">
+            {loading ? '...' : myStudents.filter((s: any) => s.status === 'pending').length}
           </p>
+          <p className="text-[10px] text-muted-foreground mt-1">Awaiting operations</p>
         </CardContent></Card>
         <Card><CardContent className="p-5">
           <p className="text-xs text-muted-foreground uppercase font-medium">My Targets</p>
@@ -478,21 +475,21 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-3">
-                  <CardTitle className="text-base">Recent Leads</CardTitle>
-                  <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => setActiveTab('leads')}>
+                  <CardTitle className="text-base">Recent Enrollments</CardTitle>
+                  <Button variant="ghost" size="sm" className="text-primary text-xs" onClick={() => setActiveTab('enrolled_students')}>
                     View All <ArrowUpRight className="ml-1 w-3 h-3" />
                   </Button>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {loading ? [1,2,3].map(i => <div key={i} className="h-10 bg-muted rounded animate-pulse" />) :
-                    myLeads.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No leads yet</p> :
-                    myLeads.slice(0, 4).map((l: any) => (
-                      <div key={l.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
+                    myStudents.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">No enrollments yet</p> :
+                    myStudents.slice(0, 4).map((s: any) => (
+                      <div key={s.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                         <div>
-                          <p className="text-sm font-medium">{l.centerName || l.contactName || 'Lead'}</p>
-                          <p className="text-[10px] text-muted-foreground">{l.source} · {new Date(l.createdAt).toLocaleDateString()}</p>
+                          <p className="text-sm font-medium">{s.name || 'Student'}</p>
+                          <p className="text-[10px] text-muted-foreground">{s.program?.name || 'N/A'} · {new Date(s.createdAt).toLocaleDateString()}</p>
                         </div>
-                        <Badge variant="outline" className="text-[10px] uppercase">{l.status}</Badge>
+                        <Badge variant="outline" className="text-[10px] uppercase bg-green-50 text-green-700 border-green-200">{s.status}</Badge>
                       </div>
                     ))
                   }
@@ -531,7 +528,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
             </div>
           );
           case 'my_subdept': return isSubDeptManager ? <SubSalesPortalPanel /> : null;
-          case 'leads': return <LeadsPanel />;
+          case 'enrolled_students': return <SalesEnrolledStudentsPanel />;
           case 'targets': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
           case 'invite_links': return <SalesInvitePanel />;
           case 'student_applications': return <SalesStudentPipelinePanel />;

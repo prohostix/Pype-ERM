@@ -10,7 +10,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   if (req.query.status) where.status = req.query.status as string;
   const students = await prisma.student.findMany({
     where,
-    include: { enrollments: true },
+    include: { enrollments: true, program: true, center: true },
     orderBy: { createdAt: 'desc' }
   });
   res.status(200).json({ success: true, count: students.length, data: students });
@@ -19,7 +19,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   const student = await prisma.student.findUnique({
     where: { id: req.params.id },
-    include: { enrollments: true }
+    include: { enrollments: true, program: true, center: true }
   });
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });
@@ -375,4 +375,43 @@ export const deleteInternalMark = asyncHandler(async (req: AuthRequest, res: Res
   }
   await prisma.internalMark.delete({ where: { id: req.params.id } });
   res.status(200).json({ success: true, data: {} });
+});
+
+export const uploadStudentDocument = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await prisma.student.findUnique({
+    where: { id: req.params.id },
+  });
+
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  if (!req.file) {
+    res.status(400).json({ success: false, message: 'No file uploaded' });
+    return;
+  }
+
+  const fileUrl = `/uploads/${req.file.filename}`;
+  const docName = req.body.name || req.file.originalname;
+
+  const currentDocs = Array.isArray(student.documents) ? (student.documents as any[]) : [];
+  const updatedDocs = [
+    ...currentDocs,
+    {
+      name: docName,
+      url: fileUrl,
+      uploadedAt: new Date().toISOString(),
+      uploadedBy: req.user.name || req.user.email,
+    },
+  ];
+
+  const updatedStudent = await prisma.student.update({
+    where: { id: req.params.id },
+    data: {
+      documents: updatedDocs,
+    },
+  });
+
+  res.status(200).json({ success: true, data: updatedStudent });
 });
