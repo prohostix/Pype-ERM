@@ -41,10 +41,10 @@ const CATEGORIES = [
 ];
 
 const COURSE_COLORS: Record<string, { color: string; bg: string }> = {
-  'Skill Course':    { color: '#7c3aed', bg: '#f5f3ff' },
-  'Online Degree':   { color: '#2563eb', bg: '#eff6ff' },
-  'B.Voc Degree':    { color: '#0891b2', bg: '#ecfeff' },
-  'Credit Transfer': { color: '#16a34a', bg: '#f0fdf4' },
+  'SkillCourse':    { color: '#7c3aed', bg: '#f5f3ff' },
+  'OnlineDegree':   { color: '#2563eb', bg: '#eff6ff' },
+  'BVocDegree':    { color: '#0891b2', bg: '#ecfeff' },
+  'CreditTransfer': { color: '#16a34a', bg: '#f0fdf4' },
 };
 
 function formatBytes(bytes: number) {
@@ -220,7 +220,7 @@ export function ProgramDetailPanel({
     );
   }
 
-  const ctMeta = COURSE_COLORS[program.courseType] || COURSE_COLORS['Online Degree'];
+  const ctMeta = COURSE_COLORS[program.courseType] || COURSE_COLORS['OnlineDegree'];
   const uniName = typeof program.universityId === 'object' ? program.universityId?.name : '';
 
   return (

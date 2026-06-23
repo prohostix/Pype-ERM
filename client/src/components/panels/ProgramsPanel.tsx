@@ -11,13 +11,13 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { ProgramDetailPanel } from './ProgramDetailPanel';
 
-type CourseType = 'Skill Course' | 'Online Degree' | 'B.Voc Degree' | 'Credit Transfer';
+type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer';
 
 const COURSE_TYPES: { value: CourseType; label: string; color: string; bg: string }[] = [
-  { value: 'Skill Course',     label: 'Skill Course',     color: '#7c3aed', bg: '#f5f3ff' },
-  { value: 'Online Degree',    label: 'Online Degree',    color: '#2563eb', bg: '#eff6ff' },
-  { value: 'B.Voc Degree',     label: 'B.Voc Degree',    color: '#0891b2', bg: '#ecfeff' },
-  { value: 'Credit Transfer',  label: 'Credit Transfer',  color: '#16a34a', bg: '#f0fdf4' },
+  { value: 'SkillCourse',     label: 'Skill Course',     color: '#7c3aed', bg: '#f5f3ff' },
+  { value: 'OnlineDegree',    label: 'Online Degree',    color: '#2563eb', bg: '#eff6ff' },
+  { value: 'BVocDegree',     label: 'B.Voc Degree',    color: '#0891b2', bg: '#ecfeff' },
+  { value: 'CreditTransfer',  label: 'Credit Transfer',  color: '#16a34a', bg: '#f0fdf4' },
 ];
 
 // Duration options: 3 months → 48 months (4 years)
@@ -64,7 +64,7 @@ export function ProgramsPanel() {
   const [form, setForm] = useState({
     name: '', code: '', universityId: '',
     subDepartmentId: '',
-    courseType: 'Online Degree' as CourseType,
+    courseType: 'OnlineDegree' as CourseType,
     duration: 12, status: 'active',
     hasSemesters: false,
   });
@@ -163,7 +163,7 @@ export function ProgramsPanel() {
       name: p.name, code: p.code,
       universityId: uniId?.toString() || '',
       subDepartmentId: subDeptId?.toString() || '',
-      courseType: p.courseType || 'Online Degree',
+      courseType: p.courseType || 'OnlineDegree',
       duration: p.duration,
       status: p.status,
       hasSemesters: p.hasSemesters || false,
@@ -180,7 +180,7 @@ export function ProgramsPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setForm({ name: '', code: '', universityId: '', subDepartmentId: '', courseType: 'Online Degree', duration: 12, status: 'active', hasSemesters: false });
+    setForm({ name: '', code: '', universityId: '', subDepartmentId: '', courseType: 'OnlineDegree', duration: 12, status: 'active', hasSemesters: false });
     setSemesters([]);
   };
 
