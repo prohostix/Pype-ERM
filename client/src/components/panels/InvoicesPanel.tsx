@@ -12,11 +12,14 @@ import api from '@/lib/api';
 export function InvoicesPanel() {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [centers, setCenters] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
+  const [billingTarget, setBillingTarget] = useState<'center' | 'student'>('center');
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     centerId: '',
+    studentId: '',
     invoiceNo: '',
     itemDescription: '',
     itemQty: '1',
@@ -29,6 +32,7 @@ export function InvoicesPanel() {
   useEffect(() => {
     fetchInvoices();
     fetchCenters();
+    fetchStudents();
   }, []);
 
   const fetchInvoices = async () => {
@@ -52,6 +56,15 @@ export function InvoicesPanel() {
     }
   };
 
+  const fetchStudents = async () => {
+    try {
+      const res = await api.get('/students');
+      setStudents(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch students:', err);
+    }
+  };
+
   const calcTotal = () => {
     const qty = Number(formData.itemQty) || 0;
     const rate = Number(formData.itemRate) || 0;
@@ -65,6 +78,7 @@ export function InvoicesPanel() {
     const { amount, total } = calcTotal();
     const payload: any = {
       centerId: formData.centerId,
+      studentId: billingTarget === 'student' ? formData.studentId : null,
       invoiceNo: formData.invoiceNo,
       items: [{
         description: formData.itemDescription,
@@ -97,10 +111,15 @@ export function InvoicesPanel() {
     const centerId = typeof inv.centerId === 'object'
       ? (inv.centerId?.id || inv.centerId?.id)
       : inv.centerId;
+    const studentId = typeof inv.studentId === 'object'
+      ? (inv.studentId?.id || inv.studentId?.id)
+      : inv.studentId;
     const firstItem = inv.items?.[0] || {};
     setEditingId(inv.id || inv.id);
+    setBillingTarget(inv.studentId ? 'student' : 'center');
     setFormData({
       centerId: centerId?.toString() || '',
+      studentId: studentId?.toString() || '',
       invoiceNo: inv.invoiceNo || '',
       itemDescription: firstItem.description || '',
       itemQty: firstItem.quantity?.toString() || '1',
@@ -126,7 +145,18 @@ export function InvoicesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ centerId: '', invoiceNo: '', itemDescription: '', itemQty: '1', itemRate: '', tax: '0', dueDate: '', status: 'draft' });
+    setBillingTarget('center');
+    setFormData({
+      centerId: '',
+      studentId: '',
+      invoiceNo: '',
+      itemDescription: '',
+      itemQty: '1',
+      itemRate: '',
+      tax: '0',
+      dueDate: '',
+      status: 'draft'
+    });
   };
 
   const { total } = calcTotal();
@@ -148,18 +178,79 @@ export function InvoicesPanel() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label>Study Center</Label>
-                <Select value={formData.centerId} onValueChange={(v) => setFormData({ ...formData, centerId: v })}>
-                  <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
-                  <SelectContent>
-                    {centers.filter(c => c && (c.id || c.id)).map((c) => (
-                      <SelectItem key={c.id || c.id} value={(c.id || c.id).toString()}>
-                        {c.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Billing Target</Label>
+                <div className="flex gap-4 mt-1 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBillingTarget('center');
+                      setFormData(prev => ({ ...prev, studentId: '' }));
+                    }}
+                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors ${
+                      billingTarget === 'center'
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background hover:bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    Study Center
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBillingTarget('student');
+                      setFormData(prev => ({ ...prev, centerId: '' }));
+                    }}
+                    className={`flex-1 py-2 px-4 rounded-md border text-sm font-medium transition-colors ${
+                      billingTarget === 'student'
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background hover:bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    Student
+                  </button>
+                </div>
               </div>
+
+              {billingTarget === 'center' ? (
+                <div>
+                  <Label>Study Center</Label>
+                  <Select value={formData.centerId} onValueChange={(v) => setFormData({ ...formData, centerId: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
+                    <SelectContent>
+                      {centers.filter(c => c && (c.id || c.id)).map((c) => (
+                        <SelectItem key={c.id || c.id} value={(c.id || c.id).toString()}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div>
+                  <Label>Student</Label>
+                  <Select
+                    value={formData.studentId}
+                    onValueChange={(v) => {
+                      const selectedStudent = students.find(s => (s.id || s.id).toString() === v);
+                      setFormData(prev => ({
+                        ...prev,
+                        studentId: v,
+                        centerId: selectedStudent ? (selectedStudent.centerId || '').toString() : prev.centerId
+                      }));
+                    }}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Select student" /></SelectTrigger>
+                    <SelectContent>
+                      {students.filter(s => s && (s.id || s.id)).map((s) => (
+                        <SelectItem key={s.id || s.id} value={(s.id || s.id).toString()}>
+                          {s.name} ({s.enrollmentNo})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
               <div>
                 <Label>Invoice No</Label>
                 <Input value={formData.invoiceNo} onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })} required placeholder="e.g. INV-001" />
@@ -225,7 +316,11 @@ export function InvoicesPanel() {
             <div className="space-y-2">
               {invoices.filter(inv => inv && (inv.id || inv.id)).map((inv) => {
                 const invId = inv.id || inv.id;
-                const centerName = typeof inv.centerId === 'object' ? inv.centerId?.name : '';
+                const centerName = inv.center?.name || (typeof inv.centerId === 'object' ? inv.centerId?.name : '');
+                const studentName = inv.student?.name;
+                const billingDisplay = studentName
+                  ? `Student: ${studentName}${centerName ? ` (${centerName})` : ''}`
+                  : `Center: ${centerName}`;
                 return (
                   <div key={invId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-center gap-4">
@@ -235,7 +330,7 @@ export function InvoicesPanel() {
                       <div>
                         <div className="font-medium">{inv.invoiceNo}</div>
                         <div className="text-sm text-muted-foreground">
-                          {centerName && `${centerName} • `}Total: ${inv.total}
+                          {billingDisplay} • Total: ${inv.total}
                           {inv.dueDate && ` • Due: ${new Date(inv.dueDate).toLocaleDateString()}`}
                         </div>
                       </div>
