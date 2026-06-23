@@ -20,16 +20,18 @@ export const getProgramFee = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const createProgramFee = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fee = await prisma.programFeeStructure.create({
-    data: { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id }
-  });
+  const data = { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id };
+  if (data.effectiveFrom) data.effectiveFrom = new Date(data.effectiveFrom);
+  const fee = await prisma.programFeeStructure.create({ data });
   res.status(201).json({ success: true, data: fee });
 });
 
 export const updateProgramFee = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const data = { ...req.body };
+  if (data.effectiveFrom) data.effectiveFrom = new Date(data.effectiveFrom);
   const fee = await prisma.programFeeStructure.update({
     where: { id: req.params.id },
-    data: req.body
+    data
   });
   res.json({ success: true, data: fee });
 });

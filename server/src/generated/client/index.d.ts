@@ -78448,6 +78448,8 @@ export namespace Prisma {
     organizationId: string | null
     billingCycle: string | null
     baseFee: number | null
+    currency: string | null
+    effectiveFrom: Date | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -78459,6 +78461,8 @@ export namespace Prisma {
     organizationId: string | null
     billingCycle: string | null
     baseFee: number | null
+    currency: string | null
+    effectiveFrom: Date | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -78471,6 +78475,8 @@ export namespace Prisma {
     billingCycle: number
     baseFee: number
     additionalFees: number
+    currency: number
+    effectiveFrom: number
     createdBy: number
     createdAt: number
     updatedAt: number
@@ -78492,6 +78498,8 @@ export namespace Prisma {
     organizationId?: true
     billingCycle?: true
     baseFee?: true
+    currency?: true
+    effectiveFrom?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -78503,6 +78511,8 @@ export namespace Prisma {
     organizationId?: true
     billingCycle?: true
     baseFee?: true
+    currency?: true
+    effectiveFrom?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -78515,6 +78525,8 @@ export namespace Prisma {
     billingCycle?: true
     baseFee?: true
     additionalFees?: true
+    currency?: true
+    effectiveFrom?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -78614,6 +78626,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees: JsonValue
+    currency: string
+    effectiveFrom: Date | null
     createdBy: string
     createdAt: Date
     updatedAt: Date
@@ -78645,6 +78659,8 @@ export namespace Prisma {
     billingCycle?: boolean
     baseFee?: boolean
     additionalFees?: boolean
+    currency?: boolean
+    effectiveFrom?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -78660,6 +78676,8 @@ export namespace Prisma {
     billingCycle?: boolean
     baseFee?: boolean
     additionalFees?: boolean
+    currency?: boolean
+    effectiveFrom?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -78675,6 +78693,8 @@ export namespace Prisma {
     billingCycle?: boolean
     baseFee?: boolean
     additionalFees?: boolean
+    currency?: boolean
+    effectiveFrom?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -78690,12 +78710,14 @@ export namespace Prisma {
     billingCycle?: boolean
     baseFee?: boolean
     additionalFees?: boolean
+    currency?: boolean
+    effectiveFrom?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProgramFeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "organizationId" | "billingCycle" | "baseFee" | "additionalFees" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["programFeeStructure"]>
+  export type ProgramFeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "organizationId" | "billingCycle" | "baseFee" | "additionalFees" | "currency" | "effectiveFrom" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["programFeeStructure"]>
   export type ProgramFeeStructureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -78726,6 +78748,8 @@ export namespace Prisma {
       billingCycle: string
       baseFee: number
       additionalFees: Prisma.JsonValue
+      currency: string
+      effectiveFrom: Date | null
       createdBy: string
       createdAt: Date
       updatedAt: Date
@@ -79161,6 +79185,8 @@ export namespace Prisma {
     readonly billingCycle: FieldRef<"ProgramFeeStructure", 'String'>
     readonly baseFee: FieldRef<"ProgramFeeStructure", 'Float'>
     readonly additionalFees: FieldRef<"ProgramFeeStructure", 'Json'>
+    readonly currency: FieldRef<"ProgramFeeStructure", 'String'>
+    readonly effectiveFrom: FieldRef<"ProgramFeeStructure", 'DateTime'>
     readonly createdBy: FieldRef<"ProgramFeeStructure", 'String'>
     readonly createdAt: FieldRef<"ProgramFeeStructure", 'DateTime'>
     readonly updatedAt: FieldRef<"ProgramFeeStructure", 'DateTime'>
@@ -82951,6 +82977,8 @@ export namespace Prisma {
     billingCycle: 'billingCycle',
     baseFee: 'baseFee',
     additionalFees: 'additionalFees',
+    currency: 'currency',
+    effectiveFrom: 'effectiveFrom',
     createdBy: 'createdBy',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -89536,6 +89564,8 @@ export namespace Prisma {
     billingCycle?: StringFilter<"ProgramFeeStructure"> | string
     baseFee?: FloatFilter<"ProgramFeeStructure"> | number
     additionalFees?: JsonFilter<"ProgramFeeStructure">
+    currency?: StringFilter<"ProgramFeeStructure"> | string
+    effectiveFrom?: DateTimeNullableFilter<"ProgramFeeStructure"> | Date | string | null
     createdBy?: StringFilter<"ProgramFeeStructure"> | string
     createdAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
@@ -89551,6 +89581,8 @@ export namespace Prisma {
     billingCycle?: SortOrder
     baseFee?: SortOrder
     additionalFees?: SortOrder
+    currency?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -89569,6 +89601,8 @@ export namespace Prisma {
     billingCycle?: StringFilter<"ProgramFeeStructure"> | string
     baseFee?: FloatFilter<"ProgramFeeStructure"> | number
     additionalFees?: JsonFilter<"ProgramFeeStructure">
+    currency?: StringFilter<"ProgramFeeStructure"> | string
+    effectiveFrom?: DateTimeNullableFilter<"ProgramFeeStructure"> | Date | string | null
     createdBy?: StringFilter<"ProgramFeeStructure"> | string
     createdAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
@@ -89584,6 +89618,8 @@ export namespace Prisma {
     billingCycle?: SortOrder
     baseFee?: SortOrder
     additionalFees?: SortOrder
+    currency?: SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -89604,6 +89640,8 @@ export namespace Prisma {
     billingCycle?: StringWithAggregatesFilter<"ProgramFeeStructure"> | string
     baseFee?: FloatWithAggregatesFilter<"ProgramFeeStructure"> | number
     additionalFees?: JsonWithAggregatesFilter<"ProgramFeeStructure">
+    currency?: StringWithAggregatesFilter<"ProgramFeeStructure"> | string
+    effectiveFrom?: DateTimeNullableWithAggregatesFilter<"ProgramFeeStructure"> | Date | string | null
     createdBy?: StringWithAggregatesFilter<"ProgramFeeStructure"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProgramFeeStructure"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProgramFeeStructure"> | Date | string
@@ -96417,6 +96455,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutCreatedProgramFeesInput
@@ -96431,6 +96471,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -96441,6 +96483,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedProgramFeesNestedInput
@@ -96455,6 +96499,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -96467,6 +96513,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -96477,6 +96525,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -96488,6 +96538,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -100904,6 +100956,8 @@ export namespace Prisma {
     billingCycle?: SortOrder
     baseFee?: SortOrder
     additionalFees?: SortOrder
+    currency?: SortOrder
+    effectiveFrom?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -100919,6 +100973,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     billingCycle?: SortOrder
     baseFee?: SortOrder
+    currency?: SortOrder
+    effectiveFrom?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -100930,6 +100986,8 @@ export namespace Prisma {
     organizationId?: SortOrder
     billingCycle?: SortOrder
     baseFee?: SortOrder
+    currency?: SortOrder
+    effectiveFrom?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -113870,6 +113928,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutCreatedProgramFeesInput
@@ -113882,6 +113942,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -116098,6 +116160,8 @@ export namespace Prisma {
     billingCycle?: StringFilter<"ProgramFeeStructure"> | string
     baseFee?: FloatFilter<"ProgramFeeStructure"> | number
     additionalFees?: JsonFilter<"ProgramFeeStructure">
+    currency?: StringFilter<"ProgramFeeStructure"> | string
+    effectiveFrom?: DateTimeNullableFilter<"ProgramFeeStructure"> | Date | string | null
     createdBy?: StringFilter<"ProgramFeeStructure"> | string
     createdAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramFeeStructure"> | Date | string
@@ -121064,6 +121128,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutProgramFeeStructuresInput
@@ -121077,6 +121143,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -129345,6 +129413,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     creator: UserCreateNestedOneWithoutCreatedProgramFeesInput
@@ -129357,6 +129427,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -129903,6 +129975,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedProgramFeesNestedInput
@@ -129915,6 +129989,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -176809,6 +176885,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -178703,6 +178781,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedProgramFeesNestedInput
@@ -178715,6 +178795,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -178726,6 +178808,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181693,6 +181777,8 @@ export namespace Prisma {
     billingCycle: string
     baseFee: number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: string
+    effectiveFrom?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -184469,6 +184555,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutProgramFeeStructuresNestedInput
@@ -184482,6 +184570,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -184493,6 +184583,8 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
     additionalFees?: JsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

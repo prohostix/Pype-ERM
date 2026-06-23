@@ -988,6 +988,8 @@ exports.Prisma.ProgramFeeStructureScalarFieldEnum = {
   billingCycle: 'billingCycle',
   baseFee: 'baseFee',
   additionalFees: 'additionalFees',
+  currency: 'currency',
+  effectiveFrom: 'effectiveFrom',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

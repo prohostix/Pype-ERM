@@ -1349,6 +1349,8 @@ model ProgramFeeStructure {
   billingCycle   String
   baseFee        Float
   additionalFees Json         @default("[]")
+  currency       String       @default("INR")
+  effectiveFrom  DateTime?
   createdBy      String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
