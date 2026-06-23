@@ -62,7 +62,19 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
 
 export const submitStudentApplication = asyncHandler(async (req: Request, res: Response) => {
   const { token } = req.params;
-  const { studentName, studentEmail, studentPhone, studentAddress, programId, sessionId, documents } = req.body;
+  const {
+    studentName,
+    studentEmail,
+    studentPhone,
+    studentAddress,
+    programId,
+    sessionId,
+    documents,
+    fatherName,
+    dob,
+    altPhone,
+    pinCode
+  } = req.body;
 
   // Validate required fields
   const missing: string[] = [];
@@ -71,6 +83,9 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
   if (!studentPhone) missing.push('studentPhone');
   if (!studentAddress) missing.push('studentAddress');
   if (!programId) missing.push('programId');
+  if (!fatherName) missing.push('fatherName');
+  if (!dob) missing.push('dob');
+  if (!pinCode) missing.push('pinCode');
   if (missing.length > 0) {
     res.status(400).json({ success: false, message: `Missing required fields: ${missing.join(', ')}` });
     return;
@@ -146,6 +161,10 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       studentEmail,
       studentPhone,
       studentAddress,
+      fatherName,
+      dob: dob ? new Date(dob) : null,
+      altPhone,
+      pinCode,
       programId,
       studyCenterId: studyCenter.id,
       sessionId: session.id,
@@ -378,6 +397,10 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           email: enrollment.studentEmail,
           phone: enrollment.studentPhone,
           address: enrollment.studentAddress,
+          fatherName: enrollment.fatherName,
+          dob: enrollment.dob,
+          altPhone: enrollment.altPhone,
+          pinCode: enrollment.pinCode,
           programId: enrollment.programId,
           sessionId: enrollment.sessionId,
           status: 'active',

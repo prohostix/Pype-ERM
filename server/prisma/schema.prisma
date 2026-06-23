@@ -417,6 +417,10 @@ model Student {
   email          String         @unique
   phone          String
   address        String
+  fatherName     String?
+  dob            DateTime?
+  altPhone       String?
+  pinCode        String?
   programId      String
   sessionId      String?
   status         String         @default("pending")
@@ -809,6 +813,10 @@ model Enrollment {
   studentEmail         String
   studentPhone         String
   studentAddress       String
+  fatherName           String?
+  dob                  DateTime?
+  altPhone             String?
+  pinCode              String?
   status               String             @default("payment_pending")
   departmentRemarks    String?
   financeRemarks       String?

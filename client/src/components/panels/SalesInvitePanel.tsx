@@ -104,7 +104,7 @@ export function SalesInvitePanel() {
       fetchInvites();
       const newToken = res.data.data?.token;
       if (newToken) {
-        const url = `${window.location.origin}/register?token=${newToken}`;
+        const url = `${window.location.origin}/student-apply?token=${newToken}`;
         navigator.clipboard.writeText(url).catch(() => {});
         toast.info('Link copied to clipboard');
       }
@@ -125,7 +125,7 @@ export function SalesInvitePanel() {
 
   const copyLink = (invite: Invite) => {
     // Always build from current origin so it works in any environment
-    const url = `${window.location.origin}/register?token=${invite.token}`;
+    const url = `${window.location.origin}/student-apply?token=${invite.token}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(invite.id);
       setTimeout(() => setCopied(null), 2000);
@@ -139,7 +139,7 @@ export function SalesInvitePanel() {
       toast.success('New invite link generated');
       const newToken = res.data.data?.token;
       if (newToken) {
-        const url = `${window.location.origin}/register?token=${newToken}`;
+        const url = `${window.location.origin}/student-apply?token=${newToken}`;
         navigator.clipboard.writeText(url).catch(() => {});
         toast.info('New link copied to clipboard');
       }

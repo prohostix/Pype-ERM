@@ -40,6 +40,10 @@ export default function StudentApplicationPage() {
     studentPhone: '',
     studentAddress: '',
     programId: '',
+    fatherName: '',
+    dob: '',
+    altPhone: '',
+    pinCode: '',
   });
 
   useEffect(() => {
@@ -133,42 +137,88 @@ export default function StudentApplicationPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <Label>Full Name *</Label>
-                <Input
-                  value={form.studentName}
-                  onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))}
-                  placeholder="Your full name"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Full Name *</Label>
+                  <Input
+                    value={form.studentName}
+                    onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))}
+                    placeholder="Your full name"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Father's Name *</Label>
+                  <Input
+                    value={form.fatherName}
+                    onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))}
+                    placeholder="Father's full name"
+                    required
+                  />
+                </div>
               </div>
-              <div className="space-y-1">
-                <Label>Email Address *</Label>
-                <Input
-                  type="email"
-                  value={form.studentEmail}
-                  onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))}
-                  placeholder="your@email.com"
-                  required
-                />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Email Address *</Label>
+                  <Input
+                    type="email"
+                    value={form.studentEmail}
+                    onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))}
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Date of Birth *</Label>
+                  <Input
+                    type="date"
+                    value={form.dob}
+                    onChange={e => setForm(f => ({ ...f, dob: e.target.value }))}
+                    required
+                  />
+                </div>
               </div>
-              <div className="space-y-1">
-                <Label>Phone Number *</Label>
-                <Input
-                  value={form.studentPhone}
-                  onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))}
-                  placeholder="+91 XXXXX XXXXX"
-                  required
-                />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Phone Number *</Label>
+                  <Input
+                    value={form.studentPhone}
+                    onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))}
+                    placeholder="+91 XXXXX XXXXX"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Alternative Phone</Label>
+                  <Input
+                    value={form.altPhone}
+                    onChange={e => setForm(f => ({ ...f, altPhone: e.target.value }))}
+                    placeholder="+91 XXXXX XXXXX"
+                  />
+                </div>
               </div>
-              <div className="space-y-1">
-                <Label>Address *</Label>
-                <Input
-                  value={form.studentAddress}
-                  onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))}
-                  placeholder="Your full address"
-                  required
-                />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-2 space-y-1">
+                  <Label>Address *</Label>
+                  <Input
+                    value={form.studentAddress}
+                    onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))}
+                    placeholder="Your full address"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Pin Code *</Label>
+                  <Input
+                    value={form.pinCode}
+                    onChange={e => setForm(f => ({ ...f, pinCode: e.target.value }))}
+                    placeholder="Pincode"
+                    required
+                  />
+                </div>
               </div>
               <div className="space-y-1">
                 <Label>Program *</Label>

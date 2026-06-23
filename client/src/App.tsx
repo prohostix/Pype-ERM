@@ -5,6 +5,7 @@ import { Dashboard } from '@/pages/Dashboard';
 import { PrismaLayout } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
 import PublicRegisterPage from '@/pages/PublicRegisterPage';
+import StudentApplicationPage from '@/pages/StudentApplicationPage';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
@@ -178,6 +179,11 @@ function App() {
 
     fetchDeptType();
   }, [user?.role, (user as any)?.subDepartmentId, user?.departmentId, (user as any)?.department]);
+
+  // Route to StudentApplicationPage if path is /student-apply
+  if (window.location.pathname === '/student-apply') {
+    return <StudentApplicationPage />;
+  }
 
   // Public register page — show when on /register path OR has ?token= param (no-router SPA)
   // Only intercept if user is not logged in, to avoid breaking logged-in users with token params

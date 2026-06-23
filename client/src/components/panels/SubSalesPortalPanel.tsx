@@ -75,7 +75,7 @@ export function SubSalesPortalPanel() {
   };
 
   const copyLink = (invite: any) => {
-    const url = invite.inviteUrl || `${window.location.origin}/register?token=${invite.token}`;
+    const url = invite.inviteUrl || `${window.location.origin}/student-apply?token=${invite.token}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(invite.id);
       setTimeout(() => setCopied(null), 2000);
