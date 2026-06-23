@@ -2,20 +2,14 @@ import prisma from '../src/lib/prisma.js';
 
 async function test() {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: 'org_admin@pype.com' },
-          { userId: 'org_admin@pype.com' }
-        ]
-      },
-      include: {
-        organization: true,
-        department: true,
-        subDepartment: true,
+    const centers = await prisma.studyCenter.findMany({
+      select: {
+        id: true,
+        name: true,
+        code: true
       }
     });
-    console.log("Query succeeded! User:", user);
+    console.log("Study Centers in DB:", centers);
   } catch (err) {
     console.error("Query failed with error:", err);
   } finally {

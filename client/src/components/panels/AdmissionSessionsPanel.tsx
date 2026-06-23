@@ -17,14 +17,12 @@ export function AdmissionSessionsPanel() {
   const isOps = user?.role === 'ops_admin';
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
-  const [branches, setBranches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
-    subDepartmentId: '',
-    branchIds: [] as string[],
+    subDepartmentIds: [] as string[],
     startDate: '',
     endDate: '',
     examDate: '',
@@ -34,7 +32,6 @@ export function AdmissionSessionsPanel() {
   useEffect(() => {
     fetchSessions();
     fetchDepartments();
-    fetchBranches();
   }, []);
 
   const fetchSessions = async () => {
@@ -51,20 +48,12 @@ export function AdmissionSessionsPanel() {
 
   const fetchDepartments = async () => {
     try {
-      const res = await api.get('/departments');
+      const res = await api.get('/sub-departments');
       const all = res.data.data || [];
-      setDepartments(all.filter((d: any) => d.type === 'operations'));
+      // Filter sub-departments that belong to operations or have type operations
+      setDepartments(all.filter((d: any) => d.type === 'operations' || d.parentDept?.type === 'operations'));
     } catch (err) {
       console.error('Failed to fetch departments:', err);
-    }
-  };
-
-  const fetchBranches = async () => {
-    try {
-      const res = await api.get('/org/branches');
-      setBranches(res.data.data || []);
-    } catch (err) {
-      console.error('Failed to fetch branches:', err);
     }
   };
 
@@ -73,8 +62,8 @@ export function AdmissionSessionsPanel() {
     try {
       const payload: any = {
         name: formData.name,
-        subDepartmentId: formData.subDepartmentId || null,
-        branchIds: formData.branchIds,
+        subDepartmentIds: formData.subDepartmentIds,
+        subDepartmentId: formData.subDepartmentIds.length > 0 ? formData.subDepartmentIds[0] : null,
         startDate: formData.startDate,
         endDate: formData.endDate,
         status: isOps ? 'pending' : formData.status
@@ -95,14 +84,21 @@ export function AdmissionSessionsPanel() {
   };
 
   const handleEdit = (s: any) => {
-    const subDeptId = typeof s.subDepartmentId === 'object'
-      ? (s.subDepartmentId?.id || s.subDepartmentId?.id)
-      : s.subDepartmentId;
+    let sDeptIds: string[] = [];
+    if (s.subDepartmentIds && s.subDepartmentIds.length > 0) {
+      sDeptIds = s.subDepartmentIds;
+    } else if (s.subDepartmentId) {
+      const subDeptId = typeof s.subDepartmentId === 'object'
+        ? (s.subDepartmentId?.id || s.subDepartmentId?.id)
+        : s.subDepartmentId;
+      if (subDeptId) {
+        sDeptIds = [subDeptId.toString()];
+      }
+    }
     setEditingId(s.id || s.id);
     setFormData({
       name: s.name || '',
-      subDepartmentId: subDeptId?.toString() || '',
-      branchIds: s.branchIds || [],
+      subDepartmentIds: sDeptIds,
       startDate: s.startDate ? new Date(s.startDate).toISOString().split('T')[0] : '',
       endDate: s.endDate ? new Date(s.endDate).toISOString().split('T')[0] : '',
       examDate: s.examDate ? new Date(s.examDate).toISOString().split('T')[0] : '',
@@ -132,7 +128,7 @@ export function AdmissionSessionsPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', subDepartmentId: '', branchIds: [], startDate: '', endDate: '', examDate: '', status: 'pending' });
+    setFormData({ name: '', subDepartmentIds: [], startDate: '', endDate: '', examDate: '', status: 'pending' });
   };
 
   return (
@@ -147,106 +143,93 @@ export function AdmissionSessionsPanel() {
             <DialogTrigger asChild>
               <Button><Plus className="w-4 h-4 mr-2" />Add Session</Button>
             </DialogTrigger>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Session' : 'Add New Session'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>Session Name</Label>
-                <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
-              </div>
-              <div>
-                <Label>Department</Label>
-                <Select value={formData.subDepartmentId} onValueChange={(v) => setFormData({ ...formData, subDepartmentId: v })}>
-                  <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
-                  <SelectContent>
-                    {departments.filter(d => d && (d.id || d.id)).map((d) => (
-                      <SelectItem key={d.id || d.id} value={(d.id || d.id).toString()}>
-                        {d.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label className="block mb-2">Branches</Label>
-                <div className="border rounded-lg p-3 space-y-2 max-h-40 overflow-y-auto">
-                  <div className="flex items-center gap-2 pb-2 border-b">
-                    <input
-                      type="checkbox"
-                      id="select-all-branches"
-                      checked={formData.branchIds.length === branches.length && branches.length > 0}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFormData({ ...formData, branchIds: branches.map(b => b.id) });
-                        } else {
-                          setFormData({ ...formData, branchIds: [] });
-                        }
-                      }}
-                      className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
-                    />
-                    <label htmlFor="select-all-branches" className="text-sm font-semibold cursor-pointer">
-                      Select All Branches
-                    </label>
-                  </div>
-                  {branches.map((b) => (
-                    <div key={b.id} className="flex items-center gap-2">
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>{editingId ? 'Edit Session' : 'Add New Session'}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <Label>Session Name</Label>
+                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+                </div>
+                <div>
+                  <Label className="block mb-2 font-medium">Departments (Sub-departments)</Label>
+                  <div className="border rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto">
+                    <div className="flex items-center gap-2 pb-2 border-b">
                       <input
                         type="checkbox"
-                        id={`branch-${b.id}`}
-                        checked={formData.branchIds.includes(b.id)}
+                        id="select-all-departments"
+                        checked={formData.subDepartmentIds.length === departments.length && departments.length > 0}
                         onChange={(e) => {
-                          const checked = e.target.checked;
-                          const nextIds = checked
-                            ? [...formData.branchIds, b.id]
-                            : formData.branchIds.filter(id => id !== b.id);
-                          setFormData({ ...formData, branchIds: nextIds });
+                          if (e.target.checked) {
+                            setFormData({ ...formData, subDepartmentIds: departments.map(d => d.id) });
+                          } else {
+                            setFormData({ ...formData, subDepartmentIds: [] });
+                          }
                         }}
                         className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
                       />
-                      <label htmlFor={`branch-${b.id}`} className="text-sm cursor-pointer">
-                        {b.name} ({b.code})
+                      <label htmlFor="select-all-departments" className="text-sm font-semibold cursor-pointer">
+                        Select All Departments
                       </label>
                     </div>
-                  ))}
+                    {departments.map((d) => (
+                      <div key={d.id} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`dept-${d.id}`}
+                          checked={formData.subDepartmentIds.includes(d.id)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            const nextIds = checked
+                              ? [...formData.subDepartmentIds, d.id]
+                              : formData.subDepartmentIds.filter(id => id !== d.id);
+                            setFormData({ ...formData, subDepartmentIds: nextIds });
+                          }}
+                          className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
+                        />
+                        <label htmlFor={`dept-${d.id}`} className="text-sm cursor-pointer">
+                          {d.name} {d.parentDept?.name ? `(${d.parentDept.name})` : ''}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Start Date</Label>
+                    <Input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
+                  </div>
+                  <div>
+                    <Label>End Date</Label>
+                    <Input type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} required />
+                  </div>
+                </div>
                 <div>
-                  <Label>Start Date</Label>
-                  <Input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
+                  <Label>Exam Date (optional)</Label>
+                  <Input type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
                 </div>
-                <div>
-                  <Label>End Date</Label>
-                  <Input type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} required />
+                {!isOps && (
+                  <div>
+                    <Label>Status</Label>
+                    <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="closed">Closed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1">Save</Button>
+                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
                 </div>
-              </div>
-              <div>
-                <Label>Exam Date (optional)</Label>
-                <Input type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
-              </div>
-              {!isOps && (
-                <div>
-                  <Label>Status</Label>
-                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="approved">Approved</SelectItem>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="closed">Closed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 
@@ -261,7 +244,6 @@ export function AdmissionSessionsPanel() {
             <div className="space-y-2">
               {sessions.filter(s => s && (s.id || s.id)).map((s) => {
                 const sid = s.id || s.id;
-                const subDeptName = typeof s.subDepartmentId === 'object' ? s.subDepartmentId?.name : '';
                 return (
                   <div key={sid} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-center gap-4">
@@ -271,25 +253,36 @@ export function AdmissionSessionsPanel() {
                       <div>
                         <div className="font-medium">{s.name}</div>
                         <div className="text-sm text-muted-foreground">
-                          {subDeptName && `${subDeptName} • `}
                           {s.startDate && new Date(s.startDate).toLocaleDateString()} – {s.endDate && new Date(s.endDate).toLocaleDateString()}
                         </div>
                         {s.examDate && (
                           <div className="text-xs text-muted-foreground">Exam: {new Date(s.examDate).toLocaleDateString()}</div>
                         )}
-                        {s.branchIds && s.branchIds.length > 0 && (
+                        {s.subDepartmentIds && s.subDepartmentIds.length > 0 ? (
                           <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-1 items-center">
-                            <span className="font-medium mr-1">Branches:</span>
-                            {s.branchIds.map((bid: string) => {
-                              const b = branches.find((branch: any) => branch.id === bid);
-                              return b ? (
-                                <Badge key={bid} variant="secondary" className="text-[10px] px-1 py-0">
-                                  {b.name}
+                            <span className="font-medium mr-1">Departments:</span>
+                            {s.subDepartmentIds.map((did: string) => {
+                              const d = departments.find((dept: any) => dept.id === did);
+                              return d ? (
+                                <Badge key={did} variant="secondary" className="text-[10px] px-1 py-0">
+                                  {d.name}
                                 </Badge>
                               ) : null;
                             })}
                           </div>
-                        )}
+                        ) : s.subDepartmentId ? (
+                          <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-1 items-center">
+                            <span className="font-medium mr-1">Department:</span>
+                            {(() => {
+                              const d = departments.find((dept: any) => dept.id === s.subDepartmentId);
+                              return d ? (
+                                <Badge variant="secondary" className="text-[10px] px-1 py-0">
+                                  {d.name}
+                                </Badge>
+                              ) : null;
+                            })()}
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">

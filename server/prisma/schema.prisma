@@ -788,6 +788,7 @@ model AdmissionSession {
   approvedBy      String?
   approvedAt      DateTime?
   subDepartmentId String?
+  subDepartmentIds String[]      @default([])
   branchIds       String[]       @default([])
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
