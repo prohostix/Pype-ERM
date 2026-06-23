@@ -8,7 +8,7 @@ export const validateInviteToken = asyncHandler(async (req: Request, res: Respon
 });
 
 export const publicRegister = asyncHandler(async (req: Request, res: Response) => {
-  const center = await prisma.studyCenter.create({ data: { ...req.body, status: 'pending_verification' } });
+  const center = await prisma.studyCenter.create({ data: { ...req.body, status: 'active' } });
   res.status(201).json({ success: true, data: center });
 });
 
