@@ -191,6 +191,9 @@ export const createAdmissionSession = asyncHandler(async (req: AuthRequest, res:
   if (req.user.role === 'ops_admin') {
     data.status = 'pending';
   }
+  if (data.startDate) data.startDate = new Date(data.startDate);
+  if (data.endDate) data.endDate = new Date(data.endDate);
+  if (data.examDate) data.examDate = new Date(data.examDate);
   const session = await prisma.admissionSession.create({ data });
   res.status(201).json({ success: true, data: session });
 });
@@ -199,6 +202,9 @@ export const updateAdmissionSession = asyncHandler(async (req: AuthRequest, res:
   if (req.user.role === 'ops_admin') {
     delete data.status;
   }
+  if (data.startDate) data.startDate = new Date(data.startDate);
+  if (data.endDate) data.endDate = new Date(data.endDate);
+  if (data.examDate) data.examDate = new Date(data.examDate);
   const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: session });
 });
