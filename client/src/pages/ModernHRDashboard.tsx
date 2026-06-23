@@ -33,7 +33,7 @@ import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { SalaryConfigPanel } from '@/components/panels/SalaryConfigPanel';
 import { LeaveAllocationPanel } from '@/components/panels/LeaveAllocationPanel';
 import { PollsPanel } from '@/components/panels/PollsPanel';
-import { HROrgChartPanel } from '@/components/panels/HROrgChartPanel';
+import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
@@ -69,7 +69,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'leave-alloc': return <LeaveAllocationPanel />;
       case 'announcements': return <AnnouncementsPanel />;
       case 'polls': return <PollsPanel />;
-      case 'org-chart': return <HROrgChartPanel />;
+      case 'org-chart': return <OrgHierarchyPanel />;
       case 'managers': return <ManagerAssignmentPanel />;
       case 'att-settings': return <HRSettingsPanel />;
       case 'activity_report': return <EmployeeActivityReportPanel />;
