@@ -132,10 +132,10 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     return;
   }
 
-  // Find or use first active session
+  // Find or use first active/approved session
   let session = sessionId
     ? await prisma.admissionSession.findFirst({ where: { id: sessionId, organizationId: orgId } })
-    : await prisma.admissionSession.findFirst({ where: { organizationId: orgId, status: 'active' }, orderBy: { createdAt: 'desc' } });
+    : await prisma.admissionSession.findFirst({ where: { organizationId: orgId, status: { in: ['active', 'approved'] } }, orderBy: { createdAt: 'desc' } });
 
   if (!session) {
     res.status(400).json({ success: false, message: 'No active admission session found' });
@@ -591,10 +591,10 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
     return;
   }
 
-  // Find active session
+  // Find active/approved session
   let session = sessionId
     ? await prisma.admissionSession.findFirst({ where: { id: sessionId, organizationId: orgId } })
-    : await prisma.admissionSession.findFirst({ where: { organizationId: orgId, status: 'active' }, orderBy: { createdAt: 'desc' } });
+    : await prisma.admissionSession.findFirst({ where: { organizationId: orgId, status: { in: ['active', 'approved'] } }, orderBy: { createdAt: 'desc' } });
 
   if (!session) {
     res.status(400).json({ success: false, message: 'No active admission session found' });
