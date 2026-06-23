@@ -73,6 +73,18 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         status: 'active',
       },
     });
+  } else {
+    // If the user already exists, update their password so it matches the generated credentials
+    const hashedPassword = await hashPassword(defaultPassword);
+    studentUser = await prisma.user.update({
+      where: { email },
+      data: {
+        password: hashedPassword,
+        name,
+        phone,
+        status: 'active'
+      }
+    });
   }
 
   const student = await prisma.student.create({
@@ -238,6 +250,16 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
         if (!generatedUid) {
           generatedUid = studentUser.userId || await generateUserId();
         }
+        const hashedPassword = await hashPassword(defaultPassword);
+        await prisma.user.update({
+          where: { email: s.email },
+          data: {
+            password: hashedPassword,
+            name: s.name,
+            phone: s.phone || '',
+            status: 'active'
+          }
+        });
       }
 
       // Create student record
