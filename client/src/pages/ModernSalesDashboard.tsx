@@ -21,7 +21,6 @@ import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
-import { CenterOnboardingOverviewPanel } from '@/components/panels/CenterOnboardingOverviewPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { 
