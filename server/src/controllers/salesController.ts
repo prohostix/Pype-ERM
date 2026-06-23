@@ -57,13 +57,30 @@ export const listMyInvites = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, count: invites.length, data: invites });
 });
 export const generateInvite = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
   const invite = await prisma.studyCenterInvite.create({
-    data: { ...req.body, organizationId: req.user.organizationId, referredBy: req.user.id, token: Math.random().toString(36).substring(7).toUpperCase() }
+    data: {
+      ...req.body,
+      organizationId: req.user.organizationId,
+      referredBy: req.user.id,
+      token: Math.random().toString(36).substring(7).toUpperCase(),
+      expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : expiresAt
+    }
   });
   res.status(201).json({ success: true, data: invite });
 });
 export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const invite = await prisma.studyCenterInvite.update({ where: { id: req.params.id }, data: { token: Math.random().toString(36).substring(7).toUpperCase() } });
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
+  const invite = await prisma.studyCenterInvite.update({
+    where: { id: req.params.id },
+    data: {
+      token: Math.random().toString(36).substring(7).toUpperCase(),
+      status: 'pending',
+      expiresAt
+    }
+  });
   res.json({ success: true, data: invite });
 });
 
