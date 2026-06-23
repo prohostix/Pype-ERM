@@ -25,7 +25,6 @@ import { InternalMarksPanel } from '@/components/panels/InternalMarksPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
-import { OpsCenterVerificationPanel } from '@/components/panels/OpsCenterVerificationPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
@@ -70,7 +69,6 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'universities': return <UniversitiesPanel />;
       case 'programs': return <ProgramsPanel />;
       case 'centers': return <StudyCentersPanel />;
-      case 'pending_verification': return <OpsCenterVerificationPanel />;
       case 'program_allocations': return <OpsProgramAllocationPanel />;
       case 'enrollment_review': return <DeptEnrollmentReviewPanel />;
       case 'sessions': return <AdmissionSessionsPanel />;
@@ -104,7 +102,6 @@ export function getOpsNavItems(isSubDeptManager: boolean) {
     { id: 'universities', label: 'Universities' },
     { id: 'programs', label: 'Programs' },
     { id: 'centers', label: 'Study Centers' },
-    { id: 'pending_verification', label: 'Pending Verification' },
     { id: 'program_allocations', label: 'Program Allocations' },
     { id: 'enrollment_review', label: 'Enrollment Review' },
     { id: 'sessions', label: 'Admission Sessions' },

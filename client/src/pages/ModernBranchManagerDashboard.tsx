@@ -20,7 +20,6 @@ import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
-import { OpsCenterVerificationPanel } from '@/components/panels/OpsCenterVerificationPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 
 // Shared panels
@@ -48,7 +47,6 @@ export function getBranchManagerNavItems() {
     { id: 'universities', label: 'Universities' },
     { id: 'programs', label: 'Programs' },
     { id: 'centers', label: 'Study Centers' },
-    { id: 'pending_verification', label: 'Pending Verification' },
     { id: 'enrollment_review', label: 'Enrollment Review' },
     { id: 'sessions', label: 'Admission Sessions' },
     { id: '__shared_section', label: 'Management', isSection: true },
@@ -111,7 +109,6 @@ export function ModernBranchManagerDashboard({ initialTab }: { initialTab?: stri
       case 'universities': return <UniversitiesPanel />;
       case 'programs': return <ProgramsPanel />;
       case 'centers': return <StudyCentersPanel />;
-      case 'pending_verification': return <OpsCenterVerificationPanel />;
       case 'enrollment_review': return <DeptEnrollmentReviewPanel />;
       case 'sessions': return <AdmissionSessionsPanel />;
       // Shared

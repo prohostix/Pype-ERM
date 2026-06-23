@@ -23,7 +23,7 @@ export function StudyCentersPanel() {
     address: '',
     contact: '',
     email: '',
-    status: 'pending'
+    status: 'active'
   });
 
   // Credentials Dialog State
@@ -114,7 +114,7 @@ export function StudyCentersPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', code: '', address: '', contact: '', email: '', status: 'pending' });
+    setFormData({ name: '', code: '', address: '', contact: '', email: '', status: 'active' });
   };
 
   return (
