@@ -31,22 +31,20 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 export const createStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { email, name, phone, centerId, programId } = req.body;
   
-  if (!centerId || centerId.trim() === '') {
-    res.status(400).json({ success: false, message: 'Study Center is required' });
-    return;
-  }
   if (!programId || programId.trim() === '') {
     res.status(400).json({ success: false, message: 'Program is required' });
     return;
   }
 
-  // Verify that the referenced center exists
-  const centerExists = await prisma.studyCenter.findFirst({
-    where: { id: centerId, organizationId: req.user.organizationId }
-  });
-  if (!centerExists) {
-    res.status(400).json({ success: false, message: 'Selected Study Center does not exist' });
-    return;
+  // Verify that the referenced center exists (if provided)
+  if (centerId && centerId.trim() !== '') {
+    const centerExists = await prisma.studyCenter.findFirst({
+      where: { id: centerId, organizationId: req.user.organizationId }
+    });
+    if (!centerExists) {
+      res.status(400).json({ success: false, message: 'Selected Study Center does not exist' });
+      return;
+    }
   }
 
   // Verify that the referenced program exists
@@ -80,6 +78,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
   const student = await prisma.student.create({
     data: {
       ...req.body,
+      centerId: (centerId && centerId.trim() !== '') ? centerId : null,
       organizationId: req.user.organizationId,
       credentials: { email, password: defaultPassword }
     }
@@ -110,6 +109,10 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
       where: { email: studentExists.email },
       data: { password: hashedPassword }
     });
+  }
+
+  if ('centerId' in req.body) {
+    req.body.centerId = (req.body.centerId && req.body.centerId.trim() !== '') ? req.body.centerId : null;
   }
 
   const student = await prisma.student.update({
@@ -189,21 +192,25 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
         continue;
       }
 
-      // Resolve study center
-      const center = await prisma.studyCenter.findFirst({
-        where: {
-          OR: [
-            { id: s.centerId },
-            { code: s.centerCode },
-            { name: s.centerName }
-          ],
-          organizationId
+      // Resolve study center (optional)
+      let resolvedCenterId: string | null = null;
+      if (s.centerId || s.centerCode || s.centerName) {
+        const center = await prisma.studyCenter.findFirst({
+          where: {
+            OR: [
+              { id: s.centerId || undefined },
+              { code: s.centerCode || undefined },
+              { name: s.centerName || undefined }
+            ],
+            organizationId
+          }
+        });
+        if (!center) {
+          results.skipped++;
+          results.errors.push(`Study Center not found for student ${s.name} (${s.email})`);
+          continue;
         }
-      });
-      if (!center) {
-        results.skipped++;
-        results.errors.push(`Study Center not found for student ${s.name} (${s.email})`);
-        continue;
+        resolvedCenterId = center.id;
       }
 
       // Ensure user account exists
@@ -242,7 +249,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           address: s.address || '',
           enrollmentNo: generatedUid,
           programId: program.id,
-          centerId: center.id,
+          centerId: resolvedCenterId,
           sessionId: s.sessionId || null,
           status: s.status || 'active',
           isPrevious: isPrevious || s.isPrevious || false,

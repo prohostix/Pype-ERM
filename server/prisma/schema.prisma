@@ -410,7 +410,7 @@ model StudyCenter {
 
 model Student {
   id             String         @id @default(uuid())
-  centerId       String
+  centerId       String?
   organizationId String
   enrollmentNo   String         @unique
   name           String
@@ -429,7 +429,7 @@ model Student {
   enrollments    Enrollment[]
   internalMarks  InternalMark[]
   invoices       Invoice[]
-  center         StudyCenter    @relation(fields: [centerId], references: [id])
+  center         StudyCenter?   @relation(fields: [centerId], references: [id])
   user           User           @relation(fields: [email], references: [email])
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program        Program        @relation(fields: [programId], references: [id])
