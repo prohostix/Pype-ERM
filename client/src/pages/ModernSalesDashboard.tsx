@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { 
-  TrendingUp, 
   Target, 
   GraduationCap, 
   Zap, 
   ArrowUpRight,
   BarChart3,
-  Users
+  Clock
 } from 'lucide-react';
 import { SalesEnrolledStudentsPanel } from '@/components/panels/SalesEnrolledStudentsPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
