@@ -788,6 +788,7 @@ model AdmissionSession {
   approvedBy      String?
   approvedAt      DateTime?
   subDepartmentId String?
+  branchIds       String[]       @default([])
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   approver        User?          @relation("SessionApprovedBy", fields: [approvedBy], references: [id])

@@ -19,6 +19,9 @@ router.use(protect);
 // Branch manager self-service — accessible to any authenticated user with a branchId
 router.get('/branches/my', getMyBranch);
 
+// Get all branches (read-only for ceo and ops_admin as well)
+router.get('/branches', authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'ops_admin'), getBranches);
+
 router.use(authorize('org_admin', 'superadmin', 'hr_admin'));
 
 // CEO Panel routes
@@ -39,7 +42,7 @@ router.patch('/designations/:id/assign', assignUserToDesignation);
 router.patch('/designations/:id/unassign', unassignUserFromDesignation);
 
 // Branch routes
-router.route('/branches').get(getBranches).post(createBranch);
+router.route('/branches').post(createBranch);
 router.route('/branches/:id').get(getBranch).patch(updateBranch).delete(deleteBranch);
 router.patch('/branches/:id/manager', assignBranchManager);
 router.patch('/branches/:id/departments', updateBranchDepartments);

@@ -12,17 +12,19 @@ import { useAuth } from '@/hooks/useAuth';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin', 'ops_admin'].includes(user?.role || '');
+  const canWrite = ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
   const isFinance = user?.role === 'finance_admin';
   const isOps = user?.role === 'ops_admin';
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
+  const [branches, setBranches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     subDepartmentId: '',
+    branchIds: [] as string[],
     startDate: '',
     endDate: '',
     examDate: '',
@@ -32,6 +34,7 @@ export function AdmissionSessionsPanel() {
   useEffect(() => {
     fetchSessions();
     fetchDepartments();
+    fetchBranches();
   }, []);
 
   const fetchSessions = async () => {
@@ -56,12 +59,22 @@ export function AdmissionSessionsPanel() {
     }
   };
 
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      setBranches(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch branches:', err);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const payload: any = {
         name: formData.name,
-        subDepartmentId: formData.subDepartmentId,
+        subDepartmentId: formData.subDepartmentId || null,
+        branchIds: formData.branchIds,
         startDate: formData.startDate,
         endDate: formData.endDate,
         status: isOps ? 'pending' : formData.status
@@ -89,6 +102,7 @@ export function AdmissionSessionsPanel() {
     setFormData({
       name: s.name || '',
       subDepartmentId: subDeptId?.toString() || '',
+      branchIds: s.branchIds || [],
       startDate: s.startDate ? new Date(s.startDate).toISOString().split('T')[0] : '',
       endDate: s.endDate ? new Date(s.endDate).toISOString().split('T')[0] : '',
       examDate: s.examDate ? new Date(s.examDate).toISOString().split('T')[0] : '',
@@ -118,7 +132,7 @@ export function AdmissionSessionsPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', subDepartmentId: '', startDate: '', endDate: '', examDate: '', status: 'pending' });
+    setFormData({ name: '', subDepartmentId: '', branchIds: [], startDate: '', endDate: '', examDate: '', status: 'pending' });
   };
 
   return (
@@ -154,6 +168,49 @@ export function AdmissionSessionsPanel() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div>
+                <Label className="block mb-2">Branches</Label>
+                <div className="border rounded-lg p-3 space-y-2 max-h-40 overflow-y-auto">
+                  <div className="flex items-center gap-2 pb-2 border-b">
+                    <input
+                      type="checkbox"
+                      id="select-all-branches"
+                      checked={formData.branchIds.length === branches.length && branches.length > 0}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData({ ...formData, branchIds: branches.map(b => b.id) });
+                        } else {
+                          setFormData({ ...formData, branchIds: [] });
+                        }
+                      }}
+                      className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
+                    />
+                    <label htmlFor="select-all-branches" className="text-sm font-semibold cursor-pointer">
+                      Select All Branches
+                    </label>
+                  </div>
+                  {branches.map((b) => (
+                    <div key={b.id} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id={`branch-${b.id}`}
+                        checked={formData.branchIds.includes(b.id)}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          const nextIds = checked
+                            ? [...formData.branchIds, b.id]
+                            : formData.branchIds.filter(id => id !== b.id);
+                          setFormData({ ...formData, branchIds: nextIds });
+                        }}
+                        className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
+                      />
+                      <label htmlFor={`branch-${b.id}`} className="text-sm cursor-pointer">
+                        {b.name} ({b.code})
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -219,6 +276,19 @@ export function AdmissionSessionsPanel() {
                         </div>
                         {s.examDate && (
                           <div className="text-xs text-muted-foreground">Exam: {new Date(s.examDate).toLocaleDateString()}</div>
+                        )}
+                        {s.branchIds && s.branchIds.length > 0 && (
+                          <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-1 items-center">
+                            <span className="font-medium mr-1">Branches:</span>
+                            {s.branchIds.map((bid: string) => {
+                              const b = branches.find((branch: any) => branch.id === bid);
+                              return b ? (
+                                <Badge key={bid} variant="secondary" className="text-[10px] px-1 py-0">
+                                  {b.name}
+                                </Badge>
+                              ) : null;
+                            })}
+                          </div>
                         )}
                       </div>
                     </div>

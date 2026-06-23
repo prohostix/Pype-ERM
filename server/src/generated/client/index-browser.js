@@ -566,6 +566,7 @@ exports.Prisma.AdmissionSessionScalarFieldEnum = {
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   subDepartmentId: 'subDepartmentId',
+  branchIds: 'branchIds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

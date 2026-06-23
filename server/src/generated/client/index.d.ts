@@ -44349,6 +44349,7 @@ export namespace Prisma {
     approvedBy: number
     approvedAt: number
     subDepartmentId: number
+    branchIds: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -44416,6 +44417,7 @@ export namespace Prisma {
     approvedBy?: true
     approvedAt?: true
     subDepartmentId?: true
+    branchIds?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -44522,6 +44524,7 @@ export namespace Prisma {
     approvedBy: string | null
     approvedAt: Date | null
     subDepartmentId: string | null
+    branchIds: string[]
     createdAt: Date
     updatedAt: Date
     _count: AdmissionSessionCountAggregateOutputType | null
@@ -44560,6 +44563,7 @@ export namespace Prisma {
     approvedBy?: boolean
     approvedAt?: boolean
     subDepartmentId?: boolean
+    branchIds?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
@@ -44589,6 +44593,7 @@ export namespace Prisma {
     approvedBy?: boolean
     approvedAt?: boolean
     subDepartmentId?: boolean
+    branchIds?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
@@ -44615,6 +44620,7 @@ export namespace Prisma {
     approvedBy?: boolean
     approvedAt?: boolean
     subDepartmentId?: boolean
+    branchIds?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
@@ -44641,11 +44647,12 @@ export namespace Prisma {
     approvedBy?: boolean
     approvedAt?: boolean
     subDepartmentId?: boolean
+    branchIds?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AdmissionSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "startDate" | "endDate" | "status" | "programId" | "universityId" | "studyCenterId" | "capacity" | "createdBy" | "approvedBy" | "approvedAt" | "subDepartmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["admissionSession"]>
+  export type AdmissionSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "startDate" | "endDate" | "status" | "programId" | "universityId" | "studyCenterId" | "capacity" | "createdBy" | "approvedBy" | "approvedAt" | "subDepartmentId" | "branchIds" | "createdAt" | "updatedAt", ExtArgs["result"]["admissionSession"]>
   export type AdmissionSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
     creator?: boolean | AdmissionSession$creatorArgs<ExtArgs>
@@ -44705,6 +44712,7 @@ export namespace Prisma {
       approvedBy: string | null
       approvedAt: Date | null
       subDepartmentId: string | null
+      branchIds: string[]
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["admissionSession"]>
@@ -45153,6 +45161,7 @@ export namespace Prisma {
     readonly approvedBy: FieldRef<"AdmissionSession", 'String'>
     readonly approvedAt: FieldRef<"AdmissionSession", 'DateTime'>
     readonly subDepartmentId: FieldRef<"AdmissionSession", 'String'>
+    readonly branchIds: FieldRef<"AdmissionSession", 'String[]'>
     readonly createdAt: FieldRef<"AdmissionSession", 'DateTime'>
     readonly updatedAt: FieldRef<"AdmissionSession", 'DateTime'>
   }
@@ -82427,6 +82436,7 @@ export namespace Prisma {
     approvedBy: 'approvedBy',
     approvedAt: 'approvedAt',
     subDepartmentId: 'subDepartmentId',
+    branchIds: 'branchIds',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -86712,6 +86722,7 @@ export namespace Prisma {
     approvedBy?: StringNullableFilter<"AdmissionSession"> | string | null
     approvedAt?: DateTimeNullableFilter<"AdmissionSession"> | Date | string | null
     subDepartmentId?: StringNullableFilter<"AdmissionSession"> | string | null
+    branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -86740,6 +86751,7 @@ export namespace Prisma {
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     subDepartmentId?: SortOrderInput | SortOrder
+    branchIds?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     approver?: UserOrderByWithRelationInput
@@ -86771,6 +86783,7 @@ export namespace Prisma {
     approvedBy?: StringNullableFilter<"AdmissionSession"> | string | null
     approvedAt?: DateTimeNullableFilter<"AdmissionSession"> | Date | string | null
     subDepartmentId?: StringNullableFilter<"AdmissionSession"> | string | null
+    branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -86799,6 +86812,7 @@ export namespace Prisma {
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     subDepartmentId?: SortOrderInput | SortOrder
+    branchIds?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AdmissionSessionCountOrderByAggregateInput
@@ -86826,6 +86840,7 @@ export namespace Prisma {
     approvedBy?: StringNullableWithAggregatesFilter<"AdmissionSession"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"AdmissionSession"> | Date | string | null
     subDepartmentId?: StringNullableWithAggregatesFilter<"AdmissionSession"> | string | null
+    branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeWithAggregatesFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AdmissionSession"> | Date | string
   }
@@ -93452,6 +93467,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -93480,6 +93496,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -93494,6 +93511,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -93522,6 +93540,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -93543,6 +93562,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93555,6 +93575,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93574,6 +93595,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99343,6 +99365,7 @@ export namespace Prisma {
     approvedBy?: SortOrder
     approvedAt?: SortOrder
     subDepartmentId?: SortOrder
+    branchIds?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -109930,6 +109953,10 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutVacanciesInput, OrganizationUpdateWithoutVacanciesInput>, OrganizationUncheckedUpdateWithoutVacanciesInput>
   }
 
+  export type AdmissionSessionCreatebranchIdsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutApprovedSessionsInput = {
     create?: XOR<UserCreateWithoutApprovedSessionsInput, UserUncheckedCreateWithoutApprovedSessionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutApprovedSessionsInput
@@ -110006,6 +110033,11 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type AdmissionSessionUpdatebranchIdsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUpdateOneWithoutApprovedSessionsNestedInput = {
@@ -112317,6 +112349,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -112343,6 +112376,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -114787,6 +114821,7 @@ export namespace Prisma {
     approvedBy?: StringNullableFilter<"AdmissionSession"> | string | null
     approvedAt?: DateTimeNullableFilter<"AdmissionSession"> | Date | string | null
     subDepartmentId?: StringNullableFilter<"AdmissionSession"> | string | null
+    branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionSession"> | Date | string
   }
@@ -118761,6 +118796,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
@@ -118787,6 +118823,7 @@ export namespace Prisma {
     createdBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -118811,6 +118848,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -118837,6 +118875,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -127981,6 +128020,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -128007,6 +128047,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -128888,6 +128929,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -128914,6 +128956,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -129922,6 +129965,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -129948,6 +129992,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -145200,6 +145245,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -145226,6 +145272,7 @@ export namespace Prisma {
     createdBy?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -150395,6 +150442,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -150422,6 +150470,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
@@ -151632,6 +151681,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -151659,6 +151709,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
@@ -172426,6 +172477,7 @@ export namespace Prisma {
     status?: string
     capacity?: number | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
@@ -172453,6 +172505,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
@@ -172684,6 +172737,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -172711,6 +172765,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -176190,6 +176245,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -176977,6 +177033,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -177003,6 +177060,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -177023,6 +177081,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -180787,6 +180846,7 @@ export namespace Prisma {
     createdBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -180805,6 +180865,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -181917,6 +181978,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
@@ -181943,6 +182005,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -181963,6 +182026,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -181975,6 +182039,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -182001,6 +182066,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -182021,6 +182087,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -185823,6 +185890,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -185881,6 +185949,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -185907,6 +185976,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -185927,6 +185997,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -186466,6 +186537,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -186581,6 +186653,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -186607,6 +186680,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -186627,6 +186701,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -187128,6 +187203,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     subDepartmentId?: string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -187315,6 +187391,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -187341,6 +187418,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -187361,6 +187439,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -188977,6 +189056,7 @@ export namespace Prisma {
     createdBy?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -189029,6 +189109,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     capacity?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
@@ -189055,6 +189136,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
@@ -189075,6 +189157,7 @@ export namespace Prisma {
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
