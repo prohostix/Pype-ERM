@@ -98,7 +98,11 @@ export const getHRSettings = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
   const settings = await prisma.hRSettings.findFirst({ where: { organizationId: orgId } });
-  res.json({ success: true, data: settings });
+  const responseData = settings ? {
+    ...settings,
+    requireLocationForCheckIn: settings.requireLocation
+  } : null;
+  res.json({ success: true, data: responseData });
 });
 
 export const createOrUpdateHRSettings = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -107,12 +111,21 @@ export const createOrUpdateHRSettings = asyncHandler(async (req: AuthRequest, re
     res.status(400).json({ success: false, message: 'Organization ID is required.' });
     return;
   }
+  const { requireLocationForCheckIn, ...rest } = req.body;
+  const updateData: any = { ...rest };
+  if (requireLocationForCheckIn !== undefined) {
+    updateData.requireLocation = requireLocationForCheckIn;
+  }
   const settings = await prisma.hRSettings.upsert({
     where: { organizationId: orgId },
-    update: req.body,
-    create: { ...req.body, organizationId: orgId }
+    update: updateData,
+    create: { ...updateData, organizationId: orgId }
   });
-  res.json({ success: true, data: settings });
+  const responseData = settings ? {
+    ...settings,
+    requireLocationForCheckIn: settings.requireLocation
+  } : null;
+  res.json({ success: true, data: responseData });
 });
 
 export const biometricSync = asyncHandler(async (req: AuthRequest, res: Response) => {
