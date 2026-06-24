@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsc && cp -r src/generated dist/generated",
     "start": "node dist/server.js",
     "seed": "tsx src/scripts/seed.ts",
     "create-departments": "tsx src/scripts/auto-create-departments.ts",
