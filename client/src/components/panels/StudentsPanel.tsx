@@ -29,7 +29,7 @@ export function StudentsPanel() {
   const [bulkData, setBulkData] = useState('');
   const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
   const [bulkProgramId, setBulkProgramId] = useState('');
-  const [bulkCenterId, setBulkCenterId] = useState('');
+  const [bulkCenterId, setBulkCenterId] = useState('__none__');
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
 
   // Notification Dialog State
@@ -280,7 +280,8 @@ export function StudentsPanel() {
       const matchedCenter = rowCenterName
         ? centers.find(c => c.name.toLowerCase() === rowCenterName)
         : null;
-      const resolvedCenterId = matchedCenter?.id || bulkCenterId || undefined;
+      const selectedCenterId = bulkCenterId && bulkCenterId !== '__none__' ? bulkCenterId : undefined;
+      const resolvedCenterId = matchedCenter?.id || selectedCenterId || undefined;
 
       return {
         name: s.name || s.fullname || '',
@@ -717,7 +718,7 @@ export function StudentsPanel() {
                 <Select value={bulkCenterId} onValueChange={setBulkCenterId}>
                   <SelectTrigger><SelectValue placeholder="Select Center (optional)" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem value="__none__">None (No Study Center)</SelectItem>
                     {centers.map(c => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
