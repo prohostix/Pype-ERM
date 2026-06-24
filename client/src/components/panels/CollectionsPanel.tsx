@@ -318,7 +318,7 @@ export function CollectionsPanel() {
                     <div className="text-center py-6 text-xs text-muted-foreground">No payments received today.</div>
                   ) : (
                     <div className="space-y-3">
-                      {metrics.todayCollectingStats.collectedSchedules.map((sc: any) => (
+                      {metrics?.todayCollectingStats?.collectedSchedules?.map((sc: any) => (
                         <div key={sc.id} className="flex justify-between items-center p-3 rounded-lg border border-emerald-500/10 bg-emerald-500/5">
                           <div>
                             <span className="font-bold text-sm block">{sc.student?.name}</span>
@@ -334,7 +334,7 @@ export function CollectionsPanel() {
                   )}
                 </CardContent>
               </Card>
-
+ 
               {/* Today Due */}
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
                 <CardHeader>
@@ -347,7 +347,7 @@ export function CollectionsPanel() {
                     <div className="text-center py-6 text-xs text-muted-foreground">No installments scheduled for today.</div>
                   ) : (
                     <div className="space-y-3">
-                      {metrics.todayCollectingStats.dueSchedules.map((sc: any) => (
+                      {metrics?.todayCollectingStats?.dueSchedules?.map((sc: any) => (
                         <div key={sc.id} className="flex justify-between items-center p-3 rounded-lg border border-amber-500/10 bg-amber-500/5">
                           <div>
                             <span className="font-bold text-sm block">{sc.student?.name}</span>
