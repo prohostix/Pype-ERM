@@ -14,6 +14,8 @@ export function FeeStructuresPanel() {
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
+  const [universities, setUniversities] = useState<any[]>([]);
+  const [selectedUniversityId, setSelectedUniversityId] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -34,6 +36,7 @@ export function FeeStructuresPanel() {
     fetchFees();
     fetchPrograms();
     fetchSessions();
+    fetchUniversities();
   }, []);
 
   const fetchFees = async () => {
@@ -63,6 +66,15 @@ export function FeeStructuresPanel() {
       setSessions(res.data.data || []);
     } catch (err) {
       console.error('Failed to fetch sessions:', err);
+    }
+  };
+
+  const fetchUniversities = async () => {
+    try {
+      const res = await api.get('/operations/universities');
+      setUniversities(res.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch universities:', err);
     }
   };
 
@@ -112,6 +124,10 @@ export function FeeStructuresPanel() {
       ? f.additionalFees.map((af: any) => `${af.label}:${af.amount}`).join(', ')
       : '';
 
+    const programObj = programs.find(p => p.id === progId);
+    const univId = programObj?.universityId || '';
+    setSelectedUniversityId(univId);
+
     setEditingId(f.id);
     setFormData({
       programId: progId?.toString() || '',
@@ -141,6 +157,7 @@ export function FeeStructuresPanel() {
 
   const resetForm = () => {
     setEditingId(null);
+    setSelectedUniversityId('');
     setFormData({
       programId: '',
       sessionId: 'standard_all',
@@ -154,6 +171,11 @@ export function FeeStructuresPanel() {
       additionalFees: ''
     });
   };
+
+  // Filter programs based on selected university
+  const filteredPrograms = selectedUniversityId
+    ? programs.filter(p => p.universityId === selectedUniversityId)
+    : [];
 
   return (
     <div className="space-y-6">
@@ -172,18 +194,33 @@ export function FeeStructuresPanel() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label>Program</Label>
-                <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v })}>
-                  <SelectTrigger><SelectValue placeholder="Select program" /></SelectTrigger>
+                <Label>University</Label>
+                <Select value={selectedUniversityId} onValueChange={(v) => { setSelectedUniversityId(v); setFormData({ ...formData, programId: '' }); }}>
+                  <SelectTrigger><SelectValue placeholder="Select university first" /></SelectTrigger>
                   <SelectContent>
-                    {programs.filter(p => p && p.id).map((p) => (
-                      <SelectItem key={p.id} value={p.id.toString()}>
-                        {p.name} ({p.university?.name || 'No University'})
+                    {universities.filter(u => u && u.id).map((u) => (
+                      <SelectItem key={u.id} value={u.id.toString()}>
+                        {u.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
+
+              <div>
+                <Label>Program</Label>
+                <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v })} disabled={!selectedUniversityId}>
+                  <SelectTrigger><SelectValue placeholder={selectedUniversityId ? "Select program" : "Select university first"}/></SelectTrigger>
+                  <SelectContent>
+                    {filteredPrograms.map((p) => (
+                      <SelectItem key={p.id} value={p.id.toString()}>
+                        {p.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div>
                 <Label>Admission Session</Label>
                 <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v })}>

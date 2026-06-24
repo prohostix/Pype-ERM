@@ -165,14 +165,24 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
 export const getFeeStructures = asyncHandler(async (req: AuthRequest, res: Response) => {
   const fees = await prisma.feeStructure.findMany({
     where: { organizationId: req.user.organizationId },
-    include: { program: true, session: true }
+    include: {
+      program: {
+        include: { university: true }
+      },
+      session: true
+    }
   });
   res.json({ success: true, count: fees.length, data: fees });
 });
 export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
   const fee = await prisma.feeStructure.findUnique({
     where: { id: req.params.id },
-    include: { program: true, session: true }
+    include: {
+      program: {
+        include: { university: true }
+      },
+      session: true
+    }
   });
   if (!fee) {
     res.status(404).json({ success: false, message: 'Fee structure not found' });
