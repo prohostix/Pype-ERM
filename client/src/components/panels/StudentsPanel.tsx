@@ -236,11 +236,6 @@ export function StudentsPanel() {
 
   // Bulk Import Parser & Submitter
   const handleBulkImport = async () => {
-    if (!bulkProgramId) {
-      toast.error('Please select a program for the bulk import');
-      return;
-    }
-
     let parsedStudents: any[] = [];
     try {
       if (bulkFormat === 'json') {
@@ -268,22 +263,21 @@ export function StudentsPanel() {
       return;
     }
 
-    // Build payload; row-level programId resolved by name if present, else use selected
+    // Build payload — all data comes from the Excel/CSV file
     const studentPayload = parsedStudents.map(s => {
-      // Try matching program by name from the row
+      // Match program by name from the row
       const rowProgramName = (s.programs || s.program || '').toString().trim().toLowerCase();
       const matchedProgram = rowProgramName
         ? programs.find(p => p.name.toLowerCase() === rowProgramName)
         : null;
-      const resolvedProgramId = matchedProgram?.id || bulkProgramId;
+      const resolvedProgramId = matchedProgram?.id || '';
 
-      // Center is optional
+      // Center is optional — match by name from the row
       const rowCenterName = (s.studycenter || s.study_center || s.center || '').toString().trim().toLowerCase();
       const matchedCenter = rowCenterName
         ? centers.find(c => c.name.toLowerCase() === rowCenterName)
         : null;
-      const selectedCenterId = bulkCenterId && bulkCenterId !== '__none__' ? bulkCenterId : undefined;
-      const resolvedCenterId = matchedCenter?.id || selectedCenterId || undefined;
+      const resolvedCenterId = matchedCenter?.id || undefined;
 
       const dob = s.dob || s.dateofbirth || s.date_of_birth || '';
       const session = s.session || s.admissionsession || s.admission_session || '';
@@ -302,6 +296,13 @@ export function StudentsPanel() {
         isPrevious: bulkIsPrevious
       };
     });
+
+    // Warn if any rows couldn't match a program
+    const unresolved = studentPayload.filter(s => !s.programId);
+    if (unresolved.length > 0) {
+      toast.error(`${unresolved.length} row(s) have an unrecognized program name. Check the 'programs' column.`);
+      return;
+    }
 
     try {
       const res = await api.post('/students/bulk-import', {
@@ -707,33 +708,6 @@ export function StudentsPanel() {
             <DialogTitle>Bulk Import Student Records</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Default Program <span className="text-rose-500">*</span></Label>
-                <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
-                  <SelectTrigger><SelectValue placeholder="Select Program" /></SelectTrigger>
-                  <SelectContent>
-                    {programs.map(p => (
-                      <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-[10px] text-muted-foreground mt-0.5">Used when no 'programs' column in file</p>
-              </div>
-              <div>
-                <Label>Default Study Center <span className="text-muted-foreground text-xs">(optional)</span></Label>
-                <Select value={bulkCenterId} onValueChange={setBulkCenterId}>
-                  <SelectTrigger><SelectValue placeholder="Select Center (optional)" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none__">None (No Study Center)</SelectItem>
-                    {centers.map(c => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
