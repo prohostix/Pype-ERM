@@ -218,14 +218,16 @@ export function StudentsPanel() {
         address: 'Mumbai, Maharashtra',
         enrollmentNo: 'PYPEER001',
         programs: 'B.Tech Computer Science',
-        university: 'Delhi University'
+        university: 'Delhi University',
+        dob: '1999-05-15',
+        session: '2024-25'
       }
     ];
     const worksheet = XLSX.utils.json_to_sheet(templateData, {
-      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university']
+      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university', 'dob', 'session']
     });
     // Set column widths
-    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26].map(w => ({ wch: w }));
+    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26, 14, 12].map(w => ({ wch: w }));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
     XLSX.writeFile(workbook, 'students_import_template.xlsx');
@@ -283,6 +285,9 @@ export function StudentsPanel() {
       const selectedCenterId = bulkCenterId && bulkCenterId !== '__none__' ? bulkCenterId : undefined;
       const resolvedCenterId = matchedCenter?.id || selectedCenterId || undefined;
 
+      const dob = s.dob || s.dateofbirth || s.date_of_birth || '';
+      const session = s.session || s.admissionsession || s.admission_session || '';
+
       return {
         name: s.name || s.fullname || '',
         email: s.email || '',
@@ -291,6 +296,8 @@ export function StudentsPanel() {
         enrollmentNo: s.enrollmentno || s.enrollmentNo || s.enrollment_no || '',
         programId: resolvedProgramId,
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
+        ...(dob ? { dob: dob.toString() } : {}),
+        ...(session ? { session: session.toString() } : {}),
         status: s.status || 'active',
         isPrevious: bulkIsPrevious
       };
@@ -765,7 +772,7 @@ export function StudentsPanel() {
                   cursor-pointer"
               />
               <p className="text-[11px] text-muted-foreground">
-                Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>. Study center is optional.
+                Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>, <strong>dob</strong>, <strong>session</strong>. Study center is optional.
               </p>
             </div>
 
@@ -775,7 +782,7 @@ export function StudentsPanel() {
                 rows={6}
                 value={bulkData}
                 onChange={(e) => setBulkData(e.target.value)}
-                placeholder={"name,email,phone,address,enrollmentNo,programs,university\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001,B.Tech CS,Delhi University"}
+                placeholder={"name,email,phone,address,enrollmentNo,programs,university,dob,session\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001,B.Tech CS,Delhi University,1999-05-15,2024-25"}
                 className="font-mono text-sm"
               />
             </div>
