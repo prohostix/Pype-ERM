@@ -37,6 +37,19 @@ import {
   getFinanceSalesUsers,
 } from '../controllers/financeController.js';
 import {
+  getOverdueSchedules,
+  sendPaymentReminder,
+  generateReceipt,
+  getStudentPaymentPlan,
+  generateInvoiceFromSchedule,
+  generateAllInvoicesForStudent,
+  bulkCreateOldFees,
+  getOldFees,
+  generatePaymentLink,
+  getPaymentLinks,
+  updatePaymentLinkStatus,
+} from '../controllers/financeExtController.js';
+import {
   getWalletTopUps,
   approveWalletTopUp,
   rejectWalletTopUp,
@@ -141,5 +154,27 @@ router.post('/payroll-batches/:id/approve', authorize('finance_admin'), financeA
 router.post('/payroll-batches/:id/reject', authorize('finance_admin'), financeRejectPayrollBatch);
 router.put('/payroll-batches/:id/payment-in-progress', authorize('finance_admin'), markBatchPaymentInProgress);
 router.put('/payroll-batches/:id/complete-payment', authorize('finance_admin'), completeBatchPayment);
+
+// Payment Reminders
+router.get('/reminders/schedules', getOverdueSchedules);
+router.post('/reminders/send', authorize('finance_admin'), sendPaymentReminder);
+
+// Receipt Generation
+router.get('/receipt/invoice/:invoiceId', generateReceipt);
+router.get('/receipt/payment/:paymentId', generateReceipt);
+
+// Invoice from Schedule
+router.get('/payment-plan/:studentId', getStudentPaymentPlan);
+router.post('/payment-plan/schedule/:scheduleId/invoice', authorize('finance_admin'), generateInvoiceFromSchedule);
+router.post('/payment-plan/student/:studentId/generate-all', authorize('finance_admin'), generateAllInvoicesForStudent);
+
+// Bulk Old Fees
+router.get('/old-fees', getOldFees);
+router.post('/old-fees/bulk', authorize('finance_admin'), bulkCreateOldFees);
+
+// Payment Gateway
+router.get('/payment-links', getPaymentLinks);
+router.post('/payment-links', authorize('finance_admin'), generatePaymentLink);
+router.put('/payment-links/:id/status', authorize('finance_admin'), updatePaymentLinkStatus);
 
 export default router;

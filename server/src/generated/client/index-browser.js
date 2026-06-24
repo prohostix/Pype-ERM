@@ -337,6 +337,8 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   items: 'items',
   dueDate: 'dueDate',
   paidAt: 'paidAt',
+  scheduleId: 'scheduleId',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -941,6 +943,8 @@ exports.Prisma.UniversityAuthFeeScalarFieldEnum = {
 exports.Prisma.FeeStructureScalarFieldEnum = {
   id: 'id',
   programId: 'programId',
+  universityId: 'universityId',
+  feeLevel: 'feeLevel',
   sessionId: 'sessionId',
   organizationId: 'organizationId',
   registrationFee: 'registrationFee',
@@ -1009,6 +1013,24 @@ exports.Prisma.PaymentScheduleScalarFieldEnum = {
   status: 'status',
   paidAt: 'paidAt',
   remarks: 'remarks',
+  isOldFee: 'isOldFee',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentLinkScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  scheduleId: 'scheduleId',
+  invoiceId: 'invoiceId',
+  token: 'token',
+  amount: 'amount',
+  description: 'description',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  paidAt: 'paidAt',
+  createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1270,7 +1292,8 @@ exports.Prisma.ModelName = {
   EnrollmentPayment: 'EnrollmentPayment',
   IncentiveStructure: 'IncentiveStructure',
   ProgramMaterial: 'ProgramMaterial',
-  PaymentSchedule: 'PaymentSchedule'
+  PaymentSchedule: 'PaymentSchedule',
+  PaymentLink: 'PaymentLink'
 };
 
 /**

@@ -41,6 +41,11 @@ import { FinanceSalaryApprovalPanel } from '@/components/panels/FinanceSalaryApp
 import { FinanceSalesTargetsPanel } from '@/components/panels/FinanceSalesTargetsPanel';
 import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
+import { PaymentRemindersPanel } from '@/components/panels/PaymentRemindersPanel';
+import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
+import { InvoiceSchedulePanel } from '@/components/panels/InvoiceSchedulePanel';
+import { BulkOldFeePanel } from '@/components/panels/BulkOldFeePanel';
+import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -116,6 +121,11 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'profit_loss': return <ProfitLossPanel />;
       case 'salary_approvals': return <FinanceSalaryApprovalPanel />;
       case 'sales_targets': return <FinanceSalesTargetsPanel />;
+      case 'payment_reminders': return <PaymentRemindersPanel />;
+      case 'bill_receipt': return <BillReceiptPanel />;
+      case 'invoice_schedule': return <InvoiceSchedulePanel />;
+      case 'bulk_old_fee': return <BulkOldFeePanel />;
+      case 'payment_gateway': return <PaymentGatewayPanel />;
       case 'leaves': return <LeavesPanel />;
       case 'tasks': return <TasksPanel />;
       case 'escalations': return <FinanceEscalationsPanel />;
@@ -159,6 +169,12 @@ export function getFinanceNavItems() {
     { id: 'profit_loss', label: 'Profit & Loss' },
     { id: 'salary_approvals', label: 'Salary Approvals' },
     { id: 'sales_targets', label: 'Sales Targets' },
+    { id: '__fee_section', label: 'Fee & Billing', isSection: true },
+    { id: 'payment_reminders', label: '🔔 Payment Reminders' },
+    { id: 'bill_receipt', label: '🧾 Bills & Receipts' },
+    { id: 'invoice_schedule', label: '📅 Invoice Schedules' },
+    { id: 'bulk_old_fee', label: '📦 Bulk Old Fees' },
+    { id: 'payment_gateway', label: '🔗 Payment Gateway' },
     { id: 'leaves', label: 'Leave Requests' },
     { id: 'tasks', label: 'Tasks' },
     { id: 'escalations', label: 'Escalations' },

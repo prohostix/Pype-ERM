@@ -73,6 +73,7 @@ model Organization {
   walletTopUps         WalletTopUp[]
   programMaterials     ProgramMaterial[]
   paymentSchedules     PaymentSchedule[]
+  paymentLinks         PaymentLink[]
 
   @@index([status])
 }
@@ -196,6 +197,7 @@ model User {
   createdPolls                  Poll[]                @relation("PollCreatedBy")
   programAllocations            ProgramAllocation[]   @relation("AllocatedBy")
   createdFees                   FeeStructure[]        @relation("FeeCreatedBy")
+  createdPaymentLinks           PaymentLink[]         @relation("PaymentLinkCreatedBy")
   referralLink                  ReferralLink?
   salaryApproved                SalaryConfig[]        @relation("SalaryApprovedBy")
   salaryCreated                 SalaryConfig[]        @relation("SalaryCreatedBy")
@@ -322,6 +324,7 @@ model University {
   assignedSubDepts  SubDepartment[]     @relation("SubDeptToUniversity")
   allowedBranches   Branch[]            @relation("UniversityToBranch")
   studyCenters      StudyCenter[]       @relation("UniversityToStudyCenter")
+  feeStructures     FeeStructure[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -439,6 +442,7 @@ model Student {
   referrer       User?          @relation("StudentReferredBy", fields: [referredBy], references: [id])
   isPrevious     Boolean        @default(false)
   paymentSchedules PaymentSchedule[]
+  paymentLinks   PaymentLink[]
   credentials    Json?
 
   @@index([organizationId, status])
@@ -447,23 +451,26 @@ model Student {
 }
 
 model Invoice {
-  id             String         @id @default(uuid())
+  id             String          @id @default(uuid())
   organizationId String
-  centerId       String
+  centerId       String?
   studentId      String?
-  invoiceNo      String         @unique
+  invoiceNo      String          @unique
   amount         Float
-  tax            Float          @default(0)
+  tax            Float           @default(0)
   total          Float
-  status         String         @default("draft")
-  items          Json           @default("[]")
+  status         String          @default("draft")
+  items          Json            @default("[]")
   dueDate        DateTime?
   paidAt         DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  center         StudyCenter    @relation(fields: [centerId], references: [id])
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student?       @relation(fields: [studentId], references: [id])
+  scheduleId     String?
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  center         StudyCenter?    @relation(fields: [centerId], references: [id])
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student?        @relation(fields: [studentId], references: [id])
+  schedule       PaymentSchedule? @relation(fields: [scheduleId], references: [id])
   payments       PaymentEntry[]
 
   @@index([organizationId, status])
@@ -1283,7 +1290,9 @@ model UniversityAuthFee {
 
 model FeeStructure {
   id              String            @id @default(uuid())
-  programId       String
+  programId       String?
+  universityId    String?
+  feeLevel        String            @default("program") // "program" | "university"
   sessionId       String?
   organizationId  String
   registrationFee Float             @default(0)
@@ -1300,11 +1309,12 @@ model FeeStructure {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program         Program           @relation(fields: [programId], references: [id])
+  program         Program?          @relation(fields: [programId], references: [id])
+  university      University?       @relation(fields: [universityId], references: [id])
   session         AdmissionSession? @relation(fields: [sessionId], references: [id])
 
-  @@unique([programId, sessionId])
   @@index([organizationId])
+  @@index([universityId])
 }
 
 model EnrollmentPayment {
@@ -1549,11 +1559,39 @@ model PaymentSchedule {
   status         String       @default("pending") // pending, paid, overdue
   paidAt         DateTime?
   remarks        String?
+  isOldFee       Boolean      @default(false)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  invoices       Invoice[]
+  paymentLinks   PaymentLink[]
 
   @@index([organizationId, status])
   @@index([studentId])
+}
+
+model PaymentLink {
+  id             String          @id @default(uuid())
+  organizationId String
+  studentId      String
+  scheduleId     String?
+  invoiceId      String?
+  token          String          @unique @default(uuid())
+  amount         Float
+  description    String?
+  status         String          @default("active") // active, paid, expired
+  expiresAt      DateTime
+  paidAt         DateTime?
+  createdBy      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student         @relation(fields: [studentId], references: [id])
+  schedule       PaymentSchedule? @relation(fields: [scheduleId], references: [id])
+  creator        User?           @relation("PaymentLinkCreatedBy", fields: [createdBy], references: [id])
+
+  @@index([organizationId])
+  @@index([studentId])
+  @@index([token])
 }

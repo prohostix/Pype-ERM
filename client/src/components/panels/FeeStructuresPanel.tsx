@@ -21,6 +21,8 @@ export function FeeStructuresPanel() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     programId: '',
+    universityId: '',
+    feeLevel: 'program' as 'program' | 'university',
     sessionId: 'standard_all',
     registrationFee: '0',
     tuitionFee: '0',
@@ -88,8 +90,8 @@ export function FeeStructuresPanel() {
         }).filter(f => f.label && !isNaN(f.amount))
       : [];
 
-    const payload = {
-      programId: formData.programId,
+    const payload: any = {
+      feeLevel: formData.feeLevel,
       sessionId: formData.sessionId === 'standard_all' || !formData.sessionId ? null : formData.sessionId,
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
@@ -100,6 +102,16 @@ export function FeeStructuresPanel() {
       effectiveFrom: formData.effectiveFrom || null,
       additionalFees
     };
+
+    if (formData.feeLevel === 'university') {
+      if (!selectedUniversityId) { toast.error('Please select a University'); return; }
+      payload.universityId = selectedUniversityId;
+      payload.programId = null;
+    } else {
+      if (!formData.programId) { toast.error('Please select a Program'); return; }
+      payload.programId = formData.programId;
+      payload.universityId = null;
+    }
 
     try {
       if (editingId) {
@@ -126,11 +138,15 @@ export function FeeStructuresPanel() {
 
     const programObj = programs.find(p => p.id === progId);
     const univId = programObj?.universityId || '';
-    setSelectedUniversityId(univId);
+    const feeLevelVal = f.feeLevel || (f.universityId && !f.programId ? 'university' : 'program');
+    const universityIdVal = f.universityId || univId || '';
+    setSelectedUniversityId(universityIdVal);
 
     setEditingId(f.id);
     setFormData({
       programId: progId?.toString() || '',
+      universityId: universityIdVal?.toString() || '',
+      feeLevel: feeLevelVal as 'program' | 'university',
       sessionId: sessId?.toString() || 'standard_all',
       registrationFee: f.registrationFee?.toString() || '0',
       tuitionFee: f.tuitionFee?.toString() || '0',
@@ -160,6 +176,8 @@ export function FeeStructuresPanel() {
     setSelectedUniversityId('');
     setFormData({
       programId: '',
+      universityId: '',
+      feeLevel: 'program',
       sessionId: 'standard_all',
       registrationFee: '0',
       tuitionFee: '0',
@@ -193,9 +211,27 @@ export function FeeStructuresPanel() {
               <DialogTitle>{editingId ? 'Edit Fee Structure' : 'Add New Fee Structure'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Fee Level Toggle */}
               <div>
-                <Label>University</Label>
-                <Select value={selectedUniversityId} onValueChange={(v) => { setSelectedUniversityId(v); setFormData({ ...formData, programId: '' }); }}>
+                <Label>Fee Level</Label>
+                <div className="flex gap-2 mt-1">
+                  {(['program', 'university'] as const).map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, feeLevel: level, programId: '', universityId: '' })}
+                      className={`flex-1 py-2 text-sm rounded-lg border font-medium transition-colors
+                        ${formData.feeLevel === level ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border hover:bg-muted'}`}
+                    >
+                      {level === 'program' ? '📚 Program Level' : '🏫 University Level'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label>University {formData.feeLevel === 'university' ? <span className="text-rose-500">*</span> : ''}</Label>
+                <Select value={selectedUniversityId} onValueChange={(v) => { setSelectedUniversityId(v); setFormData({ ...formData, programId: '', universityId: v }); }}>
                   <SelectTrigger><SelectValue placeholder="Select university first" /></SelectTrigger>
                   <SelectContent>
                     {universities.filter(u => u && u.id).map((u) => (
@@ -207,8 +243,9 @@ export function FeeStructuresPanel() {
                 </Select>
               </div>
 
+              {formData.feeLevel === 'program' && (
               <div>
-                <Label>Program</Label>
+                <Label>Program <span className="text-rose-500">*</span></Label>
                 <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v })} disabled={!selectedUniversityId}>
                   <SelectTrigger><SelectValue placeholder={selectedUniversityId ? "Select program" : "Select university first"}/></SelectTrigger>
                   <SelectContent>
@@ -220,6 +257,7 @@ export function FeeStructuresPanel() {
                   </SelectContent>
                 </Select>
               </div>
+              )}
 
               <div>
                 <Label>Admission Session</Label>
@@ -318,11 +356,23 @@ export function FeeStructuresPanel() {
                         <DollarSign className="w-5 h-5 text-green-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium">
-                          {progName || 'Unknown Program'} 
-                          {univName && <span className="text-sm text-muted-foreground ml-1">({univName})</span>}
+                        <div className="font-medium flex items-center gap-2 flex-wrap">
+                          {f.feeLevel === 'university' ? (
+                            <>
+                              <span>{f.university?.name || univName || 'Unknown University'}</span>
+                              <Badge className="text-[10px] bg-amber-100 text-amber-700 dark:bg-amber-900/30">University Level</Badge>
+                            </>
+                          ) : (
+                            <>
+                              {progName || 'Unknown Program'}
+                              {(univName || f.university?.name) && (
+                                <span className="text-sm text-muted-foreground">({univName || f.university?.name})</span>
+                              )}
+                              <Badge className="text-[10px] bg-blue-100 text-blue-700 dark:bg-blue-900/30">Program Level</Badge>
+                            </>
+                          )}
                           {sessionName && (
-                            <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 ml-2 font-normal">
+                            <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 font-normal">
                               {sessionName}
                             </span>
                           )}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -207,10 +207,35 @@ export function StudentsPanel() {
     });
   };
 
+  // Download Excel Template
+  const handleDownloadTemplate = async () => {
+    const XLSX = await import('xlsx');
+    const templateData = [
+      {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        address: 'Mumbai, Maharashtra',
+        enrollmentNo: 'PYPEER001',
+        programs: 'B.Tech Computer Science',
+        university: 'Delhi University'
+      }
+    ];
+    const worksheet = XLSX.utils.json_to_sheet(templateData, {
+      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university']
+    });
+    // Set column widths
+    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26].map(w => ({ wch: w }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
+    XLSX.writeFile(workbook, 'students_import_template.xlsx');
+    toast.success('Template downloaded!');
+  };
+
   // Bulk Import Parser & Submitter
   const handleBulkImport = async () => {
-    if (!bulkProgramId || !bulkCenterId) {
-      toast.error('Please select both a program and a study center for the bulk import');
+    if (!bulkProgramId) {
+      toast.error('Please select a program for the bulk import');
       return;
     }
 
@@ -232,7 +257,7 @@ export function StudentsPanel() {
         });
       }
     } catch (err) {
-      toast.error('Invalid bulk data formatting. Please check your JSON or CSV formatting.');
+      toast.error('Invalid bulk data formatting. Please check your CSV or JSON formatting.');
       return;
     }
 
@@ -241,18 +266,34 @@ export function StudentsPanel() {
       return;
     }
 
-    // Attach program and center details
-    const studentPayload = parsedStudents.map(s => ({
-      name: s.name || s.fullname || '',
-      email: s.email || '',
-      phone: s.phone || '',
-      address: s.address || '',
-      enrollmentNo: s.enrollmentno || s.enrollment_no || '',
-      programId: bulkProgramId,
-      centerId: bulkCenterId,
-      status: s.status || 'active',
-      isPrevious: bulkIsPrevious
-    }));
+    // Build payload; row-level programId resolved by name if present, else use selected
+    const studentPayload = parsedStudents.map(s => {
+      // Try matching program by name from the row
+      const rowProgramName = (s.programs || s.program || '').toString().trim().toLowerCase();
+      const matchedProgram = rowProgramName
+        ? programs.find(p => p.name.toLowerCase() === rowProgramName)
+        : null;
+      const resolvedProgramId = matchedProgram?.id || bulkProgramId;
+
+      // Center is optional
+      const rowCenterName = (s.studycenter || s.study_center || s.center || '').toString().trim().toLowerCase();
+      const matchedCenter = rowCenterName
+        ? centers.find(c => c.name.toLowerCase() === rowCenterName)
+        : null;
+      const resolvedCenterId = matchedCenter?.id || bulkCenterId || undefined;
+
+      return {
+        name: s.name || s.fullname || '',
+        email: s.email || '',
+        phone: (s.phone || '').toString(),
+        address: s.address || '',
+        enrollmentNo: s.enrollmentno || s.enrollmentNo || s.enrollment_no || '',
+        programId: resolvedProgramId,
+        ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
+        status: s.status || 'active',
+        isPrevious: bulkIsPrevious
+      };
+    });
 
     try {
       const res = await api.post('/students/bulk-import', {
@@ -521,10 +562,11 @@ export function StudentsPanel() {
                         </Select>
                       </div>
                       <div>
-                        <Label>Study Center</Label>
-                        <Select value={formData.centerId} onValueChange={(value) => setFormData({...formData, centerId: value})}>
-                          <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
+                        <Label>Study Center <span className="text-muted-foreground text-xs font-normal">(optional)</span></Label>
+                        <Select value={formData.centerId} onValueChange={(value) => setFormData({...formData, centerId: value === '__none__' ? '' : value})}>
+                          <SelectTrigger><SelectValue placeholder="No study center" /></SelectTrigger>
                           <SelectContent>
+                            <SelectItem value="__none__">— No Study Center —</SelectItem>
                             {centers.filter(c => c && c.id).map((center) => (
                               <SelectItem key={center.id} value={center.id.toString()}>
                                 {center.name}
@@ -659,7 +701,7 @@ export function StudentsPanel() {
           <div className="space-y-4 py-2">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Target Program</Label>
+                <Label>Default Program <span className="text-rose-500">*</span></Label>
                 <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
                   <SelectTrigger><SelectValue placeholder="Select Program" /></SelectTrigger>
                   <SelectContent>
@@ -668,12 +710,14 @@ export function StudentsPanel() {
                     ))}
                   </SelectContent>
                 </Select>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Used when no 'programs' column in file</p>
               </div>
               <div>
-                <Label>Target Study Center</Label>
+                <Label>Default Study Center <span className="text-muted-foreground text-xs">(optional)</span></Label>
                 <Select value={bulkCenterId} onValueChange={setBulkCenterId}>
-                  <SelectTrigger><SelectValue placeholder="Select Center" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Select Center (optional)" /></SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="">None</SelectItem>
                     {centers.map(c => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
@@ -682,31 +726,31 @@ export function StudentsPanel() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 items-center">
-              <div>
-                <Label>Input Data Format</Label>
-                <Select value={bulkFormat} onValueChange={(val: any) => setBulkFormat(val)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="csv">CSV (Comma Separated)</SelectItem>
-                    <SelectItem value="json">JSON Array</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2 mt-6">
-                <input
-                  type="checkbox"
-                  id="bulkIsPrevious"
-                  checked={bulkIsPrevious}
-                  onChange={(e) => setBulkIsPrevious(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                />
-                <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
-              </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="bulkIsPrevious"
+                checked={bulkIsPrevious}
+                onChange={(e) => setBulkIsPrevious(e.target.checked)}
+                className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
             </div>
 
-            <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50">
-              <Label className="block mb-2 font-medium">Or Upload Excel/CSV File</Label>
+            <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="font-medium">Upload Excel / CSV File</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadTemplate}
+                  className="flex items-center gap-1.5 text-xs h-7"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Download Template
+                </Button>
+              </div>
               <input
                 type="file"
                 accept=".xlsx,.xls,.csv"
@@ -719,22 +763,18 @@ export function StudentsPanel() {
                   hover:file:bg-primary/95
                   cursor-pointer"
               />
-              <p className="text-[11px] text-muted-foreground mt-1.5">
-                Supported formats: Microsoft Excel (.xlsx, .xls) and CSV. Columns should include: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>.
+              <p className="text-[11px] text-muted-foreground">
+                Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>. Study center is optional.
               </p>
             </div>
 
             <div>
-              <Label>Paste Data Content</Label>
+              <Label>Or Paste CSV Data</Label>
               <Textarea
-                rows={8}
+                rows={6}
                 value={bulkData}
                 onChange={(e) => setBulkData(e.target.value)}
-                placeholder={
-                  bulkFormat === 'csv'
-                    ? "name,email,phone,address,enrollmentNo\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001"
-                    : '[\n  {\n    "name": "John Doe",\n    "email": "john@example.com",\n    "phone": "9876543210",\n    "address": "Mumbai",\n    "enrollmentNo": "PYPEER001"\n  }\n]'
-                }
+                placeholder={"name,email,phone,address,enrollmentNo,programs,university\nJohn Doe,john@example.com,9876543210,Mumbai,PYPEER001,B.Tech CS,Delhi University"}
                 className="font-mono text-sm"
               />
             </div>
