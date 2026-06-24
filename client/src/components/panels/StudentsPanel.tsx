@@ -28,8 +28,6 @@ export function StudentsPanel() {
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
   const [bulkData, setBulkData] = useState('');
   const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
-  const [bulkProgramId, setBulkProgramId] = useState('');
-  const [bulkCenterId, setBulkCenterId] = useState('__none__');
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
 
   // Notification Dialog State
