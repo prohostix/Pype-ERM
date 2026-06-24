@@ -226,7 +226,7 @@ function App() {
   }
 
   // Define available tables based on user role
-  const getAvailableTables = () => {
+  function getAvailableTables() {
     if (!user) return [];
     
     const baseTables = [
@@ -352,7 +352,7 @@ function App() {
       return [...result, { id: 'collections', label: 'Collections' }];
     }
     return result;
-  };
+  }
 
 
 
