@@ -169,7 +169,6 @@ export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
   // Nullify optional centerId relations before deleting to avoid FK constraint errors
   await prisma.$transaction([
     prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
-    prisma.enrollment.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.programAllocation.deleteMany({ where: { centerId } }),
     prisma.sessionRequest.deleteMany({ where: { centerId } }),
