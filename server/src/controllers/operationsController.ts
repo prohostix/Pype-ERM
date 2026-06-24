@@ -166,15 +166,34 @@ export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
 });
 export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
   const centerId = req.params.id;
-  // Nullify optional centerId relations before deleting to avoid FK constraint errors
+
+  // Block deletion if center has enrollments (studyCenterId is non-nullable on Enrollment)
+  const enrollmentCount = await prisma.enrollment.count({ where: { studyCenterId: centerId } });
+  if (enrollmentCount > 0) {
+    res.status(400).json({
+      success: false,
+      message: `Cannot delete this study center — it has ${enrollmentCount} enrollment(s) associated with it. Please reassign or remove them first.`
+    });
+    return;
+  }
+
+  // Safely remove all related records before deleting
   await prisma.$transaction([
+    // Nullify optional references
     prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.admissionSession.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
+    prisma.user.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
+    // Delete child records
+    prisma.walletTopUp.deleteMany({ where: { studyCenterId: centerId } }),
+    prisma.studyCenterWallet.deleteMany({ where: { studyCenterId: centerId } }),
     prisma.programAllocation.deleteMany({ where: { centerId } }),
     prisma.sessionRequest.deleteMany({ where: { centerId } }),
     prisma.target.deleteMany({ where: { centerId } }),
+    // Finally delete the center
     prisma.studyCenter.delete({ where: { id: centerId } }),
   ]);
+
   res.json({ success: true, data: {} });
 });
 export const approveStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
