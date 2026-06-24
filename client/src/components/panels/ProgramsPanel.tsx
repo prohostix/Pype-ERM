@@ -40,6 +40,7 @@ interface SubDepartment { id: string; name: string; }
 interface Program {
   id: string; name: string; code: string; courseType: CourseType;
   duration: number; hasSemesters: boolean; semesters: Semester[];
+  specialisations: string[];
   status: string; universityId: any; subDepartmentId?: any;
 }
 
@@ -67,8 +68,10 @@ export function ProgramsPanel() {
     courseType: 'OnlineDegree' as CourseType,
     duration: 12, status: 'active',
     hasSemesters: false,
+    specialisations: [] as string[],
   });
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [specInput, setSpecInput] = useState('');
 
   useEffect(() => { fetchPrograms(); fetchUniversities(); fetchSubDepartments(); }, []);
 
@@ -167,8 +170,10 @@ export function ProgramsPanel() {
       duration: p.duration,
       status: p.status,
       hasSemesters: p.hasSemesters || false,
+      specialisations: Array.isArray(p.specialisations) ? p.specialisations : [],
     });
     setSemesters(p.semesters || []);
+    setSpecInput('');
     setDialogOpen(true);
   };
 
@@ -180,8 +185,20 @@ export function ProgramsPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setForm({ name: '', code: '', universityId: '', subDepartmentId: '', courseType: 'OnlineDegree', duration: 12, status: 'active', hasSemesters: false });
+    setForm({ name: '', code: '', universityId: '', subDepartmentId: '', courseType: 'OnlineDegree', duration: 12, status: 'active', hasSemesters: false, specialisations: [] });
     setSemesters([]);
+    setSpecInput('');
+  };
+
+  const addSpecialisation = (val: string) => {
+    const trimmed = val.trim();
+    if (!trimmed || form.specialisations.includes(trimmed)) return;
+    setForm(f => ({ ...f, specialisations: [...f.specialisations, trimmed] }));
+    setSpecInput('');
+  };
+
+  const removeSpecialisation = (s: string) => {
+    setForm(f => ({ ...f, specialisations: f.specialisations.filter(x => x !== s) }));
   };
 
   const getCourseTypeMeta = (ct: string) => COURSE_TYPES.find(c => c.value === ct) || COURSE_TYPES[1];
@@ -252,6 +269,13 @@ export function ProgramsPanel() {
                               </span>
                             )}
                           </div>
+                          {Array.isArray(p.specialisations) && p.specialisations.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {p.specialisations.map((s: string) => (
+                                <span key={s} className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-100 text-violet-700">{s}</span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
@@ -338,6 +362,38 @@ export function ProgramsPanel() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Specialisations */}
+            <div className="space-y-2">
+              <Label>Specialisations <span className="text-muted-foreground text-xs">(optional — add multiple)</span></Label>
+              <div className="flex gap-2">
+                <Input
+                  value={specInput}
+                  onChange={e => setSpecInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') { e.preventDefault(); addSpecialisation(specInput); }
+                    if (e.key === ',') { e.preventDefault(); addSpecialisation(specInput); }
+                  }}
+                  placeholder="e.g. Computer Science, then press Enter"
+                  className="flex-1"
+                />
+                <button type="button"
+                  onClick={() => addSpecialisation(specInput)}
+                  className="shrink-0 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-medium hover:bg-indigo-100 border border-indigo-200">
+                  Add
+                </button>
+              </div>
+              {form.specialisations.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {form.specialisations.map(s => (
+                    <span key={s} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-violet-100 text-violet-800">
+                      {s}
+                      <button type="button" onClick={() => removeSpecialisation(s)} className="text-violet-500 hover:text-violet-800 ml-0.5">&times;</button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Course Type */}

@@ -165,7 +165,19 @@ export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
   res.json({ success: true, data: center });
 });
 export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
-  await prisma.studyCenter.delete({ where: { id: req.params.id } });
+  const centerId = req.params.id;
+  // Nullify optional centerId relations before deleting to avoid FK constraint errors
+  await prisma.$transaction([
+    prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.enrollment.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.enrollmentPayment.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.internalMark.deleteMany({ where: { centerId } }),
+    prisma.programAllocation.deleteMany({ where: { centerId } }),
+    prisma.sessionRequest.deleteMany({ where: { centerId } }),
+    prisma.target.deleteMany({ where: { centerId } }),
+    prisma.studyCenter.delete({ where: { id: centerId } }),
+  ]);
   res.json({ success: true, data: {} });
 });
 export const approveStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {

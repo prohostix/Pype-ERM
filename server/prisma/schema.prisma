@@ -341,6 +341,7 @@ model Program {
   duration            Int
   hasSemesters        Boolean              @default(false)
   semesters           Json                 @default("[]")
+  specialisations     String[]             @default([])
   status              String               @default("active")
   admissionSessions   AdmissionSession[]
   enrollments         Enrollment[]
