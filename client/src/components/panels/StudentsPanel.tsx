@@ -100,10 +100,25 @@ export function StudentsPanel() {
     isPrevious: false
   });
 
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranchId, setSelectedBranchId] = useState<string>('');
+
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      if (res.data.success) {
+        setBranches(res.data.data || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch branches:', err);
+    }
+  };
+
   useEffect(() => {
     fetchStudents();
     fetchPrograms();
     fetchCenters();
+    fetchBranches();
   }, []);
 
   const fetchStudents = async () => {
@@ -234,6 +249,10 @@ export function StudentsPanel() {
 
   // Bulk Import Parser & Submitter
   const handleBulkImport = async () => {
+    if (branches.length > 0 && !selectedBranchId) {
+      toast.error('Please select a branch to upload these students to.');
+      return;
+    }
     let parsedStudents: any[] = [];
     try {
       if (bulkFormat === 'json') {
@@ -305,7 +324,8 @@ export function StudentsPanel() {
     try {
       const res = await api.post('/students/bulk-import', {
         students: studentPayload,
-        isPrevious: bulkIsPrevious
+        isPrevious: bulkIsPrevious,
+        branchId: selectedBranchId || undefined
       });
       toast.success(`Successfully imported ${res.data.data.imported} students! (${res.data.data.skipped} skipped)`);
       setBulkDialogOpen(false);
@@ -716,6 +736,24 @@ export function StudentsPanel() {
               />
               <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
             </div>
+
+            {branches.length > 0 && (
+              <div className="space-y-1.5">
+                <Label htmlFor="bulkBranchSelect" className="text-sm font-semibold">Select Target Branch</Label>
+                <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
+                  <SelectTrigger id="bulkBranchSelect" className="w-full">
+                    <SelectValue placeholder="Choose branch to associate students with..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {branches.map((b) => (
+                      <SelectItem key={b.id} value={b.id}>
+                        {b.name} ({b.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
               <div className="flex items-center justify-between">

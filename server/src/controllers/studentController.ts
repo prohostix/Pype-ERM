@@ -158,7 +158,7 @@ export const approveStudent = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { students, isPrevious } = req.body;
+  const { students, isPrevious, branchId } = req.body;
   if (!Array.isArray(students)) {
     res.status(400).json({ success: false, message: 'Invalid data format. Expected an array of students.' });
     return;
@@ -244,6 +244,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
             role: 'staff',
             phone: s.phone || '',
             status: 'active',
+            branchId: branchId || undefined,
           },
         });
       } else {
@@ -257,7 +258,8 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
             password: hashedPassword,
             name: s.name,
             phone: s.phone || '',
-            status: 'active'
+            status: 'active',
+            branchId: branchId || undefined,
           }
         });
       }
