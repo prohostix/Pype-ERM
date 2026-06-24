@@ -28,14 +28,7 @@ export const getReregRules = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, count: rules.length, data: rules });
 });
 
-// --- Program Fee Controller ---
-export const getProgramFees = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const fees = await prisma.programFeeStructure.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: { program: true }
-  });
-  res.json({ success: true, count: fees.length, data: fees });
-});
+
 
 // --- Program Material Controller ---
 export const getProgramMaterials = asyncHandler(async (req: AuthRequest, res: Response) => {

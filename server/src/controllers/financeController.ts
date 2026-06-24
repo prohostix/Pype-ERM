@@ -181,9 +181,12 @@ export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Respon
   res.json({ success: true, data: fee });
 });
 export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const data = { ...req.body, organizationId: req.user.organizationId };
+  const data = { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id };
   if (data.sessionId === '' || !data.sessionId) {
     data.sessionId = null;
+  }
+  if (data.effectiveFrom) {
+    data.effectiveFrom = new Date(data.effectiveFrom);
   }
   const fee = await prisma.feeStructure.create({ data });
   res.status(201).json({ success: true, data: fee });
@@ -197,6 +200,9 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
   const data = { ...req.body };
   if (data.sessionId === '' || data.sessionId === undefined) {
     data.sessionId = null;
+  }
+  if (data.effectiveFrom) {
+    data.effectiveFrom = new Date(data.effectiveFrom);
   }
   const fee = await prisma.feeStructure.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: fee });

@@ -948,6 +948,11 @@ exports.Prisma.FeeStructureScalarFieldEnum = {
   examFee: 'examFee',
   otherCharges: 'otherCharges',
   gstPercentage: 'gstPercentage',
+  billingCycle: 'billingCycle',
+  currency: 'currency',
+  effectiveFrom: 'effectiveFrom',
+  additionalFees: 'additionalFees',
+  createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -976,20 +981,6 @@ exports.Prisma.IncentiveStructureScalarFieldEnum = {
   approvedAt: 'approvedAt',
   effectiveFrom: 'effectiveFrom',
   effectiveTo: 'effectiveTo',
-  createdBy: 'createdBy',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ProgramFeeStructureScalarFieldEnum = {
-  id: 'id',
-  programId: 'programId',
-  organizationId: 'organizationId',
-  billingCycle: 'billingCycle',
-  baseFee: 'baseFee',
-  additionalFees: 'additionalFees',
-  currency: 'currency',
-  effectiveFrom: 'effectiveFrom',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1278,7 +1269,6 @@ exports.Prisma.ModelName = {
   FeeStructure: 'FeeStructure',
   EnrollmentPayment: 'EnrollmentPayment',
   IncentiveStructure: 'IncentiveStructure',
-  ProgramFeeStructure: 'ProgramFeeStructure',
   ProgramMaterial: 'ProgramMaterial',
   PaymentSchedule: 'PaymentSchedule'
 };

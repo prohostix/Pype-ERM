@@ -37,13 +37,6 @@ import {
   getFinanceSalesUsers,
 } from '../controllers/financeController.js';
 import {
-  getProgramFees,
-  getProgramFee,
-  createProgramFee,
-  updateProgramFee,
-  deleteProgramFee,
-} from '../controllers/programFeeController.js';
-import {
   getWalletTopUps,
   approveWalletTopUp,
   rejectWalletTopUp,
@@ -118,12 +111,7 @@ router.get('/centers/pending-payment', authorize('finance_admin'), getPendingPay
 router.post('/centers', authorize('org_admin', 'superadmin'), createStudyCenter);
 router.put('/centers/:id/finance-verify', authorize('finance_admin'), financeVerifyCenter);
 
-// Program Fee Structures
-router.route('/program-fees').get(authorize('finance_admin'), getProgramFees).post(authorize('finance_admin'), createProgramFee);
-router.route('/program-fees/:id')
-  .get(authorize('finance_admin'), getProgramFee)
-  .put(authorize('finance_admin'), updateProgramFee)
-  .delete(authorize('finance_admin'), deleteProgramFee);
+
 
 // Wallet Top-Ups
 router.get('/wallet-topups', authorize('finance_admin'), getWalletTopUps);

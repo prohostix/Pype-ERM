@@ -55,7 +55,6 @@ model Organization {
   polls                Poll[]
   programs             Program[]
   programAllocations   ProgramAllocation[]
-  programFeeStructures ProgramFeeStructure[]
   referralLinks        ReferralLink[]
   reregRules           ReregRule[]
   salaryConfigs        SalaryConfig[]
@@ -196,7 +195,7 @@ model User {
   batchTransferred              PayrollBatch[]        @relation("BatchTransferredBy")
   createdPolls                  Poll[]                @relation("PollCreatedBy")
   programAllocations            ProgramAllocation[]   @relation("AllocatedBy")
-  createdProgramFees            ProgramFeeStructure[] @relation("ProgramFeeCreatedBy")
+  createdFees                   FeeStructure[]        @relation("FeeCreatedBy")
   referralLink                  ReferralLink?
   salaryApproved                SalaryConfig[]        @relation("SalaryApprovedBy")
   salaryCreated                 SalaryConfig[]        @relation("SalaryCreatedBy")
@@ -346,7 +345,6 @@ model Program {
   organization        Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   university          University           @relation(fields: [universityId], references: [id])
   programAllocations  ProgramAllocation[]
-  programFeeStructure ProgramFeeStructure?
   reregRules          ReregRule[]
   students            Student[]
   studyCenters        StudyCenter[]        @relation("ProgramToStudyCenter")
@@ -1293,6 +1291,12 @@ model FeeStructure {
   examFee         Float             @default(0)
   otherCharges    Json              @default("{}")
   gstPercentage   Float             @default(18)
+  billingCycle    String            @default("per_year")
+  currency        String            @default("INR")
+  effectiveFrom   DateTime?
+  additionalFees  Json              @default("[]")
+  createdBy       String?
+  creator         User?             @relation("FeeCreatedBy", fields: [createdBy], references: [id])
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -1342,24 +1346,6 @@ model IncentiveStructure {
   @@index([organizationId, status])
 }
 
-model ProgramFeeStructure {
-  id             String       @id @default(uuid())
-  programId      String       @unique
-  organizationId String
-  billingCycle   String
-  baseFee        Float
-  additionalFees Json         @default("[]")
-  currency       String       @default("INR")
-  effectiveFrom  DateTime?
-  createdBy      String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  creator        User         @relation("ProgramFeeCreatedBy", fields: [createdBy], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program        Program      @relation(fields: [programId], references: [id])
-
-  @@index([organizationId])
-}
 
 enum OrganizationStatus {
   active

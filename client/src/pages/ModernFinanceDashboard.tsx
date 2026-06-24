@@ -33,7 +33,6 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { FinanceAuthFeePanel } from '@/components/panels/FinanceAuthFeePanel';
 import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
-import { ProgramFeeStructurePanel } from '@/components/panels/ProgramFeeStructurePanel';
 import { WalletTopUpsPanel } from '@/components/panels/WalletTopUpsPanel';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
 import { IncomeExpenditurePanel } from '@/components/panels/IncomeExpenditurePanel';
@@ -111,7 +110,6 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'admission_sessions': return <AdmissionSessionsPanel />;
       case 'auth_fees': return <FinanceAuthFeePanel />;
       case 'pending_payment': return <FinanceCenterVerificationPanel />;
-      case 'program_fees': return <ProgramFeeStructurePanel />;
       case 'wallet_topups': return <WalletTopUpsPanel />;
       case 'enrollments_finance': return <FinanceEnrollmentsPanel />;
       case 'income_expenditure': return <IncomeExpenditurePanel />;
@@ -155,7 +153,6 @@ export function getFinanceNavItems() {
     { id: 'admission_sessions', label: 'Admissions' },
     { id: 'auth_fees', label: 'Auth Fees' },
     { id: 'pending_payment', label: 'Pending Payment' },
-    { id: 'program_fees', label: 'Program Fees' },
     { id: 'wallet_topups', label: 'Wallet Top-Ups' },
     { id: 'enrollments_finance', label: 'Enrollments' },
     { id: 'income_expenditure', label: 'Income & Expenditure' },
