@@ -171,8 +171,6 @@ export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.enrollment.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
-    prisma.enrollmentPayment.updateMany({ where: { centerId }, data: { centerId: null } }),
-    prisma.internalMark.deleteMany({ where: { centerId } }),
     prisma.programAllocation.deleteMany({ where: { centerId } }),
     prisma.sessionRequest.deleteMany({ where: { centerId } }),
     prisma.target.deleteMany({ where: { centerId } }),
