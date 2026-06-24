@@ -31,6 +31,7 @@ import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 import { SubOpsPortalPanel } from '@/components/panels/SubOpsPortalPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { EmployeeEscalationsPanel } from '@/components/panels/EmployeeEscalationsPanel';
+import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 
 export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string }) {
   const { user } = useAuth();
@@ -44,6 +45,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
   const [leaves, setLeaves] = useState<any[]>([]);
   const [attendance, setAttendance] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
+  const [isCollectionsOverseer, setIsCollectionsOverseer] = useState(false);
 
   useEffect(() => {
     if (initialTab) setActiveTab(initialTab);
@@ -54,6 +56,15 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
   const fetchAll = async () => {
     setLoading(true);
     try {
+      // Check collections permission
+      api.get('/collections/metrics')
+        .then(res => {
+          if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
+            setIsCollectionsOverseer(true);
+          }
+        })
+        .catch(() => {});
+
       const [metricsRes, tasksRes, leavesRes, attendanceRes] = await Promise.all([
         api.get('/dashboard/metrics'),
         api.get('/tasks').catch(() => ({ data: { data: [] } })),
@@ -133,6 +144,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
           {isSubDeptManager && <TabsTrigger value="my_subdept">My Sub-Dept</TabsTrigger>}
           <TabsTrigger value="ld-portal">L&amp;D Portal</TabsTrigger>
           <TabsTrigger value="escalations">Escalations</TabsTrigger>
+          {isCollectionsOverseer && <TabsTrigger value="collections">Collections</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -369,6 +381,10 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
 
         <TabsContent value="escalations">
           <EmployeeEscalationsPanel />
+        </TabsContent>
+
+        <TabsContent value="collections">
+          <CollectionsPanel />
         </TabsContent>
       </Tabs>
     </div>

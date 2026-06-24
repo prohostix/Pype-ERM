@@ -43,9 +43,6 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
 
-  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
-  useEffect(() => { fetchOpsMetrics(); }, []);
-
   const fetchOpsMetrics = async () => {
     try {
       const response = await api.get('/dashboard/metrics');
@@ -54,6 +51,9 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       console.error('Failed to fetch ops metrics:', error);
     }
   };
+
+  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
+  useEffect(() => { fetchOpsMetrics(); }, []);
 
   const renderContent = () => {
     switch (activeTab) {

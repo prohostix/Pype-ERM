@@ -265,6 +265,7 @@ exports.Prisma.ProgramScalarFieldEnum = {
   duration: 'duration',
   hasSemesters: 'hasSemesters',
   semesters: 'semesters',
+  specialisations: 'specialisations',
   status: 'status'
 };
 
@@ -1035,6 +1036,14 @@ exports.Prisma.PaymentLinkScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CollectionOverseerScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1293,7 +1302,8 @@ exports.Prisma.ModelName = {
   IncentiveStructure: 'IncentiveStructure',
   ProgramMaterial: 'ProgramMaterial',
   PaymentSchedule: 'PaymentSchedule',
-  PaymentLink: 'PaymentLink'
+  PaymentLink: 'PaymentLink',
+  CollectionOverseer: 'CollectionOverseer'
 };
 
 /**

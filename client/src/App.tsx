@@ -119,6 +119,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   // For employee sub-dept managers: track their department type to show correct nav
   const [deptType, setDeptType] = useState<string | null>(null);
+  const [isCollectionsOverseer, setIsCollectionsOverseer] = useState(false);
 
   // When user loads/changes, reset activeTable to the correct default
   useEffect(() => {
@@ -129,6 +130,25 @@ function App() {
       setDeptType(null);
     }
   }, [user?.role]);
+
+  // Check if standard user is designated collections overseer
+  useEffect(() => {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin'].includes(user.role)) {
+      api.get('/collections/metrics')
+        .then(res => {
+          if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
+            setIsCollectionsOverseer(true);
+          } else {
+            setIsCollectionsOverseer(false);
+          }
+        })
+        .catch(() => {
+          setIsCollectionsOverseer(false);
+        });
+    } else {
+      setIsCollectionsOverseer(false);
+    }
+  }, [user]);
 
   // Fetch department type for employee sub-dept managers (mirrors Dashboard.tsx logic)
   useEffect(() => {
@@ -182,14 +202,25 @@ function App() {
   }, [user?.role, (user as any)?.subDepartmentId, user?.departmentId, (user as any)?.department]);
 
   // Route to StudentApplicationPage if path is /student-apply
+  // Route to public pages if needed — NOTE: useMemo/useEffect must be declared before these returns
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasInviteToken = urlParams.has('token');
+
+  const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.branchId, deptType, isCollectionsOverseer]);
+
+  // Fetch data for active table — only when in table view mode
+  useEffect(() => {
+    if (user && activeTable !== 'dashboard' && viewMode === 'table') {
+      fetchTableData();
+    }
+  }, [activeTable, user, viewMode]);
+
   if (window.location.pathname === '/student-apply') {
     return <StudentApplicationPage />;
   }
 
   // Public register page — show when on /register path OR has ?token= param (no-router SPA)
   // Only intercept if user is not logged in, to avoid breaking logged-in users with token params
-  const urlParams = new URLSearchParams(window.location.search);
-  const hasInviteToken = urlParams.has('token');
   if (window.location.pathname === '/register' || (hasInviteToken && !user)) {
     return <PublicRegisterPage />;
   }
@@ -287,34 +318,43 @@ function App() {
       ];
     }
 
-    if (user.role === 'employee') {
-      const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
-      if (deptType) {
-        if (isSubDeptManager) {
-          switch (deptType) {
-            case 'operations': return getOpsNavItems(true);
-            case 'hr': return getHRNavItems();
-            case 'finance': return getFinanceNavItems();
-            case 'sales': return getSalesNavItems();
-          }
-        } else if (deptType === 'sales') {
-          return getSalesNavItems();
-        }
-      }
-      return EMPLOYEE_NAV_ITEMS;
+    if (user.role === 'staff') {
+      return [
+        { id: 'dashboard', label: 'Overview' },
+        { id: 'notifications', label: 'Notifications' },
+        { id: 'materials', label: 'Classes & Ebooks' },
+        { id: 'fees', label: 'Fee Details' },
+        { id: 'invoices', label: 'Invoices' },
+      ];
     }
 
-    return baseTables;
+    const result = (() => {
+      if (user.role === 'employee') {
+        const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
+        if (deptType) {
+          if (isSubDeptManager) {
+            switch (deptType) {
+              case 'operations': return getOpsNavItems(true);
+              case 'hr': return getHRNavItems();
+              case 'finance': return getFinanceNavItems();
+              case 'sales': return getSalesNavItems();
+            }
+          } else if (deptType === 'sales') {
+            return getSalesNavItems();
+          }
+        }
+        return EMPLOYEE_NAV_ITEMS;
+      }
+      return baseTables;
+    })();
+
+    if (isCollectionsOverseer && !result.some(t => t.id === 'collections')) {
+      return [...result, { id: 'collections', label: 'Collections' }];
+    }
+    return result;
   };
 
-  const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.branchId, deptType]);
 
-  // Fetch data for active table — only when in table view mode
-  useEffect(() => {
-    if (user && activeTable !== 'dashboard' && viewMode === 'table') {
-      fetchTableData();
-    }
-  }, [activeTable, user, viewMode]);
 
   const handleTableChange = (table: string) => {
     // Section headers are non-clickable
@@ -333,7 +373,8 @@ function App() {
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.branchId);
-    if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager)) {
+    const isStudentRole = user?.role === 'staff';
+    if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager || isStudentRole)) {
       setViewMode('dashboard');
       setActiveTable(table);
       setActiveTab(table);

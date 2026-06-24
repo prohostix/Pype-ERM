@@ -167,21 +167,12 @@ export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
 export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
   const centerId = req.params.id;
 
-  // Block deletion if center has enrollments (studyCenterId is non-nullable on Enrollment)
-  const enrollmentCount = await prisma.enrollment.count({ where: { studyCenterId: centerId } });
-  if (enrollmentCount > 0) {
-    res.status(400).json({
-      success: false,
-      message: `Cannot delete this study center — it has ${enrollmentCount} enrollment(s) associated with it. Please reassign or remove them first.`
-    });
-    return;
-  }
-
   // Safely remove all related records before deleting
   await prisma.$transaction([
     // Nullify optional references
     prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
     prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
+    prisma.enrollment.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
     prisma.admissionSession.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
     prisma.user.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
     // Delete child records
@@ -215,29 +206,32 @@ export const getAdmissionSession = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const data = { ...req.body, organizationId: req.user.organizationId };
+  const { examDate, ...rest } = req.body; // examDate not in schema — strip it
+  const data: any = { ...rest, organizationId: req.user.organizationId, createdBy: req.user.id };
   if (req.user.role === 'ops_admin') {
     data.status = 'pending';
   }
   if (data.startDate) data.startDate = new Date(data.startDate);
   if (data.endDate) data.endDate = new Date(data.endDate);
-  if (data.examDate) data.examDate = new Date(data.examDate);
   const session = await prisma.admissionSession.create({ data });
   res.status(201).json({ success: true, data: session });
 });
 export const updateAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const data = { ...req.body };
+  const { examDate, ...rest } = req.body; // examDate not in schema — strip it
+  const data: any = { ...rest };
   if (req.user.role === 'ops_admin') {
     delete data.status;
   }
   if (data.startDate) data.startDate = new Date(data.startDate);
   if (data.endDate) data.endDate = new Date(data.endDate);
-  if (data.examDate) data.examDate = new Date(data.examDate);
   const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: session });
 });
 export const deleteAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  await prisma.admissionSession.delete({ where: { id: req.params.id } });
+  const sessionId = req.params.id;
+  // Nullify sessionId on any enrollments referencing this session before deleting
+  await prisma.enrollment.updateMany({ where: { sessionId }, data: { sessionId: null as any } });
+  await prisma.admissionSession.delete({ where: { id: sessionId } });
   res.json({ success: true, data: {} });
 });
 export const approveAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {

@@ -59,6 +59,7 @@ model Organization {
   reregRules          ReregRule[]
   salaryConfigs       SalaryConfig[]
   sessionReqs         SessionRequest[]
+  collectionOverseers CollectionOverseer[]
   students            Student[]
   studyCenters        StudyCenter[]
   studyCenterInvites  StudyCenterInvite[]
@@ -228,6 +229,7 @@ model User {
   assistantManagedDepartments   Department[]         @relation("AssistantManagers")
   designations                  Designation[]        @relation("DesignationFilledBy")
   uploadedMaterials             ProgramMaterial[]    @relation("MaterialUploadedBy")
+  collectionOverseers           CollectionOverseer[]
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -341,6 +343,7 @@ model Program {
   duration           Int
   hasSemesters       Boolean             @default(false)
   semesters          Json                @default("[]")
+  specialisations    String[]            @default([])
   status             String              @default("active")
   admissionSessions  AdmissionSession[]
   enrollments        Enrollment[]
@@ -815,8 +818,8 @@ model Enrollment {
   organizationId       String
   studentId            String?
   programId            String
-  studyCenterId        String
-  sessionId            String
+  studyCenterId        String?
+  sessionId            String?
   enrollmentNumber     String?            @unique
   studentName          String
   studentEmail         String
@@ -846,9 +849,9 @@ model Enrollment {
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program              Program            @relation(fields: [programId], references: [id])
-  session              AdmissionSession   @relation(fields: [sessionId], references: [id])
+  session              AdmissionSession?  @relation(fields: [sessionId], references: [id])
   student              Student?           @relation(fields: [studentId], references: [id])
-  studyCenter          StudyCenter        @relation(fields: [studyCenterId], references: [id])
+  studyCenter          StudyCenter?       @relation(fields: [studyCenterId], references: [id])
   universityReviewer   User?              @relation("UniversityReviewedBy", fields: [universityReviewedBy], references: [id])
   payment              EnrollmentPayment?
 
@@ -1593,4 +1596,18 @@ model PaymentLink {
   @@index([organizationId])
   @@index([studentId])
   @@index([token])
+}
+
+model CollectionOverseer {
+  id             String       @id @default(uuid())
+  organizationId String
+  userId         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
 }

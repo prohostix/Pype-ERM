@@ -11,6 +11,7 @@ import { ModernOrgAdminDashboard } from './ModernOrgAdminDashboard';
 import { ModernStudyCenterDashboard } from './ModernStudyCenterDashboard';
 import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
+import { ModernStudentPortal } from './ModernStudentPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 
 
@@ -29,20 +30,6 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
 
   const subDeptId = (user as any)?.subDepartmentId;
   const hasSubDept = Boolean(subDeptId);
-
-  // Branch managers always get the branch dashboard — skip all other routing
-  if (isBranchManager) {
-    return <ModernBranchManagerDashboard initialTab={initialTab} />;
-  }
-
-  useEffect(() => {
-    if (useDepartmentDashboard && (user?.departmentId || hasSubDept)) {
-      setDeptLoading(true);
-      fetchDepartmentType().finally(() => setDeptLoading(false));
-    } else if (useDepartmentDashboard) {
-      setDeptLoading(false);
-    }
-  }, [useDepartmentDashboard, user?.departmentId, hasSubDept]);
 
   const fetchDepartmentType = async () => {
     try {
@@ -95,6 +82,22 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
       setDepartmentType(null);
     }
   };
+
+  useEffect(() => {
+    // Don't fetch if this is a branch manager (they use a different dashboard)
+    if (isBranchManager) return;
+    if (useDepartmentDashboard && (user?.departmentId || hasSubDept)) {
+      setDeptLoading(true);
+      fetchDepartmentType().finally(() => setDeptLoading(false));
+    } else if (useDepartmentDashboard) {
+      setDeptLoading(false);
+    }
+  }, [useDepartmentDashboard, user?.departmentId, hasSubDept, isBranchManager]);
+
+  // Branch managers always get the branch dashboard — skip all other routing
+  if (isBranchManager) {
+    return <ModernBranchManagerDashboard initialTab={initialTab} />;
+  }
 
   // While fetching department type, don't render anything yet to avoid flash
   if (useDepartmentDashboard && deptLoading) {
@@ -170,6 +173,10 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
 
   if (user?.role === 'employee') {
     return <ModernEmployeeDashboard initialTab={initialTab} />;
+  }
+
+  if (user?.role === 'staff') {
+    return <ModernStudentPortal initialTab={initialTab} />;
   }
 
   // Fallback for other staff/admin roles
