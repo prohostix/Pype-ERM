@@ -120,17 +120,12 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     return;
   }
 
-  // Find or create a default study center for sales-led enrollments
+  // Find or create a default study center for sales-led enrollments (optional)
   // Use a special "Sales Direct" center or the first active center
   let studyCenter = await prisma.studyCenter.findFirst({
     where: { organizationId: orgId, status: 'active' },
     orderBy: { createdAt: 'asc' },
   });
-
-  if (!studyCenter) {
-    res.status(400).json({ success: false, message: 'No active study center configured for this organization' });
-    return;
-  }
 
   // Find or use first active/approved session
   let session = sessionId
@@ -166,7 +161,7 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       altPhone,
       pinCode,
       programId,
-      studyCenterId: studyCenter.id,
+      studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
       status: 'document_review',
       salesUserId,
@@ -573,8 +568,8 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
     return;
   }
 
-  // Find or use selected study center
-  let studyCenter;
+  // Find or use selected study center (optional)
+  let studyCenter = null;
   if (studyCenterId) {
     studyCenter = await prisma.studyCenter.findFirst({
       where: { id: studyCenterId, organizationId: orgId, status: 'active' }
@@ -584,11 +579,6 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
       where: { organizationId: orgId, status: 'active' },
       orderBy: { createdAt: 'asc' },
     });
-  }
-
-  if (!studyCenter) {
-    res.status(400).json({ success: false, message: 'No active study center found' });
-    return;
   }
 
   // Find active/approved session
@@ -621,7 +611,7 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
       studentPhone,
       studentAddress,
       programId,
-      studyCenterId: studyCenter.id,
+      studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
       status: 'document_review',
       salesUserId,
