@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus } from 'lucide-react';
+import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -367,8 +367,57 @@ export function SalesStudentPipelinePanel() {
                       <h4 className="font-semibold">{e.studentName}</h4>
                       <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1 text-sm text-muted-foreground">
                         <span>{e.studentEmail}</span>
+                        <span>{e.studentPhone}</span>
                         <span>{e.program.name} ({e.program.code})</span>
                         <span>{new Date(e.createdAt).toLocaleDateString()}</span>
+                      </div>
+
+                      {/* Communication Options */}
+                      <div className="flex flex-wrap items-center gap-2 mt-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-3 text-xs text-green-600 hover:text-green-700 hover:bg-green-50/50 border-green-200"
+                          asChild
+                        >
+                          <a
+                            href={`https://wa.me/${e.studentPhone.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 font-medium"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            WhatsApp
+                          </a>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-3 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 border-blue-200"
+                          asChild
+                        >
+                          <a
+                            href={`mailto:${e.studentEmail}`}
+                            className="flex items-center gap-1.5 font-medium"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            Email
+                          </a>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 border-border"
+                          asChild
+                        >
+                          <a
+                            href={`tel:${e.studentPhone}`}
+                            className="flex items-center gap-1.5 font-medium"
+                          >
+                            <Phone className="w-3.5 h-3.5" />
+                            Call
+                          </a>
+                        </Button>
                       </div>
                       {/* Current handler */}
                       {e.status === 'document_review' && (
