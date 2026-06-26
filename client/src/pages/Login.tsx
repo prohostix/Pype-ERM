@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Building2 } from 'lucide-react';
+
 
 
 
@@ -31,10 +31,8 @@ export function Login() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <div className="w-12 h-12 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg">
-            <Building2 className="w-7 h-7 text-white" />
-          </div>
+        <div className="flex flex-col items-center justify-center gap-3 mb-10">
+          <img src="/pype-logo.png" alt="PYPE ERM" className="h-16 w-auto" />
           <span className="text-3xl font-bold text-[#0F172A] tracking-tight">PYPE ERM</span>
         </div>
 

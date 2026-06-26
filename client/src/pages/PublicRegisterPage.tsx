@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, Upload, CheckCircle, AlertCircle, Loader2, CreditCard, FileText } from 'lucide-react';
+import { Upload, CheckCircle, AlertCircle, Loader2, CreditCard, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -344,7 +344,7 @@ export default function PublicRegisterPage() {
     <div className="min-h-screen bg-background py-10 px-4">
       <div className="max-w-xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <div className="p-2 rounded-xl bg-primary/10 text-primary"><Building2 className="w-6 h-6" /></div>
+          <img src="/pype-logo.png" alt="PYPE ERM" className="w-10 h-10 object-contain" />
           <div>
             <h1 className="text-2xl font-bold">Study Center Registration</h1>
             <p className="text-muted-foreground text-sm">Complete the form to register your center.</p>
