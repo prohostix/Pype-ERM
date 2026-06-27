@@ -113,6 +113,97 @@
     }
     </script>
 
+    <!-- WebSite Schema (helps AI understand this as a named entity) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PYPE ERM",
+      "url": "https://pypeerm.com",
+      "description": "Education Resource Management platform for Indian educational institutions",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@type": "Organization",
+        "name": "PYPE ERM",
+        "url": "https://pypeerm.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://pypeerm.com/pype-logo.png"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "IN"
+        }
+      }
+    }
+    </script>
+
+    <!-- FAQPage Schema (AI search engines use this for direct answers) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is PYPE ERM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PYPE ERM is a comprehensive Education Resource Management (ERM) platform built for Indian educational institutions. It helps manage students, admissions, sales pipelines, HR, payroll, finance, fee collections, and study centre operations from a single web dashboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who uses PYPE ERM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PYPE ERM is used by schools, colleges, coaching institutes, and study centres across India. Users include org admins, HR managers, finance teams, sales agents, BDEs, operations staff, and collections overseers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What features does PYPE ERM offer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PYPE ERM offers student admission management, sales pipeline and lead tracking, study centre onboarding, HR and payroll management, attendance tracking, fee and payment collections, finance dashboards, program management, performance KPI tracking, internal marks, and role-based multi-user access."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is PYPE ERM available in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. PYPE ERM is specifically designed for Indian educational institutions, uses INR (Indian Rupee ₹) as its currency, supports Indian number formatting (lakhs/crores), and is hosted on AWS infrastructure serving India."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do study centres register on PYPE ERM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Study centres can register directly at https://pypeerm.com/register using an invitation link provided by their organisation admin. The registration includes submitting institution details, documents, and going through a verification and approval workflow."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do students apply through PYPE ERM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Students can apply online via the student application portal at https://pypeerm.com/student-apply. The portal allows students to fill in personal details, select programmes, upload documents, and submit their admission application."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Collections feature in PYPE ERM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Collections module in PYPE ERM manages student fee payment schedules, tracks overdue and upcoming installments, sends in-app and WhatsApp payment reminders, and provides a collections dashboard for designated overseers to monitor outstanding receivables across the institution."
+          }
+        }
+      ]
+    }
+    </script>
+
     <!-- ═══════════════════════════════════════════
          THEME FLASH PREVENTION
     ═══════════════════════════════════════════ -->

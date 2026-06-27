@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "PYPE ERM",
+  "name_for_model": "pype_erm",
+  "description_for_human": "PYPE ERM — Education Resource Management platform for Indian educational institutions. Manage students, admissions, HR, payroll, sales pipelines, and collections.",
+  "description_for_model": "PYPE ERM is a comprehensive Education Resource Management (ERM) web application for Indian educational institutions. It covers student admission management, sales pipeline and lead tracking, study centre onboarding, HR and payroll, fee collections, finance dashboards, performance management, and role-based multi-user access. The platform is India-specific, uses INR (Indian Rupee ₹) as its currency, and supports multiple roles including Org Admin, Finance Admin, HR Admin, Operations Admin, Sales Admin, Sales Agent, BDE, and Collections Overseers.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://pypeerm.com/api/v1"
+  },
+  "logo_url": "https://pypeerm.com/pype-logo.png",
+  "contact_email": "admin@pypeerm.com",
+  "legal_info_url": "https://pypeerm.com/"
+}
