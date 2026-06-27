@@ -141,7 +141,7 @@ export function CollectionsPanel() {
     try {
       await api.post(`/students/${sc.studentId}/notify`, {
         title: 'Outstanding Installment Reminder',
-        message: `Dear ${sc.student?.name || 'Student'},\n\nThis is a reminder regarding your scheduled payment of $${sc.amount} which was due on ${new Date(sc.dueDate).toLocaleDateString()}. Please complete the payment at the earliest.\n\nThank you,\nCollections Desk`,
+        message: `Dear ${sc.student?.name || 'Student'},\n\nThis is a reminder regarding your scheduled payment of ₹${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please complete the payment at the earliest.\n\nThank you,\nCollections Desk`,
         type: 'fee_reminder'
       });
       toast.success('Fee reminder system notification sent');
@@ -157,7 +157,7 @@ export function CollectionsPanel() {
       return;
     }
     const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const message = `Hello ${sc.student?.name}, this is a reminder regarding your payment installment of $${sc.amount} which was due on ${new Date(sc.dueDate).toLocaleDateString()}. Please arrange to clear this amount. Thank you!`;
+    const message = `Hello ${sc.student?.name}, this is a reminder regarding your payment installment of ₹${sc.amount.toLocaleString('en-IN')} which was due on ${new Date(sc.dueDate).toLocaleDateString('en-IN')}. Please arrange to clear this amount. Thank you!`;
     const url = `https://wa.me/${cleanPhone.startsWith('91') || cleanPhone.length > 10 ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -325,7 +325,7 @@ export function CollectionsPanel() {
                             <span className="text-[10px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
                           </div>
                           <div className="text-right">
-                            <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-sm block">${sc.amount}</span>
+                            <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-sm block">₹{sc.amount.toLocaleString('en-IN')}</span>
                             <span className="text-[9px] text-muted-foreground">Settled</span>
                           </div>
                         </div>
@@ -339,7 +339,7 @@ export function CollectionsPanel() {
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2 text-amber-500">
-                    <Clock className="w-5 h-5" /> Today's Due Installments (${metrics?.todayCollectingStats?.dueAmount || 0})
+                    <Clock className="w-5 h-5" /> Today's Due Installments (₹{(metrics?.todayCollectingStats?.dueAmount || 0).toLocaleString('en-IN')})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -354,7 +354,7 @@ export function CollectionsPanel() {
                             <span className="text-[10px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className="font-semibold text-amber-600 text-sm">${sc.amount}</span>
+                            <span className="font-semibold text-amber-600 text-sm">₹{sc.amount.toLocaleString('en-IN')}</span>
                             <div className="flex gap-1">
                               <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleSendNotification(sc)}>
                                 <Bell className="w-3.5 h-3.5 text-amber-500" />
@@ -406,7 +406,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-rose-500">${sc.amount}</td>
+                            <td className="py-3 px-4 font-semibold text-rose-500">₹{sc.amount.toLocaleString('en-IN')}</td>
                             <td className="py-3 px-4 text-destructive font-semibold">
                               {new Date(sc.dueDate).toLocaleDateString()}
                               <span className="text-[9px] uppercase font-bold text-destructive bg-destructive/10 px-1 rounded ml-1.5">Overdue</span>
@@ -440,7 +440,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-amber-600">${sc.amount}</td>
+                            <td className="py-3 px-4 font-semibold text-amber-600">₹{sc.amount.toLocaleString('en-IN')}</td>
                             <td className="py-3 px-4 font-medium text-amber-600">
                               {new Date(sc.dueDate).toLocaleDateString()}
                               <span className="text-[9px] uppercase font-bold text-amber-600 bg-amber-500/10 px-1 rounded ml-1.5">Upcoming</span>
@@ -471,7 +471,7 @@ export function CollectionsPanel() {
                               <span className="text-[10px] text-muted-foreground">{sc.student?.enrollmentNo}</span>
                             </td>
                             <td className="py-3 px-4">{sc.title}</td>
-                            <td className="py-3 px-4 font-semibold text-foreground">${sc.amount}</td>
+                            <td className="py-3 px-4 font-semibold text-foreground">₹{sc.amount.toLocaleString('en-IN')}</td>
                             <td className="py-3 px-4 text-muted-foreground">{new Date(sc.dueDate).toLocaleDateString()}</td>
                             <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">{sc.remarks || '-'}</td>
                             <td className="py-3 px-4">
@@ -687,7 +687,7 @@ export function CollectionsPanel() {
             </div>
             <div>
               <Label>Due Milestone</Label>
-              <Input value={`${selectedSchedule?.title} ($${selectedSchedule?.amount})`} disabled />
+              <Input value={`${selectedSchedule?.title} (₹${selectedSchedule?.amount?.toLocaleString('en-IN')})`} disabled />
             </div>
             <div>
               <Label>Follow-up Remarks</Label>
