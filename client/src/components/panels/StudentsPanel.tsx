@@ -129,10 +129,25 @@ export function StudentsPanel() {
     return `${prefix}${year}${random}`;
   };
 
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranchId, setSelectedBranchId] = useState<string>('');
+
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      if (res.data.success) {
+        setBranches(res.data.data || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch branches:', err);
+    }
+  };
+
   useEffect(() => {
     fetchStudents();
     fetchPrograms();
     fetchCenters();
+    fetchBranches();
     fetchUniversities();
   }, []);
 
@@ -326,6 +341,10 @@ export function StudentsPanel() {
 
   // Bulk Import Parser & Submitter
   const handleBulkImport = async () => {
+    if (branches.length > 0 && !selectedBranchId) {
+      toast.error('Please select a branch to upload these students to.');
+      return;
+    }
     let parsedStudents: any[] = [];
     try {
       if (bulkFormat === 'json') {
@@ -397,7 +416,8 @@ export function StudentsPanel() {
     try {
       const res = await api.post('/students/bulk-import', {
         students: studentPayload,
-        isPrevious: bulkIsPrevious
+        isPrevious: bulkIsPrevious,
+        branchId: selectedBranchId || undefined
       });
       toast.success(`Successfully imported ${res.data.data.imported} students! (${res.data.data.skipped} skipped)`);
       setBulkDialogOpen(false);
@@ -651,16 +671,46 @@ export function StudentsPanel() {
                       {/* ── STEP 0: ADMISSION INFO ── */}
                       {formStep === 0 && (
                         <div className="space-y-4">
-                          <div>
-                            <Label className="font-medium">University *</Label>
-                            <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
-                              <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                              <SelectContent>
-                                {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                  <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                          {/* Previous student toggle */}
+                          <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+                            <input
+                              type="checkbox"
+                              id="isPreviousMain"
+                              checked={formData.isPrevious}
+                              onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                              className="w-4 h-4 rounded border-slate-300 accent-amber-600"
+                            />
+                            <div>
+                              <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
+                              <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
+                            </div>
+                          </div>
+
+                          {/* Branch & University */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                              <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                                <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="__none__">— No Branch —</SelectItem>
+                                  {branches.filter((b: any) => b && b.id).map((b: any) => (
+                                    <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label className="font-medium">University *</Label>
+                              <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                                <SelectContent>
+                                  {universities.filter((u: any) => u && u.id).map((u: any) => (
+                                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
 
                           {/* Program */}
@@ -716,12 +766,12 @@ export function StudentsPanel() {
                           {/* Admission Date & Status */}
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">Admission Date *</Label>
+                              <Label className="font-medium">{formData.isPrevious ? 'Previous Admission Date *' : 'Admission Date'}</Label>
                               <Input
                                 type="date"
                                 value={formData.admissionDate}
                                 onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
-                                required
+                                required={formData.isPrevious}
                               />
                             </div>
                             <div>
@@ -1082,7 +1132,24 @@ export function StudentsPanel() {
               />
               <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
             </div>
-            {/* Target Branch selection removed */}
+
+            {branches.length > 0 && (
+              <div className="space-y-1.5">
+                <Label htmlFor="bulkBranchSelect" className="text-sm font-semibold">Select Target Branch</Label>
+                <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
+                  <SelectTrigger id="bulkBranchSelect" className="w-full">
+                    <SelectValue placeholder="Choose branch to associate students with..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {branches.map((b) => (
+                      <SelectItem key={b.id} value={b.id}>
+                        {b.name} ({b.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             <div className="border border-dashed rounded-lg p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
               <div className="flex items-center justify-between">
