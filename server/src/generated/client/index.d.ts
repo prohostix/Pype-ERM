@@ -8037,6 +8037,7 @@ export namespace Prisma {
     invites: number
     users: number
     universities: number
+    students: number
   }
 
   export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8044,6 +8045,7 @@ export namespace Prisma {
     invites?: boolean | BranchCountOutputTypeCountInvitesArgs
     users?: boolean | BranchCountOutputTypeCountUsersArgs
     universities?: boolean | BranchCountOutputTypeCountUniversitiesArgs
+    students?: boolean | BranchCountOutputTypeCountStudentsArgs
   }
 
   // Custom InputTypes
@@ -8083,6 +8085,13 @@ export namespace Prisma {
    */
   export type BranchCountOutputTypeCountUniversitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UniversityWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentWhereInput
   }
 
 
@@ -25569,17 +25578,27 @@ export namespace Prisma {
   export type StudentMinAggregateOutputType = {
     id: string | null
     centerId: string | null
+    branchId: string | null
     organizationId: string | null
     enrollmentNo: string | null
+    admissionNo: string | null
+    admissionDate: Date | null
     name: string | null
     email: string | null
     phone: string | null
     address: string | null
     fatherName: string | null
+    motherName: string | null
+    fatherPhone: string | null
+    motherPhone: string | null
+    religion: string | null
+    caste: string | null
     dob: Date | null
     altPhone: string | null
     pinCode: string | null
+    photo: string | null
     programId: string | null
+    universityId: string | null
     sessionId: string | null
     status: string | null
     joinDate: Date | null
@@ -25593,17 +25612,27 @@ export namespace Prisma {
   export type StudentMaxAggregateOutputType = {
     id: string | null
     centerId: string | null
+    branchId: string | null
     organizationId: string | null
     enrollmentNo: string | null
+    admissionNo: string | null
+    admissionDate: Date | null
     name: string | null
     email: string | null
     phone: string | null
     address: string | null
     fatherName: string | null
+    motherName: string | null
+    fatherPhone: string | null
+    motherPhone: string | null
+    religion: string | null
+    caste: string | null
     dob: Date | null
     altPhone: string | null
     pinCode: string | null
+    photo: string | null
     programId: string | null
+    universityId: string | null
     sessionId: string | null
     status: string | null
     joinDate: Date | null
@@ -25617,17 +25646,27 @@ export namespace Prisma {
   export type StudentCountAggregateOutputType = {
     id: number
     centerId: number
+    branchId: number
     organizationId: number
     enrollmentNo: number
+    admissionNo: number
+    admissionDate: number
     name: number
     email: number
     phone: number
     address: number
     fatherName: number
+    motherName: number
+    fatherPhone: number
+    motherPhone: number
+    religion: number
+    caste: number
     dob: number
     altPhone: number
     pinCode: number
+    photo: number
     programId: number
+    universityId: number
     sessionId: number
     status: number
     joinDate: number
@@ -25646,17 +25685,27 @@ export namespace Prisma {
   export type StudentMinAggregateInputType = {
     id?: true
     centerId?: true
+    branchId?: true
     organizationId?: true
     enrollmentNo?: true
+    admissionNo?: true
+    admissionDate?: true
     name?: true
     email?: true
     phone?: true
     address?: true
     fatherName?: true
+    motherName?: true
+    fatherPhone?: true
+    motherPhone?: true
+    religion?: true
+    caste?: true
     dob?: true
     altPhone?: true
     pinCode?: true
+    photo?: true
     programId?: true
+    universityId?: true
     sessionId?: true
     status?: true
     joinDate?: true
@@ -25670,17 +25719,27 @@ export namespace Prisma {
   export type StudentMaxAggregateInputType = {
     id?: true
     centerId?: true
+    branchId?: true
     organizationId?: true
     enrollmentNo?: true
+    admissionNo?: true
+    admissionDate?: true
     name?: true
     email?: true
     phone?: true
     address?: true
     fatherName?: true
+    motherName?: true
+    fatherPhone?: true
+    motherPhone?: true
+    religion?: true
+    caste?: true
     dob?: true
     altPhone?: true
     pinCode?: true
+    photo?: true
     programId?: true
+    universityId?: true
     sessionId?: true
     status?: true
     joinDate?: true
@@ -25694,17 +25753,27 @@ export namespace Prisma {
   export type StudentCountAggregateInputType = {
     id?: true
     centerId?: true
+    branchId?: true
     organizationId?: true
     enrollmentNo?: true
+    admissionNo?: true
+    admissionDate?: true
     name?: true
     email?: true
     phone?: true
     address?: true
     fatherName?: true
+    motherName?: true
+    fatherPhone?: true
+    motherPhone?: true
+    religion?: true
+    caste?: true
     dob?: true
     altPhone?: true
     pinCode?: true
+    photo?: true
     programId?: true
+    universityId?: true
     sessionId?: true
     status?: true
     joinDate?: true
@@ -25794,17 +25863,27 @@ export namespace Prisma {
   export type StudentGroupByOutputType = {
     id: string
     centerId: string | null
+    branchId: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo: string | null
+    admissionDate: Date | null
     name: string
     email: string
     phone: string
     address: string
     fatherName: string | null
+    motherName: string | null
+    fatherPhone: string | null
+    motherPhone: string | null
+    religion: string | null
+    caste: string | null
     dob: Date | null
     altPhone: string | null
     pinCode: string | null
+    photo: string | null
     programId: string
+    universityId: string | null
     sessionId: string | null
     status: string
     joinDate: Date
@@ -25838,17 +25917,27 @@ export namespace Prisma {
   export type StudentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     centerId?: boolean
+    branchId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    admissionNo?: boolean
+    admissionDate?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
     fatherName?: boolean
+    motherName?: boolean
+    fatherPhone?: boolean
+    motherPhone?: boolean
+    religion?: boolean
+    caste?: boolean
     dob?: boolean
     altPhone?: boolean
     pinCode?: boolean
+    photo?: boolean
     programId?: boolean
+    universityId?: boolean
     sessionId?: boolean
     status?: boolean
     joinDate?: boolean
@@ -25864,6 +25953,7 @@ export namespace Prisma {
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25876,17 +25966,27 @@ export namespace Prisma {
   export type StudentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     centerId?: boolean
+    branchId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    admissionNo?: boolean
+    admissionDate?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
     fatherName?: boolean
+    motherName?: boolean
+    fatherPhone?: boolean
+    motherPhone?: boolean
+    religion?: boolean
+    caste?: boolean
     dob?: boolean
     altPhone?: boolean
     pinCode?: boolean
+    photo?: boolean
     programId?: boolean
+    universityId?: boolean
     sessionId?: boolean
     status?: boolean
     joinDate?: boolean
@@ -25899,6 +25999,7 @@ export namespace Prisma {
     isPrevious?: boolean
     credentials?: boolean
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25908,17 +26009,27 @@ export namespace Prisma {
   export type StudentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     centerId?: boolean
+    branchId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    admissionNo?: boolean
+    admissionDate?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
     fatherName?: boolean
+    motherName?: boolean
+    fatherPhone?: boolean
+    motherPhone?: boolean
+    religion?: boolean
+    caste?: boolean
     dob?: boolean
     altPhone?: boolean
     pinCode?: boolean
+    photo?: boolean
     programId?: boolean
+    universityId?: boolean
     sessionId?: boolean
     status?: boolean
     joinDate?: boolean
@@ -25931,6 +26042,7 @@ export namespace Prisma {
     isPrevious?: boolean
     credentials?: boolean
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25940,17 +26052,27 @@ export namespace Prisma {
   export type StudentSelectScalar = {
     id?: boolean
     centerId?: boolean
+    branchId?: boolean
     organizationId?: boolean
     enrollmentNo?: boolean
+    admissionNo?: boolean
+    admissionDate?: boolean
     name?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
     fatherName?: boolean
+    motherName?: boolean
+    fatherPhone?: boolean
+    motherPhone?: boolean
+    religion?: boolean
+    caste?: boolean
     dob?: boolean
     altPhone?: boolean
     pinCode?: boolean
+    photo?: boolean
     programId?: boolean
+    universityId?: boolean
     sessionId?: boolean
     status?: boolean
     joinDate?: boolean
@@ -25964,12 +26086,13 @@ export namespace Prisma {
     credentials?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "organizationId" | "enrollmentNo" | "name" | "email" | "phone" | "address" | "fatherName" | "dob" | "altPhone" | "pinCode" | "programId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "documents" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "branchId" | "organizationId" | "enrollmentNo" | "admissionNo" | "admissionDate" | "name" | "email" | "phone" | "address" | "fatherName" | "motherName" | "fatherPhone" | "motherPhone" | "religion" | "caste" | "dob" | "altPhone" | "pinCode" | "photo" | "programId" | "universityId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "documents" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25980,6 +26103,7 @@ export namespace Prisma {
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -25987,6 +26111,7 @@ export namespace Prisma {
   }
   export type StudentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     center?: boolean | Student$centerArgs<ExtArgs>
+    branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -26000,6 +26125,7 @@ export namespace Prisma {
       internalMarks: Prisma.$InternalMarkPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
       center: Prisma.$StudyCenterPayload<ExtArgs> | null
+      branch: Prisma.$BranchPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
       organization: Prisma.$OrganizationPayload<ExtArgs>
       program: Prisma.$ProgramPayload<ExtArgs>
@@ -26010,17 +26136,27 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       centerId: string | null
+      branchId: string | null
       organizationId: string
       enrollmentNo: string
+      admissionNo: string | null
+      admissionDate: Date | null
       name: string
       email: string
       phone: string
       address: string
       fatherName: string | null
+      motherName: string | null
+      fatherPhone: string | null
+      motherPhone: string | null
+      religion: string | null
+      caste: string | null
       dob: Date | null
       altPhone: string | null
       pinCode: string | null
+      photo: string | null
       programId: string
+      universityId: string | null
       sessionId: string | null
       status: string
       joinDate: Date
@@ -26430,6 +26566,7 @@ export namespace Prisma {
     internalMarks<T extends Student$internalMarksArgs<ExtArgs> = {}>(args?: Subset<T, Student$internalMarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InternalMarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Student$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Student$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     center<T extends Student$centerArgs<ExtArgs> = {}>(args?: Subset<T, Student$centerArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    branch<T extends Student$branchArgs<ExtArgs> = {}>(args?: Subset<T, Student$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -26467,17 +26604,27 @@ export namespace Prisma {
   interface StudentFieldRefs {
     readonly id: FieldRef<"Student", 'String'>
     readonly centerId: FieldRef<"Student", 'String'>
+    readonly branchId: FieldRef<"Student", 'String'>
     readonly organizationId: FieldRef<"Student", 'String'>
     readonly enrollmentNo: FieldRef<"Student", 'String'>
+    readonly admissionNo: FieldRef<"Student", 'String'>
+    readonly admissionDate: FieldRef<"Student", 'DateTime'>
     readonly name: FieldRef<"Student", 'String'>
     readonly email: FieldRef<"Student", 'String'>
     readonly phone: FieldRef<"Student", 'String'>
     readonly address: FieldRef<"Student", 'String'>
     readonly fatherName: FieldRef<"Student", 'String'>
+    readonly motherName: FieldRef<"Student", 'String'>
+    readonly fatherPhone: FieldRef<"Student", 'String'>
+    readonly motherPhone: FieldRef<"Student", 'String'>
+    readonly religion: FieldRef<"Student", 'String'>
+    readonly caste: FieldRef<"Student", 'String'>
     readonly dob: FieldRef<"Student", 'DateTime'>
     readonly altPhone: FieldRef<"Student", 'String'>
     readonly pinCode: FieldRef<"Student", 'String'>
+    readonly photo: FieldRef<"Student", 'String'>
     readonly programId: FieldRef<"Student", 'String'>
+    readonly universityId: FieldRef<"Student", 'String'>
     readonly sessionId: FieldRef<"Student", 'String'>
     readonly status: FieldRef<"Student", 'String'>
     readonly joinDate: FieldRef<"Student", 'DateTime'>
@@ -26978,6 +27125,25 @@ export namespace Prisma {
      */
     include?: StudyCenterInclude<ExtArgs> | null
     where?: StudyCenterWhereInput
+  }
+
+  /**
+   * Student.branch
+   */
+  export type Student$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -39653,6 +39819,7 @@ export namespace Prisma {
     invites?: boolean | Branch$invitesArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     universities?: boolean | Branch$universitiesArgs<ExtArgs>
+    students?: boolean | Branch$studentsArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["branch"]>
 
@@ -39725,6 +39892,7 @@ export namespace Prisma {
     invites?: boolean | Branch$invitesArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     universities?: boolean | Branch$universitiesArgs<ExtArgs>
+    students?: boolean | Branch$studentsArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BranchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -39751,6 +39919,7 @@ export namespace Prisma {
       invites: Prisma.$StudyCenterInvitePayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
       universities: Prisma.$UniversityPayload<ExtArgs>[]
+      students: Prisma.$StudentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -40169,6 +40338,7 @@ export namespace Prisma {
     invites<T extends Branch$invitesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyCenterInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Branch$usersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     universities<T extends Branch$universitiesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$universitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    students<T extends Branch$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -40763,6 +40933,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UniversityScalarFieldEnum | UniversityScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.students
+   */
+  export type Branch$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Student
+     */
+    omit?: StudentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null
+    where?: StudentWhereInput
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
+    cursor?: StudentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
   }
 
   /**
@@ -83964,17 +84158,27 @@ export namespace Prisma {
   export const StudentScalarFieldEnum: {
     id: 'id',
     centerId: 'centerId',
+    branchId: 'branchId',
     organizationId: 'organizationId',
     enrollmentNo: 'enrollmentNo',
+    admissionNo: 'admissionNo',
+    admissionDate: 'admissionDate',
     name: 'name',
     email: 'email',
     phone: 'phone',
     address: 'address',
     fatherName: 'fatherName',
+    motherName: 'motherName',
+    fatherPhone: 'fatherPhone',
+    motherPhone: 'motherPhone',
+    religion: 'religion',
+    caste: 'caste',
     dob: 'dob',
     altPhone: 'altPhone',
     pinCode: 'pinCode',
+    photo: 'photo',
     programId: 'programId',
+    universityId: 'universityId',
     sessionId: 'sessionId',
     status: 'status',
     joinDate: 'joinDate',
@@ -86930,17 +87134,27 @@ export namespace Prisma {
     NOT?: StudentWhereInput | StudentWhereInput[]
     id?: StringFilter<"Student"> | string
     centerId?: StringNullableFilter<"Student"> | string | null
+    branchId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringFilter<"Student"> | string
+    admissionNo?: StringNullableFilter<"Student"> | string | null
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    fatherPhone?: StringNullableFilter<"Student"> | string | null
+    motherPhone?: StringNullableFilter<"Student"> | string | null
+    religion?: StringNullableFilter<"Student"> | string | null
+    caste?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     altPhone?: StringNullableFilter<"Student"> | string | null
     pinCode?: StringNullableFilter<"Student"> | string | null
+    photo?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
+    universityId?: StringNullableFilter<"Student"> | string | null
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
     joinDate?: DateTimeFilter<"Student"> | Date | string
@@ -86956,6 +87170,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
     center?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -86967,17 +87182,27 @@ export namespace Prisma {
   export type StudentOrderByWithRelationInput = {
     id?: SortOrder
     centerId?: SortOrderInput | SortOrder
+    branchId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    admissionNo?: SortOrderInput | SortOrder
+    admissionDate?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
     fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    fatherPhone?: SortOrderInput | SortOrder
+    motherPhone?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    caste?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     altPhone?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     programId?: SortOrder
+    universityId?: SortOrderInput | SortOrder
     sessionId?: SortOrderInput | SortOrder
     status?: SortOrder
     joinDate?: SortOrder
@@ -86993,6 +87218,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
     center?: StudyCenterOrderByWithRelationInput
+    branch?: BranchOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
     program?: ProgramOrderByWithRelationInput
@@ -87009,15 +87235,25 @@ export namespace Prisma {
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
     centerId?: StringNullableFilter<"Student"> | string | null
+    branchId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
+    admissionNo?: StringNullableFilter<"Student"> | string | null
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     name?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    fatherPhone?: StringNullableFilter<"Student"> | string | null
+    motherPhone?: StringNullableFilter<"Student"> | string | null
+    religion?: StringNullableFilter<"Student"> | string | null
+    caste?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     altPhone?: StringNullableFilter<"Student"> | string | null
     pinCode?: StringNullableFilter<"Student"> | string | null
+    photo?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
+    universityId?: StringNullableFilter<"Student"> | string | null
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
     joinDate?: DateTimeFilter<"Student"> | Date | string
@@ -87033,6 +87269,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
     center?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -87044,17 +87281,27 @@ export namespace Prisma {
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
     centerId?: SortOrderInput | SortOrder
+    branchId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    admissionNo?: SortOrderInput | SortOrder
+    admissionDate?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
     fatherName?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    fatherPhone?: SortOrderInput | SortOrder
+    motherPhone?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    caste?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     altPhone?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     programId?: SortOrder
+    universityId?: SortOrderInput | SortOrder
     sessionId?: SortOrderInput | SortOrder
     status?: SortOrder
     joinDate?: SortOrder
@@ -87077,17 +87324,27 @@ export namespace Prisma {
     NOT?: StudentScalarWhereWithAggregatesInput | StudentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Student"> | string
     centerId?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    branchId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     organizationId?: StringWithAggregatesFilter<"Student"> | string
     enrollmentNo?: StringWithAggregatesFilter<"Student"> | string
+    admissionNo?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    admissionDate?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     name?: StringWithAggregatesFilter<"Student"> | string
     email?: StringWithAggregatesFilter<"Student"> | string
     phone?: StringWithAggregatesFilter<"Student"> | string
     address?: StringWithAggregatesFilter<"Student"> | string
     fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    fatherPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    motherPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    religion?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    caste?: StringNullableWithAggregatesFilter<"Student"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     altPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
     pinCode?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    photo?: StringNullableWithAggregatesFilter<"Student"> | string | null
     programId?: StringWithAggregatesFilter<"Student"> | string
+    universityId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     sessionId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     status?: StringWithAggregatesFilter<"Student"> | string
     joinDate?: DateTimeWithAggregatesFilter<"Student"> | Date | string
@@ -88200,6 +88457,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteListRelationFilter
     users?: UserListRelationFilter
     universities?: UniversityListRelationFilter
+    students?: StudentListRelationFilter
   }
 
   export type BranchOrderByWithRelationInput = {
@@ -88225,6 +88483,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
     universities?: UniversityOrderByRelationAggregateInput
+    students?: StudentOrderByRelationAggregateInput
   }
 
   export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -88254,6 +88513,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteListRelationFilter
     users?: UserListRelationFilter
     universities?: UniversityListRelationFilter
+    students?: StudentListRelationFilter
   }, "id" | "code" | "branchManagerId" | "salesDeptId" | "operationsDeptId" | "organizationId_code">
 
   export type BranchOrderByWithAggregationInput = {
@@ -93723,13 +93983,22 @@ export namespace Prisma {
   export type StudentCreateInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -93744,6 +94013,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -93755,17 +94025,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -93787,13 +94067,22 @@ export namespace Prisma {
   export type StudentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93808,6 +94097,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -93819,17 +94109,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93851,17 +94151,27 @@ export namespace Prisma {
   export type StudentCreateManyInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -93878,13 +94188,22 @@ export namespace Prisma {
   export type StudentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93900,17 +94219,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -95106,6 +95435,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateInput = {
@@ -95127,6 +95457,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUpdateInput = {
@@ -95148,6 +95479,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateInput = {
@@ -95169,6 +95501,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchCreateManyInput = {
@@ -100605,17 +100938,27 @@ export namespace Prisma {
   export type StudentCountOrderByAggregateInput = {
     id?: SortOrder
     centerId?: SortOrder
+    branchId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    admissionNo?: SortOrder
+    admissionDate?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
     fatherName?: SortOrder
+    motherName?: SortOrder
+    fatherPhone?: SortOrder
+    motherPhone?: SortOrder
+    religion?: SortOrder
+    caste?: SortOrder
     dob?: SortOrder
     altPhone?: SortOrder
     pinCode?: SortOrder
+    photo?: SortOrder
     programId?: SortOrder
+    universityId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     joinDate?: SortOrder
@@ -100632,17 +100975,27 @@ export namespace Prisma {
   export type StudentMaxOrderByAggregateInput = {
     id?: SortOrder
     centerId?: SortOrder
+    branchId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    admissionNo?: SortOrder
+    admissionDate?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
     fatherName?: SortOrder
+    motherName?: SortOrder
+    fatherPhone?: SortOrder
+    motherPhone?: SortOrder
+    religion?: SortOrder
+    caste?: SortOrder
     dob?: SortOrder
     altPhone?: SortOrder
     pinCode?: SortOrder
+    photo?: SortOrder
     programId?: SortOrder
+    universityId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     joinDate?: SortOrder
@@ -100656,17 +101009,27 @@ export namespace Prisma {
   export type StudentMinOrderByAggregateInput = {
     id?: SortOrder
     centerId?: SortOrder
+    branchId?: SortOrder
     organizationId?: SortOrder
     enrollmentNo?: SortOrder
+    admissionNo?: SortOrder
+    admissionDate?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
     fatherName?: SortOrder
+    motherName?: SortOrder
+    fatherPhone?: SortOrder
+    motherPhone?: SortOrder
+    religion?: SortOrder
+    caste?: SortOrder
     dob?: SortOrder
     altPhone?: SortOrder
     pinCode?: SortOrder
+    photo?: SortOrder
     programId?: SortOrder
+    universityId?: SortOrder
     sessionId?: SortOrder
     status?: SortOrder
     joinDate?: SortOrder
@@ -110975,6 +111338,12 @@ export namespace Prisma {
     connect?: StudyCenterWhereUniqueInput
   }
 
+  export type BranchCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutStudentsInput
+    connect?: BranchWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutStudentProfileInput = {
     create?: XOR<UserCreateWithoutStudentProfileInput, UserUncheckedCreateWithoutStudentProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutStudentProfileInput
@@ -111098,6 +111467,16 @@ export namespace Prisma {
     delete?: StudyCenterWhereInput | boolean
     connect?: StudyCenterWhereUniqueInput
     update?: XOR<XOR<StudyCenterUpdateToOneWithWhereWithoutStudentsInput, StudyCenterUpdateWithoutStudentsInput>, StudyCenterUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type BranchUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutStudentsInput
+    upsert?: BranchUpsertWithoutStudentsInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutStudentsInput, BranchUpdateWithoutStudentsInput>, BranchUncheckedUpdateWithoutStudentsInput>
   }
 
   export type UserUpdateOneRequiredWithoutStudentProfileNestedInput = {
@@ -111821,6 +112200,13 @@ export namespace Prisma {
     connect?: UniversityWhereUniqueInput | UniversityWhereUniqueInput[]
   }
 
+  export type StudentCreateNestedManyWithoutBranchInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
   export type DesignationUncheckedCreateNestedManyWithoutBranchInput = {
     create?: XOR<DesignationCreateWithoutBranchInput, DesignationUncheckedCreateWithoutBranchInput> | DesignationCreateWithoutBranchInput[] | DesignationUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: DesignationCreateOrConnectWithoutBranchInput | DesignationCreateOrConnectWithoutBranchInput[]
@@ -111846,6 +112232,13 @@ export namespace Prisma {
     create?: XOR<UniversityCreateWithoutAllowedBranchesInput, UniversityUncheckedCreateWithoutAllowedBranchesInput> | UniversityCreateWithoutAllowedBranchesInput[] | UniversityUncheckedCreateWithoutAllowedBranchesInput[]
     connectOrCreate?: UniversityCreateOrConnectWithoutAllowedBranchesInput | UniversityCreateOrConnectWithoutAllowedBranchesInput[]
     connect?: UniversityWhereUniqueInput | UniversityWhereUniqueInput[]
+  }
+
+  export type StudentUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
   }
 
   export type UserUpdateOneWithoutManagedBranchNestedInput = {
@@ -111941,6 +112334,20 @@ export namespace Prisma {
     deleteMany?: UniversityScalarWhereInput | UniversityScalarWhereInput[]
   }
 
+  export type StudentUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutBranchInput | StudentUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutBranchInput | StudentUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutBranchInput | StudentUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
+  }
+
   export type DesignationUncheckedUpdateManyWithoutBranchNestedInput = {
     create?: XOR<DesignationCreateWithoutBranchInput, DesignationUncheckedCreateWithoutBranchInput> | DesignationCreateWithoutBranchInput[] | DesignationUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: DesignationCreateOrConnectWithoutBranchInput | DesignationCreateOrConnectWithoutBranchInput[]
@@ -111994,6 +112401,20 @@ export namespace Prisma {
     update?: UniversityUpdateWithWhereUniqueWithoutAllowedBranchesInput | UniversityUpdateWithWhereUniqueWithoutAllowedBranchesInput[]
     updateMany?: UniversityUpdateManyWithWhereWithoutAllowedBranchesInput | UniversityUpdateManyWithWhereWithoutAllowedBranchesInput[]
     deleteMany?: UniversityScalarWhereInput | UniversityScalarWhereInput[]
+  }
+
+  export type StudentUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput> | StudentCreateWithoutBranchInput[] | StudentUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutBranchInput | StudentCreateOrConnectWithoutBranchInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutBranchInput | StudentUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: StudentCreateManyBranchInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutBranchInput | StudentUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutBranchInput | StudentUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
   export type AdmissionSessionCreateNestedManyWithoutSubDepartmentInput = {
@@ -115219,6 +115640,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutOrganizationInput = {
@@ -115239,6 +115661,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutOrganizationInput = {
@@ -116700,13 +117123,22 @@ export namespace Prisma {
   export type StudentCreateWithoutOrganizationInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -116721,6 +117153,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -116731,16 +117164,26 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutOrganizationInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -118981,17 +119424,27 @@ export namespace Prisma {
     NOT?: StudentScalarWhereInput | StudentScalarWhereInput[]
     id?: StringFilter<"Student"> | string
     centerId?: StringNullableFilter<"Student"> | string | null
+    branchId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
     enrollmentNo?: StringFilter<"Student"> | string
+    admissionNo?: StringNullableFilter<"Student"> | string | null
+    admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     name?: StringFilter<"Student"> | string
     email?: StringFilter<"Student"> | string
     phone?: StringFilter<"Student"> | string
     address?: StringFilter<"Student"> | string
     fatherName?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    fatherPhone?: StringNullableFilter<"Student"> | string | null
+    motherPhone?: StringNullableFilter<"Student"> | string | null
+    religion?: StringNullableFilter<"Student"> | string | null
+    caste?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     altPhone?: StringNullableFilter<"Student"> | string | null
     pinCode?: StringNullableFilter<"Student"> | string | null
+    photo?: StringNullableFilter<"Student"> | string | null
     programId?: StringFilter<"Student"> | string
+    universityId?: StringNullableFilter<"Student"> | string | null
     sessionId?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
     joinDate?: DateTimeFilter<"Student"> | Date | string
@@ -119733,6 +120186,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutOperationsDeptInput = {
@@ -119753,6 +120207,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutOperationsDeptInput = {
@@ -119778,6 +120233,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutSalesDeptInput = {
@@ -119798,6 +120254,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutSalesDeptInput = {
@@ -120980,6 +121437,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutOperationsDeptInput = {
@@ -121000,6 +121458,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUpsertWithoutSalesDeptInput = {
@@ -121031,6 +121490,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutSalesDeptInput = {
@@ -121051,6 +121511,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type UserUpsertWithoutManagedDepartmentsInput = {
@@ -121854,6 +122315,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutBranchManagerInput = {
@@ -121874,6 +122336,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutBranchManagerInput = {
@@ -124155,13 +124618,22 @@ export namespace Prisma {
   export type StudentCreateWithoutUserInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -124176,6 +124648,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -124186,16 +124659,26 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutUserInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -124222,13 +124705,22 @@ export namespace Prisma {
   export type StudentCreateWithoutReferrerInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -124243,6 +124735,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -124253,17 +124746,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutReferrerInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -124919,6 +125422,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutUsersInput = {
@@ -124939,6 +125443,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutUsersInput = {
@@ -126027,6 +126532,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutBranchManagerInput = {
@@ -126047,6 +126553,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type CeoPanelUpsertWithoutUserInput = {
@@ -126980,13 +127487,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127001,6 +127517,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -127011,16 +127528,26 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127244,6 +127771,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutUsersInput = {
@@ -127264,6 +127792,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type DepartmentUpsertWithoutUsersInput = {
@@ -131576,6 +132105,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutUniversitiesInput = {
@@ -131596,6 +132126,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutUniversitiesInput = {
@@ -132446,13 +132977,22 @@ export namespace Prisma {
   export type StudentCreateWithoutProgramInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -132467,6 +133007,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     referrer?: UserCreateNestedOneWithoutReferredStudentsInput
@@ -132477,16 +133018,26 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutProgramInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -133334,13 +133885,22 @@ export namespace Prisma {
   export type StudentCreateWithoutCenterInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -133354,6 +133914,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -133364,17 +133925,27 @@ export namespace Prisma {
 
   export type StudentUncheckedCreateWithoutCenterInput = {
     id?: string
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -135865,6 +136436,53 @@ export namespace Prisma {
     create: XOR<StudyCenterCreateWithoutStudentsInput, StudyCenterUncheckedCreateWithoutStudentsInput>
   }
 
+  export type BranchCreateWithoutStudentsInput = {
+    id?: string
+    name: string
+    code: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    branchManager?: UserCreateNestedOneWithoutManagedBranchInput
+    operationsDept?: DepartmentCreateNestedOneWithoutOpsBranchInput
+    organization: OrganizationCreateNestedOneWithoutBranchesInput
+    salesDept?: DepartmentCreateNestedOneWithoutSalesBranchInput
+    designations?: DesignationCreateNestedManyWithoutBranchInput
+    invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
+    users?: UserCreateNestedManyWithoutBranchInput
+    universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutStudentsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    branchManagerId?: string | null
+    salesDeptId?: string | null
+    operationsDeptId?: string | null
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    designations?: DesignationUncheckedCreateNestedManyWithoutBranchInput
+    invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
+    users?: UserUncheckedCreateNestedManyWithoutBranchInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+  }
+
+  export type BranchCreateOrConnectWithoutStudentsInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+  }
+
   export type UserCreateWithoutStudentProfileInput = {
     id?: string
     userId?: string | null
@@ -136682,6 +137300,59 @@ export namespace Prisma {
     allowedPrograms?: ProgramUncheckedUpdateManyWithoutStudyCentersNestedInput
     assignedSubDepts?: SubDepartmentUncheckedUpdateManyWithoutAssignedCentersNestedInput
     associatedUniversities?: UniversityUncheckedUpdateManyWithoutStudyCentersNestedInput
+  }
+
+  export type BranchUpsertWithoutStudentsInput = {
+    update: XOR<BranchUpdateWithoutStudentsInput, BranchUncheckedUpdateWithoutStudentsInput>
+    create: XOR<BranchCreateWithoutStudentsInput, BranchUncheckedCreateWithoutStudentsInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutStudentsInput, BranchUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type BranchUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    branchManager?: UserUpdateOneWithoutManagedBranchNestedInput
+    operationsDept?: DepartmentUpdateOneWithoutOpsBranchNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutBranchesNestedInput
+    salesDept?: DepartmentUpdateOneWithoutSalesBranchNestedInput
+    designations?: DesignationUpdateManyWithoutBranchNestedInput
+    invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
+    users?: UserUpdateManyWithoutBranchNestedInput
+    universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branchManagerId?: NullableStringFieldUpdateOperationsInput | string | null
+    salesDeptId?: NullableStringFieldUpdateOperationsInput | string | null
+    operationsDeptId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    designations?: DesignationUncheckedUpdateManyWithoutBranchNestedInput
+    invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
+    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
   }
 
   export type UserUpsertWithoutStudentProfileInput = {
@@ -137565,13 +138236,22 @@ export namespace Prisma {
   export type StudentCreateWithoutInvoicesInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -137585,6 +138265,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -137596,17 +138277,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutInvoicesInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -137960,13 +138651,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -137980,6 +138680,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -137991,17 +138692,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -148159,6 +148870,98 @@ export namespace Prisma {
     create: XOR<UniversityCreateWithoutAllowedBranchesInput, UniversityUncheckedCreateWithoutAllowedBranchesInput>
   }
 
+  export type StudentCreateWithoutBranchInput = {
+    id?: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutBranchInput = {
+    id?: string
+    centerId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    universityId?: string | null
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput>
+  }
+
+  export type StudentCreateManyBranchInputEnvelope = {
+    data: StudentCreateManyBranchInput | StudentCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutManagedBranchInput = {
     update: XOR<UserUpdateWithoutManagedBranchInput, UserUncheckedUpdateWithoutManagedBranchInput>
     create: XOR<UserCreateWithoutManagedBranchInput, UserUncheckedCreateWithoutManagedBranchInput>
@@ -148699,6 +149502,22 @@ export namespace Prisma {
   export type UniversityUpdateManyWithWhereWithoutAllowedBranchesInput = {
     where: UniversityScalarWhereInput
     data: XOR<UniversityUpdateManyMutationInput, UniversityUncheckedUpdateManyWithoutAllowedBranchesInput>
+  }
+
+  export type StudentUpsertWithWhereUniqueWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    update: XOR<StudentUpdateWithoutBranchInput, StudentUncheckedUpdateWithoutBranchInput>
+    create: XOR<StudentCreateWithoutBranchInput, StudentUncheckedCreateWithoutBranchInput>
+  }
+
+  export type StudentUpdateWithWhereUniqueWithoutBranchInput = {
+    where: StudentWhereUniqueInput
+    data: XOR<StudentUpdateWithoutBranchInput, StudentUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type StudentUpdateManyWithWhereWithoutBranchInput = {
+    where: StudentScalarWhereInput
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutBranchInput>
   }
 
   export type AdmissionSessionCreateWithoutSubDepartmentInput = {
@@ -150116,6 +150935,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutDesignationsInput = {
@@ -150136,6 +150956,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutDesignationsInput = {
@@ -150697,6 +151518,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutDesignationsInput = {
@@ -150717,6 +151539,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type DepartmentUpsertWithoutDesignationsInput = {
@@ -154034,13 +154857,22 @@ export namespace Prisma {
   export type StudentCreateWithoutEnrollmentsInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -154054,6 +154886,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -154065,17 +154898,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -155301,13 +156144,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -155321,6 +156173,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -155332,17 +156185,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -166300,13 +167163,22 @@ export namespace Prisma {
   export type StudentCreateWithoutInternalMarksInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -166320,6 +167192,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -166331,17 +167204,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutInternalMarksInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -166821,13 +167704,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutInternalMarksInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -166841,6 +167733,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -166852,17 +167745,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutInternalMarksInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173643,6 +174546,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutInvitesInput = {
@@ -173663,6 +174567,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutInvitesInput = {
@@ -174039,6 +174944,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutInvitesInput = {
@@ -174059,6 +174965,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCenterInvitesInput = {
@@ -179621,13 +180528,22 @@ export namespace Prisma {
   export type StudentCreateWithoutPaymentSchedulesInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -179642,6 +180558,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -179652,17 +180569,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutPaymentSchedulesInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -179936,13 +180863,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutPaymentSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -179957,6 +180893,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -179967,17 +180904,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutPaymentSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -180171,13 +181118,22 @@ export namespace Prisma {
   export type StudentCreateWithoutPaymentLinksInput = {
     id?: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -180192,6 +181148,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
     user: UserCreateNestedOneWithoutStudentProfileInput
     organization: OrganizationCreateNestedOneWithoutStudentsInput
     program: ProgramCreateNestedOneWithoutStudentsInput
@@ -180202,17 +181159,27 @@ export namespace Prisma {
   export type StudentUncheckedCreateWithoutPaymentLinksInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -180632,13 +181599,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutPaymentLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -180653,6 +181629,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -180663,17 +181640,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutPaymentLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182214,16 +183201,26 @@ export namespace Prisma {
   export type StudentCreateManyOrganizationInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -182660,6 +183657,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutOrganizationInput = {
@@ -182680,6 +183678,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateManyWithoutOrganizationInput = {
@@ -184256,13 +185255,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184277,6 +185285,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -184287,16 +185296,26 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184318,16 +185337,26 @@ export namespace Prisma {
   export type StudentUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -187238,17 +188267,27 @@ export namespace Prisma {
   export type StudentCreateManyReferrerInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -190232,13 +191271,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190253,6 +191301,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -190263,17 +191312,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190294,17 +191353,27 @@ export namespace Prisma {
   export type StudentUncheckedUpdateManyWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192057,6 +193126,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutUniversitiesInput = {
@@ -192077,6 +193147,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateManyWithoutUniversitiesInput = {
@@ -192366,16 +193437,26 @@ export namespace Prisma {
   export type StudentCreateManyProgramInput = {
     id?: string
     centerId?: string | null
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -192686,13 +193767,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192707,6 +193797,7 @@ export namespace Prisma {
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
@@ -192717,16 +193808,26 @@ export namespace Prisma {
   export type StudentUncheckedUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192748,16 +193849,26 @@ export namespace Prisma {
   export type StudentUncheckedUpdateManyWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -193089,17 +194200,27 @@ export namespace Prisma {
 
   export type StudentCreateManyCenterInput = {
     id?: string
+    branchId?: string | null
     organizationId: string
     enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
     name: string
     email: string
     phone: string
     address: string
     fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
     dob?: Date | string | null
     altPhone?: string | null
     pinCode?: string | null
+    photo?: string | null
     programId: string
+    universityId?: string | null
     sessionId?: string | null
     status?: string
     joinDate?: Date | string
@@ -193527,13 +194648,22 @@ export namespace Prisma {
   export type StudentUpdateWithoutCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -193547,6 +194677,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
     user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
     program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
@@ -193557,17 +194688,27 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateWithoutCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -193588,17 +194729,27 @@ export namespace Prisma {
 
   export type StudentUncheckedUpdateManyWithoutCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -194569,6 +195720,42 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type StudentCreateManyBranchInput = {
+    id?: string
+    centerId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    universityId?: string | null
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type DesignationUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -194929,6 +196116,124 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudentUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateManyWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AdmissionSessionCreateManySubDepartmentInput = {

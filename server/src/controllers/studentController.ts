@@ -29,7 +29,31 @@ export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const createStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { email, name, phone, centerId, programId } = req.body;
+  const {
+    email,
+    name,
+    phone,
+    centerId,
+    branchId,
+    universityId,
+    programId,
+    dob,
+    admissionDate,
+    admissionNo,
+    isPrevious,
+    fatherName,
+    fatherPhone,
+    motherName,
+    motherPhone,
+    religion,
+    caste,
+    address,
+    pinCode,
+    altPhone,
+    photo,
+    documents,
+    status
+  } = req.body;
   
   if (!programId || programId.trim() === '') {
     res.status(400).json({ success: false, message: 'Program is required' });
@@ -43,6 +67,17 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     });
     if (!centerExists) {
       res.status(400).json({ success: false, message: 'Selected Study Center does not exist' });
+      return;
+    }
+  }
+
+  // Verify that the referenced branch exists (if provided)
+  if (branchId && branchId.trim() !== '') {
+    const branchExists = await prisma.branch.findFirst({
+      where: { id: branchId, organizationId: req.user.organizationId }
+    });
+    if (!branchExists) {
+      res.status(400).json({ success: false, message: 'Selected Branch does not exist' });
       return;
     }
   }
@@ -89,8 +124,30 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
 
   const student = await prisma.student.create({
     data: {
-      ...req.body,
+      name,
+      email,
+      phone,
+      address: address || '',
+      enrollmentNo: req.body.enrollmentNo,
+      admissionNo: admissionNo || null,
+      admissionDate: admissionDate ? new Date(admissionDate) : null,
+      dob: dob ? new Date(dob) : null,
+      fatherName: fatherName || null,
+      fatherPhone: fatherPhone || null,
+      motherName: motherName || null,
+      motherPhone: motherPhone || null,
+      religion: religion || null,
+      caste: caste || null,
+      altPhone: altPhone || null,
+      pinCode: pinCode || null,
+      photo: photo || null,
+      documents: documents || [],
+      isPrevious: Boolean(isPrevious),
+      status: status || 'pending',
+      programId,
+      universityId: universityId || null,
       centerId: (centerId && centerId.trim() !== '') ? centerId : null,
+      branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
       credentials: { email, password: defaultPassword }
     }
@@ -123,13 +180,25 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     });
   }
 
-  if ('centerId' in req.body) {
-    req.body.centerId = (req.body.centerId && req.body.centerId.trim() !== '') ? req.body.centerId : null;
+  const dataToUpdate: any = { ...req.body };
+  delete dataToUpdate.id;
+  delete dataToUpdate.email; // Do not allow updating primary email directly
+
+  if (dataToUpdate.dob) dataToUpdate.dob = new Date(dataToUpdate.dob);
+  if (dataToUpdate.admissionDate) dataToUpdate.admissionDate = new Date(dataToUpdate.admissionDate);
+  if ('centerId' in dataToUpdate) {
+    dataToUpdate.centerId = (dataToUpdate.centerId && dataToUpdate.centerId.trim() !== '') ? dataToUpdate.centerId : null;
+  }
+  if ('branchId' in dataToUpdate) {
+    dataToUpdate.branchId = (dataToUpdate.branchId && dataToUpdate.branchId.trim() !== '') ? dataToUpdate.branchId : null;
+  }
+  if ('universityId' in dataToUpdate) {
+    dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
   }
 
   const student = await prisma.student.update({
     where: { id: req.params.id },
-    data: req.body
+    data: dataToUpdate
   });
   res.status(200).json({ success: true, data: student });
 });

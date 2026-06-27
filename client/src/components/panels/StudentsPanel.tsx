@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -19,10 +20,12 @@ export function StudentsPanel() {
   const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [students, setStudents] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
+  const [universities, setUniversities] = useState<any[]>([]);
   const [centers, setCenters] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [formStep, setFormStep] = useState(0); // 0=Admission, 1=Personal, 2=Family, 3=Documents
   
   // Bulk Import State
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
@@ -88,17 +91,44 @@ export function StudentsPanel() {
     }
   };
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
+    // Admission
+    isPrevious: false,
+    branchId: '',
+    universityId: '',
+    programId: '',
+    enrollmentNo: '',
+    admissionNo: '',
+    admissionDate: '',
+    status: 'pending',
+    // Personal
     name: '',
     email: '',
     phone: '',
+    dob: '',
     address: '',
-    enrollmentNo: '',
-    programId: '',
-    centerId: '',
-    status: 'pending',
-    isPrevious: false
+    pinCode: '',
+    altPhone: '',
+    religion: '',
+    caste: '',
+    photo: '',
+    // Family
+    fatherName: '',
+    fatherPhone: '',
+    motherName: '',
+    motherPhone: '',
+    // Documents stored as array of {type, url}
+    documents: [] as any[],
+    centerId: ''
   });
+
+  // Generate admission number helper
+  const generateAdmissionNo = () => {
+    const prefix = 'ADM';
+    const year = new Date().getFullYear().toString().slice(-2);
+    const random = Math.floor(10000 + Math.random() * 90000);
+    return `${prefix}${year}${random}`;
+  };
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
@@ -119,6 +149,7 @@ export function StudentsPanel() {
     fetchPrograms();
     fetchCenters();
     fetchBranches();
+    fetchUniversities();
   }, []);
 
   const fetchStudents = async () => {
@@ -142,6 +173,15 @@ export function StudentsPanel() {
     }
   };
 
+  const fetchUniversities = async () => {
+    try {
+      const response = await api.get('/operations/universities');
+      setUniversities(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch universities:', error);
+    }
+  };
+
   const fetchCenters = async () => {
     try {
       const response = await api.get('/operations/centers');
@@ -150,6 +190,11 @@ export function StudentsPanel() {
       console.error('Failed to fetch centers:', error);
     }
   };
+
+  // Programs filtered by selected university
+  const filteredPrograms = formData.universityId
+    ? programs.filter((p: any) => p.universityId === formData.universityId)
+    : programs;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,17 +223,34 @@ export function StudentsPanel() {
     const studentId = student.id;
     const programId = typeof student.programId === 'object' ? student.programId?.id : student.programId;
     const centerId = typeof student.centerId === 'object' ? student.centerId?.id : student.centerId;
+    const branchId = typeof student.branchId === 'object' ? student.branchId?.id : student.branchId;
     setEditingId(studentId);
+    setFormStep(0);
     setFormData({
+      isPrevious: student.isPrevious || false,
+      branchId: branchId?.toString() || '',
+      universityId: student.universityId || '',
+      programId: programId?.toString() || '',
+      enrollmentNo: student.enrollmentNo || '',
+      admissionNo: student.admissionNo || '',
+      admissionDate: student.admissionDate ? new Date(student.admissionDate).toISOString().split('T')[0] : '',
+      status: student.status || 'active',
       name: student.name || '',
       email: student.email || '',
       phone: student.phone || '',
+      dob: student.dob ? new Date(student.dob).toISOString().split('T')[0] : '',
       address: student.address || '',
-      enrollmentNo: student.enrollmentNo || '',
-      programId: programId?.toString() || '',
-      centerId: centerId?.toString() || '',
-      status: student.status || 'active',
-      isPrevious: student.isPrevious || false
+      pinCode: student.pinCode || '',
+      altPhone: student.altPhone || '',
+      religion: student.religion || '',
+      caste: student.caste || '',
+      photo: student.photo || '',
+      fatherName: student.fatherName || '',
+      fatherPhone: student.fatherPhone || '',
+      motherName: student.motherName || '',
+      motherPhone: student.motherPhone || '',
+      documents: student.documents || [],
+      centerId: centerId?.toString() || ''
     });
     setDialogOpen(true);
   };
@@ -207,16 +269,32 @@ export function StudentsPanel() {
 
   const resetForm = () => {
     setEditingId(null);
+    setFormStep(0);
     setFormData({
+      isPrevious: false,
+      branchId: '',
+      universityId: '',
+      programId: '',
+      enrollmentNo: '',
+      admissionNo: '',
+      admissionDate: '',
+      status: 'pending',
       name: '',
       email: '',
       phone: '',
+      dob: '',
       address: '',
-      enrollmentNo: '',
-      programId: '',
-      centerId: '',
-      status: 'pending',
-      isPrevious: false
+      pinCode: '',
+      altPhone: '',
+      religion: '',
+      caste: '',
+      photo: '',
+      fatherName: '',
+      fatherPhone: '',
+      motherName: '',
+      motherPhone: '',
+      documents: [],
+      centerId: ''
     });
   };
 
@@ -547,89 +625,313 @@ export function StudentsPanel() {
                 <DialogTrigger asChild>
                   <Button><Plus className="w-4 h-4 mr-2" />Add Student</Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>{editingId ? 'Edit Student Details' : 'Add New Student Record'}</DialogTitle>
+                <DialogContent className="max-w-3xl max-h-[92vh] flex flex-col">
+                  <DialogHeader className="pb-2 border-b">
+                    <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
+                    {/* Step indicator */}
+                    <div className="flex items-center gap-1 pt-2">
+                      {['Admission Info', 'Personal Details', 'Family Info', 'Documents'].map((step, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setFormStep(i)}
+                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            formStep === i
+                              ? 'bg-primary text-primary-foreground shadow'
+                              : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
+                          }`}
+                        >
+                          {i === 0 && <BookOpen className="w-3 h-3" />}
+                          {i === 1 && <User className="w-3 h-3" />}
+                          {i === 2 && <Building2 className="w-3 h-3" />}
+                          {i === 3 && <FileText className="w-3 h-3" />}
+                          {step}
+                        </button>
+                      ))}
+                    </div>
                   </DialogHeader>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label>Full Name</Label>
-                      <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Email</Label>
-                        <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+
+                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+                    <ScrollArea className="flex-1 pr-4">
+                      <div className="space-y-4 py-3">
+
+                      {/* ── STEP 0: ADMISSION INFO ── */}
+                      {formStep === 0 && (
+                        <div className="space-y-4">
+                          {/* Previous student toggle */}
+                          <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+                            <input
+                              type="checkbox"
+                              id="isPreviousMain"
+                              checked={formData.isPrevious}
+                              onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                              className="w-4 h-4 rounded border-slate-300 accent-amber-600"
+                            />
+                            <div>
+                              <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
+                              <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
+                            </div>
+                          </div>
+
+                          {/* Branch & University */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                              <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                                <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="__none__">— No Branch —</SelectItem>
+                                  {branches.filter((b: any) => b && b.id).map((b: any) => (
+                                    <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label className="font-medium">University *</Label>
+                              <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                                <SelectContent>
+                                  {universities.filter((u: any) => u && u.id).map((u: any) => (
+                                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+
+                          {/* Program */}
+                          <div>
+                            <Label className="font-medium">Program *</Label>
+                            <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
+                                  <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                                ))}
+                                {filteredPrograms.length === 0 && (
+                                  <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Enrollment & Admission Numbers */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Enrollment Number *</Label>
+                              <Input
+                                placeholder="e.g. PYPEER001"
+                                value={formData.enrollmentNo}
+                                onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label className="font-medium">Admission Number</Label>
+                              <div className="flex gap-2">
+                                <Input
+                                  placeholder="Auto-generated"
+                                  value={formData.admissionNo}
+                                  onChange={(e) => setFormData({...formData, admissionNo: e.target.value})}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="shrink-0"
+                                  onClick={() => setFormData({...formData, admissionNo: generateAdmissionNo()})}
+                                >
+                                  Generate
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Admission Date & Status */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">{formData.isPrevious ? 'Previous Admission Date *' : 'Admission Date'}</Label>
+                              <Input
+                                type="date"
+                                value={formData.admissionDate}
+                                onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
+                                required={formData.isPrevious}
+                              />
+                            </div>
+                            <div>
+                              <Label className="font-medium">Status</Label>
+                              <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                                <SelectTrigger><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="pending">Pending</SelectItem>
+                                  <SelectItem value="active">Active</SelectItem>
+                                  <SelectItem value="inactive">Inactive</SelectItem>
+                                  <SelectItem value="completed">Completed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── STEP 1: PERSONAL DETAILS ── */}
+                      {formStep === 1 && (
+                        <div className="space-y-4">
+                          <div>
+                            <Label className="font-medium">Full Name *</Label>
+                            <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required placeholder="Student's full name" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Email *</Label>
+                              <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required placeholder="student@example.com" />
+                            </div>
+                            <div>
+                              <Label className="font-medium">Contact Number *</Label>
+                              <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required placeholder="10-digit mobile" />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Date of Birth</Label>
+                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} />
+                            </div>
+                            <div>
+                              <Label className="font-medium">Alternate Phone</Label>
+                              <Input value={formData.altPhone} onChange={(e) => setFormData({...formData, altPhone: e.target.value})} placeholder="Optional" />
+                            </div>
+                          </div>
+                          <div>
+                            <Label className="font-medium">Address *</Label>
+                            <Textarea value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required placeholder="Full residential address" rows={2} />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">PIN Code</Label>
+                              <Input value={formData.pinCode} onChange={(e) => setFormData({...formData, pinCode: e.target.value})} placeholder="6-digit PIN" maxLength={6} />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Religion</Label>
+                              <Input value={formData.religion} onChange={(e) => setFormData({...formData, religion: e.target.value})} placeholder="e.g. Hindu, Muslim, Christian" />
+                            </div>
+                            <div>
+                              <Label className="font-medium">Caste / Category</Label>
+                              <Input value={formData.caste} onChange={(e) => setFormData({...formData, caste: e.target.value})} placeholder="e.g. OBC, SC, ST, General" />
+                            </div>
+                          </div>
+                          {/* Photo */}
+                          <div>
+                            <Label className="font-medium">Student Photo</Label>
+                            <div className="flex items-center gap-3 mt-1">
+                              {formData.photo ? (
+                                <img src={formData.photo} alt="Student" className="w-16 h-16 rounded-full object-cover border-2 border-primary/30" />
+                              ) : (
+                                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-dashed border-slate-300">
+                                  <User className="w-7 h-7 text-slate-400" />
+                                </div>
+                              )}
+                              <div>
+                                <Input
+                                  placeholder="Paste photo URL or upload below"
+                                  value={formData.photo}
+                                  onChange={(e) => setFormData({...formData, photo: e.target.value})}
+                                  className="w-64 text-sm"
+                                />
+                                <p className="text-xs text-muted-foreground mt-1">Enter a URL or paste a direct image link</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── STEP 2: FAMILY INFO ── */}
+                      {formStep === 2 && (
+                        <div className="space-y-5">
+                          <div className="p-4 rounded-xl border bg-blue-50/50 dark:bg-blue-950/10 space-y-4">
+                            <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                              <User className="w-4 h-4 text-blue-500" /> Father's Information
+                            </h4>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="font-medium">Father's Name</Label>
+                                <Input value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} placeholder="Father's full name" />
+                              </div>
+                              <div>
+                                <Label className="font-medium">Father's Mobile</Label>
+                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})} placeholder="10-digit mobile" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="p-4 rounded-xl border bg-pink-50/50 dark:bg-pink-950/10 space-y-4">
+                            <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                              <User className="w-4 h-4 text-pink-500" /> Mother's Information
+                            </h4>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="font-medium">Mother's Name</Label>
+                                <Input value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} placeholder="Mother's full name" />
+                              </div>
+                              <div>
+                                <Label className="font-medium">Mother's Mobile</Label>
+                                <Input value={formData.motherPhone} onChange={(e) => setFormData({...formData, motherPhone: e.target.value})} placeholder="10-digit mobile" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── STEP 3: DOCUMENTS ── */}
+                      {formStep === 3 && (
+                        <div className="space-y-4">
+                          <p className="text-sm text-muted-foreground">Add document URLs or paste links. Supported: Aadhaar, SSLC, Plus Two, and other certificates.</p>
+                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'].map((docType) => {
+                            const existing = (formData.documents || []).find((d: any) => d.type === docType);
+                            return (
+                              <div key={docType} className="flex items-center gap-3">
+                                <span className="text-sm font-medium w-44 shrink-0 text-slate-700 dark:text-slate-300">{docType}</span>
+                                <Input
+                                  className="flex-1 text-sm"
+                                  placeholder="Paste document URL..."
+                                  value={existing?.url || ''}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
+                                    if (val) newDocs.push({ type: docType, url: val });
+                                    setFormData({...formData, documents: newDocs});
+                                  }}
+                                />
+                                {existing?.url && (
+                                  <a href={existing.url} target="_blank" rel="noreferrer" className="text-primary text-xs underline shrink-0">View</a>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
                       </div>
-                      <div>
-                        <Label>Phone</Label>
-                        <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Address</Label>
-                      <Input value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required />
-                    </div>
-                    <div>
-                      <Label>Enrollment Number</Label>
-                      <Input value={formData.enrollmentNo} onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})} required />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Program</Label>
-                        <Select value={formData.programId} onValueChange={(value) => setFormData({...formData, programId: value})}>
-                          <SelectTrigger><SelectValue placeholder="Select program" /></SelectTrigger>
-                          <SelectContent>
-                            {programs.filter(p => p && p.id).map((prog) => (
-                              <SelectItem key={prog.id} value={prog.id.toString()}>
-                                {prog.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Study Center <span className="text-muted-foreground text-xs font-normal">(optional)</span></Label>
-                        <Select value={formData.centerId} onValueChange={(value) => setFormData({...formData, centerId: value === '__none__' ? '' : value})}>
-                          <SelectTrigger><SelectValue placeholder="No study center" /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="__none__">— No Study Center —</SelectItem>
-                            {centers.filter(c => c && c.id).map((center) => (
-                              <SelectItem key={center.id} value={center.id.toString()}>
-                                {center.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 items-center">
-                      <div>
-                        <Label>Status</Label>
-                        <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                          <SelectTrigger><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex items-center gap-2 mt-6">
-                        <input
-                          type="checkbox"
-                          id="isPrevious"
-                          checked={formData.isPrevious}
-                          onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
-                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <Label htmlFor="isPrevious" className="cursor-pointer">Mark as Previous Student</Label>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 pt-4">
-                      <Button type="submit" className="flex-1">Save</Button>
-                      <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    </ScrollArea>
+
+                    {/* Footer buttons */}
+                    <div className="flex items-center justify-between pt-3 border-t mt-3">
+                      <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
+                        ← Back
+                      </Button>
+                      <div className="text-xs text-muted-foreground">Step {formStep + 1} of 4</div>
+                      {formStep < 3 ? (
+                        <Button type="button" onClick={() => setFormStep(formStep + 1)}>
+                          Next <ChevronRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      ) : (
+                        <Button type="submit" className="bg-primary">
+                          {editingId ? 'Update Student' : 'Save Student'}
+                        </Button>
+                      )}
                     </div>
                   </form>
                 </DialogContent>
