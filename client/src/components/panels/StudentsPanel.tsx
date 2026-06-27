@@ -206,7 +206,7 @@ export function StudentsPanel() {
       setFormStep(1); // Redirect to personal step
       return;
     }
-    const requiredDocs = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'];
+    const requiredDocs = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate'];
     const missingDocs = requiredDocs.filter(docType => {
       const doc = (formData.documents || []).find((d: any) => d.type === docType);
       return !doc || !doc.url;
@@ -936,17 +936,23 @@ export function StudentsPanel() {
                       {/* ── STEP 3: DOCUMENTS ── */}
                       {formStep === 3 && (
                         <div className="space-y-4">
-                          <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
                           {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'].map((docType) => {
+                            const isOptional = docType === 'Other';
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
                             return (
                               <div key={docType} className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
                                 <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">{docType} *</div>
+                                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                    {docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                                  </div>
                                   {existing?.url ? (
                                     <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                                       ✓ Uploaded: {existing.url.split('/').pop()}
+                                    </div>
+                                  ) : isOptional ? (
+                                    <div className="text-xs text-muted-foreground font-medium mt-1">
+                                      Optional
                                     </div>
                                   ) : (
                                     <div className="text-xs text-rose-500 font-medium mt-1">
