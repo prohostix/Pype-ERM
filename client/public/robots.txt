@@ -1,0 +1,17 @@
+# PYPE ERM — robots.txt
+# https://pypeerm.com
+
+User-agent: *
+
+# Allow all public-facing pages
+Allow: /
+Allow: /register
+Allow: /student-apply
+
+# Block private app routes (authenticated-only dashboards)
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://pypeerm.com/sitemap.xml
