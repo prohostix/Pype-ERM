@@ -207,6 +207,7 @@ model User {
   sessionRequests               SessionRequest[]
   studentProfile                Student?
   referredStudents              Student[]             @relation("StudentReferredBy")
+  enrolledStudents              Student[]             @relation("StudentEnrolledBy")
   financeApprovedCenters        StudyCenter[]         @relation("FinanceApprovedBy")
   referredStudyCenters          StudyCenter[]         @relation("ReferredBy")
   verifiedStudyCenters          StudyCenter[]         @relation("VerifiedBy")
@@ -444,6 +445,7 @@ model Student {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   referredBy     String?
+  enrolledBy     String?          // ID of the sales user who enrolled this student
   documents      Json?          @default("[]")
   enrollments    Enrollment[]
   internalMarks  InternalMark[]
@@ -454,6 +456,7 @@ model Student {
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program        Program        @relation(fields: [programId], references: [id])
   referrer       User?          @relation("StudentReferredBy", fields: [referredBy], references: [id])
+  enrolledByUser User?          @relation("StudentEnrolledBy", fields: [enrolledBy], references: [id])
   isPrevious     Boolean        @default(false)
   paymentSchedules PaymentSchedule[]
   paymentLinks   PaymentLink[]
@@ -463,6 +466,7 @@ model Student {
   @@index([centerId])
   @@index([branchId])
   @@index([referredBy])
+  @@index([enrolledBy])
 }
 
 model Invoice {

@@ -5,9 +5,17 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
 
+const SALES_ROLES = ['sales_admin', 'sales_agent', 'bde'];
+
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
+
+  // Sales users only see students they personally enrolled
+  if (SALES_ROLES.includes(req.user.role)) {
+    where.enrolledBy = req.user.id;
+  }
+
   const students = await prisma.student.findMany({
     where,
     include: { enrollments: true, program: true, center: true },
@@ -149,7 +157,9 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       centerId: (centerId && centerId.trim() !== '') ? centerId : null,
       branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
-      credentials: { email, password: defaultPassword }
+      credentials: { email, password: defaultPassword },
+      // Track who enrolled this student (sales user)
+      enrolledBy: req.user.id
     }
   });
 
