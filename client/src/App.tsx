@@ -133,7 +133,7 @@ function App() {
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
-    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin'].includes(user.role)) {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user.role)) {
       api.get('/collections/metrics')
         .then(res => {
           if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {

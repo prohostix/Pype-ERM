@@ -57,13 +57,16 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
     setLoading(true);
     try {
       // Check collections permission
-      api.get('/collections/metrics')
-        .then(res => {
-          if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
-            setIsCollectionsOverseer(true);
-          }
-        })
-        .catch(() => {});
+      const isSales = ['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
+      if (!isSales) {
+        api.get('/collections/metrics')
+          .then(res => {
+            if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
+              setIsCollectionsOverseer(true);
+            }
+          })
+          .catch(() => {});
+      }
 
       const [metricsRes, tasksRes, leavesRes, attendanceRes] = await Promise.all([
         api.get('/dashboard/metrics'),

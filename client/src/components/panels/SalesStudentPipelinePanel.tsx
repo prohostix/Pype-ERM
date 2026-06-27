@@ -3,12 +3,10 @@ import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCi
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { StudentsPanel } from './StudentsPanel';
 
 interface StatusHistoryEntry {
   status: string;
@@ -73,82 +71,8 @@ export function SalesStudentPipelinePanel() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Direct Enrollment Form States
+  // Direct Enrollment Trigger State
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
-  const [submittingEnroll, setSubmittingEnroll] = useState(false);
-  const [universities, setUniversities] = useState<any[]>([]);
-  const [programs, setPrograms] = useState<any[]>([]);
-  const [selectedUniId, setSelectedUniId] = useState('');
-
-  // Form Fields
-  const [studentName, setStudentName] = useState('');
-  const [studentEmail, setStudentEmail] = useState('');
-  const [studentPhone, setStudentPhone] = useState('');
-  const [studentAddress, setStudentAddress] = useState('');
-  const [selectedProgramId, setSelectedProgramId] = useState('');
-
-  const fetchUniversities = async () => {
-    try {
-      const res = await api.get('/operations/universities');
-      setUniversities(res.data.data || []);
-    } catch (_) {}
-  };
-
-  const fetchPrograms = async (uniId: string) => {
-    if (!uniId) {
-      setPrograms([]);
-      return;
-    }
-    try {
-      const res = await api.get(`/sales/programs-by-university?universityId=${uniId}`);
-      setPrograms(res.data.data || []);
-    } catch (_) {
-      setPrograms([]);
-    }
-  };
-
-  useEffect(() => {
-    if (enrollDialogOpen) {
-      fetchUniversities();
-    }
-  }, [enrollDialogOpen]);
-
-  useEffect(() => {
-    fetchPrograms(selectedUniId);
-    setSelectedProgramId('');
-  }, [selectedUniId]);
-
-  const handleDirectEnroll = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!studentName || !studentEmail || !studentPhone || !studentAddress || !selectedProgramId) {
-      toast.error('All fields are required');
-      return;
-    }
-    setSubmittingEnroll(true);
-    try {
-      const res = await api.post('/sales/direct-enroll', {
-        studentName,
-        studentEmail,
-        studentPhone,
-        studentAddress,
-        programId: selectedProgramId,
-      });
-      toast.success(res.data.message || 'Student enrolled successfully!');
-      setEnrollDialogOpen(false);
-      // Clear form fields
-      setStudentName('');
-      setStudentEmail('');
-      setStudentPhone('');
-      setStudentAddress('');
-      setSelectedUniId('');
-      setSelectedProgramId('');
-      fetchPipeline();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to enroll student');
-    } finally {
-      setSubmittingEnroll(false);
-    }
-  };
 
   const fetchPipeline = async () => {
     setLoading(true);
@@ -189,108 +113,26 @@ export function SalesStudentPipelinePanel() {
             Refresh
           </Button>
 
-          <Dialog open={enrollDialogOpen} onOpenChange={setEnrollDialogOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-medium shadow-sm transition-all flex items-center">
-                <Plus className="w-4 h-4 mr-2" />
-                Direct Enroll Student
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Direct Student Enrollment</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleDirectEnroll} className="space-y-4 py-2">
-                <div className="space-y-1.5">
-                  <Label htmlFor="studentName">Student Name</Label>
-                  <Input
-                    id="studentName"
-                    value={studentName}
-                    onChange={e => setStudentName(e.target.value)}
-                    placeholder="Enter student's full name"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="studentEmail">Student Email</Label>
-                  <Input
-                    id="studentEmail"
-                    type="email"
-                    value={studentEmail}
-                    onChange={e => setStudentEmail(e.target.value)}
-                    placeholder="student@example.com"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="studentPhone">Student Phone</Label>
-                  <Input
-                    id="studentPhone"
-                    value={studentPhone}
-                    onChange={e => setStudentPhone(e.target.value)}
-                    placeholder="Enter phone number"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="studentAddress">Student Address</Label>
-                  <Input
-                    id="studentAddress"
-                    value={studentAddress}
-                    onChange={e => setStudentAddress(e.target.value)}
-                    placeholder="Enter student's address"
-                    required
-                  />
-                </div>
+          <Button 
+            size="sm" 
+            className="bg-primary hover:bg-primary/90 text-white font-medium shadow-sm transition-all flex items-center"
+            onClick={() => setEnrollDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Direct Enroll Student
+          </Button>
 
-                <div className="space-y-1.5">
-                  <Label>University</Label>
-                  <Select value={selectedUniId} onValueChange={setSelectedUniId}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select University" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {universities.map(u => (
-                        <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label>Program</Label>
-                  <Select
-                    value={selectedProgramId}
-                    onValueChange={setSelectedProgramId}
-                    disabled={!selectedUniId || programs.length === 0}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={!selectedUniId ? "Choose university first" : "Select Program"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {programs.map(p => (
-                        <SelectItem key={p.id} value={p.id}>{p.name} ({p.code})</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <DialogFooter className="pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setEnrollDialogOpen(false)}
-                    disabled={submittingEnroll}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={submittingEnroll || !selectedProgramId}>
-                    {submittingEnroll ? 'Enrolling...' : 'Enroll Student'}
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+          {/* Trigger shared full wizard form component instead of the simplified modal */}
+          <StudentsPanel 
+            triggerOpen={enrollDialogOpen} 
+            isSalesMode={true}
+            onOpenChange={(open) => {
+              setEnrollDialogOpen(open);
+              if (!open) {
+                fetchPipeline();
+              }
+            }}
+          />
         </div>
       </div>
 

@@ -13,9 +13,9 @@ import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
-export function StudentsPanel() {
+export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean } = {}) {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
+  const canWrite = ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
   const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [students, setStudents] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
@@ -23,6 +23,26 @@ export function StudentsPanel() {
   const [centers, setCenters] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  
+  useEffect(() => {
+    if (triggerOpen !== undefined) {
+      setDialogOpen(triggerOpen);
+      if (triggerOpen) {
+        setFormStep(0);
+      }
+    }
+  }, [triggerOpen]);
+
+  const handleDialogOpenChange = (open: boolean) => {
+    setDialogOpen(open);
+    if (onOpenChange) {
+      onOpenChange(open);
+    }
+    if (!open) {
+      resetForm();
+    }
+  };
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formStep, setFormStep] = useState(0); // 0=Admission, 1=Personal, 2=Family, 3=Documents
   
@@ -131,6 +151,7 @@ export function StudentsPanel() {
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
+  const [customOtherName, setCustomOtherName] = useState<string>('');
 
   const fetchBranches = async () => {
     try {
@@ -144,12 +165,15 @@ export function StudentsPanel() {
   };
 
   useEffect(() => {
-    fetchStudents();
+    const isSales = ['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
+    if (!isSales) {
+      fetchStudents();
+      fetchBranches();
+    }
     fetchPrograms();
     fetchCenters();
-    fetchBranches();
     fetchUniversities();
-  }, []);
+  }, [user]);
 
   const fetchStudents = async () => {
     setLoading(true);
@@ -266,6 +290,8 @@ export function StudentsPanel() {
       documents: student.documents || [],
       centerId: centerId?.toString() || ''
     });
+    const otherDoc = (student.documents || []).find((d: any) => d.type === 'Other');
+    setCustomOtherName(otherDoc?.label || '');
     setDialogOpen(true);
   };
 
@@ -284,6 +310,7 @@ export function StudentsPanel() {
   const resetForm = () => {
     setEditingId(null);
     setFormStep(0);
+    setCustomOtherName('');
     setFormData({
       isPrevious: false,
       branchId: '',
@@ -619,6 +646,492 @@ export function StudentsPanel() {
     return true;
   });
 
+  if (triggerOpen !== undefined) {
+    return (
+      <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
+        <DialogContent className="max-w-3xl max-h-[92vh] flex flex-col">
+          <DialogHeader className="pb-2 border-b">
+            <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
+            {/* Step indicator */}
+            <div className="flex items-center gap-1 pt-2">
+              {['Admission Info', 'Personal Details', 'Family Info', 'Documents'].map((step, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setFormStep(i)}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    formStep === i
+                      ? 'bg-primary text-primary-foreground shadow'
+                      : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {i === 0 && <BookOpen className="w-3 h-3" />}
+                  {i === 1 && <User className="w-3 h-3" />}
+                  {i === 2 && <Building2 className="w-3 h-3" />}
+                  {i === 3 && <FileText className="w-3 h-3" />}
+                  {step}
+                </button>
+              ))}
+            </div>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
+
+              {/* ── STEP 0: ADMISSION INFO ── */}
+              {formStep === 0 && (
+                <div className="space-y-4">
+                  {/* Previous student toggle - only show for non-sales admins */}
+                  {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') && (
+                    <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+                      <input
+                        type="checkbox"
+                        id="isPreviousMain"
+                        checked={formData.isPrevious}
+                        onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                        className="w-4 h-4 rounded border-slate-300 accent-amber-600"
+                      />
+                      <div>
+                        <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
+                        <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Branch & University */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
+                      <>
+                        <div>
+                          <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                          <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                            <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="__none__">— No Branch —</SelectItem>
+                              {branches.filter((b: any) => b && b.id).map((b: any) => (
+                                <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="font-medium">University *</Label>
+                          <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                            <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                            <SelectContent>
+                              {universities.filter((u: any) => u && u.id).map((u: any) => (
+                                <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="col-span-2">
+                        <Label className="font-medium">University *</Label>
+                        <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                          <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                          <SelectContent>
+                            {universities.filter((u: any) => u && u.id).map((u: any) => (
+                              <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Program */}
+                  <div>
+                    <Label className="font-medium">Program *</Label>
+                    <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
+                          <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                        ))}
+                        {filteredPrograms.length === 0 && (
+                          <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Enrollment & Admission Numbers */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Enrollment Number *</Label>
+                      <Input
+                        placeholder="e.g. PYPEER001"
+                        value={formData.enrollmentNo}
+                        onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Admission Number</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Auto-generated"
+                          value={formData.admissionNo}
+                          onChange={(e) => setFormData({...formData, admissionNo: e.target.value})}
+                          readOnly
+                        />
+                        <Button type="button" variant="outline" onClick={() => setFormData({...formData, admissionNo: generateAdmissionNo()})}>
+                          Generate
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Admission Date & Status */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Admission Date</Label>
+                      <Input
+                        type="date"
+                        value={formData.admissionDate}
+                        onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Status</Label>
+                      <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                        <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 1: PERSONAL DETAILS ── */}
+              {formStep === 1 && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Full Name *</Label>
+                      <Input
+                        placeholder="Student's name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Email Address *</Label>
+                      <Input
+                        type="email"
+                        placeholder="student@example.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Phone Number *</Label>
+                      <Input
+                        placeholder="Primary phone"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Date of Birth *</Label>
+                      <Input
+                        type="date"
+                        value={formData.dob}
+                        onChange={(e) => setFormData({...formData, dob: e.target.value})}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="font-medium">Home Address *</Label>
+                    <Textarea
+                      placeholder="Permanent address"
+                      value={formData.address}
+                      onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Pincode *</Label>
+                      <Input
+                        placeholder="6-digit pincode"
+                        value={formData.pinCode}
+                        onChange={(e) => setFormData({...formData, pinCode: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Alternative Phone</Label>
+                      <Input
+                        placeholder="Secondary phone"
+                        value={formData.altPhone}
+                        onChange={(e) => setFormData({...formData, altPhone: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Religion</Label>
+                      <Input
+                        placeholder="e.g. Christian, Hindu, Muslim"
+                        value={formData.religion}
+                        onChange={(e) => setFormData({...formData, religion: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Caste / Category</Label>
+                      <Input
+                        placeholder="e.g. General, OBC, SC, ST"
+                        value={formData.caste}
+                        onChange={(e) => setFormData({...formData, caste: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Photo upload */}
+                  <div className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex items-center justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo *</Label>
+                      {formData.photo ? (
+                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
+                          ✓ Photo Uploaded: {formData.photo.split('/').pop()}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-rose-500 font-medium mt-1">⚠️ Required (direct upload)</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {formData.photo && (
+                        <a
+                          href={formData.photo.startsWith('http') ? formData.photo : `${api.getBaseUrl().replace('/api/v1', '')}${formData.photo}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                        >
+                          View
+                        </a>
+                      )}
+                      <input
+                        type="file"
+                        id="student-photo-main"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const toastId = toast.loading('Uploading photo...');
+                          try {
+                            const uploadData = new FormData();
+                            uploadData.append('file', file);
+                            const res = await api.post('/auth/upload', uploadData, {
+                              headers: { 'Content-Type': 'multipart/form-data' }
+                            });
+                            setFormData({ ...formData, photo: res.data.url });
+                            toast.success('Photo uploaded successfully', { id: toastId });
+                          } catch (err) {
+                            console.error(err);
+                            toast.error('Failed to upload photo', { id: toastId });
+                          }
+                        }}
+                      />
+                      <Label
+                        htmlFor="student-photo-main"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
+                      >
+                        <Upload className="w-3 h-3" />
+                        {formData.photo ? 'Change Photo' : 'Upload Photo'}
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 2: FAMILY INFO ── */}
+              {formStep === 2 && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Father's Name</Label>
+                      <Input
+                        placeholder="Father's full name"
+                        value={formData.fatherName}
+                        onChange={(e) => setFormData({...formData, fatherName: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Father's Phone</Label>
+                      <Input
+                        placeholder="Father's phone"
+                        value={formData.fatherPhone}
+                        onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Mother's Name</Label>
+                      <Input
+                        placeholder="Mother's full name"
+                        value={formData.motherName}
+                        onChange={(e) => setFormData({...formData, motherName: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label className="font-medium">Mother's Phone</Label>
+                      <Input
+                        placeholder="Mother's phone"
+                        value={formData.motherPhone}
+                        onChange={(e) => setFormData({...formData, motherPhone: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── STEP 3: DOCUMENTS ── */}
+              {formStep === 3 && (
+                <div className="space-y-4">
+                  <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
+                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                    const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].includes(docType);
+                    const existing = (formData.documents || []).find((d: any) => d.type === docType);
+                    const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
+                    return (
+                      <div key={docType} className="space-y-2">
+                        <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                              {docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                            </div>
+                            {existing?.url ? (
+                              <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
+                                ✓ Uploaded: {existing.url.split('/').pop()}
+                              </div>
+                            ) : isOptional ? (
+                              <div className="text-xs text-muted-foreground font-medium mt-1">
+                                Optional
+                              </div>
+                            ) : (
+                              <div className="text-xs text-rose-500 font-medium mt-1">
+                                ⚠️ Required
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {existing?.url && (
+                              <a
+                                href={existing.url.startsWith('http') ? existing.url : `${api.getBaseUrl().replace('/api/v1', '')}${existing.url}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                              >
+                                View
+                              </a>
+                            )}
+                            <input
+                              type="file"
+                              id={elementId}
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const toastId = toast.loading(`Uploading ${docType}...`);
+                                try {
+                                  const uploadData = new FormData();
+                                  uploadData.append('file', file);
+                                  const res = await api.post('/auth/upload', uploadData, {
+                                    headers: { 'Content-Type': 'multipart/form-data' }
+                                  });
+                                  const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
+                                  newDocs.push({ type: docType, url: res.data.url, label: docType === 'Other' ? customOtherName : undefined });
+                                  setFormData({ ...formData, documents: newDocs });
+                                  toast.success(`${docType} uploaded successfully`, { id: toastId });
+                                } catch (err) {
+                                  console.error(err);
+                                  toast.error(`Failed to upload ${docType}`, { id: toastId });
+                                }
+                              }}
+                            />
+                            <Label
+                              htmlFor={elementId}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
+                            >
+                              <Upload className="w-3 h-3" />
+                              {existing?.url ? 'Change File' : 'Upload File'}
+                            </Label>
+                          </div>
+                        </div>
+                        {docType === 'Other' && (
+                          <div className="pl-2 pr-2">
+                            <Label htmlFor="customOtherDocName" className="text-xs text-muted-foreground font-semibold">Custom label for Other document (optional)</Label>
+                            <Input
+                              id="customOtherDocName"
+                              placeholder="e.g. Experience Certificate, TC alternative..."
+                              className="h-8 text-xs mt-1"
+                              value={customOtherName}
+                              onChange={(e) => {
+                                const nextVal = e.target.value;
+                                setCustomOtherName(nextVal);
+                                // Update label in existing document array if already uploaded
+                                const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
+                                if (hasOther) {
+                                  const newDocs = (formData.documents || []).map((d: any) => 
+                                    d.type === 'Other' ? { ...d, label: nextVal } : d
+                                  );
+                                  setFormData({ ...formData, documents: newDocs });
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+            </div>
+
+            {/* Footer buttons */}
+            <div className="flex items-center justify-between pt-3 border-t mt-3">
+              <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
+                ← Back
+              </Button>
+              <div className="text-xs text-muted-foreground">Step {formStep + 1} of 4</div>
+              {formStep < 3 ? (
+                <Button type="button" onClick={() => setFormStep(formStep + 1)}>
+                  Next <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              ) : (
+                <Button type="submit" className="bg-primary">
+                  {editingId ? 'Update Student' : 'Save Student'}
+                </Button>
+              )}
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -635,7 +1148,7 @@ export function StudentsPanel() {
                 <Upload className="w-4 h-4 mr-2" /> Bulk Import
               </Button>
 
-              <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+              <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
                 <DialogTrigger asChild>
                   <Button><Plus className="w-4 h-4 mr-2" />Add Student</Button>
                 </DialogTrigger>
@@ -671,46 +1184,64 @@ export function StudentsPanel() {
                       {/* ── STEP 0: ADMISSION INFO ── */}
                       {formStep === 0 && (
                         <div className="space-y-4">
-                          {/* Previous student toggle */}
-                          <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
-                            <input
-                              type="checkbox"
-                              id="isPreviousMain"
-                              checked={formData.isPrevious}
-                              onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
-                              className="w-4 h-4 rounded border-slate-300 accent-amber-600"
-                            />
-                            <div>
-                              <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
-                              <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
+                          {/* Previous student toggle - only show for non-sales admins */}
+                          {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') && (
+                            <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
+                              <input
+                                type="checkbox"
+                                id="isPreviousMain"
+                                checked={formData.isPrevious}
+                                onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                                className="w-4 h-4 rounded border-slate-300 accent-amber-600"
+                              />
+                              <div>
+                                <Label htmlFor="isPreviousMain" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
+                                <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system was set up</p>
+                              </div>
                             </div>
-                          </div>
+                          )}
 
                           {/* Branch & University */}
                           <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                              <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
-                                <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="__none__">— No Branch —</SelectItem>
-                                  {branches.filter((b: any) => b && b.id).map((b: any) => (
-                                    <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div>
-                              <Label className="font-medium">University *</Label>
-                              <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
-                                <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                                <SelectContent>
-                                  {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
+                            {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
+                              <>
+                                <div>
+                                  <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                                  <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                                    <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="__none__">— No Branch —</SelectItem>
+                                      {branches.filter((b: any) => b && b.id).map((b: any) => (
+                                        <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <Label className="font-medium">University *</Label>
+                                  <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                    <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                                    <SelectContent>
+                                      {universities.filter((u: any) => u && u.id).map((u: any) => (
+                                        <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="col-span-2">
+                                <Label className="font-medium">University *</Label>
+                                <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                  <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                                  <SelectContent>
+                                    {universities.filter((u: any) => u && u.id).map((u: any) => (
+                                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
                           </div>
 
                           {/* Program */}
@@ -936,73 +1467,99 @@ export function StudentsPanel() {
                       {/* ── STEP 3: DOCUMENTS ── */}
                       {formStep === 3 && (
                         <div className="space-y-4">
-                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'].map((docType) => {
-                            const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Other'].includes(docType);
+                          <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
+                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                            const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].includes(docType);
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
                             return (
-                              <div key={docType} className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
-                                <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                    {docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                              <div key={docType} className="space-y-2">
+                                <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                      {docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                                    </div>
+                                    {existing?.url ? (
+                                      <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
+                                        ✓ Uploaded: {existing.url.split('/').pop()}
+                                      </div>
+                                    ) : isOptional ? (
+                                      <div className="text-xs text-muted-foreground font-medium mt-1">
+                                        Optional
+                                      </div>
+                                    ) : (
+                                      <div className="text-xs text-rose-500 font-medium mt-1">
+                                        ⚠️ Required
+                                      </div>
+                                    )}
                                   </div>
-                                  {existing?.url ? (
-                                    <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
-                                      ✓ Uploaded: {existing.url.split('/').pop()}
-                                    </div>
-                                  ) : isOptional ? (
-                                    <div className="text-xs text-muted-foreground font-medium mt-1">
-                                      Optional
-                                    </div>
-                                  ) : (
-                                    <div className="text-xs text-rose-500 font-medium mt-1">
-                                      ⚠️ Required
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-2 shrink-0">
-                                  {existing?.url && (
-                                    <a
-                                      href={existing.url.startsWith('http') ? existing.url : `${api.getBaseUrl().replace('/api/v1', '')}${existing.url}`}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {existing?.url && (
+                                      <a
+                                        href={existing.url.startsWith('http') ? existing.url : `${api.getBaseUrl().replace('/api/v1', '')}${existing.url}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
+                                      >
+                                        View
+                                      </a>
+                                    )}
+                                    <input
+                                      type="file"
+                                      id={elementId}
+                                      className="hidden"
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        const toastId = toast.loading(`Uploading ${docType}...`);
+                                        try {
+                                          const uploadData = new FormData();
+                                          uploadData.append('file', file);
+                                          const res = await api.post('/auth/upload', uploadData, {
+                                            headers: { 'Content-Type': 'multipart/form-data' }
+                                          });
+                                          const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
+                                          newDocs.push({ type: docType, url: res.data.url, label: docType === 'Other' ? customOtherName : undefined });
+                                          setFormData({ ...formData, documents: newDocs });
+                                          toast.success(`${docType} uploaded successfully`, { id: toastId });
+                                        } catch (err) {
+                                          console.error(err);
+                                          toast.error(`Failed to upload ${docType}`, { id: toastId });
+                                        }
+                                      }}
+                                    />
+                                    <Label
+                                      htmlFor={elementId}
+                                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
                                     >
-                                      View
-                                    </a>
-                                  )}
-                                  <input
-                                    type="file"
-                                    id={elementId}
-                                    className="hidden"
-                                    onChange={async (e) => {
-                                      const file = e.target.files?.[0];
-                                      if (!file) return;
-                                      const toastId = toast.loading(`Uploading ${docType}...`);
-                                      try {
-                                        const uploadData = new FormData();
-                                        uploadData.append('file', file);
-                                        const res = await api.post('/auth/upload', uploadData, {
-                                          headers: { 'Content-Type': 'multipart/form-data' }
-                                        });
-                                        const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
-                                        newDocs.push({ type: docType, url: res.data.url });
-                                        setFormData({ ...formData, documents: newDocs });
-                                        toast.success(`${docType} uploaded successfully`, { id: toastId });
-                                      } catch (err) {
-                                        console.error(err);
-                                        toast.error(`Failed to upload ${docType}`, { id: toastId });
-                                      }
-                                    }}
-                                  />
-                                  <Label
-                                    htmlFor={elementId}
-                                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 cursor-pointer shadow-sm"
-                                  >
-                                    <Upload className="w-3 h-3" />
-                                    {existing?.url ? 'Change File' : 'Upload File'}
-                                  </Label>
+                                      <Upload className="w-3 h-3" />
+                                      {existing?.url ? 'Change File' : 'Upload File'}
+                                    </Label>
+                                  </div>
                                 </div>
+                                {docType === 'Other' && (
+                                  <div className="pl-2 pr-2">
+                                    <Label htmlFor="customOtherDocName" className="text-xs text-muted-foreground font-semibold">Custom label for Other document (optional)</Label>
+                                    <Input
+                                      id="customOtherDocName"
+                                      placeholder="e.g. Experience Certificate, TC alternative..."
+                                      className="h-8 text-xs mt-1"
+                                      value={customOtherName}
+                                      onChange={(e) => {
+                                        const nextVal = e.target.value;
+                                        setCustomOtherName(nextVal);
+                                        // Update label in existing document array if already uploaded
+                                        const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
+                                        if (hasOther) {
+                                          const newDocs = (formData.documents || []).map((d: any) => 
+                                            d.type === 'Other' ? { ...d, label: nextVal } : d
+                                          );
+                                          setFormData({ ...formData, documents: newDocs });
+                                        }
+                                      }}
+                                    />
+                                  </div>
+                                )}
                               </div>
                             );
                           })}

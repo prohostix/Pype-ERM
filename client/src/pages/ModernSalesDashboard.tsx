@@ -7,7 +7,7 @@ import {
   BarChart3,
   Clock
 } from 'lucide-react';
-import { SalesEnrolledStudentsPanel } from '@/components/panels/SalesEnrolledStudentsPanel';
+import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -82,7 +82,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'overview': return (
         <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
       );
-      case 'enrolled_students': return <SalesEnrolledStudentsPanel />;
+      case 'enrolled_students': return <StudentsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
       case 'invite_links': return <SalesInvitePanel />;
       case 'student_applications': return <SalesStudentPipelinePanel />;
@@ -527,7 +527,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
             </div>
           );
           case 'my_subdept': return isSubDeptManager ? <SubSalesPortalPanel /> : null;
-          case 'enrolled_students': return <SalesEnrolledStudentsPanel />;
+          case 'enrolled_students': return <StudentsPanel />;
           case 'targets': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
           case 'invite_links': return <SalesInvitePanel />;
           case 'student_applications': return <SalesStudentPipelinePanel />;
