@@ -206,7 +206,7 @@ export function StudentsPanel() {
       setFormStep(1); // Redirect to personal step
       return;
     }
-    const requiredDocs = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate'];
+    const requiredDocs = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'];
     const missingDocs = requiredDocs.filter(docType => {
       const doc = (formData.documents || []).find((d: any) => d.type === docType);
       return !doc || !doc.url;
@@ -937,7 +937,7 @@ export function StudentsPanel() {
                       {formStep === 3 && (
                         <div className="space-y-4">
                           {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'].map((docType) => {
-                            const isOptional = docType === 'Other';
+                            const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Other'].includes(docType);
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
                             return (
