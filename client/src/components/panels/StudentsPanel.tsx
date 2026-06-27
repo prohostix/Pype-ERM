@@ -9,7 +9,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -651,9 +650,8 @@ export function StudentsPanel() {
                     </div>
                   </DialogHeader>
 
-                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-                    <ScrollArea className="flex-1 pr-4">
-                      <div className="space-y-4 py-3">
+                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                    <div className="flex-1 overflow-y-auto pr-2 max-h-[60vh] space-y-4 py-3">
 
                       {/* ── STEP 0: ADMISSION INFO ── */}
                       {formStep === 0 && (
@@ -888,16 +886,17 @@ export function StudentsPanel() {
                       {/* ── STEP 3: DOCUMENTS ── */}
                       {formStep === 3 && (
                         <div className="space-y-4">
-                          <p className="text-sm text-muted-foreground">Add document URLs or paste links. Supported: Aadhaar, SSLC, Plus Two, and other certificates.</p>
+                          <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please provide the document URLs/links for all items. All files are required to save the record.</p>
                           {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Other'].map((docType) => {
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             return (
                               <div key={docType} className="flex items-center gap-3">
-                                <span className="text-sm font-medium w-44 shrink-0 text-slate-700 dark:text-slate-300">{docType}</span>
+                                <span className="text-sm font-medium w-44 shrink-0 text-slate-700 dark:text-slate-300">{docType} *</span>
                                 <Input
                                   className="flex-1 text-sm"
                                   placeholder="Paste document URL..."
                                   value={existing?.url || ''}
+                                  required
                                   onChange={(e) => {
                                     const val = e.target.value;
                                     const newDocs = (formData.documents || []).filter((d: any) => d.type !== docType);
@@ -914,8 +913,7 @@ export function StudentsPanel() {
                         </div>
                       )}
 
-                      </div>
-                    </ScrollArea>
+                    </div>
 
                     {/* Footer buttons */}
                     <div className="flex items-center justify-between pt-3 border-t mt-3">
