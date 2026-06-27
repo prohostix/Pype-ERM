@@ -52,7 +52,6 @@ export function SalesEnrolledStudentsPanel() {
   const [students, setStudents] = useState<Student[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
-  const [branches, setBranches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -127,22 +126,10 @@ export function SalesEnrolledStudentsPanel() {
     }
   };
 
-  const fetchBranches = async () => {
-    try {
-      const res = await api.get('/org/branches');
-      if (res.data.success) {
-        setBranches(res.data.data || []);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   useEffect(() => {
     fetchStudents();
     fetchPrograms();
     fetchUniversities();
-    fetchBranches();
   }, []);
 
   const handleOpenProfile = (student: Student) => {
@@ -322,44 +309,16 @@ export function SalesEnrolledStudentsPanel() {
                   {/* STEP 0: ADMISSION */}
                   {formStep === 0 && (
                     <div className="space-y-4">
-                      <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
-                        <input
-                          type="checkbox"
-                          id="salesIsPrevious"
-                          checked={formData.isPrevious}
-                          onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
-                          className="w-4 h-4 rounded border-slate-300 accent-amber-600"
-                        />
-                        <div>
-                          <Label htmlFor="salesIsPrevious" className="cursor-pointer font-semibold text-amber-800 dark:text-amber-400">Mark as Previous Student</Label>
-                          <p className="text-xs text-amber-700 dark:text-amber-500 mt-0.5">Enable this for students admitted before the system setup</p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                          <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
-                            <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="__none__">— No Branch —</SelectItem>
-                              {branches.filter((b: any) => b && b.id).map((b: any) => (
-                                <SelectItem key={b.id} value={b.id}>{b.name} ({b.code})</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label className="font-medium">University *</Label>
-                          <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
-                            <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
-                            <SelectContent>
-                              {universities.filter((u: any) => u && u.id).map((u: any) => (
-                                <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                      <div>
+                        <Label className="font-medium">University *</Label>
+                        <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                          <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
+                          <SelectContent>
+                            {universities.filter((u: any) => u && u.id).map((u: any) => (
+                              <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <div>
@@ -412,12 +371,12 @@ export function SalesEnrolledStudentsPanel() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label className="font-medium">{formData.isPrevious ? 'Previous Admission Date *' : 'Admission Date'}</Label>
+                          <Label className="font-medium">Admission Date *</Label>
                           <Input
                             type="date"
                             value={formData.admissionDate}
                             onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
-                            required={formData.isPrevious}
+                            required
                           />
                         </div>
                         <div>
