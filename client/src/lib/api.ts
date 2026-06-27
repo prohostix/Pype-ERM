@@ -39,6 +39,10 @@ class ApiService {
     );
   }
 
+  getBaseUrl() {
+    return API_BASE_URL;
+  }
+
   // Generic HTTP methods for direct access
   get(url: string, config?: any) {
     return this.api.get(url, config);
