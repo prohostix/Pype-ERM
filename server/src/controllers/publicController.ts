@@ -29,3 +29,15 @@ export const getPublicPrograms = asyncHandler(async (req: Request, res: Response
   const programs = await prisma.program.findMany({ where: { status: 'active' }, include: { university: true } });
   res.json({ success: true, count: programs.length, data: programs });
 });
+
+export const createOrgInquiry = asyncHandler(async (req: Request, res: Response) => {
+  const { orgName, adminName, email, phone, message } = req.body;
+  if (!orgName || !adminName || !email || !phone) {
+    res.status(400).json({ success: false, message: 'All standard fields are required.' });
+    return;
+  }
+  const inquiry = await prisma.orgInquiry.create({
+    data: { orgName, adminName, email, phone, message }
+  });
+  res.status(201).json({ success: true, data: inquiry });
+});

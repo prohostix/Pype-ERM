@@ -1630,3 +1630,14 @@ model CollectionOverseer {
   @@index([userId])
 }
 
+model OrgInquiry {
+  id        String   @id @default(uuid())
+  orgName   String
+  adminName String
+  email     String
+  phone     String
+  message   String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
+

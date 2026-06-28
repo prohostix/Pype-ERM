@@ -1,5 +1,5 @@
 import express from 'express';
-import { validateInviteToken, publicRegister, getPaymentStatus, submitPaymentProof } from '../controllers/publicController.js';
+import { validateInviteToken, publicRegister, getPaymentStatus, submitPaymentProof, createOrgInquiry } from '../controllers/publicController.js';
 import {
   validateStudentInviteToken,
   submitStudentApplication,
@@ -13,6 +13,7 @@ router.get('/invite/:token', validateInviteToken);
 router.post('/register', upload.array('documents', 10), publicRegister);
 router.get('/payment-status/:token', getPaymentStatus);
 router.post('/submit-payment/:token', upload.array('paymentProof', 1), submitPaymentProof);
+router.post('/org-inquiry', createOrgInquiry);
 
 // Sales-led student application public routes
 router.get('/student-apply/:token', validateStudentInviteToken);
