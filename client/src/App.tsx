@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
+import { LandingPage } from '@/pages/LandingPage';
 import { Dashboard } from '@/pages/Dashboard';
 import { PrismaLayout } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
@@ -778,9 +779,12 @@ function App() {
     }
   };
 
-  // Redirect to login if not authenticated
+  // Redirect to login or landing page if not authenticated
   if (!user) {
-    return <Login />;
+    if (window.location.pathname === '/login') {
+      return <Login />;
+    }
+    return <LandingPage onGoToLogin={() => window.location.pathname = '/login'} />;
   }
 
   // For employees with department or sub-department assignments, route to department dashboard
