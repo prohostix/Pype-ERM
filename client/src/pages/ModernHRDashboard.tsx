@@ -50,10 +50,11 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview': return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div>
-          <PunchWidget />
-        </div>
+        <OverviewContent 
+          metrics={metrics} 
+          onNavigate={setActiveTab} 
+          punchWidget={<PunchWidget />} 
+        />
       );
       case 'users': return <HRUsersPanel />;
       case 'employees': return <EmployeesPanel />;
@@ -120,7 +121,7 @@ export function getHRNavItems() {
   ];
 }
 
-function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (tab: string) => void }) {
+function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; onNavigate: (tab: string) => void; punchWidget?: React.ReactNode }) {
   const [vacancies, setVacancies] = useState<any[]>([]);
   const [pendingLeaves, setPendingLeaves] = useState<any[]>([]);
   const [absentToday, setAbsentToday] = useState<any[]>([]);
@@ -150,41 +151,50 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
   const highPriorityVacancies = vacancies.filter(v => v.priority === 'high' || v.priority === 'urgent');
 
   return (
-    <>
-      {/* HR Core Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <HRMetricCard 
-          title="Total Headcount" 
-          value={metrics.totalEmployees ?? '—'} 
-          icon={<Users className="w-5 h-5" />}
-          subtext="Active across all wings"
-          color="primary"
-          onClick={() => onNavigate('users')}
-        />
-        <HRMetricCard 
-          title="Open Vacancies" 
-          value={metrics.totalVacancies ?? vacancies.length} 
-          icon={<Briefcase className="w-5 h-5" />}
-          subtext={highPriorityVacancies.length > 0 ? `${highPriorityVacancies.length} high priority` : 'No high priority'}
-          color="info"
-          onClick={() => onNavigate('vacancies')}
-        />
-        <HRMetricCard 
-          title="Absent Today" 
-          value={metrics.absentToday ?? absentToday.length} 
-          icon={<Clock className="w-5 h-5" />}
-          subtext={absentToday.length > 0 ? `${absentToday.length} not checked in` : 'All present'}
-          color="warning"
-          onClick={() => onNavigate('attendance')}
-        />
-        <HRMetricCard 
-          title="Present Today" 
-          value={metrics.presentToday ?? '—'} 
-          icon={<Heart className="w-5 h-5" />}
-          subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
-          color="success"
-          onClick={() => onNavigate('attendance')}
-        />
+    <div className="space-y-6">
+      {/* Core Metrics & Attendance Widget Top Section */}
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <div className="xl:col-span-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <HRMetricCard 
+              title="Total Headcount" 
+              value={metrics.totalEmployees ?? '—'} 
+              icon={<Users className="w-5 h-5" />}
+              subtext="Active across all wings"
+              color="primary"
+              onClick={() => onNavigate('users')}
+            />
+            <HRMetricCard 
+              title="Open Vacancies" 
+              value={metrics.totalVacancies ?? vacancies.length} 
+              icon={<Briefcase className="w-5 h-5" />}
+              subtext={highPriorityVacancies.length > 0 ? `${highPriorityVacancies.length} high priority` : 'No high priority'}
+              color="info"
+              onClick={() => onNavigate('vacancies')}
+            />
+            <HRMetricCard 
+              title="Absent Today" 
+              value={metrics.absentToday ?? absentToday.length} 
+              icon={<Clock className="w-5 h-5" />}
+              subtext={absentToday.length > 0 ? `${absentToday.length} not checked in` : 'All present'}
+              color="warning"
+              onClick={() => onNavigate('attendance')}
+            />
+            <HRMetricCard 
+              title="Present Today" 
+              value={metrics.presentToday ?? '—'} 
+              icon={<Heart className="w-5 h-5" />}
+              subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
+              color="success"
+              onClick={() => onNavigate('attendance')}
+            />
+          </div>
+        </div>
+        {punchWidget && (
+          <div className="xl:col-span-1">
+            {punchWidget}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -343,7 +353,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
           )}
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
 
