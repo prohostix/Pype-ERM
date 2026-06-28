@@ -244,6 +244,7 @@ function App() {
         { id: 'licenses', label: 'Licenses' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
+        { id: 'inquiries', label: 'Enquiries' },
         { id: 'audit_logs', label: 'Audit Logs' },
       ];
     }
@@ -414,6 +415,9 @@ function App() {
         case 'organizations':
           response = await api.get('/organizations');
           break;
+        case 'inquiries':
+          response = await api.get('/organizations/inquiries');
+          break;
         case 'licenses':
           response = await api.get('/licenses');
           break;
@@ -568,6 +572,14 @@ function App() {
         { key: 'maxUsers', label: 'maxUsers', type: 'number' },
         { key: 'price', label: 'price', type: 'number' },
         { key: 'createdAt', label: 'createdAt', type: 'date' },
+      ],
+      inquiries: [
+        { key: 'orgName', label: 'Organisation Name', type: 'text' },
+        { key: 'adminName', label: 'Admin Name', type: 'text' },
+        { key: 'email', label: 'Email', type: 'text' },
+        { key: 'phone', label: 'Phone', type: 'text' },
+        { key: 'status', label: 'Status', type: 'text' },
+        { key: 'createdAt', label: 'Submitted At', type: 'date' },
       ],
       students: [
         { key: 'id', label: 'id', type: 'id', required: true },

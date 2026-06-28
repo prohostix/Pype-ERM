@@ -68,3 +68,19 @@ export const assignLicense = asyncHandler(async (req: AuthRequest, res: Response
   });
   res.status(200).json({ success: true, data: updatedOrg });
 });
+
+export const getOrgInquiries = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const inquiries = await prisma.orgInquiry.findMany({
+    orderBy: { createdAt: 'desc' }
+  });
+  res.status(200).json({ success: true, count: inquiries.length, data: inquiries });
+});
+
+export const updateOrgInquiryStatus = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { status } = req.body;
+  const inquiry = await prisma.orgInquiry.update({
+    where: { id: req.params.id },
+    data: { status }
+  });
+  res.status(200).json({ success: true, data: inquiry });
+});

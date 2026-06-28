@@ -6,6 +6,8 @@ import {
   updateOrganization,
   deleteOrganization,
   assignLicense,
+  getOrgInquiries,
+  updateOrgInquiryStatus,
 } from '../controllers/organizationController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
@@ -13,6 +15,9 @@ import { auditLog } from '../middleware/auditLog.js';
 const router = express.Router();
 
 router.use(protect);
+
+router.get('/inquiries', authorize('superadmin'), getOrgInquiries);
+router.patch('/inquiries/:id', authorize('superadmin'), updateOrgInquiryStatus);
 
 router
   .route('/')

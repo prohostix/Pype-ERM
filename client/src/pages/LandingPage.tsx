@@ -1,7 +1,39 @@
+import { useState } from 'react';
 import { ArrowRight, Shield, Users, GraduationCap, DollarSign, Activity, FileText, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import api from '@/lib/api';
+import { toast } from 'sonner';
 
 export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [formData, setFormData] = useState({
+    orgName: '',
+    adminName: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await api.post('/public/org-inquiry', formData);
+      toast.success('Inquiry submitted successfully! Our team will contact you shortly.');
+      setOpenModal(false);
+      setFormData({ orgName: '', adminName: '', email: '', phone: '', message: '' });
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to submit inquiry. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white overflow-hidden">
       {/* Background patterns */}
@@ -27,9 +59,9 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           </Button>
           <Button 
             className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 shadow-lg shadow-indigo-600/35 hover:shadow-indigo-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all"
-            onClick={() => window.location.pathname = '/register'}
+            onClick={() => setOpenModal(true)}
           >
-            Register Study Centre
+            Manage your Organisation
           </Button>
         </div>
       </header>
@@ -58,9 +90,9 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           <Button 
             variant="outline" 
             className="border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800/80 text-base font-bold px-8 py-6 h-auto"
-            onClick={() => window.location.pathname = '/student-apply'}
+            onClick={() => setOpenModal(true)}
           >
-            Apply as Student
+            Manage your Organisation
           </Button>
         </div>
 
@@ -152,7 +184,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               desc: 'Indian-compliant basic salary configs, automated allowances, deduction counters, and bulk monthly payslip batches.'
             },
             {
-              icon: <Shield className="w-6 h-6 text-purple-400" />,
+              icon: <Shield className="w- purple-400" />,
               title: 'Role-Based Authorization',
               desc: 'Enforce operational boundaries with custom permissions for Superadmin, Org Admin, Finance, HR, Sales, and Collections.'
             }
@@ -222,6 +254,99 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           <a href="mailto:admin@pypeerm.com" className="hover:text-indigo-400 transition-colors">Support Email</a>
         </div>
       </footer>
+
+      {/* Manage Organisation Form Modal */}
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogContent className="max-w-md bg-slate-950 border border-slate-800 text-slate-100">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Manage your Organisation</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Fill in the details below to request setup or onboarding assistance for your educational institution.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+            <div>
+              <Label htmlFor="orgName" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Organisation Name</Label>
+              <Input 
+                id="orgName"
+                placeholder="e.g. EduTech International"
+                value={formData.orgName}
+                onChange={e => setFormData(prev => ({ ...prev, orgName: e.target.value }))}
+                className="mt-1 bg-slate-900 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="adminName" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Admin Name</Label>
+              <Input 
+                id="adminName"
+                placeholder="e.g. Rajesh Kumar"
+                value={formData.adminName}
+                onChange={e => setFormData(prev => ({ ...prev, adminName: e.target.value }))}
+                className="mt-1 bg-slate-900 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="email" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Email Address</Label>
+                <Input 
+                  id="email"
+                  type="email"
+                  placeholder="rajesh@company.com"
+                  value={formData.email}
+                  onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="mt-1 bg-slate-900 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Phone Number</Label>
+                <Input 
+                  id="phone"
+                  placeholder="e.g. +91 9876543210"
+                  value={formData.phone}
+                  onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  className="mt-1 bg-slate-900 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="message" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Additional Message (Optional)</Label>
+              <Textarea 
+                id="message"
+                placeholder="Describe your university affiliations, branches, or student capacity..."
+                value={formData.message}
+                onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                className="mt-1 bg-slate-900 border-slate-800 text-slate-100 placeholder-slate-500 focus:border-indigo-500 min-h-[80px]"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <Button 
+                type="button"
+                variant="ghost" 
+                onClick={() => setOpenModal(false)}
+                className="text-slate-300 hover:text-white hover:bg-slate-800"
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit"
+                disabled={submitting}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6"
+              >
+                {submitting ? 'Submitting...' : 'Submit Request'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
