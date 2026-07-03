@@ -311,7 +311,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
         </TabsContent>
 
         <TabsContent value="attendance">
-          <AttendancePanel />
+          <AttendancePanel isMyPortal />
         </TabsContent>
 
         <TabsContent value="notice-board">

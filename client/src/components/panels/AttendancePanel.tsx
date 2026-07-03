@@ -11,10 +11,14 @@ import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
 
-export function AttendancePanel() {
+interface AttendancePanelProps {
+  isMyPortal?: boolean;
+}
+
+export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const { user } = useAuth();
-  const isHR = user?.role === 'hr_admin';
-  const canViewAll = ['hr_admin', 'org_admin', 'ceo'].includes(user?.role || '');
+  const isHR = !isMyPortal && user?.role === 'hr_admin';
+  const canViewAll = !isMyPortal && ['hr_admin', 'org_admin', 'ceo'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
