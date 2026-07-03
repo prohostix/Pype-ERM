@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
+import { toast } from 'sonner';
 
 interface AttendancePanelProps {
   isMyPortal?: boolean;
@@ -59,6 +60,39 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       console.error('Failed to fetch attendance:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      const XLSX = await import('xlsx');
+      const exportData = attendance.map(rec => {
+        const empName = rec.employeeId?.name || rec.employee?.name || rec.user?.name || 'Unknown';
+        const empEmail = rec.employeeId?.email || rec.employee?.email || rec.user?.email || '';
+        return {
+          'Employee Name': empName,
+          'Email': empEmail,
+          'Date': rec.date ? new Date(rec.date).toLocaleDateString('en-IN') : '',
+          'Status': rec.status?.replace('_', ' ').toUpperCase() || 'PRESENT',
+          'Check-In': rec.checkIn ? new Date(rec.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
+          'Check-Out': rec.checkOut ? new Date(rec.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
+          'Late Check-In': rec.isLate ? 'YES' : 'NO',
+          'Late Minutes': rec.lateMinutes || 0,
+          'Working Hours': rec.workingHours || 0,
+          'Notes': rec.notes || ''
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 26].map(w => ({ wch: w }));
+      
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
+      XLSX.writeFile(workbook, 'employee_attendance_report.xlsx');
+      toast.success('Attendance report exported successfully!');
+    } catch (error) {
+      console.error('Failed to export excel:', error);
+      toast.error('Failed to export excel');
     }
   };
 
@@ -181,6 +215,12 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                 </SelectContent>
               </Select>
             </div>
+          )}
+
+          {canViewAll && (
+            <Button variant="outline" size="sm" onClick={handleExportExcel} className="h-9 text-xs font-semibold gap-1.5 border-dashed border-primary hover:border-primary/80">
+              <Download className="w-4 h-4 text-primary" /> Download Report
+            </Button>
           )}
 
           {isHR && (
