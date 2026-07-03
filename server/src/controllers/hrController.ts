@@ -5,9 +5,42 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 
 // --- Leave Requests ---
 export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { role, id: userId, organizationId, departmentId, branchId } = req.user;
+
+  // Enforce visibility scoping
+  const where: any = { organizationId };
+
+  const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'];
+  const isHR = role === 'hr_admin';
+  const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo'].includes(role);
+
+  if (isGlobalAdmin || isHR) {
+    // Global admins and HR see all leaves
+  } else if (DEPT_MANAGER_ROLES.includes(role)) {
+    // Department managers see leaves in their department plus their own leaves
+    where.OR = [
+      { employeeId: userId },
+      { departmentId: departmentId || '' }
+    ];
+  } else if (branchId) {
+    // Branch managers see leaves of employees in their branch plus their own leaves
+    where.OR = [
+      { employeeId: userId },
+      { user: { branchId } }
+    ];
+  } else {
+    // Standard employees only see their own leaves
+    where.employeeId = userId;
+  }
+
   const leaves = await prisma.leaveRequest.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: { user: { select: { name: true, email: true } } },
+    where,
+    include: {
+      user: { select: { name: true, email: true, designation: true } },
+      department: { select: { name: true } },
+      deptApprover: { select: { name: true } },
+      hrApprover: { select: { name: true } }
+    },
     orderBy: { createdAt: 'desc' }
   });
   res.json({ success: true, count: leaves.length, data: leaves });
@@ -83,7 +116,16 @@ export const getLeaveStats = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const getMyLeaves = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const leaves = await prisma.leaveRequest.findMany({ where: { employeeId: req.user.id } });
+  const leaves = await prisma.leaveRequest.findMany({
+    where: { employeeId: req.user.id },
+    include: {
+      user: { select: { name: true, email: true, designation: true } },
+      department: { select: { name: true } },
+      deptApprover: { select: { name: true } },
+      hrApprover: { select: { name: true } }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
   res.json({ success: true, data: leaves });
 });
 

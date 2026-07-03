@@ -28,8 +28,10 @@ import api from '@/lib/api';
 
 interface LeaveRequest {
   id: string;
-  employeeId: { id: string; name: string; email: string; designation?: string } | null;
-  departmentId?: { id: string; name: string } | null;
+  employeeId: string;
+  user?: { name: string; email: string; designation?: string } | null;
+  departmentId?: string;
+  department?: { name: string } | null;
   type: string;
   startDate: string;
   endDate: string;
@@ -37,8 +39,8 @@ interface LeaveRequest {
   status: 'pending' | 'dept_approved' | 'approved' | 'rejected';
   deptAdminRemarks?: string;
   hrRemarks?: string;
-  deptApprovedBy?: { name: string } | null;
-  hrApprovedBy?: { name: string } | null;
+  deptApprover?: { name: string } | null;
+  hrApprover?: { name: string } | null;
   appliedAt: string;
   createdAt: string;
 }
@@ -162,7 +164,7 @@ export function LeavesPanel() {
   // Filter tabs
   const filtered = leaves.filter(l => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'mine') return l.employeeId?.id === userId;
+    if (activeTab === 'mine') return l.employeeId === userId;
     return l.status === activeTab;
   });
 
@@ -248,7 +250,7 @@ export function LeavesPanel() {
               {filtered.map(leave => {
                 const cfg = STATUS_CONFIG[leave.status] || STATUS_CONFIG.pending;
                 const isExpanded = expanded === leave.id;
-                const isOwner = leave.employeeId?.id === userId;
+                const isOwner = leave.employeeId === userId;
                 const canDeptAct = isDeptManager && leave.status === 'pending';
                 const canHRAct = isHR && leave.status === 'dept_approved';
 
@@ -263,16 +265,16 @@ export function LeavesPanel() {
                               {cfg.label}
                             </Badge>
                             <Badge variant="outline" className="text-[10px] capitalize">{leave.type}</Badge>
-                            {leave.departmentId && (
-                              <Badge variant="outline" className="text-[10px]">{leave.departmentId.name}</Badge>
+                            {leave.department && (
+                              <Badge variant="outline" className="text-[10px]">{leave.department.name}</Badge>
                             )}
                           </div>
 
                           {/* Employee name */}
                           <p className="font-semibold text-sm">
-                            {leave.employeeId?.name || 'Employee'}
-                            {leave.employeeId?.designation && (
-                              <span className="text-muted-foreground font-normal ml-1 text-xs">· {leave.employeeId.designation}</span>
+                            {leave.user?.name || 'Employee'}
+                            {leave.user?.designation && (
+                              <span className="text-muted-foreground font-normal ml-1 text-xs">· {leave.user.designation}</span>
                             )}
                           </p>
 
@@ -299,8 +301,8 @@ export function LeavesPanel() {
                                 <div>
                                   <span className="font-semibold text-foreground/70">Dept Manager:</span>
                                   <span className="ml-1 text-muted-foreground">{leave.deptAdminRemarks}</span>
-                                  {leave.deptApprovedBy && (
-                                    <span className="ml-1 text-muted-foreground/60">— {(leave.deptApprovedBy as any).name}</span>
+                                  {leave.deptApprover && (
+                                    <span className="ml-1 text-muted-foreground/60">— {leave.deptApprover.name}</span>
                                   )}
                                 </div>
                               )}
@@ -308,8 +310,8 @@ export function LeavesPanel() {
                                 <div>
                                   <span className="font-semibold text-foreground/70">HR:</span>
                                   <span className="ml-1 text-muted-foreground">{leave.hrRemarks}</span>
-                                  {leave.hrApprovedBy && (
-                                    <span className="ml-1 text-muted-foreground/60">— {(leave.hrApprovedBy as any).name}</span>
+                                  {leave.hrApprover && (
+                                    <span className="ml-1 text-muted-foreground/60">— {leave.hrApprover.name}</span>
                                   )}
                                 </div>
                               )}
@@ -430,7 +432,7 @@ export function LeavesPanel() {
           <div className="space-y-4 pt-2">
             {actionLeave && (
               <div className="p-3 rounded-lg bg-muted text-sm space-y-1">
-                <p className="font-semibold">{actionLeave.employeeId?.name}</p>
+                <p className="font-semibold">{actionLeave.user?.name || 'Employee'}</p>
                 <p className="text-muted-foreground capitalize">{actionLeave.type} leave · {new Date(actionLeave.startDate).toLocaleDateString()} → {new Date(actionLeave.endDate).toLocaleDateString()}</p>
                 <p className="text-muted-foreground text-xs">{actionLeave.reason}</p>
               </div>
