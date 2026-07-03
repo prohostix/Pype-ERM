@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
+import { AttendanceCalendar } from '@/components/attendance/AttendanceCalendar';
 
 export function AttendancePanel() {
   const { user } = useAuth();
@@ -19,6 +20,10 @@ export function AttendancePanel() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('calendar');
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
+
   const [formData, setFormData] = useState({
     employeeId: '',
     date: new Date().toISOString().split('T')[0],
@@ -33,10 +38,16 @@ export function AttendancePanel() {
     if (canViewAll) fetchEmployees();
   }, []);
 
+  useEffect(() => {
+    if (employees.length > 0 && !selectedEmployeeId) {
+      const me = employees.find(e => e.id === user?.id);
+      setSelectedEmployeeId(me ? me.id.toString() : employees[0].id.toString());
+    }
+  }, [employees]);
+
   const fetchAttendance = async () => {
     setLoading(true);
     try {
-      // HR sees all; employees see only their own
       const endpoint = canViewAll ? '/hr/attendance' : '/hr/attendance/my';
       const response = await api.get(endpoint);
       setAttendance(response.data.data || []);
@@ -56,10 +67,17 @@ export function AttendancePanel() {
     }
   };
 
+  const activeEmployeeId = selectedEmployeeId || user?.id?.toString() || '';
+  const activeEmployeeName = employees.find(e => e.id.toString() === activeEmployeeId)?.name || user?.name || 'Employee';
+
+  const activeEmployeeRecords = attendance.filter(rec => {
+    const empId = rec.employeeId?.id || rec.employeeId || rec.user?.id || '';
+    return empId.toString() === activeEmployeeId;
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Combine date + time strings into full ISO datetime for the Date fields
       const toISO = (date: string, time: string) => {
         if (!date || !time) return undefined;
         return new Date(`${date}T${time}:00`).toISOString();
@@ -88,8 +106,8 @@ export function AttendancePanel() {
   };
 
   const handleEdit = (record: any) => {
-    const recId = record.id || record.id;
-    const empId = record.employeeId?.id || record.employeeId?.id || record.employeeId || '';
+    const recId = record.id;
+    const empId = record.employeeId?.id || record.employeeId || '';
     setEditingId(recId);
     setFormData({
       employeeId: empId?.toString() || '',
@@ -126,133 +144,167 @@ export function AttendancePanel() {
 
   const getStatusBadge = (status: string) => {
     const variants: any = {
-      present: 'bg-green-100 text-green-800',
-      absent: 'bg-red-100 text-red-800',
-      late: 'bg-yellow-100 text-yellow-800',
-      half_day: 'bg-blue-100 text-blue-800',
-      leave: 'bg-purple-100 text-purple-800'
+      present: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-none',
+      absent: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-none',
+      late: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-none',
+      half_day: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-none',
+      leave: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-none'
     };
     return <Badge className={variants[status] || ''}>{status?.replace('_', ' ')}</Badge>;
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold">Attendance {canViewAll ? 'Management' : 'Records'}</h2>
           <p className="text-muted-foreground">{canViewAll ? 'Track and manage employee attendance' : 'Your attendance history'}</p>
         </div>
-        {isHR && (
-        <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>          <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Mark Attendance</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>Employee</Label>
-                <Select value={formData.employeeId} onValueChange={(value) => setFormData({...formData, employeeId: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select employee" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {employees.filter(emp => emp && (emp.id || emp.id)).map((emp) => (
-                      <SelectItem key={emp.id || emp.id} value={(emp.id || emp.id).toString()}>
-                        {emp.name || `${emp.firstName || ''} ${emp.lastName || ''}`.trim()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Date</Label>
-                <Input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
-              </div>
-              <div>
-                <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="present">Present</SelectItem>
-                    <SelectItem value="absent">Absent</SelectItem>
-                    <SelectItem value="late">Late</SelectItem>
-                    <SelectItem value="half_day">Half Day</SelectItem>
-                    <SelectItem value="leave">Leave</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Check In</Label>
-                  <Input type="time" value={formData.checkIn} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
-                </div>
-                <div>
-                  <Label>Check Out</Label>
-                  <Input type="time" value={formData.checkOut} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
-                </div>
-              </div>
-              <div>
-                <Label>Notes</Label>
-                <Input value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Optional notes" />
-              </div>
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-        )}
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Attendance Records</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="text-center py-8">Loading...</div>
-          ) : attendance.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No attendance records found</div>
-          ) : (
-            <div className="space-y-2">
-              {attendance.filter(rec => rec && (rec.id || rec.id)).map((record) => {
-                const recId = record.id || record.id;
-                return (
-                <div key={recId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                  <div className="flex-1">
-                    <div className="font-medium">
-                      {record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown'}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {new Date(record.date).toLocaleDateString()} • {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'} - {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
-                    </div>
-                    {record.notes && <div className="text-xs text-muted-foreground mt-1">{record.notes}</div>}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {getStatusBadge(record.status)}
-                    {isHR && (
-                      <>
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(record)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(recId)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-                );
-              })}
+        <div className="flex flex-wrap items-center gap-2">
+          {canViewAll && viewMode === 'calendar' && (
+            <div className="flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-1.5 shadow-sm">
+              <Users className="w-4 h-4 text-muted-foreground" />
+              <Select value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
+                <SelectTrigger className="h-7 border-none bg-transparent shadow-none focus:ring-0 w-[180px] text-xs font-bold">
+                  <SelectValue placeholder="Select Employee" />
+                </SelectTrigger>
+                <SelectContent>
+                  {employees.map(emp => (
+                    <SelectItem key={emp.id} value={emp.id.toString()} className="text-xs">
+                      {emp.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
-        </CardContent>
-      </Card>
+
+          {isHR && (
+            <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+              <DialogTrigger asChild>
+                <Button><Plus className="w-4 h-4 mr-2" />Mark Attendance</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <Label>Employee</Label>
+                    <Select value={formData.employeeId} onValueChange={(value) => setFormData({...formData, employeeId: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select employee" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees.filter(emp => emp && emp.id).map((emp) => (
+                          <SelectItem key={emp.id} value={emp.id.toString()}>
+                            {emp.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Date</Label>
+                    <Input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
+                  </div>
+                  <div>
+                    <Label>Status</Label>
+                    <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="present">Present</SelectItem>
+                        <SelectItem value="absent">Absent</SelectItem>
+                        <SelectItem value="late">Late</SelectItem>
+                        <SelectItem value="half_day">Half Day</SelectItem>
+                        <SelectItem value="leave">Leave</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Check In</Label>
+                      <Input type="time" value={formData.checkIn} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
+                    </div>
+                    <div>
+                      <Label>Check Out</Label>
+                      <Input type="time" value={formData.checkOut} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Notes</Label>
+                    <Input value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Optional notes" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button type="submit" className="flex-1">Save</Button>
+                    <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
+      </div>
+
+      {viewMode === 'calendar' ? (
+        <AttendanceCalendar
+          employeeId={activeEmployeeId}
+          employeeName={activeEmployeeName}
+          records={activeEmployeeRecords}
+          onRefresh={fetchAttendance}
+          onToggleView={() => setViewMode('list')}
+          isHR={isHR}
+        />
+      ) : (
+        <Card className="border-none shadow-xl bg-card/65 backdrop-blur-xl">
+          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-border/40">
+            <CardTitle>Attendance Records List</CardTitle>
+            <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-1.5 h-9 text-xs font-semibold">
+              <Calendar className="w-3.5 h-3.5" /> Calendar View
+            </Button>
+          </CardHeader>
+          <CardContent className="pt-6">
+            {loading ? (
+              <div className="text-center py-8">Loading...</div>
+            ) : attendance.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">No attendance records found</div>
+            ) : (
+              <div className="space-y-3">
+                {attendance.filter(rec => rec && rec.id).map((record) => {
+                  const recId = record.id;
+                  const empName = record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown';
+                  return (
+                    <div key={recId} className="flex items-center justify-between p-4 border border-border/60 rounded-xl hover:bg-muted/30 transition-colors">
+                      <div className="flex-1">
+                        <div className="font-bold text-sm text-foreground">{empName}</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {new Date(record.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} • {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'} - {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
+                        </div>
+                        {record.notes && <div className="text-xs text-slate-500 mt-1 italic">"{record.notes}"</div>}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {getStatusBadge(record.status)}
+                        {isHR && (
+                          <div className="flex items-center gap-1">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => handleEdit(record)}>
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(recId)}>
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
