@@ -670,7 +670,7 @@ export function OrgHierarchyPanel() {
 
       {/* ── Create / Edit Designation Dialog ── */}
       <Dialog open={designDialog} onOpenChange={setDesignDialog}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingNode ? 'Edit Position' : 'Add Position'}</DialogTitle>
           </DialogHeader>
