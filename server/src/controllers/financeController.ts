@@ -314,8 +314,18 @@ export const getIncomeExpenditureReport = asyncHandler(async (req: AuthRequest, 
   res.json({ success: true, data: { totals: { income: 0, expenditure: 0, netProfit: 0 } } });
 });
 
-// Sales Users
 export const getFinanceSalesUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, role: 'sales_admin' } });
+  const users = await prisma.user.findMany({
+    where: {
+      organizationId: req.user.organizationId,
+      OR: [
+        { role: { in: ['sales_admin', 'sales'] } },
+        { department: { type: 'sales' } }
+      ]
+    },
+    include: {
+      department: true
+    }
+  });
   res.json({ success: true, data: users });
 });
