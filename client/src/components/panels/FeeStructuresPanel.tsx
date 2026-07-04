@@ -38,14 +38,19 @@ export function FeeStructuresPanel() {
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
 
   useEffect(() => {
-    if (formData.programId && formData.billingCycle === 'per_year') {
+    if (formData.programId && (formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester')) {
       const prog = programs.find(p => p.id === formData.programId);
-      const duration = prog?.duration || 1;
+      const durationMonths = prog?.duration || 12;
+      const periodsCount = formData.billingCycle === 'per_year'
+        ? Math.ceil(durationMonths / 12)
+        : Math.ceil(durationMonths / 6);
+
       setYearlyFees(prev => {
         const next = [...prev];
-        while (next.length < duration) {
+        while (next.length < periodsCount) {
           next.push({
             year: next.length + 1,
+            periodName: formData.billingCycle === 'per_year' ? `Year ${next.length + 1}` : `Semester ${next.length + 1}`,
             registrationFee: '0',
             tuitionFee: '0',
             universityFee: '0',
@@ -53,7 +58,12 @@ export function FeeStructuresPanel() {
             commissionRate: '0'
           });
         }
-        return next.slice(0, duration);
+        const synced = next.slice(0, periodsCount).map((item, idx) => ({
+          ...item,
+          year: idx + 1,
+          periodName: formData.billingCycle === 'per_year' ? `Year ${idx + 1}` : `Semester ${idx + 1}`
+        }));
+        return synced;
       });
     } else {
       setYearlyFees([]);
@@ -319,13 +329,15 @@ export function FeeStructuresPanel() {
                 </div>
               </div>
 
-              {formData.billingCycle === 'per_year' && yearlyFees.length > 0 ? (
+              {(formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester') && yearlyFees.length > 0 ? (
                 <div className="space-y-4 border-t pt-4">
-                  <h3 className="font-semibold text-sm">Yearly Fee Breakdown ({yearlyFees.length} Years)</h3>
+                  <h3 className="font-semibold text-sm">
+                    {formData.billingCycle === 'per_year' ? 'Yearly' : 'Semester'} Fee Breakdown ({yearlyFees.length} {formData.billingCycle === 'per_year' ? 'Years' : 'Semesters'})
+                  </h3>
                   {yearlyFees.map((yf, idx) => (
                     <Card key={yf.year} className="bg-muted/20 border">
                       <CardContent className="p-4 space-y-3">
-                        <h4 className="font-medium text-xs text-primary">Year {yf.year}</h4>
+                        <h4 className="font-medium text-xs text-primary">{yf.periodName}</h4>
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <Label className="text-[10px] uppercase">Registration Fee</Label>
