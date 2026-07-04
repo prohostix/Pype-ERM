@@ -29,25 +29,49 @@ export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, data: lead });
 });
 
+import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
+
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const targets = await prisma.target.findMany({ where: { organizationId: req.user.organizationId }, include: { employee: true } });
+  const { role, id: userId, organizationId, departmentId } = req.user;
+  const canManage = ['superadmin', 'org_admin', 'ceo', 'sales_admin', 'finance_admin'].includes(role);
+  
+  const whereClause: any = { organizationId };
+  if (!canManage) {
+    whereClause.OR = [
+      { employeeId: userId },
+      { departmentId: departmentId || '' }
+    ];
+  }
+
+  const targets = await prisma.target.findMany({
+    where: whereClause,
+    include: { employee: true, department: true }
+  });
   res.json({ success: true, count: targets.length, data: targets });
 });
 export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.findUnique({ where: { id: req.params.id } });
+  const target = await prisma.target.findUnique({
+    where: { id: req.params.id },
+    include: { employee: true, department: true }
+  });
   res.json({ success: true, data: target });
 });
 export const createTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
   const target = await prisma.target.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  await handleTargetRollup(target.id, req.user.organizationId);
+  await syncParentTargets(req.user.organizationId);
   res.status(201).json({ success: true, data: target });
 });
 export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
   const target = await prisma.target.update({ where: { id: req.params.id }, data: req.body });
+  await handleTargetRollup(target.id, req.user.organizationId);
+  await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: target });
 });
 export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
   await prisma.target.delete({ where: { id: req.params.id } });
+  await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: {} });
 });
 

@@ -206,7 +206,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="revenue">Revenue</SelectItem>
-                      <SelectItem value="students">Students</SelectItem>
+                      <SelectItem value="students">Per Admission</SelectItem>
                       <SelectItem value="centers">Centers</SelectItem>
                     </SelectContent>
                   </Select>

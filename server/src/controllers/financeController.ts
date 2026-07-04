@@ -125,6 +125,8 @@ export const approveExpense = asyncHandler(async (req: AuthRequest, res: Respons
   res.json({ success: true, data: expense });
 });
 
+import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
+
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
   const targets = await prisma.target.findMany({
@@ -146,6 +148,8 @@ export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) =>
 });
 export const createTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
   const target = await prisma.target.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  await handleTargetRollup(target.id, req.user.organizationId);
+  await syncParentTargets(req.user.organizationId);
   res.status(201).json({ success: true, data: target });
 });
 export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -155,6 +159,8 @@ export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response)
     return;
   }
   const target = await prisma.target.update({ where: { id: req.params.id }, data: req.body });
+  await handleTargetRollup(target.id, req.user.organizationId);
+  await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: target });
 });
 export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -164,6 +170,7 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
     return;
   }
   await prisma.target.delete({ where: { id: req.params.id } });
+  await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: {} });
 });
 

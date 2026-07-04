@@ -29,7 +29,7 @@ interface SalesTarget {
 
 const TYPE_LABELS: Record<string, string> = {
   revenue: 'Revenue',
-  students: 'Students',
+  students: 'Per Admission',
   centers: 'Centers',
 };
 
@@ -226,7 +226,7 @@ export function FinanceSalesTargetsPanel() {
                   onChange={e => setForm(f => ({ ...f, type: e.target.value as any }))}
                 >
                   <option value="revenue">Revenue</option>
-                  <option value="students">Students</option>
+                  <option value="students">Per Admission</option>
                   <option value="centers">Centers</option>
                 </select>
               </div>
