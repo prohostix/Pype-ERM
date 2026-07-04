@@ -32,7 +32,8 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
     target: '',
     achieved: '0',
     period: 'monthly',
-    type: 'revenue'
+    type: 'revenue',
+    incentive: ''
   });
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
       period: formData.period,
       type: formData.type
     };
+    if (formData.incentive) payload.incentive = Number(formData.incentive);
     if (formData.employeeId && formData.employeeId !== 'none') payload.employeeId = formData.employeeId;
     if (formData.departmentId && formData.departmentId !== 'none') payload.departmentId = formData.departmentId;
 
@@ -106,7 +108,8 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
       target: t.target?.toString() || '',
       achieved: t.achieved?.toString() || '0',
       period: t.period || 'monthly',
-      type: t.type || 'revenue'
+      type: t.type || 'revenue',
+      incentive: t.incentive?.toString() || ''
     });
     setDialogOpen(true);
   };
@@ -123,7 +126,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ employeeId: '', departmentId: '', target: '', achieved: '0', period: 'monthly', type: 'revenue' });
+    setFormData({ employeeId: '', departmentId: '', target: '', achieved: '0', period: 'monthly', type: 'revenue', incentive: '' });
   };
 
   return (
@@ -209,6 +212,10 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                   </Select>
                 </div>
               </div>
+              <div>
+                <Label>Incentive Amount (₹, optional)</Label>
+                <Input type="number" min="0" value={formData.incentive} onChange={(e) => setFormData({ ...formData, incentive: e.target.value })} placeholder="e.g. 5000" />
+              </div>
               <div className="flex gap-2">
                 <Button type="submit" className="flex-1">Save</Button>
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
@@ -253,12 +260,34 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                         )}
                       </div>
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span>{t.achieved || 0} / {t.target}</span>
-                        <span className="font-bold">{pct.toFixed(1)}%</span>
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-sm items-center">
+                        <span className="font-semibold text-slate-300">
+                          {t.type === 'revenue' ? `₹${(t.achieved || 0).toLocaleString('en-IN')}` : t.achieved || 0} / {t.type === 'revenue' ? `₹${(t.target).toLocaleString('en-IN')}` : t.target}
+                        </span>
+                        <div className="text-right flex items-center gap-2">
+                          {t.incentive > 0 && (
+                            <span className="text-xs bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-bold">
+                              Incentive: ₹{t.incentive.toLocaleString('en-IN')}
+                            </span>
+                          )}
+                          <span className="font-bold text-foreground">{pct.toFixed(1)}%</span>
+                        </div>
                       </div>
                       <Progress value={pct} />
+                      <div className="text-xs text-muted-foreground pt-0.5">
+                        {t.achieved >= t.target ? (
+                          <span className="text-emerald-500 font-bold">✓ Target Completed!</span>
+                        ) : (
+                          <span>
+                            {t.type === 'revenue' ? (
+                              `₹${Math.max(0, t.target - t.achieved).toLocaleString('en-IN')} left to complete`
+                            ) : (
+                              `${Math.max(0, t.target - t.achieved)} ${t.type} left to complete`
+                            )}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );

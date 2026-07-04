@@ -509,14 +509,35 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
                       myTargets.length === 0 ? <p className="text-sm text-muted-foreground text-center py-2">No targets assigned</p> :
                       myTargets.slice(0, 3).map((t: any) => {
                         const pct = t.target > 0 ? Math.min(100, Math.round((t.achieved / t.target) * 100)) : 0;
+                        const remaining = Math.max(0, t.target - t.achieved);
                         return (
-                          <div key={t.id} className="space-y-1">
-                            <div className="flex justify-between text-xs">
-                              <span className="font-medium">{t.type} · {t.period}</span>
+                          <div key={t.id} className="space-y-1.5">
+                            <div className="flex justify-between items-center text-xs">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-medium capitalize">{t.type} · {t.period}</span>
+                                {t.incentive > 0 && (
+                                  <span className="text-[9px] bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded-full font-bold">
+                                    Incentive: ₹{t.incentive.toLocaleString('en-IN')}
+                                  </span>
+                                )}
+                              </div>
                               <span className="font-bold text-primary">{pct}%</span>
                             </div>
                             <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                               <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }} />
+                            </div>
+                            <div className="text-[10px] text-muted-foreground">
+                              {t.achieved >= t.target ? (
+                                <span className="text-emerald-500 font-bold">✓ Target Completed!</span>
+                              ) : (
+                                <span>
+                                  {t.type === 'revenue' ? (
+                                    `₹${remaining.toLocaleString('en-IN')} left to achieve`
+                                  ) : (
+                                    `${remaining} ${t.type} left`
+                                  )}
+                                </span>
+                              )}
                             </div>
                           </div>
                         );

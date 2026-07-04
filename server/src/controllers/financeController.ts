@@ -127,11 +127,17 @@ export const approveExpense = asyncHandler(async (req: AuthRequest, res: Respons
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const targets = await prisma.target.findMany({ where: { organizationId: req.user.organizationId } });
+  const targets = await prisma.target.findMany({
+    where: { organizationId: req.user.organizationId },
+    include: { employee: true }
+  });
   res.json({ success: true, count: targets.length, data: targets });
 });
 export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.findUnique({ where: { id: req.params.id } });
+  const target = await prisma.target.findUnique({
+    where: { id: req.params.id },
+    include: { employee: true }
+  });
   if (!target) {
     res.status(404).json({ success: false, message: 'Target not found' });
     return;

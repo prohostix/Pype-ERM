@@ -66,8 +66,11 @@ export function FinanceSalesTargetsPanel() {
       setUsers(usersRes.data.data || []);
       // Filter targets that belong to sales users
       const salesUserIds = new Set((usersRes.data.data || []).map((u: SalesUser) => u.id));
-      const allTargets: SalesTarget[] = targetsRes.data.data || [];
-      setTargets(allTargets.filter(t => t.employeeId && salesUserIds.has(t.employeeId.id)));
+      const allTargets: SalesTarget[] = (targetsRes.data.data || []).map((t: any) => ({
+        ...t,
+        employeeId: t.employee || t.employeeId
+      }));
+      setTargets(allTargets.filter(t => t.employeeId && (typeof t.employeeId === 'object' ? salesUserIds.has(t.employeeId.id) : salesUserIds.has(t.employeeId))));
     } catch (e: any) {
       toast.error('Failed to load data');
     } finally {
@@ -314,7 +317,7 @@ export function FinanceSalesTargetsPanel() {
                         </div>
                         <span className="text-xs font-bold shrink-0 w-10 text-right">{pct}%</span>
                         <span className="text-xs text-muted-foreground shrink-0">
-                          {t.achieved.toLocaleString()} / {t.target.toLocaleString()}
+                          {t.achieved.toLocaleString()} / {t.target.toLocaleString()} ({t.achieved >= t.target ? 'Completed' : `${(t.target - t.achieved).toLocaleString()} left`})
                         </span>
                       </div>
                     </div>
