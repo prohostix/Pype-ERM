@@ -68,6 +68,7 @@ model Organization {
   targets              Target[]
   tasks                Task[]
   universities         University[]
+  commissions          UniversityCommission[]
   authFees             UniversityAuthFee[]
   users                User[]
   vacancies            Vacancy[]
@@ -328,6 +329,7 @@ model University {
   allowedBranches   Branch[]            @relation("UniversityToBranch")
   studyCenters      StudyCenter[]       @relation("UniversityToStudyCenter")
   feeStructures     FeeStructure[]
+  commissions       UniversityCommission[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -461,6 +463,7 @@ model Student {
   paymentSchedules PaymentSchedule[]
   paymentLinks   PaymentLink[]
   credentials    Json?
+  commissions    UniversityCommission[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -1318,6 +1321,9 @@ model FeeStructure {
   registrationFee Float             @default(0)
   tuitionFee      Float             @default(0)
   examFee         Float             @default(0)
+  universityFee   Float             @default(0)
+  commissionRate  Float             @default(0)
+  yearlyFees      Json              @default("[]")
   otherCharges    Json              @default("{}")
   gstPercentage   Float             @default(18)
   billingCycle    String            @default("per_year")
@@ -1335,6 +1341,22 @@ model FeeStructure {
 
   @@index([organizationId])
   @@index([universityId])
+}
+
+model UniversityCommission {
+  id              String       @id @default(uuid())
+  organizationId  String
+  studentId       String
+  universityId    String
+  amountReceived  Float
+  dateReceived    DateTime     @default(now())
+  status          String       @default("pending") // "received" | "pending"
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student         Student      @relation(fields: [studentId], references: [id])
+  university      University   @relation(fields: [universityId], references: [id])
 }
 
 model EnrollmentPayment {
