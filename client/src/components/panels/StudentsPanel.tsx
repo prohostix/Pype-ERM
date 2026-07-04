@@ -404,7 +404,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     // Build payload — all data comes from the Excel/CSV file
     const studentPayload = parsedStudents.map(s => {
       // Match program by code first, then by name combined with university name if provided, then by name alone.
-      const rowProgramName = (s.programs || s.program || '').toString().trim().toLowerCase();
+      const rowProgramName = (s.programme || s.programs || s.program || '').toString().trim().toLowerCase();
       const rowUnivName = (s.university || '').toString().trim().toLowerCase();
       
       let matchedProgram = null;
