@@ -417,13 +417,15 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
     : user?.designation || 'Sales';
 
   const myStudents = students.filter((s: any) => {
+    const enrollId = typeof s.enrolledBy === 'object' ? s.enrolledBy?.id : s.enrolledBy;
     const refId = typeof s.referredBy === 'object' ? s.referredBy?.id : s.referredBy;
-    return refId?.toString() === (user?.id || user?.id)?.toString();
+    const activeUserId = user?.id?.toString();
+    return enrollId?.toString() === activeUserId || refId?.toString() === activeUserId;
   });
 
   const myTargets = targets.filter((t: any) => {
     const empId = typeof t.employeeId === 'object' ? t.employeeId?.id : t.employeeId;
-    return empId?.toString() === (user?.id || user?.id)?.toString();
+    return empId?.toString() === user?.id?.toString();
   });
 
   return (
