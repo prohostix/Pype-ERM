@@ -1698,7 +1698,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <SelectValue placeholder="Choose branch to associate students with..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {branches.map((b) => (
+                    {branches.filter(b => b && b.id).map((b) => (
                       <SelectItem key={b.id} value={b.id}>
                         {b.name} ({b.code})
                       </SelectItem>

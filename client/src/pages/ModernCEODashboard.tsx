@@ -95,11 +95,14 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
     }
   };
 
-  const deptPerformanceData = (analytics.departmentEfficiency || []).slice(0, 6).map((d: any) => ({
-    name: d.name,
-    score: d.efficiency,
-    color: DEPT_COLORS[d.type] || 'hsl(var(--muted-foreground))',
-  }));
+  const deptPerformanceData = (analytics.departmentEfficiency || [])
+    .filter(Boolean)
+    .slice(0, 6)
+    .map((d: any) => ({
+      name: d?.name || 'N/A',
+      score: d?.efficiency || 0,
+      color: DEPT_COLORS[d?.type] || 'hsl(var(--muted-foreground))',
+    }));
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
