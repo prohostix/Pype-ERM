@@ -206,7 +206,7 @@ export function FeeStructuresPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Add Fee Structure</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Fee Structure' : 'Add New Fee Structure'}</DialogTitle>
             </DialogHeader>
