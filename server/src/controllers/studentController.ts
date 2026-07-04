@@ -369,6 +369,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           address: s.address || '',
           enrollmentNo: generatedUid,
           programId: program.id,
+          universityId: program.universityId,
           centerId: resolvedCenterId || undefined,
           sessionId: resolvedSessionId || undefined,
           status: s.status || 'active',

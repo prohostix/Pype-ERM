@@ -443,7 +443,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         email: s.email || '',
         phone: (s.phone || '').toString(),
         address: s.address || '',
-        enrollmentNo: s.enrollmentno || s.enrollmentNo || s.enrollment_no || '',
+        enrollmentNo: s.enrollmentno || s.enrollmentNo || s.enrollment_no || s['enrollment no'] || s.enrollment || '',
         programId: resolvedProgramId,
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
         ...(dob ? { dob: dob.toString() } : {}),
