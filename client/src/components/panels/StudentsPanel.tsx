@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -76,6 +76,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   });
 
   const [activeFilter, setActiveFilter] = useState<'all' | 'current' | 'previous'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [batchQuery, setBatchQuery] = useState('');
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -662,8 +664,33 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const filteredStudents = students.filter(s => {
     if (!s) return false;
-    if (activeFilter === 'current') return !s.isPrevious;
-    if (activeFilter === 'previous') return s.isPrevious;
+    
+    // Status filter
+    if (activeFilter === 'current' && s.isPrevious) return false;
+    if (activeFilter === 'previous' && !s.isPrevious) return false;
+
+    // Search query filter
+    if (searchQuery.trim() !== '') {
+      const q = searchQuery.toLowerCase();
+      const nameMatch = s.name?.toLowerCase().includes(q);
+      const emailMatch = s.email?.toLowerCase().includes(q);
+      const enrollMatch = s.enrollmentNo?.toLowerCase().includes(q);
+      const centerName = typeof s.centerId === 'object' ? s.centerId?.name?.toLowerCase() : '';
+      const centerMatch = centerName?.includes(q);
+      if (!nameMatch && !emailMatch && !enrollMatch && !centerMatch) return false;
+    }
+
+    // Batch query filter
+    if (batchQuery.trim() !== '') {
+      const b = batchQuery.toLowerCase();
+      // Match against session relation if populated
+      const sessionName = typeof s.sessionId === 'object' ? s.sessionId?.name?.toLowerCase() : '';
+      const sessionMatch = sessionName?.includes(b);
+      // Fallback check on string fields if present
+      const directSession = s.session ? s.session.toLowerCase().includes(b) : false;
+      if (!sessionMatch && !directSession) return false;
+    }
+
     return true;
   });
 
@@ -1623,8 +1650,37 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       </Tabs>
 
       <Card>
-        <CardHeader><CardTitle>Student Directory</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Student Directory</CardTitle>
+        </CardHeader>
         <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, or Center)</Label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Type name, email, enrollment number..." 
+                  className="pl-8 text-sm"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground block mb-1">Search by Batch / Admission Session Name</Label>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="e.g. 2024-25, 2025-A..." 
+                  className="pl-8 text-sm"
+                  value={batchQuery}
+                  onChange={(e) => setBatchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
           {loading ? (
             <div className="text-center py-8">Loading students database...</div>
           ) : filteredStudents.length === 0 ? (

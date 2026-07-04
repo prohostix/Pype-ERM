@@ -8,18 +8,18 @@ datasource db {
 }
 
 model Organization {
-  id                  String               @id @default(uuid())
+  id                  String                 @id @default(uuid())
   name                String
-  email               String               @unique
+  email               String                 @unique
   phone               String
   address             String
   logo                String?
-  status              OrganizationStatus   @default(active)
+  status              OrganizationStatus     @default(active)
   licenseId           String?
   licenseExpiry       DateTime?
   metadata            Json?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
   sessions            AdmissionSession[]
   announcements       Announcement[]
   attendances         Attendance[]
@@ -48,7 +48,7 @@ model Organization {
   leaveAllocations    LeaveAllocation[]
   leaveRequests       LeaveRequest[]
   notifications       Notification[]
-  license             License?             @relation(fields: [licenseId], references: [id])
+  license             License?               @relation(fields: [licenseId], references: [id])
   payments            PaymentEntry[]
   payrolls            Payroll[]
   payrollBatches      PayrollBatch[]
@@ -68,6 +68,7 @@ model Organization {
   targets             Target[]
   tasks               Task[]
   universities        University[]
+  commissions         UniversityCommission[]
   authFees            UniversityAuthFee[]
   users               User[]
   vacancies           Vacancy[]
@@ -207,6 +208,7 @@ model User {
   sessionRequests               SessionRequest[]
   studentProfile                Student?
   referredStudents              Student[]            @relation("StudentReferredBy")
+  enrolledStudents              Student[]            @relation("StudentEnrolledBy")
   financeApprovedCenters        StudyCenter[]        @relation("FinanceApprovedBy")
   referredStudyCenters          StudyCenter[]        @relation("ReferredBy")
   verifiedStudyCenters          StudyCenter[]        @relation("VerifiedBy")
@@ -309,7 +311,7 @@ model Attendance {
 }
 
 model University {
-  id                String              @id @default(uuid())
+  id                String                 @id @default(uuid())
   organizationId    String
   subDepartmentId   String?
   name              String
@@ -317,16 +319,17 @@ model University {
   address           String?
   contact           String?
   country           String?
-  status            String              @default("active")
+  status            String                 @default("active")
   admissionSessions AdmissionSession[]
   programs          Program[]
-  organization      Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization      Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   authFees          UniversityAuthFee[]
-  admins            User[]              @relation("UniversityAdmin")
-  assignedSubDepts  SubDepartment[]     @relation("SubDeptToUniversity")
-  allowedBranches   Branch[]            @relation("UniversityToBranch")
-  studyCenters      StudyCenter[]       @relation("UniversityToStudyCenter")
+  admins            User[]                 @relation("UniversityAdmin")
+  assignedSubDepts  SubDepartment[]        @relation("SubDeptToUniversity")
+  allowedBranches   Branch[]               @relation("UniversityToBranch")
+  studyCenters      StudyCenter[]          @relation("UniversityToStudyCenter")
   feeStructures     FeeStructure[]
+  commissions       UniversityCommission[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -413,15 +416,15 @@ model StudyCenter {
 }
 
 model Student {
-  id               String            @id @default(uuid())
+  id               String                 @id @default(uuid())
   centerId         String?
   branchId         String?
   organizationId   String
-  enrollmentNo     String            @unique
+  enrollmentNo     String                 @unique
   admissionNo      String?
   admissionDate    DateTime?
   name             String
-  email            String            @unique
+  email            String                 @unique
   phone            String
   address          String
   fatherName       String?
@@ -437,32 +440,36 @@ model Student {
   programId        String
   universityId     String?
   sessionId        String?
-  status           String            @default("pending")
-  joinDate         DateTime          @default(now())
+  status           String                 @default("pending")
+  joinDate         DateTime               @default(now())
   enrolledAt       DateTime?
   reregStatus      Json?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
   referredBy       String?
-  documents        Json?             @default("[]")
+  enrolledBy       String? // ID of the sales user who enrolled this student
+  documents        Json?                  @default("[]")
   enrollments      Enrollment[]
   internalMarks    InternalMark[]
   invoices         Invoice[]
-  center           StudyCenter?      @relation(fields: [centerId], references: [id])
-  branch           Branch?           @relation(fields: [branchId], references: [id])
-  user             User              @relation(fields: [email], references: [email])
-  organization     Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program          Program           @relation(fields: [programId], references: [id])
-  referrer         User?             @relation("StudentReferredBy", fields: [referredBy], references: [id])
-  isPrevious       Boolean           @default(false)
+  center           StudyCenter?           @relation(fields: [centerId], references: [id])
+  branch           Branch?                @relation(fields: [branchId], references: [id])
+  user             User                   @relation(fields: [email], references: [email])
+  organization     Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program          Program                @relation(fields: [programId], references: [id])
+  referrer         User?                  @relation("StudentReferredBy", fields: [referredBy], references: [id])
+  enrolledByUser   User?                  @relation("StudentEnrolledBy", fields: [enrolledBy], references: [id])
+  isPrevious       Boolean                @default(false)
   paymentSchedules PaymentSchedule[]
   paymentLinks     PaymentLink[]
   credentials      Json?
+  commissions      UniversityCommission[]
 
   @@index([organizationId, status])
   @@index([centerId])
   @@index([branchId])
   @@index([referredBy])
+  @@index([enrolledBy])
 }
 
 model Invoice {
@@ -1314,6 +1321,9 @@ model FeeStructure {
   registrationFee Float             @default(0)
   tuitionFee      Float             @default(0)
   examFee         Float             @default(0)
+  universityFee   Float             @default(0)
+  commissionRate  Float             @default(0)
+  yearlyFees      Json              @default("[]")
   otherCharges    Json              @default("{}")
   gstPercentage   Float             @default(18)
   billingCycle    String            @default("per_year")
@@ -1331,6 +1341,22 @@ model FeeStructure {
 
   @@index([organizationId])
   @@index([universityId])
+}
+
+model UniversityCommission {
+  id             String       @id @default(uuid())
+  organizationId String
+  studentId      String
+  universityId   String
+  amountReceived Float
+  dateReceived   DateTime     @default(now())
+  status         String       @default("pending") // "received" | "pending"
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id])
+  university     University   @relation(fields: [universityId], references: [id])
 }
 
 model EnrollmentPayment {
@@ -1623,4 +1649,15 @@ model CollectionOverseer {
   @@unique([organizationId, userId])
   @@index([organizationId])
   @@index([userId])
+}
+
+model OrgInquiry {
+  id        String   @id @default(uuid())
+  orgName   String
+  adminName String
+  email     String
+  phone     String
+  message   String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
 }

@@ -330,6 +330,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referredBy: 'referredBy',
+  enrolledBy: 'enrolledBy',
   documents: 'documents',
   isPrevious: 'isPrevious',
   credentials: 'credentials'
@@ -961,6 +962,9 @@ exports.Prisma.FeeStructureScalarFieldEnum = {
   registrationFee: 'registrationFee',
   tuitionFee: 'tuitionFee',
   examFee: 'examFee',
+  universityFee: 'universityFee',
+  commissionRate: 'commissionRate',
+  yearlyFees: 'yearlyFees',
   otherCharges: 'otherCharges',
   gstPercentage: 'gstPercentage',
   billingCycle: 'billingCycle',
@@ -968,6 +972,19 @@ exports.Prisma.FeeStructureScalarFieldEnum = {
   effectiveFrom: 'effectiveFrom',
   additionalFees: 'additionalFees',
   createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UniversityCommissionScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  universityId: 'universityId',
+  amountReceived: 'amountReceived',
+  dateReceived: 'dateReceived',
+  status: 'status',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1052,6 +1069,17 @@ exports.Prisma.CollectionOverseerScalarFieldEnum = {
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrgInquiryScalarFieldEnum = {
+  id: 'id',
+  orgName: 'orgName',
+  adminName: 'adminName',
+  email: 'email',
+  phone: 'phone',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1308,12 +1336,14 @@ exports.Prisma.ModelName = {
   Target: 'Target',
   UniversityAuthFee: 'UniversityAuthFee',
   FeeStructure: 'FeeStructure',
+  UniversityCommission: 'UniversityCommission',
   EnrollmentPayment: 'EnrollmentPayment',
   IncentiveStructure: 'IncentiveStructure',
   ProgramMaterial: 'ProgramMaterial',
   PaymentSchedule: 'PaymentSchedule',
   PaymentLink: 'PaymentLink',
-  CollectionOverseer: 'CollectionOverseer'
+  CollectionOverseer: 'CollectionOverseer',
+  OrgInquiry: 'OrgInquiry'
 };
 
 /**
