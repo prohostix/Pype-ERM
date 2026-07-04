@@ -1620,8 +1620,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 return (
                   <div key={student.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
+                        {student.photo ? (
+                          <img 
+                            src={student.photo.startsWith('http') ? student.photo : `${api.getBaseUrl().replace('/api/v1', '')}${student.photo}`} 
+                            alt={student.name} 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        )}
                       </div>
                       <div>
                         <div className="font-semibold text-slate-850 dark:text-slate-100 flex items-center gap-2">

@@ -246,6 +246,7 @@ export interface Student {
   fees: StudentFee[];
   marks: InternalMark[];
   reregStatus?: REREGStatus;
+  photo?: string;
 }
 
 export interface REREGStatus {
