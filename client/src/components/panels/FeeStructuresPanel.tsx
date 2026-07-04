@@ -141,15 +141,9 @@ export function FeeStructuresPanel() {
       additionalFees
     };
 
-    if (formData.feeLevel === 'university') {
-      if (!selectedUniversityId) { toast.error('Please select a University'); return; }
-      payload.universityId = selectedUniversityId;
-      payload.programId = null;
-    } else {
-      if (!formData.programId) { toast.error('Please select a Program'); return; }
-      payload.programId = formData.programId;
-      payload.universityId = null;
-    }
+    if (!formData.programId) { toast.error('Please select a Program'); return; }
+    payload.programId = formData.programId;
+    payload.universityId = selectedUniversityId;
 
     try {
       if (editingId) {
@@ -264,26 +258,8 @@ export function FeeStructuresPanel() {
               <DialogTitle>{editingId ? 'Edit Fee Structure' : 'Add New Fee Structure'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Fee Level Toggle */}
               <div>
-                <Label>Fee Level</Label>
-                <div className="flex gap-2 mt-1">
-                  {(['program', 'university'] as const).map(level => (
-                    <button
-                      key={level}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, feeLevel: level, programId: '', universityId: '' })}
-                      className={`flex-1 py-2 text-sm rounded-lg border font-medium transition-colors
-                        ${formData.feeLevel === level ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border hover:bg-muted'}`}
-                    >
-                      {level === 'program' ? '📚 Program Level' : '🏫 University Level'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <Label>University {formData.feeLevel === 'university' ? <span className="text-rose-500">*</span> : ''}</Label>
+                <Label>University <span className="text-rose-500">*</span></Label>
                 <Select value={selectedUniversityId} onValueChange={(v) => { setSelectedUniversityId(v); setFormData({ ...formData, programId: '', universityId: v }); }}>
                   <SelectTrigger><SelectValue placeholder="Select university first" /></SelectTrigger>
                   <SelectContent>
@@ -296,7 +272,6 @@ export function FeeStructuresPanel() {
                 </Select>
               </div>
 
-              {formData.feeLevel === 'program' && (
               <div>
                 <Label>Program <span className="text-rose-500">*</span></Label>
                 <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v })} disabled={!selectedUniversityId}>
@@ -310,7 +285,6 @@ export function FeeStructuresPanel() {
                   </SelectContent>
                 </Select>
               </div>
-              )}
 
               <div>
                 <Label>Admission Session</Label>
