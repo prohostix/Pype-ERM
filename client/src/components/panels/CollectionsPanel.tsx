@@ -245,7 +245,7 @@ export function CollectionsPanel() {
           <div className="space-y-6">
             
             {/* KPI Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
                 <CardHeader className="pb-2">
                   <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Today Collecting Payment</span>
@@ -290,7 +290,7 @@ export function CollectionsPanel() {
 
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
                 <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Expected Payments (Outstanding)</span>
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Expected Payments</span>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-destructive">
@@ -298,6 +298,28 @@ export function CollectionsPanel() {
                   </div>
                   <p className="text-[10px] text-destructive mt-1 font-semibold">
                     Includes ${metrics?.paymentPendingStats?.overdueAmount || 0} Overdue dues
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+                <CardHeader className="pb-2">
+                  <span className="text-[10px] uppercase font-bold text-primary tracking-wider block">Collection Target</span>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-primary flex items-baseline gap-1">
+                    ${metrics?.targetStats?.achieved || 0} 
+                    <span className="text-xs font-semibold text-muted-foreground">/ ${metrics?.targetStats?.target || 50000}</span>
+                  </div>
+                  <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden mt-2">
+                    <div 
+                      className="bg-primary h-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100))}%` }} 
+                    />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground mt-1">
+                    {Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100)}% Target Achieved
                   </p>
                 </CardContent>
               </Card>
@@ -534,10 +556,11 @@ export function CollectionsPanel() {
                     <table className="w-full text-left border-collapse text-sm">
                       <thead>
                         <tr className="border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          <th className="pb-3 pr-4">Student Name</th>
-                          <th className="pb-3 px-4">Program</th>
+                          <th className="pb-3 pr-4">Student Name & Enrollment</th>
+                          <th className="pb-3 px-4">Student Contact</th>
+                          <th className="pb-3 px-4">Father Details</th>
+                          <th className="pb-3 px-4">Mother Details</th>
                           <th className="pb-3 px-4">Admission Status</th>
-                          <th className="pb-3 px-4">Enrollments Count</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border/60">
@@ -555,22 +578,40 @@ export function CollectionsPanel() {
                             ).values()).filter(Boolean);
                             
                             if (uniqueStudents.length === 0) {
-                              return <tr><td colSpan={4} className="text-center py-4 text-muted-foreground text-xs">No student database logs linked</td></tr>;
+                              return <tr><td colSpan={5} className="text-center py-4 text-muted-foreground text-xs">No student database logs linked</td></tr>;
                             }
                             
                             return uniqueStudents.map((st: any) => (
                               <tr key={st.id} className="hover:bg-background/20">
-                                <td className="py-3 pr-4 font-bold text-foreground">{st.name}</td>
-                                <td className="py-3 px-4 text-xs font-medium text-muted-foreground">{st.email}</td>
+                                <td className="py-3 pr-4">
+                                  <span className="font-bold text-foreground block">{st.name}</span>
+                                  <span className="text-[10px] text-muted-foreground font-mono">ENR: {st.enrollmentNo || 'N/A'}</span>
+                                </td>
+                                <td className="py-3 px-4">
+                                  <span className="text-xs font-medium text-foreground block">{st.phone || 'N/A'}</span>
+                                  <span className="text-[10px] text-muted-foreground block">{st.email}</span>
+                                </td>
+                                <td className="py-3 px-4">
+                                  <span className="text-xs font-semibold text-foreground block">{st.fatherName || 'N/A'}</span>
+                                  <span className="text-[10px] text-muted-foreground block">{st.fatherPhone || '-'}</span>
+                                </td>
+                                <td className="py-3 px-4">
+                                  <span className="text-xs font-semibold text-foreground block">{st.motherName || 'N/A'}</span>
+                                  <span className="text-[10px] text-muted-foreground block">{st.motherPhone || '-'}</span>
+                                </td>
                                 <td className="py-3 px-4">
                                   <Badge 
-                                    variant="outline" 
-                                    className="bg-emerald-500/10 text-emerald-500 border-none hover:bg-emerald-500/20"
+                                    variant={
+                                      st.status === 'active' || st.status === 'ACTIVE' ? 'default' : 
+                                      st.status === 'pending' || st.status === 'PENDING' ? 'outline' : 'secondary'
+                                    }
+                                    className={cn(
+                                      (st.status === 'active' || st.status === 'ACTIVE') && 'bg-emerald-500/10 text-emerald-500 border-none hover:bg-emerald-500/20'
+                                    )}
                                   >
-                                    Active
+                                    {st.status || 'Active'}
                                   </Badge>
                                 </td>
-                                <td className="py-3 px-4 font-semibold">{st.enrollmentNo || 'N/A'}</td>
                               </tr>
                             ));
                           })()

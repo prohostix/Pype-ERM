@@ -129,7 +129,13 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
           name: true,
           email: true,
           phone: true,
-          enrollmentNo: true
+          altPhone: true,
+          enrollmentNo: true,
+          fatherName: true,
+          motherName: true,
+          fatherPhone: true,
+          motherPhone: true,
+          status: true
         }
       }
     }
@@ -208,7 +214,14 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
     }
   });
 
-  // 4. Check if current user is an overseer
+  // 4. Fetch Collection Target & Achieved metrics
+  const targetRecords = await prisma.target.findMany({
+    where: { organizationId, type: 'collections' }
+  });
+  const totalTarget = targetRecords.reduce((sum, t) => sum + t.target, 0);
+  const totalAchieved = targetRecords.reduce((sum, t) => sum + t.achieved, 0);
+
+  // 5. Check if current user is an overseer
   const isOverseer = await prisma.collectionOverseer.findFirst({
     where: { userId: req.user.id, organizationId }
   });
@@ -242,6 +255,10 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
         expectedTotal: totalOutstanding,
         overdueSchedules: overdueSchedules,
         pendingSchedules: pendingSchedules
+      },
+      targetStats: {
+        target: totalTarget || 50000, // Fallback default targets if none defined
+        achieved: totalAchieved || totalCollected,
       },
       orgUsers: users,
       currentUserOversight: {
