@@ -112,10 +112,14 @@ export function FinanceEnrollmentsPanel() {
   };
 
   const getProgramName = (e: Enrollment) =>
-    typeof e.programId === 'object' ? `${e.programId.name} (${e.programId.code})` : e.programId;
+    (e.programId && typeof e.programId === 'object')
+      ? `${e.programId.name || 'Unknown'} (${e.programId.code || ''})`
+      : (e.programId as string) || 'N/A';
 
   const getCenterName = (e: Enrollment) =>
-    typeof e.studyCenterId === 'object' ? `${e.studyCenterId.name}` : e.studyCenterId;
+    (e.studyCenterId && typeof e.studyCenterId === 'object')
+      ? `${e.studyCenterId.name || 'Unknown'}`
+      : (e.studyCenterId as string) || 'N/A';
 
   return (
     <div className="space-y-6">

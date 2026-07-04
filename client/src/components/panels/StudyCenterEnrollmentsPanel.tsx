@@ -48,7 +48,9 @@ export function StudyCenterEnrollmentsPanel() {
   useEffect(() => { fetch(); }, [statusFilter]);
 
   const getProgramName = (e: Enrollment) =>
-    typeof e.programId === 'object' ? `${e.programId.name} (${e.programId.code})` : e.programId;
+    (e.programId && typeof e.programId === 'object')
+      ? `${e.programId.name || 'Unknown'} (${e.programId.code || ''})`
+      : (e.programId as string) || 'N/A';
 
   const STATUSES = ['', 'document_review', 'dept_review', 'finance_review', 'enrolled', 'rejected'];
 

@@ -160,7 +160,7 @@ export function ManagerAssignmentPanel() {
 
   const getManagerName = (managerId: any) => {
     if (!managerId) return null;
-    if (typeof managerId === 'object') return managerId.name;
+    if (typeof managerId === 'object') return (managerId as any)?.name || null;
     const user = users.find((u) => u.id === managerId);
     return user?.name || null;
   };

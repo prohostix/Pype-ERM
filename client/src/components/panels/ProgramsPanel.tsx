@@ -265,7 +265,7 @@ export function ProgramsPanel() {
                             {p.subDepartmentId && (
                               <span className="flex items-center gap-1 text-violet-600">
                                 <Tag className="h-3 w-3" />
-                                {typeof p.subDepartmentId === 'object' ? p.subDepartmentId.name : p.subDepartmentId}
+                                {typeof p.subDepartmentId === 'object' ? (p.subDepartmentId as any)?.name : p.subDepartmentId}
                               </span>
                             )}
                           </div>

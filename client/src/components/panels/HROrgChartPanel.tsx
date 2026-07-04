@@ -63,7 +63,7 @@ function HROrgNode({
       : '#6366f1';
 
   const subDeptName = node.subDepartmentId
-    ? (typeof node.subDepartmentId === 'object' ? node.subDepartmentId.name : '')
+    ? (typeof node.subDepartmentId === 'object' ? (node.subDepartmentId as any)?.name : '')
     : null;
 
   return (
