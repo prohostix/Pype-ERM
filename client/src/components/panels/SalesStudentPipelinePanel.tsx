@@ -91,9 +91,9 @@ export function SalesStudentPipelinePanel() {
 
   const filtered = enrollments.filter(e => {
     const matchesSearch = !search ||
-      e.studentName.toLowerCase().includes(search.toLowerCase()) ||
-      e.studentEmail.toLowerCase().includes(search.toLowerCase()) ||
-      e.program.name.toLowerCase().includes(search.toLowerCase());
+      e.studentName?.toLowerCase().includes(search.toLowerCase()) ||
+      e.studentEmail?.toLowerCase().includes(search.toLowerCase()) ||
+      (e.program?.name || '').toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || e.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -210,7 +210,7 @@ export function SalesStudentPipelinePanel() {
                       <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1 text-sm text-muted-foreground">
                         <span>{e.studentEmail}</span>
                         <span>{e.studentPhone}</span>
-                        <span>{e.program.name} ({e.program.code})</span>
+                        <span>{e.program?.name || 'N/A'} {e.program?.code ? `(${e.program.code})` : ''}</span>
                         <span>{new Date(e.createdAt).toLocaleDateString()}</span>
                       </div>
 
