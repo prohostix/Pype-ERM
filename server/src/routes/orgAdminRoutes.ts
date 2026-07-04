@@ -20,7 +20,7 @@ router.use(protect);
 router.get('/branches/my', getMyBranch);
 
 // Get all branches (read-only for ceo and ops_admin as well)
-router.get('/branches', authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'ops_admin', 'sales_admin', 'sales_agent', 'bde', 'finance'), getBranches);
+router.get('/branches', authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'ops_admin', 'sales_admin', 'sales_agent', 'bde', 'finance_admin'), getBranches);
 
 router.use(authorize('org_admin', 'superadmin', 'hr_admin'));
 
