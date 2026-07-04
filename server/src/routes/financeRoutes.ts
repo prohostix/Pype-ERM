@@ -35,6 +35,8 @@ import {
   createStudyCenter,
   getIncomeExpenditureReport,
   getFinanceSalesUsers,
+  getUniversityCommissions,
+  recordUniversityCommission,
 } from '../controllers/financeController.js';
 import {
   getOverdueSchedules,
@@ -176,5 +178,10 @@ router.post('/old-fees/bulk', authorize('finance_admin'), bulkCreateOldFees);
 router.get('/payment-links', getPaymentLinks);
 router.post('/payment-links', authorize('finance_admin'), generatePaymentLink);
 router.put('/payment-links/:id/status', authorize('finance_admin'), updatePaymentLinkStatus);
+
+// Commissions from Universities
+router.route('/commissions')
+  .get(getUniversityCommissions)
+  .post(authorize('finance_admin'), recordUniversityCommission);
 
 export default router;

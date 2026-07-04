@@ -20,6 +20,7 @@ import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
+import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
@@ -121,6 +122,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'profit_loss': return <ProfitLossPanel />;
       case 'salary_approvals': return <FinanceSalaryApprovalPanel />;
       case 'sales_targets': return <FinanceSalesTargetsPanel />;
+      case 'university_commissions': return <UniversityCommissionsPanel />;
       case 'payment_reminders': return <PaymentRemindersPanel />;
       case 'bill_receipt': return <BillReceiptPanel />;
       case 'invoice_schedule': return <InvoiceSchedulePanel />;
@@ -155,6 +157,7 @@ export function getFinanceNavItems() {
     { id: 'expenses', label: 'Expenses' },
     { id: 'targets', label: 'Targets' },
     { id: 'fees', label: 'Fee Structures' },
+    { id: 'university_commissions', label: 'University Commissions' },
     { id: 'payroll', label: 'Payroll' },
     { id: 'payroll-batches', label: 'Payroll Batches' },
     { id: 'students', label: 'Students' },

@@ -204,29 +204,99 @@ export const getFeeStructure = asyncHandler(async (req: AuthRequest, res: Respon
   res.json({ success: true, data: fee });
 });
 export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const data = { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id };
-  if (data.sessionId === '' || !data.sessionId) {
-    data.sessionId = null;
+  const {
+    programId,
+    universityId,
+    feeLevel,
+    sessionId,
+    registrationFee,
+    tuitionFee,
+    examFee,
+    universityFee,
+    commissionRate,
+    yearlyFees,
+    gstPercentage,
+    billingCycle,
+    currency,
+    effectiveFrom,
+    additionalFees
+  } = req.body;
+
+  const data: any = {
+    organizationId: req.user.organizationId,
+    createdBy: req.user.id,
+    feeLevel: feeLevel || 'program',
+    programId: feeLevel === 'program' ? programId : null,
+    universityId: universityId || null,
+    sessionId: sessionId === '' || !sessionId ? null : sessionId,
+    registrationFee: registrationFee ? parseFloat(registrationFee) : 0,
+    tuitionFee: tuitionFee ? parseFloat(tuitionFee) : 0,
+    examFee: examFee ? parseFloat(examFee) : 0,
+    universityFee: universityFee ? parseFloat(universityFee) : 0,
+    commissionRate: commissionRate ? parseFloat(commissionRate) : 0,
+    yearlyFees: yearlyFees || [],
+    gstPercentage: gstPercentage ? parseFloat(gstPercentage) : 18,
+    billingCycle: billingCycle || 'per_year',
+    currency: currency || 'INR',
+    additionalFees: additionalFees || []
+  };
+
+  if (effectiveFrom) {
+    data.effectiveFrom = new Date(effectiveFrom);
   }
-  if (data.effectiveFrom) {
-    data.effectiveFrom = new Date(data.effectiveFrom);
-  }
+
   const fee = await prisma.feeStructure.create({ data });
   res.status(201).json({ success: true, data: fee });
 });
+
 export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.feeStructure.findUnique({ where: { id: req.params.id } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Fee structure not found' });
     return;
   }
-  const data = { ...req.body };
-  if (data.sessionId === '' || data.sessionId === undefined) {
-    data.sessionId = null;
+
+  const {
+    programId,
+    universityId,
+    feeLevel,
+    sessionId,
+    registrationFee,
+    tuitionFee,
+    examFee,
+    universityFee,
+    commissionRate,
+    yearlyFees,
+    gstPercentage,
+    billingCycle,
+    currency,
+    effectiveFrom,
+    additionalFees
+  } = req.body;
+
+  const data: any = {
+    feeLevel: feeLevel || 'program',
+    programId: feeLevel === 'program' ? programId : null,
+    universityId: universityId || null,
+    sessionId: sessionId === '' || !sessionId ? null : sessionId,
+    registrationFee: registrationFee ? parseFloat(registrationFee) : 0,
+    tuitionFee: tuitionFee ? parseFloat(tuitionFee) : 0,
+    examFee: examFee ? parseFloat(examFee) : 0,
+    universityFee: universityFee ? parseFloat(universityFee) : 0,
+    commissionRate: commissionRate ? parseFloat(commissionRate) : 0,
+    yearlyFees: yearlyFees || [],
+    gstPercentage: gstPercentage ? parseFloat(gstPercentage) : 18,
+    billingCycle: billingCycle || 'per_year',
+    currency: currency || 'INR',
+    additionalFees: additionalFees || []
+  };
+
+  if (effectiveFrom) {
+    data.effectiveFrom = new Date(effectiveFrom);
+  } else {
+    data.effectiveFrom = null;
   }
-  if (data.effectiveFrom) {
-    data.effectiveFrom = new Date(data.effectiveFrom);
-  }
+
   const fee = await prisma.feeStructure.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: fee });
 });
@@ -328,4 +398,55 @@ export const getFinanceSalesUsers = asyncHandler(async (req: AuthRequest, res: R
     }
   });
   res.json({ success: true, data: users });
+});
+
+export const getUniversityCommissions = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const students = await prisma.student.findMany({
+    where: {
+      organizationId,
+    },
+    include: {
+      program: {
+        include: {
+          university: true,
+          feeStructures: {
+            where: {
+              organizationId
+            }
+          }
+        }
+      },
+      commissions: true
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  res.json({ success: true, data: students });
+});
+
+export const recordUniversityCommission = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const { studentId, universityId, amountReceived, notes, status } = req.body;
+
+  if (!studentId || !universityId || amountReceived === undefined) {
+    res.status(400).json({ success: false, message: 'Missing required fields' });
+    return;
+  }
+
+  const commission = await prisma.universityCommission.create({
+    data: {
+      organizationId,
+      studentId,
+      universityId,
+      amountReceived: parseFloat(amountReceived),
+      status: status || 'received',
+      notes: notes || '',
+      dateReceived: new Date()
+    }
+  });
+
+  res.status(201).json({ success: true, data: commission });
 });

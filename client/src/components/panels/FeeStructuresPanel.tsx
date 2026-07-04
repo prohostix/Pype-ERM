@@ -27,12 +27,38 @@ export function FeeStructuresPanel() {
     registrationFee: '0',
     tuitionFee: '0',
     examFee: '0',
+    universityFee: '0',
+    commissionRate: '0',
     gstPercentage: '18',
     billingCycle: 'per_year',
     currency: 'INR',
     effectiveFrom: '',
     additionalFees: ''
   });
+  const [yearlyFees, setYearlyFees] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (formData.programId && formData.billingCycle === 'per_year') {
+      const prog = programs.find(p => p.id === formData.programId);
+      const duration = prog?.duration || 1;
+      setYearlyFees(prev => {
+        const next = [...prev];
+        while (next.length < duration) {
+          next.push({
+            year: next.length + 1,
+            registrationFee: '0',
+            tuitionFee: '0',
+            universityFee: '0',
+            examFee: '0',
+            commissionRate: '0'
+          });
+        }
+        return next.slice(0, duration);
+      });
+    } else {
+      setYearlyFees([]);
+    }
+  }, [formData.programId, formData.billingCycle, programs]);
 
   useEffect(() => {
     fetchFees();
@@ -90,12 +116,24 @@ export function FeeStructuresPanel() {
         }).filter(f => f.label && !isNaN(f.amount))
       : [];
 
+    const formattedYearlyFees = yearlyFees.map(yf => ({
+      year: Number(yf.year),
+      registrationFee: Number(yf.registrationFee || 0),
+      tuitionFee: Number(yf.tuitionFee || 0),
+      universityFee: Number(yf.universityFee || 0),
+      examFee: Number(yf.examFee || 0),
+      commissionRate: Number(yf.commissionRate || 0)
+    }));
+
     const payload: any = {
       feeLevel: formData.feeLevel,
       sessionId: formData.sessionId === 'standard_all' || !formData.sessionId ? null : formData.sessionId,
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
       examFee: Number(formData.examFee),
+      universityFee: Number(formData.universityFee),
+      commissionRate: Number(formData.commissionRate),
+      yearlyFees: formattedYearlyFees,
       gstPercentage: Number(formData.gstPercentage),
       billingCycle: formData.billingCycle,
       currency: formData.currency,
@@ -142,6 +180,16 @@ export function FeeStructuresPanel() {
     const universityIdVal = f.universityId || univId || '';
     setSelectedUniversityId(universityIdVal);
 
+    const savedYearlyFees = Array.isArray(f.yearlyFees) ? f.yearlyFees : [];
+    setYearlyFees(savedYearlyFees.map((yf: any) => ({
+      year: yf.year,
+      registrationFee: yf.registrationFee?.toString() || '0',
+      tuitionFee: yf.tuitionFee?.toString() || '0',
+      universityFee: yf.universityFee?.toString() || '0',
+      examFee: yf.examFee?.toString() || '0',
+      commissionRate: yf.commissionRate?.toString() || '0'
+    })));
+
     setEditingId(f.id);
     setFormData({
       programId: progId?.toString() || '',
@@ -151,6 +199,8 @@ export function FeeStructuresPanel() {
       registrationFee: f.registrationFee?.toString() || '0',
       tuitionFee: f.tuitionFee?.toString() || '0',
       examFee: f.examFee?.toString() || '0',
+      universityFee: f.universityFee?.toString() || '0',
+      commissionRate: f.commissionRate?.toString() || '0',
       gstPercentage: f.gstPercentage?.toString() || '18',
       billingCycle: f.billingCycle || 'per_year',
       currency: f.currency || 'INR',
@@ -174,6 +224,7 @@ export function FeeStructuresPanel() {
   const resetForm = () => {
     setEditingId(null);
     setSelectedUniversityId('');
+    setYearlyFees([]);
     setFormData({
       programId: '',
       universityId: '',
@@ -182,6 +233,8 @@ export function FeeStructuresPanel() {
       registrationFee: '0',
       tuitionFee: '0',
       examFee: '0',
+      universityFee: '0',
+      commissionRate: '0',
       gstPercentage: '18',
       billingCycle: 'per_year',
       currency: 'INR',
@@ -292,26 +345,93 @@ export function FeeStructuresPanel() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Registration Fee</Label>
-                  <Input type="number" min="0" value={formData.registrationFee} onChange={(e) => setFormData({ ...formData, registrationFee: e.target.value })} required />
+              {formData.billingCycle === 'per_year' && yearlyFees.length > 0 ? (
+                <div className="space-y-4 border-t pt-4">
+                  <h3 className="font-semibold text-sm">Yearly Fee Breakdown ({yearlyFees.length} Years)</h3>
+                  {yearlyFees.map((yf, idx) => (
+                    <Card key={yf.year} className="bg-muted/20 border">
+                      <CardContent className="p-4 space-y-3">
+                        <h4 className="font-medium text-xs text-primary">Year {yf.year}</h4>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <Label className="text-[10px] uppercase">Registration Fee</Label>
+                            <Input type="number" min="0" value={yf.registrationFee} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].registrationFee = e.target.value;
+                              setYearlyFees(updated);
+                            }} required />
+                          </div>
+                          <div>
+                            <Label className="text-[10px] uppercase">Tuition / Base Fee</Label>
+                            <Input type="number" min="0" value={yf.tuitionFee} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].tuitionFee = e.target.value;
+                              setYearlyFees(updated);
+                            }} required />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                          <div>
+                            <Label className="text-[10px] uppercase">University Fee</Label>
+                            <Input type="number" min="0" value={yf.universityFee} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].universityFee = e.target.value;
+                              setYearlyFees(updated);
+                            }} required />
+                          </div>
+                          <div>
+                            <Label className="text-[10px] uppercase">Exam Fee</Label>
+                            <Input type="number" min="0" value={yf.examFee} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].examFee = e.target.value;
+                              setYearlyFees(updated);
+                            }} required />
+                          </div>
+                          <div>
+                            <Label className="text-[10px] uppercase">Commission Rate (%)</Label>
+                            <Input type="number" min="0" max="100" value={yf.commissionRate} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].commissionRate = e.target.value;
+                              setYearlyFees(updated);
+                            }} required />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                <div>
-                  <Label>Tuition / Base Fee</Label>
-                  <Input type="number" min="0" value={formData.tuitionFee} onChange={(e) => setFormData({ ...formData, tuitionFee: e.target.value })} required />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Exam Fee</Label>
-                  <Input type="number" min="0" value={formData.examFee} onChange={(e) => setFormData({ ...formData, examFee: e.target.value })} required />
-                </div>
-                <div>
-                  <Label>GST %</Label>
-                  <Input type="number" min="0" max="100" value={formData.gstPercentage} onChange={(e) => setFormData({ ...formData, gstPercentage: e.target.value })} required />
-                </div>
-              </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <Label>Registration Fee</Label>
+                      <Input type="number" min="0" value={formData.registrationFee} onChange={(e) => setFormData({ ...formData, registrationFee: e.target.value })} required />
+                    </div>
+                    <div>
+                      <Label>Tuition / Base Fee</Label>
+                      <Input type="number" min="0" value={formData.tuitionFee} onChange={(e) => setFormData({ ...formData, tuitionFee: e.target.value })} required />
+                    </div>
+                    <div>
+                      <Label>University Fee</Label>
+                      <Input type="number" min="0" value={formData.universityFee} onChange={(e) => setFormData({ ...formData, universityFee: e.target.value })} required />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <Label>Exam Fee</Label>
+                      <Input type="number" min="0" value={formData.examFee} onChange={(e) => setFormData({ ...formData, examFee: e.target.value })} required />
+                    </div>
+                    <div>
+                      <Label>GST %</Label>
+                      <Input type="number" min="0" max="100" value={formData.gstPercentage} onChange={(e) => setFormData({ ...formData, gstPercentage: e.target.value })} required />
+                    </div>
+                    <div>
+                      <Label>Commission Rate (%)</Label>
+                      <Input type="number" min="0" max="100" value={formData.commissionRate} onChange={(e) => setFormData({ ...formData, commissionRate: e.target.value })} required />
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="grid grid-cols-1 gap-4">
                 <div>
