@@ -327,6 +327,9 @@ function App() {
         { id: 'materials', label: 'Classes & Ebooks' },
         { id: 'fees', label: 'Fee Details' },
         { id: 'invoices', label: 'Invoices' },
+        { id: 'refer_admission', label: 'Refer Admission' },
+        { id: 'terms', label: 'Terms & Conditions' },
+        { id: 'help', label: 'Help & Support' },
       ];
     }
 

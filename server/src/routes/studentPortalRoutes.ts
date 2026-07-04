@@ -5,6 +5,7 @@ import {
   getStudentMaterials,
   getStudentFees,
   getStudentInvoices,
+  submitReferral
 } from '../controllers/studentPortalController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -18,5 +19,6 @@ router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);
 router.get('/fees', getStudentFees);
 router.get('/invoices', getStudentInvoices);
+router.post('/refer', submitReferral);
 
 export default router;

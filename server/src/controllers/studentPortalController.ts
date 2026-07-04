@@ -101,3 +101,27 @@ export const getStudentInvoices = asyncHandler(async (req: AuthRequest, res: Res
   });
   res.json({ success: true, data: invoices });
 });
+
+// POST /student-portal/refer
+export const submitReferral = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  const studentName = student ? student.name : req.user.name;
+
+  const { centerName, contactName, email, phone, address, notes } = req.body;
+
+  const lead = await prisma.lead.create({
+    data: {
+      organizationId: req.user.organizationId,
+      centerName: centerName || 'Direct',
+      contactName,
+      email,
+      phone: phone || '',
+      address: address || '',
+      source: 'referral',
+      referredBy: req.user.id,
+      notes: `Referred by student: ${studentName} (${req.user.email}). ${notes || ''}`
+    }
+  });
+
+  res.status(201).json({ success: true, data: lead });
+});

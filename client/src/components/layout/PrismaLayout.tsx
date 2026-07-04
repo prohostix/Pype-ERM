@@ -176,6 +176,9 @@ export function PrismaLayout({
       case 'escalations': return <FileText className={iconClass} />;
       case 'expenses':
       case 'payments': return <Wallet className={iconClass} />;
+      case 'refer_admission': return <TrendingUp className={iconClass} />;
+      case 'terms': return <ShieldCheck className={iconClass} />;
+      case 'help': return <MessageSquare className={iconClass} />;
       default: return <FileText className={iconClass} />;
     }
   }

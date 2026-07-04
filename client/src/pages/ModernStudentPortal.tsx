@@ -12,7 +12,10 @@ import {
   AlertCircle,
   CheckCircle,
   Printer,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  ShieldCheck,
+  MessageSquare
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -266,6 +269,9 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
     { id: 'fees', label: 'Fee details', icon: <CreditCard className="w-4 h-4" />, count: pendingSchedules.length },
     { id: 'invoices', label: 'Invoices', icon: <FileText className="w-4 h-4" /> },
+    { id: 'refer_admission', label: 'Refer Admission', icon: <TrendingUp className="w-4 h-4" /> },
+    { id: 'terms', label: 'Terms & Conditions', icon: <ShieldCheck className="w-4 h-4" /> },
+    { id: 'help', label: 'Help & Support', icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
   return (
@@ -695,6 +701,187 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
               )}
             </CardContent>
           </Card>
+        )}
+        
+        {/* REFER ADMISSION */}
+        {activeTab === 'refer_admission' && (
+          <div className="space-y-6">
+            <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg">Refer a Student</CardTitle>
+                <CardDescription>Recommend our programs to your friends or family and refer them for admission.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formEl = e.currentTarget;
+                    const formData = new FormData(formEl);
+                    const payload = {
+                      centerName: formData.get('centerName') as string,
+                      contactName: formData.get('contactName') as string,
+                      email: formData.get('email') as string,
+                      phone: formData.get('phone') as string,
+                      address: formData.get('address') as string,
+                      notes: formData.get('notes') as string,
+                    };
+                    
+                    if (!payload.contactName || !payload.email || !payload.phone) {
+                      toast.error('Name, Email, and Phone number are required.');
+                      return;
+                    }
+                    
+                    try {
+                      await api.post('/student-portal/refer', payload);
+                      toast.success('Referral submitted successfully! Your referral has been recorded.');
+                      formEl.reset();
+                    } catch (err: any) {
+                      toast.error(err.response?.data?.message || 'Failed to submit referral.');
+                    }
+                  }}
+                  className="space-y-4 max-w-xl"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Full Name *</label>
+                      <input 
+                        name="contactName" 
+                        type="text" 
+                        required 
+                        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="Friend's full name"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Email Address *</label>
+                      <input 
+                        name="email" 
+                        type="email" 
+                        required 
+                        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="friend@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Phone Number *</label>
+                      <input 
+                        name="phone" 
+                        type="tel" 
+                        required 
+                        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="e.g. +91 9876543210"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">Preferred Study Center (Optional)</label>
+                      <input 
+                        name="centerName" 
+                        type="text" 
+                        className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                        placeholder="e.g. TIMS EDAPPAL"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-muted-foreground">Address / Location (Optional)</label>
+                    <input 
+                      name="address" 
+                      type="text" 
+                      className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                      placeholder="City, State"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-muted-foreground">Additional Notes</label>
+                    <textarea 
+                      name="notes" 
+                      rows={3}
+                      className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                      placeholder="Any program preferences or details..."
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full md:w-auto">Submit Referral</Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* TERMS & CONDITIONS */}
+        {activeTab === 'terms' && (
+          <div className="space-y-6">
+            <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg">Terms & Conditions</CardTitle>
+                <CardDescription>Review the rules, policies, and regulations of our institution.</CardDescription>
+              </CardHeader>
+              <CardContent className="prose dark:prose-invert max-w-none text-sm text-muted-foreground space-y-4 leading-relaxed">
+                <div>
+                  <h4 className="font-semibold text-foreground mb-1">1. Academic Integrity & Conduct</h4>
+                  <p>Students are expected to adhere to high standards of academic honesty and conduct. Plagiarism, cheating, or behavior disrupting academic operations will lead to disciplinary actions.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-1">2. Fee Payment & Installments</h4>
+                  <p>Tuition fees must be settled according to the scheduled milestones. Failure to complete installment payments on or before the due date may restrict access to exams and student portal assets.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-1">3. Attendance Requirement</h4>
+                  <p>A minimum of 75% attendance is required in all classes and coursework to qualify for term examinations, unless approved otherwise by the academic board.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground mb-1">4. Refund & Cancellation Policy</h4>
+                  <p>Admission registration fees are non-refundable. Tuition fee refunds will be processed strictly in accordance with the institution's official refund policy guidelines.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* HELP & SUPPORT */}
+        {activeTab === 'help' && (
+          <div className="space-y-6">
+            <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg">Help & Support Desk</CardTitle>
+                <CardDescription>Need help with your courses, fee receipts, or exams? Contact us.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Academic Queries</h4>
+                    <p className="text-sm text-muted-foreground">For support with classes, study materials, or exams, email us at:</p>
+                    <span className="text-sm text-primary font-medium">support.academics@pypeerm.com</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Finance & Billing Help</h4>
+                    <p className="text-sm text-muted-foreground">For issues relating to payments, balance, or invoice receipts:</p>
+                    <span className="text-sm text-primary font-medium">support.billing@pypeerm.com</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">General Office Support</h4>
+                    <p className="text-sm text-muted-foreground">For general inquiries, campus details, and other operations support:</p>
+                    <span className="text-sm text-primary font-medium">info@pypeerm.com</span>
+                  </div>
+                </div>
+                <div className="bg-muted/40 p-4 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">Frequently Asked Questions</h4>
+                    <ul className="text-xs text-muted-foreground list-disc list-inside space-y-2">
+                      <li>How can I print my invoice? Go to the "Invoices" tab and click the printer icon next to the record.</li>
+                      <li>Where can I access study materials? Select the "Classes & Ebooks" tab in your sidebar.</li>
+                      <li>How to apply for a referral fee? Once your referral registers, sales agents will link the lead to your record.</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </div>
 
