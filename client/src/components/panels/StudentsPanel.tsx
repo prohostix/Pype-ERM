@@ -403,11 +403,28 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
     // Build payload — all data comes from the Excel/CSV file
     const studentPayload = parsedStudents.map(s => {
-      // Match program by name from the row
+      // Match program by code first, then by name combined with university name if provided, then by name alone.
       const rowProgramName = (s.programs || s.program || '').toString().trim().toLowerCase();
-      const matchedProgram = rowProgramName
-        ? programs.find(p => p.name.toLowerCase() === rowProgramName)
-        : null;
+      const rowUnivName = (s.university || '').toString().trim().toLowerCase();
+      
+      let matchedProgram = null;
+      if (rowProgramName) {
+        // 1. Try finding by exact code match (case-insensitive)
+        matchedProgram = programs.find(p => p.code.toLowerCase() === rowProgramName);
+        
+        // 2. If not found and university is specified in the row, try matching program name + university name
+        if (!matchedProgram && rowUnivName) {
+          matchedProgram = programs.find(p => 
+            p.name.toLowerCase() === rowProgramName && 
+            (typeof p.universityId === 'object' ? p.universityId?.name?.toLowerCase()?.includes(rowUnivName) : false)
+          );
+        }
+        
+        // 3. Fallback to matching program name alone
+        if (!matchedProgram) {
+          matchedProgram = programs.find(p => p.name.toLowerCase() === rowProgramName);
+        }
+      }
       const resolvedProgramId = matchedProgram?.id || '';
 
       // Center is optional — match by name from the row
