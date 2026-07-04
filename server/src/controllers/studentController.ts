@@ -343,6 +343,23 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
         });
       }
 
+      // Resolve admission session (optional)
+      let resolvedSessionId: string | null = null;
+      if (s.session) {
+        const sessionRec = await prisma.admissionSession.findFirst({
+          where: {
+            name: {
+              equals: s.session.toString().trim(),
+              mode: 'insensitive'
+            },
+            organizationId
+          }
+        });
+        if (sessionRec) {
+          resolvedSessionId = sessionRec.id;
+        }
+      }
+
       // Create student record
       await prisma.student.create({
         data: {
@@ -353,10 +370,12 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           enrollmentNo: generatedUid,
           programId: program.id,
           centerId: resolvedCenterId || undefined,
-          sessionId: s.sessionId || undefined,
+          sessionId: resolvedSessionId || undefined,
           status: s.status || 'active',
           isPrevious: isPrevious || s.isPrevious || false,
           organizationId,
+          dob: s.dob ? new Date(s.dob) : undefined,
+          admissionDate: s.admissionDate ? new Date(s.admissionDate) : undefined,
           credentials: { email: s.email, password: defaultPassword }
         }
       });

@@ -352,14 +352,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         programs: 'B.Tech Computer Science',
         university: 'Delhi University',
         dob: '1999-05-15',
-        session: '2024-25'
+        session: '2024-25',
+        admissionDate: '2024-08-01',
+        studyCenter: ''
       }
     ];
     const worksheet = XLSX.utils.json_to_sheet(templateData, {
-      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university', 'dob', 'session']
+      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university', 'dob', 'session', 'admissionDate', 'studyCenter']
     });
     // Set column widths
-    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26, 14, 12].map(w => ({ wch: w }));
+    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26, 14, 12, 16, 26].map(w => ({ wch: w }));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
     XLSX.writeFile(workbook, 'students_import_template.xlsx');
@@ -417,6 +419,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
       const dob = s.dob || s.dateofbirth || s.date_of_birth || '';
       const session = s.session || s.admissionsession || s.admission_session || '';
+      const admissionDate = s.admissiondate || s.admission_date || s.dateofadmission || s.date_of_admission || '';
 
       return {
         name: s.name || s.fullname || '',
@@ -428,6 +431,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
         ...(dob ? { dob: dob.toString() } : {}),
         ...(session ? { session: session.toString() } : {}),
+        ...(admissionDate ? { admissionDate: admissionDate.toString() } : {}),
         status: s.status || 'active',
         isPrevious: bulkIsPrevious
       };
