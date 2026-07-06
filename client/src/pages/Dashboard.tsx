@@ -6,6 +6,7 @@ import { ModernFinanceDashboard } from './ModernFinanceDashboard';
 import { ModernOpsDashboard } from './ModernOpsDashboard';
 import { ModernHRDashboard } from './ModernHRDashboard';
 import { ModernSalesDashboard } from './ModernSalesDashboard';
+import { ModernCollectionsDashboard } from './ModernCollectionsDashboard';
 import { ModernSuperadminDashboard } from './ModernSuperadminDashboard';
 import { ModernOrgAdminDashboard } from './ModernOrgAdminDashboard';
 import { ModernStudyCenterDashboard } from './ModernStudyCenterDashboard';
@@ -24,75 +25,77 @@ interface DashboardProps {
 export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps) {
   const { user } = useAuth();
   const [departmentType, setDepartmentType] = useState<string | null>(null);
-  const isBranchManager = Boolean((user as any)?.branchId);
-  // If this is an employee with a dept, start loading=true to prevent wrong-panel flash
-  const [deptLoading, setDeptLoading] = useState(Boolean(useDepartmentDashboard) && !isBranchManager);
+  const [hasSubDept, setHasSubDept] = useState(false);
+  const [deptLoading, setDeptLoading] = useState(false);
 
-  const subDeptId = (user as any)?.subDepartmentId;
-  const hasSubDept = Boolean(subDeptId);
+  useEffect(() => {
+    if (!useDepartmentDashboard || !user) return;
+    const fetchDeptAndSubDept = async () => {
+      setDeptLoading(true);
+      try {
+        // Fetch subdepartment status
+        const subDeptId = (user as any).subDepartmentId;
+        const subDept = typeof subDeptId === 'object' ? subDeptId : null;
+        setHasSubDept(Boolean(subDeptId));
 
-  const fetchDepartmentType = async () => {
-    try {
-      // Try direct department object or departmentId first
-      const dept = (user as any).department || user?.departmentId;
-      if (dept) {
-        if (typeof dept === 'object' && dept !== null) {
-          const populated = dept as any;
-          if (populated.type) { setDepartmentType(populated.type); return; }
-          const deptId = populated.id?.toString();
-          if (deptId) {
-            const res = await api.get(`/departments/${deptId}`);
-            setDepartmentType(res.data.data?.type || null);
+        // Fetch department type
+        const dept = (user as any).department || user.departmentId;
+        if (dept) {
+          if (typeof dept === 'object' && (dept as any).type) {
+            setDepartmentType((dept as any).type);
+            setDeptLoading(false);
             return;
           }
-        } else {
-          const deptId = dept.toString();
+          const deptId = typeof dept === 'object'
+            ? (dept as any).id?.toString()
+            : dept.toString();
           if (deptId) {
             const res = await api.get(`/departments/${deptId}`);
-            setDepartmentType(res.data.data?.type || null);
-            return;
+            if (res.data.data?.type) {
+              setDepartmentType(res.data.data.type);
+              setDeptLoading(false);
+              return;
+            }
           }
         }
-      }
-      // Fall back to sub-department's parentDeptId
-      if (hasSubDept) {
-        const subDept = typeof subDeptId === 'object' ? subDeptId : null;
+
+        // Try from subdepartment parent
         const parentDeptId = subDept?.parentDeptId;
         if (parentDeptId) {
           if (typeof parentDeptId === 'object' && parentDeptId.type) {
             setDepartmentType(parentDeptId.type);
+            setDeptLoading(false);
             return;
           }
           const pid = typeof parentDeptId === 'object' ? parentDeptId.id?.toString() : parentDeptId?.toString();
           if (pid) {
             const res = await api.get(`/departments/${pid}`);
-            setDepartmentType(res.data.data?.type || null);
-            return;
+            if (res.data.data?.type) {
+              setDepartmentType(res.data.data.type);
+              setDeptLoading(false);
+              return;
+            }
           }
         }
-        // If sub-dept has no parentDeptId info, fetch from /sub-departments/my
+
+        // Last resort: fetch from /sub-departments/my
         try {
           const res = await api.get('/sub-departments/my');
           const parentType = res.data.data?.subDepartment?.parentDeptId?.type;
-          if (parentType) { setDepartmentType(parentType); return; }
+          if (parentType) {
+            setDepartmentType(parentType);
+          }
         } catch (_) {}
+      } catch (err) {
+        console.error('Failed to load dept for dashboard routing:', err);
+      } finally {
+        setDeptLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to fetch department type:', error);
-      setDepartmentType(null);
-    }
-  };
+    };
+    fetchDeptAndSubDept();
+  }, [useDepartmentDashboard, user]);
 
-  useEffect(() => {
-    // Don't fetch if this is a branch manager (they use a different dashboard)
-    if (isBranchManager) return;
-    if (useDepartmentDashboard && (user?.departmentId || hasSubDept)) {
-      setDeptLoading(true);
-      fetchDepartmentType().finally(() => setDeptLoading(false));
-    } else if (useDepartmentDashboard) {
-      setDeptLoading(false);
-    }
-  }, [useDepartmentDashboard, user?.departmentId, hasSubDept, isBranchManager]);
+  const isBranchManager = Boolean((user as any)?.branchId);
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
@@ -116,7 +119,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     if (departmentType) {
       // Regular employees (not sub-dept managers) always get the employee dashboard
       // Exception: Sales employees get the Sales dashboard (which has an employee portal)
-      if (!isSubDeptManager && departmentType !== 'sales') {
+      if (!isSubDeptManager && departmentType !== 'sales' && departmentType !== 'collections') {
         return <ModernEmployeeDashboard initialTab={initialTab} />;
       }
       // Sub-dept managers get the department admin dashboard
@@ -129,6 +132,8 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
           return <ModernOpsDashboard initialTab={initialTab} />;
         case 'sales':
           return <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} />;
+        case 'collections':
+          return <ModernCollectionsDashboard initialTab={initialTab} />;
         default:
           return <ModernEmployeeDashboard initialTab={initialTab} />;
       }
@@ -165,6 +170,10 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
 
   if (user?.role === 'sales_admin') {
     return <ModernSalesDashboard initialTab={initialTab} />;
+  }
+
+  if (['collections_admin', 'collections'].includes(user?.role || '')) {
+    return <ModernCollectionsDashboard initialTab={initialTab} />;
   }
 
   if (user?.role === 'center_admin') {

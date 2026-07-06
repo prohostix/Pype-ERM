@@ -1421,6 +1421,7 @@ enum DepartmentType {
   study_center
   staff
   custom
+  collections
 }
 
 enum DepartmentSubType {
@@ -1451,6 +1452,8 @@ enum UserRole {
   sales
   employee
   staff
+  collections_admin
+  collections
 }
 
 enum TaskPriority {

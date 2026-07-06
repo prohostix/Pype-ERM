@@ -1132,7 +1132,8 @@ exports.DepartmentType = exports.$Enums.DepartmentType = {
   org_admin: 'org_admin',
   study_center: 'study_center',
   staff: 'staff',
-  custom: 'custom'
+  custom: 'custom',
+  collections: 'collections'
 };
 
 exports.DepartmentSubType = exports.$Enums.DepartmentSubType = {
@@ -1156,7 +1157,9 @@ exports.UserRole = exports.$Enums.UserRole = {
   finance: 'finance',
   sales: 'sales',
   employee: 'employee',
-  staff: 'staff'
+  staff: 'staff',
+  collections_admin: 'collections_admin',
+  collections: 'collections'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {

@@ -12,6 +12,7 @@ import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
 import { getSalesNavItems } from '@/pages/ModernSalesDashboard';
 import { getBranchManagerNavItems } from '@/pages/ModernBranchManagerDashboard';
+import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -309,6 +310,10 @@ function App() {
       return getSalesNavItems();
     }
 
+    if (['collections_admin', 'collections'].includes(user.role)) {
+      return getCollectionsNavItems();
+    }
+
     if (user.role === 'center_admin') {
       return [
         { id: 'dashboard', label: 'Dashboard' },
@@ -343,9 +348,12 @@ function App() {
               case 'hr': return getHRNavItems();
               case 'finance': return getFinanceNavItems();
               case 'sales': return getSalesNavItems();
+              case 'collections': return getCollectionsNavItems();
             }
           } else if (deptType === 'sales') {
             return getSalesNavItems();
+          } else if (deptType === 'collections') {
+            return getCollectionsNavItems();
           }
         }
         return EMPLOYEE_NAV_ITEMS;
@@ -372,9 +380,9 @@ function App() {
       return;
     }
 
-    // For role-specific dashboards (ops, hr, finance, sales), the nav item IDs
+    // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'hr_admin', 'sales_admin'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.branchId);

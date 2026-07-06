@@ -340,7 +340,8 @@ export const DepartmentType: {
   org_admin: 'org_admin',
   study_center: 'study_center',
   staff: 'staff',
-  custom: 'custom'
+  custom: 'custom',
+  collections: 'collections'
 };
 
 export type DepartmentType = (typeof DepartmentType)[keyof typeof DepartmentType]
@@ -379,7 +380,9 @@ export const UserRole: {
   finance: 'finance',
   sales: 'sales',
   employee: 'employee',
-  staff: 'staff'
+  staff: 'staff',
+  collections_admin: 'collections_admin',
+  collections: 'collections'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
