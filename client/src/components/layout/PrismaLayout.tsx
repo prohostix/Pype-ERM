@@ -248,7 +248,7 @@ export function PrismaLayout({
             return (
               <button
                 key={table.id}
-                onClick={() => onTableChange(table.id)}
+                onClick={() => { onTableChange(table.id); setIsSidebarOpen(false); }}
                 className={cn(
                   'w-full px-4 py-2.5 rounded-lg text-left text-sm transition-all duration-200 flex items-center gap-3 group',
                   isActive
@@ -301,8 +301,8 @@ export function PrismaLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden relative">
-        <header className="h-16 flex items-center px-4 lg:px-8 gap-4 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
+      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0">
+        <header className="h-12 sm:h-16 flex items-center px-3 sm:px-4 lg:px-8 gap-2 sm:gap-4 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -392,7 +392,7 @@ export function PrismaLayout({
           </div>
         </header>
 
-        <section className="flex-1 overflow-auto p-4 lg:p-8 bg-background">
+        <section className="flex-1 overflow-auto p-3 sm:p-4 lg:p-8 bg-background">
           <div className="max-w-[1600px] mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
             {children}
           </div>

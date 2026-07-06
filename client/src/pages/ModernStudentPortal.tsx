@@ -274,8 +274,11 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
     { id: 'help', label: 'Help & Support', icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
+  // Primary tabs shown in bottom nav on mobile (max 5)
+  const primaryTabs = tabs.slice(0, 5);
+
   return (
-    <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
+    <div className="space-y-4 max-w-7xl mx-auto p-3 sm:p-4 md:p-6 pb-24 sm:pb-6 animate-in fade-in duration-500">
       
       {/* Due Payment Reminder Notification */}
       {nextPayment && (
@@ -343,8 +346,8 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-border overflow-x-auto gap-2 scrollbar-none pb-px">
+      {/* Desktop Tabs — horizontal scroll */}
+      <div className="hidden sm:flex border-b border-border overflow-x-auto gap-2 scrollbar-none pb-px">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -365,6 +368,46 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
             )}
           </button>
         ))}
+      </div>
+
+      {/* Mobile Bottom Tab Navigation */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border flex items-center justify-around px-2 py-1 safe-area-pb">
+        {primaryTabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+              "flex flex-col items-center justify-center gap-0.5 flex-1 py-2 rounded-lg transition-all relative",
+              activeTab === tab.id
+                ? "text-primary"
+                : "text-muted-foreground"
+            )}
+          >
+            <div className="relative">
+              <div className={cn("p-1.5 rounded-lg transition-all", activeTab === tab.id ? "bg-primary/10" : "")}>
+                {tab.icon}
+              </div>
+              {tab.count !== undefined && tab.count > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {tab.count > 9 ? '9+' : tab.count}
+                </span>
+              )}
+            </div>
+            <span className={cn("text-[10px] font-medium", activeTab === tab.id ? "text-primary" : "text-muted-foreground")}>
+              {tab.label.split(' ')[0]}
+            </span>
+          </button>
+        ))}
+        {/* More button for overflow tabs */}
+        {tabs.length > 5 && (
+          <button
+            onClick={() => setActiveTab(tabs[5]?.id)}
+            className="flex flex-col items-center justify-center gap-0.5 flex-1 py-2 rounded-lg text-muted-foreground"
+          >
+            <div className="p-1.5"><BookOpen className="w-4 h-4" /></div>
+            <span className="text-[10px] font-medium">More</span>
+          </button>
+        )}
       </div>
 
       {/* Tab Contents */}

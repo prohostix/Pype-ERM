@@ -1191,25 +1191,25 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Student Management</h2>
-          <p className="text-muted-foreground text-sm">Manage student records, bulk imports, communications, and installment schedules</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">Student Management</h2>
+          <p className="text-muted-foreground text-sm hidden sm:block">Manage student records, bulk imports, communications, and installment schedules</p>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {canWrite && (
             <>
               {/* Bulk Import Button */}
-              <Button variant="outline" onClick={() => setBulkDialogOpen(true)}>
-                <Upload className="w-4 h-4 mr-2" /> Bulk Import
+              <Button variant="outline" size="sm" onClick={() => setBulkDialogOpen(true)}>
+                <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Bulk Import</span>
               </Button>
 
               <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
                 <DialogTrigger asChild>
-                  <Button><Plus className="w-4 h-4 mr-2" />Add Student</Button>
+                  <Button size="sm"><Plus className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Add Student</span></Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-3xl max-h-[92vh] flex flex-col">
+                <DialogContent className="max-w-3xl w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-none sm:rounded-xl">
                   <DialogHeader className="pb-2 border-b">
                     <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
                     {/* Step indicator */}
@@ -1700,7 +1700,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : '';
                 return (
-                  <div key={student.id} className="flex items-center justify-between p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                  <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
@@ -1728,7 +1728,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
                       <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
                       
                       {/* Send system notification */}
@@ -1768,7 +1768,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
       {/* Bulk Import Dialog */}
       <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] rounded-none sm:rounded-xl">
           <DialogHeader>
             <DialogTitle>Bulk Import Student Records</DialogTitle>
           </DialogHeader>

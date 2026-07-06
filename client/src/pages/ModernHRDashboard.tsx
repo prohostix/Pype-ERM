@@ -153,7 +153,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
   return (
     <div className="space-y-6">
       {/* Core Metrics & Attendance Widget Top Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         <div className="xl:col-span-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <HRMetricCard 
