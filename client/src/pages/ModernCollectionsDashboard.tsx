@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
-  DollarSign, 
-  Users, 
-  Calendar,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  ArrowRight,
-  TrendingUp,
-  MessageSquare
+  CheckCircle2, 
+  Clock, 
+  AlertCircle, 
+  ArrowRight, 
+  TrendingUp 
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
@@ -23,10 +18,8 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
-import { useAuth } from '@/hooks/useAuth';
 
 export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string }) {
-  const { user } = useAuth();
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
