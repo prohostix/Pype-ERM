@@ -264,12 +264,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     const programId = typeof student.programId === 'object' ? student.programId?.id : student.programId;
     const centerId = typeof student.centerId === 'object' ? student.centerId?.id : student.centerId;
     const branchId = typeof student.branchId === 'object' ? student.branchId?.id : student.branchId;
+
+    // universityId can be directly on student OR inherited from the populated program object
+    const universityId =
+      student.universityId ||
+      (typeof student.program === 'object' ? student.program?.universityId : null) ||
+      (typeof student.programId === 'object' ? student.programId?.universityId : null) ||
+      '';
+
     setEditingId(studentId);
     setFormStep(0);
     setFormData({
       isPrevious: student.isPrevious || false,
       branchId: branchId?.toString() || '',
-      universityId: student.universityId || '',
+      universityId: universityId?.toString() || '',
       programId: programId?.toString() || '',
       enrollmentNo: student.enrollmentNo || '',
       admissionNo: student.admissionNo || '',
@@ -296,6 +304,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     setCustomOtherName(otherDoc?.label || '');
     setDialogOpen(true);
   };
+
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this student?')) return;
