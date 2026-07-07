@@ -3,17 +3,145 @@ import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
+function getDistanceInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371000; // metres
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c; // in meters
+}
+
 export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (!req.user.organizationId) {
     res.status(400).json({ success: false, message: 'Punch-in is only available for tenant organization employees.' });
     return;
   }
+
+  const { latitude, longitude, address } = req.body;
+
+  // Retrieve HR Settings
+  const settings = await prisma.hRSettings.findFirst({
+    where: { organizationId: req.user.organizationId }
+  });
+
+  // 1. Geofencing location check (if required by settings)
+  if (settings && settings.requireLocation) {
+    if (latitude === undefined || longitude === undefined) {
+      res.status(400).json({ success: false, message: 'Location coordinates are required to check in.' });
+      return;
+    }
+
+    let isWithinGeofence = false;
+    let allowedRadiusMsg = '';
+
+    // Check default office location
+    const defaultLoc = settings.location as any;
+    if (defaultLoc && defaultLoc.officeLatitude && defaultLoc.officeLongitude) {
+      const distance = getDistanceInMeters(latitude, longitude, defaultLoc.officeLatitude, defaultLoc.officeLongitude);
+      const radius = defaultLoc.allowedRadius || 100;
+      if (distance <= radius) {
+        isWithinGeofence = true;
+      } else {
+        allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+      }
+    }
+
+    // Check other office locations
+    const locationsList = settings.locations as any[];
+    if (!isWithinGeofence && Array.isArray(locationsList)) {
+      for (const loc of locationsList) {
+        if (loc.latitude && loc.longitude) {
+          const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
+          const radius = loc.allowedRadius || 100;
+          if (distance <= radius) {
+            isWithinGeofence = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!isWithinGeofence) {
+      res.status(400).json({
+        success: false,
+        message: `Check-in denied: You are outside the allowed office geofences. ${allowedRadiusMsg}`
+      });
+      return;
+    }
+  }
+
+  const now = new Date();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const attendance = await prisma.attendance.create({
-    data: { employeeId: req.user.id, organizationId: req.user.organizationId, date: today, checkIn: new Date(), status: 'present' }
+
+  // Check if already checked in today
+  const existing = await prisma.attendance.findFirst({
+    where: { employeeId: req.user.id, date: today }
   });
-  res.status(201).json({ success: true, data: attendance });
+
+  if (existing) {
+    res.status(400).json({ success: false, message: 'You have already checked in today.' });
+    return;
+  }
+
+  // 2. Late calculation
+  let isLate = false;
+  let lateMinutes = 0;
+  let status: 'present' | 'late' = 'present';
+
+  if (settings && settings.officeHours) {
+    const officeHours = settings.officeHours as any;
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const currentDayName = weekdays[now.getDay()];
+
+    // Find if there is a day override for today
+    const overrides = officeHours.dayOverrides || [];
+    const dayOverride = overrides.find((o: any) => o.day === currentDayName);
+
+    const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
+    const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
+
+    // Parse shift target check-in time
+    const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+    const targetCheckInDate = new Date(now);
+    targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+
+    // Calculate time difference
+    const diffMs = now.getTime() - targetCheckInDate.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+
+    if (diffMins > gracePeriod) {
+      isLate = true;
+      lateMinutes = diffMins;
+      status = 'late';
+    }
+  }
+
+  const attendance = await prisma.attendance.create({
+    data: {
+      employeeId: req.user.id,
+      organizationId: req.user.organizationId,
+      date: today,
+      checkIn: now,
+      checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+      status,
+      isLate,
+      lateMinutes
+    }
+  });
+
+  res.status(201).json({
+    success: true,
+    message: isLate ? `Punched in successfully! (Late by ${lateMinutes} mins)` : 'Punched in successfully!',
+    data: attendance
+  });
 });
 
 export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -21,13 +149,45 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
     res.status(400).json({ success: false, message: 'Punch-out is only available for tenant organization employees.' });
     return;
   }
+
+  const { latitude, longitude, address } = req.body;
+  const now = new Date();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const attendance = await prisma.attendance.updateMany({
-    where: { employeeId: req.user.id, date: today },
-    data: { checkOut: new Date() }
+
+  // Retrieve today's check-in record
+  const attendanceRecord = await prisma.attendance.findFirst({
+    where: { employeeId: req.user.id, date: today }
   });
-  res.json({ success: true, data: attendance });
+
+  if (!attendanceRecord) {
+    res.status(400).json({ success: false, message: 'You must check in first before checking out.' });
+    return;
+  }
+
+  if (attendanceRecord.checkOut) {
+    res.status(400).json({ success: false, message: 'You have already checked out today.' });
+    return;
+  }
+
+  // Calculate working hours
+  const checkInTime = new Date(attendanceRecord.checkIn!).getTime();
+  const workingHours = Number(((now.getTime() - checkInTime) / 3600000).toFixed(2));
+
+  const attendance = await prisma.attendance.update({
+    where: { id: attendanceRecord.id },
+    data: {
+      checkOut: now,
+      checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
+      workingHours
+    }
+  });
+
+  res.json({
+    success: true,
+    message: `Punched out successfully! Total duration: ${workingHours} hrs.`,
+    data: attendance
+  });
 });
 
 export const getTodayAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
