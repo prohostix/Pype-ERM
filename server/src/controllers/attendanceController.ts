@@ -78,18 +78,29 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   }
 
   const now = new Date();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
 
-  // Check if already checked in today
+  // Check if already checked in today (using 24h range check)
   const existing = await prisma.attendance.findFirst({
-    where: { employeeId: req.user.id, date: today }
+    where: {
+      employeeId: req.user.id,
+      date: {
+        gte: todayStart,
+        lte: todayEnd
+      }
+    }
   });
 
   if (existing) {
     res.status(400).json({ success: false, message: 'You have already checked in today.' });
     return;
   }
+
+  const today = todayStart; // Save exact normalized midnight date to respect unique constraint
+
 
   // 2. Late calculation
   let isLate = false;
@@ -152,12 +163,20 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
 
   const { latitude, longitude, address } = req.body;
   const now = new Date();
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
 
   // Retrieve today's check-in record
   const attendanceRecord = await prisma.attendance.findFirst({
-    where: { employeeId: req.user.id, date: today }
+    where: {
+      employeeId: req.user.id,
+      date: {
+        gte: todayStart,
+        lte: todayEnd
+      }
+    }
   });
 
   if (!attendanceRecord) {
@@ -195,9 +214,20 @@ export const getTodayAttendance = asyncHandler(async (req: AuthRequest, res: Res
     res.json({ success: true, data: null });
     return;
   }
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const attendance = await prisma.attendance.findFirst({ where: { employeeId: req.user.id, date: today } });
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
+  const attendance = await prisma.attendance.findFirst({
+    where: {
+      employeeId: req.user.id,
+      date: {
+        gte: todayStart,
+        lte: todayEnd
+      }
+    }
+  });
   res.json({ success: true, data: attendance });
 });
 
