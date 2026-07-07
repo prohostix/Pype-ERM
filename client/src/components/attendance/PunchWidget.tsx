@@ -340,7 +340,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
       {/* Map Dialog */}
       <Dialog open={mapOpen} onOpenChange={(o) => { if (!punching) setMapOpen(o); }}>
-        <DialogContent className="max-w-lg p-0 overflow-hidden" data-no-fullscreen="true">
+        <DialogContent className="max-w-lg p-0 overflow-y-auto max-h-[95vh] sm:max-h-none" data-no-fullscreen="true">
           <DialogHeader className="p-4 pb-0">
             <DialogTitle className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-primary" />
@@ -356,7 +356,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
           ) : location ? (
             <>
               {/* Leaflet Map */}
-              <div ref={mapRef} className="w-full h-64" style={{ zIndex: 0 }} />
+              <div ref={mapRef} className="w-full h-48 sm:h-64" style={{ zIndex: 0 }} />
 
               {/* Location info */}
               <div className="p-4 space-y-3">
