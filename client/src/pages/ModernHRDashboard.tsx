@@ -443,7 +443,7 @@ function LiveLeaveItem({ leave, onRefresh, onViewAll }: { leave: any; onRefresh:
     }
   };
 
-  const name = leave.employeeId?.name || 'Employee';
+  const name = leave.user?.name || leave.employee?.name || leave.employeeId?.name || 'Employee';
   const type = leave.type ? leave.type.charAt(0).toUpperCase() + leave.type.slice(1) + ' Leave' : 'Leave';
   const start = new Date(leave.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   const end = new Date(leave.endDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
