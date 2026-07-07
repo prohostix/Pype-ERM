@@ -150,8 +150,8 @@
 
 /* Full-screen dialogs on mobile */
 @media (max-width: 640px) {
-  [data-radix-dialog-content],
-  [role="dialog"] > div {
+  [data-radix-dialog-content]:not([data-no-fullscreen]),
+  [role="dialog"] > div:not([data-no-fullscreen]) {
     max-width: 100vw !important;
     max-height: 100dvh !important;
     height: 100dvh !important;

@@ -200,8 +200,15 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
   };
 
   if (loading) {
+    if (compact) {
+      return (
+        <div className="flex items-center justify-center w-10 h-10">
+          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
     return (
-      <Card className={compact ? 'border-none shadow-none' : ''}>
+      <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
         <CardContent className="p-6 flex items-center justify-center">
           <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
         </CardContent>
@@ -211,97 +218,129 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   return (
     <>
-      <Card className={`overflow-hidden ${compact ? 'border-none shadow-none bg-transparent' : 'border-none shadow-xl bg-card/60 backdrop-blur-xl'}`}>
-        {!compact && (
+      {compact ? (
+        <div className="flex items-center gap-2">
+          {!hasPunchedIn ? (
+            <Button
+              size="sm"
+              onClick={() => openPunchMap('in')}
+              className="h-9 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-sm text-xs font-semibold"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Punch In</span>
+            </Button>
+          ) : !hasPunchedOut ? (
+            <Button
+              size="sm"
+              onClick={() => openPunchMap('out')}
+              variant="destructive"
+              className="h-9 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white flex items-center gap-1.5 shadow-sm text-xs font-semibold"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Punch Out</span>
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              disabled
+              className="h-9 px-3 rounded-lg text-muted-foreground flex items-center gap-1.5 text-xs font-semibold bg-muted"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="hidden sm:inline">Punched Out</span>
+            </Button>
+          )}
+        </div>
+      ) : (
+        <Card className="overflow-hidden border-none shadow-xl bg-card/60 backdrop-blur-xl">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Clock className="w-4 h-4 text-primary" />
               Attendance
             </CardTitle>
           </CardHeader>
-        )}
-        <CardContent className={compact ? 'p-0' : 'pt-0'}>
-          {/* Live Clock */}
-          <div className="text-center mb-4">
-            <p className="text-4xl font-bold tracking-tight tabular-nums">
-              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {currentTime.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}
-            </p>
-          </div>
-
-          {/* Status row */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-muted/50 text-center">
-              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Check In</p>
-              <p className="text-lg font-bold">{formatTime(today?.checkIn)}</p>
-              {today?.isLate && (
-                <Badge className="text-[9px] bg-warning/10 text-warning mt-1">
-                  +{today.lateMinutes}m late
-                </Badge>
-              )}
-            </div>
-            <div className="p-3 rounded-xl bg-muted/50 text-center">
-              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Check Out</p>
-              <p className="text-lg font-bold">{formatTime(today?.checkOut)}</p>
-              {workingDuration() && (
-                <p className="text-[10px] text-muted-foreground mt-1">{workingDuration()}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Status badge */}
-          {today?.status && (
-            <div className="flex justify-center mb-4">
-              <Badge className={
-                today.status === 'present' ? 'bg-success/10 text-success' :
-                today.status === 'late' ? 'bg-warning/10 text-warning' :
-                'bg-muted text-muted-foreground'
-              }>
-                {today.status === 'present' && <CheckCircle2 className="w-3 h-3 mr-1" />}
-                {today.status.replace('_', ' ')}
-              </Badge>
-            </div>
-          )}
-
-          {/* Punch buttons */}
-          <div className="flex gap-2">
-            <Button
-              className="flex-1"
-              disabled={hasPunchedIn}
-              onClick={() => openPunchMap('in')}
-              variant={hasPunchedIn ? 'outline' : 'default'}
-            >
-              <LogIn className="w-4 h-4 mr-2" />
-              {hasPunchedIn ? 'Punched In' : 'Punch In'}
-            </Button>
-            <Button
-              className="flex-1"
-              disabled={!hasPunchedIn || hasPunchedOut}
-              onClick={() => openPunchMap('out')}
-              variant={hasPunchedOut ? 'outline' : 'secondary'}
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              {hasPunchedOut ? 'Punched Out' : 'Punch Out'}
-            </Button>
-          </div>
-
-          {/* Location of last punch */}
-          {today?.checkInLocation && (
-            <div className="mt-3 flex items-start gap-2 p-2 rounded-lg bg-muted/30">
-              <MapPin className="w-3 h-3 text-muted-foreground mt-0.5 shrink-0" />
-              <p className="text-[10px] text-muted-foreground line-clamp-2">
-                {today.checkInLocation.address || `${today.checkInLocation.latitude}, ${today.checkInLocation.longitude}`}
+          <CardContent className="pt-0">
+            {/* Live Clock */}
+            <div className="text-center mb-4">
+              <p className="text-4xl font-bold tracking-tight tabular-nums">
+                {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {currentTime.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}
               </p>
             </div>
-          )}
-        </CardContent>
-      </Card>
+
+            {/* Status row */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="p-3 rounded-xl bg-muted/50 text-center">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Check In</p>
+                <p className="text-lg font-bold">{formatTime(today?.checkIn)}</p>
+                {today?.isLate && (
+                  <Badge className="text-[9px] bg-warning/10 text-warning mt-1">
+                    +{today.lateMinutes}m late
+                  </Badge>
+                )}
+              </div>
+              <div className="p-3 rounded-xl bg-muted/50 text-center">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Check Out</p>
+                <p className="text-lg font-bold">{formatTime(today?.checkOut)}</p>
+                {workingDuration() && (
+                  <p className="text-[10px] text-muted-foreground mt-1">{workingDuration()}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Status badge */}
+            {today?.status && (
+              <div className="flex justify-center mb-4">
+                <Badge className={
+                  today.status === 'present' ? 'bg-success/10 text-success' :
+                  today.status === 'late' ? 'bg-warning/10 text-warning' :
+                  'bg-muted text-muted-foreground'
+                }>
+                  {today.status === 'present' && <CheckCircle2 className="w-3 h-3 mr-1" />}
+                  {today.status.replace('_', ' ')}
+                </Badge>
+              </div>
+            )}
+
+            {/* Punch buttons */}
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                disabled={hasPunchedIn}
+                onClick={() => openPunchMap('in')}
+                variant={hasPunchedIn ? 'outline' : 'default'}
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                {hasPunchedIn ? 'Punched In' : 'Punch In'}
+              </Button>
+              <Button
+                className="flex-1"
+                disabled={!hasPunchedIn || hasPunchedOut}
+                onClick={() => openPunchMap('out')}
+                variant={hasPunchedOut ? 'outline' : 'secondary'}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                {hasPunchedOut ? 'Punched Out' : 'Punch Out'}
+              </Button>
+            </div>
+
+            {/* Location of last punch */}
+            {today?.checkInLocation && (
+              <div className="mt-3 flex items-start gap-2 p-2 rounded-lg bg-muted/30">
+                <MapPin className="w-3 h-3 text-muted-foreground mt-0.5 shrink-0" />
+                <p className="text-[10px] text-muted-foreground line-clamp-2">
+                  {today.checkInLocation.address || `${today.checkInLocation.latitude}, ${today.checkInLocation.longitude}`}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Map Dialog */}
       <Dialog open={mapOpen} onOpenChange={(o) => { if (!punching) setMapOpen(o); }}>
-        <DialogContent className="max-w-lg p-0 overflow-hidden">
+        <DialogContent className="max-w-lg p-0 overflow-hidden" data-no-fullscreen="true">
           <DialogHeader className="p-4 pb-0">
             <DialogTitle className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-primary" />

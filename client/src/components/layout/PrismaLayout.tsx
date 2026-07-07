@@ -27,6 +27,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { PunchWidget } from '@/components/attendance/PunchWidget';
 
 interface TableItem {
   id: string;
@@ -327,6 +328,9 @@ export function PrismaLayout({
             </div>
             
             <div className="h-8 w-px bg-border mx-1" />
+            {userRole !== 'staff' && (
+              <PunchWidget compact={true} />
+            )}
             
             <NotificationBell userId={userId} organizationId={organizationId} />
             
