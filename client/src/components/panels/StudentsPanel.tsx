@@ -662,26 +662,140 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const handleSavePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!paymentForm.invoiceId || !paymentForm.amount) {
-      toast.error('Please select an invoice and enter amount');
+    if (!paymentForm.amount) {
+      toast.error('Please enter the payment amount');
       return;
     }
     setPaymentSaving(true);
     try {
-      await api.post('/finance/payments', {
-        invoiceId: paymentForm.invoiceId,
+      const res = await api.post('/finance/payments', {
+        invoiceId: paymentForm.invoiceId === 'auto' ? undefined : paymentForm.invoiceId || undefined,
+        studentId: paymentDialogStudent.id,
         amount: Number(paymentForm.amount),
         method: paymentForm.method,
         referenceNo: paymentForm.referenceNo
       });
-      toast.success('Payment logged successfully against student invoice!');
+      toast.success('Payment logged successfully!');
       setPaymentDialogOpen(false);
+      
+      // Auto-trigger printable receipt receipt
+      if (res.data.success && res.data.data) {
+        printPaymentReceipt(res.data.data);
+      }
     } catch (err: any) {
       console.error(err);
       toast.error(err.response?.data?.message || 'Failed to save payment');
     } finally {
       setPaymentSaving(false);
     }
+  };
+
+  const printPaymentReceipt = (payment: any) => {
+    const invoice = payment.invoice || {};
+    const student = invoice.student || paymentDialogStudent || {};
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const dateStr = new Date(payment.receivedAt).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Payment Receipt - ${invoice.invoiceNo || 'Receipt'}</title>
+          <style>
+            body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; padding: 40px; line-height: 1.5; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 30px; }
+            .logo { font-size: 24px; font-weight: bold; color: #4f46e5; }
+            .title { font-size: 28px; font-weight: 800; text-align: right; color: #0f172a; }
+            .details { display: flex; justify-content: space-between; margin-bottom: 40px; gap: 20px; }
+            .details h3 { font-size: 14px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; margin-top: 0; }
+            .table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+            .table th { background: #f8fafc; border-bottom: 1px solid #cbd5e1; padding: 12px; font-weight: 600; text-align: left; }
+            .table td { border-bottom: 1px solid #e2e8f0; padding: 12px; }
+            .totals { display: flex; justify-content: flex-end; margin-bottom: 50px; }
+            .totals table { width: 300px; }
+            .totals td { padding: 6px 12px; }
+            .footer { border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center; font-size: 12px; color: #64748b; margin-top: 100px; }
+            .signatures { display: flex; justify-content: space-between; margin-top: 60px; }
+            .sig-line { border-top: 1px solid #cbd5e1; width: 200px; text-align: center; padding-top: 8px; font-size: 13px; color: #475569; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="logo">Pype ERM Institution</div>
+              <div>${student.center?.name || 'Main Study Center'}</div>
+            </div>
+            <div>
+              <div class="title">PAYMENT RECEIPT</div>
+              <div style="text-align: right; margin-top: 5px; font-size: 14px;">
+                <strong>Receipt No:</strong> REC-${payment.id.slice(-6).toUpperCase()}<br/>
+                <strong>Invoice Ref:</strong> ${invoice.invoiceNo}<br/>
+                <strong>Date:</strong> ${dateStr}
+              </div>
+            </div>
+          </div>
+          
+          <div class="details">
+            <div>
+              <h3>Received From (Student):</h3>
+              <strong>${student.name || 'N/A'}</strong><br/>
+              Enrollment No: ${student.enrollmentNo || 'N/A'}<br/>
+              Email: ${student.email || 'N/A'}<br/>
+              Program: ${student.program?.name || 'N/A'}
+            </div>
+            <div style="text-align: right;">
+              <h3>Payment Method:</h3>
+              <strong style="text-transform: uppercase;">${payment.method}</strong><br/>
+              Ref No: ${payment.referenceNo || 'N/A'}
+            </div>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th style="text-align: right;">Total Fee</th>
+                <th style="text-align: right;">This Payment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Program Admission installment Fee & Allied Charges</td>
+                <td style="text-align: right;">₹${invoice.total || payment.amount}</td>
+                <td style="text-align: right; font-weight: bold; color: #16a34a;">₹${payment.amount}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="totals">
+            <table>
+              <tr style="font-size: 16px; font-weight: bold;">
+                <td>Amount Paid:</td>
+                <td style="text-align: right; color: #16a34a;">₹${payment.amount}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="signatures">
+            <div class="sig-line">Student Signature</div>
+            <div class="sig-line">Authorized Signatory</div>
+          </div>
+
+          <div class="footer">
+            This is a computer generated receipt. For any billing queries, please contact accounts team.
+          </div>
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   const fetchSchedules = async (studentId: string) => {
@@ -2108,12 +2222,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <Label>Invoice <span className="text-rose-500">*</span></Label>
               {paymentInvoicesLoading ? (
                 <div className="text-sm text-muted-foreground mt-2">Loading invoices...</div>
-              ) : paymentInvoices.length === 0 ? (
-                <div className="text-sm text-rose-500 mt-2 font-medium">⚠️ No outstanding invoices found for this student. Please create an invoice first.</div>
               ) : (
                 <Select
-                  value={paymentForm.invoiceId}
+                  value={paymentForm.invoiceId || 'auto'}
                   onValueChange={(val) => {
+                    if (val === 'auto') {
+                      setPaymentForm({
+                        ...paymentForm,
+                        invoiceId: 'auto',
+                        amount: ''
+                      });
+                      return;
+                    }
                     const selectedInv = paymentInvoices.find(i => i.id === val);
                     const paid = (selectedInv?.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
                     const balance = (selectedInv?.total || 0) - paid;
@@ -2128,6 +2248,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <SelectValue placeholder="Select an invoice" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="auto">None (Auto-generate Invoice)</SelectItem>
                     {paymentInvoices.map((inv) => {
                       const paid = (inv.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
                       const balance = inv.total - paid;
@@ -2184,7 +2305,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             </div>
 
             <div className="flex gap-2 justify-end pt-2">
-              <Button type="submit" disabled={paymentSaving || paymentInvoices.length === 0}>
+              <Button type="submit" disabled={paymentSaving}>
                 {paymentSaving ? 'Logging...' : 'Log Payment'}
               </Button>
               <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>

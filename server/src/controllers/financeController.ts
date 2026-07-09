@@ -79,9 +79,72 @@ export const getPayment = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, data: payment });
 });
 export const createPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  let invoiceId = req.body.invoiceId;
+
+  // Auto-generate invoice if payment is recorded directly against student (no invoice selected)
+  if (!invoiceId && req.body.studentId) {
+    const student = await prisma.student.findUnique({
+      where: { id: req.body.studentId },
+      include: { program: true }
+    });
+
+    if (!student) {
+      res.status(404).json({ success: false, message: 'Student not found' });
+      return;
+    }
+
+    // Attempt to resolve program fee structure from db
+    let invoiceTotal = Number(req.body.amount);
+    let feeDescription = 'Program Admission Fees / Custom Invoice Item';
+
+    if (student.programId) {
+      const feeStructure = await prisma.feeStructure.findFirst({
+        where: { programId: student.programId }
+      });
+      if (feeStructure) {
+        const base = (feeStructure.registrationFee || 0) + (feeStructure.tuitionFee || 0) + (feeStructure.examFee || 0);
+        const gst = feeStructure.gstPercentage || 0;
+        invoiceTotal = base + Math.round((base * gst) / 100);
+        feeDescription = `Admission Fees for ${student.program?.name || 'Program'}`;
+      }
+    }
+
+    // Auto-generate unique invoice number
+    const random = Math.floor(1000 + Math.random() * 9000);
+    const invoiceNo = `INV-AUTO-${Date.now().toString().slice(-4)}-${random}`;
+
+    const newInvoice = await prisma.invoice.create({
+      data: {
+        organizationId: req.user.organizationId,
+        studentId: student.id,
+        centerId: student.centerId,
+        invoiceNo,
+        amount: Number(req.body.amount), // Set item amount equal to incoming paid amount
+        tax: 0,
+        total: invoiceTotal,
+        status: 'approved',
+        items: [{
+          description: feeDescription,
+          quantity: 1,
+          rate: Number(req.body.amount),
+          amount: Number(req.body.amount)
+        }]
+      }
+    });
+    invoiceId = newInvoice.id;
+  }
+
+  if (!invoiceId) {
+    res.status(400).json({ success: false, message: 'Invoice ID or Student ID is required' });
+    return;
+  }
+
   const payment = await prisma.paymentEntry.create({
     data: {
-      ...req.body,
+      amount: Number(req.body.amount),
+      method: req.body.method || 'cash',
+      referenceNo: req.body.referenceNo || null,
+      invoiceId,
       organizationId: req.user.organizationId,
       receivedBy: req.user.id
     }
@@ -89,7 +152,7 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
 
   // Auto-update invoice status based on total payments received
   const invoice = await prisma.invoice.findUnique({
-    where: { id: req.body.invoiceId },
+    where: { id: invoiceId },
     include: { payments: true }
   });
   if (invoice) {
@@ -108,7 +171,24 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
     }
   }
 
-  res.status(201).json({ success: true, data: payment });
+  // Include populated invoice in response to generate receipt immediately
+  const populatedPayment = await prisma.paymentEntry.findUnique({
+    where: { id: payment.id },
+    include: {
+      invoice: {
+        include: {
+          student: {
+            include: {
+              program: true,
+              center: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  res.status(201).json({ success: true, data: populatedPayment });
 });
 export const updatePayment = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.paymentEntry.findUnique({ where: { id: req.params.id } });
