@@ -36,6 +36,8 @@ interface User {
   subDepartment?: { name: string };
   reportingToUser?: { name: string };
   status?: string;
+  branchId?: string;
+  branch?: { id: string; name: string };
 }
 
 interface Department {
