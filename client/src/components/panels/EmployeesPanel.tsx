@@ -19,6 +19,7 @@ export function EmployeesPanel() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [profileUserId, setProfileUserId] = useState<string | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [selectedBranchFilter, setSelectedBranchFilter] = useState<string>('all');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -300,8 +301,23 @@ export function EmployeesPanel() {
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
           <CardTitle>Employee Directory</CardTitle>
+          {branches.length > 0 && (
+            <div className="w-48 sm:w-56">
+              <Select value={selectedBranchFilter} onValueChange={setSelectedBranchFilter}>
+                <SelectTrigger className="w-full h-9">
+                  <SelectValue placeholder="All Branches" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Branches</SelectItem>
+                  {branches.map((b: any) => (
+                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -310,10 +326,17 @@ export function EmployeesPanel() {
             <div className="text-center py-8 text-muted-foreground">No employees found</div>
           ) : (
             <div className="space-y-2">
-              {employees.filter(emp => emp && (emp.id || emp.id)).map((employee) => {
-                const empId = employee.id || employee.id;
-                return (
-                <div key={empId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+              {employees
+                .filter(emp => emp && (emp.id || emp.id))
+                .filter(emp => {
+                  if (selectedBranchFilter === 'all') return true;
+                  const empBranchId = typeof emp.branchId === 'object' ? emp.branchId?.id : emp.branchId;
+                  return empBranchId?.toString() === selectedBranchFilter;
+                })
+                .map((employee) => {
+                  const empId = employee.id || employee.id;
+                  return (
+                  <div key={empId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
                       {(employee.name || '?')[0].toUpperCase()}

@@ -11,15 +11,20 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
     where.organizationId = req.user.organizationId;
   }
 
-  if (req.query.role) where.role = req.query.role as string;
+  if (req.query.role) {
+    where.role = req.query.role as string;
+  } else {
+    where.role = { not: 'staff' };
+  }
   if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
   if (req.query.status) where.status = req.query.status as string;
 
   const users = await prisma.user.findMany({
     where,
     include: {
-      organization: { select: { name: true } },
-      department: { select: { name: true } },
+      organization: { select: { id: true, name: true } },
+      department: { select: { id: true, name: true } },
+      branch: { select: { id: true, name: true } },
     }
   });
 

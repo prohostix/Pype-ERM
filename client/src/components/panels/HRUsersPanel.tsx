@@ -104,12 +104,23 @@ export function HRUsersPanel() {
     confirmPassword: '',
   });
 
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranchFilter, setSelectedBranchFilter] = useState<string>('all');
+
   useEffect(() => {
     fetchUsers();
     fetchDepartments();
     fetchSubDepartments();
     fetchDesignations();
+    fetchBranches();
   }, []);
+
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      setBranches(res.data.data || []);
+    } catch { /* non-critical */ }
+  };
 
   useEffect(() => {
     // Fetch sub-departments when department changes
@@ -395,23 +406,39 @@ export function HRUsersPanel() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
         <div>
           <CardTitle>User Management</CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             Manage all staff accounts — HR, Finance, Ops, Sales, and Employees
           </p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={(open) => {
-          setDialogOpen(open);
-          if (!open) resetForm();
-        }}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Employee User
-            </Button>
-          </DialogTrigger>
+        <div className="flex items-center gap-3 flex-wrap">
+          {branches.length > 0 && (
+            <div className="w-48 sm:w-56">
+              <Select value={selectedBranchFilter} onValueChange={setSelectedBranchFilter}>
+                <SelectTrigger className="w-full h-9">
+                  <SelectValue placeholder="All Branches" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Branches</SelectItem>
+                  {branches.map((b: any) => (
+                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <Dialog open={dialogOpen} onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) resetForm();
+          }}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="h-9">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Employee User
+              </Button>
+            </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
@@ -639,7 +666,13 @@ export function HRUsersPanel() {
           </div>
         ) : (
           <div className="space-y-4">
-            {users.map((user) => {
+            {users
+              .filter((user) => {
+                if (selectedBranchFilter === 'all') return true;
+                const empBranchId = typeof user.branchId === 'object' ? (user.branchId as any)?.id : (user.branchId || (user as any).branch?.id);
+                return empBranchId?.toString() === selectedBranchFilter;
+              })
+              .map((user) => {
               const userId = user.id || user.id || '';
               return (
                 <div
