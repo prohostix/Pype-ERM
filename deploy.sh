@@ -84,6 +84,7 @@ echo "🛠️  Building Backend Server..."
 npm install
 npx prisma db push
 npx prisma generate
+export NODE_OPTIONS="--max-old-space-size=1024"
 npm run build
 cp -R src/generated dist/
 
