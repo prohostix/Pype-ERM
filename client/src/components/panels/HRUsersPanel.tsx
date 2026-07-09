@@ -655,7 +655,8 @@ export function HRUsersPanel() {
               </div>
             </form>
           </DialogContent>
-        </Dialog>
+          </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {users.length === 0 ? (
