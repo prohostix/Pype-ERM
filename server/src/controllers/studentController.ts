@@ -309,7 +309,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
 
       // Ensure user account exists
       let studentUser = await prisma.user.findUnique({ where: { email: s.email } });
-      let generatedUid = s.enrollmentNo;
+      let generatedUid = s.enrollmentNo || s.enrollmentno || s.enrollment_no || s['enrollment no'] || s.enrollment || '';
       const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
       if (!studentUser) {
         if (!generatedUid) {
