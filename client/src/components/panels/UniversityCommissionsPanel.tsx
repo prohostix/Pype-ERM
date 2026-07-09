@@ -241,8 +241,13 @@ export function UniversityCommissionsPanel() {
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map((student) => {
-                    const {
+                  {students
+                    .filter((student) => {
+                      const { expectedCommission } = calculateCommissionData(student);
+                      return expectedCommission > 0;
+                    })
+                    .map((student) => {
+                      const {
                       totalUniversityFee,
                       expectedCommission,
                       baseCommissionRate,
