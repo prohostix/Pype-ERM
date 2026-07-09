@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, DollarSign } from 'lucide-react';
+import { Plus, Edit, Trash2, DollarSign, Search, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -38,6 +38,11 @@ export function FeeStructuresPanel() {
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
   const [sortBy, setSortBy] = useState<'university' | 'program' | 'session' | 'total_fee'>('program');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  // Filter bar state
+  const [filterUniversity, setFilterUniversity] = useState<string>('all');
+  const [filterProgram, setFilterProgram] = useState<string>('all');
+  const [filterSession, setFilterSession] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     if (formData.programId && (formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester')) {
@@ -442,30 +447,111 @@ export function FeeStructuresPanel() {
       </div>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 flex-wrap gap-4">
+        <CardHeader className="space-y-3 pb-3">
           <CardTitle>Fee Structures</CardTitle>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Sort by:</span>
+
+          {/* Search bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              className="pl-9 h-9 text-sm"
+              placeholder="Search by program, university or session..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                onClick={() => setSearchQuery('')}
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Filter + Sort row */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* University filter */}
+            <Select value={filterUniversity} onValueChange={setFilterUniversity}>
+              <SelectTrigger className="h-8 text-xs w-40">
+                <SelectValue placeholder="All Universities" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Universities</SelectItem>
+                {universities.filter(u => u?.id).map(u => (
+                  <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Program filter */}
+            <Select value={filterProgram} onValueChange={setFilterProgram}>
+              <SelectTrigger className="h-8 text-xs w-36">
+                <SelectValue placeholder="All Programs" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Programs</SelectItem>
+                {programs.filter(p => p?.id).map(p => (
+                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Session filter */}
+            <Select value={filterSession} onValueChange={setFilterSession}>
+              <SelectTrigger className="h-8 text-xs w-44">
+                <SelectValue placeholder="All Sessions" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Sessions</SelectItem>
+                {sessions.filter(s => s?.id).map(s => (
+                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="h-4 w-px bg-border mx-1" />
+
+            {/* Sort by */}
+            <span className="text-xs text-muted-foreground">Sort:</span>
             <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-              <SelectTrigger className="w-36 h-8 text-xs">
+              <SelectTrigger className="h-8 text-xs w-36">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="university">University</SelectItem>
                 <SelectItem value="program">Program</SelectItem>
-                <SelectItem value="session">Admission Session</SelectItem>
+                <SelectItem value="session">Session</SelectItem>
                 <SelectItem value="total_fee">Total Fee</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortOrder} onValueChange={(v: any) => setSortOrder(v)}>
-              <SelectTrigger className="w-24 h-8 text-xs">
+              <SelectTrigger className="h-8 text-xs w-24">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="asc">Ascending</SelectItem>
-                <SelectItem value="desc">Descending</SelectItem>
+                <SelectItem value="asc">Asc ↑</SelectItem>
+                <SelectItem value="desc">Desc ↓</SelectItem>
               </SelectContent>
             </Select>
+
+            {/* Reset button — shown only when any filter is active */}
+            {(filterUniversity !== 'all' || filterProgram !== 'all' || filterSession !== 'all' || searchQuery) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-xs text-rose-500 hover:text-rose-600"
+                onClick={() => {
+                  setFilterUniversity('all');
+                  setFilterProgram('all');
+                  setFilterSession('all');
+                  setSearchQuery('');
+                }}
+              >
+                <X className="w-3 h-3 mr-1" /> Reset Filters
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -476,6 +562,31 @@ export function FeeStructuresPanel() {
           ) : (
             <div className="space-y-2">
               {[...fees]
+                // --- Apply filters ---
+                .filter(f => {
+                  if (!f?.id) return false;
+                  const progName = (typeof f.programId === 'object' ? f.programId?.name : f.program?.name) || '';
+                  const univName = (typeof f.programId === 'object' ? f.programId?.university?.name : f.program?.university?.name) || f.university?.name || '';
+                  const univId   = (typeof f.programId === 'object' ? f.programId?.universityId : f.program?.universityId) || f.universityId || '';
+                  const progId   = (typeof f.programId === 'object' ? f.programId?.id : f.programId) || f.program?.id || '';
+                  const sessId   = (typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId) || f.session?.id || '';
+                  const sessName = f.session?.name || '';
+
+                  if (filterUniversity !== 'all' && univId !== filterUniversity) return false;
+                  if (filterProgram   !== 'all' && progId !== filterProgram)   return false;
+                  if (filterSession   !== 'all' && sessId !== filterSession)   return false;
+
+                  if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    if (
+                      !progName.toLowerCase().includes(q) &&
+                      !univName.toLowerCase().includes(q) &&
+                      !sessName.toLowerCase().includes(q)
+                    ) return false;
+                  }
+                  return true;
+                })
+                // --- Sort ---
                 .sort((a, b) => {
                   let comparison = 0;
                   if (sortBy === 'university') {
@@ -497,7 +608,6 @@ export function FeeStructuresPanel() {
                   }
                   return sortOrder === 'asc' ? comparison : -comparison;
                 })
-                .filter(f => f && f.id)
                 .map((f) => {
                   const fid = f.id;
                 const progName = typeof f.programId === 'object' ? f.programId?.name : (f.program?.name || '');
