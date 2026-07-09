@@ -86,6 +86,7 @@ export interface User {
   status: 'active' | 'inactive' | 'on_leave';
   lastLogin?: Date;
   createdAt: Date;
+  organization?: Organization;
 }
 
 export interface Employee extends User {
