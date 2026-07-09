@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -156,6 +156,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [customOtherName, setCustomOtherName] = useState<string>('');
   const [salesUsers, setSalesUsers] = useState<any[]>([]);
   const [selectedSalesUserId, setSelectedSalesUserId] = useState<string>('none');
+
+  // --- Quick Payment Dialog state ---
+  const [paymentDialogStudent, setPaymentDialogStudent] = useState<any>(null);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [paymentInvoices, setPaymentInvoices] = useState<any[]>([]);
+  const [paymentInvoicesLoading, setPaymentInvoicesLoading] = useState(false);
+  const [paymentForm, setPaymentForm] = useState({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
+  const [paymentSaving, setPaymentSaving] = useState(false);
 
   const fetchSalesUsers = async () => {
     try {
@@ -634,6 +642,46 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     setScheduleDialogOpen(true);
     setNewSchedule({ title: 'Tuition Fee Installment', amount: '', dueDate: '' });
     fetchSchedules(student.id);
+  };
+
+  const handleOpenPaymentDialog = async (student: any) => {
+    setPaymentDialogStudent(student);
+    setPaymentDialogOpen(true);
+    setPaymentInvoicesLoading(true);
+    setPaymentForm({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
+    try {
+      const res = await api.get(`/finance/invoices?studentId=${student.id}`);
+      setPaymentInvoices(res.data.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load student invoices');
+    } finally {
+      setPaymentInvoicesLoading(false);
+    }
+  };
+
+  const handleSavePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!paymentForm.invoiceId || !paymentForm.amount) {
+      toast.error('Please select an invoice and enter amount');
+      return;
+    }
+    setPaymentSaving(true);
+    try {
+      await api.post('/finance/payments', {
+        invoiceId: paymentForm.invoiceId,
+        amount: Number(paymentForm.amount),
+        method: paymentForm.method,
+        referenceNo: paymentForm.referenceNo
+      });
+      toast.success('Payment logged successfully against student invoice!');
+      setPaymentDialogOpen(false);
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to save payment');
+    } finally {
+      setPaymentSaving(false);
+    }
   };
 
   const fetchSchedules = async (studentId: string) => {
@@ -1760,6 +1808,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <CalendarDays className="w-4 h-4 text-indigo-500" />
                       </Button>
 
+                      {/* Log Payment */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenPaymentDialog(student)} title="Log Payment">
+                        <DollarSign className="w-4 h-4 text-emerald-600" />
+                      </Button>
+
                       {/* View/Change Credentials */}
                       <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenCredentials(student)} title="View/Edit Credentials">
                         <Key className="w-4 h-4 text-cyan-500" />
@@ -2041,6 +2094,102 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <Button variant="outline" onClick={() => setCredDialogOpen(false)}>Close</Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Quick Log Payment Dialog */}
+      <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Log Payment — {paymentDialogStudent?.name}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSavePayment} className="space-y-4 py-2">
+            <div>
+              <Label>Invoice <span className="text-rose-500">*</span></Label>
+              {paymentInvoicesLoading ? (
+                <div className="text-sm text-muted-foreground mt-2">Loading invoices...</div>
+              ) : paymentInvoices.length === 0 ? (
+                <div className="text-sm text-rose-500 mt-2 font-medium">⚠️ No outstanding invoices found for this student. Please create an invoice first.</div>
+              ) : (
+                <Select
+                  value={paymentForm.invoiceId}
+                  onValueChange={(val) => {
+                    const selectedInv = paymentInvoices.find(i => i.id === val);
+                    const paid = (selectedInv?.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
+                    const balance = (selectedInv?.total || 0) - paid;
+                    setPaymentForm({
+                      ...paymentForm,
+                      invoiceId: val,
+                      amount: balance > 0 ? balance.toString() : ''
+                    });
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select an invoice" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {paymentInvoices.map((inv) => {
+                      const paid = (inv.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
+                      const balance = inv.total - paid;
+                      return (
+                        <SelectItem key={inv.id} value={inv.id}>
+                          {inv.invoiceNo} (Total: ₹{inv.total} | Bal: ₹{balance})
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+
+            <div>
+              <Label>Amount <span className="text-rose-500">*</span></Label>
+              <Input
+                type="number"
+                min="1"
+                required
+                value={paymentForm.amount}
+                onChange={(e) => setPaymentForm({ ...paymentForm, amount: e.target.value })}
+                placeholder="Enter amount"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Method</Label>
+                <Select
+                  value={paymentForm.method}
+                  onValueChange={(val) => setPaymentForm({ ...paymentForm, method: val })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="upi">UPI</SelectItem>
+                    <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                    <SelectItem value="cheque">Cheque</SelectItem>
+                    <SelectItem value="card">Card</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Reference No</Label>
+                <Input
+                  value={paymentForm.referenceNo}
+                  onChange={(e) => setPaymentForm({ ...paymentForm, referenceNo: e.target.value })}
+                  placeholder="e.g. UPI Ref / Txn ID"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end pt-2">
+              <Button type="submit" disabled={paymentSaving || paymentInvoices.length === 0}>
+                {paymentSaving ? 'Logging...' : 'Log Payment'}
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

@@ -7,9 +7,16 @@ import { sendEmail } from '../utils/emailService.js';
 
 // Invoices
 export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId };
+  if (req.query.studentId) where.studentId = req.query.studentId as string;
+
   const invoices = await prisma.invoice.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: { center: { select: { name: true } }, student: { select: { name: true } } },
+    where,
+    include: {
+      center: { select: { name: true } },
+      student: { select: { name: true } },
+      payments: { select: { amount: true } }
+    },
     orderBy: { createdAt: 'desc' }
   });
   res.json({ success: true, count: invoices.length, data: invoices });
@@ -79,6 +86,28 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
       receivedBy: req.user.id
     }
   });
+
+  // Auto-update invoice status based on total payments received
+  const invoice = await prisma.invoice.findUnique({
+    where: { id: req.body.invoiceId },
+    include: { payments: true }
+  });
+  if (invoice) {
+    const totalPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0);
+    let newStatus = invoice.status;
+    if (totalPaid >= invoice.total) {
+      newStatus = 'paid';
+    } else if (totalPaid > 0) {
+      newStatus = 'partial';
+    }
+    if (newStatus !== invoice.status) {
+      await prisma.invoice.update({
+        where: { id: invoice.id },
+        data: { status: newStatus, paidAt: totalPaid >= invoice.total ? new Date() : null }
+      });
+    }
+  }
+
   res.status(201).json({ success: true, data: payment });
 });
 export const updatePayment = asyncHandler(async (req: AuthRequest, res: Response) => {
