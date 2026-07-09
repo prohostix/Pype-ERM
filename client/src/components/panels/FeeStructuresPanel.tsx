@@ -36,6 +36,8 @@ export function FeeStructuresPanel() {
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState<'university' | 'program' | 'session' | 'total_fee'>('program');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     if (formData.programId && (formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester')) {
@@ -440,7 +442,32 @@ export function FeeStructuresPanel() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Fee Structures</CardTitle></CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 flex-wrap gap-4">
+          <CardTitle>Fee Structures</CardTitle>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Sort by:</span>
+            <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
+              <SelectTrigger className="w-36 h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="university">University</SelectItem>
+                <SelectItem value="program">Program</SelectItem>
+                <SelectItem value="session">Admission Session</SelectItem>
+                <SelectItem value="total_fee">Total Fee</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={sortOrder} onValueChange={(v: any) => setSortOrder(v)}>
+              <SelectTrigger className="w-24 h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Ascending</SelectItem>
+                <SelectItem value="desc">Descending</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardHeader>
         <CardContent>
           {loading ? (
             <div className="text-center py-8">Loading...</div>
@@ -448,8 +475,31 @@ export function FeeStructuresPanel() {
             <div className="text-center py-8 text-muted-foreground">No fee structures found</div>
           ) : (
             <div className="space-y-2">
-              {fees.filter(f => f && f.id).map((f) => {
-                const fid = f.id;
+              {[...fees]
+                .sort((a, b) => {
+                  let comparison = 0;
+                  if (sortBy === 'university') {
+                    const aUniv = a.university?.name || (typeof a.programId === 'object' ? a.programId?.university?.name : a.program?.university?.name) || '';
+                    const bUniv = b.university?.name || (typeof b.programId === 'object' ? b.programId?.university?.name : b.program?.university?.name) || '';
+                    comparison = aUniv.localeCompare(bUniv);
+                  } else if (sortBy === 'program') {
+                    const aProg = typeof a.programId === 'object' ? a.programId?.name : (a.program?.name || '');
+                    const bProg = typeof b.programId === 'object' ? b.programId?.name : (b.program?.name || '');
+                    comparison = aProg.localeCompare(bProg);
+                  } else if (sortBy === 'session') {
+                    const aSess = a.session?.name || '';
+                    const bSess = b.session?.name || '';
+                    comparison = aSess.localeCompare(bSess);
+                  } else if (sortBy === 'total_fee') {
+                    const aTotal = (a.registrationFee || 0) + (a.tuitionFee || 0) + (a.examFee || 0);
+                    const bTotal = (b.registrationFee || 0) + (b.tuitionFee || 0) + (b.examFee || 0);
+                    comparison = aTotal - bTotal;
+                  }
+                  return sortOrder === 'asc' ? comparison : -comparison;
+                })
+                .filter(f => f && f.id)
+                .map((f) => {
+                  const fid = f.id;
                 const progName = typeof f.programId === 'object' ? f.programId?.name : (f.program?.name || '');
                 const univName = typeof f.programId === 'object' ? f.programId?.university?.name : (f.program?.university?.name || '');
                 const sessionName = f.session?.name || '';
