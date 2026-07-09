@@ -696,98 +696,141 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
 
+    // Fetch org details from currently logged-in user context
+    const orgName = user?.organization?.name || 'Pype ERM Institution';
+    const orgLogo = user?.organization?.logo 
+      ? (user.organization.logo.startsWith('http') ? user.organization.logo : `${api.getBaseUrl().replace('/api/v1', '')}${user.organization.logo}`)
+      : '';
+    const orgAddress = user?.organization?.address || student.center?.name || 'Main Study Center';
+
     const dateStr = new Date(payment.receivedAt).toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
 
+    // Compute balance remaining
+    const totalFee = Number(invoice.total) || Number(payment.amount);
+    const thisPay = Number(payment.amount);
+    const totalPaidOnInvoice = Array.isArray(invoice.payments)
+      ? invoice.payments.reduce((acc: number, p: any) => acc + p.amount, 0)
+      : thisPay;
+    const balanceDue = Math.max(0, totalFee - totalPaidOnInvoice);
+
     printWindow.document.write(`
       <html>
         <head>
           <title>Payment Receipt - ${invoice.invoiceNo || 'Receipt'}</title>
           <style>
-            body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; padding: 40px; line-height: 1.5; }
-            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 30px; }
-            .logo { font-size: 24px; font-weight: bold; color: #4f46e5; }
-            .title { font-size: 28px; font-weight: 800; text-align: right; color: #0f172a; }
-            .details { display: flex; justify-content: space-between; margin-bottom: 40px; gap: 20px; }
-            .details h3 { font-size: 14px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; margin-top: 0; }
-            .table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-            .table th { background: #f8fafc; border-bottom: 1px solid #cbd5e1; padding: 12px; font-weight: 600; text-align: left; }
-            .table td { border-bottom: 1px solid #e2e8f0; padding: 12px; }
-            .totals { display: flex; justify-content: flex-end; margin-bottom: 50px; }
-            .totals table { width: 300px; }
-            .totals td { padding: 6px 12px; }
-            .footer { border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center; font-size: 12px; color: #64748b; margin-top: 100px; }
-            .signatures { display: flex; justify-content: space-between; margin-top: 60px; }
-            .sig-line { border-top: 1px solid #cbd5e1; width: 200px; text-align: center; padding-top: 8px; font-size: 13px; color: #475569; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; padding: 40px; line-height: 1.6; background-color: #ffffff; }
+            .receipt-container { max-width: 800px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #6366f1; padding-bottom: 24px; margin-bottom: 30px; }
+            .logo-area { display: flex; align-items: center; gap: 12px; }
+            .logo-img { max-height: 60px; max-width: 150px; object-fit: contain; }
+            .logo-txt { font-size: 22px; font-weight: 800; color: #4f46e5; }
+            .org-address { font-size: 13px; color: #64748b; margin-top: 4px; }
+            .title-area { text-align: right; }
+            .title { font-size: 26px; font-weight: 900; color: #0f172a; margin: 0; }
+            .meta-info { font-size: 13px; color: #475569; margin-top: 8px; line-height: 1.4; }
+            .details-grid { display: grid; grid-cols-2; display: flex; justify-content: space-between; margin-bottom: 35px; gap: 30px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #f1f5f9; }
+            .details-col h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #828fa9; margin: 0 0 8px 0; letter-spacing: 0.05em; }
+            .details-col p { margin: 0; font-size: 14px; color: #334155; line-height: 1.5; }
+            .details-col strong { color: #0f172a; }
+            .table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+            .table th { background: #f1f5f9; border-bottom: 2px solid #cbd5e1; padding: 12px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #475569; text-align: left; }
+            .table td { border-bottom: 1px solid #e2e8f0; padding: 14px 16px; font-size: 14px; color: #334155; }
+            .totals-container { display: flex; justify-content: flex-end; margin-bottom: 50px; }
+            .totals-table { width: 320px; border-collapse: collapse; }
+            .totals-table td { padding: 8px 12px; font-size: 14px; color: #475569; }
+            .totals-table tr.highlight td { font-weight: 700; font-size: 16px; color: #0f172a; border-top: 2px solid #e2e8f0; padding-top: 12px; }
+            .totals-table tr.balance td { font-weight: 700; font-size: 15px; color: #b91c1c; padding-top: 8px; }
+            .signatures { display: flex; justify-content: space-between; margin-top: 60px; padding: 0 20px; }
+            .sig-line { border-top: 1px solid #94a3b8; width: 220px; text-align: center; padding-top: 8px; font-size: 12px; font-weight: 600; color: #475569; }
+            .footer { border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center; font-size: 11px; color: #94a3b8; margin-top: 60px; }
+            @media print {
+              body { padding: 0; }
+              .receipt-container { border: none; box-shadow: none; padding: 0; }
+            }
           </style>
         </head>
         <body>
-          <div class="header">
-            <div>
-              <div class="logo">Pype ERM Institution</div>
-              <div>${student.center?.name || 'Main Study Center'}</div>
-            </div>
-            <div>
-              <div class="title">PAYMENT RECEIPT</div>
-              <div style="text-align: right; margin-top: 5px; font-size: 14px;">
-                <strong>Receipt No:</strong> REC-${payment.id.slice(-6).toUpperCase()}<br/>
-                <strong>Invoice Ref:</strong> ${invoice.invoiceNo}<br/>
-                <strong>Date:</strong> ${dateStr}
+          <div class="receipt-container">
+            <div class="header">
+              <div class="logo-area">
+                ${orgLogo ? `<img src="${orgLogo}" class="logo-img" alt="${orgName}"/>` : `<div class="logo-txt">${orgName}</div>`}
+                <div class="org-address">${orgAddress}</div>
+              </div>
+              <div class="title-area">
+                <h1 class="title">RECEIPT</h1>
+                <div class="meta-info">
+                  <strong>Receipt No:</strong> REC-${payment.id.slice(-6).toUpperCase()}<br/>
+                  <strong>Invoice Ref:</strong> ${invoice.invoiceNo || 'N/A'}<br/>
+                  <strong>Date:</strong> ${dateStr}
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div class="details">
-            <div>
-              <h3>Received From (Student):</h3>
-              <strong>${student.name || 'N/A'}</strong><br/>
-              Enrollment No: ${student.enrollmentNo || 'N/A'}<br/>
-              Email: ${student.email || 'N/A'}<br/>
-              Program: ${student.program?.name || 'N/A'}
+            
+            <div class="details-grid">
+              <div class="details-col">
+                <h3>Received From:</h3>
+                <p>
+                  <strong>${student.name || 'N/A'}</strong><br/>
+                  Enrollment No: ${student.enrollmentNo || 'N/A'}<br/>
+                  Email: ${student.email || 'N/A'}<br/>
+                  Program: ${student.program?.name || 'N/A'}
+                </p>
+              </div>
+              <div class="details-col" style="text-align: right;">
+                <h3>Payment Details:</h3>
+                <p>
+                  Method: <strong style="text-transform: uppercase;">${payment.method}</strong><br/>
+                  Transaction Ref: <strong>${payment.referenceNo || 'N/A'}</strong>
+                </p>
+              </div>
             </div>
-            <div style="text-align: right;">
-              <h3>Payment Method:</h3>
-              <strong style="text-transform: uppercase;">${payment.method}</strong><br/>
-              Ref No: ${payment.referenceNo || 'N/A'}
-            </div>
-          </div>
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th style="text-align: right;">Total Fee</th>
-                <th style="text-align: right;">This Payment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Program Admission installment Fee & Allied Charges</td>
-                <td style="text-align: right;">₹${invoice.total || payment.amount}</td>
-                <td style="text-align: right; font-weight: bold; color: #16a34a;">₹${payment.amount}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="totals">
-            <table>
-              <tr style="font-size: 16px; font-weight: bold;">
-                <td>Amount Paid:</td>
-                <td style="text-align: right; color: #16a34a;">₹${payment.amount}</td>
-              </tr>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th style="text-align: right;">Total Amount</th>
+                  <th style="text-align: right;">Paid Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Program Admission installment Fee & Allied Charges</td>
+                  <td style="text-align: right;">₹${totalFee.toLocaleString('en-IN')}</td>
+                  <td style="text-align: right; font-weight: 700; color: #15803d;">₹${thisPay.toLocaleString('en-IN')}</td>
+                </tr>
+              </tbody>
             </table>
-          </div>
 
-          <div class="signatures">
-            <div class="sig-line">Student Signature</div>
-            <div class="sig-line">Authorized Signatory</div>
-          </div>
+            <div class="totals-container">
+              <table class="totals-table">
+                <tr>
+                  <td>Total Invoiced Fee:</td>
+                  <td style="text-align: right;">₹${totalFee.toLocaleString('en-IN')}</td>
+                </tr>
+                <tr>
+                  <td>Total Payments Received:</td>
+                  <td style="text-align: right; color: #15803d;">₹${totalPaidOnInvoice.toLocaleString('en-IN')}</td>
+                </tr>
+                <tr class="balance">
+                  <td>Remaining Balance Due:</td>
+                  <td style="text-align: right; color: ${balanceDue > 0 ? '#b91c1c' : '#15803d'};">₹${balanceDue.toLocaleString('en-IN')}</td>
+                </tr>
+              </table>
+            </div>
 
-          <div class="footer">
-            This is a computer generated receipt. For any billing queries, please contact accounts team.
+            <div class="signatures">
+              <div class="sig-line">Student Signature</div>
+              <div class="sig-line">Authorized Signatory</div>
+            </div>
+
+            <div class="footer">
+              This is a computer-generated document. No physical signature required.
+            </div>
           </div>
           <script>
             window.onload = function() { window.print(); }
