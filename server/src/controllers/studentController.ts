@@ -5,7 +5,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
 
-const SALES_ROLES = ['sales_admin', 'sales'];
+const SALES_ROLES = ['sales_admin', 'sales', 'sales_agent', 'bde'];
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
