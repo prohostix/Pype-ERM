@@ -14,6 +14,9 @@ export function PaymentsPanel() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [students, setStudents] = useState<any[]>([]);
+  const [paymentTarget, setPaymentTarget] = useState<'invoice' | 'student'>('invoice');
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [formData, setFormData] = useState({
     invoiceId: '',
     amount: '',
@@ -24,7 +27,17 @@ export function PaymentsPanel() {
   useEffect(() => {
     fetchPayments();
     fetchInvoices();
+    fetchStudents();
   }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await api.get('/students');
+      setStudents(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch students:', error);
+    }
+  };
 
   const fetchPayments = async () => {
     setLoading(true);
@@ -117,20 +130,72 @@ export function PaymentsPanel() {
               <DialogTitle>{editingId ? 'Edit Payment' : 'Add New Payment'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Record Payment Against</Label>
+                  <Select value={paymentTarget} onValueChange={(value: 'invoice' | 'student') => {
+                    setPaymentTarget(value);
+                    setFormData({ ...formData, invoiceId: '' });
+                    setSelectedStudentId('');
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="invoice">Against Invoice</SelectItem>
+                      <SelectItem value="student">Against Student</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {paymentTarget === 'student' ? (
+                  <div>
+                    <Label>Select Student</Label>
+                    <Select value={selectedStudentId} onValueChange={(value) => {
+                      setSelectedStudentId(value);
+                      setFormData({ ...formData, invoiceId: '' });
+                    }}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select student" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {students.map((st) => (
+                          <SelectItem key={st.id} value={st.id}>
+                            {st.name} ({st.email})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : <div />}
+              </div>
+
               <div>
                 <Label>Invoice</Label>
-                <Select value={formData.invoiceId} onValueChange={(value) => setFormData({...formData, invoiceId: value})}>
+                <Select value={formData.invoiceId} onValueChange={(value) => setFormData({...formData, invoiceId: value})} disabled={paymentTarget === 'student' && !selectedStudentId}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select invoice" />
+                    <SelectValue placeholder={paymentTarget === 'student' && !selectedStudentId ? "Select student first" : "Select invoice"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {invoices.filter(inv => inv && (inv.id || inv.id)).map((inv) => (
-                      <SelectItem key={inv.id || inv.id} value={(inv.id || inv.id).toString()}>
-                        {inv.invoiceNo || inv.id} - ${inv.total || inv.amount}
-                      </SelectItem>
-                    ))}
+                    {invoices
+                      .filter(inv => inv && (inv.id || inv.id))
+                      .filter(inv => {
+                        if (paymentTarget === 'student') {
+                          return inv.studentId === selectedStudentId;
+                        }
+                        return true;
+                      })
+                      .map((inv) => (
+                        <SelectItem key={inv.id || inv.id} value={(inv.id || inv.id).toString()}>
+                          {inv.invoiceNo || inv.id} - ₹{inv.total || inv.amount}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
+                {paymentTarget === 'student' && selectedStudentId && invoices.filter(i => i.studentId === selectedStudentId).length === 0 && (
+                  <p className="text-xs text-rose-500 mt-1 font-medium">
+                    ⚠️ This student has no outstanding invoices. Please create an invoice first to record payments.
+                  </p>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -182,14 +247,22 @@ export function PaymentsPanel() {
                 return (
                   <div key={paymentId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
-                        <DollarSign className="w-6 h-6 text-success" />
+                      <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center">
+                        <DollarSign className="w-6 h-6 text-emerald-600" />
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium">${payment.amount}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {payment.method} • {payment.referenceNo || 'No reference'}
+                        <div className="font-semibold text-sm">₹{payment.amount.toLocaleString('en-IN')}</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          {payment.method?.toUpperCase()} • {payment.referenceNo || 'No reference'}
                         </div>
+                        {payment.invoice && (
+                          <div className="text-xs text-muted-foreground mt-1">
+                            Invoice: <span className="font-medium text-foreground">{payment.invoice.invoiceNo}</span>
+                            {payment.invoice.student && (
+                              <> · Student: <span className="font-medium text-foreground">{payment.invoice.student.name}</span></>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
