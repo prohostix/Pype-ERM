@@ -11,9 +11,12 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
 
-  // Sales users only see students they personally enrolled
+  // Sales users only see students they personally enrolled or referred
   if (SALES_ROLES.includes(req.user.role)) {
-    where.enrolledBy = req.user.id;
+    where.OR = [
+      { enrolledBy: req.user.id },
+      { referredBy: req.user.id }
+    ];
   }
 
   const students = await prisma.student.findMany({
@@ -237,7 +240,7 @@ export const approveStudent = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { students, isPrevious, branchId } = req.body;
+  const { students, isPrevious, branchId, salesUserId } = req.body;
   if (!Array.isArray(students)) {
     res.status(400).json({ success: false, message: 'Invalid data format. Expected an array of students.' });
     return;
@@ -377,7 +380,8 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           organizationId,
           dob: s.dob ? new Date(s.dob) : undefined,
           admissionDate: s.admissionDate ? new Date(s.admissionDate) : undefined,
-          credentials: { email: s.email, password: defaultPassword }
+          credentials: { email: s.email, password: defaultPassword },
+          enrolledBy: salesUserId && salesUserId !== 'none' ? salesUserId : null
         }
       });
 

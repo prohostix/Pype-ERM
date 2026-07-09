@@ -154,6 +154,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
   const [customOtherName, setCustomOtherName] = useState<string>('');
+  const [salesUsers, setSalesUsers] = useState<any[]>([]);
+  const [selectedSalesUserId, setSelectedSalesUserId] = useState<string>('none');
+
+  const fetchSalesUsers = async () => {
+    try {
+      const response = await api.get('/users');
+      const allUsers = response.data.data || [];
+      const salesOnly = allUsers.filter((u: any) =>
+        ['sales_admin', 'sales_agent', 'bde'].includes(u.role)
+      );
+      setSalesUsers(salesOnly);
+    } catch (err) {
+      console.error('Failed to fetch sales users:', err);
+    }
+  };
 
   const fetchBranches = async () => {
     try {
@@ -167,14 +182,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   };
 
   useEffect(() => {
-    const isSales = ['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
-    if (!isSales) {
-      fetchStudents();
-      fetchBranches();
-    }
+    fetchStudents();
+    fetchBranches();
     fetchPrograms();
     fetchCenters();
     fetchUniversities();
+    fetchSalesUsers();
   }, [user]);
 
   const fetchStudents = async () => {
@@ -476,7 +489,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const res = await api.post('/students/bulk-import', {
         students: studentPayload,
         isPrevious: bulkIsPrevious,
-        branchId: selectedBranchId || undefined
+        branchId: selectedBranchId || undefined,
+        salesUserId: selectedSalesUserId === 'none' ? undefined : selectedSalesUserId
       });
       toast.success(`Successfully imported ${res.data.data.imported} students! (${res.data.data.skipped} skipped)`);
       setBulkDialogOpen(false);
@@ -1799,6 +1813,28 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            )}
+
+            {user?.role === 'org_admin' && salesUsers.length > 0 && (
+              <div className="space-y-1.5">
+                <Label htmlFor="bulkSalesUserSelect" className="text-sm font-semibold">Assign Sales User (Optional)</Label>
+                <Select value={selectedSalesUserId} onValueChange={setSelectedSalesUserId}>
+                  <SelectTrigger id="bulkSalesUserSelect" className="w-full">
+                    <SelectValue placeholder="Select sales user (optional)..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None (Assign to Organisation)</SelectItem>
+                    {salesUsers.map((su) => (
+                      <SelectItem key={su.id} value={su.id}>
+                        {su.name} ({su.role})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  If left unassigned, students will belong generally to the organization.
+                </p>
               </div>
             )}
 
