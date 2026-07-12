@@ -30,7 +30,7 @@ export function CollectionsPanel() {
   // Metrics state
   const [metrics, setMetrics] = useState<any>(null);
   const [overseers, setOverseers] = useState<any[]>([]);
-  const [selectedUserForOverseer, setSelectedUserForOverseer] = useState('');
+  const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
   const [overseerLoading, setOverseerLoading] = useState(false);
   const [searchUserQuery, setSearchUserQuery] = useState('');
 
@@ -78,23 +78,30 @@ export function CollectionsPanel() {
     }
   };
 
-  const handleAddOverseer = async () => {
-    if (!selectedUserForOverseer) {
-      toast.error('Please select a user');
+  // Add multiple overseers at once
+  const handleAddOverseers = async () => {
+    if (selectedUserIds.size === 0) {
+      toast.error('Please select at least one user');
       return;
     }
     setOverseerLoading(true);
-    try {
-      const res = await api.post('/collections/overseers', { userId: selectedUserForOverseer });
-      if (res.data.success) {
-        toast.success('User added successfully to overseers list');
-        setSelectedUserForOverseer('');
-        fetchOverseers();
+    let addedCount = 0;
+    let failedCount = 0;
+    for (const userId of selectedUserIds) {
+      try {
+        await api.post('/collections/overseers', { userId });
+        addedCount++;
+      } catch {
+        failedCount++;
       }
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to add overseer');
-    } finally {
-      setOverseerLoading(false);
+    }
+    setOverseerLoading(false);
+    setSelectedUserIds(new Set());
+    fetchOverseers();
+    if (failedCount === 0) {
+      toast.success(`${addedCount} agent${addedCount !== 1 ? 's' : ''} granted collection access`);
+    } else {
+      toast.warning(`${addedCount} added, ${failedCount} failed (already assigned?)`);
     }
   };
 
@@ -108,6 +115,15 @@ export function CollectionsPanel() {
     } catch (err) {
       toast.error('Failed to remove overseer');
     }
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUserIds(prev => {
+      const next = new Set(prev);
+      if (next.has(userId)) next.delete(userId);
+      else next.add(userId);
+      return next;
+    });
   };
 
   const handleMarkPaid = async (sc: any) => {
@@ -184,11 +200,35 @@ export function CollectionsPanel() {
     );
   }
 
-  // Filter org users by query
-  const filteredUsers = (metrics?.orgUsers || []).filter((u: any) => 
-    u.name.toLowerCase().includes(searchUserQuery.toLowerCase()) || 
-    u.email.toLowerCase().includes(searchUserQuery.toLowerCase())
+  // Overseers already added (by ID)
+  const overseerIds = new Set(overseers.map((o: any) => o.id));
+
+  // Filter org users — exclude already-assigned overseers, apply search
+  const filteredUsers = (metrics?.orgUsers || []).filter((u: any) =>
+    !overseerIds.has(u.id) && (
+      u.name.toLowerCase().includes(searchUserQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchUserQuery.toLowerCase()) ||
+      u.role.toLowerCase().includes(searchUserQuery.toLowerCase())
+    )
   );
+
+  const allFilteredSelected = filteredUsers.length > 0 && filteredUsers.every((u: any) => selectedUserIds.has(u.id));
+
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      setSelectedUserIds(prev => {
+        const next = new Set(prev);
+        filteredUsers.forEach((u: any) => next.delete(u.id));
+        return next;
+      });
+    } else {
+      setSelectedUserIds(prev => {
+        const next = new Set(prev);
+        filteredUsers.forEach((u: any) => next.add(u.id));
+        return next;
+      });
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
@@ -232,7 +272,7 @@ export function CollectionsPanel() {
               activePanelTab === 'overseers' ? "border-primary text-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
-            Designated Overseers ({overseers.length})
+            Collection Agents ({overseers.length})
           </button>
         )}
       </div>
@@ -625,76 +665,121 @@ export function CollectionsPanel() {
           </div>
         )}
 
-        {/* TAB 3: DESIGNATED OVERSEERS */}
+        {/* TAB 3: COLLECTION AGENTS (MULTI-SELECT) */}
         {activePanelTab === 'overseers' && metrics?.currentUserOversight?.isAdmin && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             
-            {/* Assign Overseers Card */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-1">
+            {/* LEFT: Add agents panel */}
+            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-2">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-primary" /> Assign Oversight Permission
+                  <UserPlus className="w-5 h-5 text-primary" /> Add Collection Agents
                 </CardTitle>
-                <CardDescription>Grant designated users access to see this Collections Dashboard</CardDescription>
+                <CardDescription>Select one or more users to grant access to the Collections Dashboard</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <Label className="text-xs mb-1.5 block">Search & Select User</Label>
-                  <div className="relative mb-2">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="Type name or email..." 
-                      className="pl-8"
-                      value={searchUserQuery}
-                      onChange={(e) => setSearchUserQuery(e.target.value)}
-                    />
-                  </div>
-                  
-                  <select
-                    className="w-full bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-3 py-2 text-sm text-foreground mb-4"
-                    value={selectedUserForOverseer}
-                    onChange={(e) => setSelectedUserForOverseer(e.target.value)}
-                  >
-                    <option value="">-- Choose User --</option>
-                    {filteredUsers.map((u: any) => (
-                      <option key={u.id} value={u.id}>
-                        {u.name} ({u.role} - {u.email})
-                      </option>
-                    ))}
-                  </select>
+
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, email or role..."
+                    className="pl-8"
+                    value={searchUserQuery}
+                    onChange={(e) => setSearchUserQuery(e.target.value)}
+                  />
                 </div>
-                
-                <Button 
-                  className="w-full" 
-                  variant="premium" 
-                  onClick={handleAddOverseer}
-                  disabled={overseerLoading}
+
+                {/* Select All toggle */}
+                {filteredUsers.length > 0 && (
+                  <div className="flex items-center justify-between px-1">
+                    <button
+                      onClick={toggleSelectAll}
+                      className="text-xs text-primary hover:underline font-medium"
+                    >
+                      {allFilteredSelected ? 'Deselect All' : `Select All (${filteredUsers.length})`}
+                    </button>
+                    {selectedUserIds.size > 0 && (
+                      <span className="text-xs text-muted-foreground">{selectedUserIds.size} selected</span>
+                    )}
+                  </div>
+                )}
+
+                {/* User checkbox list */}
+                <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
+                  {filteredUsers.length === 0 ? (
+                    <p className="text-xs text-muted-foreground text-center py-4">
+                      {searchUserQuery ? 'No users match your search.' : 'All users are already agents.'}
+                    </p>
+                  ) : (
+                    filteredUsers.map((u: any) => {
+                      const isChecked = selectedUserIds.has(u.id);
+                      return (
+                        <label
+                          key={u.id}
+                          htmlFor={`agent-${u.id}`}
+                          className={cn(
+                            "flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-colors",
+                            isChecked
+                              ? "border-primary/40 bg-primary/5"
+                              : "border-border hover:bg-accent/50"
+                          )}
+                        >
+                          <input
+                            id={`agent-${u.id}`}
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleUserSelection(u.id)}
+                            className="w-4 h-4 accent-primary rounded"
+                          />
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-xs uppercase flex-shrink-0">
+                            {u.name?.charAt(0)}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <span className="font-semibold text-sm block truncate">{u.name}</span>
+                            <span className="text-[10px] text-muted-foreground truncate block">{u.email} · {u.role}</span>
+                          </div>
+                        </label>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Add button */}
+                <Button
+                  className="w-full"
+                  onClick={handleAddOverseers}
+                  disabled={overseerLoading || selectedUserIds.size === 0}
                 >
-                  {overseerLoading ? 'Adding...' : 'Grant Oversight Access'}
+                  {overseerLoading
+                    ? 'Adding...'
+                    : selectedUserIds.size === 0
+                      ? 'Select Users to Add'
+                      : `Grant Access to ${selectedUserIds.size} Agent${selectedUserIds.size !== 1 ? 's' : ''}`}
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Designated Overseers List */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-2">
+            {/* RIGHT: Current agents list */}
+            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-3">
               <CardHeader>
-                <CardTitle className="text-base">Current Designated Collections Overseers</CardTitle>
+                <CardTitle className="text-base">Active Collection Agents ({overseers.length})</CardTitle>
                 <CardDescription>These users can oversee outstanding dues, upcoming schedules and student statuses</CardDescription>
               </CardHeader>
               <CardContent>
                 {overseers.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground text-xs">No designated overseers found. Admins have access by default.</div>
+                  <div className="text-center py-8 text-muted-foreground text-xs">No agents assigned yet. Admins have access by default.</div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {overseers.map((ov: any) => (
                       <div key={ov.id} className="flex justify-between items-center p-3.5 rounded-xl border border-border bg-background/50">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm uppercase">
-                            {ov.name.charAt(0)}
+                            {ov.name?.charAt(0)}
                           </div>
                           <div>
                             <span className="font-bold text-sm block">{ov.name}</span>
-                            <span className="text-[10px] text-muted-foreground">{ov.email} • Role: {ov.role}</span>
+                            <span className="text-[10px] text-muted-foreground">{ov.email} · {ov.role}</span>
                           </div>
                         </div>
                         <Button 
@@ -702,6 +787,7 @@ export function CollectionsPanel() {
                           size="icon" 
                           className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                           onClick={() => handleRemoveOverseer(ov.id)}
+                          title="Remove agent"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
