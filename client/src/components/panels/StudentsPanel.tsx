@@ -51,6 +51,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [bulkData, setBulkData] = useState('');
   const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
+  const [bulkErrors, setBulkErrors] = useState<string[]>([]);
 
   // Notification Dialog State
   const [notifDialogOpen, setNotifDialogOpen] = useState(false);
@@ -411,11 +412,33 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (bulkFormat === 'json') {
         parsedStudents = JSON.parse(bulkData);
       } else {
-        // Simple CSV Parser
+        // RFC-4180 compliant CSV parser that handles quoted fields containing commas
+        const parseCSVLine = (line: string): string[] => {
+          const result: string[] = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') {
+              if (inQuotes && line[i + 1] === '"') {
+                current += '"'; i++; // escaped quote
+              } else {
+                inQuotes = !inQuotes;
+              }
+            } else if (char === ',' && !inQuotes) {
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          result.push(current.trim());
+          return result;
+        };
         const lines = bulkData.split('\n').map(l => l.trim()).filter(Boolean);
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase());
         parsedStudents = lines.slice(1).map(line => {
-          const cols = line.split(',').map(c => c.trim());
+          const cols = parseCSVLine(line);
           const obj: any = {};
           headers.forEach((header, index) => {
             obj[header] = cols[index] || '';
@@ -489,10 +512,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     // Warn if any rows couldn't match a program
     const unresolved = studentPayload.filter(s => !s.programId);
     if (unresolved.length > 0) {
-      toast.error(`${unresolved.length} row(s) have an unrecognized program name. Check the 'programs' column.`);
+      const names = unresolved.map(s => s.name || '(no name)').join(', ');
+      toast.error(`${unresolved.length} row(s) have an unrecognized program: ${names}. Check the 'programs' column.`);
       return;
     }
 
+    setBulkErrors([]);
     try {
       const res = await api.post('/students/bulk-import', {
         students: studentPayload,
@@ -500,9 +525,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         branchId: selectedBranchId || undefined,
         salesUserId: selectedSalesUserId === 'none' ? undefined : selectedSalesUserId
       });
-      toast.success(`Successfully imported ${res.data.data.imported} students! (${res.data.data.skipped} skipped)`);
-      setBulkDialogOpen(false);
-      setBulkData('');
+      const { imported, skipped, errors } = res.data.data;
+      if (skipped > 0 && errors?.length > 0) {
+        setBulkErrors(errors);
+        toast.warning(`Imported ${imported} student(s). ${skipped} row(s) had issues — see details below.`);
+      } else {
+        toast.success(`Successfully imported ${imported} student(s)!`);
+        setBulkDialogOpen(false);
+        setBulkData('');
+      }
       fetchStudents();
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Bulk import failed');
@@ -2090,13 +2121,31 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               />
             </div>
 
+            {/* Per-row import error details */}
+            {bulkErrors.length > 0 && (
+              <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 space-y-1.5">
+                <p className="text-sm font-semibold text-destructive flex items-center gap-1.5">
+                  ⚠️ Import Issues ({bulkErrors.length})
+                </p>
+                <ul className="text-xs space-y-1 max-h-36 overflow-y-auto pr-1">
+                  {bulkErrors.map((err, i) => (
+                    <li key={i} className="text-muted-foreground border-l-2 border-destructive/30 pl-2 py-0.5">
+                      {err}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-muted-foreground pt-1">Students without issues were imported successfully. Fix the rows above and re-upload.</p>
+              </div>
+            )}
+
             <div className="flex gap-2 pt-2">
               <Button onClick={handleBulkImport} className="flex-1">Start Import Process</Button>
-              <Button variant="outline" onClick={() => setBulkDialogOpen(false)}>Close</Button>
+              <Button variant="outline" onClick={() => { setBulkDialogOpen(false); setBulkErrors([]); }}>Close</Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
+
 
       {/* Notifications Dialog */}
       <Dialog open={notifDialogOpen} onOpenChange={setNotifDialogOpen}>
