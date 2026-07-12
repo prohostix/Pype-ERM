@@ -11,6 +11,11 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
     where.organizationId = req.user.organizationId;
   }
 
+  // Branch-level isolation for users list
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+
   if (req.query.role) {
     where.role = req.query.role as string;
   } else {

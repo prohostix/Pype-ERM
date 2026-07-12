@@ -11,6 +11,11 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
 
+  // Branch-level isolation for students list
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+
   // Sales users only see students they personally enrolled or referred
   if (SALES_ROLES.includes(req.user.role)) {
     where.OR = [

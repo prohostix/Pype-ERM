@@ -10,6 +10,11 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.studentId) where.studentId = req.query.studentId as string;
 
+  // Branch-level isolation for invoices list
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+
   const invoices = await prisma.invoice.findMany({
     where,
     include: {
@@ -58,8 +63,15 @@ export const approveInvoice = asyncHandler(async (req: AuthRequest, res: Respons
 
 // Payments
 export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId };
+
+  // Branch-level isolation for payments list
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+
   const payments = await prisma.paymentEntry.findMany({
-    where: { organizationId: req.user.organizationId },
+    where,
     include: {
       invoice: {
         include: {
