@@ -176,7 +176,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
               title="Absent Today" 
               value={metrics.absentToday ?? absentToday.length} 
               icon={<Clock className="w-5 h-5" />}
-              subtext={absentToday.length > 0 ? `${absentToday.length} not checked in` : 'All present'}
+              subtext={(metrics.absentToday ?? absentToday.length) > 0 ? `${metrics.absentToday ?? absentToday.length} not checked in` : 'All present'}
               color="warning"
               onClick={() => onNavigate('attendance')}
             />

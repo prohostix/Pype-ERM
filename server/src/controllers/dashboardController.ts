@@ -31,8 +31,16 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    if (metrics.totalEmployees === undefined) {
+      metrics.totalEmployees = await prisma.user.count({
+        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin'] } } }
+      });
+    }
+
     metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId, date: today, status: 'present' } });
     metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId, date: today, status: 'leave' } });
+    metrics.absentToday = Math.max(0, metrics.totalEmployees - metrics.presentToday - metrics.onLeave);
+    
     metrics.pendingLeaves = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
     metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
   }
