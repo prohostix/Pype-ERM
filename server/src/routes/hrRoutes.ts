@@ -36,6 +36,7 @@ import {
 } from '../controllers/hrController.js';
 import {
   getAttendance,
+  getAttendances,
   getAttendanceById,
   markAttendance,
   updateAttendance,
@@ -91,7 +92,7 @@ router.patch('/leaves/:id/hr-approve', authorize('hr_admin'), hrApproveLeave);
 router.get('/attendance/my', getMyAttendance);
 router.get('/attendance/my-summary', getMyAttendanceSummary);
 router.get('/attendance/activity-report', authorize('hr_admin', 'ceo', 'org_admin'), getActivityReport);
-router.route('/attendance').get(authorize('hr_admin', 'org_admin', 'ceo'), getAttendance).post(authorize('hr_admin'), markAttendance);
+router.route('/attendance').get(authorize('hr_admin', 'org_admin', 'ceo'), getAttendances).post(authorize('hr_admin'), markAttendance);
 router.route('/attendance/:id')
   .get(getAttendanceById)
   .put(authorize('hr_admin'), updateAttendance)

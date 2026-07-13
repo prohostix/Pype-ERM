@@ -241,7 +241,20 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
     where.branchId = req.user.branchId;
   }
-  const attendances = await prisma.attendance.findMany({ where, include: { user: true } });
+  // Date filter
+  if (req.query.date) {
+    const dateStr = req.query.date as string;
+    const start = new Date(dateStr);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(dateStr);
+    end.setHours(23, 59, 59, 999);
+    where.date = { gte: start, lte: end };
+  }
+  // Status filter
+  if (req.query.status) {
+    where.status = req.query.status as string;
+  }
+  const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
   res.json({ success: true, count: attendances.length, data: attendances });
 });
 
