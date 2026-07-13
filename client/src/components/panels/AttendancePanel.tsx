@@ -26,8 +26,11 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
-  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('calendar');
+  // HR admins default to list view (with date filter), others to calendar
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>(canViewAll ? 'list' : 'calendar');
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
   const [formData, setFormData] = useState({
     employeeId: '',
@@ -50,17 +53,25 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
     }
   }, [employees]);
 
-  const fetchAttendance = async () => {
+  const fetchAttendance = async (date?: string) => {
     setLoading(true);
     try {
       const endpoint = canViewAll ? '/hr/attendance' : '/hr/attendance/my';
-      const response = await api.get(endpoint);
+      const params: Record<string, string> = {};
+      const effectiveDate = date !== undefined ? date : dateFilter;
+      if (effectiveDate) params.date = effectiveDate;
+      const response = await api.get(endpoint, { params });
       setAttendance(response.data.data || []);
     } catch (error) {
       console.error('Failed to fetch attendance:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDateFilterChange = (newDate: string) => {
+    setDateFilter(newDate);
+    fetchAttendance(newDate);
   };
 
   const handleExportExcel = async () => {
@@ -310,13 +321,50 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
             </Button>
           </CardHeader>
           <CardContent className="pt-6">
+            {/* Date filter bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-5 p-3 rounded-xl bg-muted/30 border border-border/40">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-semibold text-muted-foreground">Filter by Date</span>
+                <input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => handleDateFilterChange(e.target.value)}
+                  className="border border-border rounded-lg px-3 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                {dateFilter && (
+                  <button
+                    onClick={() => handleDateFilterChange('')}
+                    className="text-xs text-muted-foreground hover:text-foreground underline"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground font-medium">Sort:</span>
+                <button
+                  onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted transition-colors"
+                >
+                  {sortOrder === 'desc' ? '↓ Newest First' : '↑ Oldest First'}
+                </button>
+              </div>
+            </div>
             {loading ? (
               <div className="text-center py-8">Loading...</div>
             ) : attendance.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">No attendance records found</div>
             ) : (
               <div className="space-y-3">
-                {attendance.filter(rec => rec && rec.id).map((record) => {
+                {[...attendance]
+                  .filter(rec => rec && rec.id)
+                  .sort((a, b) => {
+                    const dateA = new Date(a.date).getTime();
+                    const dateB = new Date(b.date).getTime();
+                    return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+                  })
+                  .map((record) => {
                   const recId = record.id;
                   const empName = record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown';
                   return (
