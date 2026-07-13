@@ -351,3 +351,41 @@ export const updatePaymentLinkStatus = asyncHandler(async (req: AuthRequest, res
   });
   res.json({ success: true, data: link });
 });
+
+export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const students = await prisma.student.findMany({
+    where: { organizationId: req.user.organizationId },
+    select: {
+      id: true,
+      name: true,
+      enrollmentNo: true,
+      program: {
+        select: { name: true }
+      },
+      paymentSchedules: true
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  const logs = students.map(student => {
+    const totalFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    const totalPaid = student.paymentSchedules
+      .filter(ps => ps.status === 'paid')
+      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    const balance = totalFee - totalPaid;
+    const status = (balance <= 0 && totalFee > 0) ? 'Completed' : 'Pending';
+
+    return {
+      studentId: student.id,
+      name: student.name,
+      enrollmentNo: student.enrollmentNo,
+      programName: student.program?.name || 'N/A',
+      totalFee,
+      totalPaid,
+      balance,
+      status
+    };
+  });
+
+  res.status(200).json({ success: true, count: logs.length, data: logs });
+});

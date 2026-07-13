@@ -15,7 +15,6 @@ import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { BranchesPanel } from '@/components/panels/BranchesPanel';
-import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
@@ -53,7 +52,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
             <TabsTrigger value="branches" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Branches</TabsTrigger>
             <TabsTrigger value="users" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Users</TabsTrigger>
             <TabsTrigger value="departments" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Departments</TabsTrigger>
-            <TabsTrigger value="subdepartments" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Sub-Departments</TabsTrigger>
+
             <TabsTrigger value="tasks" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Tasks</TabsTrigger>
             <TabsTrigger value="students" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Students</TabsTrigger>
             <TabsTrigger value="universities" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Universities</TabsTrigger>
@@ -90,7 +89,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
         <TabsContent value="hierarchy"><OrgHierarchyPanel /></TabsContent>
         <TabsContent value="branches"><BranchesPanel /></TabsContent>
         <TabsContent value="departments"><DepartmentsPanel /></TabsContent>
-        <TabsContent value="subdepartments"><SubDepartmentsPanel /></TabsContent>
+
         <TabsContent value="tasks"><TasksPanel /></TabsContent>
         <TabsContent value="students"><StudentsPanel /></TabsContent>
         <TabsContent value="universities"><UniversitiesPanel /></TabsContent>

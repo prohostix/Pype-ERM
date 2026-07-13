@@ -52,6 +52,7 @@ import {
   generatePaymentLink,
   getPaymentLinks,
   updatePaymentLinkStatus,
+  getStudentPaymentsLog,
 } from '../controllers/financeExtController.js';
 import {
   getWalletTopUps,
@@ -180,6 +181,10 @@ router.post('/old-fees/bulk', authorize('finance_admin'), bulkCreateOldFees);
 router.get('/payment-links', getPaymentLinks);
 router.post('/payment-links', authorize('finance_admin'), generatePaymentLink);
 router.put('/payment-links/:id/status', authorize('finance_admin'), updatePaymentLinkStatus);
+
+// Student Payments Log
+// Student Payments Log
+router.get('/student-payments-log', getStudentPaymentsLog);
 
 // Commissions from Universities
 router.route('/commissions')

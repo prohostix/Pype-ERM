@@ -72,3 +72,191 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
   res.status(200).json({ success: true, data: metrics });
 });
+
+export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const { dateRange } = req.query;
+  const branchId = req.query.branchId as string;
+
+  const whereBase: any = { organizationId: orgId };
+  const branchFilter = (branchId && branchId !== 'all') ? branchId : undefined;
+
+  // Date filtering
+  let dateFilter = {};
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  
+  if (dateRange === 'today') {
+    dateFilter = { gte: today };
+  } else if (dateRange === 'this_week') {
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    dateFilter = { gte: startOfWeek };
+  } else if (dateRange === 'this_month') {
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    dateFilter = { gte: startOfMonth };
+  }
+
+  // 1. Total Receivables & 2. Total Collected (from Invoices & PaymentEntry)
+  const invoices = await prisma.invoice.findMany({
+    where: { 
+      ...whereBase, 
+      ...(branchFilter ? { student: { branchId: branchFilter } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    }
+  });
+  
+  const totalReceivables = invoices.reduce((sum, inv) => sum + inv.total, 0);
+  
+  const payments = await prisma.paymentEntry.findMany({
+    where: { 
+      ...whereBase, 
+      ...(branchFilter ? { invoice: { student: { branchId: branchFilter } } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    }
+  });
+  const totalCollected = payments.reduce((sum, p) => sum + p.amount, 0);
+
+  // 3. Cash & Bank Balance
+  const wallets = await prisma.studyCenterWallet.findMany({
+    where: { organizationId: orgId }
+  });
+  const cashAndBankBalance = wallets.reduce((sum, w) => sum + w.balance, 0);
+
+  // 4. Operational Expenses
+  const expenses = await prisma.expenseClaim.findMany({
+    where: { 
+      ...whereBase, 
+      ...(branchFilter ? { user: { branchId: branchFilter } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    }
+  });
+  const operationalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+  // 5. Committed Payments (using UniversityPayment or just 0 placeholder)
+  const committedPayments = 0; // Placeholder
+
+  // 6. University Fee Pending
+  const universityFeeData = await prisma.universityPayment.findMany({
+    where: { 
+      organizationId: orgId, 
+      status: 'pending',
+      ...(branchFilter ? { student: { branchId: branchFilter } } : {})
+    }
+  });
+  const universityFeePending = universityFeeData.reduce((sum, up) => sum + (up.amountPaid || 0), 0);
+
+  // 7. Incentive Pending
+  const incentivePending = 0;
+
+  // 8. Payroll Pending
+  const payrollPendingData = await prisma.payroll.findMany({
+    where: { 
+      organizationId: orgId, 
+      status: 'transferred_to_finance',
+      ...(branchFilter ? { user: { branchId: branchFilter } } : {})
+    },
+  });
+  const payrollPending = payrollPendingData.reduce((acc, p) => acc + (p.netSalary || 0), 0);
+
+  // 9. My Target
+  const myTarget = await prisma.target.findFirst({
+    where: { organizationId: orgId, employeeId: req.user?.id },
+    orderBy: { createdAt: 'desc' },
+  });
+  const myTargetValue = myTarget?.target || 0;
+
+  // Lists
+  const recentCollections = await prisma.paymentEntry.findMany({
+    where: { 
+      ...whereBase, 
+      ...(branchFilter ? { invoice: { student: { branchId: branchFilter } } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 5,
+    include: { invoice: { include: { student: true } } },
+  });
+
+  const recentExpenses = await prisma.expenseClaim.findMany({
+    where: { 
+      ...whereBase, 
+      ...(branchFilter ? { user: { branchId: branchFilter } } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 5,
+    include: { user: true },
+  });
+
+  // Charts data
+  const collectionOverview = [
+    { name: 'Mon', value: 1200 }, { name: 'Tue', value: 3000 },
+    { name: 'Wed', value: 2000 }, { name: 'Thu', value: 2780 },
+    { name: 'Fri', value: 1890 }, { name: 'Sat', value: 2390 },
+    { name: 'Sun', value: 3490 },
+  ];
+
+  const expenseOverview = [
+    { name: 'Rent', value: 400 },
+    { name: 'Salaries', value: 3000 },
+    { name: 'Marketing', value: 300 },
+    { name: 'Utilities', value: 200 }
+  ];
+
+  const branchWiseCollection = [
+    { name: 'Main Branch', value: 4000 },
+    { name: 'South Branch', value: 3000 },
+    { name: 'North Branch', value: 2000 },
+  ];
+
+  // Alerts
+  const overdueStudentFees = await prisma.invoice.count({
+    where: { 
+      ...whereBase, 
+      status: 'overdue',
+      ...(branchFilter ? { student: { branchId: branchFilter } } : {})
+    }
+  });
+
+  const universityFeeDue = await prisma.universityPayment.count({
+    where: { 
+      organizationId: orgId, 
+      status: 'pending',
+      ...(branchFilter ? { student: { branchId: branchFilter } } : {})
+    }
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {
+      metrics: {
+        totalReceivables,
+        totalCollected,
+        cashAndBankBalance,
+        operationalExpenses,
+        committedPayments,
+        universityFeePending,
+        incentivePending,
+        payrollPending,
+        myTargetValue
+      },
+      lists: {
+        recentCollections,
+        recentExpenses,
+        upcomingCommittedPayments: []
+      },
+      charts: {
+        collectionOverview,
+        expenseOverview,
+        branchWiseCollection
+      },
+      alerts: {
+        overdueStudentFees,
+        universityFeeDue,
+        committedPaymentDueToday: 0,
+        incentivePending: 0
+      }
+    }
+  });
+});

@@ -10,7 +10,6 @@ import {
   AlertTriangle,
   CheckCircle,
   RefreshCw,
-  Receipt,
   Wallet,
   FileText,
   Users,
@@ -22,18 +21,11 @@ import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
 import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsPanel';
-import { TasksPanel } from '@/components/panels/TasksPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
-import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
-import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
-import { AttendancePanel } from '@/components/panels/AttendancePanel';
-import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
-import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
-import { FinanceAuthFeePanel } from '@/components/panels/FinanceAuthFeePanel';
 import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
 import { WalletTopUpsPanel } from '@/components/panels/WalletTopUpsPanel';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
@@ -41,13 +33,11 @@ import { IncomeExpenditurePanel } from '@/components/panels/IncomeExpenditurePan
 import { ProfitLossPanel } from '@/components/panels/ProfitLossPanel';
 import { FinanceSalaryApprovalPanel } from '@/components/panels/FinanceSalaryApprovalPanel';
 import { FinanceSalesTargetsPanel } from '@/components/panels/FinanceSalesTargetsPanel';
-import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
-import { PaymentRemindersPanel } from '@/components/panels/PaymentRemindersPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
-import { InvoiceSchedulePanel } from '@/components/panels/InvoiceSchedulePanel';
-import { BulkOldFeePanel } from '@/components/panels/BulkOldFeePanel';
 import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
+import { AttendancePanel } from '@/components/panels/AttendancePanel';
+import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
+import { StudentPaymentsLogPanel } from '@/components/panels/StudentPaymentsLogPanel';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -58,88 +48,57 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Cell,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
 export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) {
-  const [metrics, setMetrics] = useState<any>({});
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [expenses, setExpenses] = useState<any[]>([]);
-  const [payrollBatches, setPayrollBatches] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
-
   useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
-  useEffect(() => { fetchAll(); }, []);
-
-  const fetchAll = async () => {
-    setLoading(true);
-    try {
-      const [metricsRes, invoicesRes, expensesRes, batchesRes] = await Promise.all([
-        api.get('/dashboard/metrics'),
-        api.get('/finance/invoices').catch(() => ({ data: { data: [] } })),
-        api.get('/finance/expenses').catch(() => ({ data: { data: [] } })),
-        api.get('/finance/payroll-batches').catch(() => ({ data: { data: [] } })),
-      ]);
-      setMetrics(metricsRes.data.data || {});
-      setInvoices(invoicesRes.data.data || []);
-      setExpenses(expensesRes.data.data || []);
-      setPayrollBatches(batchesRes.data.data || []);
-    } catch (e) {
-      console.error('Finance fetch error:', e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return (
-        <OverviewContent
-          metrics={metrics} invoices={invoices} expenses={expenses}
-          payrollBatches={payrollBatches} loading={loading} onNavigate={setActiveTab}
-        />
-      );
+      case 'overview': return <OverviewContent onNavigate={setActiveTab} />;
       case 'invoices': return <InvoicesPanel />;
+      case 'student_payment_log': return <StudentPaymentsLogPanel />;
       case 'payments': return <PaymentsPanel />;
-      case 'expenses': return <ExpensesPanel />;
-      case 'targets': return <TargetsPanel endpoint="/finance/targets" title="Finance Targets" />;
-      case 'fees': return <FeeStructuresPanel />;
-      case 'payroll': return <PayrollPanel />;
-      case 'payroll-batches': return <PayrollBatchesPanel />;
-      case 'students': return <StudentsPanel />;
-      case 'collections': return <CollectionsPanel />;
-      case 'study_centers': return <StudyCentersPanel />;
-      case 'admission_sessions': return <AdmissionSessionsPanel />;
-      case 'auth_fees': return <FinanceAuthFeePanel />;
-      case 'pending_payment': return <FinanceCenterVerificationPanel />;
-      case 'wallet_topups': return <WalletTopUpsPanel />;
-      case 'enrollments_finance': return <FinanceEnrollmentsPanel />;
-      case 'income_expenditure': return <IncomeExpenditurePanel />;
-      case 'profit_loss': return <ProfitLossPanel />;
-      case 'salary_approvals': return <FinanceSalaryApprovalPanel />;
-      case 'sales_targets': return <FinanceSalesTargetsPanel />;
-      case 'university_commissions': return <UniversityCommissionsPanel />;
-      case 'university_payments': return <UniversityPaymentsPanel />;
-      case 'payment_reminders': return <PaymentRemindersPanel />;
-      case 'bill_receipt': return <BillReceiptPanel />;
-      case 'invoice_schedule': return <InvoiceSchedulePanel />;
-      case 'bulk_old_fee': return <BulkOldFeePanel />;
+      case 'pending_payments': return <FinanceCenterVerificationPanel />;
+      case 'bill_receipts': return <BillReceiptPanel />;
       case 'payment_gateway': return <PaymentGatewayPanel />;
-      case 'leaves': return <LeavesPanel />;
-      case 'tasks': return <TasksPanel />;
-      case 'escalations': return <FinanceEscalationsPanel />;
-      case 'my_leaves': return <LeavesPanel />;
-      case 'my_attendance': return <AttendancePanel isMyPortal />;
-      case 'my_payslips': return <PayrollPanel />;
-      case 'holidays': return <HolidaysPanel />;
-      case 'notice-board': return <NoticeBoardPanel />;
-      case 'subdepartments': return <SubDepartmentsPanel />;
-      default: return null;
+      case 'wallet_topup': return <WalletTopUpsPanel />;
+      case 'student_collections': return <CollectionsPanel />;
+      case 'fee_structures': return <FeeStructuresPanel />;
+      case 'discounts': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Discounts Module Coming Soon</div>;
+      
+      case 'expenses': return <ExpensesPanel />;
+      case 'committed_payments': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Committed Payments Module Coming Soon</div>;
+      case 'university_fee': return <UniversityPaymentsPanel />;
+      case 'university_commissions': return <UniversityCommissionsPanel />;
+      case 'payroll': return <PayrollPanel />;
+      case 'salary_approval': return <FinanceSalaryApprovalPanel />;
+      case 'incentive_approval': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Approval Module Coming Soon</div>;
+
+      case 'students': return <StudentsPanel />;
+      case 'admissions': return <AdmissionSessionsPanel />;
+      case 'enrollments': return <FinanceEnrollmentsPanel />;
+      
+      case 'sales_target': return <FinanceSalesTargetsPanel />;
+      case 'my_target': return <TargetsPanel endpoint="/finance/targets" title="My Finance Targets" />;
+      
+      case 'income_expense': return <IncomeExpenditurePanel />;
+      case 'profit_loss': return <ProfitLossPanel />;
+      case 'collection_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Collection Report Coming Soon</div>;
+      case 'fee_pending_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Fee Pending Report Coming Soon</div>;
+      case 'incentive_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Report Coming Soon</div>;
+      
+      case 'my_leave_request': return <LeavesPanel />;
+      case 'my_attendance': return <AttendancePanel isMyPortal={true} />;
+      case 'notice_board': return <NoticeBoardPanel />;
+      case 'pay_slips': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Pay Slips Coming Soon</div>;
+      
+      default: return <div className="p-8 text-center text-muted-foreground">Module under construction</div>;
     }
   };
 
@@ -152,280 +111,264 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
 
 export function getFinanceNavItems() {
   return [
-    { id: '__finance_section', label: 'Finance Management', isSection: true },
+    { id: '__dashboard_section', label: '📊 Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
-    { id: 'invoices', label: 'Invoices' },
+    
+    { id: '__collections_section', label: '💳 Collections', isSection: true },
+    { id: 'student_collections', label: 'Student Collections' },
+    { id: 'student_payment_log', label: 'Student Payment Log' },
     { id: 'payments', label: 'Payments' },
+    { id: 'pending_payments', label: 'Pending Payments' },
+    { id: 'bill_receipts', label: 'Bill Receipts' },
+    { id: 'payment_gateway', label: 'Payment Gateway' },
+    { id: 'wallet_topup', label: 'Wallet Top-up' },
+    
+    { id: '__billing_section', label: '📄 Billing', isSection: true },
+    { id: 'invoices', label: 'Invoices' },
+    { id: 'fee_structures', label: 'Fee Structures' },
+    { id: 'discounts', label: 'Discounts' },
+    
+    { id: '__finance_ops_section', label: '💰 Finance', isSection: true },
     { id: 'expenses', label: 'Expenses' },
-    { id: 'targets', label: 'Targets' },
-    { id: 'fees', label: 'Fee Structures' },
+    { id: 'committed_payments', label: 'Committed Payments' },
+    { id: 'university_fee', label: 'University Fee' },
     { id: 'university_commissions', label: 'University Commissions' },
     { id: 'payroll', label: 'Payroll' },
-    { id: 'payroll-batches', label: 'Payroll Batches' },
+    { id: 'salary_approval', label: 'Salary Approval' },
+    { id: 'incentive_approval', label: 'Incentive Approval' },
+    
+    { id: '__students_section', label: '🎓 Students', isSection: true },
     { id: 'students', label: 'Students' },
-    { id: 'collections', label: 'Collections' },
-    { id: 'study_centers', label: 'Study Centers' },
-    { id: 'admission_sessions', label: 'Admissions' },
-    { id: 'auth_fees', label: 'Auth Fees' },
-    { id: 'pending_payment', label: 'Pending Payment' },
-    { id: 'wallet_topups', label: 'Wallet Top-Ups' },
-    { id: 'enrollments_finance', label: 'Enrollments' },
-    { id: 'income_expenditure', label: 'Income & Expenditure' },
+    { id: 'admissions', label: 'Admissions' },
+    { id: 'enrollments', label: 'Enrollments' },
+    
+    { id: '__targets_section', label: '🎯 Targets', isSection: true },
+    { id: 'sales_target', label: 'Sales Target' },
+    { id: 'my_target', label: 'My Target' },
+    
+    { id: '__reports_section', label: '📈 Reports', isSection: true },
+    { id: 'income_expense', label: 'Income & Expense' },
     { id: 'profit_loss', label: 'Profit & Loss' },
-    { id: 'salary_approvals', label: 'Salary Approvals' },
-    { id: 'sales_targets', label: 'Sales Targets' },
-    { id: '__fee_section', label: 'Fee & Billing', isSection: true },
-    { id: 'payment_reminders', label: '🔔 Payment Reminders' },
-    { id: 'bill_receipt', label: '🧾 Bills & Receipts' },
-    { id: 'invoice_schedule', label: '📅 Invoice Schedules' },
-    { id: 'bulk_old_fee', label: '📦 Bulk Old Fees' },
-    { id: 'payment_gateway', label: '🔗 Payment Gateway' },
-    { id: 'leaves', label: 'Leave Requests' },
-    { id: 'tasks', label: 'Tasks' },
-    { id: 'escalations', label: 'Escalations' },
-    { id: '__portal_section', label: 'My Portal', isSection: true },
-    { id: 'my_leaves', label: 'My Leaves' },
+    { id: 'collection_report', label: 'Collection Report' },
+    { id: 'fee_pending_report', label: 'Fee Pending Report' },
+    { id: 'incentive_report', label: 'Incentive Report' },
+    
+    { id: '__my_account_section', label: '👤 My Account', isSection: true },
     { id: 'my_attendance', label: 'My Attendance' },
-    { id: 'my_payslips', label: 'Pay Slips' },
-    { id: 'holidays', label: 'Holidays' },
-    { id: 'notice-board', label: 'Notice Board' },
-    { id: 'subdepartments', label: 'Sub-Departments' },
+    { id: 'my_leave_request', label: 'My Leave Request' },
+    { id: 'pay_slips', label: 'Pay Slips' },
+    { id: 'notice_board', label: 'Notice Board' },
   ];
 }
 
 // ─── Overview Content ─────────────────────────────────────────────────────────
 
-function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading, onNavigate }: any) {
-  // Compute live stats from real data
-  const totalInvoiceAmount = invoices.reduce((s: number, i: any) => s + (i.total || i.amount || 0), 0);
-  const paidInvoices = invoices.filter((i: any) => i.status === 'paid');
-  const pendingInvoices = invoices.filter((i: any) => i.status === 'pending' || i.status === 'unpaid');
-  const partialInvoices = invoices.filter((i: any) => i.status === 'partial');
-  const totalPaid = paidInvoices.reduce((s: number, i: any) => s + (i.total || i.amount || 0), 0);
-  const totalExpenses = expenses.reduce((s: number, e: any) => s + (e.amount || 0), 0);
-  const pendingExpenses = expenses.filter((e: any) => e.status === 'pending');
-  const pendingBatches = payrollBatches.filter((b: any) => b.status === 'pending_finance');
+function OverviewContent({ onNavigate }: any) {
+  const [data, setData] = useState<any>(null);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [branchFilter, setBranchFilter] = useState('all');
+  const [dateRange, setDateRange] = useState('this_month'); // today, this_week, this_month, custom
 
-  // Build bar chart data from invoices grouped by status
-  const chartData = [
-    { label: 'Paid', value: paidInvoices.length, color: 'hsl(var(--success))' },
-    { label: 'Pending', value: pendingInvoices.length, color: 'hsl(var(--warning))' },
-    { label: 'Partial', value: partialInvoices.length, color: 'hsl(var(--info))' },
-    { label: 'Expenses', value: expenses.length, color: 'hsl(var(--error))' },
-  ];
+  useEffect(() => {
+    fetchBranches();
+  }, []);
 
-  const paidPct = invoices.length ? Math.round((paidInvoices.length / invoices.length) * 100) : 0;
-  const partialPct = invoices.length ? Math.round((partialInvoices.length / invoices.length) * 100) : 0;
-  const pendingPct = invoices.length ? Math.round((pendingInvoices.length / invoices.length) * 100) : 0;
+  useEffect(() => {
+    fetchDashboardData();
+  }, [branchFilter, dateRange]);
 
-  const recentInvoices = [...invoices].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4);
+  const fetchBranches = async () => {
+    try {
+      const res = await api.get('/org/branches');
+      setBranches(res.data.data || []);
+    } catch (e) { console.error('Failed to fetch branches', e); }
+  };
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get(`/dashboard/finance-overview?branchId=${branchFilter}&dateRange=${dateRange}`);
+      setData(res.data.data);
+    } catch (e) {
+      console.error('Failed to fetch finance overview', e);
+      toast.error('Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading || !data) {
+    return <div className="space-y-4">{[1,2,3].map(i => <div key={i} className="h-32 bg-muted rounded-xl animate-pulse" />)}</div>;
+  }
+
+  const { metrics, lists, charts, alerts } = data;
 
   return (
     <div className="space-y-6">
-      {/* Hero Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <FinanceMetric
-          title="Total Receivables"
-          value={`₹${(totalInvoiceAmount / 1000).toFixed(1)}K`}
-          sub={`${invoices.length} total invoices`}
-          trend={pendingInvoices.length > 0 ? `${pendingInvoices.length} pending` : 'All collected'}
-          trendType={pendingInvoices.length > 0 ? 'warn' : 'up'}
-          icon={<DollarSign className="w-5 h-5" />}
-          color="primary"
-          onClick={() => onNavigate('invoices')}
-        />
-        <FinanceMetric
-          title="Total Collected"
-          value={`₹${(totalPaid / 1000).toFixed(1)}K`}
-          sub={`${paidInvoices.length} paid invoices`}
-          trend={paidPct > 0 ? `${paidPct}% collection rate` : 'No payments yet'}
-          trendType="up"
-          icon={<CreditCard className="w-5 h-5" />}
-          color="success"
-          onClick={() => onNavigate('payments')}
-        />
-        <FinanceMetric
-          title="Operational Expenses"
-          value={`₹${(totalExpenses / 1000).toFixed(1)}K`}
-          sub={`${expenses.length} expense claims`}
-          trend={pendingExpenses.length > 0 ? `${pendingExpenses.length} pending approval` : 'All reviewed'}
-          trendType={pendingExpenses.length > 0 ? 'down' : 'up'}
-          icon={<TrendingUp className="w-5 h-5" />}
-          color="warning"
-          onClick={() => onNavigate('expenses')}
-        />
-      </div>
-
-      {/* Secondary quick-nav row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Payroll Batches', value: pendingBatches.length, sub: 'Pending approval', icon: <Users className="w-4 h-4" />, tab: 'payroll-batches', urgent: pendingBatches.length > 0 },
-          { label: 'Wallet Top-Ups', value: metrics.pendingWalletTopUps || 0, sub: 'Awaiting review', icon: <Wallet className="w-4 h-4" />, tab: 'wallet_topups', urgent: (metrics.pendingWalletTopUps || 0) > 0 },
-          { label: 'Enrollments', value: metrics.pendingEnrollments || 0, sub: 'Finance review', icon: <FileText className="w-4 h-4" />, tab: 'enrollments_finance', urgent: (metrics.pendingEnrollments || 0) > 0 },
-          { label: 'Pending Centers', value: metrics.pendingCenters || 0, sub: 'Payment verification', icon: <Receipt className="w-4 h-4" />, tab: 'pending_payment', urgent: (metrics.pendingCenters || 0) > 0 },
-        ].map(item => (
-          <Card
-            key={item.label}
-            className={cn('cursor-pointer transition-colors', item.urgent ? 'hover:border-warning/50 border-warning/20' : 'hover:border-primary/40')}
-            onClick={() => onNavigate(item.tab)}
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 items-center justify-between bg-card p-4 rounded-xl border">
+        <div>
+          <h2 className="text-xl font-bold">Finance Overview</h2>
+          <p className="text-sm text-muted-foreground">Monitor collections, expenses, and targets.</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <select 
+            value={branchFilter} 
+            onChange={e => setBranchFilter(e.target.value)}
+            className="h-10 px-3 rounded-md border bg-background text-sm"
           >
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className={cn('p-2 rounded-lg', item.urgent ? 'bg-warning/10 text-warning' : 'bg-muted text-muted-foreground')}>
-                {item.icon}
-              </div>
-              <div>
-                <p className="text-xl font-bold">{item.value}</p>
-                <p className="text-xs text-muted-foreground">{item.label}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+            <option value="all">All Branches</option>
+            {branches.map(b => (
+              <option key={b.id} value={b.id}>{b.name}</option>
+            ))}
+          </select>
+          
+          <select 
+            value={dateRange} 
+            onChange={e => setDateRange(e.target.value)}
+            className="h-10 px-3 rounded-md border bg-background text-sm"
+          >
+            <option value="today">Today</option>
+            <option value="this_week">This Week</option>
+            <option value="this_month">This Month</option>
+            <option value="all">All Time</option>
+          </select>
+          <Button onClick={fetchDashboardData} variant="outline" size="icon">
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Invoice Status Chart */}
-        <Card
-          className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
-          onClick={() => onNavigate('invoices')}
-        >
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Invoice Overview</CardTitle>
-              <CardDescription>Live billing status — click to manage invoices</CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="h-[280px]">
-            {invoices.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                  <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} allowDecimals={false} />
-                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} />
-                  <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={40}>
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                <Receipt className="w-10 h-10 opacity-20" />
-                <p className="text-sm">No invoice data yet</p>
-                <Button size="sm" variant="outline" onClick={e => { e.stopPropagation(); onNavigate('invoices'); }}>
-                  Create Invoice
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
+        <FinanceMetric title="Total Receivables" value={`₹${(metrics.totalReceivables / 1000).toFixed(1)}K`} icon={<DollarSign className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('invoices')} />
+        <FinanceMetric title="Total Collected" value={`₹${(metrics.totalCollected / 1000).toFixed(1)}K`} icon={<CreditCard className="w-5 h-5"/>} color="success" onClick={() => onNavigate('payments')} />
+        <FinanceMetric title="Cash & Bank Bal" value={`₹${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} icon={<Wallet className="w-5 h-5"/>} color="info" />
+        <FinanceMetric title="Operational Exp" value={`₹${(metrics.operationalExpenses / 1000).toFixed(1)}K`} icon={<TrendingUp className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('expenses')} />
+        <FinanceMetric title="Committed Pay" value={`₹${(metrics.committedPayments / 1000).toFixed(1)}K`} icon={<AlertTriangle className="w-5 h-5"/>} color="error" onClick={() => onNavigate('committed_payments')} />
+        
+        <FinanceMetric title="Univ Fee Pending" value={`₹${(metrics.universityFeePending / 1000).toFixed(1)}K`} icon={<AlertCircle className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('university_fee')} />
+        <FinanceMetric title="Incentive Pending" value={`₹${(metrics.incentivePending / 1000).toFixed(1)}K`} icon={<Users className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('incentive_approval')} />
+        <FinanceMetric title="Payroll Pending" value={`₹${(metrics.payrollPending / 1000).toFixed(1)}K`} icon={<FileText className="w-5 h-5"/>} color="error" onClick={() => onNavigate('payroll')} />
+        <FinanceMetric title="My Target" value={`₹${(metrics.myTargetValue / 1000).toFixed(1)}K`} icon={<CheckCircle className="w-5 h-5"/>} color="success" onClick={() => onNavigate('my_target')} />
+      </div>
 
-        {/* Fee Status */}
-        <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('invoices')}>
+      {/* Alerts Widget */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <AlertCard title="Overdue Student Fees" count={alerts.overdueStudentFees} icon={<AlertCircle />} type="error" />
+        <AlertCard title="University Fee Due" count={alerts.universityFeeDue} icon={<AlertTriangle />} type="warning" />
+        <AlertCard title="Committed Payment Due" count={alerts.committedPaymentDueToday} icon={<Clock />} type="info" />
+        <AlertCard title="Incentive Pending" count={alerts.incentivePending} icon={<Users />} type="primary" />
+      </div>
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <Card className="lg:col-span-2 shadow-xl border-none">
           <CardHeader>
-            <CardTitle>Fee Status</CardTitle>
-            <CardDescription>Live student billing breakdown</CardDescription>
+            <CardTitle>Collection Overview</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-5">
-            <FeeStat label="Fully Paid" value={`${paidPct}%`} color="bg-success" count={`${paidInvoices.length} invoices`} />
-            <FeeStat label="Partial" value={`${partialPct}%`} color="bg-warning" count={`${partialInvoices.length} invoices`} />
-            <FeeStat label="Outstanding" value={`${pendingPct}%`} color="bg-error" count={`${pendingInvoices.length} invoices`} />
-            <div className="pt-3 mt-3 border-t border-border">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">Total Invoices</span>
-                <span className="text-sm font-bold">{invoices.length}</span>
-              </div>
-              <p className="text-xs text-muted-foreground">Click to view full invoice list</p>
-            </div>
+          <CardContent className="h-[300px]">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={charts.collectionOverview}>
+                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                 <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                 <YAxis axisLine={false} tickLine={false} />
+                 <Tooltip />
+                 <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4,4,0,0]} barSize={40} />
+               </BarChart>
+             </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        
+        <Card className="shadow-xl border-none">
+          <CardHeader>
+            <CardTitle>Branch-wise Collection</CardTitle>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={charts.branchWiseCollection} layout="vertical" margin={{left: 20}}>
+                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                 <XAxis type="number" hide />
+                 <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} />
+                 <Tooltip />
+                 <Bar dataKey="value" fill="hsl(var(--success))" radius={[0,4,4,0]} barSize={20} />
+               </BarChart>
+             </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Recent Invoices */}
-        <Card className="lg:col-span-2 cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('invoices')}>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg">Recent Invoices</CardTitle>
-            <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); onNavigate('invoices'); }}>
-              View All <ArrowUpRight className="ml-1 w-3 h-3" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {loading ? (
-              [1,2,3,4].map(i => <div key={i} className="h-12 bg-muted rounded-lg animate-pulse" />)
-            ) : recentInvoices.length === 0 ? (
-              <div className="py-8 text-center text-muted-foreground">
-                <Receipt className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">No invoices yet</p>
-              </div>
-            ) : (
-              recentInvoices.map((inv: any) => (
-                <TransactionItem
-                  key={inv.id}
-                  name={inv.studentId?.name || inv.centerId?.name || 'Invoice'}
-                  id={`#${inv.id?.slice(-8).toUpperCase()}`}
-                  amount={`₹${(inv.total || inv.amount || 0).toLocaleString()}`}
-                  status={inv.status}
-                  type="revenue"
-                />
-              ))
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Priority Tasks */}
+      {/* Tables Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
-          <CardHeader><CardTitle className="text-lg">Priority Actions</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {pendingBatches.length > 0 && (
-              <div
-                className="p-4 rounded-xl border border-warning/20 bg-warning/5 flex items-start gap-3 cursor-pointer hover:bg-warning/10 transition-colors"
-                onClick={() => onNavigate('payroll-batches')}
-              >
-                <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
-                <div>
-                  <h5 className="font-bold text-sm">Payroll Batches Pending</h5>
-                  <p className="text-xs text-muted-foreground mt-1">{pendingBatches.length} batch{pendingBatches.length > 1 ? 'es' : ''} awaiting finance approval.</p>
-                </div>
+          <CardHeader>
+            <CardTitle>Recent Collections</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {lists.recentCollections.length > 0 ? (
+              <div className="space-y-3">
+                {lists.recentCollections.map((c: any) => (
+                  <div key={c.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-sm">{c.student?.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground">{new Date(c.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-success">₹{c.amount}</p>
+                      <Badge variant="outline" className="text-[10px] uppercase">{c.paymentMode}</Badge>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-            {pendingExpenses.length > 0 && (
-              <div
-                className="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3 cursor-pointer hover:bg-primary/10 transition-colors"
-                onClick={() => onNavigate('expenses')}
-              >
-                <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <div>
-                  <h5 className="font-bold text-sm">Expense Claims Pending</h5>
-                  <p className="text-xs text-muted-foreground mt-1">{pendingExpenses.length} expense claim{pendingExpenses.length > 1 ? 's' : ''} waiting for review.</p>
-                </div>
+            ) : <p className="text-sm text-muted-foreground text-center py-4">No recent collections</p>}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Expenses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {lists.recentExpenses.length > 0 ? (
+              <div className="space-y-3">
+                {lists.recentExpenses.map((e: any) => (
+                  <div key={e.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-sm">{e.category}</p>
+                      <p className="text-xs text-muted-foreground">{e.employee?.user?.name || 'Unknown'}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-error">₹{e.amount}</p>
+                      <Badge variant="outline" className="text-[10px] uppercase">{e.status}</Badge>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-            {pendingInvoices.length > 0 && (
-              <div
-                className="p-4 rounded-xl border border-error/20 bg-error/5 flex items-start gap-3 cursor-pointer hover:bg-error/10 transition-colors"
-                onClick={() => onNavigate('invoices')}
-              >
-                <AlertTriangle className="w-5 h-5 text-error shrink-0 mt-0.5" />
-                <div>
-                  <h5 className="font-bold text-sm">Unpaid Invoices</h5>
-                  <p className="text-xs text-muted-foreground mt-1">{pendingInvoices.length} invoice{pendingInvoices.length > 1 ? 's' : ''} outstanding.</p>
-                </div>
-              </div>
-            )}
-            {pendingBatches.length === 0 && pendingExpenses.length === 0 && pendingInvoices.length === 0 && (
-              <div className="py-8 text-center text-muted-foreground">
-                <CheckCircle className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">All clear — no pending actions</p>
-              </div>
-            )}
-            <div className="pt-2">
-              <PunchWidget />
-            </div>
+            ) : <p className="text-sm text-muted-foreground text-center py-4">No recent expenses</p>}
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+}
+
+function AlertCard({ title, count, icon, type }: { title: string, count: number, icon: any, type: string }) {
+  const typeMap: any = {
+    error: 'bg-error/10 text-error border-error/20',
+    warning: 'bg-warning/10 text-warning border-warning/20',
+    info: 'bg-info/10 text-info border-info/20',
+    primary: 'bg-primary/10 text-primary border-primary/20',
+  };
+  return (
+    <div className={cn("p-4 rounded-xl border flex flex-col gap-2 cursor-pointer hover:shadow-md transition-shadow", typeMap[type])}>
+      <div className="flex items-center justify-between">
+        <div className="p-2 rounded-lg bg-background/50">
+          {icon}
+        </div>
+        <span className="text-2xl font-black">{count}</span>
+      </div>
+      <p className="text-sm font-semibold">{title}</p>
     </div>
   );
 }
@@ -464,181 +407,5 @@ function FinanceMetric({ title, value, sub, trend, trendType, icon, color, onCli
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-function FeeStat({ label, value, color, count }: any) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground font-medium">{label}</span>
-        <span className="font-bold">{value}</span>
-      </div>
-      <div className="h-2 bg-muted rounded-full overflow-hidden">
-        <div className={cn('h-full rounded-full', color)} style={{ width: value }} />
-      </div>
-      <p className="text-[10px] text-muted-foreground text-right">{count}</p>
-    </div>
-  );
-}
-
-function TransactionItem({ name, id, amount, status, type }: any) {
-  const statusColor: Record<string, string> = {
-    paid: 'bg-success/10 text-success',
-    pending: 'bg-warning/10 text-warning',
-    partial: 'bg-info/10 text-info',
-    rejected: 'bg-error/10 text-error',
-  };
-  return (
-    <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-      <div className="flex items-center gap-3">
-        <div className={cn('w-9 h-9 rounded-full flex items-center justify-center', type === 'revenue' ? 'bg-success/10 text-success' : 'bg-error/10 text-error')}>
-          {type === 'revenue' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground truncate max-w-[160px]">{name}</p>
-          <p className="text-[11px] text-muted-foreground uppercase">{id}</p>
-        </div>
-      </div>
-      <div className="text-right shrink-0">
-        <p className={cn('text-sm font-bold', type === 'revenue' ? 'text-success' : 'text-foreground')}>{amount}</p>
-        <span className={cn('text-[10px] px-1.5 py-0.5 rounded uppercase font-bold', statusColor[status?.toLowerCase()] || 'bg-muted text-muted-foreground')}>
-          {status}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-// ─── Finance Escalations Panel ────────────────────────────────────────────────
-
-interface Escalation {
-  id: string;
-  title?: string;
-  description?: string;
-  type?: string;
-  status: string;
-  priority?: string;
-  raisedBy?: { name: string; email: string };
-  raisedAt?: string;
-}
-
-function FinanceEscalationsPanel() {
-  const [escalations, setEscalations] = useState<Escalation[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchEscalations = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/escalations');
-      setEscalations(res.data.data || []);
-    } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to load escalations');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchEscalations(); }, []);
-
-  const handleResolve = async (id: string) => {
-    try {
-      await api.put(`/escalations/${id}/resolve`, { remarks: 'Resolved by Finance Admin' });
-      toast.success('Escalation resolved');
-      fetchEscalations();
-    } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to resolve');
-    }
-  };
-
-  const STATUS_COLOR: Record<string, string> = {
-    open:     'bg-warning/10 text-warning',
-    resolved: 'bg-success/10 text-success',
-    closed:   'bg-muted text-muted-foreground',
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Escalations</h2>
-          <p className="text-muted-foreground text-sm mt-1">View and resolve escalations in your organisation.</p>
-        </div>
-        <Button variant="outline" size="sm" onClick={fetchEscalations} disabled={loading}>
-          <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
-          Refresh
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-4">
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-warning/10 text-warning"><AlertTriangle className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{escalations.filter(e => e.status === 'open').length}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Open</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-success/10 text-success"><CheckCircle className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{escalations.filter(e => e.status === 'resolved').length}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Resolved</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary"><Clock className="w-5 h-5" /></div>
-            <div>
-              <p className="text-2xl font-bold">{escalations.length}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Total</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
-      ) : escalations.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center text-muted-foreground">
-            <AlertTriangle className="w-10 h-10 mx-auto mb-3 opacity-30" />
-            <p>No escalations found</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-3">
-          {escalations.map(esc => (
-            <Card key={esc.id} className="hover:border-primary/30 transition-colors">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-2">
-                      <Badge className={cn('text-[10px] uppercase font-bold', STATUS_COLOR[esc.status] || 'bg-muted text-muted-foreground')}>
-                        {esc.status}
-                      </Badge>
-                      {esc.priority && <Badge variant="outline" className="text-[10px] uppercase font-bold">{esc.priority}</Badge>}
-                      {esc.type && <Badge variant="outline" className="text-[10px]">{esc.type}</Badge>}
-                    </div>
-                    <h4 className="font-semibold text-sm">{esc.title || 'Escalation'}</h4>
-                    {esc.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{esc.description}</p>}
-                    <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                      {esc.raisedBy && <span>Raised by: {esc.raisedBy.name}</span>}
-                      {esc.raisedAt && <span>{new Date(esc.raisedAt).toLocaleDateString()}</span>}
-                    </div>
-                  </div>
-                  {esc.status === 'open' && (
-                    <Button size="sm" variant="outline" onClick={() => handleResolve(esc.id)}>Resolve</Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }

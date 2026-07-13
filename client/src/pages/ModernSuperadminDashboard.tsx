@@ -31,7 +31,6 @@ import { OrganizationsPanel } from '@/components/panels/OrganizationsPanel';
 import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { LicensesPanel } from '@/components/panels/LicensesPanel';
-import { SubDepartmentsPanel } from '@/components/panels/SubDepartmentsPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 
@@ -95,7 +94,7 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
           <TabsTrigger value="organizations">Organizations</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="departments">Departments</TabsTrigger>
-          <TabsTrigger value="subdepartments">Sub-Departments</TabsTrigger>
+
           <TabsTrigger value="licenses">Licenses</TabsTrigger>
           <TabsTrigger value="enquiries">Enquiries</TabsTrigger>
         </TabsList>
@@ -120,9 +119,7 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
           <DepartmentsPanel />
         </TabsContent>
 
-        <TabsContent value="subdepartments">
-          <SubDepartmentsPanel />
-        </TabsContent>
+
 
         <TabsContent value="licenses">
           <LicensesPanel />

@@ -110,6 +110,8 @@ export function PrismaLayout({
       case 'dashboard':
       case 'overview': return <LayoutDashboard className={iconClass} />;
       case 'users':
+      case 'incentive_approval':
+      case 'salary_approval':
       case 'managers': return <Users className={iconClass} />;
       case 'students':
       case 'enroll_student': return <GraduationCap className={iconClass} />;
@@ -118,9 +120,14 @@ export function PrismaLayout({
       case 'fees':
       case 'fee_structures':
       case 'enrollment_review':
+      case 'bill_receipts':
+      case 'committed_payments':
+      case 'discounts':
       case 'leave-alloc': return <FileText className={iconClass} />;
       case 'leads':
       case 'targets':
+      case 'sales_target':
+      case 'my_target':
       case 'performance': return <TrendingUp className={iconClass} />;
       case 'employees': return <UserCircle className={iconClass} />;
       case 'departments':
@@ -150,6 +157,7 @@ export function PrismaLayout({
       case 'attendance':
       case 'my_attendance':
       case 'pending_payment':
+      case 'pending_payments':
       case 'auth_fees': return <Clock className={iconClass} />;
       case 'hierarchy':
       case 'my_subdept':
@@ -160,6 +168,9 @@ export function PrismaLayout({
       case 'ld_portal':
       case 'ld-portal':
       case 'center_enrollments':
+      case 'admissions':
+      case 'enrollments':
+      case 'student_collections':
       case 'enrollments_finance': return <GraduationCap className={iconClass} />;
       case 'licenses': return <ShieldCheck className={iconClass} />;
       case 'centers':
@@ -176,10 +187,21 @@ export function PrismaLayout({
       case 'invite_links': return <TrendingUp className={iconClass} />;
       case 'escalations': return <FileText className={iconClass} />;
       case 'expenses':
+      case 'payment_gateway':
+      case 'wallet_topup':
+      case 'university_fee':
+      case 'university_commissions':
       case 'payments': return <Wallet className={iconClass} />;
       case 'refer_admission': return <TrendingUp className={iconClass} />;
       case 'terms': return <ShieldCheck className={iconClass} />;
       case 'help': return <MessageSquare className={iconClass} />;
+      case 'income_expense':
+      case 'profit_loss':
+      case 'collection_report':
+      case 'fee_pending_report':
+      case 'incentive_report': return <FileText className={iconClass} />;
+      case 'my_leave_request': return <Calendar className={iconClass} />;
+      case 'pay_slips': return <FileText className={iconClass} />;
       default: return <FileText className={iconClass} />;
     }
   }

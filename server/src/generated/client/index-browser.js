@@ -1082,6 +1082,19 @@ exports.Prisma.OrgInquiryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.UniversityPaymentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  universityId: 'universityId',
+  amountPaid: 'amountPaid',
+  datePaid: 'datePaid',
+  status: 'status',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1346,7 +1359,8 @@ exports.Prisma.ModelName = {
   PaymentSchedule: 'PaymentSchedule',
   PaymentLink: 'PaymentLink',
   CollectionOverseer: 'CollectionOverseer',
-  OrgInquiry: 'OrgInquiry'
+  OrgInquiry: 'OrgInquiry',
+  UniversityPayment: 'UniversityPayment'
 };
 
 /**
