@@ -58,7 +58,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview': return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div>
           <PunchWidget />
         </div>
@@ -133,7 +133,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
       </div>
 
       {/* Operations Quick Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <OpsMetricCard 
           title="Total Students" 
           value={metrics.totalStudents || 0} 
@@ -164,7 +164,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Admission Pipeline */}
         <Card className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('students')}>
           <CardHeader className="flex flex-row items-center justify-between">

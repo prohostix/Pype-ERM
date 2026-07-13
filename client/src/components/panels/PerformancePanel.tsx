@@ -294,7 +294,7 @@ export function PerformancePanel() {
           ) : employees.length === 0 ? (
             <Card><CardContent className="py-16 text-center text-muted-foreground"><Users className="w-10 h-10 mx-auto mb-3 opacity-30" /><p>No employee task data yet</p></CardContent></Card>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Radial chart for top 5 */}
               <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
                 <CardHeader>

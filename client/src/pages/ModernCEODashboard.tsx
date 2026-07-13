@@ -142,7 +142,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
 
         <TabsContent value="overview" className="space-y-8">
           {/* Hero Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
               title="Total Revenue"
               value={metrics.totalRevenue ? `₹${(metrics.totalRevenue / 1000).toFixed(1)}K` : '₹0'}
@@ -182,7 +182,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           </div>
 
           {/* Secondary metrics row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { label: 'Total Employees', value: metrics.totalEmployees || 0, icon: <Users className="w-4 h-4" />, tab: 'users' },
               { label: 'Active Leads', value: metrics.totalLeads || 0, icon: <TrendingUp className="w-4 h-4" />, tab: 'leads' },
@@ -190,7 +190,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
               { label: 'Programs', value: metrics.totalPrograms || 0, icon: <BookOpen className="w-4 h-4" />, tab: 'students' },
             ].map(item => (
               <Card key={item.label} className="cursor-pointer hover:border-primary/40 transition-colors" onClick={() => setActiveTab(item.tab)}>
-                <CardContent className="p-4 flex items-center gap-3">
+                <CardContent className="p-6 flex items-center gap-4">
                   <div className="p-2 rounded-lg bg-muted text-muted-foreground">{item.icon}</div>
                   <div>
                     <p className="text-xl font-bold">{item.value}</p>
@@ -201,7 +201,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Departmental Performance Chart */}
             <Card
               className="lg:col-span-2 overflow-hidden border-none shadow-2xl bg-card/50 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
@@ -282,7 +282,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           </div>
 
           {/* Punch Widget + Quick Access */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <PunchWidget />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Card className="bg-primary/5 border-primary/10 cursor-pointer hover:border-primary/40 transition-colors" onClick={() => setActiveTab('kpi-kra')}>
@@ -560,7 +560,7 @@ function EscalationsPanel() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-4">
         <Card>
           <CardContent className="pt-6 flex items-center gap-4">
             <div className="p-3 rounded-xl bg-warning/10 text-warning"><AlertTriangle className="w-5 h-5" /></div>

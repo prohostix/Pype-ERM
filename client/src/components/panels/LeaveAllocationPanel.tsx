@@ -180,7 +180,7 @@ export function LeaveAllocationPanel() {
                         <Badge variant="outline" className="text-xs capitalize">{user?.role?.replace(/_/g, ' ')}</Badge>
                         {user?.designation && <Badge variant="outline" className="text-xs">{user.designation}</Badge>}
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                         {[
                           { label: 'Sick', total: alloc.sickLeave, used: alloc.usedSick, color: 'text-red-500' },
                           { label: 'Casual', total: alloc.casualLeave, used: alloc.usedCasual, color: 'text-blue-500' },

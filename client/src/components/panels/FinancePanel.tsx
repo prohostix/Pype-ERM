@@ -182,7 +182,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
         />
       </MetricCardGrid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Revenue vs Expenses</CardTitle>
@@ -228,7 +228,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Pending Invoices</CardTitle>

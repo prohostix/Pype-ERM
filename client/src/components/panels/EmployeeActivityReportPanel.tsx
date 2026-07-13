@@ -352,7 +352,7 @@ export function EmployeeActivityReportPanel() {
           { label: 'ERM Actions', value: totalErm, color: 'text-primary', bg: 'bg-primary/10' },
         ].map(s => (
           <Card key={s.label} className="border-none shadow-sm">
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className={cn('p-2 rounded-lg', s.bg)}>
                 <Users className={cn('w-4 h-4', s.color)} />
               </div>

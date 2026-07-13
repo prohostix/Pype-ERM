@@ -153,9 +153,9 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
   return (
     <div className="space-y-6">
       {/* Core Metrics & Attendance Widget Top Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-4">
         <div className="xl:col-span-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <HRMetricCard 
               title="Total Headcount" 
               value={metrics.totalEmployees ?? '—'} 
@@ -197,7 +197,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recruitment Pipeline — live vacancies */}
         <Card className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl">
           <CardHeader className="flex flex-row items-center justify-between">

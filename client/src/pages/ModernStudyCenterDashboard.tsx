@@ -42,7 +42,7 @@ export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <OverviewCard
@@ -66,7 +66,7 @@ export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string
                   <School className="w-5 h-5 text-primary" />
                   <h3 className="font-semibold">Quick Actions</h3>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <button onClick={() => setActiveTab('enroll')} className="p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-left">
                     <GraduationCap className="w-5 h-5 text-primary mb-2" />
                     <p className="text-sm font-semibold">Enroll Student</p>

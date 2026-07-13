@@ -328,7 +328,7 @@ export function ProgramsPanel() {
           <form onSubmit={handleSubmit} className="space-y-5 py-1">
 
             {/* Basic info */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Program Name *</Label>
                 <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />

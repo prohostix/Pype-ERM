@@ -102,7 +102,7 @@ export function SalesCenterOnboardingPanel() {
       </div>
 
       {/* Summary stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: 'Pending Ops', value: pending, color: 'text-warning', bg: 'bg-warning/10' },
           { label: 'Ops Verified', value: opsVerified, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -111,7 +111,7 @@ export function SalesCenterOnboardingPanel() {
           { label: 'Rejected', value: rejected, color: 'text-error', bg: 'bg-error/10' },
         ].map(s => (
           <Card key={s.label}>
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className={cn('p-2 rounded-lg', s.bg)}>
                 <div className={cn('w-2 h-2 rounded-full', s.bg.replace('/10', ''))} />
               </div>

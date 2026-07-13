@@ -2222,7 +2222,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           <div className="space-y-4 py-2">
             <div className="border rounded-xl p-4 bg-slate-50 dark:bg-slate-900/20">
               <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm">Add New Installment/Milestone</h4>
-              <div className="grid grid-cols-3 gap-3 items-end">
+              <div className="grid grid-cols-3 gap-4 items-end">
                 <div>
                   <Label>Installment Title</Label>
                   <Input value={newSchedule.title} onChange={(e) => setNewSchedule({...newSchedule, title: e.target.value})} />

@@ -184,7 +184,7 @@ export function CenterOnboardingOverviewPanel({ mode = 'ceo' }: { mode?: 'ceo' |
 
       {/* Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
             { label: 'Total Centers', value: summary.total, color: 'text-foreground', bg: 'bg-muted', filter: 'all' },
             { label: 'Pending Ops', value: summary.pending_verification, color: 'text-warning', bg: 'bg-warning/10', filter: 'pending_verification' },
@@ -201,7 +201,7 @@ export function CenterOnboardingOverviewPanel({ mode = 'ceo' }: { mode?: 'ceo' |
               )}
               onClick={() => setStatusFilter(s.filter)}
             >
-              <CardContent className="p-4 flex items-center gap-3">
+              <CardContent className="p-6 flex items-center gap-4">
                 <div className={cn('p-2 rounded-lg', s.bg)}>
                   <div className={cn('w-2 h-2 rounded-full',
                     s.filter === 'all' ? 'bg-foreground/30' :
@@ -541,9 +541,9 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
   return (
     <div className="space-y-6">
       {/* Status summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
+          <CardContent className="p-6 flex items-center gap-4">
             <div className="p-2 rounded-lg bg-primary/10 text-primary">
               <Users className="w-4 h-4" />
             </div>
@@ -554,7 +554,7 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
+          <CardContent className="p-6 flex items-center gap-4">
             <div className="p-2 rounded-lg bg-success/10 text-success">
               <CheckCircle className="w-4 h-4" />
             </div>
@@ -565,7 +565,7 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
+          <CardContent className="p-6 flex items-center gap-4">
             <div className="p-2 rounded-lg bg-warning/10 text-warning">
               <Clock className="w-4 h-4" />
             </div>
@@ -578,7 +578,7 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 flex items-center gap-3">
+          <CardContent className="p-6 flex items-center gap-4">
             <div className="p-2 rounded-lg bg-error/10 text-error">
               <XCircle className="w-4 h-4" />
             </div>
@@ -592,7 +592,7 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Status Distribution Chart */}
         {barData.length > 0 && (
           <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">

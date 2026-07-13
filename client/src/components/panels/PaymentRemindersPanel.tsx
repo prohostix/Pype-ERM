@@ -106,7 +106,7 @@ export function PaymentRemindersPanel() {
         </CardHeader>
         <CardContent>
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="grid grid-cols-3 gap-4 mb-4">
             {[
               { label: 'Total Pending', value: filterStats.all, icon: <Clock className="w-4 h-4" />, color: 'text-blue-600' },
               { label: 'Overdue', value: filterStats.overdue, icon: <AlertTriangle className="w-4 h-4" />, color: 'text-rose-600' },

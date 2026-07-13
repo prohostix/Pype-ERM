@@ -152,7 +152,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
 
         <TabsContent value="overview" className="space-y-6">
           {/* Productivity Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <EmployeeMetric
               title="Assigned Tasks"
               value={loading ? '...' : pendingTaskCount}
@@ -187,7 +187,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Live Task List */}
             <Card className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -275,7 +275,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
           </div>
 
           {/* Punch + Shortcuts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <PunchWidget />
             <div className="grid grid-cols-2 gap-4">
               <ShortcutBtn

@@ -249,7 +249,7 @@ export function PayrollPanel() {
             </div>
             <div className="space-y-2">
               <Label>Generation Mode</Label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
                   onClick={() => setGenerateMode('smart')}
@@ -297,7 +297,7 @@ export function PayrollPanel() {
             </div>
             <div>
               <p className="text-sm font-semibold mb-2">Allowances</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {(['hra', 'transport', 'medical', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
                     <Label className="capitalize">{key} (₹)</Label>
@@ -309,7 +309,7 @@ export function PayrollPanel() {
             </div>
             <div>
               <p className="text-sm font-semibold mb-2">Deductions</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {(['pf', 'tax', 'insurance', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
                     <Label className="capitalize">{key} (₹)</Label>
@@ -319,7 +319,7 @@ export function PayrollPanel() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Bonus (₹)</Label>
                 <Input type="number" min="0" value={editForm.bonus || 0}

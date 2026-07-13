@@ -113,9 +113,9 @@ export function FinanceSalaryApprovalPanel() {
 
       {/* Summary */}
       {summary && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-4">
           <Card className="cursor-pointer hover:border-yellow-400/50 transition-colors" onClick={() => handleTabChange('pending_approval')}>
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className="p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600"><Clock className="w-4 h-4" /></div>
               <div>
                 <p className="text-xl font-bold">{summary.pending_approval}</p>
@@ -124,7 +124,7 @@ export function FinanceSalaryApprovalPanel() {
             </CardContent>
           </Card>
           <Card className="cursor-pointer hover:border-green-400/50 transition-colors" onClick={() => handleTabChange('approved')}>
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className="p-2 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600"><CheckCircle className="w-4 h-4" /></div>
               <div>
                 <p className="text-xl font-bold">{summary.approved}</p>
@@ -133,7 +133,7 @@ export function FinanceSalaryApprovalPanel() {
             </CardContent>
           </Card>
           <Card className="cursor-pointer hover:border-red-400/50 transition-colors" onClick={() => handleTabChange('rejected')}>
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500"><XCircle className="w-4 h-4" /></div>
               <div>
                 <p className="text-xl font-bold">{summary.rejected}</p>
@@ -199,7 +199,7 @@ export function FinanceSalaryApprovalPanel() {
                       <p className="text-xs text-muted-foreground mb-3">{config.userId?.email}</p>
 
                       {/* Salary breakdown */}
-                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
                         <div>
                           <p className="text-xs text-muted-foreground">Basic</p>
                           <p className="font-semibold">₹{config.basicSalary.toLocaleString()}</p>
@@ -282,7 +282,7 @@ export function FinanceSalaryApprovalPanel() {
           <DialogHeader><DialogTitle>Salary Config — {detailConfig?.userId?.name}</DialogTitle></DialogHeader>
           {detailConfig && (
             <div className="space-y-4 py-2 text-sm">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div><p className="text-xs text-muted-foreground">Basic Salary</p><p className="font-semibold">₹{detailConfig.basicSalary.toLocaleString()}</p></div>
                 <div><p className="text-xs text-muted-foreground">Late/min</p><p className="font-semibold">₹{detailConfig.lateDeductionPerMinute}</p></div>
               </div>
@@ -308,7 +308,7 @@ export function FinanceSalaryApprovalPanel() {
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3 p-3 rounded-xl bg-muted/50 font-semibold">
+              <div className="grid grid-cols-3 gap-4 p-3 rounded-xl bg-muted/50 font-semibold">
                 <div><p className="text-xs text-muted-foreground">Gross</p><p className="text-blue-600">₹{gross(detailConfig).toLocaleString()}</p></div>
                 <div><p className="text-xs text-muted-foreground">Deductions</p><p className="text-red-500">₹{Object.values(detailConfig.deductions).reduce((s, v) => s + (v || 0), 0).toLocaleString()}</p></div>
                 <div><p className="text-xs text-muted-foreground">Net</p><p className="text-green-600">₹{net(detailConfig).toLocaleString()}</p></div>

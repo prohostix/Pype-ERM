@@ -111,7 +111,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
         />
       </MetricCardGrid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">My Tasks</CardTitle>

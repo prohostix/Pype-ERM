@@ -60,7 +60,7 @@ export function ModernStaffPortal() {
       </div>
 
       {/* Staff Highlights */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StaffMetric 
           title="Daily Schedule" 
           value="09:00 - 18:00" 
@@ -84,7 +84,7 @@ export function ModernStaffPortal() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Notice Board */}
         <Card className="lg:col-span-3 border-none shadow-xl bg-card/60 backdrop-blur-xl">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -148,7 +148,7 @@ export function ModernStaffPortal() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Punch Widget */}
         <PunchWidget />
 

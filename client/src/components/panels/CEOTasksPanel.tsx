@@ -211,7 +211,7 @@ export function CEOTasksPanel() {
       </div>
 
       {/* Summary KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {[
           { label: 'Total', value: counts.total, icon: <ListTodo className="w-4 h-4" />, color: 'bg-muted text-foreground' },
           { label: 'Completed', value: counts.completed, icon: <CheckCircle2 className="w-4 h-4" />, color: 'bg-success/10 text-success' },

@@ -170,7 +170,7 @@ function BranchOverview({ branch, metrics, leads, targets, loading, onNavigate }
         <BranchMetric title="Pending Tasks" value={loading ? '...' : (metrics.pendingTasks || 0)} sub={metrics.overdueTasks ? `${metrics.overdueTasks} overdue` : 'on track'} icon={<Users className="w-4 h-4" />} color="info" onClick={() => onNavigate('tasks')} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Sales snapshot */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-3">

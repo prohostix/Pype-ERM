@@ -227,7 +227,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               ))}
             </ul>
           </div>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4">
             {[
               { val: '₹12Cr+', label: 'Fee Invoices Tracked' },
               { val: '20,000+', label: 'Student Admissions' },

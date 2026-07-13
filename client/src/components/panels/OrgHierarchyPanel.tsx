@@ -681,7 +681,7 @@ export function OrgHierarchyPanel() {
                 value={designForm.title}
                 onChange={e => setDesignForm(p => ({ ...p, title: e.target.value }))} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Level (1 = top)</Label>
                 <Input type="number" min={1} value={designForm.level}

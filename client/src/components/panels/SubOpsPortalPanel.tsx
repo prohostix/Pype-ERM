@@ -108,7 +108,7 @@ export function SubOpsPortalPanel() {
 
         {/* Overview */}
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Monthly enrollment chart */}
             <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
               <CardHeader>

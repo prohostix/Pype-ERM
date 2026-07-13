@@ -136,7 +136,7 @@ export function FinanceEnrollmentsPanel() {
 
       {/* Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           <SummaryCard label="Fee Pending" count={summary.payment_pending} icon={<Clock className="w-4 h-4" />} color="text-orange-500 bg-orange-50 dark:bg-orange-900/20" onClick={() => handleTabChange('payment_pending')} />
           <SummaryCard label="Doc Review" count={summary.document_review} icon={<AlertCircle className="w-4 h-4" />} color="text-blue-500 bg-blue-50 dark:bg-blue-900/20" onClick={() => handleTabChange('document_review')} />
           <SummaryCard label="Finance Review" count={summary.finance_review} icon={<Clock className="w-4 h-4" />} color="text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20" onClick={() => handleTabChange('finance_review')} />
@@ -283,7 +283,7 @@ export function FinanceEnrollmentsPanel() {
 function SummaryCard({ label, count, icon, color, onClick }: { label: string; count: number; icon: React.ReactNode; color: string; onClick: () => void }) {
   return (
     <Card className="cursor-pointer hover:border-primary/40 transition-colors" onClick={onClick}>
-      <CardContent className="p-4 flex items-center gap-3">
+      <CardContent className="p-6 flex items-center gap-4">
         <div className={cn('p-2 rounded-lg', color)}>{icon}</div>
         <div>
           <p className="text-xl font-bold">{count}</p>

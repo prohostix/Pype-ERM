@@ -221,7 +221,7 @@ function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading,
   return (
     <div className="space-y-6">
       {/* Hero Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FinanceMetric
           title="Total Receivables"
           value={`₹${(totalInvoiceAmount / 1000).toFixed(1)}K`}
@@ -255,7 +255,7 @@ function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading,
       </div>
 
       {/* Secondary quick-nav row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Payroll Batches', value: pendingBatches.length, sub: 'Pending approval', icon: <Users className="w-4 h-4" />, tab: 'payroll-batches', urgent: pendingBatches.length > 0 },
           { label: 'Wallet Top-Ups', value: metrics.pendingWalletTopUps || 0, sub: 'Awaiting review', icon: <Wallet className="w-4 h-4" />, tab: 'wallet_topups', urgent: (metrics.pendingWalletTopUps || 0) > 0 },
@@ -267,7 +267,7 @@ function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading,
             className={cn('cursor-pointer transition-colors', item.urgent ? 'hover:border-warning/50 border-warning/20' : 'hover:border-primary/40')}
             onClick={() => onNavigate(item.tab)}
           >
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className={cn('p-2 rounded-lg', item.urgent ? 'bg-warning/10 text-warning' : 'bg-muted text-muted-foreground')}>
                 {item.icon}
               </div>
@@ -280,7 +280,7 @@ function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading,
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Invoice Status Chart */}
         <Card
           className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
@@ -340,7 +340,7 @@ function OverviewContent({ metrics, invoices, expenses, payrollBatches, loading,
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recent Invoices */}
         <Card className="lg:col-span-2 cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('invoices')}>
           <CardHeader className="flex flex-row items-center justify-between">
@@ -568,7 +568,7 @@ function FinanceEscalationsPanel() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-4">
         <Card>
           <CardContent className="pt-6 flex items-center gap-4">
             <div className="p-3 rounded-xl bg-warning/10 text-warning"><AlertTriangle className="w-5 h-5" /></div>

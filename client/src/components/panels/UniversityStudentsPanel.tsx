@@ -273,7 +273,7 @@ export function UniversityStudentsPanel() {
 function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
     <Card className="border-none shadow-sm">
-      <CardContent className="p-4 flex items-center gap-3">
+      <CardContent className="p-6 flex items-center gap-4">
         <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
         <div>
           <p className="text-xs text-muted-foreground">{label}</p>

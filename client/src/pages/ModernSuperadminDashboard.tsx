@@ -102,7 +102,7 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
 
         <TabsContent value="overview" className="space-y-6">
           {/* Overview content - existing dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2"><OverviewContent metrics={metrics} /></div>
             <PunchWidget />
           </div>
@@ -140,7 +140,7 @@ function OverviewContent({ metrics }: { metrics: any }) {
   return (
     <>
       {/* Global Core Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <GlobalMetric 
           title="Organizations" 
           value={metrics.totalOrganizations || 8} 
@@ -171,7 +171,7 @@ function OverviewContent({ metrics }: { metrics: any }) {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Global Traffic Chart */}
         <Card className="lg:col-span-2 border-none shadow-2xl bg-card/40 backdrop-blur-3xl overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-8">
@@ -229,7 +229,7 @@ function OverviewContent({ metrics }: { metrics: any }) {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Security / Audit Log */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">

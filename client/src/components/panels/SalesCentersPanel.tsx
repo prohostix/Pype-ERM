@@ -83,7 +83,7 @@ function CenterDetailView({ centerId, onBack }: { centerId: string; onBack: () =
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total Students', value: stats.totalStudents, color: 'text-primary', bg: 'bg-primary/10' },
           { label: 'Enrolled', value: stats.enrolled, color: 'text-green-600', bg: 'bg-green-500/10' },
@@ -91,7 +91,7 @@ function CenterDetailView({ centerId, onBack }: { centerId: string; onBack: () =
           { label: 'Rejected', value: stats.rejected, color: 'text-red-600', bg: 'bg-red-500/10' },
         ].map(s => (
           <Card key={s.label}>
-            <CardContent className="p-4 flex items-center gap-3">
+            <CardContent className="p-6 flex items-center gap-4">
               <div className={cn('p-2 rounded-lg', s.bg)}>
                 <Users className={cn('w-4 h-4', s.color)} />
               </div>

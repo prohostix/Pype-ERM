@@ -184,7 +184,7 @@ export function SalesEnrolledStudentsPanel() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-4">
           {filtered.map(student => (
             <Card
               key={student.id}

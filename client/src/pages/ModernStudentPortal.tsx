@@ -415,7 +415,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
         
         {/* OVERVIEW */}
         {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
             {/* Quick Metrics */}
             <Card className="md:col-span-2 border-none bg-card/60 backdrop-blur-md shadow-lg">
@@ -497,7 +497,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
 
         {/* NOTIFICATIONS & ANNOUNCEMENTS */}
         {activeTab === 'notifications' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Direct Notifications */}
             <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
               <CardHeader>
@@ -894,7 +894,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
                 <CardTitle className="text-lg">Help & Support Desk</CardTitle>
                 <CardDescription>Need help with your courses, fee receipts, or exams? Contact us.</CardDescription>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Academic Queries</h4>

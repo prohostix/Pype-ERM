@@ -166,7 +166,7 @@ function OverviewContent({ metrics, students, targets, loading, onNavigate }: an
   return (
     <>
       {/* Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <SalesMetric
           title="Total Students Enrolled"
           value={loading ? '...' : totalStudents}
@@ -201,7 +201,7 @@ function OverviewContent({ metrics, students, targets, loading, onNavigate }: an
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Student Status Chart */}
         <Card
           className="lg:col-span-2 border-none shadow-xl bg-card/60 backdrop-blur-xl cursor-pointer hover:border-primary/30 transition-colors"
@@ -282,7 +282,7 @@ function OverviewContent({ metrics, students, targets, loading, onNavigate }: an
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Recent Students */}
         <Card className="cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onNavigate('enrolled_students')}>
           <CardHeader className="flex flex-row items-center justify-between">
@@ -473,7 +473,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
       {(() => {
         switch (activeTab) {
           case 'overview': return (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-3">
                   <CardTitle className="text-base">Recent Enrollments</CardTitle>

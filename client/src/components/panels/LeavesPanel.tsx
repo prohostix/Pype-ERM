@@ -206,7 +206,7 @@ export function LeavesPanel() {
       </div>
 
       {/* Summary KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Pending', count: counts.pending, color: 'text-yellow-600' },
           { label: 'Dept Approved', count: counts.dept_approved, color: 'text-blue-600' },

@@ -366,7 +366,7 @@ export function CollectionsPanel() {
             </div>
 
             {/* Today's Collections Lists */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               
               {/* Today Collected */}
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
@@ -667,7 +667,7 @@ export function CollectionsPanel() {
 
         {/* TAB 3: COLLECTION AGENTS (MULTI-SELECT) */}
         {activePanelTab === 'overseers' && metrics?.currentUserOversight?.isAdmin && (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             
             {/* LEFT: Add agents panel */}
             <Card className="border-none bg-card/65 backdrop-blur-md shadow-md lg:col-span-2">

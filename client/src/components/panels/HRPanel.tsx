@@ -178,7 +178,7 @@ export function HRPanel({ activeModule }: HRPanelProps) {
         />
       </MetricCardGrid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Weekly Attendance</CardTitle>
@@ -225,7 +225,7 @@ export function HRPanel({ activeModule }: HRPanelProps) {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Pending Leave Requests</CardTitle>

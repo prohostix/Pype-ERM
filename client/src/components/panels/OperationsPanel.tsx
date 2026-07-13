@@ -131,7 +131,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
         />
       </MetricCardGrid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Pending Admissions</CardTitle>

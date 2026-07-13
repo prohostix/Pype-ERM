@@ -345,7 +345,7 @@ export function FeeStructuresPanel() {
                     <Card key={yf.year} className="bg-muted/20 border">
                       <CardContent className="p-4 space-y-3">
                         <h4 className="font-medium text-xs text-primary">{yf.periodName}</h4>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-4">
                           <div>
                             <Label className="text-[10px] uppercase">Registration Fee</Label>
                             <Input type="number" min="0" value={yf.registrationFee} onChange={(e) => {

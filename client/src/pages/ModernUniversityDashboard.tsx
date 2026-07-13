@@ -222,7 +222,7 @@ export function ModernUniversityDashboard({ initialTab }: { initialTab?: string 
 function MetricCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: number; color: string }) {
   return (
     <Card className="border-none shadow-sm">
-      <CardContent className="p-4 flex items-center gap-3">
+      <CardContent className="p-6 flex items-center gap-4">
         <div className={`p-2 rounded-lg bg-muted ${color}`}>{icon}</div>
         <div>
           <p className="text-xs text-muted-foreground">{label}</p>
