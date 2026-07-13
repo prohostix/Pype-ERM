@@ -927,18 +927,17 @@ export function HRUsersPanel() {
                   value={promotionData.newDesignation}
                   onValueChange={(value) => setPromotionData({ ...promotionData, newDesignation: value })}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select from org chart..." />
+                  <SelectTrigger className="truncate">
+                    <SelectValue placeholder="Select from org chart..." className="truncate" />
                   </SelectTrigger>
                   <SelectContent>
                     {designations.map(d => {
                       const filled = d.filledBy?.length || 0;
                       const vacant = d.maxHeadcount - filled;
+                      const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 ? ' (Full)' : ` (${vacant} open)`}`;
                       return (
                         <SelectItem key={d.id} value={d.title}>
-                          {d.title}
-                          {d.departmentId ? ` — ${d.departmentId.name}` : ''}
-                          {vacant <= 0 ? ' (Full)' : ` (${vacant} open)`}
+                          <span className="block max-w-[340px] truncate">{label}</span>
                         </SelectItem>
                       );
                     })}
@@ -964,8 +963,16 @@ export function HRUsersPanel() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="employee">Employee</SelectItem>
-                  <SelectItem value="staff">Staff</SelectItem>
+                  <SelectItem value="staff">Employee / Staff</SelectItem>
+                  <SelectItem value="hr_admin">HR Admin</SelectItem>
+                  <SelectItem value="finance_admin">Finance Admin</SelectItem>
+                  <SelectItem value="ops_admin">Operations Admin</SelectItem>
+                  <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
+                  <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                  <SelectItem value="sales_agent">Sales Agent</SelectItem>
+                  <SelectItem value="bde">BDE</SelectItem>
+                  <SelectItem value="collections_admin">Collections Admin</SelectItem>
+                  <SelectItem value="center_admin">Center Admin</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -994,7 +1001,7 @@ export function HRUsersPanel() {
                 variant="outline"
                 onClick={() => {
                   setPromotionDialogOpen(false);
-                  setPromotionData({ newDesignation: '', newRole: 'employee', reportingTo: '', type: 'promotion' });
+                  setPromotionData({ newDesignation: '', newRole: 'staff', reportingTo: '', type: 'promotion' });
                 }}
               >
                 Cancel
