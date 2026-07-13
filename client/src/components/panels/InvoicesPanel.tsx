@@ -398,11 +398,11 @@ export function InvoicesPanel() {
 
               {/* Admission details dropdowns */}
               {serviceType === 'admission' ? (
-                <div className="grid grid-cols-2 gap-4 border p-3 rounded-lg bg-muted/20">
+                <div className="flex flex-col gap-4 border p-3 rounded-lg bg-muted/20">
                   <div>
                     <Label>University</Label>
                     <Select value={selectedUnivId} onValueChange={(val) => { setSelectedUnivId(val); setSelectedProgId(''); }}>
-                      <SelectTrigger><SelectValue placeholder="Select university" /></SelectTrigger>
+                      <SelectTrigger className="w-full"><SelectValue placeholder="Select university" /></SelectTrigger>
                       <SelectContent>
                         {universities.map(u => (
                           <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
@@ -413,7 +413,7 @@ export function InvoicesPanel() {
                   <div>
                     <Label>Program</Label>
                     <Select value={selectedProgId} onValueChange={setSelectedProgId} disabled={!selectedUnivId}>
-                      <SelectTrigger><SelectValue placeholder={selectedUnivId ? 'Select program' : 'Select university first'} /></SelectTrigger>
+                      <SelectTrigger className="w-full"><SelectValue placeholder={selectedUnivId ? 'Select program' : 'Select university first'} /></SelectTrigger>
                       <SelectContent>
                         {filteredPrograms.map(p => (
                           <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
