@@ -42,7 +42,7 @@ sudo chown -R ubuntu:ubuntu /var/www/pype-erm
 
 # 6. Copy or Clone project contents to /var/www/pype-erm
 # Note: If running this script inside the cloned repository, we will copy the files.
-if [ -d "./client" ] && [ -d "./server" ]; then
+if [ -d "./client" ] && [ -d "./server" ] && [ "$PWD" != "/var/www/pype-erm" ]; then
     echo "📂 Local repository files found. Copying files to /var/www/pype-erm..."
     cp -R ./* /var/www/pype-erm/
 else
