@@ -9,22 +9,60 @@ export const getLeads = asyncHandler(async (req: AuthRequest, res: Response) => 
   res.json({ success: true, count: leads.length, data: leads });
 });
 export const getLead = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const lead = await prisma.lead.findUnique({ where: { id: req.params.id } });
+  const lead = await prisma.lead.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!lead) {
+    res.status(404).json({ success: false, message: 'Lead not found' });
+    return;
+  }
   res.json({ success: true, data: lead });
 });
 export const createLead = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const lead = await prisma.lead.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const { centerName, contactName, email, phone, address, source, status, notes } = req.body;
+  const lead = await prisma.lead.create({
+    data: {
+      centerName, contactName, email, phone, address, source, status, notes,
+      organizationId: req.user.organizationId
+    }
+  });
   res.status(201).json({ success: true, data: lead });
 });
 export const updateLead = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const lead = await prisma.lead.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.lead.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Lead not found' });
+    return;
+  }
+  const { centerName, contactName, email, phone, address, source, status, notes } = req.body;
+  const updateData: any = {};
+  if (centerName !== undefined) updateData.centerName = centerName;
+  if (contactName !== undefined) updateData.contactName = contactName;
+  if (email !== undefined) updateData.email = email;
+  if (phone !== undefined) updateData.phone = phone;
+  if (address !== undefined) updateData.address = address;
+  if (source !== undefined) updateData.source = source;
+  if (status !== undefined) updateData.status = status;
+  if (notes !== undefined) updateData.notes = notes;
+  
+  const lead = await prisma.lead.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: lead });
 });
 export const deleteLead = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.lead.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Lead not found' });
+    return;
+  }
   await prisma.lead.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
 export const convertLead = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.lead.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Lead not found' });
+    return;
+  }
   const lead = await prisma.lead.update({ where: { id: req.params.id }, data: { status: 'converted', convertedAt: new Date() } });
   res.json({ success: true, data: lead });
 });
@@ -51,10 +89,14 @@ export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, count: targets.length, data: targets });
 });
 export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.findUnique({
-    where: { id: req.params.id },
+  const target = await prisma.target.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
     include: { employee: true, department: true }
   });
+  if (!target) {
+    res.status(404).json({ success: false, message: 'Target not found' });
+    return;
+  }
   res.json({ success: true, data: target });
 });
 export const createTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -64,12 +106,29 @@ export const createTarget = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(201).json({ success: true, data: target });
 });
 export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Target not found' });
+    return;
+  }
+  const { title, targetAmount, period, employeeId, departmentId } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
+  if (period !== undefined) updateData.period = period;
+  if (employeeId !== undefined) updateData.employeeId = employeeId;
+  if (departmentId !== undefined) updateData.departmentId = departmentId;
+  const target = await prisma.target.update({ where: { id: req.params.id }, data: updateData });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: target });
 });
 export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Target not found' });
+    return;
+  }
   await prisma.target.delete({ where: { id: req.params.id } });
   await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: {} });

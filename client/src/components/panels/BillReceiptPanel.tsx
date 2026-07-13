@@ -14,76 +14,105 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
     paid: '#16a34a', pending: '#d97706', draft: '#64748b', partial: '#2563eb'
   };
 
+  const actualOrgName = receipt.organization?.name || orgName;
+  const logoUrl = receipt.organization?.logo;
+  const totalPaid = (receipt.payments || []).reduce((sum: number, p: any) => sum + p.amount, 0);
+  const balanceDue = receipt.balanceDue !== undefined ? receipt.balanceDue : Math.max(0, (receipt.total || 0) - totalPaid);
+
   return (
-    <div id="receipt-print-area" style={{ fontFamily: 'Arial, sans-serif', maxWidth: 700, margin: '0 auto', padding: 32, background: '#fff', color: '#1e293b' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #1e40af', paddingBottom: 16, marginBottom: 20 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: '#1e40af' }}>{orgName}</h1>
-          <p style={{ margin: '4px 0 0', fontSize: 12, color: '#64748b' }}>Finance Department</p>
+    <div id="receipt-print-area" style={{ fontFamily: '"Inter", "Helvetica Neue", sans-serif', maxWidth: 800, margin: '0 auto', padding: 40, background: '#fff', color: '#334155' }}>
+      {/* Header Section */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '3px solid #f1f5f9', paddingBottom: 24, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {logoUrl ? (
+            <img src={logoUrl} alt="Organization Logo" style={{ width: 64, height: 64, objectFit: 'contain' }} />
+          ) : (
+            <div style={{ width: 64, height: 64, background: '#1e40af', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 24, fontWeight: 'bold' }}>
+              {actualOrgName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div>
+            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px' }}>{actualOrgName}</h1>
+            <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b', fontWeight: 500 }}>Finance &amp; Admissions Department</p>
+          </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#1e40af' }}>RECEIPT</div>
-          <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>#{receipt.receiptNo}</div>
-          <div style={{ fontSize: 12, color: '#64748b' }}>{new Date(receipt.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+          <div style={{ fontSize: 24, fontWeight: 800, color: '#1e40af', letterSpacing: '1px' }}>INVOICE / RECEIPT</div>
+          <div style={{ fontSize: 14, color: '#475569', marginTop: 8, fontWeight: 500 }}>Receipt #: <span style={{ color: '#0f172a' }}>{receipt.receiptNo}</span></div>
+          <div style={{ fontSize: 14, color: '#475569', marginTop: 4, fontWeight: 500 }}>Date: <span style={{ color: '#0f172a' }}>{new Date(receipt.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span></div>
         </div>
       </div>
 
-      {/* Student Info */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
-        <div style={{ background: '#f8fafc', borderRadius: 8, padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Student Details</div>
-          <div style={{ fontWeight: 600, fontSize: 15 }}>{receipt.studentName}</div>
-          <div style={{ fontSize: 12, color: '#475569', marginTop: 2 }}>{receipt.studentEmail}</div>
-          {receipt.enrollmentNo && <div style={{ fontSize: 12, color: '#475569' }}>ID: {receipt.enrollmentNo}</div>}
+      {/* Info Cards */}
+      <div style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
+        <div style={{ flex: 1, border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, background: '#f8fafc' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 12 }}>Billed To (Student)</div>
+          <div style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>{receipt.studentName}</div>
+          {receipt.studentEmail && <div style={{ fontSize: 13, color: '#475569', marginTop: 4 }}>{receipt.studentEmail}</div>}
+          {receipt.enrollmentNo && <div style={{ fontSize: 13, color: '#475569', marginTop: 4, fontWeight: 500 }}>Enrollment ID: <span style={{ color: '#0f172a' }}>{receipt.enrollmentNo}</span></div>}
         </div>
-        <div style={{ background: '#f8fafc', borderRadius: 8, padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Program Details</div>
-          <div style={{ fontWeight: 600, fontSize: 14 }}>{receipt.program || 'N/A'}</div>
-          {receipt.university && <div style={{ fontSize: 12, color: '#475569' }}>{receipt.university}</div>}
-          {receipt.center && <div style={{ fontSize: 12, color: '#475569' }}>Center: {receipt.center}</div>}
+        <div style={{ flex: 1, border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, background: '#f8fafc' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 12 }}>Program &amp; Center Details</div>
+          <div style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>{receipt.program || 'N/A'}</div>
+          {receipt.university && <div style={{ fontSize: 13, color: '#475569', marginTop: 4 }}>{receipt.university}</div>}
+          {receipt.center && <div style={{ fontSize: 13, color: '#475569', marginTop: 4, fontWeight: 500 }}>Center: <span style={{ color: '#0f172a' }}>{receipt.center}</span></div>}
         </div>
       </div>
 
       {/* Items Table */}
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16 }}>
-        <thead>
-          <tr style={{ background: '#1e40af', color: '#fff' }}>
-            <th style={{ padding: '10px 12px', textAlign: 'left', fontSize: 12 }}>Description</th>
-            <th style={{ padding: '10px 12px', textAlign: 'right', fontSize: 12 }}>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(Array.isArray(receipt.items) ? receipt.items : []).map((item: any, i: number) => (
-            <tr key={i} style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '10px 12px', fontSize: 13 }}>{item.description || item.name || 'Fee'}</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', fontSize: 13 }}>₹{(item.amount || 0).toLocaleString('en-IN')}</td>
+      <div style={{ borderRadius: 12, border: '1px solid #e2e8f0', overflow: 'hidden', marginBottom: 32 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ background: '#f1f5f9', borderBottom: '2px solid #e2e8f0' }}>
+              <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: 13, color: '#475569', fontWeight: 700, textTransform: 'uppercase' }}>Description</th>
+              <th style={{ padding: '14px 20px', textAlign: 'right', fontSize: 13, color: '#475569', fontWeight: 700, textTransform: 'uppercase' }}>Amount</th>
             </tr>
-          ))}
-          {receipt.tax > 0 && (
-            <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-              <td style={{ padding: '10px 12px', fontSize: 13, color: '#64748b' }}>Tax / GST</td>
-              <td style={{ padding: '10px 12px', textAlign: 'right', fontSize: 13 }}>₹{receipt.tax.toLocaleString('en-IN')}</td>
-            </tr>
-          )}
-        </tbody>
-        <tfoot>
-          <tr style={{ background: '#f1f5f9' }}>
-            <td style={{ padding: '12px', fontWeight: 700, fontSize: 15 }}>Total</td>
-            <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: 15, color: '#1e40af' }}>₹{(receipt.total || 0).toLocaleString('en-IN')}</td>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            {(Array.isArray(receipt.items) ? receipt.items : []).map((item: any, i: number) => (
+              <tr key={i} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                <td style={{ padding: '16px 20px', fontSize: 14, color: '#0f172a', fontWeight: 500 }}>{item.description || item.name || 'Fee'}</td>
+                <td style={{ padding: '16px 20px', textAlign: 'right', fontSize: 14, color: '#0f172a', fontWeight: 600 }}>₹{(item.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            ))}
+            {receipt.tax > 0 && (
+              <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                <td style={{ padding: '16px 20px', fontSize: 14, color: '#64748b' }}>Tax / GST</td>
+                <td style={{ padding: '16px 20px', textAlign: 'right', fontSize: 14, color: '#64748b', fontWeight: 500 }}>₹{receipt.tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Financial Summary */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
+        <div style={{ width: '320px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>
+            <span style={{ fontSize: 14, color: '#64748b', fontWeight: 500 }}>Subtotal</span>
+            <span style={{ fontSize: 14, color: '#0f172a', fontWeight: 600 }}>₹{(receipt.total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #e2e8f0' }}>
+            <span style={{ fontSize: 14, color: '#16a34a', fontWeight: 600 }}>Amount Paid</span>
+            <span style={{ fontSize: 14, color: '#16a34a', fontWeight: 700 }}>- ₹{totalPaid.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0', borderBottom: '3px solid #1e40af' }}>
+            <span style={{ fontSize: 18, color: '#0f172a', fontWeight: 800 }}>Balance Due</span>
+            <span style={{ fontSize: 18, color: '#1e40af', fontWeight: 800 }}>₹{balanceDue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+          </div>
+        </div>
+      </div>
 
       {/* Status */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#f8fafc', borderRadius: 8, marginBottom: 20 }}>
-        <div style={{ fontSize: 13, color: '#64748b' }}>Payment Status</div>
-        <div style={{ fontWeight: 700, fontSize: 14, color: statusColor[receipt.status] || '#64748b', textTransform: 'uppercase' }}>{receipt.status}</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', background: balanceDue === 0 ? '#f0fdf4' : (balanceDue === receipt.total ? '#fffbeb' : '#eff6ff'), border: `1px solid ${balanceDue === 0 ? '#bbf7d0' : (balanceDue === receipt.total ? '#fde68a' : '#bfdbfe')}`, borderRadius: 12, marginBottom: 32 }}>
+        <div style={{ fontSize: 14, color: '#475569', fontWeight: 600 }}>Payment Status</div>
+        <div style={{ fontWeight: 800, fontSize: 16, color: statusColor[receipt.status] || '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>{receipt.status}</div>
       </div>
 
       {/* Footer */}
-      <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 12, fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
-        This is a computer-generated receipt and does not require a physical signature. • Generated on {new Date().toLocaleDateString('en-IN')}
+      <div style={{ borderTop: '2px dashed #cbd5e1', paddingTop: 20, fontSize: 12, color: '#64748b', textAlign: 'center', fontWeight: 500 }}>
+        This is a computer-generated receipt and does not require a physical signature. <br/>
+        Generated on {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}
       </div>
     </div>
   );

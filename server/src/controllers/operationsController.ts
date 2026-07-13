@@ -68,7 +68,8 @@ export const getPrograms = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, count: programs.length, data: programs });
 });
 export const getProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const program = await prisma.program.findUnique({ where: { id: req.params.id }, include: { university: true } });
+  const program = await prisma.program.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId }, include: { university: true } });
+  if (!program) { res.status(404).json({ success: false, message: 'Program not found' }); return; }
   res.json({ success: true, data: program });
 });
 export const createProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -76,7 +77,18 @@ export const createProgram = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: program });
 });
 export const updateProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const program = await prisma.program.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.program.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Program not found' }); return; }
+  const { name, code, duration, description, status, universityId, sessionId } = req.body;
+  const updateData: any = {};
+  if (name !== undefined) updateData.name = name;
+  if (code !== undefined) updateData.code = code;
+  if (duration !== undefined) updateData.duration = duration;
+  if (description !== undefined) updateData.description = description;
+  if (status !== undefined) updateData.status = status;
+  if (universityId !== undefined) updateData.universityId = universityId;
+  if (sessionId !== undefined) updateData.sessionId = sessionId || null;
+  const program = await prisma.program.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: program });
 });
 export const deleteProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -94,7 +106,8 @@ export const getStudyCenters = asyncHandler(async (req: AuthRequest, res: Respon
   res.json({ success: true, count: centers.length, data: centers });
 });
 export const getStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const center = await prisma.studyCenter.findUnique({ where: { id: req.params.id } });
+  const center = await prisma.studyCenter.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!center) { res.status(404).json({ success: false, message: 'Study center not found' }); return; }
   res.json({ success: true, data: center });
 });
 export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -134,13 +147,16 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  // Send credentials email
-  await sendEmail(
-    targetEmail,
-    'Your Study Center Portal Credentials',
-    `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
-    `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
-  );
+  try {
+    await sendEmail(
+      targetEmail,
+      'Your Study Center Portal Credentials',
+      `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+      `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
+    );
+  } catch (mailErr: any) {
+    console.error('Failed to send center credentials email:', mailErr.message);
+  }
 
   res.status(201).json({ success: true, data: center });
 });
@@ -161,7 +177,20 @@ export const updateStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     });
   }
 
-  const center = await prisma.studyCenter.update({ where: { id: req.params.id }, data: req.body });
+  const center = await prisma.studyCenter.update({
+    where: { id: req.params.id },
+    data: {
+      name: req.body.name,
+      code: req.body.code,
+      email: req.body.email,
+      contact: req.body.contact,
+      address: req.body.address,
+      status: req.body.status,
+      state: req.body.state,
+      city: req.body.city,
+      ...(req.body.credentials ? { credentials: req.body.credentials } : {}),
+    }
+  });
   res.json({ success: true, data: center });
 });
 export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -249,7 +278,16 @@ export const createInternalMark = asyncHandler(async (req: AuthRequest, res: Res
   res.status(201).json({ success: true, data: mark });
 });
 export const updateInternalMark = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const mark = await prisma.internalMark.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.internalMark.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Internal mark not found' }); return; }
+  const { subject, marks, maxMarks, examType, remarks } = req.body;
+  const updateData: any = {};
+  if (subject !== undefined) updateData.subject = subject;
+  if (marks !== undefined) updateData.marks = Number(marks);
+  if (maxMarks !== undefined) updateData.maxMarks = Number(maxMarks);
+  if (examType !== undefined) updateData.examType = examType;
+  if (remarks !== undefined) updateData.remarks = remarks;
+  const mark = await prisma.internalMark.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: mark });
 });
 export const deleteInternalMark = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -271,7 +309,16 @@ export const createAnnouncement = asyncHandler(async (req: AuthRequest, res: Res
   res.status(201).json({ success: true, data: announcement });
 });
 export const updateAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const announcement = await prisma.announcement.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.announcement.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Announcement not found' }); return; }
+  const { title, content, type, targetAudience, expiresAt } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (content !== undefined) updateData.content = content;
+  if (type !== undefined) updateData.type = type;
+  if (targetAudience !== undefined) updateData.targetAudience = targetAudience;
+  if (expiresAt !== undefined) updateData.expiresAt = new Date(expiresAt);
+  const announcement = await prisma.announcement.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: announcement });
 });
 export const deleteAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {

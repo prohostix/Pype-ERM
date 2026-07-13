@@ -236,10 +236,23 @@ export const getMonthlyLateSummary = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const getAttendances = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const attendances = await prisma.attendance.findMany({ where: { organizationId: req.user.organizationId }, include: { user: true } });
+  const where: any = { organizationId: req.user.organizationId };
+  // Branch isolation
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+  const attendances = await prisma.attendance.findMany({ where, include: { user: true } });
   res.json({ success: true, count: attendances.length, data: attendances });
 });
-export const getAttendance = getAttendances;
+
+export const getAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
+  if (!attendance || attendance.organizationId !== req.user.organizationId) {
+    res.status(404).json({ success: false, message: 'Attendance record not found' });
+    return;
+  }
+  res.json({ success: true, data: attendance });
+});
 
 export const getAttendanceById = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
@@ -263,11 +276,20 @@ export const markAttendance = createAttendance;
 
 export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
   const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
-  if (!attendance) {
+  if (!attendance || attendance.organizationId !== req.user.organizationId) {
     res.status(404).json({ success: false, message: 'Attendance record not found' });
     return;
   }
-  const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: req.body });
+  const { checkIn, checkOut, status, isLate, lateMinutes, workingHours, remarks } = req.body;
+  const updateData: any = {};
+  if (checkIn !== undefined) updateData.checkIn = new Date(checkIn);
+  if (checkOut !== undefined) updateData.checkOut = new Date(checkOut);
+  if (status !== undefined) updateData.status = status;
+  if (isLate !== undefined) updateData.isLate = isLate;
+  if (lateMinutes !== undefined) updateData.lateMinutes = Number(lateMinutes);
+  if (workingHours !== undefined) updateData.workingHours = Number(workingHours);
+  if (remarks !== undefined) updateData.remarks = remarks;
+  const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: updatedAttendance });
 });
 

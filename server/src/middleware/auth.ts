@@ -27,15 +27,19 @@ export const protect = async (
     }
 
     try {
-      const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+      const jwtSecret = process.env.JWT_SECRET;
+      if (!jwtSecret) throw new Error('JWT_SECRET not configured');
+      const decoded: any = jwt.verify(token, jwtSecret);
       
       const user = await prisma.user.findUnique({
         where: { id: decoded.id },
-        include: {
-          organization: true,
-          department: true,
-          branch: true,
-          studyCenter: true,
+        select: {
+          id: true, userId: true, email: true, name: true, role: true,
+          phone: true, designation: true, status: true, lastLogin: true,
+          avatar: true, reportingTo: true, createdAt: true, updatedAt: true,
+          organizationId: true, departmentId: true, subDepartmentId: true,
+          branchId: true, studyCenterId: true, ceoPanelId: true,
+          organization: true, department: true, branch: true, studyCenter: true,
         }
       });
 

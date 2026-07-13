@@ -13,14 +13,37 @@ export const getCeoPanels = asyncHandler(async (req: AuthRequest, res: Response)
   res.json({ success: true, count: ceoPanels.length, data: ceoPanels });
 });
 export const getCeoPanel = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const ceoPanel = await prisma.ceoPanel.findUnique({ where: { id: req.params.id } });
+  const ceoPanel = await prisma.ceoPanel.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!ceoPanel) {
+    res.status(404).json({ success: false, message: 'CEO Panel not found' });
+    return;
+  }
   res.json({ success: true, data: ceoPanel });
 });
 export const updateCeoPanel = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const ceoPanel = await prisma.ceoPanel.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.ceoPanel.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'CEO Panel not found' });
+    return;
+  }
+  const { title, description, metrics, links } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (description !== undefined) updateData.description = description;
+  if (metrics !== undefined) updateData.metrics = metrics;
+  if (links !== undefined) updateData.links = links;
+  
+  const ceoPanel = await prisma.ceoPanel.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: ceoPanel });
 });
 export const deleteCeoPanel = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.ceoPanel.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'CEO Panel not found' });
+    return;
+  }
   await prisma.ceoPanel.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
@@ -102,18 +125,36 @@ export const createDesignation = asyncHandler(async (req: AuthRequest, res: Resp
   res.status(201).json({ success: true, data: designation });
 });
 export const updateDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { allowedDeptIds, allowedBranchIds, ...rest } = req.body;
+  const exists = await prisma.designation.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Designation not found' });
+    return;
+  }
+  const { title, description, level, maxOccupants, allowedDeptIds, allowedBranchIds, parentId, departmentId, subDepartmentId, branchId } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (description !== undefined) updateData.description = description;
+  if (level !== undefined) updateData.level = Number(level);
+  if (maxOccupants !== undefined) updateData.maxOccupants = Number(maxOccupants);
+  if (parentId !== undefined) updateData.parentId = parentId;
+  if (departmentId !== undefined) updateData.departmentId = departmentId;
+  if (subDepartmentId !== undefined) updateData.subDepartmentId = subDepartmentId;
+  if (branchId !== undefined) updateData.branchId = branchId;
+  if (allowedDeptIds !== undefined) updateData.allowedDeptIds = allowedDeptIds;
+  if (allowedBranchIds !== undefined) updateData.allowedBranchIds = allowedBranchIds;
+  
   const designation = await prisma.designation.update({
     where: { id: req.params.id },
-    data: {
-      ...rest,
-      allowedDeptIds: allowedDeptIds !== undefined ? allowedDeptIds : undefined,
-      allowedBranchIds: allowedBranchIds !== undefined ? allowedBranchIds : undefined
-    }
+    data: updateData
   });
   res.json({ success: true, data: designation });
 });
 export const deleteDesignation = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.designation.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Designation not found' });
+    return;
+  }
   await prisma.designation.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });

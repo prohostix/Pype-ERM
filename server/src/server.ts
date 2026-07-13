@@ -77,8 +77,8 @@ app.use(
 app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
 
 // Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 // Compression
 app.use(compression());
@@ -165,7 +165,9 @@ const httpServer = createServer(app);
 // Initialize Socket.io
 if (process.env.NODE_ENV !== 'test') {
   initializeSocket(httpServer);
-  console.log('✅ Socket.io initialized');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('✅ Socket.io initialized');
+  }
 }
 
 // Start cron jobs

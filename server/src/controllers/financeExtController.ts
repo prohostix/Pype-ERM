@@ -104,7 +104,8 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       include: {
         student: { include: { program: { include: { university: true } } } },
         center: true,
-        payments: true
+        payments: true,
+        organization: true
       }
     });
     if (!invoice) { res.status(404).json({ success: false, message: 'Invoice not found' }); return; }
@@ -123,7 +124,9 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       tax: invoice.tax,
       total: invoice.total,
       status: invoice.status,
-      payments: invoice.payments
+      payments: invoice.payments,
+      organization: invoice.organization,
+      balanceDue: Math.max(0, invoice.total - invoice.payments.reduce((sum, p) => sum + p.amount, 0))
     };
   } else if (paymentId) {
     const payment = await prisma.paymentEntry.findUnique({ where: { id: paymentId } });

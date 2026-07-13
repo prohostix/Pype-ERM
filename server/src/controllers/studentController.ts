@@ -171,13 +171,17 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
-  // Send credentials email
-  await sendEmail(
-    email,
-    'Your Student Portal Credentials',
-    `Hello ${name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
-    `<p>Hello <strong>${name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
-  );
+  // Send credentials email — failure must not fail the creation
+  try {
+    await sendEmail(
+      email,
+      'Your Student Portal Credentials',
+      `Hello ${name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
+      `<p>Hello <strong>${name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
+    );
+  } catch (mailErr: any) {
+    console.error('Failed to send student credentials email:', mailErr.message);
+  }
 
   res.status(201).json({ success: true, data: student });
 });

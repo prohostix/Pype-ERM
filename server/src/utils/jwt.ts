@@ -1,7 +1,13 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 
+function requireEnv(key: string): string {
+  const val = process.env[key];
+  if (!val) throw new Error(`Missing required environment variable: ${key}`);
+  return val;
+}
+
 export const generateToken = (id: string): string => {
-  const secret = process.env.JWT_SECRET || 'secret';
+  const secret = requireEnv('JWT_SECRET');
   const options: SignOptions = {
     expiresIn: (process.env.JWT_EXPIRE || '7d') as any,
   };
@@ -9,7 +15,7 @@ export const generateToken = (id: string): string => {
 };
 
 export const generateRefreshToken = (id: string): string => {
-  const secret = process.env.JWT_REFRESH_SECRET || 'refresh-secret';
+  const secret = requireEnv('JWT_REFRESH_SECRET');
   const options: SignOptions = {
     expiresIn: (process.env.JWT_REFRESH_EXPIRE || '30d') as any,
   };
@@ -17,11 +23,11 @@ export const generateRefreshToken = (id: string): string => {
 };
 
 export const verifyToken = (token: string): any => {
-  const secret = process.env.JWT_SECRET || 'secret';
+  const secret = requireEnv('JWT_SECRET');
   return jwt.verify(token, secret);
 };
 
 export const verifyRefreshToken = (token: string): any => {
-  const secret = process.env.JWT_REFRESH_SECRET || 'refresh-secret';
+  const secret = requireEnv('JWT_REFRESH_SECRET');
   return jwt.verify(token, secret);
 };

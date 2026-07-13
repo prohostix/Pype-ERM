@@ -13,7 +13,10 @@ export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 
 export const getPayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const payroll = await prisma.payroll.findUnique({ where: { id: req.params.id }, include: { user: true } });
+  const payroll = await prisma.payroll.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
+    include: { user: true }
+  });
   if (!payroll) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;
@@ -27,12 +30,26 @@ export const createPayroll = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const updatePayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const payroll = await prisma.payroll.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.payroll.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Payroll not found' });
+    return;
+  }
+  const { basicSalary, allowances, deductions, netSalary, status, remarks } = req.body;
+  const updateData: any = {};
+  if (basicSalary !== undefined) updateData.basicSalary = Number(basicSalary);
+  if (allowances !== undefined) updateData.allowances = allowances;
+  if (deductions !== undefined) updateData.deductions = deductions;
+  if (netSalary !== undefined) updateData.netSalary = Number(netSalary);
+  if (status !== undefined) updateData.status = status;
+  if (remarks !== undefined) updateData.remarks = remarks;
+
+  const payroll = await prisma.payroll.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: payroll });
 });
 
 export const deletePayroll = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const payroll = await prisma.payroll.findUnique({ where: { id: req.params.id } });
+  const payroll = await prisma.payroll.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!payroll) {
     res.status(404).json({ success: false, message: 'Payroll record not found' });
     return;

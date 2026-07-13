@@ -60,7 +60,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
     try {
       const res = await api.get('/attendance/today');
       setToday(res.data.data);
-    } catch {
+    } catch (err) {
+      console.error('Failed to fetch today attendance:', err);
       setToday(null);
     } finally {
       setLoading(false);
@@ -82,7 +83,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
       );
       const data = await res.json();
       return data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    } catch {
+    } catch (err) {
+      console.error('Geocoding failed:', err);
       return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
     }
   };

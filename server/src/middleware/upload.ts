@@ -3,6 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
 
+const ALLOWED_EXTENSIONS = new Set(['.jpeg', '.jpg', '.png', '.gif', '.webp', '.pdf', '.doc', '.docx', '.xls', '.xlsx']);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = process.env.UPLOAD_PATH || './uploads';
@@ -14,7 +16,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname).toLowerCase());
   },
 });
 
@@ -23,15 +25,12 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  const allowedTypes = /jpeg|jpg|png|pdf|doc|docx|xls|xlsx/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (mimetype && extname) {
+  // Check ONLY the extension — the mimetype from client headers is untrusted
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (ALLOWED_EXTENSIONS.has(ext)) {
     return cb(null, true);
-  } else {
-    cb(new Error('Invalid file type. Only images and documents are allowed.'));
   }
+  cb(new Error(`Invalid file type '${ext}'. Allowed: ${Array.from(ALLOWED_EXTENSIONS).join(', ')}`));
 };
 
 export const upload = multer({
@@ -41,3 +40,4 @@ export const upload = multer({
   },
   fileFilter,
 });
+

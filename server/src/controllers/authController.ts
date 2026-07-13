@@ -33,6 +33,9 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
   const userId = await generateUserId();
   const hashedPassword = await hashPassword(password);
 
+  // Prevent privilege escalation — nobody can register themselves as superadmin
+  const assignedRole = (role === 'superadmin' || role === 'org_admin') ? 'staff' : (role || 'staff');
+
   // Create user
   const user = await prisma.user.create({
     data: {
@@ -43,7 +46,7 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
       email,
       password: hashedPassword,
       name,
-      role,
+      role: assignedRole,
       phone,
       designation,
       reportingTo,
@@ -151,10 +154,12 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
 export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
-    include: {
-      organization: true,
-      department: true,
-      subDepartment: true,
+    select: {
+      id: true, userId: true, email: true, name: true, role: true,
+      phone: true, designation: true, status: true, lastLogin: true,
+      avatar: true, reportingTo: true, organizationId: true,
+      departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
+      organization: true, department: true, subDepartment: true,
     }
   });
 

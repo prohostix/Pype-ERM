@@ -47,7 +47,13 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
 });
 
 export const getLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const leave = await prisma.leaveRequest.findUnique({ where: { id: req.params.id } });
+  const leave = await prisma.leaveRequest.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!leave) {
+    res.status(404).json({ success: false, message: 'Leave request not found' });
+    return;
+  }
   res.json({ success: true, data: leave });
 });
 
@@ -67,20 +73,29 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { startDate, endDate, ...rest } = req.body;
-  const updateData: any = { ...rest };
-  
+  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Leave request not found' });
+    return;
+  }
+  const { startDate, endDate, leaveType, reason, status, remarks } = req.body;
+  const updateData: any = {};
   if (startDate) updateData.startDate = new Date(startDate);
   if (endDate) updateData.endDate = new Date(endDate);
-
-  const leave = await prisma.leaveRequest.update({ 
-    where: { id: req.params.id }, 
-    data: updateData 
-  });
+  if (leaveType !== undefined) updateData.leaveType = leaveType;
+  if (reason !== undefined) updateData.reason = reason;
+  if (status !== undefined) updateData.status = status;
+  if (remarks !== undefined) updateData.remarks = remarks;
+  const leave = await prisma.leaveRequest.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: leave });
 });
 
 export const deleteLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) {
+    res.status(404).json({ success: false, message: 'Leave request not found' });
+    return;
+  }
   await prisma.leaveRequest.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
@@ -135,7 +150,13 @@ export const getVacancies = asyncHandler(async (req: AuthRequest, res: Response)
   res.json({ success: true, data: vacancies });
 });
 export const getVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const vacancy = await prisma.vacancy.findUnique({ where: { id: req.params.id } });
+  const vacancy = await prisma.vacancy.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!vacancy) {
+    res.status(404).json({ success: false, message: 'Vacancy not found' });
+    return;
+  }
   res.json({ success: true, data: vacancy });
 });
 export const createVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -143,14 +164,32 @@ export const createVacancy = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: vacancy });
 });
 export const updateVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const vacancy = await prisma.vacancy.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.vacancy.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Vacancy not found' }); return; }
+  const { title, departmentId, location, type, experience, positions, status, description, requirements } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (departmentId !== undefined) updateData.departmentId = departmentId;
+  if (location !== undefined) updateData.location = location;
+  if (type !== undefined) updateData.type = type;
+  if (experience !== undefined) updateData.experience = experience;
+  if (positions !== undefined) updateData.positions = Number(positions);
+  if (status !== undefined) updateData.status = status;
+  if (description !== undefined) updateData.description = description;
+  if (requirements !== undefined) updateData.requirements = requirements;
+  
+  const vacancy = await prisma.vacancy.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: vacancy });
 });
 export const deleteVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.vacancy.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Vacancy not found' }); return; }
   await prisma.vacancy.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
 export const closeVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.vacancy.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Vacancy not found' }); return; }
   const vacancy = await prisma.vacancy.update({ where: { id: req.params.id }, data: { status: 'closed' } });
   res.json({ success: true, data: vacancy });
 });
@@ -170,7 +209,10 @@ export const getComplaints = asyncHandler(async (req: AuthRequest, res: Response
   res.json({ success: true, data: complaints });
 });
 export const getComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const complaint = await prisma.complaint.findUnique({ where: { id: req.params.id } });
+  const complaint = await prisma.complaint.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!complaint) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
   res.json({ success: true, data: complaint });
 });
 export const createComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -180,14 +222,28 @@ export const createComplaint = asyncHandler(async (req: AuthRequest, res: Respon
   res.status(201).json({ success: true, data: complaint });
 });
 export const updateComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: req.body });
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
+  const { title, description, category, priority, status } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (description !== undefined) updateData.description = description;
+  if (category !== undefined) updateData.category = category;
+  if (priority !== undefined) updateData.priority = priority;
+  if (status !== undefined) updateData.status = status;
+  
+  const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: complaint });
 });
 export const deleteComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
   await prisma.complaint.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });
 export const resolveComplaint = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.complaint.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Complaint not found' }); return; }
   const complaint = await prisma.complaint.update({ where: { id: req.params.id }, data: { status: 'resolved' } });
   res.json({ success: true, data: complaint });
 });
@@ -198,7 +254,10 @@ export const getHolidays = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, data: holidays });
 });
 export const getHoliday = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const holiday = await prisma.holiday.findUnique({ where: { id: req.params.id } });
+  const holiday = await prisma.holiday.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
+  if (!holiday) { res.status(404).json({ success: false, message: 'Holiday not found' }); return; }
   res.json({ success: true, data: holiday });
 });
 export const createHoliday = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -213,14 +272,22 @@ export const createHoliday = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: holiday });
 });
 export const updateHoliday = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { date, ...rest } = req.body;
-  const updateData: any = { ...rest };
-  if (date) updateData.date = new Date(date);
+  const exists = await prisma.holiday.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Holiday not found' }); return; }
+  const { date, name, description, type, status } = req.body;
+  const updateData: any = {};
+  if (date !== undefined) updateData.date = new Date(date);
+  if (name !== undefined) updateData.name = name;
+  if (description !== undefined) updateData.description = description;
+  if (type !== undefined) updateData.type = type;
+  if (status !== undefined) updateData.status = status;
 
   const holiday = await prisma.holiday.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: holiday });
 });
 export const deleteHoliday = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const exists = await prisma.holiday.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!exists) { res.status(404).json({ success: false, message: 'Holiday not found' }); return; }
   await prisma.holiday.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
 });

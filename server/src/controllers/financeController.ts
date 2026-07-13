@@ -27,7 +27,9 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, count: invoices.length, data: invoices });
 });
 export const getInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
+  const invoice = await prisma.invoice.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
   if (!invoice) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
@@ -39,16 +41,24 @@ export const createInvoice = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: invoice });
 });
 export const updateInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.invoice.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.invoice.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
   }
-  const invoice = await prisma.invoice.update({ where: { id: req.params.id }, data: req.body });
+  const { status, amount, tax, total, items, notes } = req.body;
+  const updateData: any = {};
+  if (status !== undefined) updateData.status = status;
+  if (amount !== undefined) updateData.amount = Number(amount);
+  if (tax !== undefined) updateData.tax = Number(tax);
+  if (total !== undefined) updateData.total = Number(total);
+  if (items !== undefined) updateData.items = items;
+  if (notes !== undefined) updateData.notes = notes;
+  const invoice = await prisma.invoice.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: invoice });
 });
 export const deleteInvoice = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.invoice.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.invoice.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Invoice not found' });
     return;
@@ -83,7 +93,9 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, count: payments.length, data: payments });
 });
 export const getPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const payment = await prisma.paymentEntry.findUnique({ where: { id: req.params.id } });
+  const payment = await prisma.paymentEntry.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
   if (!payment) {
     res.status(404).json({ success: false, message: 'Payment not found' });
     return;
@@ -131,15 +143,15 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
         studentId: student.id,
         centerId: student.centerId,
         invoiceNo,
-        amount: Number(req.body.amount), // Set item amount equal to incoming paid amount
+        amount: invoiceTotal,
         tax: 0,
         total: invoiceTotal,
         status: 'approved',
         items: [{
           description: feeDescription,
           quantity: 1,
-          rate: Number(req.body.amount),
-          amount: Number(req.body.amount)
+          rate: invoiceTotal,
+          amount: invoiceTotal
         }]
       }
     });
@@ -203,16 +215,22 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: populatedPayment });
 });
 export const updatePayment = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.paymentEntry.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.paymentEntry.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Payment not found' });
     return;
   }
-  const payment = await prisma.paymentEntry.update({ where: { id: req.params.id }, data: req.body });
+  const { amount, method, referenceNo, notes } = req.body;
+  const updateData: any = {};
+  if (amount !== undefined) updateData.amount = Number(amount);
+  if (method !== undefined) updateData.method = method;
+  if (referenceNo !== undefined) updateData.referenceNo = referenceNo;
+  if (notes !== undefined) updateData.notes = notes;
+  const payment = await prisma.paymentEntry.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: payment });
 });
 export const deletePayment = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.paymentEntry.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.paymentEntry.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Payment not found' });
     return;
@@ -223,11 +241,18 @@ export const deletePayment = asyncHandler(async (req: AuthRequest, res: Response
 
 // Expenses
 export const getExpenses = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const expenses = await prisma.expenseClaim.findMany({ where: { organizationId: req.user.organizationId } });
+  const where: any = { organizationId: req.user.organizationId };
+  // Branch-level isolation
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+  const expenses = await prisma.expenseClaim.findMany({ where });
   res.json({ success: true, count: expenses.length, data: expenses });
 });
 export const getExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const expense = await prisma.expenseClaim.findUnique({ where: { id: req.params.id } });
+  const expense = await prisma.expenseClaim.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId }
+  });
   if (!expense) {
     res.status(404).json({ success: false, message: 'Expense not found' });
     return;
@@ -239,16 +264,24 @@ export const createExpense = asyncHandler(async (req: AuthRequest, res: Response
   res.status(201).json({ success: true, data: expense });
 });
 export const updateExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.expenseClaim.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.expenseClaim.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Expense not found' });
     return;
   }
-  const expense = await prisma.expenseClaim.update({ where: { id: req.params.id }, data: req.body });
+  const { title, description, amount, category, date, receiptUrl } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (description !== undefined) updateData.description = description;
+  if (amount !== undefined) updateData.amount = Number(amount);
+  if (category !== undefined) updateData.category = category;
+  if (date !== undefined) updateData.date = new Date(date);
+  if (receiptUrl !== undefined) updateData.receiptUrl = receiptUrl;
+  const expense = await prisma.expenseClaim.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: expense });
 });
 export const deleteExpense = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.expenseClaim.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.expenseClaim.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Expense not found' });
     return;
@@ -265,15 +298,17 @@ import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const targets = await prisma.target.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: { employee: true }
-  });
+  const where: any = { organizationId: req.user.organizationId };
+  // Branch-level isolation
+  if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+    where.branchId = req.user.branchId;
+  }
+  const targets = await prisma.target.findMany({ where, include: { employee: true } });
   res.json({ success: true, count: targets.length, data: targets });
 });
 export const getTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const target = await prisma.target.findUnique({
-    where: { id: req.params.id },
+  const target = await prisma.target.findFirst({
+    where: { id: req.params.id, organizationId: req.user.organizationId },
     include: { employee: true }
   });
   if (!target) {
@@ -289,18 +324,25 @@ export const createTarget = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(201).json({ success: true, data: target });
 });
 export const updateTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.target.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Target not found' });
     return;
   }
-  const target = await prisma.target.update({ where: { id: req.params.id }, data: req.body });
+  const { title, targetAmount, period, employeeId, branchId } = req.body;
+  const updateData: any = {};
+  if (title !== undefined) updateData.title = title;
+  if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
+  if (period !== undefined) updateData.period = period;
+  if (employeeId !== undefined) updateData.employeeId = employeeId;
+  if (branchId !== undefined) updateData.branchId = branchId || null;
+  const target = await prisma.target.update({ where: { id: req.params.id }, data: updateData });
   await handleTargetRollup(target.id, req.user.organizationId);
   await syncParentTargets(req.user.organizationId);
   res.json({ success: true, data: target });
 });
 export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const exists = await prisma.target.findUnique({ where: { id: req.params.id } });
+  const exists = await prisma.target.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) {
     res.status(404).json({ success: false, message: 'Target not found' });
     return;

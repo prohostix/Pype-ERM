@@ -144,7 +144,8 @@ function App() {
             setIsCollectionsOverseer(false);
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error('Failed to get collections metrics:', err);
           setIsCollectionsOverseer(false);
         });
     } else {
@@ -194,7 +195,9 @@ function App() {
           const res = await api.get('/sub-departments/my');
           const parentType = res.data.data?.subDepartment?.parentDeptId?.type;
           if (parentType) { setDeptType(parentType); return; }
-        } catch (_) {}
+        } catch (err) {
+          console.error('Failed to fetch sub-departments:', err);
+        }
       } catch (err) {
         console.error('Failed to fetch dept type for nav:', err);
       }
