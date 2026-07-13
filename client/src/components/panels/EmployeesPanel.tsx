@@ -218,8 +218,7 @@ export function EmployeesPanel() {
                   <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="employee">Employee</SelectItem>
-                      <SelectItem value="staff">Staff</SelectItem>
+                      <SelectItem value="staff">Employee / Staff</SelectItem>
                       <SelectItem value="hr_admin">HR Admin</SelectItem>
                       <SelectItem value="finance_admin">Finance Admin</SelectItem>
                       <SelectItem value="ops_admin">Operations Admin</SelectItem>
