@@ -366,6 +366,7 @@ export function InvoicesPanel() {
                                   studentId: st.id,
                                   centerId: (st.centerId || '').toString()
                                 }));
+                                setServiceType('admission');
                                 setStudentSearch('');
                                 setStudentDropdownOpen(false);
                               }}
