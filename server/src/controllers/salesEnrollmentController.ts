@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../generated/client/index.js';
 import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import { prisma } from '../config/postgres.js';
