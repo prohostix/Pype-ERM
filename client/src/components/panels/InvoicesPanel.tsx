@@ -109,6 +109,22 @@ export function InvoicesPanel() {
     }
   };
 
+  // Auto-fill university and program if billing target is student and service type is admission
+  useEffect(() => {
+    if (billingTarget === 'student' && serviceType === 'admission' && formData.studentId) {
+      const student = students.find(s => s.id === formData.studentId);
+      if (student) {
+        if (student.universityId) {
+          setSelectedUnivId(student.universityId.toString());
+        }
+        if (student.programId) {
+          // ensure the universities are updated before setting program ID to avoid select constraints
+          setTimeout(() => setSelectedProgId(student.programId.toString()), 50);
+        }
+      }
+    }
+  }, [billingTarget, serviceType, formData.studentId, students]);
+
   // Auto-fill rates and tax from fee structure when admission selection changes
   useEffect(() => {
     if (serviceType === 'admission' && selectedProgId) {
