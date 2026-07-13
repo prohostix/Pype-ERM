@@ -21,6 +21,7 @@ import { ExpensesPanel } from '@/components/panels/ExpensesPanel';
 import { TargetsPanel } from '@/components/panels/TargetsPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
+import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
@@ -123,6 +124,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'salary_approvals': return <FinanceSalaryApprovalPanel />;
       case 'sales_targets': return <FinanceSalesTargetsPanel />;
       case 'university_commissions': return <UniversityCommissionsPanel />;
+      case 'university_payments': return <UniversityPaymentsPanel />;
       case 'payment_reminders': return <PaymentRemindersPanel />;
       case 'bill_receipt': return <BillReceiptPanel />;
       case 'invoice_schedule': return <InvoiceSchedulePanel />;

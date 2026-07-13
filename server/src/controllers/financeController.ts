@@ -628,3 +628,53 @@ export const recordUniversityCommission = asyncHandler(async (req: AuthRequest, 
 
   res.status(201).json({ success: true, data: commission });
 });
+
+export const getUniversityPayments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const students = await prisma.student.findMany({
+    where: {
+      organizationId,
+    },
+    include: {
+      program: {
+        include: {
+          university: true,
+          feeStructures: {
+            where: {
+              organizationId
+            }
+          }
+        }
+      },
+      universityPayments: true
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  res.json({ success: true, data: students });
+});
+
+export const recordUniversityPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const { studentId, universityId, amountPaid, notes, status } = req.body;
+
+  if (!studentId || !universityId || amountPaid === undefined) {
+    res.status(400).json({ success: false, message: 'Missing required fields' });
+    return;
+  }
+
+  const payment = await prisma.universityPayment.create({
+    data: {
+      organizationId,
+      studentId,
+      universityId,
+      amountPaid: Number(amountPaid),
+      notes,
+      status: status || 'paid'
+    }
+  });
+
+  res.json({ success: true, data: payment });
+});

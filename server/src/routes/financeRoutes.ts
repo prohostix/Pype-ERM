@@ -36,6 +36,8 @@ import {
   getIncomeExpenditureReport,
   getFinanceSalesUsers,
   getUniversityCommissions,
+  getUniversityPayments,
+  recordUniversityPayment,
   recordUniversityCommission,
 } from '../controllers/financeController.js';
 import {
@@ -183,5 +185,11 @@ router.put('/payment-links/:id/status', authorize('finance_admin'), updatePaymen
 router.route('/commissions')
   .get(getUniversityCommissions)
   .post(authorize('finance_admin'), recordUniversityCommission);
+
+
+// Payments to Universities
+router.route('/university-payments')
+  .get(getUniversityPayments)
+  .post(authorize('finance_admin'), recordUniversityPayment);
 
 export default router;
