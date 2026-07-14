@@ -84,9 +84,9 @@ router.route('/leaves/:id')
   .get(getLeaveRequest)
   .put(updateLeaveRequest)
   .delete(deleteLeaveRequest);
-router.put('/leaves/:id/approve', authorize('hr_admin', 'ops_admin', 'finance_admin', 'sales_admin', 'center_admin'), hrApproveLeave);
-router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'), deptApproveLeave);
-router.patch('/leaves/:id/hr-approve', authorize('hr_admin'), hrApproveLeave);
+router.put('/leaves/:id/approve', authorize('hr_admin', 'ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo'), hrApproveLeave);
+router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'superadmin', 'org_admin', 'ceo'), deptApproveLeave);
+router.patch('/leaves/:id/hr-approve', authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), hrApproveLeave);
 
 // Attendance
 router.get('/attendance/my', getMyAttendance);

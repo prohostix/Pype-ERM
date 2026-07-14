@@ -432,7 +432,8 @@ function LiveLeaveItem({ leave, onRefresh, onViewAll }: { leave: any; onRefresh:
   const handleQuickAction = async (action: 'approve' | 'reject') => {
     setActing(true);
     try {
-      await api.patch(`/hr/leaves/${leave.id}/dept-approve`, { action, remarks: action === 'approve' ? 'Approved from overview' : 'Rejected from overview' });
+      const endpoint = leave.status === 'dept_approved' ? 'hr-approve' : 'dept-approve';
+      await api.patch(`/hr/leaves/${leave.id}/${endpoint}`, { action, remarks: action === 'approve' ? 'Approved from overview' : 'Rejected from overview' });
       toast.success(action === 'approve' ? 'Leave approved' : 'Leave rejected');
       onRefresh();
     } catch (err: any) {

@@ -33,6 +33,14 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
     where.employeeId = userId;
   }
 
+  if (req.query.status) {
+    if (req.query.status === 'pending' && (isHR || isGlobalAdmin)) {
+      where.status = { in: ['pending', 'dept_approved'] };
+    } else {
+      where.status = req.query.status;
+    }
+  }
+
   const leaves = await prisma.leaveRequest.findMany({
     where,
     include: {
