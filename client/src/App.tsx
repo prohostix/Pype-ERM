@@ -297,8 +297,7 @@ function App() {
     }
 
     if (user.role === 'ops_admin' || user.role === 'ops_sub_admin') {
-      const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
-      return getOpsNavItems(isSubDeptManager);
+      return getOpsNavItems();
     }
 
     if (user.role === 'finance_admin') {
@@ -347,7 +346,7 @@ function App() {
         if (deptType) {
           if (isSubDeptManager) {
             switch (deptType) {
-              case 'operations': return getOpsNavItems(true);
+              case 'operations': return getOpsNavItems();
               case 'hr': return getHRNavItems();
               case 'finance': return getFinanceNavItems();
               case 'sales': return getSalesNavItems();

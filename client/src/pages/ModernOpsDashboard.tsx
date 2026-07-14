@@ -18,27 +18,19 @@ import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
-import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
-import { InternalMarksPanel } from '@/components/panels/InternalMarksPanel';
-import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
-import { SubOpsPortalPanel } from '@/components/panels/SubOpsPortalPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
-import { PollsPanel } from '@/components/panels/PollsPanel';
-import { PayrollPanel } from '@/components/panels/PayrollPanel';
-import { useAuth } from '@/hooks/useAuth';
+import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
-  const { user } = useAuth();
-  const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
   const [metrics, setMetrics] = useState<any>({});
-  const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
+  const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
   const fetchOpsMetrics = async () => {
     try {
@@ -54,30 +46,58 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-3"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div>
-        </div>
-      );
-      case 'my_subdept': return <SubOpsPortalPanel />;
+      case 'overview': return <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"><div className="lg:col-span-3"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div></div>;
+      
       case 'students': return <StudentsPanel />;
-      case 'collections': return <CollectionsPanel />;
+      case 'student_verification': return <PlaceholderPanel title="Student Verification" description="Verify student documents and credentials." />;
+      case 'student_portal_management': return <PlaceholderPanel title="Student Portal Management" description="Manage student portal access and settings." />;
+      case 'student_documents': return <PlaceholderPanel title="Student Documents" description="Manage and verify all student documents." />;
+      case 'student_timeline': return <PlaceholderPanel title="Student Timeline" description="View complete timeline of student activities." />;
+      
+      case 'new_admissions': return <PlaceholderPanel title="New Admissions" description="Process new student admissions." />;
+      case 'admission_review': return <DeptEnrollmentReviewPanel />;
+      case 'pending_admissions': return <PlaceholderPanel title="Pending Admissions" description="Review admissions waiting for approval." />;
+      case 'admission_verification': return <PlaceholderPanel title="Admission Verification" description="Verify admission details and documents." />;
+
       case 'universities': return <UniversitiesPanel />;
+      case 'university_submission': return <PlaceholderPanel title="University Submission" description="Manage submissions to universities." />;
+      case 'enrollment_management': return <PlaceholderPanel title="Enrollment Management" description="Manage university enrollments." />;
+      case 'enrollment_number_update': return <PlaceholderPanel title="Enrollment Number Update" description="Update student enrollment numbers." />;
+      case 're_registration': return <PlaceholderPanel title="Re-registration" description="Manage student re-registrations." />;
+      case 'exam_registration': return <PlaceholderPanel title="Exam Registration" description="Manage student exam registrations." />;
+
       case 'programs': return <ProgramsPanel />;
-      case 'centers': return <StudyCentersPanel />;
       case 'program_allocations': return <OpsProgramAllocationPanel />;
-      case 'enrollment_review': return <DeptEnrollmentReviewPanel />;
-      case 'sessions': return <AdmissionSessionsPanel />;
-      case 'marks': return <InternalMarksPanel />;
+      
+      case 'centers': return <StudyCentersPanel />;
+      
+      case 'document_received': return <PlaceholderPanel title="Document Received" description="Log received documents." />;
+      case 'document_dispatch': return <PlaceholderPanel title="Document Dispatch" description="Manage document dispatch." />;
+      case 'courier_tracking': return <PlaceholderPanel title="Courier Tracking" description="Track couriered documents." />;
+      case 'delivery_confirmation': return <PlaceholderPanel title="Delivery Confirmation" description="Confirm document deliveries." />;
+
       case 'announcements': return <AnnouncementsPanel />;
+      case 'bulk_sms': return <PlaceholderPanel title="Bulk SMS" description="Send bulk SMS to students/staff." />;
+      case 'bulk_whatsapp': return <PlaceholderPanel title="Bulk WhatsApp" description="Send bulk WhatsApp messages." />;
+      case 'email_notifications': return <PlaceholderPanel title="Email Notifications" description="Manage email notifications." />;
+
       case 'tasks': return <TasksPanel />;
-      case 'my_leaves': return <LeavesPanel />;
+      case 'pending_tasks': return <PlaceholderPanel title="Pending Tasks" description="View your pending tasks." />;
+      case 'completed_tasks': return <PlaceholderPanel title="Completed Tasks" description="View your completed tasks." />;
+      case 'follow_up_reminders': return <PlaceholderPanel title="Follow-up Reminders" description="Manage your follow-ups." />;
+
+      case 'student_report': return <PlaceholderPanel title="Student Report" description="Generate student reports." />;
+      case 'admission_report': return <PlaceholderPanel title="Admission Report" description="Generate admission reports." />;
+      case 'enrollment_report': return <PlaceholderPanel title="Enrollment Report" description="Generate enrollment reports." />;
+      case 'university_report': return <PlaceholderPanel title="University Report" description="Generate university reports." />;
+      case 're_registration_report': return <PlaceholderPanel title="Re-registration Report" description="Generate re-registration reports." />;
+
       case 'my_attendance': return <AttendancePanel isMyPortal />;
-      case 'my_payslips': return <PayrollPanel />;
+      case 'my_leaves': return <LeavesPanel />;
       case 'holidays': return <HolidaysPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
-      case 'polls': return <PollsPanel />;
-      default: return null;
+      
+      default: return <PlaceholderPanel title="Feature Upcoming" />;
     }
   };
 
@@ -88,29 +108,69 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   );
 }
 
-export function getOpsNavItems(isSubDeptManager: boolean) {
+export function getOpsNavItems() {
   return [
-    { id: '__ops_section', label: 'Operations', isSection: true },
+    { id: '__dashboard', label: 'Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
-    ...(isSubDeptManager ? [{ id: 'my_subdept', label: 'My Sub-Dept' }] : []),
-    { id: 'students', label: 'Students' },
-    { id: 'collections', label: 'Collections' },
-    { id: 'universities', label: 'Universities' },
+    
+    { id: '__students', label: 'Students', isSection: true },
+    { id: 'students', label: 'Student List' },
+    { id: 'student_verification', label: 'Student Verification' },
+    { id: 'student_portal_management', label: 'Student Portal Management' },
+    { id: 'student_documents', label: 'Student Documents' },
+    { id: 'student_timeline', label: 'Student Timeline' },
+    
+    { id: '__admissions', label: 'Admissions', isSection: true },
+    { id: 'new_admissions', label: 'New Admissions' },
+    { id: 'admission_review', label: 'Admission Review' },
+    { id: 'pending_admissions', label: 'Pending Admissions' },
+    { id: 'admission_verification', label: 'Admission Verification' },
+    
+    { id: '__universities', label: 'Universities', isSection: true },
+    { id: 'universities', label: 'University List' },
+    { id: 'university_submission', label: 'University Submission' },
+    { id: 'enrollment_management', label: 'Enrollment Management' },
+    { id: 'enrollment_number_update', label: 'Enrollment Number Update' },
+    { id: 're_registration', label: 'Re-registration' },
+    { id: 'exam_registration', label: 'Exam Registration' },
+    
+    { id: '__programs', label: 'Programs', isSection: true },
     { id: 'programs', label: 'Programs' },
+    { id: 'program_allocations', label: 'Program Allocation' },
+    
+    { id: '__study_centers', label: 'Study Centers', isSection: true },
     { id: 'centers', label: 'Study Centers' },
-    { id: 'program_allocations', label: 'Program Allocations' },
-    { id: 'enrollment_review', label: 'Enrollment Review' },
-    { id: 'sessions', label: 'Admission Sessions' },
-    { id: 'marks', label: 'Internal Marks' },
+    
+    { id: '__document_management', label: 'Document Management', isSection: true },
+    { id: 'document_received', label: 'Document Received' },
+    { id: 'document_dispatch', label: 'Document Dispatch' },
+    { id: 'courier_tracking', label: 'Courier Tracking' },
+    { id: 'delivery_confirmation', label: 'Delivery Confirmation' },
+    
+    { id: '__communication', label: 'Communication', isSection: true },
     { id: 'announcements', label: 'Announcements' },
-    { id: 'tasks', label: 'Tasks' },
+    { id: 'bulk_sms', label: 'Bulk SMS' },
+    { id: 'bulk_whatsapp', label: 'Bulk WhatsApp' },
+    { id: 'email_notifications', label: 'Email Notifications' },
+    
+    { id: '__tasks', label: 'Tasks', isSection: true },
+    { id: 'tasks', label: 'My Tasks' },
+    { id: 'pending_tasks', label: 'Pending Tasks' },
+    { id: 'completed_tasks', label: 'Completed Tasks' },
+    { id: 'follow_up_reminders', label: 'Follow-up Reminders' },
+    
+    { id: '__reports', label: 'Reports', isSection: true },
+    { id: 'student_report', label: 'Student Report' },
+    { id: 'admission_report', label: 'Admission Report' },
+    { id: 'enrollment_report', label: 'Enrollment Report' },
+    { id: 'university_report', label: 'University Report' },
+    { id: 're_registration_report', label: 'Re-registration Report' },
+    
     { id: '__portal_section', label: 'My Portal', isSection: true },
-    { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'Attendance' },
-    { id: 'my_payslips', label: 'Pay Slips' },
+    { id: 'my_leaves', label: 'Leave Request' },
     { id: 'holidays', label: 'Holidays' },
     { id: 'notice-board', label: 'Notice Board' },
-    { id: 'polls', label: 'Polls' },
   ];
 }
 
@@ -127,14 +187,14 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
       {/* Top Filters */}
       <div className="flex flex-wrap items-center gap-3 bg-card p-4 rounded-xl border border-border shadow-sm">
         <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>All Branches</option>
+          <option>Branch</option>
           <option>Main Campus</option>
         </select>
         <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>All Universities</option>
+          <option>University</option>
         </select>
         <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>All Batches</option>
+          <option>Batch</option>
           <option>2026</option>
         </select>
         <div className="relative flex-1 min-w-[200px]">

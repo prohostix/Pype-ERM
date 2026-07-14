@@ -12,6 +12,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
+import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'date-fns';
 import api from '@/lib/api';
@@ -86,29 +88,29 @@ export function StudentProfilePanel({ student, onBack }: { student: any; onBack:
             <Tabs defaultValue="personal" className="w-full">
               <CardHeader className="border-b pb-0">
                 <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-6 overflow-x-auto rounded-none border-b border-transparent">
-                  <TabsTrigger 
-                    value="personal" 
-                    className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1"
-                  >
+                  <TabsTrigger value="personal" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
                     Personal Details
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="academic" 
-                    className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1"
-                  >
-                    Academic Info
+                  <TabsTrigger value="documents" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
+                    Documents
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="fees" 
-                    className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1"
-                  >
+                  <TabsTrigger value="fees" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
                     Fee Details
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="documents" 
-                    className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1"
-                  >
-                    Documents
+                  <TabsTrigger value="university" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
+                    University Details
+                  </TabsTrigger>
+                  <TabsTrigger value="portal" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
+                    Student Portal
+                  </TabsTrigger>
+                  <TabsTrigger value="progress" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-amber-500 data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap flex items-center gap-1.5 font-bold">
+                    <span className="text-amber-500">⭐</span> Student Progress
+                  </TabsTrigger>
+                  <TabsTrigger value="communication" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
+                    Communication History
+                  </TabsTrigger>
+                  <TabsTrigger value="remarks" className="pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-1 whitespace-nowrap">
+                    Remarks
                   </TabsTrigger>
                 </TabsList>
               </CardHeader>
@@ -146,8 +148,8 @@ export function StudentProfilePanel({ student, onBack }: { student: any; onBack:
                   </div>
                 </TabsContent>
 
-                {/* Academic Info Tab */}
-                <TabsContent value="academic" className="space-y-6 mt-0">
+                {/* University Details Tab (Replaced Academic Info) */}
+                <TabsContent value="university" className="space-y-6 mt-0">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
                     <div>
                       <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">University</p>
@@ -215,6 +217,26 @@ export function StudentProfilePanel({ student, onBack }: { student: any; onBack:
                       </div>
                     )}
                   </div>
+                </TabsContent>
+
+                {/* Student Portal Tab */}
+                <TabsContent value="portal" className="mt-0">
+                  <PlaceholderPanel title="Student Portal Management" description="Manage portal access for this student." />
+                </TabsContent>
+
+                {/* Student Progress Tab */}
+                <TabsContent value="progress" className="mt-0">
+                  <StudentProgressTab student={student} />
+                </TabsContent>
+
+                {/* Communication History Tab */}
+                <TabsContent value="communication" className="mt-0">
+                  <PlaceholderPanel title="Communication History" description="View all SMS, Email, and WhatsApp communications with this student." />
+                </TabsContent>
+
+                {/* Remarks Tab */}
+                <TabsContent value="remarks" className="mt-0">
+                  <PlaceholderPanel title="Remarks" description="Internal remarks and notes regarding this student." />
                 </TabsContent>
 
               </CardContent>
