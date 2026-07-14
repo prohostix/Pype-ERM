@@ -113,6 +113,17 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
       ...whereBase, 
       ...(branchFilter ? { invoice: { student: { branchId: branchFilter } } } : {}),
       ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {}) 
+    },
+    include: {
+      invoice: {
+        include: {
+          student: {
+            include: {
+              branch: true
+            }
+          }
+        }
+      }
     }
   });
   const totalCollected = payments.reduce((sum, p) => sum + p.amount, 0);
@@ -190,25 +201,43 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
   });
 
   // Charts data
-  const collectionOverview = [
-    { name: 'Mon', value: 1200 }, { name: 'Tue', value: 3000 },
-    { name: 'Wed', value: 2000 }, { name: 'Thu', value: 2780 },
-    { name: 'Fri', value: 1890 }, { name: 'Sat', value: 2390 },
-    { name: 'Sun', value: 3490 },
-  ];
+  // 1. Collection Overview (Current Week)
+  const startOfThisWeek = new Date();
+  startOfThisWeek.setHours(0,0,0,0);
+  startOfThisWeek.setDate(startOfThisWeek.getDate() - (startOfThisWeek.getDay() === 0 ? 6 : startOfThisWeek.getDay() - 1)); // Mon=0, Sun=6
 
-  const expenseOverview = [
-    { name: 'Rent', value: 400 },
-    { name: 'Salaries', value: 3000 },
-    { name: 'Marketing', value: 300 },
-    { name: 'Utilities', value: 200 }
-  ];
+  const thisWeekPayments = await prisma.paymentEntry.findMany({
+    where: {
+      organizationId: orgId,
+      ...(branchFilter ? { invoice: { student: { branchId: branchFilter } } } : {}),
+      createdAt: { gte: startOfThisWeek }
+    }
+  });
 
-  const branchWiseCollection = [
-    { name: 'Main Branch', value: 4000 },
-    { name: 'South Branch', value: 3000 },
-    { name: 'North Branch', value: 2000 },
-  ];
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const collectionOverview = weekDays.map(name => ({ name, value: 0 }));
+
+  thisWeekPayments.forEach(p => {
+    let dayIndex = p.createdAt.getDay() - 1;
+    if (dayIndex === -1) dayIndex = 6;
+    collectionOverview[dayIndex].value += p.amount;
+  });
+
+  // 2. Expense Overview
+  const expenseMap: Record<string, number> = {};
+  expenses.forEach(e => {
+    const cat = e.category || 'Other';
+    expenseMap[cat] = (expenseMap[cat] || 0) + e.amount;
+  });
+  const expenseOverview = Object.entries(expenseMap).map(([name, value]) => ({ name, value }));
+
+  // 3. Branch-wise Collection
+  const branchMap: Record<string, number> = {};
+  payments.forEach(p => {
+    const branchName = p.invoice?.student?.branch?.name || 'Unknown Branch';
+    branchMap[branchName] = (branchMap[branchName] || 0) + p.amount;
+  });
+  const branchWiseCollection = Object.entries(branchMap).map(([name, value]) => ({ name, value }));
 
   // Alerts
   const overdueStudentFees = await prisma.invoice.count({
