@@ -169,7 +169,55 @@ export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Respo
 
 // Performance
 export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: [] });
+  if (!req.user.departmentId) {
+    return res.json({ success: true, data: [] });
+  }
+
+  const teammates = await prisma.user.findMany({
+    where: {
+      organizationId: req.user.organizationId,
+      departmentId: req.user.departmentId,
+    },
+    select: {
+      id: true,
+      name: true,
+      designation: true,
+      status: true,
+    }
+  });
+
+  const performanceData = await Promise.all(teammates.map(async (member) => {
+    const enrollmentsCount = await prisma.student.count({
+      where: {
+        OR: [
+          { referredBy: member.id },
+          { enrolledBy: member.id }
+        ]
+      }
+    });
+
+    const targets = await prisma.target.findMany({ where: { employeeId: member.id } });
+    const targetTotal = targets.reduce((acc, t) => acc + t.target, 0);
+    
+    const targetProgress = targetTotal > 0 ? Math.round((enrollmentsCount / targetTotal) * 100) : 0;
+    const score = Math.min(100, targetProgress) || 0;
+
+    return {
+      id: member.id,
+      name: member.name,
+      designation: member.designation || 'Team Member',
+      status: member.status,
+      enrollments: enrollmentsCount,
+      targetCount: targets.length,
+      targetTotal,
+      targetProgress,
+      score
+    };
+  }));
+
+  performanceData.sort((a, b) => b.score - a.score);
+
+  res.json({ success: true, data: performanceData });
 });
 
 // Study Centers

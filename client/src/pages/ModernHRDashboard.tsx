@@ -58,7 +58,9 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'users': return <HRUsersPanel />;
       case 'employees': return <EmployeesPanel />;
       case 'leaves': return <LeavesPanel />;
+      case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'attendance': return <AttendancePanel />;
+      case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'vacancies': return <VacanciesPanel />;
       case 'holidays': return <HolidaysPanel />;
       case 'complaints': return <ComplaintsPanel />;
@@ -73,8 +75,6 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'managers': return <ManagerAssignmentPanel />;
       case 'att-settings': return <HRSettingsPanel />;
       case 'activity_report': return <EmployeeActivityReportPanel />;
-      case 'my_leaves': return <LeavesPanel />;
-      case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
 
       case 'notice-board': return <NoticeBoardPanel />;

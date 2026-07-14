@@ -31,6 +31,11 @@ import {
   Wallet,
   UserPlus,
   Bell,
+  Home,
+  Phone,
+  BarChart2,
+  User,
+  BookOpen
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -43,11 +48,12 @@ interface SidebarProps {
 interface NavItem {
   id: string;
   label: string;
-  icon: React.ElementType;
-  roles: UserRole[];
+  icon?: React.ElementType;
+  roles?: UserRole[];
   badge?: number;
   children?: NavItem[];
   department?: DepartmentType;
+  isSection?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -90,12 +96,118 @@ const navItems: NavItem[] = [
     icon: GraduationCap,
     roles: ['ops_admin', 'ceo'],
     children: [
-      { id: 'universities', label: 'Universities', icon: School, roles: ['ops_admin', 'ceo'] },
+      { id: 'dashboard', label: 'Dashboard', icon: Home, roles: ['ops_admin', 'ceo'] },
+      { 
+        id: 'students-ops', 
+        label: 'Students', 
+        icon: Users, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'students', label: 'Student List' },
+          { id: 'students-verify', label: 'Student Verification' },
+          { id: 'students-portal', label: 'Student Portal Management' },
+          { id: 'students-docs', label: 'Student Documents' },
+          { id: 'students-timeline', label: 'Student Timeline' }
+        ]
+      },
+      { 
+        id: 'admissions-ops', 
+        label: 'Admissions', 
+        icon: FileText, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'admissions-new', label: 'New Admissions' },
+          { id: 'admissions-review', label: 'Admission Review' },
+          { id: 'admissions-pending', label: 'Pending Admissions' },
+          { id: 'admissions-verify', label: 'Admission Verification' }
+        ]
+      },
+      { 
+        id: 'universities-ops', 
+        label: 'Universities', 
+        icon: School, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'universities', label: 'University List' },
+          { id: 'uni-submission', label: 'University Submission' },
+          { id: 'enrollment-manage', label: 'Enrollment Management' },
+          { id: 'enrollment-update', label: 'Enrollment Number Update' },
+          { id: 'reregistration', label: 'Re-registration' },
+          { id: 'exam-reg', label: 'Exam Registration' }
+        ]
+      },
+      { 
+        id: 'programs-ops', 
+        label: 'Programs', 
+        icon: BookOpen, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'programs', label: 'Programs' },
+          { id: 'program-alloc', label: 'Program Allocation' }
+        ]
+      },
       { id: 'centers', label: 'Study Centers', icon: Building, roles: ['ops_admin', 'ceo'] },
-      { id: 'students', label: 'Students', icon: Users, roles: ['ops_admin', 'ceo'] },
-      { id: 'collections', label: 'Collections', icon: FileText, roles: ['ops_admin', 'ceo'] },
-      { id: 'marks', label: 'Internal Marks', icon: FileText, roles: ['ops_admin', 'ceo'] },
-      { id: 'sessions', label: 'Admission Sessions', icon: Calendar, roles: ['ops_admin', 'ceo'] },
+      { 
+        id: 'documents-ops', 
+        label: 'Document Management', 
+        icon: FileText, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'doc-received', label: 'Document Received' },
+          { id: 'doc-dispatch', label: 'Document Dispatch' },
+          { id: 'courier-track', label: 'Courier Tracking' },
+          { id: 'delivery-conf', label: 'Delivery Confirmation' }
+        ]
+      },
+      { 
+        id: 'communication-ops', 
+        label: 'Communication', 
+        icon: Phone, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'announcements', label: 'Announcements' },
+          { id: 'bulk-sms', label: 'Bulk SMS' },
+          { id: 'bulk-wa', label: 'Bulk WhatsApp' },
+          { id: 'email-notif', label: 'Email Notifications' }
+        ]
+      },
+      { 
+        id: 'tasks-ops', 
+        label: 'Tasks', 
+        icon: CheckSquare, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'my-tasks', label: 'My Tasks' },
+          { id: 'pending-tasks', label: 'Pending Tasks' },
+          { id: 'completed-tasks', label: 'Completed Tasks' },
+          { id: 'follow-up', label: 'Follow-up Reminders' }
+        ]
+      },
+      { 
+        id: 'reports-ops', 
+        label: 'Reports', 
+        icon: BarChart2, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'report-student', label: 'Student Report' },
+          { id: 'report-admission', label: 'Admission Report' },
+          { id: 'report-enrollment', label: 'Enrollment Report' },
+          { id: 'report-university', label: 'University Report' },
+          { id: 'report-rereg', label: 'Re-registration Report' }
+        ]
+      },
+      { 
+        id: 'my-portal', 
+        label: 'My Portal', 
+        icon: User, 
+        roles: ['ops_admin', 'ceo'],
+        children: [
+          { id: 'attendance', label: 'Attendance' },
+          { id: 'leave-req', label: 'Leave Request' },
+          { id: 'holidays', label: 'Holidays' },
+          { id: 'notice-board', label: 'Notice Board' }
+        ]
+      }
     ],
   },
   {
@@ -192,7 +304,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
   if (!user) return null;
 
   const filteredNavItems = navItems.filter(item => 
-    item.roles.includes(user.role)
+    !item.roles || item.roles.includes(user.role)
   );
 
   const handleNavClick = (itemId: string) => {
@@ -296,61 +408,72 @@ function NavItemComponent({ item, isCollapsed, isActive, activeChild, onClick, l
 
   return (
     <div>
-      <button
-        onClick={handleClick}
-        className={cn(
-          'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-          isActive
-            ? 'bg-blue-600 text-white'
-            : 'text-slate-300 hover:bg-slate-800 hover:text-white',
-          isCollapsed && 'justify-center px-2'
-        )}
-        style={{ paddingLeft: isCollapsed ? undefined : `${12 + level * 12}px` }}
-      >
-        <Icon className="w-4 h-4 flex-shrink-0" />
-        {!isCollapsed && (
-          <>
-            <span className="flex-1 text-left">{item.label}</span>
-            {item.badge && (
-              <Badge variant="destructive" className="text-xs">
-                {item.badge}
-              </Badge>
-            )}
-            {hasChildren && (
-              <ChevronRight
-                className={cn(
-                  'w-4 h-4 transition-transform',
-                  isExpanded && 'rotate-90'
-                )}
-              />
-            )}
-          </>
-        )}
-      </button>
+      {item.isSection ? (
+        !isCollapsed && (
+          <div className="px-3 py-2 mt-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            {item.label}
+          </div>
+        )
+      ) : (
+        <button
+          onClick={handleClick}
+          className={cn(
+            'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+            isActive
+              ? 'bg-blue-600 text-white'
+              : 'text-slate-300 hover:bg-slate-800 hover:text-white',
+            isCollapsed && 'justify-center px-2'
+          )}
+          style={{ paddingLeft: isCollapsed ? undefined : `${12 + level * 12}px` }}
+        >
+          {Icon && <Icon className="w-4 h-4 flex-shrink-0" />}
+          {!isCollapsed && (
+            <>
+              <span className="flex-1 text-left">{item.label}</span>
+              {item.badge && (
+                <Badge variant="destructive" className="text-xs">
+                  {item.badge}
+                </Badge>
+              )}
+              {hasChildren && (
+                <ChevronRight
+                  className={cn(
+                    'w-4 h-4 transition-transform',
+                    isExpanded && 'rotate-90'
+                  )}
+                />
+              )}
+            </>
+          )}
+        </button>
+      )}
 
       {/* Child Items */}
       {!isCollapsed && hasChildren && isExpanded && (
         <div className="mt-1 ml-4 space-y-1 border-l border-slate-700">
-          {item.children!.map((child) => (
-            <button
-              key={child.id}
-              onClick={() => handleChildClick(child.id)}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
-                activeChild === child.id
-                  ? 'bg-blue-600/50 text-white'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              )}
-            >
-              <child.icon className="w-4 h-4 flex-shrink-0" />
-              <span className="flex-1 text-left">{child.label}</span>
-              {child.badge && (
-                <Badge variant="destructive" className="text-xs">
-                  {child.badge}
-                </Badge>
-              )}
-            </button>
-          ))}
+          {item.children!.map((child) => {
+            const ChildIcon = child.icon;
+            return (
+              <button
+                key={child.id}
+                onClick={() => handleChildClick(child.id)}
+                className={cn(
+                  'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+                  activeChild === child.id
+                    ? 'bg-blue-600/50 text-white'
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                )}
+              >
+                {ChildIcon && <ChildIcon className="w-4 h-4 flex-shrink-0" />}
+                <span className="flex-1 text-left">{child.label}</span>
+                {child.badge && (
+                  <Badge variant="destructive" className="text-xs">
+                    {child.badge}
+                  </Badge>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

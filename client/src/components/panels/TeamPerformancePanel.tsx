@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, TrendingUp, Target, RefreshCw, Trophy, Medal, Award } from 'lucide-react';
+import { Users, UserPlus, Target, RefreshCw, Trophy, Medal, Award } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -11,11 +11,8 @@ interface TeamMember {
   name: string;
   designation: string;
   status: string;
-  leads: number;
-  converted: number;
-  conversionRate: number;
+  enrollments: number;
   targetCount: number;
-  targetAchieved: number;
   targetTotal: number;
   targetProgress: number;
   score: number;
@@ -53,8 +50,7 @@ export function TeamPerformancePanel() {
 
   useEffect(() => { fetch(); }, []);
 
-  const totalLeads = team.reduce((s, m) => s + m.leads, 0);
-  const totalConverted = team.reduce((s, m) => s + m.converted, 0);
+  const totalEnrollments = team.reduce((s, m) => s + m.enrollments, 0);
   const avgScore = team.length ? Math.round(team.reduce((s, m) => s + m.score, 0) / team.length) : 0;
 
   return (
@@ -62,7 +58,7 @@ export function TeamPerformancePanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold">My Team</h2>
-          <p className="text-sm text-muted-foreground">Sales performance &amp; lead stats for your team</p>
+          <p className="text-sm text-muted-foreground">Sales performance &amp; enrollment stats for your team</p>
         </div>
         <Button variant="outline" size="sm" onClick={fetch} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
@@ -86,12 +82,11 @@ export function TeamPerformancePanel() {
         <Card>
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-xl bg-success/10 text-success">
-              <TrendingUp className="w-5 h-5" />
+              <UserPlus className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase font-medium">Total Leads</p>
-              <p className="text-2xl font-bold">{loading ? '...' : totalLeads}</p>
-              <p className="text-[10px] text-muted-foreground">{totalConverted} converted</p>
+              <p className="text-xs text-muted-foreground uppercase font-medium">Total Enrollments</p>
+              <p className="text-2xl font-bold">{loading ? '...' : totalEnrollments}</p>
             </div>
           </CardContent>
         </Card>
@@ -101,7 +96,7 @@ export function TeamPerformancePanel() {
               <Target className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase font-medium">Avg Performance</p>
+              <p className="text-xs text-muted-foreground uppercase font-medium">Avg Target Progress</p>
               <p className={cn('text-2xl font-bold', scoreColor(avgScore))}>{loading ? '...' : `${avgScore}%`}</p>
             </div>
           </CardContent>
@@ -112,7 +107,7 @@ export function TeamPerformancePanel() {
       <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
         <CardHeader>
           <CardTitle>Team Leaderboard</CardTitle>
-          <CardDescription>Ranked by combined conversion rate &amp; target progress</CardDescription>
+          <CardDescription>Ranked by target progress</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -163,32 +158,27 @@ export function TeamPerformancePanel() {
                   </div>
 
                   {/* Stats */}
-                  <div className="hidden md:flex items-center gap-6 shrink-0">
+                  <div className="hidden md:flex items-center gap-8 shrink-0 pr-4 border-r">
                     <div className="text-center">
-                      <p className="text-xs text-muted-foreground">Leads</p>
-                      <p className="font-bold text-sm">{member.leads}</p>
-                      <p className="text-[10px] text-success">{member.converted} conv.</p>
+                      <p className="text-xs text-muted-foreground">Enrollments</p>
+                      <p className="font-bold text-lg">{member.enrollments}</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-xs text-muted-foreground">Conv. Rate</p>
-                      <p className="font-bold text-sm">{member.conversionRate}%</p>
-                    </div>
-                    <div className="text-center min-w-[80px]">
-                      <p className="text-xs text-muted-foreground">Target</p>
-                      <div className="h-1.5 w-20 bg-muted rounded-full overflow-hidden mt-1">
+                    <div className="text-center min-w-[100px]">
+                      <p className="text-xs text-muted-foreground">Target ({member.targetTotal})</p>
+                      <div className="h-2 w-24 bg-muted rounded-full overflow-hidden mt-1.5 mx-auto">
                         <div
-                          className="h-full bg-primary rounded-full"
+                          className={cn('h-full rounded-full', scoreColor(member.targetProgress).replace('text-', 'bg-'))}
                           style={{ width: `${Math.min(100, member.targetProgress)}%` }}
                         />
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{member.targetProgress}%</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">{member.targetProgress}% Achieved</p>
                     </div>
                   </div>
 
                   {/* Score badge */}
-                  <div className="shrink-0 text-right">
+                  <div className="shrink-0 text-right w-16">
                     <p className="text-[10px] text-muted-foreground uppercase">Score</p>
-                    <p className={cn('text-lg font-bold', scoreColor(member.score))}>{member.score}</p>
+                    <p className={cn('text-xl font-bold', scoreColor(member.score))}>{member.score}</p>
                   </div>
                 </div>
               ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign, Eye } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { StudentProfilePanel } from './StudentProfilePanel';
 
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean } = {}) {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [centers, setCenters] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewingProfileStudent, setViewingProfileStudent] = useState<any>(null);
   
   useEffect(() => {
     if (triggerOpen !== undefined) {
@@ -1439,6 +1441,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     );
   }
 
+  if (viewingProfileStudent) {
+    return (
+      <StudentProfilePanel 
+        student={viewingProfileStudent} 
+        onBack={() => setViewingProfileStudent(null)} 
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -1978,10 +1989,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
-                      <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
-                      
-                      {/* Send system notification */}
+                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
+                        <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
+
+                        {/* View Profile */}
+                        <Button variant="default" size="icon" className="w-8 h-8" onClick={() => setViewingProfileStudent(student)} title="View Profile">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        
+                        {/* Send system notification */}
                       <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenNotif(student)} title="Send Notification">
                         <Bell className="w-4 h-4 text-amber-500" />
                       </Button>

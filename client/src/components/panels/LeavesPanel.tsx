@@ -54,7 +54,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
 
 const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'];
 
-export function LeavesPanel() {
+export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const { user } = useAuth();
   const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,8 +90,8 @@ export function LeavesPanel() {
   const fetchLeaves = async () => {
     setLoading(true);
     try {
-      // Employees only see their own leaves; managers/HR see all
-      const endpoint = (isEmployee) ? '/hr/leaves/my' : '/hr/leaves';
+      // Employees only see their own leaves; managers/HR see all UNLESS isMyPortal is true
+      const endpoint = (isEmployee || isMyPortal) ? '/hr/leaves/my' : '/hr/leaves';
       const res = await api.get(endpoint);
       setLeaves(res.data.data || []);
     } catch {
@@ -230,7 +230,7 @@ export function LeavesPanel() {
           <TabsTrigger value="dept_approved">Dept Approved ({counts.dept_approved})</TabsTrigger>
           <TabsTrigger value="approved">Approved ({counts.approved})</TabsTrigger>
           <TabsTrigger value="rejected">Rejected ({counts.rejected})</TabsTrigger>
-          {!isEmployee && <TabsTrigger value="mine">My Requests</TabsTrigger>}
+          {!isEmployee && !isMyPortal && <TabsTrigger value="mine">My Requests</TabsTrigger>}
         </TabsList>
 
         <TabsContent value={activeTab} className="mt-4">

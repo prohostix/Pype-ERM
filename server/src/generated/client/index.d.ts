@@ -26160,6 +26160,8 @@ export namespace Prisma {
     documents: number
     isPrevious: number
     credentials: number
+    admissionProgress: number
+    academicProgress: number
     _all: number
   }
 
@@ -26270,6 +26272,8 @@ export namespace Prisma {
     documents?: true
     isPrevious?: true
     credentials?: true
+    admissionProgress?: true
+    academicProgress?: true
     _all?: true
   }
 
@@ -26381,6 +26385,8 @@ export namespace Prisma {
     documents: JsonValue | null
     isPrevious: boolean
     credentials: JsonValue | null
+    admissionProgress: JsonValue | null
+    academicProgress: JsonValue | null
     _count: StudentCountAggregateOutputType | null
     _min: StudentMinAggregateOutputType | null
     _max: StudentMaxAggregateOutputType | null
@@ -26436,6 +26442,8 @@ export namespace Prisma {
     documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
@@ -26489,6 +26497,8 @@ export namespace Prisma {
     documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26534,6 +26544,8 @@ export namespace Prisma {
     documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26579,9 +26591,11 @@ export namespace Prisma {
     documents?: boolean
     isPrevious?: boolean
     credentials?: boolean
+    admissionProgress?: boolean
+    academicProgress?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "branchId" | "organizationId" | "enrollmentNo" | "admissionNo" | "admissionDate" | "name" | "email" | "phone" | "address" | "fatherName" | "motherName" | "fatherPhone" | "motherPhone" | "religion" | "caste" | "dob" | "altPhone" | "pinCode" | "photo" | "programId" | "universityId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "enrolledBy" | "documents" | "isPrevious" | "credentials", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "branchId" | "organizationId" | "enrollmentNo" | "admissionNo" | "admissionDate" | "name" | "email" | "phone" | "address" | "fatherName" | "motherName" | "fatherPhone" | "motherPhone" | "religion" | "caste" | "dob" | "altPhone" | "pinCode" | "photo" | "programId" | "universityId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "enrolledBy" | "documents" | "isPrevious" | "credentials" | "admissionProgress" | "academicProgress", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
@@ -26672,6 +26686,8 @@ export namespace Prisma {
       documents: Prisma.JsonValue | null
       isPrevious: boolean
       credentials: Prisma.JsonValue | null
+      admissionProgress: Prisma.JsonValue | null
+      academicProgress: Prisma.JsonValue | null
     }, ExtArgs["result"]["student"]>
     composites: {}
   }
@@ -27144,6 +27160,8 @@ export namespace Prisma {
     readonly documents: FieldRef<"Student", 'Json'>
     readonly isPrevious: FieldRef<"Student", 'Boolean'>
     readonly credentials: FieldRef<"Student", 'Json'>
+    readonly admissionProgress: FieldRef<"Student", 'Json'>
+    readonly academicProgress: FieldRef<"Student", 'Json'>
   }
     
 
@@ -88203,7 +88221,9 @@ export namespace Prisma {
     enrolledBy: 'enrolledBy',
     documents: 'documents',
     isPrevious: 'isPrevious',
-    credentials: 'credentials'
+    credentials: 'credentials',
+    admissionProgress: 'admissionProgress',
+    academicProgress: 'academicProgress'
   };
 
   export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -91245,6 +91265,8 @@ export namespace Prisma {
     documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
+    admissionProgress?: JsonNullableFilter<"Student">
+    academicProgress?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -91297,6 +91319,8 @@ export namespace Prisma {
     documents?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrderInput | SortOrder
+    admissionProgress?: SortOrderInput | SortOrder
+    academicProgress?: SortOrderInput | SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
     internalMarks?: InternalMarkOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
@@ -91352,6 +91376,8 @@ export namespace Prisma {
     documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
+    admissionProgress?: JsonNullableFilter<"Student">
+    academicProgress?: JsonNullableFilter<"Student">
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -91404,6 +91430,8 @@ export namespace Prisma {
     documents?: SortOrderInput | SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrderInput | SortOrder
+    admissionProgress?: SortOrderInput | SortOrder
+    academicProgress?: SortOrderInput | SortOrder
     _count?: StudentCountOrderByAggregateInput
     _max?: StudentMaxOrderByAggregateInput
     _min?: StudentMinOrderByAggregateInput
@@ -91448,6 +91476,8 @@ export namespace Prisma {
     documents?: JsonNullableWithAggregatesFilter<"Student">
     isPrevious?: BoolWithAggregatesFilter<"Student"> | boolean
     credentials?: JsonNullableWithAggregatesFilter<"Student">
+    admissionProgress?: JsonNullableWithAggregatesFilter<"Student">
+    academicProgress?: JsonNullableWithAggregatesFilter<"Student">
   }
 
   export type InvoiceWhereInput = {
@@ -98379,6 +98409,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -98431,6 +98463,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -98469,6 +98503,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -98521,6 +98557,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -98566,6 +98604,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUpdateManyMutationInput = {
@@ -98597,6 +98637,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUncheckedUpdateManyInput = {
@@ -98635,6 +98677,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type InvoiceCreateInput = {
@@ -105649,6 +105693,8 @@ export namespace Prisma {
     documents?: SortOrder
     isPrevious?: SortOrder
     credentials?: SortOrder
+    admissionProgress?: SortOrder
+    academicProgress?: SortOrder
   }
 
   export type StudentMaxOrderByAggregateInput = {
@@ -122368,6 +122414,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -122418,6 +122466,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -124759,6 +124809,8 @@ export namespace Prisma {
     documents?: JsonNullableFilter<"Student">
     isPrevious?: BoolFilter<"Student"> | boolean
     credentials?: JsonNullableFilter<"Student">
+    admissionProgress?: JsonNullableFilter<"Student">
+    academicProgress?: JsonNullableFilter<"Student">
   }
 
   export type StudyCenterUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -130037,6 +130089,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -130087,6 +130141,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -130130,6 +130186,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -130180,6 +130238,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -130228,6 +130288,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -130278,6 +130340,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -133028,6 +133092,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -133078,6 +133144,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -138724,6 +138792,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -138774,6 +138844,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -139646,6 +139718,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -139696,6 +139770,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -144557,6 +144633,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -144608,6 +144686,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -144982,6 +145062,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -145033,6 +145115,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -155358,6 +155442,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -155408,6 +155494,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -161430,6 +161518,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -161481,6 +161571,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -162735,6 +162827,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -162786,6 +162880,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -173924,6 +174020,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -173975,6 +174073,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
@@ -174477,6 +174577,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -174528,6 +174630,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
@@ -185187,6 +185291,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -185238,6 +185344,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -185489,6 +185597,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -185540,6 +185650,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -188087,6 +188199,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -188138,6 +188252,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -188432,6 +188548,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -188483,6 +188601,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -188697,6 +188817,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -188748,6 +188870,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -189190,6 +189314,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -189241,6 +189367,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -190377,6 +190505,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -190428,6 +190558,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
@@ -190679,6 +190811,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -190730,6 +190864,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -191409,6 +191545,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterCreateManyOrganizationInput = {
@@ -193491,6 +193629,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -193541,6 +193681,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -193585,6 +193727,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutOrganizationInput = {
@@ -196605,6 +196749,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentCreateManyEnrolledByUserInput = {
@@ -196642,6 +196788,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterCreateManyApproverInput = {
@@ -199650,6 +199798,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -199700,6 +199850,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -199744,6 +199896,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudentUpdateWithoutEnrolledByUserInput = {
@@ -199775,6 +199929,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -199825,6 +199981,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -199869,6 +200027,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutApproverInput = {
@@ -202069,6 +202229,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProgramMaterialCreateManyProgramInput = {
@@ -202403,6 +202565,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -202453,6 +202617,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -202497,6 +202663,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StudyCenterUpdateWithoutAllowedProgramsInput = {
@@ -202850,6 +203018,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TargetCreateManyCenterInput = {
@@ -203292,6 +203462,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -203342,6 +203514,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -203386,6 +203560,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TargetUpdateWithoutCenterInput = {
@@ -204482,6 +204658,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationUpdateWithoutBranchInput = {
@@ -204881,6 +205059,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -204931,6 +205111,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
@@ -204975,6 +205157,8 @@ export namespace Prisma {
     documents?: NullableJsonNullValueInput | InputJsonValue
     isPrevious?: BoolFieldUpdateOperationsInput | boolean
     credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AdmissionSessionCreateManySubDepartmentInput = {

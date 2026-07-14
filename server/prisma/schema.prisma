@@ -465,6 +465,8 @@ model Student {
   paymentSchedules   PaymentSchedule[]
   paymentLinks       PaymentLink[]
   credentials        Json?
+  admissionProgress  Json?                  @default("{}") // Tracks Admission Progress Checklist
+  academicProgress   Json?                  @default("[]") // Array of yearly academic progress
   commissions        UniversityCommission[]
   universityPayments UniversityPayment[]
 
