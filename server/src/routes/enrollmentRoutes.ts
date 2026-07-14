@@ -22,14 +22,14 @@ const router = express.Router();
 router.use(protect);
 
 // Study Center wallet routes
-router.get('/wallet', authorize('center_admin'), getWallet);
-router.post('/wallet/topup', authorize('center_admin'), upload.single('proofDocument'), submitTopUp);
-router.get('/wallet/topups', authorize('center_admin'), getTopUpHistory);
+router.get('/wallet', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), getWallet);
+router.post('/wallet/topup', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), upload.single('proofDocument'), submitTopUp);
+router.get('/wallet/topups', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), getTopUpHistory);
 
 // Study Center enrollment routes
-router.get('/programs', authorize('center_admin'), getEnrollablePrograms);
-router.post('/enroll', authorize('center_admin'), createEnrollment);
-router.get('/enrollments', authorize('center_admin'), getMyEnrollments);
+router.get('/programs', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), getEnrollablePrograms);
+router.post('/enroll', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), createEnrollment);
+router.get('/enrollments', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), getMyEnrollments);
 
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
