@@ -31,6 +31,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const [formData, setFormData] = useState({
     employeeId: '',
@@ -53,13 +54,15 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
     }
   }, [employees]);
 
-  const fetchAttendance = async (date?: string) => {
+  const fetchAttendance = async (date?: string, status?: string) => {
     setLoading(true);
     try {
       const endpoint = canViewAll ? '/hr/attendance' : '/hr/attendance/my';
       const params: Record<string, string> = {};
       const effectiveDate = date !== undefined ? date : dateFilter;
+      const effectiveStatus = status !== undefined ? status : statusFilter;
       if (effectiveDate) params.date = effectiveDate;
+      if (effectiveStatus && effectiveStatus !== 'all') params.status = effectiveStatus;
       const response = await api.get(endpoint, { params });
       setAttendance(response.data.data || []);
     } catch (error) {
@@ -71,7 +74,12 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
 
   const handleDateFilterChange = (newDate: string) => {
     setDateFilter(newDate);
-    fetchAttendance(newDate);
+    fetchAttendance(newDate, statusFilter);
+  };
+
+  const handleStatusFilterChange = (newStatus: string) => {
+    setStatusFilter(newStatus);
+    fetchAttendance(dateFilter, newStatus);
   };
 
   const handleExportExcel = async () => {
@@ -157,7 +165,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const handleEdit = (record: any) => {
     const recId = record.id;
     const empId = record.employeeId?.id || record.employeeId || '';
-    setEditingId(recId);
+    setEditingId(recId && !recId.toString().startsWith('absent-') ? recId : null);
     setFormData({
       employeeId: empId?.toString() || '',
       date: record.date ? new Date(record.date).toISOString().split('T')[0] : '',
@@ -342,6 +350,22 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                 )}
               </div>
               <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground font-medium">Status:</span>
+                <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
+                  <SelectTrigger className="h-8 border-border bg-background w-[120px] text-xs shadow-sm">
+                    <SelectValue placeholder="All Statuses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="present">Present</SelectItem>
+                    <SelectItem value="absent">Absent</SelectItem>
+                    <SelectItem value="late">Late</SelectItem>
+                    <SelectItem value="half_day">Half Day</SelectItem>
+                    <SelectItem value="leave">Leave</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground font-medium">Sort:</span>
                 <button
                   onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
@@ -383,9 +407,11 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => handleEdit(record)}>
                               <Edit className="w-4 h-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(recId)}>
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                            {recId && !recId.toString().startsWith('absent-') && (
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(recId)}>
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
                           </div>
                         )}
                       </div>

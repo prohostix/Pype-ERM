@@ -241,21 +241,86 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
     where.branchId = req.user.branchId;
   }
+  
+  let isDateFiltered = false;
+  let targetDate = new Date();
+  
   // Date filter
   if (req.query.date) {
+    isDateFiltered = true;
     const dateStr = req.query.date as string;
     const start = new Date(dateStr);
     start.setHours(0, 0, 0, 0);
     const end = new Date(dateStr);
     end.setHours(23, 59, 59, 999);
     where.date = { gte: start, lte: end };
+    targetDate = start;
   }
+  
   // Status filter
-  if (req.query.status) {
-    where.status = req.query.status as string;
+  let requestedStatus = req.query.status as string;
+  if (requestedStatus && requestedStatus !== 'absent' && requestedStatus !== 'all') {
+    where.status = requestedStatus;
+  } else if (requestedStatus === 'all') {
+    // do not apply status filter
+  } else if (requestedStatus === 'absent') {
+    // we'll filter them later
   }
+
   const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
-  res.json({ success: true, count: attendances.length, data: attendances });
+
+  let finalAttendances = [...attendances];
+
+  if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
+    const orgQuery: any = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } } };
+    if (where.branchId) orgQuery.branchId = where.branchId;
+    
+    const allEmployees = await prisma.user.findMany({ where: orgQuery });
+    
+    let presentEmployeeIds = new Set(attendances.map(a => a.employeeId));
+    if (requestedStatus === 'absent' || requestedStatus === 'all') {
+       const allAttendancesForDate = await prisma.attendance.findMany({ 
+         where: { organizationId: where.organizationId, branchId: where.branchId, date: where.date }
+       });
+       presentEmployeeIds = new Set(allAttendancesForDate.map(a => a.employeeId));
+    }
+
+    const absentEmployees = allEmployees.filter(emp => !presentEmployeeIds.has(emp.id));
+    
+    const mockAbsentRecords = absentEmployees.map(emp => ({
+      id: `absent-${emp.id}-${targetDate.getTime()}`,
+      employeeId: emp.id,
+      organizationId: emp.organizationId,
+      branchId: emp.branchId,
+      date: targetDate,
+      status: 'absent',
+      checkIn: null,
+      checkOut: null,
+      isLate: false,
+      lateMinutes: 0,
+      workingHours: 0,
+      notes: null,
+      user: emp
+    }));
+
+    if (requestedStatus === 'absent') {
+      finalAttendances = mockAbsentRecords;
+    } else {
+      finalAttendances = [...finalAttendances, ...mockAbsentRecords];
+    }
+    
+    // re-sort by date and then by name if date is same
+    finalAttendances.sort((a, b) => {
+      const d1 = new Date(a.date).getTime();
+      const d2 = new Date(b.date).getTime();
+      if (d1 !== d2) return d2 - d1;
+      const nameA = a.user?.name || '';
+      const nameB = b.user?.name || '';
+      return nameA.localeCompare(nameB);
+    });
+  }
+
+  res.json({ success: true, count: finalAttendances.length, data: finalAttendances });
 });
 
 export const getAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
