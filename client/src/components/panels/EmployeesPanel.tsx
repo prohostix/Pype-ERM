@@ -26,7 +26,7 @@ export function EmployeesPanel() {
     phone: '',
     password: '',
     departmentId: '',
-    role: 'employee',
+    role: 'staff',
     designation: '',
     branchId: '',
     status: 'active'
@@ -152,7 +152,7 @@ export function EmployeesPanel() {
       phone: '',
       password: '',
       departmentId: '',
-      role: 'employee',
+      role: 'staff',
       designation: '',
       branchId: '',
       status: 'active'

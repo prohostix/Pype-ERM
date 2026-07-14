@@ -39,6 +39,20 @@ export const errorHandler = (
     error = { name: 'ValidationError', message, statusCode: 400 } as ErrorResponse;
   }
 
+  // Prisma unique constraint violation
+  if ((err as any).code === 'P2002') {
+    const target = (err as any).meta?.target;
+    const field = Array.isArray(target) ? target.join(', ') : 'field';
+    const message = `An account with this ${field} already exists.`;
+    error = { name: 'PrismaUniqueError', message, statusCode: 400 } as ErrorResponse;
+  }
+
+  // Prisma foreign key constraint violation
+  if ((err as any).code === 'P2003') {
+    const message = `Invalid reference provided for a related record.`;
+    error = { name: 'PrismaForeignKeyError', message, statusCode: 400 } as ErrorResponse;
+  }
+
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Server Error',
