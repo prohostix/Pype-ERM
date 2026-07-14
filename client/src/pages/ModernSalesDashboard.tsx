@@ -20,6 +20,15 @@ import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
+import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
+import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
+import { LeadsPanel } from '@/components/panels/LeadsPanel';
+import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
+import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
+import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
+import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
+import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
+import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { 
   BarChart, 
@@ -81,58 +90,78 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'overview': return (
         <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
       );
+
+      // Enrollment
+      case 'team_student_registration': return <EnrollStudentPanel />;
       case 'team_enrolled_students':
-      case 'enrolled_students': return <StudentsPanel />;
-      case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
-      case 'invite_links': return <SalesInvitePanel />;
+      case 'enrolled_students':
+      case 'student_status': return <StudentsPanel />;
       case 'student_applications':
+      case 'pending_admissions':
       case 'admission_pipeline': return <SalesStudentPipelinePanel />;
+
+      // My Team
       case 'team_members':
+      case 'counselor_performance':
+      case 'todays_performance':
       case 'my_team': return <TeamPerformancePanel />;
-      case 'tasks': return <TasksPanel />;
+      case 'attendance_overview':
+      case 'activity_monitoring':
+      case 'team_availability':
+      case 'daily_activity_report': return <EmployeeActivityReportPanel />;
+
+      // Target Management
+      case 'targets':
+      case 'target_vs_achievement':
+      case 'individual_target':
+      case 'achievement_tracking':
+      case 'target_history': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
+
+      // Lead & Follow-up
+      case 'total_leads':
+      case 'follow_up_status':
+      case 'hot_leads': return <LeadsPanel />;
+
+      // Task Management
+      case 'tasks':
+      case 'pending_actions':
+      case 'lead_pending_actions':
+      case 'assign_tasks':
+      case 'task_status':
+      case 'completed_tasks': return <TasksPanel />;
+
+      // Performance & Reports
+      case 'team_reports':
+      case 'counselor_reports':
+      case 'admission_reports':
+      case 'conversion_report': return <CEOKPIReportPanel />;
+
+      // Team Communication
+      case 'team_announcements':
+      case 'announcements': return <AnnouncementsPanel />;
+      case 'team_notes':
+      case 'important_updates':
+      case 'notice-board': return <NoticeBoardPanel />;
+
+      // Sales Resources
+      case 'course_details': return <ProgramsPanel />;
+      case 'fee_structure': return <FeeStructuresPanel />;
+      case 'university_details': return <UniversitiesPanel />;
+      case 'sales_materials': return <NoticeBoardPanel />;
+
+      // Requests & Approvals
+      case 'team_requests': return <EscalationsPanel />;
+      case 'admission_approval': return <SalesStudentPipelinePanel />;
+      case 'support_requests': return <ComplaintsPanel />;
+
+      // My Portal
+      case 'my_profile': return <PlaceholderPanel title="My Profile" />;
       case 'my_leaves': return <LeavesPanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;
-      case 'team_announcements':
-      case 'announcements': return <AnnouncementsPanel />;
-      case 'notice-board': return <NoticeBoardPanel />;
-      case 'my_profile':
-      case 'todays_performance':
-      case 'target_vs_achievement':
-      case 'pending_actions':
-      case 'team_student_registration':
-      case 'pending_admissions':
-      case 'student_status':
-      case 'counselor_performance':
-      case 'attendance_overview':
-      case 'activity_monitoring':
-      case 'team_availability':
-      case 'total_leads':
-      case 'follow_up_status':
-      case 'hot_leads':
-      case 'lead_pending_actions':
-      case 'assign_tasks':
-      case 'task_status':
-      case 'completed_tasks':
-      case 'individual_target':
-      case 'achievement_tracking':
-      case 'target_history':
-      case 'team_reports':
-      case 'counselor_reports':
-      case 'admission_reports':
-      case 'conversion_report':
-      case 'daily_activity_report':
-      case 'team_notes':
-      case 'important_updates':
-      case 'course_details':
-      case 'fee_structure':
-      case 'university_details':
-      case 'sales_materials':
-      case 'team_requests':
-      case 'admission_approval':
-      case 'support_requests':
-        return <PlaceholderPanel title={activeTab.replace(/_/g, ' ').toUpperCase()} />;
+      case 'invite_links': return <SalesInvitePanel />;
+
       default: return null;
     }
   };
@@ -752,28 +781,26 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
           case 'notice-board': return <NoticeBoardPanel />;
           case 'holidays': return <HolidaysPanel />;
           case 'student_details_status':
-          case 'payment_status':
+          case 'payment_status': return <StudentsPanel />;
           case 'course_details_dash':
-          case 'create_student':
+          case 'course_details_res': return <ProgramsPanel />;
+          case 'create_student': return <EnrollStudentPanel />;
           case 'admission_status_overview':
-          case 'document_status':
+          case 'document_status': return <SalesStudentPipelinePanel />;
           case 'pending_tasks':
-          case 'completed_tasks_counselor':
+          case 'completed_tasks_counselor': return <TasksPanel />;
           case 'achievement':
           case 'admission_count':
-          case 'incentive_status':
+          case 'incentive_status': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
           case 'counselor_admission_reports':
-          case 'performance_reports':
-          case 'course_details_res':
-          case 'fee_structure_res':
-          case 'university_details_res':
-          case 'brochures':
-          case 'approval_requests':
-          case 'support_requests':
-          case 'my_profile':
-          case 'lead_management':
-            return <PlaceholderPanel title={activeTab.replace(/_/g, ' ').toUpperCase()} />;
-          default: return null;
+          case 'performance_reports': return <CEOKPIReportPanel />;
+          case 'fee_structure_res': return <FeeStructuresPanel />;
+          case 'university_details_res': return <UniversitiesPanel />;
+          case 'brochures': return <NoticeBoardPanel />;
+          case 'approval_requests': return <EscalationsPanel />;
+          case 'support_requests': return <ComplaintsPanel />;
+          case 'my_profile': return <PlaceholderPanel title="My Profile" />;
+          case 'lead_management': return <LeadsPanel />;
         }
       })()}
     </div>
