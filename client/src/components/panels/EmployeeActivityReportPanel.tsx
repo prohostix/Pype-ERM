@@ -102,7 +102,7 @@ function DeptCards({ departments }: { departments: DeptSummary[] }) {
         <Card key={d.departmentId} className="border-none shadow-md bg-card/60">
           <CardContent className="p-4 space-y-3">
             <p className="font-semibold text-sm truncate">{d.name}</p>
-            <div className="grid grid-cols-3 gap-1 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-1 text-center">
               <div>
                 <p className="text-lg font-bold text-success">{d.present}</p>
                 <p className="text-[10px] text-muted-foreground uppercase">Present</p>
@@ -344,7 +344,7 @@ export function EmployeeActivityReportPanel() {
       </div>
 
       {/* Org-level summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         {[
           { label: 'Present', value: totalPresent, color: 'text-success', bg: 'bg-success/10' },
           { label: 'Absent', value: totalAbsent, color: 'text-destructive', bg: 'bg-destructive/10' },

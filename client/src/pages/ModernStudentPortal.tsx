@@ -424,7 +424,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
                 <CardDescription>Academic & enrollment configuration</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <span className="text-xs text-muted-foreground block">Academic Program</span>
                     <span className="font-semibold text-sm">{profile?.program?.name || 'N/A'}</span>

@@ -111,7 +111,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               <div className="h-6 w-32 bg-slate-800 rounded-md animate-pulse" />
               <div className="h-8 w-24 bg-indigo-600/20 text-indigo-400 rounded-md border border-indigo-500/20 text-xs font-extrabold flex items-center justify-center">PUBLIC PREVIEW</div>
             </div>
-            <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
               {[
                 { title: 'Total Headcount', val: '1,280', desc: 'Active students', color: 'text-indigo-400' },
                 { title: 'Open Vacancies', val: '12', desc: 'Hiring positions', color: 'text-sky-400' },
@@ -125,7 +125,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-3 gap-4 mt-6 flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 flex-1">
               <div className="col-span-2 p-4 rounded-xl border border-slate-800/80 bg-slate-950/40 flex flex-col justify-between">
                 <div className="h-4 w-40 bg-slate-800 rounded animate-pulse" />
                 <div className="space-y-2 mt-4">
@@ -227,7 +227,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               ))}
             </ul>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { val: '₹12Cr+', label: 'Fee Invoices Tracked' },
               { val: '20,000+', label: 'Student Admissions' },
@@ -290,7 +290,7 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="email" className="text-slate-300 text-xs font-semibold uppercase tracking-wider">Email Address</Label>
                 <Input 

@@ -134,7 +134,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
               Add Organization
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create New Organization</DialogTitle>
             </DialogHeader>
@@ -199,7 +199,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
               Create License
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create New License</DialogTitle>
             </DialogHeader>
@@ -221,7 +221,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Max Users</Label>
                   <Input type="number" placeholder="50" />
@@ -231,7 +231,7 @@ export function SuperadminPanel({ activeModule }: SuperadminPanelProps) {
                   <Input type="number" placeholder="100" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Duration (Months)</Label>
                   <Input type="number" placeholder="12" />

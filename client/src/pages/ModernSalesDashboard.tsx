@@ -183,29 +183,20 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'pending_actions', label: 'Pending Actions' },
 
       { id: '__enrollment', label: 'Enrollment', isSection: true },
-      { id: 'team_enrolled_students', label: 'Team Enrolled Students' },
       { id: 'admission_pipeline', label: 'Admission Pipeline' },
-      { id: 'pending_admissions', label: 'Pending Admissions' },
       { id: 'student_status', label: 'Student Status' },
 
       { id: '__my_team', label: 'My Team', isSection: true },
       { id: 'team_members', label: 'Team Members' },
       { id: 'counselor_performance', label: 'Counselor Performance' },
       { id: 'attendance_overview', label: 'Attendance Overview' },
-      { id: 'activity_monitoring', label: 'Activity Monitoring' },
-      { id: 'team_availability', label: 'Team Availability' },
 
       { id: '__tasks', label: 'Task Management', isSection: true },
       { id: 'assign_tasks', label: 'Assign Tasks' },
-      { id: 'tasks', label: 'Team Tasks' },
-      { id: 'task_status', label: 'Task Status' },
-      { id: 'completed_tasks', label: 'Completed Tasks' },
 
       { id: '__targets', label: 'Target Management', isSection: true },
       { id: 'targets', label: 'Team Target' },
       { id: 'individual_target', label: 'Individual Target' },
-      { id: 'achievement_tracking', label: 'Achievement Tracking' },
-      { id: 'target_history', label: 'Target History' },
 
       { id: '__reports', label: 'Performance & Reports', isSection: true },
       { id: 'team_reports', label: 'Team Reports' },
@@ -608,7 +599,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
       </div>
 
       {/* Executive Overview Row 1: Performance */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Admissions</p>
           <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : myStudents.length}</p>
@@ -642,7 +633,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
       </div>
 
       {/* Executive Overview Row 2: Admission Status */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-yellow-500/10 rounded-full text-yellow-500"><Clock className="w-4 h-4" /></div>
           <div>

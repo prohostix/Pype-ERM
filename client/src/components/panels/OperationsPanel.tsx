@@ -200,7 +200,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
               Add University
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add New University</DialogTitle>
             </DialogHeader>
@@ -443,7 +443,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
               Create Session
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create Admission Session</DialogTitle>
             </DialogHeader>
@@ -466,7 +466,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Start Date</Label>
                   <Input type="date" />

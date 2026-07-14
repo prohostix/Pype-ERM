@@ -145,7 +145,7 @@ export function PaymentGatewayPanel() {
         </CardHeader>
         <CardContent>
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {[
               { label: 'Total Links', value: links.length, color: 'text-violet-600' },
               { label: 'Active', value: links.filter(l => l.status === 'active').length, color: 'text-blue-600' },

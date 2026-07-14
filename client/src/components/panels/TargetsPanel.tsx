@@ -142,12 +142,12 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
             <Button><Plus className="w-4 h-4 mr-2" />Add Target</Button>
           </DialogTrigger>
           )}
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Target' : 'Add New Target'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Employee (optional)</Label>
                   <Select value={formData.employeeId} onValueChange={(v) => setFormData({ ...formData, employeeId: v })}>
@@ -177,7 +177,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                   </Select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Target Amount</Label>
                   <Input type="number" min="0" value={formData.target} onChange={(e) => setFormData({ ...formData, target: e.target.value })} required />
@@ -187,7 +187,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
                   <Input type="number" min="0" value={formData.achieved} onChange={(e) => setFormData({ ...formData, achieved: e.target.value })} />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Period</Label>
                   <Select value={formData.period} onValueChange={(v) => setFormData({ ...formData, period: v })}>

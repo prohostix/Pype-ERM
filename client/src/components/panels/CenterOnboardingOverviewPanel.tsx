@@ -184,7 +184,7 @@ export function CenterOnboardingOverviewPanel({ mode = 'ceo' }: { mode?: 'ceo' |
 
       {/* Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
             { label: 'Total Centers', value: summary.total, color: 'text-foreground', bg: 'bg-muted', filter: 'all' },
             { label: 'Pending Ops', value: summary.pending_verification, color: 'text-warning', bg: 'bg-warning/10', filter: 'pending_verification' },
@@ -541,7 +541,7 @@ function EnrollmentOverview({ data, loading }: { data: EnrollmentData | null; lo
   return (
     <div className="space-y-6">
       {/* Status summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
             <div className="p-2 rounded-lg bg-primary/10 text-primary">

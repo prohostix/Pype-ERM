@@ -1008,7 +1008,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   )}
 
                   {/* Branch & University */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
                       <>
                         <div>
@@ -1069,7 +1069,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
 
                   {/* Enrollment & Admission Numbers */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Enrollment Number *</Label>
                       <Input
@@ -1096,7 +1096,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
 
                   {/* Admission Date & Status */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Admission Date</Label>
                       <Input
@@ -1123,7 +1123,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               {/* ── STEP 1: PERSONAL DETAILS ── */}
               {formStep === 1 && (
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Full Name *</Label>
                       <Input
@@ -1145,7 +1145,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Phone Number *</Label>
                       <Input
@@ -1176,7 +1176,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Pincode *</Label>
                       <Input
@@ -1196,7 +1196,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Religion</Label>
                       <Input
@@ -1275,7 +1275,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               {/* ── STEP 2: FAMILY INFO ── */}
               {formStep === 2 && (
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Father's Name</Label>
                       <Input
@@ -1294,7 +1294,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Mother's Name</Label>
                       <Input
@@ -1520,7 +1520,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           )}
 
                           {/* Branch & University */}
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {!isSalesMode && !['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
                               <>
                                 <div>
@@ -1581,7 +1581,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
 
                           {/* Enrollment & Admission Numbers */}
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Enrollment Number *</Label>
                               <Input
@@ -1613,7 +1613,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
 
                           {/* Admission Date & Status */}
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">{formData.isPrevious ? 'Previous Admission Date *' : 'Admission Date'}</Label>
                               <Input
@@ -1646,7 +1646,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <Label className="font-medium">Full Name *</Label>
                             <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required placeholder="Student's full name" />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Email *</Label>
                               <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required placeholder="student@example.com" />
@@ -1656,7 +1656,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required placeholder="10-digit mobile" />
                             </div>
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Date of Birth</Label>
                               <Input type="date" value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} />
@@ -1670,13 +1670,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <Label className="font-medium">Address *</Label>
                             <Textarea value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required placeholder="Full residential address" rows={2} />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">PIN Code</Label>
                               <Input value={formData.pinCode} onChange={(e) => setFormData({...formData, pinCode: e.target.value})} placeholder="6-digit PIN" maxLength={6} />
                             </div>
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Religion</Label>
                               <Input value={formData.religion} onChange={(e) => setFormData({...formData, religion: e.target.value})} placeholder="e.g. Hindu, Muslim, Christian" />
@@ -1753,7 +1753,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                               <User className="w-4 h-4 text-blue-500" /> Father's Information
                             </h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
                                 <Label className="font-medium">Father's Name</Label>
                                 <Input value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} placeholder="Father's full name" />
@@ -1768,7 +1768,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <h4 className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                               <User className="w-4 h-4 text-pink-500" /> Mother's Information
                             </h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
                                 <Label className="font-medium">Mother's Name</Label>
                                 <Input value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} placeholder="Mother's full name" />
@@ -2165,7 +2165,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
       {/* Notifications Dialog */}
       <Dialog open={notifDialogOpen} onOpenChange={setNotifDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Send Notification — {selectedStudent?.name}</DialogTitle>
           </DialogHeader>
@@ -2199,7 +2199,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
       {/* WhatsApp Dialog */}
       <Dialog open={waDialogOpen} onOpenChange={setWaDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Compose WhatsApp Message — {waStudent?.name}</DialogTitle>
           </DialogHeader>
@@ -2231,14 +2231,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
       {/* Payment Schedule Dialog */}
       <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Payment Installment Schedule — {scheduleStudent?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="border rounded-xl p-4 bg-slate-50 dark:bg-slate-900/20">
               <h4 className="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm">Add New Installment/Milestone</h4>
-              <div className="grid grid-cols-3 gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div>
                   <Label>Installment Title</Label>
                   <Input value={newSchedule.title} onChange={(e) => setNewSchedule({...newSchedule, title: e.target.value})} />
@@ -2383,7 +2383,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Method</Label>
                 <Select

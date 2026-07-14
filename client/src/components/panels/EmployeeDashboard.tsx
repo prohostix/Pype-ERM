@@ -235,7 +235,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
       
       <Card>
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="p-4 bg-green-50 rounded-lg text-center">
               <p className="text-3xl font-bold text-green-600">22</p>
               <p className="text-sm text-slate-600">Present Days</p>
@@ -254,7 +254,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
             </div>
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
+          <div className="border rounded-lg overflow-x-auto">
             <table className="w-full">
               <thead className="bg-slate-50">
                 <tr>
@@ -308,7 +308,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
               Apply Leave
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Apply for Leave</DialogTitle>
             </DialogHeader>
@@ -327,7 +327,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Start Date</Label>
                   <Input type="date" />
@@ -395,7 +395,7 @@ export function EmployeeDashboard({ activeModule }: EmployeeDashboardProps) {
               Raise Complaint
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Raise a Complaint</DialogTitle>
             </DialogHeader>

@@ -318,7 +318,7 @@ export function FeeStructuresPanel() {
                 </Select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Billing Cycle</Label>
                   <Select value={formData.billingCycle} onValueChange={(v) => setFormData({ ...formData, billingCycle: v })}>
@@ -345,7 +345,7 @@ export function FeeStructuresPanel() {
                     <Card key={yf.year} className="bg-muted/20 border">
                       <CardContent className="p-4 space-y-3">
                         <h4 className="font-medium text-xs text-primary">{yf.periodName}</h4>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <Label className="text-[10px] uppercase">Registration Fee</Label>
                             <Input type="number" min="0" value={yf.registrationFee} onChange={(e) => {
@@ -363,7 +363,7 @@ export function FeeStructuresPanel() {
                             }} required />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                           <div>
                             <Label className="text-[10px] uppercase">University Fee</Label>
                             <Input type="number" min="0" value={yf.universityFee} onChange={(e) => {
@@ -395,7 +395,7 @@ export function FeeStructuresPanel() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <Label>Registration Fee</Label>
                       <Input type="number" min="0" value={formData.registrationFee} onChange={(e) => setFormData({ ...formData, registrationFee: e.target.value })} required />
@@ -409,7 +409,7 @@ export function FeeStructuresPanel() {
                       <Input type="number" min="0" value={formData.universityFee} onChange={(e) => setFormData({ ...formData, universityFee: e.target.value })} required />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <Label>Exam Fee</Label>
                       <Input type="number" min="0" value={formData.examFee} onChange={(e) => setFormData({ ...formData, examFee: e.target.value })} required />

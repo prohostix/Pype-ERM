@@ -194,7 +194,7 @@ export function SalaryConfigPanel() {
                         <p className="text-xs text-red-500 mb-2 flex items-center gap-1">
                           <AlertCircle className="w-3 h-3" />{config.rejectedRemarks}
                         </p>
-                      )}                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                      )}                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-xs text-muted-foreground">Basic</p>
                           <p className="font-semibold">₹{config.basicSalary.toLocaleString()}</p>
@@ -253,7 +253,7 @@ export function SalaryConfigPanel() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1 col-span-2">
                 <Label>Basic Salary (₹)</Label>
                 <Input type="number" min="0" value={form.basicSalary}
@@ -263,7 +263,7 @@ export function SalaryConfigPanel() {
 
             <div>
               <p className="text-sm font-semibold mb-2">Allowances</p>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['hra', 'transport', 'medical', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
                     <Label className="capitalize">{key} (₹)</Label>
@@ -276,7 +276,7 @@ export function SalaryConfigPanel() {
 
             <div>
               <p className="text-sm font-semibold mb-2">Deductions</p>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(['pf', 'tax', 'insurance', 'other'] as const).map(key => (
                   <div key={key} className="space-y-1">
                     <Label className="capitalize">{key} (₹)</Label>

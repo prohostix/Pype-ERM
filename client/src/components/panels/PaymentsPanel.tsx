@@ -137,12 +137,12 @@ export function PaymentsPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Add Payment</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Payment' : 'Add New Payment'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Record Payment Against</Label>
                   <Select value={paymentTarget} onValueChange={(value: 'invoice' | 'student') => {
@@ -245,7 +245,7 @@ export function PaymentsPanel() {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Amount</Label>
                   <Input type="number" value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} required />

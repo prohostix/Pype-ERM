@@ -301,7 +301,7 @@ export function ProgramsPanel() {
                     {/* Semester breakdown */}
                     {isExpanded && p.semesters?.length > 0 && (
                       <div className="border-t bg-slate-50 px-4 py-3">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2">
                           {p.semesters.map(s => (
                             <div key={s.number} className="bg-white border rounded-lg px-3 py-2 text-center">
                               <p className="text-xs font-semibold text-slate-700">{s.name}</p>
@@ -328,7 +328,7 @@ export function ProgramsPanel() {
           <form onSubmit={handleSubmit} className="space-y-5 py-1">
 
             {/* Basic info */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Program Name *</Label>
                 <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
@@ -399,7 +399,7 @@ export function ProgramsPanel() {
             {/* Course Type */}
             <div className="space-y-2">
               <Label>Course Type *</Label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {COURSE_TYPES.map(ct => (
                   <button key={ct.value} type="button"
                     onClick={() => setForm(f => ({ ...f, courseType: ct.value }))}

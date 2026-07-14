@@ -184,7 +184,7 @@ export function EmployeesPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Add Employee</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Employee' : 'Add New Employee'}</DialogTitle>
             </DialogHeader>
@@ -212,7 +212,7 @@ export function EmployeesPanel() {
                   />
                 </div>
               )}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Role</Label>
                   <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>

@@ -277,7 +277,7 @@ export function ProgramDetailPanel({
       )}
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
         {CATEGORIES.map(cat => {
           const count = byCategory[cat.value]?.length || 0;
           return (
@@ -396,7 +396,7 @@ export function ProgramDetailPanel({
 
       {/* Upload / Edit Dialog */}
       <Dialog open={uploadDialogOpen} onOpenChange={(open) => { setUploadDialogOpen(open); if (!open) resetUploadForm(); }}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Edit Material' : 'Upload Program Material'}</DialogTitle>
           </DialogHeader>
@@ -420,7 +420,7 @@ export function ProgramDetailPanel({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Category *</Label>
                 <Select value={uploadForm.category} onValueChange={v => setUploadForm(f => ({ ...f, category: v }))}>

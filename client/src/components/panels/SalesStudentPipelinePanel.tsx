@@ -138,7 +138,7 @@ export function SalesStudentPipelinePanel() {
 
       {/* Summary cards */}
       {summary && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
             { key: 'total', label: 'Total', color: 'text-foreground' },
             { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },

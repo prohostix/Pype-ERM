@@ -113,7 +113,7 @@ export function ComplaintsPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />File Complaint</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Complaint' : 'File New Complaint'}</DialogTitle>
             </DialogHeader>
@@ -126,7 +126,7 @@ export function ComplaintsPanel() {
                 <Label>Description</Label>
                 <Textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={4} required />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Category</Label>
                   <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>

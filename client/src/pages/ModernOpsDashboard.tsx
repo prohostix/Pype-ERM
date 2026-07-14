@@ -204,7 +204,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
       </div>
 
       {/* Operations Quick Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <OpsMetricCard 
           title="Total Active Students" 
           value={metrics.totalStudents || 0} 

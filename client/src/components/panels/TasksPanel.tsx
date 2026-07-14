@@ -201,7 +201,7 @@ export function TasksPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Assign Task</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingTask ? 'Edit Task' : 'Assign New Task'}</DialogTitle>
             </DialogHeader>
@@ -244,7 +244,7 @@ export function TasksPanel() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Priority</Label>
                   <Select value={formData.priority} onValueChange={v => setFormData({ ...formData, priority: v })}>

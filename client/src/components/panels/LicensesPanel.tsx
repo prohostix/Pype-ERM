@@ -112,7 +112,7 @@ export function LicensesPanel() {
           <DialogTrigger asChild>
             <Button><Plus className="w-4 h-4 mr-2" />Add License</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit License' : 'Add New License'}</DialogTitle>
             </DialogHeader>
@@ -121,7 +121,7 @@ export function LicensesPanel() {
                 <Label>License Name</Label>
                 <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required placeholder="e.g., Basic Plan" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Type</Label>
                   <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
@@ -144,7 +144,7 @@ export function LicensesPanel() {
                   </Select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Max Users</Label>
                   <Input type="number" min="1" value={formData.maxUsers} onChange={(e) => setFormData({ ...formData, maxUsers: e.target.value })} required />
@@ -154,7 +154,7 @@ export function LicensesPanel() {
                   <Input type="number" min="1" value={formData.maxStorage} onChange={(e) => setFormData({ ...formData, maxStorage: e.target.value })} required />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>Duration (months)</Label>
                   <Input type="number" min="1" value={formData.durationMonths} onChange={(e) => setFormData({ ...formData, durationMonths: e.target.value })} required />

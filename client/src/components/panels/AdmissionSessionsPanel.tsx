@@ -143,7 +143,7 @@ export function AdmissionSessionsPanel() {
             <DialogTrigger asChild>
               <Button><Plus className="w-4 h-4 mr-2" />Add Session</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingId ? 'Edit Session' : 'Add New Session'}</DialogTitle>
               </DialogHeader>
@@ -195,7 +195,7 @@ export function AdmissionSessionsPanel() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label>Start Date</Label>
                     <Input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />

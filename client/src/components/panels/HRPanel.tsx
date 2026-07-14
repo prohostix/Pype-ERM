@@ -275,7 +275,7 @@ export function HRPanel({ activeModule }: HRPanelProps) {
                 Add Employee
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add New Employee</DialogTitle>
               </DialogHeader>
@@ -341,7 +341,7 @@ export function HRPanel({ activeModule }: HRPanelProps) {
               Create Vacancy
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create Vacancy</DialogTitle>
             </DialogHeader>

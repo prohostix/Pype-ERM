@@ -278,7 +278,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
                 Create Invoice
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create Invoice</DialogTitle>
               </DialogHeader>
@@ -456,7 +456,7 @@ export function FinancePanel({ activeModule }: FinancePanelProps) {
               Set Target
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Set Target</DialogTitle>
             </DialogHeader>

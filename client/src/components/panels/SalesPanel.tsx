@@ -266,7 +266,7 @@ export function SalesPanel({ activeModule }: SalesPanelProps) {
                 Add Lead
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add New Lead</DialogTitle>
               </DialogHeader>
@@ -435,7 +435,7 @@ export function SalesPanel({ activeModule }: SalesPanelProps) {
               Set Target
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Set Sales Target</DialogTitle>
             </DialogHeader>

@@ -106,7 +106,7 @@ export function PaymentRemindersPanel() {
         </CardHeader>
         <CardContent>
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {[
               { label: 'Total Pending', value: filterStats.all, icon: <Clock className="w-4 h-4" />, color: 'text-blue-600' },
               { label: 'Overdue', value: filterStats.overdue, icon: <AlertTriangle className="w-4 h-4" />, color: 'text-rose-600' },
@@ -176,7 +176,7 @@ export function PaymentRemindersPanel() {
 
       {/* Compose Reminder Dialog */}
       <Dialog open={reminderOpen} onOpenChange={setReminderOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Compose Payment Reminder</DialogTitle>
           </DialogHeader>

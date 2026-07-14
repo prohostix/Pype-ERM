@@ -255,7 +255,7 @@ function OverviewContent({ onNavigate }: any) {
       </div>
 
       {/* Alerts Widget */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <AlertCard title="Overdue Student Fees" count={alerts.overdueStudentFees} icon={<AlertCircle />} type="error" />
         <AlertCard title="University Fee Due" count={alerts.universityFeeDue} icon={<AlertTriangle />} type="warning" />
         <AlertCard title="Committed Payment Due" count={alerts.committedPaymentDueToday} icon={<Clock />} type="info" />
