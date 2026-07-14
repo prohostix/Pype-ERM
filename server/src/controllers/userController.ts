@@ -42,7 +42,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   if (req.query.role) {
     where.role = req.query.role as string;
   } else {
-    where.role = { not: 'staff' };
+    where.role = { not: 'student' };
   }
   if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
   if (req.query.status) where.status = req.query.status as string;
