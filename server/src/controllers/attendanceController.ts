@@ -239,7 +239,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   const where: any = { organizationId: req.user.organizationId };
   // Branch isolation
   if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
-    where.branchId = req.user.branchId;
+    where.user = { branchId: req.user.branchId };
   }
   
   let isDateFiltered = false;
@@ -269,25 +269,25 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
 
   const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
 
-  let finalAttendances = [...attendances];
+  let finalAttendances: any[] = [...attendances];
 
   if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
     const orgQuery: any = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } } };
-    if (where.branchId) orgQuery.branchId = where.branchId;
+    if (where.user?.branchId) orgQuery.branchId = where.user.branchId;
     
     const allEmployees = await prisma.user.findMany({ where: orgQuery });
     
     let presentEmployeeIds = new Set(attendances.map(a => a.employeeId));
     if (requestedStatus === 'absent' || requestedStatus === 'all') {
        const allAttendancesForDate = await prisma.attendance.findMany({ 
-         where: { organizationId: where.organizationId, branchId: where.branchId, date: where.date }
+         where: { organizationId: where.organizationId, date: where.date, ...(where.user ? { user: where.user } : {}) }
        });
        presentEmployeeIds = new Set(allAttendancesForDate.map(a => a.employeeId));
     }
 
     const absentEmployees = allEmployees.filter(emp => !presentEmployeeIds.has(emp.id));
     
-    const mockAbsentRecords = absentEmployees.map(emp => ({
+    const mockAbsentRecords: any[] = absentEmployees.map(emp => ({
       id: `absent-${emp.id}-${targetDate.getTime()}`,
       employeeId: emp.id,
       organizationId: emp.organizationId,
@@ -296,10 +296,14 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       status: 'absent',
       checkIn: null,
       checkOut: null,
+      checkInLocation: null,
+      checkOutLocation: null,
       isLate: false,
       lateMinutes: 0,
       workingHours: 0,
       notes: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       user: emp
     }));
 
