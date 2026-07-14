@@ -104,10 +104,7 @@ const navItems: NavItem[] = [
         roles: ['ops_admin', 'ceo'],
         children: [
           { id: 'students', label: 'Student List' },
-          { id: 'students-verify', label: 'Student Verification' },
-          { id: 'students-portal', label: 'Student Portal Management' },
-          { id: 'students-docs', label: 'Student Documents' },
-          { id: 'students-timeline', label: 'Student Timeline' }
+          { id: 'students-portal', label: 'Student Portal Management' }
         ]
       },
       { 
@@ -116,10 +113,7 @@ const navItems: NavItem[] = [
         icon: FileText, 
         roles: ['ops_admin', 'ceo'],
         children: [
-          { id: 'admissions-new', label: 'New Admissions' },
-          { id: 'admissions-review', label: 'Admission Review' },
-          { id: 'admissions-pending', label: 'Pending Admissions' },
-          { id: 'admissions-verify', label: 'Admission Verification' }
+          { id: 'admissions-review', label: 'Admission Review' }
         ]
       },
       { 
@@ -130,7 +124,6 @@ const navItems: NavItem[] = [
         children: [
           { id: 'universities', label: 'University List' },
           { id: 'uni-submission', label: 'University Submission' },
-          { id: 'enrollment-manage', label: 'Enrollment Management' },
           { id: 'enrollment-update', label: 'Enrollment Number Update' },
           { id: 'reregistration', label: 'Re-registration' },
           { id: 'exam-reg', label: 'Exam Registration' }
@@ -177,10 +170,7 @@ const navItems: NavItem[] = [
         icon: CheckSquare, 
         roles: ['ops_admin', 'ceo'],
         children: [
-          { id: 'my-tasks', label: 'My Tasks' },
-          { id: 'pending-tasks', label: 'Pending Tasks' },
-          { id: 'completed-tasks', label: 'Completed Tasks' },
-          { id: 'follow-up', label: 'Follow-up Reminders' }
+          { id: 'my-tasks', label: 'My Tasks' }
         ]
       },
       { 

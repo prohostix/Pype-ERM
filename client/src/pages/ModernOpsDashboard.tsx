@@ -115,21 +115,14 @@ export function getOpsNavItems() {
     
     { id: '__students', label: 'Students', isSection: true },
     { id: 'students', label: 'Student List' },
-    { id: 'student_verification', label: 'Student Verification' },
     { id: 'student_portal_management', label: 'Student Portal Management' },
-    { id: 'student_documents', label: 'Student Documents' },
-    { id: 'student_timeline', label: 'Student Timeline' },
     
     { id: '__admissions', label: 'Admissions', isSection: true },
-    { id: 'new_admissions', label: 'New Admissions' },
     { id: 'admission_review', label: 'Admission Review' },
-    { id: 'pending_admissions', label: 'Pending Admissions' },
-    { id: 'admission_verification', label: 'Admission Verification' },
     
     { id: '__universities', label: 'Universities', isSection: true },
     { id: 'universities', label: 'University List' },
     { id: 'university_submission', label: 'University Submission' },
-    { id: 'enrollment_management', label: 'Enrollment Management' },
     { id: 'enrollment_number_update', label: 'Enrollment Number Update' },
     { id: 're_registration', label: 'Re-registration' },
     { id: 'exam_registration', label: 'Exam Registration' },
@@ -155,9 +148,6 @@ export function getOpsNavItems() {
     
     { id: '__tasks', label: 'Tasks', isSection: true },
     { id: 'tasks', label: 'My Tasks' },
-    { id: 'pending_tasks', label: 'Pending Tasks' },
-    { id: 'completed_tasks', label: 'Completed Tasks' },
-    { id: 'follow_up_reminders', label: 'Follow-up Reminders' },
     
     { id: '__reports', label: 'Reports', isSection: true },
     { id: 'student_report', label: 'Student Report' },
