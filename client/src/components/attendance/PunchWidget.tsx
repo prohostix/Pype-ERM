@@ -42,15 +42,25 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [locating, setLocating] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [lastFetchDate, setLastFetchDate] = useState(new Date().getDate());
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
 
-  // Live clock
+  // Live clock and midnight reset check
   useEffect(() => {
-    const t = setInterval(() => setCurrentTime(new Date()), 1000);
+    const t = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now);
+      
+      // If the day has changed (crossed midnight), refresh the attendance state
+      if (now.getDate() !== lastFetchDate) {
+        setLastFetchDate(now.getDate());
+        fetchToday();
+      }
+    }, 1000);
     return () => clearInterval(t);
-  }, []);
+  }, [lastFetchDate]);
 
   useEffect(() => {
     fetchToday();
