@@ -309,7 +309,7 @@ function App() {
     }
 
     if (user.role === 'sales_admin') {
-      return getSalesNavItems();
+      return getSalesNavItems(true);
     }
 
     if (['collections_admin', 'collections'].includes(user.role)) {
@@ -349,11 +349,11 @@ function App() {
               case 'operations': return getOpsNavItems();
               case 'hr': return getHRNavItems();
               case 'finance': return getFinanceNavItems();
-              case 'sales': return getSalesNavItems();
+              case 'sales': return getSalesNavItems(true);
               case 'collections': return getCollectionsNavItems();
             }
           } else if (deptType === 'sales') {
-            return getSalesNavItems();
+            return getSalesNavItems(false);
           } else if (deptType === 'collections') {
             return getCollectionsNavItems();
           }

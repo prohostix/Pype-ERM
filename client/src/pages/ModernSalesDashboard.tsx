@@ -19,8 +19,8 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
-
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
+import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { 
   BarChart, 
   Bar, 
@@ -81,18 +81,58 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'overview': return (
         <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
       );
+      case 'team_enrolled_students':
       case 'enrolled_students': return <StudentsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
       case 'invite_links': return <SalesInvitePanel />;
-      case 'student_applications': return <SalesStudentPipelinePanel />;
+      case 'student_applications':
+      case 'admission_pipeline': return <SalesStudentPipelinePanel />;
+      case 'team_members':
       case 'my_team': return <TeamPerformancePanel />;
       case 'tasks': return <TasksPanel />;
       case 'my_leaves': return <LeavesPanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;
+      case 'team_announcements':
       case 'announcements': return <AnnouncementsPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
+      case 'my_profile':
+      case 'todays_performance':
+      case 'target_vs_achievement':
+      case 'pending_actions':
+      case 'team_student_registration':
+      case 'pending_admissions':
+      case 'student_status':
+      case 'counselor_performance':
+      case 'attendance_overview':
+      case 'activity_monitoring':
+      case 'team_availability':
+      case 'total_leads':
+      case 'follow_up_status':
+      case 'hot_leads':
+      case 'lead_pending_actions':
+      case 'assign_tasks':
+      case 'task_status':
+      case 'completed_tasks':
+      case 'individual_target':
+      case 'achievement_tracking':
+      case 'target_history':
+      case 'team_reports':
+      case 'counselor_reports':
+      case 'admission_reports':
+      case 'conversion_report':
+      case 'daily_activity_report':
+      case 'team_notes':
+      case 'important_updates':
+      case 'course_details':
+      case 'fee_structure':
+      case 'university_details':
+      case 'sales_materials':
+      case 'team_requests':
+      case 'admission_approval':
+      case 'support_requests':
+        return <PlaceholderPanel title={activeTab.replace(/_/g, ' ').toUpperCase()} />;
       default: return null;
     }
   };
@@ -104,23 +144,133 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
   );
 }
 
-export function getSalesNavItems() {
+export function getSalesNavItems(isSalesAdmin?: boolean) {
+  if (isSalesAdmin) {
+    return [
+      { id: '__dashboard', label: 'Dashboard', isSection: true },
+      { id: 'overview', label: 'Team Summary' },
+      { id: 'todays_performance', label: 'Today\'s Performance' },
+      { id: 'target_vs_achievement', label: 'Target vs Achievement' },
+      { id: 'pending_actions', label: 'Pending Actions' },
+
+      { id: '__enrollment', label: 'Enrollment', isSection: true },
+      { id: 'team_student_registration', label: 'Team Student Registration' },
+      { id: 'team_enrolled_students', label: 'Team Enrolled Students' },
+      { id: 'admission_pipeline', label: 'Admission Pipeline' },
+      { id: 'pending_admissions', label: 'Pending Admissions' },
+      { id: 'student_status', label: 'Student Status' },
+
+      { id: '__my_team', label: 'My Team', isSection: true },
+      { id: 'team_members', label: 'Team Members' },
+      { id: 'counselor_performance', label: 'Counselor Performance' },
+      { id: 'attendance_overview', label: 'Attendance Overview' },
+      { id: 'activity_monitoring', label: 'Activity Monitoring' },
+      { id: 'team_availability', label: 'Team Availability' },
+
+      { id: '__leads', label: 'Lead & Follow-up', isSection: true },
+      { id: 'total_leads', label: 'Total Leads' },
+      { id: 'follow_up_status', label: 'Follow-up Status' },
+      { id: 'hot_leads', label: 'Hot Leads' },
+      { id: 'lead_pending_actions', label: 'Pending Actions' },
+
+      { id: '__tasks', label: 'Task Management', isSection: true },
+      { id: 'assign_tasks', label: 'Assign Tasks' },
+      { id: 'tasks', label: 'Team Tasks' },
+      { id: 'task_status', label: 'Task Status' },
+      { id: 'completed_tasks', label: 'Completed Tasks' },
+
+      { id: '__targets', label: 'Target Management', isSection: true },
+      { id: 'targets', label: 'Team Target' },
+      { id: 'individual_target', label: 'Individual Target' },
+      { id: 'achievement_tracking', label: 'Achievement Tracking' },
+      { id: 'target_history', label: 'Target History' },
+
+      { id: '__reports', label: 'Performance & Reports', isSection: true },
+      { id: 'team_reports', label: 'Team Reports' },
+      { id: 'counselor_reports', label: 'Counselor Reports' },
+      { id: 'admission_reports', label: 'Admission Reports' },
+      { id: 'conversion_report', label: 'Conversion Report' },
+      { id: 'daily_activity_report', label: 'Daily Activity Report' },
+
+      { id: '__communication', label: 'Team Communication', isSection: true },
+      { id: 'team_announcements', label: 'Team Announcements' },
+      { id: 'team_notes', label: 'Team Notes' },
+      { id: 'important_updates', label: 'Important Updates' },
+
+      { id: '__resources', label: 'Sales Resources', isSection: true },
+      { id: 'course_details', label: 'Course Details' },
+      { id: 'fee_structure', label: 'Fee Structure' },
+      { id: 'university_details', label: 'University Details' },
+      { id: 'sales_materials', label: 'Sales Materials' },
+
+      { id: '__requests', label: 'Requests & Approvals', isSection: true },
+      { id: 'team_requests', label: 'Team Requests' },
+      { id: 'admission_approval', label: 'Admission Approval' },
+      { id: 'support_requests', label: 'Support Requests' },
+
+      { id: '__portal_section', label: 'My Portal', isSection: true },
+      { id: 'my_profile', label: 'My Profile' },
+      { id: 'my_attendance', label: 'Attendance' },
+      { id: 'my_leaves', label: 'Leave' },
+      { id: 'my_payslips', label: 'Payslip' },
+      { id: 'holidays', label: 'Holidays' },
+      { id: 'announcements', label: 'Announcements' },
+      { id: 'notice-board', label: 'Notifications' },
+    ];
+  }
+
   return [
-    { id: '__sales_section', label: 'Sales Management', isSection: true },
+    { id: '__dashboard', label: 'Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
-    { id: 'enrolled_students', label: 'Total Student Enrolled' },
-    { id: 'targets', label: 'Targets' },
-    { id: 'invite_links', label: 'Invite Links' },
-    { id: 'student_applications', label: 'Student Pipeline' },
-    { id: 'my_team', label: 'My Team' },
-    { id: 'tasks', label: 'Tasks' },
+    { id: 'enrolled_students', label: 'Enrolled Students' },
+    { id: 'my_total_admissions', label: 'My Total Admissions' },
+    { id: 'student_details_status', label: 'Student Details & Status' },
+    { id: 'payment_status', label: 'Payment Status' },
+    { id: 'course_details_dash', label: 'Course Details' },
+
+    { id: '__pipeline', label: 'Student Pipeline', isSection: true },
+    { id: 'create_student', label: 'Create Student / Enroll' },
+    { id: 'invite_links', label: 'Generate Student Link' },
+    { id: 'admission_status_overview', label: 'Admission Status Overview' },
+    { id: 'student_applications', label: 'Application Progress' },
+    { id: 'document_status', label: 'Document Status' },
+
+    { id: '__tasks', label: 'Tasks', isSection: true },
+    { id: 'tasks', label: 'My Tasks' },
+    { id: 'pending_tasks', label: 'Pending Tasks' },
+    { id: 'completed_tasks_counselor', label: 'Completed Tasks' },
+
+    { id: '__performance', label: 'My Performance', isSection: true },
+    { id: 'targets', label: 'Target' },
+    { id: 'achievement', label: 'Achievement' },
+    { id: 'admission_count', label: 'Admission Count' },
+    { id: 'incentive_status', label: 'Incentive Status' },
+
+    { id: '__reports', label: 'Reports', isSection: true },
+    { id: 'counselor_admission_reports', label: 'Admission Reports' },
+    { id: 'performance_reports', label: 'Performance Reports' },
+
+    { id: '__resources', label: 'Sales Resources', isSection: true },
+    { id: 'course_details_res', label: 'Course Details' },
+    { id: 'fee_structure_res', label: 'Fee Structure' },
+    { id: 'university_details_res', label: 'University Details' },
+    { id: 'brochures', label: 'Brochures & Materials' },
+
+    { id: '__requests', label: 'Requests', isSection: true },
+    { id: 'approval_requests', label: 'Approval Requests' },
+    { id: 'support_requests', label: 'Support Requests' },
+
     { id: '__portal_section', label: 'My Portal', isSection: true },
-    { id: 'my_leaves', label: 'My Leaves' },
+    { id: 'my_profile', label: 'My Profile' },
     { id: 'my_attendance', label: 'Attendance' },
-    { id: 'my_payslips', label: 'Pay Slips' },
+    { id: 'my_leaves', label: 'Leave' },
+    { id: 'my_payslips', label: 'Payslip' },
     { id: 'holidays', label: 'Holidays' },
     { id: 'announcements', label: 'Announcements' },
-    { id: 'notice-board', label: 'Notice Board' },
+    { id: 'notice-board', label: 'Notifications' },
+
+    { id: '__admission_flow', label: 'Admission Flow', isSection: true },
+    { id: 'lead_management', label: 'Lead Management Flow' },
   ];
 }
 
@@ -435,35 +585,76 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
         </div>
       </div>
 
-      {/* Quick stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">My Enrolled Students</p>
-          <p className="text-3xl font-bold mt-1">{loading ? '...' : myStudents.length}</p>
-          <p className="text-[10px] text-muted-foreground mt-1">
-            {myStudents.filter((s: any) => s.status === 'active').length} active
+      {/* Executive Overview Row 1: Performance */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Card><CardContent className="p-4 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Admissions</p>
+          <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : myStudents.length}</p>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Target</p>
+          <p className="text-2xl font-bold mt-1">
+            {loading ? '...' : myTargets.reduce((s: number, t: any) => s + (t.target || 0), 0)}
           </p>
         </CardContent></Card>
-        <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">Pending Verification</p>
-          <p className="text-3xl font-bold mt-1 text-warning">
-            {loading ? '...' : myStudents.filter((s: any) => s.status === 'pending').length}
-          </p>
-          <p className="text-[10px] text-muted-foreground mt-1">Awaiting operations</p>
-        </CardContent></Card>
-        <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">My Targets</p>
-          <p className="text-3xl font-bold mt-1">{loading ? '...' : myTargets.length}</p>
-          <p className="text-[10px] text-muted-foreground mt-1">{myTargets.filter((t:any) => (t.achieved||0) < t.target).length} active</p>
-        </CardContent></Card>
-        <Card><CardContent className="p-5">
-          <p className="text-xs text-muted-foreground uppercase font-medium">Avg Progress</p>
-          <p className="text-3xl font-bold mt-1 text-primary">
+        <Card><CardContent className="p-4 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold">Achievement %</p>
+          <p className="text-2xl font-bold mt-1 text-info">
             {loading ? '...' : (myTargets.length > 0
               ? Math.round(myTargets.reduce((s:number, t:any) => s + (t.target > 0 ? (t.achieved/t.target)*100 : 0), 0) / myTargets.length)
               : 0)}%
           </p>
-          <p className="text-[10px] text-muted-foreground mt-1">across all targets</p>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold">My Collection</p>
+          <p className="text-2xl font-bold mt-1 text-success">
+            {loading ? '...' : `₹${myTargets.reduce((s: number, t: any) => s + (t.type === 'revenue' ? t.achieved : 0), 0).toLocaleString('en-IN')}`}
+          </p>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold">Expected Incentive</p>
+          <p className="text-2xl font-bold mt-1 text-warning">
+            {loading ? '...' : `₹${myTargets.reduce((s: number, t: any) => s + (t.achieved >= t.target ? (t.incentive || 0) : 0), 0).toLocaleString('en-IN')}`}
+          </p>
+        </CardContent></Card>
+      </div>
+
+      {/* Executive Overview Row 2: Admission Status */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Card><CardContent className="p-4 flex items-center gap-3">
+          <div className="p-2 bg-yellow-500/10 rounded-full text-yellow-500"><Clock className="w-4 h-4" /></div>
+          <div>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Verification Pending</p>
+            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'pending').length}</p>
+          </div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3">
+          <div className="p-2 bg-orange-500/10 rounded-full text-orange-500"><Zap className="w-4 h-4" /></div>
+          <div>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Payment Pending</p>
+            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'payment_pending').length}</p>
+          </div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3">
+          <div className="p-2 bg-blue-500/10 rounded-full text-blue-500"><ArrowUpRight className="w-4 h-4" /></div>
+          <div>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Handover Pending</p>
+            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'ops_pending').length}</p>
+          </div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3">
+          <div className="p-2 bg-green-500/10 rounded-full text-green-500"><Target className="w-4 h-4" /></div>
+          <div>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Accepted</p>
+            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'active').length}</p>
+          </div>
+        </CardContent></Card>
+        <Card><CardContent className="p-4 flex items-center gap-3">
+          <div className="p-2 bg-red-500/10 rounded-full text-red-500"><BarChart3 className="w-4 h-4" /></div>
+          <div>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Cancelled Admissions</p>
+            <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'cancelled').length}</p>
+          </div>
         </CardContent></Card>
       </div>
 
@@ -547,7 +738,8 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
             </div>
           );
           case 'my_subdept': return isSubDeptManager ? <SubSalesPortalPanel /> : null;
-          case 'enrolled_students': return <StudentsPanel />;
+          case 'enrolled_students':
+          case 'my_total_admissions': return <StudentsPanel />;
           case 'targets': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
           case 'invite_links': return <SalesInvitePanel />;
           case 'student_applications': return <SalesStudentPipelinePanel />;
@@ -559,19 +751,28 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
           case 'announcements': return <AnnouncementsPanel />;
           case 'notice-board': return <NoticeBoardPanel />;
           case 'holidays': return <HolidaysPanel />;
-          case 'ld-portal': return (
-            <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle>Learning &amp; Development Portal</CardTitle>
-                <CardDescription>Courses, certifications and growth resources</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="py-12 text-center text-muted-foreground">
-                  <p className="font-medium">Courses will be assigned by HR. Check back regularly.</p>
-                </div>
-              </CardContent>
-            </Card>
-          );
+          case 'student_details_status':
+          case 'payment_status':
+          case 'course_details_dash':
+          case 'create_student':
+          case 'admission_status_overview':
+          case 'document_status':
+          case 'pending_tasks':
+          case 'completed_tasks_counselor':
+          case 'achievement':
+          case 'admission_count':
+          case 'incentive_status':
+          case 'counselor_admission_reports':
+          case 'performance_reports':
+          case 'course_details_res':
+          case 'fee_structure_res':
+          case 'university_details_res':
+          case 'brochures':
+          case 'approval_requests':
+          case 'support_requests':
+          case 'my_profile':
+          case 'lead_management':
+            return <PlaceholderPanel title={activeTab.replace(/_/g, ' ').toUpperCase()} />;
           default: return null;
         }
       })()}
