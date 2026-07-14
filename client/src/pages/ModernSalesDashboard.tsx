@@ -183,7 +183,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'pending_actions', label: 'Pending Actions' },
 
       { id: '__enrollment', label: 'Enrollment', isSection: true },
-      { id: 'team_student_registration', label: 'Team Student Registration' },
       { id: 'team_enrolled_students', label: 'Team Enrolled Students' },
       { id: 'admission_pipeline', label: 'Admission Pipeline' },
       { id: 'pending_admissions', label: 'Pending Admissions' },
@@ -195,12 +194,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'attendance_overview', label: 'Attendance Overview' },
       { id: 'activity_monitoring', label: 'Activity Monitoring' },
       { id: 'team_availability', label: 'Team Availability' },
-
-      { id: '__leads', label: 'Lead & Follow-up', isSection: true },
-      { id: 'total_leads', label: 'Total Leads' },
-      { id: 'follow_up_status', label: 'Follow-up Status' },
-      { id: 'hot_leads', label: 'Hot Leads' },
-      { id: 'lead_pending_actions', label: 'Pending Actions' },
 
       { id: '__tasks', label: 'Task Management', isSection: true },
       { id: 'assign_tasks', label: 'Assign Tasks' },
