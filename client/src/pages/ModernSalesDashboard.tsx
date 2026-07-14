@@ -21,7 +21,6 @@ import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { 
   BarChart, 
   Bar, 
@@ -353,7 +352,6 @@ function OverviewContent({ metrics, students, targets, loading, onNavigate }: an
               )}
             </CardContent>
           </Card>
-          <PunchWidget />
         </div>
       </div>
     </>
@@ -545,7 +543,6 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
                     }
                   </CardContent>
                 </Card>
-                <PunchWidget />
               </div>
             </div>
           );

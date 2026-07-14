@@ -32,7 +32,6 @@ import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { LicensesPanel } from '@/components/panels/LicensesPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
 
 const globalActivity = [
   { time: '00:00', requests: 120, latency: 45 },
@@ -103,7 +102,6 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
           {/* Overview content - existing dashboard */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2"><OverviewContent metrics={metrics} /></div>
-            <PunchWidget />
           </div>
         </TabsContent>
 

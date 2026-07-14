@@ -221,8 +221,17 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
   return (
     <>
       {compact ? (
-        <div className="flex items-center gap-2">
-          {!hasPunchedIn ? (
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex flex-col items-end">
+             <span className="text-sm font-bold tabular-nums">
+               {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+             </span>
+             <span className="text-[10px] text-muted-foreground leading-none">
+               {currentTime.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}
+             </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {!hasPunchedIn ? (
             <Button
               size="sm"
               onClick={() => openPunchMap('in')}
@@ -251,6 +260,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
               <span className="hidden sm:inline">Punched Out</span>
             </Button>
           )}
+        </div>
         </div>
       ) : (
         <Card className="overflow-hidden border-none shadow-xl bg-card/60 backdrop-blur-xl">

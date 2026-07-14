@@ -30,7 +30,6 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
 
 export function getBranchManagerNavItems() {
   return [
@@ -222,7 +221,6 @@ function BranchOverview({ branch, metrics, leads, targets, loading, onNavigate }
               ))}
             </CardContent>
           </Card>
-          <PunchWidget />
         </div>
       </div>
 

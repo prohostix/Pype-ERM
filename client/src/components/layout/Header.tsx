@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -109,6 +110,11 @@ export function Header({ onMenuToggle, title }: HeaderProps) {
             placeholder="Search..."
             className="pl-10 w-64 bg-slate-50 border-slate-200"
           />
+        </div>
+
+        {/* Punch Widget */}
+        <div className="hidden md:block">
+          <PunchWidget compact={true} />
         </div>
 
         {/* Role Switcher (Demo) */}

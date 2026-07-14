@@ -25,7 +25,6 @@ import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { SubOpsPortalPanel } from '@/components/panels/SubOpsPortalPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -123,7 +122,6 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
           <h2 className="text-xl font-bold">Operations Overview</h2>
           <p className="text-sm text-muted-foreground">Monitor and manage daily operations</p>
         </div>
-        <PunchWidget />
       </div>
 
       {/* Top Filters */}

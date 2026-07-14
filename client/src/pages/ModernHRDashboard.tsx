@@ -27,7 +27,6 @@ import { TasksPanel } from '@/components/panels/TasksPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
-import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { HRSettingsPanel } from '@/components/attendance/HRSettingsPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { SalaryConfigPanel } from '@/components/panels/SalaryConfigPanel';
@@ -52,7 +51,6 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
         <OverviewContent 
           metrics={metrics} 
           onNavigate={setActiveTab} 
-          punchWidget={<PunchWidget />} 
         />
       );
       case 'users': return <HRUsersPanel />;
