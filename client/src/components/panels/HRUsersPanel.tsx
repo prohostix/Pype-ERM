@@ -145,7 +145,7 @@ export function HRUsersPanel() {
       const allUsers = response.data.data || response.data || [];
       // Exclude top-level admin roles — everyone else is headcount
       const staffUsers = allUsers.filter((user: User) =>
-        !['ceo', 'org_admin', 'superadmin'].includes(user.role)
+        !['ceo', 'org_admin', 'superadmin', 'student'].includes(user.role)
       );
       setUsers(staffUsers);
     } catch (error) {
