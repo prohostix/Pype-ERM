@@ -500,7 +500,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         email: s.email || '',
         phone: (s.phone || '').toString(),
         address: s.address || '',
-        enrollmentNo: (s.enrollmentno || s.enrollmentNo || s.enrollment_no || s['enrollment no'] || s['enrollment no.'] || s['enrollmentno.'] || s.enrollment || s.enrollmentnumber || s['enrollment number'] || s.enrollno || s['enroll no'] || s.enrollnumber || s['enroll number'] || s.regno || s.reg_no || s['reg no'] || s.registration || s.registration_no || s['registration no'] || '').toString().trim(),
+        enrollmentNo: (s.enrollmentno || s.enrollmentNo || s.enrollment_no || s['enrollment no'] || s['enrollment no.'] || s['enrollmentno.'] || s.enrollment || s.entrollment || s.entrollmentno || s.entrollment_no || s.enrollmentnumber || s['enrollment number'] || s.enrollno || s['enroll no'] || s.enrollnumber || s['enroll number'] || s.regno || s.reg_no || s['reg no'] || s.registration || s.registration_no || s['registration no'] || '').toString().trim(),
         programId: resolvedProgramId,
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
         ...(dob ? { dob: dob.toString() } : {}),
