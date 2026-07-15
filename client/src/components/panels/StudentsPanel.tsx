@@ -473,7 +473,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         if (!matchedProgram && rowUnivName) {
           matchedProgram = programs.find(p => 
             p.name.toLowerCase() === rowProgramName && 
-            (typeof p.universityId === 'object' ? p.universityId?.name?.toLowerCase()?.includes(rowUnivName) : false)
+            (p.university?.name?.toLowerCase()?.includes(rowUnivName) ?? false)
           );
         }
         
