@@ -130,13 +130,12 @@ export const updateDesignation = asyncHandler(async (req: AuthRequest, res: Resp
     res.status(404).json({ success: false, message: 'Designation not found' });
     return;
   }
-  const { title, description, level, maxOccupants, allowedDeptIds, allowedBranchIds, parentId, departmentId, subDepartmentId, branchId } = req.body;
+  const { title, level, maxHeadcount, allowedDeptIds, allowedBranchIds, parentDesignationId, departmentId, subDepartmentId, branchId } = req.body;
   const updateData: any = {};
   if (title !== undefined) updateData.title = title;
-  if (description !== undefined) updateData.description = description;
   if (level !== undefined) updateData.level = Number(level);
-  if (maxOccupants !== undefined) updateData.maxOccupants = Number(maxOccupants);
-  if (parentId !== undefined) updateData.parentId = parentId;
+  if (maxHeadcount !== undefined) updateData.maxHeadcount = Number(maxHeadcount);
+  if (parentDesignationId !== undefined) updateData.parentDesignationId = parentDesignationId;
   if (departmentId !== undefined) updateData.departmentId = departmentId;
   if (subDepartmentId !== undefined) updateData.subDepartmentId = subDepartmentId;
   if (branchId !== undefined) updateData.branchId = branchId;
