@@ -339,7 +339,6 @@ export function VacanciesPanel() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="employee">Employee</SelectItem>
-                  <SelectItem value="staff">Staff</SelectItem>
                 </SelectContent>
               </Select>
             </div>

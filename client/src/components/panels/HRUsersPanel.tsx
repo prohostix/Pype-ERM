@@ -536,7 +536,7 @@ export function HRUsersPanel() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="staff">Employee / Staff</SelectItem>
+                    <SelectItem value="employee">Employee / Staff</SelectItem>
                     <SelectItem value="hr_admin">HR Admin</SelectItem>
                     <SelectItem value="finance_admin">Finance Admin</SelectItem>
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
@@ -963,7 +963,7 @@ export function HRUsersPanel() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="staff">Employee / Staff</SelectItem>
+                  <SelectItem value="employee">Employee / Staff</SelectItem>
                   <SelectItem value="hr_admin">HR Admin</SelectItem>
                   <SelectItem value="finance_admin">Finance Admin</SelectItem>
                   <SelectItem value="ops_admin">Operations Admin</SelectItem>
@@ -1001,7 +1001,8 @@ export function HRUsersPanel() {
                 variant="outline"
                 onClick={() => {
                   setPromotionDialogOpen(false);
-                  setPromotionData({ newDesignation: '', newRole: 'staff', reportingTo: '', type: 'promotion' });
+                  setPromotionData({ newDesignation: '', newRole: 'employee', reportingTo: '', type: 'promotion' });
+                  setSelectedUser(null);
                 }}
               >
                 Cancel

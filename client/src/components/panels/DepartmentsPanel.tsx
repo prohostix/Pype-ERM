@@ -354,7 +354,7 @@ export function DepartmentsPanel() {
                     <SelectItem value="ceo">CEO</SelectItem>
                     <SelectItem value="org_admin">Org Admin</SelectItem>
                     <SelectItem value="study_center">Study Center</SelectItem>
-                    <SelectItem value="staff">Staff</SelectItem>
+                    <SelectItem value="employee">Staff</SelectItem>
                     <SelectItem value="custom">Custom</SelectItem>
                   </SelectContent>
                 </Select>

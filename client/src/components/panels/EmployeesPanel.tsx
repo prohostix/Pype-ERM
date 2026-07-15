@@ -26,7 +26,7 @@ export function EmployeesPanel() {
     phone: '',
     password: '',
     departmentId: '',
-    role: 'staff',
+    role: 'employee',
     designation: '',
     branchId: '',
     status: 'active'
@@ -152,7 +152,7 @@ export function EmployeesPanel() {
       phone: '',
       password: '',
       departmentId: '',
-      role: 'staff',
+      role: 'employee',
       designation: '',
       branchId: '',
       status: 'active'
@@ -218,7 +218,7 @@ export function EmployeesPanel() {
                   <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="staff">Employee / Staff</SelectItem>
+                      <SelectItem value="employee">Employee / Staff</SelectItem>
                       <SelectItem value="hr_admin">HR Admin</SelectItem>
                       <SelectItem value="finance_admin">Finance Admin</SelectItem>
                       <SelectItem value="ops_admin">Operations Admin</SelectItem>
