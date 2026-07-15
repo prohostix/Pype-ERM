@@ -110,8 +110,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
       const address = await reverseGeocode(lat, lng);
       setLocation({ lat, lng, address });
     } catch (err: any) {
-      toast.error('Could not get location. Please enable GPS.');
-      setMapOpen(false);
+      toast.warning('Could not get precise location. Continuing without it.');
+      setLocation({ lat: 0, lng: 0, address: 'Location Unknown (Access Denied/Unavailable)' });
     } finally {
       setLocating(false);
     }
@@ -181,8 +181,8 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
     try {
       const endpoint = punchType === 'in' ? '/attendance/punch-in' : '/attendance/punch-out';
       const res = await api.post(endpoint, {
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: location.lat === 0 ? undefined : location.lat,
+        longitude: location.lng === 0 ? undefined : location.lng,
         address: location.address,
       });
       toast.success(res.data.message || (punchType === 'in' ? 'Punched in!' : 'Punched out!'));

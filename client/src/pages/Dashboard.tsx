@@ -185,7 +185,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
   }
 
   if (user?.role === 'staff') {
-    return <ModernStudentPortal initialTab={initialTab} />;
+    return <ModernEmployeeDashboard initialTab={initialTab} />;
   }
 
   // Fallback for other staff/admin roles

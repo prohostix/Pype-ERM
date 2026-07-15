@@ -327,21 +327,8 @@ function App() {
       ];
     }
 
-    if (user.role === 'staff') {
-      return [
-        { id: 'dashboard', label: 'Overview' },
-        { id: 'notifications', label: 'Notifications' },
-        { id: 'materials', label: 'Classes & Ebooks' },
-        { id: 'fees', label: 'Fee Details' },
-        { id: 'invoices', label: 'Invoices' },
-        { id: 'refer_admission', label: 'Refer Admission' },
-        { id: 'terms', label: 'Terms & Conditions' },
-        { id: 'help', label: 'Help & Support' },
-      ];
-    }
-
     const result = (() => {
-      if (user.role === 'employee') {
+      if (user.role === 'employee' || user.role === 'staff') {
         const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
         if (deptType) {
           if (isSubDeptManager) {
@@ -815,7 +802,7 @@ function App() {
   // For employees with department or sub-department assignments, route to department dashboard
   // Branch managers are excluded — they always get the branch dashboard
   const shouldUseDepartmentDashboard = Boolean(
-    user.role === 'employee' &&
+    (user.role === 'employee' || user.role === 'staff') &&
     !(user as any).branchId &&
     (user.departmentId || (user as any).subDepartmentId) &&
     viewMode === 'dashboard'
