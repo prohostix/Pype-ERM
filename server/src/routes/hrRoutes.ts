@@ -99,15 +99,15 @@ router.route('/attendance/:id')
   .delete(authorize('hr_admin'), deleteAttendance);
 
 // Vacancies
-router.route('/vacancies').get(getVacancies).post(authorize('hr_admin'), createVacancy);
-router.route('/vacancies/stats').get(authorize('hr_admin'), getVacancyStats);
+router.route('/vacancies').get(getVacancies).post(authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), createVacancy);
+router.route('/vacancies/stats').get(authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), getVacancyStats);
 router.route('/vacancies/:id')
   .get(getVacancy)
-  .put(authorize('hr_admin'), updateVacancy)
-  .delete(authorize('hr_admin'), deleteVacancy);
-router.put('/vacancies/:id/close', authorize('hr_admin'), closeVacancy);
-router.get('/vacancies/:id/validate', authorize('hr_admin'), validateVacancyForHiring);
-router.patch('/vacancies/:id/fill', authorize('hr_admin'), fillVacancyPosition);
+  .put(authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), updateVacancy)
+  .delete(authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), deleteVacancy);
+router.put('/vacancies/:id/close', authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), closeVacancy);
+router.get('/vacancies/:id/validate', authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), validateVacancyForHiring);
+router.patch('/vacancies/:id/fill', authorize('hr_admin', 'superadmin', 'org_admin', 'ceo'), fillVacancyPosition);
 
 // Complaints
 router.route('/complaints').get(getComplaints).post(createComplaint);
