@@ -168,23 +168,28 @@ export const getVacancy = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, data: vacancy });
 });
 export const createVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const vacancy = await prisma.vacancy.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const { designation, departmentId, count, status } = req.body;
+  const vacancy = await prisma.vacancy.create({ 
+    data: { 
+      designation,
+      departmentId,
+      count: count ? Number(count) : 1,
+      status: status || 'open',
+      organizationId: req.user.organizationId 
+    } 
+  });
   res.status(201).json({ success: true, data: vacancy });
 });
 export const updateVacancy = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.vacancy.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) { res.status(404).json({ success: false, message: 'Vacancy not found' }); return; }
-  const { title, departmentId, location, type, experience, positions, status, description, requirements } = req.body;
+  
+  const { designation, departmentId, count, status } = req.body;
   const updateData: any = {};
-  if (title !== undefined) updateData.title = title;
+  if (designation !== undefined) updateData.designation = designation;
   if (departmentId !== undefined) updateData.departmentId = departmentId;
-  if (location !== undefined) updateData.location = location;
-  if (type !== undefined) updateData.type = type;
-  if (experience !== undefined) updateData.experience = experience;
-  if (positions !== undefined) updateData.positions = Number(positions);
+  if (count !== undefined) updateData.count = Number(count);
   if (status !== undefined) updateData.status = status;
-  if (description !== undefined) updateData.description = description;
-  if (requirements !== undefined) updateData.requirements = requirements;
   
   const vacancy = await prisma.vacancy.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: vacancy });
