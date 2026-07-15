@@ -12,7 +12,6 @@ import { ModernOrgAdminDashboard } from './ModernOrgAdminDashboard';
 import { ModernStudyCenterDashboard } from './ModernStudyCenterDashboard';
 import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
-import { ModernStudentPortal } from './ModernStudentPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 
 
