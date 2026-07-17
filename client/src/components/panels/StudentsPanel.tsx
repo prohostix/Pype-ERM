@@ -486,7 +486,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const rowProgramName = (s.programme || s.programs || s.program || '').toString().trim().toLowerCase();
       const rowUnivName = (s.university || '').toString().trim().toLowerCase();
 
-      
+      let matchedProgram: any = null;
       if (rowProgramName) {
         let univPrograms = programs;
         if (matchedUniv) {
