@@ -494,6 +494,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         if (matchedUniv) {
           univPrograms = programs.filter(p => p.universityId === matchedUniv.id);
         }
+        
+        const cleanStr = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const cleanRowProg = cleanStr(rowProgramName);
 
         // 1. Try finding by exact code match in scoped programs
         matchedProgram = univPrograms.find(p => p.code?.toLowerCase() === rowProgramName);
@@ -503,7 +506,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           matchedProgram = univPrograms.find(p => p.name.toLowerCase() === rowProgramName);
         }
 
-        // 3. Fallback to global search if univ was not matched
+        // 3. Fuzzy match (ignore punctuation/spaces) in scoped programs
+        if (!matchedProgram) {
+          matchedProgram = univPrograms.find(p => cleanStr(p.name) === cleanRowProg || (p.code && cleanStr(p.code) === cleanRowProg));
+        }
+
+        // 4. Prefix match in scoped programs (e.g., 'mba' matches 'mba (mizoram)')
+        if (!matchedProgram && rowProgramName.length > 1) {
+          matchedProgram = univPrograms.find(p => {
+             const pName = p.name.toLowerCase();
+             return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
+          });
+        }
+
+        // 5. Fallback to global search if univ was not matched
         if (!matchedProgram && rowUnivName && !matchedUniv) {
           matchedProgram = programs.find(p => 
             p.name.toLowerCase() === rowProgramName && 
@@ -511,9 +527,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           );
         }
         
-        // 4. Absolute fallback
+        // 6. Absolute fallbacks
         if (!matchedProgram) {
           matchedProgram = programs.find(p => p.name.toLowerCase() === rowProgramName || p.code?.toLowerCase() === rowProgramName);
+        }
+        if (!matchedProgram) {
+          matchedProgram = programs.find(p => cleanStr(p.name) === cleanRowProg || (p.code && cleanStr(p.code) === cleanRowProg));
+        }
+        if (!matchedProgram && rowProgramName.length > 1) {
+          matchedProgram = programs.find(p => {
+             const pName = p.name.toLowerCase();
+             return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
+          });
         }
       }
       const resolvedProgramId = matchedProgram?.id || '';
