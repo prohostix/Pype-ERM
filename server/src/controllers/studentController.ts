@@ -214,8 +214,8 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
   if ('branchId' in dataToUpdate) {
     dataToUpdate.branchId = (dataToUpdate.branchId && dataToUpdate.branchId.trim() !== '') ? dataToUpdate.branchId : null;
   }
-  if (x27sessionIdx27 in dataToUpdate) {
-    dataToUpdate.sessionId = (dataToUpdate.sessionId && dataToUpdate.sessionId.trim() !== x27x27) ? dataToUpdate.sessionId : null;
+  if ('sessionId' in dataToUpdate) {
+    dataToUpdate.sessionId = (dataToUpdate.sessionId && dataToUpdate.sessionId.trim() !== '') ? dataToUpdate.sessionId : null;
   }
 
   if ('universityId' in dataToUpdate) {
