@@ -22,6 +22,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
   const [centers, setCenters] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewingProfileStudent, setViewingProfileStudent] = useState<any>(null);
@@ -121,6 +122,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     branchId: '',
     universityId: '',
     programId: '',
+    sessionId: '',
     enrollmentNo: '',
     admissionNo: '',
     admissionDate: '',
@@ -198,6 +200,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     fetchPrograms();
     fetchCenters();
     fetchUniversities();
+    fetchSessions();
     fetchSalesUsers();
   }, [user]);
 
@@ -228,6 +231,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       setUniversities(response.data.data || []);
     } catch (error) {
       console.error('Failed to fetch universities:', error);
+    }
+  };
+
+  const fetchSessions = async () => {
+    try {
+      const response = await api.get('/operations/sessions');
+      setSessions(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch sessions:', error);
     }
   };
 
@@ -288,6 +300,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     const programId = typeof student.programId === 'object' ? student.programId?.id : student.programId;
     const centerId = typeof student.centerId === 'object' ? student.centerId?.id : student.centerId;
     const branchId = typeof student.branchId === 'object' ? student.branchId?.id : student.branchId;
+    const sessionId = typeof student.sessionId === 'object' ? student.sessionId?.id : student.sessionId;
 
     // universityId can be directly on student OR inherited from the populated program object
     const universityId =
@@ -303,6 +316,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       branchId: branchId?.toString() || '',
       universityId: universityId?.toString() || '',
       programId: programId?.toString() || '',
+      sessionId: sessionId?.toString() || '',
       enrollmentNo: student.enrollmentNo || '',
       admissionNo: student.admissionNo || '',
       admissionDate: student.admissionDate ? new Date(student.admissionDate).toISOString().split('T')[0] : '',
@@ -1050,22 +1064,36 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     )}
                   </div>
 
-                  {/* Program */}
-                  <div>
-                    <Label className="font-medium">Program *</Label>
-                    <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
-                          <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
-                        ))}
-                        {filteredPrograms.length === 0 && (
-                          <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
-                        )}
-                      </SelectContent>
-                    </Select>
+                  {/* Program & Session */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-medium">Program *</Label>
+                      <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
+                            <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                          ))}
+                          {filteredPrograms.length === 0 && (
+                            <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})}>
+                        <SelectTrigger><SelectValue placeholder="Select session..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__none__">— No Session —</SelectItem>
+                          {sessions.filter((s: any) => s && s.id).map((s: any) => (
+                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   {/* Enrollment & Admission Numbers */}
@@ -1562,22 +1590,36 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             )}
                           </div>
 
-                          {/* Program */}
-                          <div>
-                            <Label className="font-medium">Program *</Label>
-                            <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
-                              <SelectTrigger>
-                                <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
-                                  <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
-                                ))}
-                                {filteredPrograms.length === 0 && (
-                                  <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
-                                )}
-                              </SelectContent>
-                            </Select>
+                          {/* Program & Session */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label className="font-medium">Program *</Label>
+                              <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {filteredPrograms.filter((p: any) => p && p.id).map((p: any) => (
+                                    <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
+                                  ))}
+                                  {filteredPrograms.length === 0 && (
+                                    <div className="px-3 py-2 text-sm text-muted-foreground">No programs found for this university</div>
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})}>
+                                <SelectTrigger><SelectValue placeholder="Select session..." /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="__none__">— No Session —</SelectItem>
+                                  {sessions.filter((s: any) => s && s.id).map((s: any) => (
+                                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
 
                           {/* Enrollment & Admission Numbers */}

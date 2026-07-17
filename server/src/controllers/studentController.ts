@@ -26,7 +26,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 
   const students = await prisma.student.findMany({
     where,
-    include: { enrollments: true, program: true, center: true, university: true, session: true },
+    include: { enrollments: true, program: true, center: true, university: true, session: true, branch: true },
     orderBy: { createdAt: 'desc' }
   });
   res.status(200).json({ success: true, count: students.length, data: students });
@@ -35,7 +35,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
   const student = await prisma.student.findUnique({
     where: { id: req.params.id },
-    include: { enrollments: true, program: true, center: true, university: true, session: true }
+    include: { enrollments: true, program: true, center: true, university: true, session: true, branch: true }
   });
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });
@@ -214,6 +214,10 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
   if ('branchId' in dataToUpdate) {
     dataToUpdate.branchId = (dataToUpdate.branchId && dataToUpdate.branchId.trim() !== '') ? dataToUpdate.branchId : null;
   }
+  if (x27sessionIdx27 in dataToUpdate) {
+    dataToUpdate.sessionId = (dataToUpdate.sessionId && dataToUpdate.sessionId.trim() !== x27x27) ? dataToUpdate.sessionId : null;
+  }
+
   if ('universityId' in dataToUpdate) {
     dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
   }
