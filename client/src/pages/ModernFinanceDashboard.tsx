@@ -5,7 +5,6 @@ import {
   TrendingUp, 
   ArrowUpRight, 
   ArrowDownRight,
-  Clock,
   AlertCircle,
   AlertTriangle,
   CheckCircle,
