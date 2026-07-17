@@ -55,6 +55,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
   const [bulkErrors, setBulkErrors] = useState<string[]>([]);
+  const [bulkUniversityId, setBulkUniversityId] = useState<string>('');
 
   // Notification Dialog State
   const [notifDialogOpen, setNotifDialogOpen] = useState(false);
@@ -472,22 +473,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       return;
     }
 
+    if (!bulkUniversityId) {
+      toast.error('Please select a University from the dropdown before importing.');
+      return;
+    }
+
+    const matchedUniv = universities.find(u => u.id === bulkUniversityId) || null;
+
     // Build payload — all data comes from the Excel/CSV file
     const studentPayload = parsedStudents.map(s => {
       // Match program by code first, then by name combined with university name if provided, then by name alone.
       const rowProgramName = (s.programme || s.programs || s.program || '').toString().trim().toLowerCase();
       const rowUnivName = (s.university || '').toString().trim().toLowerCase();
-      
-      let matchedProgram = null;
-      let matchedUniv = null;
 
-      if (rowUnivName) {
-        matchedUniv = universities.find(u => 
-          u.name.toLowerCase().includes(rowUnivName) || 
-          (u.code && u.code.toLowerCase() === rowUnivName) ||
-          (u.shortName && u.shortName.toLowerCase() === rowUnivName)
-        );
-      }
       
       if (rowProgramName) {
         let univPrograms = programs;
@@ -2154,6 +2152,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
               <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="bulkUniversitySelect" className="text-sm font-semibold">Select Target University *</Label>
+              <Select value={bulkUniversityId} onValueChange={setBulkUniversityId}>
+                <SelectTrigger id="bulkUniversitySelect" className="w-full">
+                  <SelectValue placeholder="Choose university for these students..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {universities.filter(u => u && u.id).map((u) => (
+                    <SelectItem key={u.id} value={u.id}>
+                      {u.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {branches.length > 0 && (
