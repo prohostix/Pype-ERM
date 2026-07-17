@@ -7893,6 +7893,7 @@ export namespace Prisma {
    */
 
   export type UniversityCountOutputType = {
+    students: number
     admissionSessions: number
     programs: number
     authFees: number
@@ -7906,6 +7907,7 @@ export namespace Prisma {
   }
 
   export type UniversityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | UniversityCountOutputTypeCountStudentsArgs
     admissionSessions?: boolean | UniversityCountOutputTypeCountAdmissionSessionsArgs
     programs?: boolean | UniversityCountOutputTypeCountProgramsArgs
     authFees?: boolean | UniversityCountOutputTypeCountAuthFeesArgs
@@ -7927,6 +7929,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the UniversityCountOutputType
      */
     select?: UniversityCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UniversityCountOutputType without action
+   */
+  export type UniversityCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentWhereInput
   }
 
   /**
@@ -8555,11 +8564,13 @@ export namespace Prisma {
    */
 
   export type AdmissionSessionCountOutputType = {
+    students: number
     enrollments: number
     feeStructures: number
   }
 
   export type AdmissionSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | AdmissionSessionCountOutputTypeCountStudentsArgs
     enrollments?: boolean | AdmissionSessionCountOutputTypeCountEnrollmentsArgs
     feeStructures?: boolean | AdmissionSessionCountOutputTypeCountFeeStructuresArgs
   }
@@ -8573,6 +8584,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the AdmissionSessionCountOutputType
      */
     select?: AdmissionSessionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdmissionSessionCountOutputType without action
+   */
+  export type AdmissionSessionCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentWhereInput
   }
 
   /**
@@ -21591,6 +21609,7 @@ export namespace Prisma {
     contact?: boolean
     country?: boolean
     status?: boolean
+    students?: boolean | University$studentsArgs<ExtArgs>
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     programs?: boolean | University$programsArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -21645,6 +21664,7 @@ export namespace Prisma {
 
   export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status", ExtArgs["result"]["university"]>
   export type UniversityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | University$studentsArgs<ExtArgs>
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     programs?: boolean | University$programsArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -21668,6 +21688,7 @@ export namespace Prisma {
   export type $UniversityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "University"
     objects: {
+      students: Prisma.$StudentPayload<ExtArgs>[]
       admissionSessions: Prisma.$AdmissionSessionPayload<ExtArgs>[]
       programs: Prisma.$ProgramPayload<ExtArgs>[]
       organization: Prisma.$OrganizationPayload<ExtArgs>
@@ -22084,6 +22105,7 @@ export namespace Prisma {
    */
   export interface Prisma__UniversityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    students<T extends University$studentsArgs<ExtArgs> = {}>(args?: Subset<T, University$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     admissionSessions<T extends University$admissionSessionsArgs<ExtArgs> = {}>(args?: Subset<T, University$admissionSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programs<T extends University$programsArgs<ExtArgs> = {}>(args?: Subset<T, University$programsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -22531,6 +22553,30 @@ export namespace Prisma {
      * Limit how many Universities to delete.
      */
     limit?: number
+  }
+
+  /**
+   * University.students
+   */
+  export type University$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Student
+     */
+    omit?: StudentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null
+    where?: StudentWhereInput
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
+    cursor?: StudentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
   }
 
   /**
@@ -26444,6 +26490,8 @@ export namespace Prisma {
     credentials?: boolean
     admissionProgress?: boolean
     academicProgress?: boolean
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
@@ -26499,6 +26547,8 @@ export namespace Prisma {
     credentials?: boolean
     admissionProgress?: boolean
     academicProgress?: boolean
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26546,6 +26596,8 @@ export namespace Prisma {
     credentials?: boolean
     admissionProgress?: boolean
     academicProgress?: boolean
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26597,6 +26649,8 @@ export namespace Prisma {
 
   export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "centerId" | "branchId" | "organizationId" | "enrollmentNo" | "admissionNo" | "admissionDate" | "name" | "email" | "phone" | "address" | "fatherName" | "motherName" | "fatherPhone" | "motherPhone" | "religion" | "caste" | "dob" | "altPhone" | "pinCode" | "photo" | "programId" | "universityId" | "sessionId" | "status" | "joinDate" | "enrolledAt" | "reregStatus" | "createdAt" | "updatedAt" | "referredBy" | "enrolledBy" | "documents" | "isPrevious" | "credentials" | "admissionProgress" | "academicProgress", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     enrollments?: boolean | Student$enrollmentsArgs<ExtArgs>
     internalMarks?: boolean | Student$internalMarksArgs<ExtArgs>
     invoices?: boolean | Student$invoicesArgs<ExtArgs>
@@ -26614,6 +26668,8 @@ export namespace Prisma {
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26623,6 +26679,8 @@ export namespace Prisma {
     enrolledByUser?: boolean | Student$enrolledByUserArgs<ExtArgs>
   }
   export type StudentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    university?: boolean | Student$universityArgs<ExtArgs>
+    session?: boolean | Student$sessionArgs<ExtArgs>
     center?: boolean | Student$centerArgs<ExtArgs>
     branch?: boolean | Student$branchArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -26635,6 +26693,8 @@ export namespace Prisma {
   export type $StudentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Student"
     objects: {
+      university: Prisma.$UniversityPayload<ExtArgs> | null
+      session: Prisma.$AdmissionSessionPayload<ExtArgs> | null
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       internalMarks: Prisma.$InternalMarkPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
@@ -27082,6 +27142,8 @@ export namespace Prisma {
    */
   export interface Prisma__StudentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    university<T extends Student$universityArgs<ExtArgs> = {}>(args?: Subset<T, Student$universityArgs<ExtArgs>>): Prisma__UniversityClient<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    session<T extends Student$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Student$sessionArgs<ExtArgs>>): Prisma__AdmissionSessionClient<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     enrollments<T extends Student$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Student$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     internalMarks<T extends Student$internalMarksArgs<ExtArgs> = {}>(args?: Subset<T, Student$internalMarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InternalMarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Student$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Student$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -27560,6 +27622,44 @@ export namespace Prisma {
      * Limit how many Students to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Student.university
+   */
+  export type Student$universityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the University
+     */
+    select?: UniversitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the University
+     */
+    omit?: UniversityOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UniversityInclude<ExtArgs> | null
+    where?: UniversityWhereInput
+  }
+
+  /**
+   * Student.session
+   */
+  export type Student$sessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdmissionSession
+     */
+    select?: AdmissionSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdmissionSession
+     */
+    omit?: AdmissionSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdmissionSessionInclude<ExtArgs> | null
+    where?: AdmissionSessionWhereInput
   }
 
   /**
@@ -45731,6 +45831,7 @@ export namespace Prisma {
     branchIds?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    students?: boolean | AdmissionSession$studentsArgs<ExtArgs>
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
     creator?: boolean | AdmissionSession$creatorArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -45822,6 +45923,7 @@ export namespace Prisma {
 
   export type AdmissionSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "startDate" | "endDate" | "status" | "programId" | "universityId" | "studyCenterId" | "capacity" | "createdBy" | "approvedBy" | "approvedAt" | "subDepartmentId" | "subDepartmentIds" | "branchIds" | "createdAt" | "updatedAt", ExtArgs["result"]["admissionSession"]>
   export type AdmissionSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | AdmissionSession$studentsArgs<ExtArgs>
     approver?: boolean | AdmissionSession$approverArgs<ExtArgs>
     creator?: boolean | AdmissionSession$creatorArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -45855,6 +45957,7 @@ export namespace Prisma {
   export type $AdmissionSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AdmissionSession"
     objects: {
+      students: Prisma.$StudentPayload<ExtArgs>[]
       approver: Prisma.$UserPayload<ExtArgs> | null
       creator: Prisma.$UserPayload<ExtArgs> | null
       organization: Prisma.$OrganizationPayload<ExtArgs>
@@ -46278,6 +46381,7 @@ export namespace Prisma {
    */
   export interface Prisma__AdmissionSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    students<T extends AdmissionSession$studentsArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approver<T extends AdmissionSession$approverArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$approverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     creator<T extends AdmissionSession$creatorArgs<ExtArgs> = {}>(args?: Subset<T, AdmissionSession$creatorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -46732,6 +46836,30 @@ export namespace Prisma {
      * Limit how many AdmissionSessions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * AdmissionSession.students
+   */
+  export type AdmissionSession$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student
+     */
+    select?: StudentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Student
+     */
+    omit?: StudentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentInclude<ExtArgs> | null
+    where?: StudentWhereInput
+    orderBy?: StudentOrderByWithRelationInput | StudentOrderByWithRelationInput[]
+    cursor?: StudentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentScalarFieldEnum | StudentScalarFieldEnum[]
   }
 
   /**
@@ -90796,6 +90924,7 @@ export namespace Prisma {
     contact?: StringNullableFilter<"University"> | string | null
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
+    students?: StudentListRelationFilter
     admissionSessions?: AdmissionSessionListRelationFilter
     programs?: ProgramListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -90819,6 +90948,7 @@ export namespace Prisma {
     contact?: SortOrderInput | SortOrder
     country?: SortOrderInput | SortOrder
     status?: SortOrder
+    students?: StudentOrderByRelationAggregateInput
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     programs?: ProgramOrderByRelationAggregateInput
     organization?: OrganizationOrderByWithRelationInput
@@ -90846,6 +90976,7 @@ export namespace Prisma {
     contact?: StringNullableFilter<"University"> | string | null
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
+    students?: StudentListRelationFilter
     admissionSessions?: AdmissionSessionListRelationFilter
     programs?: ProgramListRelationFilter
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -91267,6 +91398,8 @@ export namespace Prisma {
     credentials?: JsonNullableFilter<"Student">
     admissionProgress?: JsonNullableFilter<"Student">
     academicProgress?: JsonNullableFilter<"Student">
+    university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
+    session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -91321,6 +91454,8 @@ export namespace Prisma {
     credentials?: SortOrderInput | SortOrder
     admissionProgress?: SortOrderInput | SortOrder
     academicProgress?: SortOrderInput | SortOrder
+    university?: UniversityOrderByWithRelationInput
+    session?: AdmissionSessionOrderByWithRelationInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
     internalMarks?: InternalMarkOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
@@ -91378,6 +91513,8 @@ export namespace Prisma {
     credentials?: JsonNullableFilter<"Student">
     admissionProgress?: JsonNullableFilter<"Student">
     academicProgress?: JsonNullableFilter<"Student">
+    university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
+    session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     enrollments?: EnrollmentListRelationFilter
     internalMarks?: InternalMarkListRelationFilter
     invoices?: InvoiceListRelationFilter
@@ -93004,6 +93141,7 @@ export namespace Prisma {
     branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionSession"> | Date | string
+    students?: StudentListRelationFilter
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     creator?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -93034,6 +93172,7 @@ export namespace Prisma {
     branchIds?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    students?: StudentOrderByRelationAggregateInput
     approver?: UserOrderByWithRelationInput
     creator?: UserOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
@@ -93067,6 +93206,7 @@ export namespace Prisma {
     branchIds?: StringNullableListFilter<"AdmissionSession">
     createdAt?: DateTimeFilter<"AdmissionSession"> | Date | string
     updatedAt?: DateTimeFilter<"AdmissionSession"> | Date | string
+    students?: StudentListRelationFilter
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     creator?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -97868,6 +98008,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -97891,6 +98032,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -97912,6 +98054,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -97935,6 +98078,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -98398,8 +98542,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -98411,6 +98553,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -98492,8 +98636,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -98505,6 +98647,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -98626,8 +98770,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -100307,6 +100449,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -100337,6 +100480,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -100353,6 +100497,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -100383,6 +100528,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -105652,6 +105798,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type AdmissionSessionNullableScalarRelationFilter = {
+    is?: AdmissionSessionWhereInput | null
+    isNot?: AdmissionSessionWhereInput | null
+  }
+
   export type ProgramScalarRelationFilter = {
     is?: ProgramWhereInput
     isNot?: ProgramWhereInput
@@ -106765,11 +106916,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type AdmissionSessionNullableScalarRelationFilter = {
-    is?: AdmissionSessionWhereInput | null
-    isNot?: AdmissionSessionWhereInput | null
   }
 
   export type EnrollmentPaymentNullableScalarRelationFilter = {
@@ -114865,6 +115011,13 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutAttendancesInput, OrganizationUpdateWithoutAttendancesInput>, OrganizationUncheckedUpdateWithoutAttendancesInput>
   }
 
+  export type StudentCreateNestedManyWithoutUniversityInput = {
+    create?: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput> | StudentCreateWithoutUniversityInput[] | StudentUncheckedCreateWithoutUniversityInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutUniversityInput | StudentCreateOrConnectWithoutUniversityInput[]
+    createMany?: StudentCreateManyUniversityInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
   export type AdmissionSessionCreateNestedManyWithoutUniversityInput = {
     create?: XOR<AdmissionSessionCreateWithoutUniversityInput, AdmissionSessionUncheckedCreateWithoutUniversityInput> | AdmissionSessionCreateWithoutUniversityInput[] | AdmissionSessionUncheckedCreateWithoutUniversityInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutUniversityInput | AdmissionSessionCreateOrConnectWithoutUniversityInput[]
@@ -114938,6 +115091,13 @@ export namespace Prisma {
     connect?: UniversityPaymentWhereUniqueInput | UniversityPaymentWhereUniqueInput[]
   }
 
+  export type StudentUncheckedCreateNestedManyWithoutUniversityInput = {
+    create?: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput> | StudentCreateWithoutUniversityInput[] | StudentUncheckedCreateWithoutUniversityInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutUniversityInput | StudentCreateOrConnectWithoutUniversityInput[]
+    createMany?: StudentCreateManyUniversityInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput = {
     create?: XOR<AdmissionSessionCreateWithoutUniversityInput, AdmissionSessionUncheckedCreateWithoutUniversityInput> | AdmissionSessionCreateWithoutUniversityInput[] | AdmissionSessionUncheckedCreateWithoutUniversityInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutUniversityInput | AdmissionSessionCreateOrConnectWithoutUniversityInput[]
@@ -115003,6 +115163,20 @@ export namespace Prisma {
     connectOrCreate?: UniversityPaymentCreateOrConnectWithoutUniversityInput | UniversityPaymentCreateOrConnectWithoutUniversityInput[]
     createMany?: UniversityPaymentCreateManyUniversityInputEnvelope
     connect?: UniversityPaymentWhereUniqueInput | UniversityPaymentWhereUniqueInput[]
+  }
+
+  export type StudentUpdateManyWithoutUniversityNestedInput = {
+    create?: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput> | StudentCreateWithoutUniversityInput[] | StudentUncheckedCreateWithoutUniversityInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutUniversityInput | StudentCreateOrConnectWithoutUniversityInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutUniversityInput | StudentUpsertWithWhereUniqueWithoutUniversityInput[]
+    createMany?: StudentCreateManyUniversityInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutUniversityInput | StudentUpdateWithWhereUniqueWithoutUniversityInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutUniversityInput | StudentUpdateManyWithWhereWithoutUniversityInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
   export type AdmissionSessionUpdateManyWithoutUniversityNestedInput = {
@@ -115148,6 +115322,20 @@ export namespace Prisma {
     update?: UniversityPaymentUpdateWithWhereUniqueWithoutUniversityInput | UniversityPaymentUpdateWithWhereUniqueWithoutUniversityInput[]
     updateMany?: UniversityPaymentUpdateManyWithWhereWithoutUniversityInput | UniversityPaymentUpdateManyWithWhereWithoutUniversityInput[]
     deleteMany?: UniversityPaymentScalarWhereInput | UniversityPaymentScalarWhereInput[]
+  }
+
+  export type StudentUncheckedUpdateManyWithoutUniversityNestedInput = {
+    create?: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput> | StudentCreateWithoutUniversityInput[] | StudentUncheckedCreateWithoutUniversityInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutUniversityInput | StudentCreateOrConnectWithoutUniversityInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutUniversityInput | StudentUpsertWithWhereUniqueWithoutUniversityInput[]
+    createMany?: StudentCreateManyUniversityInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutUniversityInput | StudentUpdateWithWhereUniqueWithoutUniversityInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutUniversityInput | StudentUpdateManyWithWhereWithoutUniversityInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
   export type AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput = {
@@ -116386,6 +116574,18 @@ export namespace Prisma {
     deleteMany?: UniversityScalarWhereInput | UniversityScalarWhereInput[]
   }
 
+  export type UniversityCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<UniversityCreateWithoutStudentsInput, UniversityUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: UniversityCreateOrConnectWithoutStudentsInput
+    connect?: UniversityWhereUniqueInput
+  }
+
+  export type AdmissionSessionCreateNestedOneWithoutStudentsInput = {
+    create?: XOR<AdmissionSessionCreateWithoutStudentsInput, AdmissionSessionUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: AdmissionSessionCreateOrConnectWithoutStudentsInput
+    connect?: AdmissionSessionWhereUniqueInput
+  }
+
   export type EnrollmentCreateNestedManyWithoutStudentInput = {
     create?: XOR<EnrollmentCreateWithoutStudentInput, EnrollmentUncheckedCreateWithoutStudentInput> | EnrollmentCreateWithoutStudentInput[] | EnrollmentUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutStudentInput | EnrollmentCreateOrConnectWithoutStudentInput[]
@@ -116524,6 +116724,26 @@ export namespace Prisma {
     connectOrCreate?: UniversityPaymentCreateOrConnectWithoutStudentInput | UniversityPaymentCreateOrConnectWithoutStudentInput[]
     createMany?: UniversityPaymentCreateManyStudentInputEnvelope
     connect?: UniversityPaymentWhereUniqueInput | UniversityPaymentWhereUniqueInput[]
+  }
+
+  export type UniversityUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<UniversityCreateWithoutStudentsInput, UniversityUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: UniversityCreateOrConnectWithoutStudentsInput
+    upsert?: UniversityUpsertWithoutStudentsInput
+    disconnect?: UniversityWhereInput | boolean
+    delete?: UniversityWhereInput | boolean
+    connect?: UniversityWhereUniqueInput
+    update?: XOR<XOR<UniversityUpdateToOneWithWhereWithoutStudentsInput, UniversityUpdateWithoutStudentsInput>, UniversityUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type AdmissionSessionUpdateOneWithoutStudentsNestedInput = {
+    create?: XOR<AdmissionSessionCreateWithoutStudentsInput, AdmissionSessionUncheckedCreateWithoutStudentsInput>
+    connectOrCreate?: AdmissionSessionCreateOrConnectWithoutStudentsInput
+    upsert?: AdmissionSessionUpsertWithoutStudentsInput
+    disconnect?: AdmissionSessionWhereInput | boolean
+    delete?: AdmissionSessionWhereInput | boolean
+    connect?: AdmissionSessionWhereUniqueInput
+    update?: XOR<XOR<AdmissionSessionUpdateToOneWithWhereWithoutStudentsInput, AdmissionSessionUpdateWithoutStudentsInput>, AdmissionSessionUncheckedUpdateWithoutStudentsInput>
   }
 
   export type EnrollmentUpdateManyWithoutStudentNestedInput = {
@@ -118070,6 +118290,13 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type StudentCreateNestedManyWithoutSessionInput = {
+    create?: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput> | StudentCreateWithoutSessionInput[] | StudentUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutSessionInput | StudentCreateOrConnectWithoutSessionInput[]
+    createMany?: StudentCreateManySessionInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutApprovedSessionsInput = {
     create?: XOR<UserCreateWithoutApprovedSessionsInput, UserUncheckedCreateWithoutApprovedSessionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutApprovedSessionsInput
@@ -118126,6 +118353,13 @@ export namespace Prisma {
     connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
   }
 
+  export type StudentUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput> | StudentCreateWithoutSessionInput[] | StudentUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutSessionInput | StudentCreateOrConnectWithoutSessionInput[]
+    createMany?: StudentCreateManySessionInputEnvelope
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutSessionInput = {
     create?: XOR<EnrollmentCreateWithoutSessionInput, EnrollmentUncheckedCreateWithoutSessionInput> | EnrollmentCreateWithoutSessionInput[] | EnrollmentUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSessionInput | EnrollmentCreateOrConnectWithoutSessionInput[]
@@ -118156,6 +118390,20 @@ export namespace Prisma {
   export type AdmissionSessionUpdatebranchIdsInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type StudentUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput> | StudentCreateWithoutSessionInput[] | StudentUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutSessionInput | StudentCreateOrConnectWithoutSessionInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutSessionInput | StudentUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: StudentCreateManySessionInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutSessionInput | StudentUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutSessionInput | StudentUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
   export type UserUpdateOneWithoutApprovedSessionsNestedInput = {
@@ -118252,6 +118500,20 @@ export namespace Prisma {
     update?: FeeStructureUpdateWithWhereUniqueWithoutSessionInput | FeeStructureUpdateWithWhereUniqueWithoutSessionInput[]
     updateMany?: FeeStructureUpdateManyWithWhereWithoutSessionInput | FeeStructureUpdateManyWithWhereWithoutSessionInput[]
     deleteMany?: FeeStructureScalarWhereInput | FeeStructureScalarWhereInput[]
+  }
+
+  export type StudentUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput> | StudentCreateWithoutSessionInput[] | StudentUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: StudentCreateOrConnectWithoutSessionInput | StudentCreateOrConnectWithoutSessionInput[]
+    upsert?: StudentUpsertWithWhereUniqueWithoutSessionInput | StudentUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: StudentCreateManySessionInputEnvelope
+    set?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    disconnect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    delete?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    connect?: StudentWhereUniqueInput | StudentWhereUniqueInput[]
+    update?: StudentUpdateWithWhereUniqueWithoutSessionInput | StudentUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: StudentUpdateManyWithWhereWithoutSessionInput | StudentUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutSessionNestedInput = {
@@ -120723,6 +120985,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     program?: ProgramCreateNestedOneWithoutAdmissionSessionsInput
@@ -120751,6 +121014,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -122403,8 +122667,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -122416,6 +122678,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -122802,6 +123066,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeCreateNestedManyWithoutUniversityInput
@@ -122823,6 +123088,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -127524,6 +127790,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
     program?: ProgramCreateNestedOneWithoutAdmissionSessionsInput
@@ -127552,6 +127819,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -127578,6 +127846,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
     program?: ProgramCreateNestedOneWithoutAdmissionSessionsInput
@@ -127606,6 +127875,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -130078,8 +130348,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -130091,6 +130359,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -130175,8 +130445,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -130188,6 +130456,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -130277,8 +130547,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -130290,6 +130558,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -131768,6 +132038,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -131790,6 +132061,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -133081,8 +133353,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -133094,6 +133364,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -134001,6 +134273,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -134023,6 +134296,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -137222,6 +137496,108 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
+  export type StudentCreateWithoutUniversityInput = {
+    id?: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    enrolledByUser?: UserCreateNestedOneWithoutEnrolledStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutUniversityInput = {
+    id?: string
+    centerId?: string | null
+    branchId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    enrolledBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutUniversityInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput>
+  }
+
+  export type StudentCreateManyUniversityInputEnvelope = {
+    data: StudentCreateManyUniversityInput | StudentCreateManyUniversityInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AdmissionSessionCreateWithoutUniversityInput = {
     id?: string
     name: string
@@ -137234,6 +137610,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -137262,6 +137639,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -138014,6 +138392,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentUpsertWithWhereUniqueWithoutUniversityInput = {
+    where: StudentWhereUniqueInput
+    update: XOR<StudentUpdateWithoutUniversityInput, StudentUncheckedUpdateWithoutUniversityInput>
+    create: XOR<StudentCreateWithoutUniversityInput, StudentUncheckedCreateWithoutUniversityInput>
+  }
+
+  export type StudentUpdateWithWhereUniqueWithoutUniversityInput = {
+    where: StudentWhereUniqueInput
+    data: XOR<StudentUpdateWithoutUniversityInput, StudentUncheckedUpdateWithoutUniversityInput>
+  }
+
+  export type StudentUpdateManyWithWhereWithoutUniversityInput = {
+    where: StudentScalarWhereInput
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutUniversityInput>
+  }
+
   export type AdmissionSessionUpsertWithWhereUniqueWithoutUniversityInput = {
     where: AdmissionSessionWhereUniqueInput
     update: XOR<AdmissionSessionUpdateWithoutUniversityInput, AdmissionSessionUncheckedUpdateWithoutUniversityInput>
@@ -138337,6 +138731,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -138365,6 +138760,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -138665,6 +139061,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
     authFees?: UniversityAuthFeeCreateNestedManyWithoutUniversityInput
@@ -138687,6 +139084,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
     admins?: UserUncheckedCreateNestedManyWithoutUniversityInput
@@ -138781,8 +139179,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -138794,6 +139190,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -139250,6 +139648,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
     authFees?: UniversityAuthFeeUpdateManyWithoutUniversityNestedInput
@@ -139272,6 +139671,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
     admins?: UserUncheckedUpdateManyWithoutUniversityNestedInput
@@ -139391,6 +139791,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -139419,6 +139820,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -139707,8 +140109,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -139720,6 +140120,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -140951,6 +141353,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -140973,6 +141376,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -142026,6 +142430,106 @@ export namespace Prisma {
   export type UniversityUpdateManyWithWhereWithoutStudyCentersInput = {
     where: UniversityScalarWhereInput
     data: XOR<UniversityUpdateManyMutationInput, UniversityUncheckedUpdateManyWithoutStudyCentersInput>
+  }
+
+  export type UniversityCreateWithoutStudentsInput = {
+    id?: string
+    subDepartmentId?: string | null
+    name: string
+    code: string
+    address?: string | null
+    contact?: string | null
+    country?: string | null
+    status?: string
+    admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
+    programs?: ProgramCreateNestedManyWithoutUniversityInput
+    organization: OrganizationCreateNestedOneWithoutUniversitiesInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutUniversityInput
+    admins?: UserCreateNestedManyWithoutUniversityInput
+    assignedSubDepts?: SubDepartmentCreateNestedManyWithoutAssignedUniversitiesInput
+    allowedBranches?: BranchCreateNestedManyWithoutUniversitiesInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutAssociatedUniversitiesInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutUniversityInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutUniversityInput
+  }
+
+  export type UniversityUncheckedCreateWithoutStudentsInput = {
+    id?: string
+    organizationId: string
+    subDepartmentId?: string | null
+    name: string
+    code: string
+    address?: string | null
+    contact?: string | null
+    country?: string | null
+    status?: string
+    admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
+    admins?: UserUncheckedCreateNestedManyWithoutUniversityInput
+    assignedSubDepts?: SubDepartmentUncheckedCreateNestedManyWithoutAssignedUniversitiesInput
+    allowedBranches?: BranchUncheckedCreateNestedManyWithoutUniversitiesInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutAssociatedUniversitiesInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutUniversityInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutUniversityInput
+  }
+
+  export type UniversityCreateOrConnectWithoutStudentsInput = {
+    where: UniversityWhereUniqueInput
+    create: XOR<UniversityCreateWithoutStudentsInput, UniversityUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type AdmissionSessionCreateWithoutStudentsInput = {
+    id?: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    capacity?: number | null
+    approvedAt?: Date | string | null
+    subDepartmentIds?: AdmissionSessionCreatesubDepartmentIdsInput | string[]
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approver?: UserCreateNestedOneWithoutApprovedSessionsInput
+    creator?: UserCreateNestedOneWithoutCreatedSessionsInput
+    organization: OrganizationCreateNestedOneWithoutSessionsInput
+    program?: ProgramCreateNestedOneWithoutAdmissionSessionsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutAdmissionSessionsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutAdmissionSessionsInput
+    university?: UniversityCreateNestedOneWithoutAdmissionSessionsInput
+    enrollments?: EnrollmentCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutSessionInput
+  }
+
+  export type AdmissionSessionUncheckedCreateWithoutStudentsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    programId?: string | null
+    universityId?: string | null
+    studyCenterId?: string | null
+    capacity?: number | null
+    createdBy?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    subDepartmentId?: string | null
+    subDepartmentIds?: AdmissionSessionCreatesubDepartmentIdsInput | string[]
+    branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type AdmissionSessionCreateOrConnectWithoutStudentsInput = {
+    where: AdmissionSessionWhereUniqueInput
+    create: XOR<AdmissionSessionCreateWithoutStudentsInput, AdmissionSessionUncheckedCreateWithoutStudentsInput>
   }
 
   export type EnrollmentCreateWithoutStudentInput = {
@@ -143275,6 +143779,118 @@ export namespace Prisma {
   export type UniversityPaymentCreateManyStudentInputEnvelope = {
     data: UniversityPaymentCreateManyStudentInput | UniversityPaymentCreateManyStudentInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UniversityUpsertWithoutStudentsInput = {
+    update: XOR<UniversityUpdateWithoutStudentsInput, UniversityUncheckedUpdateWithoutStudentsInput>
+    create: XOR<UniversityCreateWithoutStudentsInput, UniversityUncheckedCreateWithoutStudentsInput>
+    where?: UniversityWhereInput
+  }
+
+  export type UniversityUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: UniversityWhereInput
+    data: XOR<UniversityUpdateWithoutStudentsInput, UniversityUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type UniversityUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
+    programs?: ProgramUpdateManyWithoutUniversityNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutUniversityNestedInput
+    admins?: UserUpdateManyWithoutUniversityNestedInput
+    assignedSubDepts?: SubDepartmentUpdateManyWithoutAssignedUniversitiesNestedInput
+    allowedBranches?: BranchUpdateManyWithoutUniversitiesNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutAssociatedUniversitiesNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutUniversityNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutUniversityNestedInput
+  }
+
+  export type UniversityUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
+    admins?: UserUncheckedUpdateManyWithoutUniversityNestedInput
+    assignedSubDepts?: SubDepartmentUncheckedUpdateManyWithoutAssignedUniversitiesNestedInput
+    allowedBranches?: BranchUncheckedUpdateManyWithoutUniversitiesNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutAssociatedUniversitiesNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutUniversityNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutUniversityNestedInput
+  }
+
+  export type AdmissionSessionUpsertWithoutStudentsInput = {
+    update: XOR<AdmissionSessionUpdateWithoutStudentsInput, AdmissionSessionUncheckedUpdateWithoutStudentsInput>
+    create: XOR<AdmissionSessionCreateWithoutStudentsInput, AdmissionSessionUncheckedCreateWithoutStudentsInput>
+    where?: AdmissionSessionWhereInput
+  }
+
+  export type AdmissionSessionUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: AdmissionSessionWhereInput
+    data: XOR<AdmissionSessionUpdateWithoutStudentsInput, AdmissionSessionUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type AdmissionSessionUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subDepartmentIds?: AdmissionSessionUpdatesubDepartmentIdsInput | string[]
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
+    creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
+    program?: ProgramUpdateOneWithoutAdmissionSessionsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutAdmissionSessionsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutAdmissionSessionsNestedInput
+    university?: UniversityUpdateOneWithoutAdmissionSessionsNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutSessionNestedInput
+  }
+
+  export type AdmissionSessionUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    programId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentIds?: AdmissionSessionUpdatesubDepartmentIdsInput | string[]
+    branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutStudentInput = {
@@ -144622,8 +145238,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -144635,6 +145249,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -145051,8 +145667,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -145064,6 +145678,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -155375,6 +155991,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -155397,6 +156014,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -155431,8 +156049,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -155444,6 +156060,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -156091,6 +156709,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -156119,6 +156738,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
@@ -156939,6 +157559,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -156961,6 +157582,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -158881,6 +159503,108 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
+  export type StudentCreateWithoutSessionInput = {
+    id?: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    enrolledByUser?: UserCreateNestedOneWithoutEnrolledStudentsInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutSessionInput = {
+    id?: string
+    centerId?: string | null
+    branchId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    universityId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    enrolledBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutSessionInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput>
+  }
+
+  export type StudentCreateManySessionInputEnvelope = {
+    data: StudentCreateManySessionInput | StudentCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutApprovedSessionsInput = {
     id?: string
     userId?: string | null
@@ -159620,6 +160344,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
     authFees?: UniversityAuthFeeCreateNestedManyWithoutUniversityInput
@@ -159642,6 +160367,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
     admins?: UserUncheckedCreateNestedManyWithoutUniversityInput
@@ -159788,6 +160514,22 @@ export namespace Prisma {
   export type FeeStructureCreateManySessionInputEnvelope = {
     data: FeeStructureCreateManySessionInput | FeeStructureCreateManySessionInput[]
     skipDuplicates?: boolean
+  }
+
+  export type StudentUpsertWithWhereUniqueWithoutSessionInput = {
+    where: StudentWhereUniqueInput
+    update: XOR<StudentUpdateWithoutSessionInput, StudentUncheckedUpdateWithoutSessionInput>
+    create: XOR<StudentCreateWithoutSessionInput, StudentUncheckedCreateWithoutSessionInput>
+  }
+
+  export type StudentUpdateWithWhereUniqueWithoutSessionInput = {
+    where: StudentWhereUniqueInput
+    data: XOR<StudentUpdateWithoutSessionInput, StudentUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type StudentUpdateManyWithWhereWithoutSessionInput = {
+    where: StudentScalarWhereInput
+    data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutSessionInput>
   }
 
   export type UserUpsertWithoutApprovedSessionsInput = {
@@ -160576,6 +161318,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
     authFees?: UniversityAuthFeeUpdateManyWithoutUniversityNestedInput
@@ -160598,6 +161341,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
     admins?: UserUncheckedUpdateManyWithoutUniversityNestedInput
@@ -161452,6 +162196,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -161481,6 +162226,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutSessionInput
   }
 
@@ -161507,8 +162253,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -161520,6 +162264,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -162755,6 +163501,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -162784,6 +163531,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
 
@@ -162816,8 +163564,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -162829,6 +163575,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -174009,8 +174757,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -174022,6 +174768,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
     center?: StudyCenterCreateNestedOneWithoutStudentsInput
@@ -174566,8 +175314,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -174579,6 +175325,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
     center?: StudyCenterUpdateOneWithoutStudentsNestedInput
@@ -183652,6 +184400,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -183674,6 +184423,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     admins?: UserUncheckedCreateNestedManyWithoutUniversityInput
@@ -184068,6 +184818,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -184090,6 +184841,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     admins?: UserUncheckedUpdateManyWithoutUniversityNestedInput
@@ -184507,6 +185259,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -184529,6 +185282,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -184557,6 +185311,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentCreateNestedManyWithoutSessionInput
     approver?: UserCreateNestedOneWithoutApprovedSessionsInput
     creator?: UserCreateNestedOneWithoutCreatedSessionsInput
     organization: OrganizationCreateNestedOneWithoutSessionsInput
@@ -184586,6 +185341,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionCreatebranchIdsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    students?: StudentUncheckedCreateNestedManyWithoutSessionInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutSessionInput
   }
 
@@ -185029,6 +185785,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -185051,6 +185808,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -185085,6 +185843,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -185114,6 +185873,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
   }
 
@@ -185280,8 +186040,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -185293,6 +186051,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -185368,6 +186128,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -185390,6 +186151,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -185586,8 +186348,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -185599,6 +186359,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -185680,6 +186442,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -185702,6 +186465,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -188188,8 +188952,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -188201,6 +188963,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -188537,8 +189301,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -188550,6 +189312,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -188806,8 +189570,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -188819,6 +189581,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -189303,8 +190067,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -189316,6 +190078,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -190494,8 +191258,6 @@ export namespace Prisma {
     altPhone?: string | null
     pinCode?: string | null
     photo?: string | null
-    universityId?: string | null
-    sessionId?: string | null
     status?: string
     joinDate?: Date | string
     enrolledAt?: Date | string | null
@@ -190507,6 +191269,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
     internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
     invoices?: InvoiceCreateNestedManyWithoutStudentInput
@@ -190582,6 +191346,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     organization: OrganizationCreateNestedOneWithoutUniversitiesInput
@@ -190604,6 +191369,7 @@ export namespace Prisma {
     contact?: string | null
     country?: string | null
     status?: string
+    students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutUniversityInput
@@ -190800,8 +191566,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -190813,6 +191577,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -190894,6 +191660,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -190916,6 +191683,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -191797,6 +192565,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     program?: ProgramUpdateOneWithoutAdmissionSessionsNestedInput
@@ -191825,6 +192594,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -193618,8 +194388,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -193631,6 +194399,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -194086,6 +194856,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUpdateManyWithoutUniversityNestedInput
@@ -194107,6 +194878,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -197063,6 +197835,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
     program?: ProgramUpdateOneWithoutAdmissionSessionsNestedInput
@@ -197091,6 +197864,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -197127,6 +197901,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
     program?: ProgramUpdateOneWithoutAdmissionSessionsNestedInput
@@ -197155,6 +197930,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -199787,8 +200563,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199800,6 +200574,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -199918,8 +200694,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199931,6 +200705,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -201250,6 +202026,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentCreateManyUniversityInput = {
+    id?: string
+    centerId?: string | null
+    branchId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    enrolledBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type AdmissionSessionCreateManyUniversityInput = {
     id?: string
     organizationId: string
@@ -201364,6 +202179,137 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type StudentUpdateWithoutUniversityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    enrolledByUser?: UserUpdateOneWithoutEnrolledStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutUniversityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateManyWithoutUniversityInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type AdmissionSessionUpdateWithoutUniversityInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -201376,6 +202322,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -201404,6 +202351,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -202257,6 +203205,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -202285,6 +203234,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -202554,8 +203504,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -202567,6 +203515,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -203089,6 +204039,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -203117,6 +204068,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -203451,8 +204403,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203464,6 +204414,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -203996,6 +204948,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -204018,6 +204971,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -204985,6 +205939,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -205007,6 +205962,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -205048,8 +206004,6 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
-    universityId?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -205061,6 +206015,8 @@ export namespace Prisma {
     credentials?: NullableJsonNullValueInput | InputJsonValue
     admissionProgress?: NullableJsonNullValueInput | InputJsonValue
     academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
     internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
     invoices?: InvoiceUpdateManyWithoutStudentNestedInput
@@ -205233,6 +206189,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUpdateManyWithoutSessionNestedInput
     approver?: UserUpdateOneWithoutApprovedSessionsNestedInput
     creator?: UserUpdateOneWithoutCreatedSessionsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutSessionsNestedInput
@@ -205261,6 +206218,7 @@ export namespace Prisma {
     branchIds?: AdmissionSessionUpdatebranchIdsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: StudentUncheckedUpdateManyWithoutSessionNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutSessionNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutSessionNestedInput
   }
@@ -205742,6 +206700,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutUniversitiesNestedInput
@@ -205764,6 +206723,7 @@ export namespace Prisma {
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutUniversityNestedInput
@@ -206076,6 +207036,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentCreateManySessionInput = {
+    id?: string
+    centerId?: string | null
+    branchId?: string | null
+    organizationId: string
+    enrollmentNo: string
+    admissionNo?: string | null
+    admissionDate?: Date | string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    fatherName?: string | null
+    motherName?: string | null
+    fatherPhone?: string | null
+    motherPhone?: string | null
+    religion?: string | null
+    caste?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    photo?: string | null
+    programId: string
+    universityId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    enrolledBy?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type EnrollmentCreateManySessionInput = {
     id?: string
     organizationId: string
@@ -206129,6 +207128,137 @@ export namespace Prisma {
     createdBy?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type StudentUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    enrolledByUser?: UserUpdateOneWithoutEnrolledStudentsNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type EnrollmentUpdateWithoutSessionInput = {
