@@ -400,7 +400,6 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         address: 'Mumbai, Maharashtra',
         enrollmentNo: 'PYPEER001',
         programs: 'B.Tech Computer Science',
-        university: 'Delhi University',
         dob: '1999-05-15',
         session: '2024-25',
         admissionDate: '2024-08-01',
@@ -408,10 +407,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       }
     ];
     const worksheet = XLSX.utils.json_to_sheet(templateData, {
-      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'university', 'dob', 'session', 'admissionDate', 'studyCenter']
+      header: ['name', 'email', 'phone', 'address', 'enrollmentNo', 'programs', 'dob', 'session', 'admissionDate', 'studyCenter']
     });
     // Set column widths
-    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 26, 14, 12, 16, 26].map(w => ({ wch: w }));
+    worksheet['!cols'] = [22, 28, 14, 26, 16, 30, 14, 12, 16, 26].map(w => ({ wch: w }));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
     XLSX.writeFile(workbook, 'students_import_template.xlsx');
