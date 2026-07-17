@@ -279,16 +279,20 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
       }
 
       // Resolve program
-      const program = await prisma.program.findFirst({
-        where: {
-          OR: [
-            { id: s.programId },
-            { code: s.programCode },
-            { name: s.programName }
-          ],
-          organizationId
-        }
-      });
+      const programOr: any[] = [];
+      if (s.programId) programOr.push({ id: s.programId });
+      if (s.programCode) programOr.push({ code: s.programCode });
+      if (s.programName) programOr.push({ name: s.programName });
+
+      let program = null;
+      if (programOr.length > 0) {
+        program = await prisma.program.findFirst({
+          where: {
+            OR: programOr,
+            organizationId
+          }
+        });
+      }
       if (!program) {
         results.skipped++;
         results.errors.push(`Program not found for student ${s.name} (${s.email})`);
@@ -298,13 +302,14 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
       // Resolve study center (optional)
       let resolvedCenterId: string | null = null;
       if (s.centerId || s.centerCode || s.centerName) {
+        const centerOr: any[] = [];
+        if (s.centerId) centerOr.push({ id: s.centerId });
+        if (s.centerCode) centerOr.push({ code: s.centerCode });
+        if (s.centerName) centerOr.push({ name: s.centerName });
+
         const center = await prisma.studyCenter.findFirst({
           where: {
-            OR: [
-              { id: s.centerId || undefined },
-              { code: s.centerCode || undefined },
-              { name: s.centerName || undefined }
-            ],
+            OR: centerOr.length > 0 ? centerOr : undefined,
             organizationId
           }
         });
