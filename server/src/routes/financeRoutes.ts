@@ -39,6 +39,7 @@ import {
   getUniversityPayments,
   recordUniversityPayment,
   recordUniversityCommission,
+  getCollectionReport,
 } from '../controllers/financeController.js';
 import {
   getOverdueSchedules,
@@ -144,6 +145,7 @@ router.put('/enrollments/:id/reject', authorize('finance_admin'), rejectFinanceE
 
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin'), getIncomeExpenditureReport);
+router.get('/reports/collections', getCollectionReport);
 
 // Sales users (for target assignment)
 router.get('/sales-users', authorize('finance_admin'), getFinanceSalesUsers);

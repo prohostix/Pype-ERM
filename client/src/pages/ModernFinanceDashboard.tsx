@@ -37,6 +37,7 @@ import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { StudentPaymentsLogPanel } from '@/components/panels/StudentPaymentsLogPanel';
+import { CollectionReportPanel } from '@/components/panels/CollectionReportPanel';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -87,7 +88,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       
       case 'income_expense': return <IncomeExpenditurePanel />;
       case 'profit_loss': return <ProfitLossPanel />;
-      case 'collection_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Collection Report Coming Soon</div>;
+      case 'collection_report': return <CollectionReportPanel />;
       case 'fee_pending_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Fee Pending Report Coming Soon</div>;
       case 'incentive_report': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Report Coming Soon</div>;
       

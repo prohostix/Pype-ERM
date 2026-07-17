@@ -678,3 +678,52 @@ export const recordUniversityPayment = asyncHandler(async (req: AuthRequest, res
 
   res.json({ success: true, data: payment });
 });
+
+// Collection Report
+export const getCollectionReport = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { organizationId } = req.user;
+  const { startDate, endDate, receivedBy } = req.query;
+
+  const where: any = { organizationId };
+
+  if (startDate && endDate) {
+    where.receivedAt = {
+      gte: new Date(startDate as string),
+      lte: new Date(endDate as string)
+    };
+  } else if (startDate) {
+    where.receivedAt = { gte: new Date(startDate as string) };
+  } else if (endDate) {
+    where.receivedAt = { lte: new Date(endDate as string) };
+  }
+
+  if (receivedBy && receivedBy !== 'all') {
+    where.receivedBy = receivedBy as string;
+  }
+
+  const payments = await prisma.paymentEntry.findMany({
+    where,
+    include: {
+      receiver: { select: { name: true } },
+      invoice: {
+        include: {
+          student: { select: { name: true, enrollmentNo: true } }
+        }
+      }
+    },
+    orderBy: { receivedAt: 'desc' }
+  });
+
+  const totalCollected = payments.reduce((sum, p) => sum + p.amount, 0);
+
+  res.json({
+    success: true,
+    data: {
+      summary: {
+        totalCollected,
+        transactionCount: payments.length
+      },
+      ledger: payments
+    }
+  });
+});
