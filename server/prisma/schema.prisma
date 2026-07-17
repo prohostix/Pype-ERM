@@ -312,6 +312,8 @@ model Attendance {
 }
 
 model University {
+  students Student[]
+
   id                 String                 @id @default(uuid())
   organizationId     String
   subDepartmentId    String?
@@ -418,6 +420,9 @@ model StudyCenter {
 }
 
 model Student {
+  university University?       @relation(fields: [universityId], references: [id])
+  session    AdmissionSession? @relation(fields: [sessionId], references: [id])
+
   id                 String                 @id @default(uuid())
   centerId           String?
   branchId           String?
@@ -807,6 +812,8 @@ model Vacancy {
 }
 
 model AdmissionSession {
+  students Student[]
+
   id               String         @id @default(uuid())
   organizationId   String
   name             String
