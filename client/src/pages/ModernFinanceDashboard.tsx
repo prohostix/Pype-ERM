@@ -73,7 +73,6 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'discounts': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Discounts Module Coming Soon</div>;
       
       case 'expenses': return <ExpensesPanel />;
-      case 'committed_payments': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Committed Payments Module Coming Soon</div>;
       case 'university_fee': return <UniversityPaymentsPanel />;
       case 'university_commissions': return <UniversityCommissionsPanel />;
       case 'payroll': return <PayrollPanel />;
@@ -130,7 +129,6 @@ export function getFinanceNavItems() {
     
     { id: '__finance_ops_section', label: '💰 Finance', isSection: true },
     { id: 'expenses', label: 'Expenses' },
-    { id: 'committed_payments', label: 'Committed Payments' },
     { id: 'university_fee', label: 'University Fee' },
     { id: 'university_commissions', label: 'University Commissions' },
     { id: 'payroll', label: 'Payroll' },
@@ -246,7 +244,6 @@ function OverviewContent({ onNavigate }: any) {
         <FinanceMetric title="Total Collected" value={`₹${(metrics.totalCollected / 1000).toFixed(1)}K`} icon={<CreditCard className="w-5 h-5"/>} color="success" onClick={() => onNavigate('payments')} />
         <FinanceMetric title="Cash & Bank Bal" value={`₹${(metrics.cashAndBankBalance / 1000).toFixed(1)}K`} icon={<Wallet className="w-5 h-5"/>} color="info" />
         <FinanceMetric title="Operational Exp" value={`₹${(metrics.operationalExpenses / 1000).toFixed(1)}K`} icon={<TrendingUp className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('expenses')} />
-        <FinanceMetric title="Committed Pay" value={`₹${(metrics.committedPayments / 1000).toFixed(1)}K`} icon={<AlertTriangle className="w-5 h-5"/>} color="error" onClick={() => onNavigate('committed_payments')} />
         
         <FinanceMetric title="Univ Fee Pending" value={`₹${(metrics.universityFeePending / 1000).toFixed(1)}K`} icon={<AlertCircle className="w-5 h-5"/>} color="warning" onClick={() => onNavigate('university_fee')} />
         <FinanceMetric title="Incentive Pending" value={`₹${(metrics.incentivePending / 1000).toFixed(1)}K`} icon={<Users className="w-5 h-5"/>} color="primary" onClick={() => onNavigate('incentive_approval')} />
@@ -258,7 +255,6 @@ function OverviewContent({ onNavigate }: any) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <AlertCard title="Overdue Student Fees" count={alerts.overdueStudentFees} icon={<AlertCircle />} type="error" />
         <AlertCard title="University Fee Due" count={alerts.universityFeeDue} icon={<AlertTriangle />} type="warning" />
-        <AlertCard title="Committed Payment Due" count={alerts.committedPaymentDueToday} icon={<Clock />} type="info" />
         <AlertCard title="Incentive Pending" count={alerts.incentivePending} icon={<Users />} type="primary" />
       </div>
 
