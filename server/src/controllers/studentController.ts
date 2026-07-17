@@ -283,19 +283,27 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
       }
 
       // Resolve program
-      const programOr: any[] = [];
-      if (s.programId) programOr.push({ id: s.programId });
-      if (s.programCode) programOr.push({ code: s.programCode });
-      if (s.programName) programOr.push({ name: s.programName });
-
       let program = null;
-      if (programOr.length > 0) {
+      if (s.programId) {
         program = await prisma.program.findFirst({
           where: {
-            OR: programOr,
+            id: s.programId,
             organizationId
           }
         });
+      } else {
+        const programOr: any[] = [];
+        if (s.programCode) programOr.push({ code: s.programCode });
+        if (s.programName) programOr.push({ name: s.programName });
+
+        if (programOr.length > 0) {
+          program = await prisma.program.findFirst({
+            where: {
+              OR: programOr,
+              organizationId
+            }
+          });
+        }
       }
       if (!program) {
         results.skipped++;
@@ -366,7 +374,9 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
 
       // Resolve admission session (optional)
       let resolvedSessionId: string | null = null;
-      if (s.session) {
+      if (s.sessionId) {
+        resolvedSessionId = s.sessionId;
+      } else if (s.session) {
         const sessionRec = await prisma.admissionSession.findFirst({
           where: {
             name: {

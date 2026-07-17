@@ -479,21 +479,41 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const rowUnivName = (s.university || '').toString().trim().toLowerCase();
       
       let matchedProgram = null;
+      let matchedUniv = null;
+
+      if (rowUnivName) {
+        matchedUniv = universities.find(u => 
+          u.name.toLowerCase().includes(rowUnivName) || 
+          (u.code && u.code.toLowerCase() === rowUnivName) ||
+          (u.shortName && u.shortName.toLowerCase() === rowUnivName)
+        );
+      }
+      
       if (rowProgramName) {
-        // 1. Try finding by exact code match (case-insensitive)
-        matchedProgram = programs.find(p => p.code.toLowerCase() === rowProgramName);
+        let univPrograms = programs;
+        if (matchedUniv) {
+          univPrograms = programs.filter(p => p.universityId === matchedUniv.id);
+        }
+
+        // 1. Try finding by exact code match in scoped programs
+        matchedProgram = univPrograms.find(p => p.code?.toLowerCase() === rowProgramName);
         
-        // 2. If not found and university is specified in the row, try matching program name + university name
-        if (!matchedProgram && rowUnivName) {
+        // 2. If not found, try matching by name
+        if (!matchedProgram) {
+          matchedProgram = univPrograms.find(p => p.name.toLowerCase() === rowProgramName);
+        }
+
+        // 3. Fallback to global search if univ was not matched
+        if (!matchedProgram && rowUnivName && !matchedUniv) {
           matchedProgram = programs.find(p => 
             p.name.toLowerCase() === rowProgramName && 
             (p.university?.name?.toLowerCase()?.includes(rowUnivName) ?? false)
           );
         }
         
-        // 3. Fallback to matching program name alone
+        // 4. Absolute fallback
         if (!matchedProgram) {
-          matchedProgram = programs.find(p => p.name.toLowerCase() === rowProgramName);
+          matchedProgram = programs.find(p => p.name.toLowerCase() === rowProgramName || p.code?.toLowerCase() === rowProgramName);
         }
       }
       const resolvedProgramId = matchedProgram?.id || '';
@@ -506,7 +526,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const resolvedCenterId = matchedCenter?.id || undefined;
 
       const dob = s.dob || s.dateofbirth || s.date_of_birth || '';
-      const session = s.session || s.admissionsession || s.admission_session || '';
+      
+      // Match Session strictly to the university if possible
+      const sessionStr = (s.session || s.admissionsession || s.admission_session || '').toString().trim().toLowerCase();
+      let matchedSession = null;
+      if (sessionStr) {
+        let univSessions = sessions;
+        if (matchedUniv) {
+          univSessions = sessions.filter(sess => !sess.universityId || sess.universityId === matchedUniv.id);
+        }
+        matchedSession = univSessions.find(sess => sess.name.toLowerCase() === sessionStr);
+        if (!matchedSession) {
+          matchedSession = sessions.find(sess => sess.name.toLowerCase() === sessionStr);
+        }
+      }
+      const resolvedSessionId = matchedSession?.id || undefined;
       const admissionDate = s.admissiondate || s.admission_date || s.dateofadmission || s.date_of_admission || '';
 
       return {
@@ -518,7 +552,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         programId: resolvedProgramId,
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
         ...(dob ? { dob: dob.toString() } : {}),
-        ...(session ? { session: session.toString() } : {}),
+        ...(resolvedSessionId ? { sessionId: resolvedSessionId } : (sessionStr ? { session: sessionStr } : {})),
         ...(admissionDate ? { admissionDate: admissionDate.toString() } : {}),
         status: s.status || 'active',
         isPrevious: bulkIsPrevious
