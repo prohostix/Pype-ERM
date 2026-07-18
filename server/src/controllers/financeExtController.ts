@@ -360,7 +360,10 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       name: true,
       enrollmentNo: true,
       program: {
-        select: { name: true }
+        select: { 
+          name: true,
+          feeStructures: true
+        }
       },
       paymentSchedules: true
     },
@@ -368,7 +371,23 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
   });
 
   const logs = students.map(student => {
-    const totalFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    let totalFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    
+    if (student.program?.feeStructures?.length) {
+      const feeSt = student.program.feeStructures[0];
+      let structureTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0) + (feeSt.universityFee || 0);
+      
+      if (Array.isArray(feeSt.yearlyFees)) {
+        feeSt.yearlyFees.forEach((yf: any) => {
+          structureTotal += (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) + (Number(yf.universityFee) || 0);
+        });
+      }
+      
+      if (structureTotal > totalFee) {
+        totalFee = structureTotal;
+      }
+    }
+
     const totalPaid = student.paymentSchedules
       .filter(ps => ps.status === 'paid')
       .reduce((sum, ps) => sum + (ps.amount || 0), 0);
