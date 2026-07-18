@@ -35,7 +35,8 @@ import {
   Phone,
   BarChart2,
   User,
-  BookOpen
+  BookOpen,
+  MonitorSmartphone
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -232,6 +233,7 @@ const navItems: NavItem[] = [
       { id: 'payroll', label: 'Payroll', icon: DollarSign, roles: ['hr_admin', 'ceo'] },
       { id: 'salary-config', label: 'Salary Config', icon: Settings, roles: ['hr_admin', 'ceo'] },
       { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['hr_admin', 'ceo'] },
+      { id: 'assets', label: 'Assets', icon: MonitorSmartphone, roles: ['hr_admin', 'ceo'] },
     ],
   },
   {

@@ -233,6 +233,7 @@ model User {
   designations                  Designation[]        @relation("DesignationFilledBy")
   uploadedMaterials             ProgramMaterial[]    @relation("MaterialUploadedBy")
   collectionOverseers           CollectionOverseer[]
+  assets                        Asset[]              @relation("UserAssets")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -1691,4 +1692,36 @@ model UniversityPayment {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   student        Student      @relation(fields: [studentId], references: [id])
   university     University   @relation(fields: [universityId], references: [id])
+}
+
+model Asset {
+  id              String       @id @default(uuid())
+  type            AssetType
+  brand           String?
+  model           String?
+  serialNumber    String?
+  imeiNumber      String?
+  networkProvider String?
+  phoneNumber     String?
+  userId          String
+  user            User         @relation("UserAssets", fields: [userId], references: [id])
+  status          AssetStatus  @default(ASSIGNED)
+  notes           String?
+  assignedDate    DateTime     @default(now())
+  returnedDate    DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+enum AssetType {
+  COMPUTER
+  PHONE
+  OTHER
+}
+
+enum AssetStatus {
+  ASSIGNED
+  RETURNED
+  LOST
+  DAMAGED
 }

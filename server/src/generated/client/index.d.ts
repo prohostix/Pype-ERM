@@ -313,6 +313,11 @@ export type OrgInquiry = $Result.DefaultSelection<Prisma.$OrgInquiryPayload>
  * 
  */
 export type UniversityPayment = $Result.DefaultSelection<Prisma.$UniversityPaymentPayload>
+/**
+ * Model Asset
+ * 
+ */
+export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
 
 /**
  * Enums
@@ -562,6 +567,25 @@ export const PayrollBatchStatus: {
 
 export type PayrollBatchStatus = (typeof PayrollBatchStatus)[keyof typeof PayrollBatchStatus]
 
+
+export const AssetType: {
+  COMPUTER: 'COMPUTER',
+  PHONE: 'PHONE',
+  OTHER: 'OTHER'
+};
+
+export type AssetType = (typeof AssetType)[keyof typeof AssetType]
+
+
+export const AssetStatus: {
+  ASSIGNED: 'ASSIGNED',
+  RETURNED: 'RETURNED',
+  LOST: 'LOST',
+  DAMAGED: 'DAMAGED'
+};
+
+export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
+
 }
 
 export type OrganizationStatus = $Enums.OrganizationStatus
@@ -655,6 +679,14 @@ export const TopUpStatus: typeof $Enums.TopUpStatus
 export type PayrollBatchStatus = $Enums.PayrollBatchStatus
 
 export const PayrollBatchStatus: typeof $Enums.PayrollBatchStatus
+
+export type AssetType = $Enums.AssetType
+
+export const AssetType: typeof $Enums.AssetType
+
+export type AssetStatus = $Enums.AssetStatus
+
+export const AssetStatus: typeof $Enums.AssetStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1376,6 +1408,16 @@ export class PrismaClient<
     * ```
     */
   get universityPayment(): Prisma.UniversityPaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.asset`: Exposes CRUD operations for the **Asset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Assets
+    * const assets = await prisma.asset.findMany()
+    * ```
+    */
+  get asset(): Prisma.AssetDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1869,7 +1911,8 @@ export namespace Prisma {
     PaymentLink: 'PaymentLink',
     CollectionOverseer: 'CollectionOverseer',
     OrgInquiry: 'OrgInquiry',
-    UniversityPayment: 'UniversityPayment'
+    UniversityPayment: 'UniversityPayment',
+    Asset: 'Asset'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1885,7 +1928,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6329,6 +6372,80 @@ export namespace Prisma {
           }
         }
       }
+      Asset: {
+        payload: Prisma.$AssetPayload<ExtArgs>
+        fields: Prisma.AssetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findFirst: {
+            args: Prisma.AssetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findMany: {
+            args: Prisma.AssetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          create: {
+            args: Prisma.AssetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          createMany: {
+            args: Prisma.AssetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AssetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          delete: {
+            args: Prisma.AssetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          update: {
+            args: Prisma.AssetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AssetUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          upsert: {
+            args: Prisma.AssetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          aggregate: {
+            args: Prisma.AssetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsset>
+          }
+          groupBy: {
+            args: Prisma.AssetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssetCountArgs<ExtArgs>
+            result: $Utils.Optional<AssetCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6497,6 +6614,7 @@ export namespace Prisma {
     collectionOverseer?: CollectionOverseerOmit
     orgInquiry?: OrgInquiryOmit
     universityPayment?: UniversityPaymentOmit
+    asset?: AssetOmit
   }
 
   /* Types for Logging */
@@ -7304,6 +7422,7 @@ export namespace Prisma {
     designations: number
     uploadedMaterials: number
     collectionOverseers: number
+    assets: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7374,6 +7493,7 @@ export namespace Prisma {
     designations?: boolean | UserCountOutputTypeCountDesignationsArgs
     uploadedMaterials?: boolean | UserCountOutputTypeCountUploadedMaterialsArgs
     collectionOverseers?: boolean | UserCountOutputTypeCountCollectionOverseersArgs
+    assets?: boolean | UserCountOutputTypeCountAssetsArgs
   }
 
   // Custom InputTypes
@@ -7854,6 +7974,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCollectionOverseersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CollectionOverseerWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetWhereInput
   }
 
 
@@ -14548,6 +14675,7 @@ export namespace Prisma {
     designations?: boolean | User$designationsArgs<ExtArgs>
     uploadedMaterials?: boolean | User$uploadedMaterialsArgs<ExtArgs>
     collectionOverseers?: boolean | User$collectionOverseersArgs<ExtArgs>
+    assets?: boolean | User$assetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -14723,6 +14851,7 @@ export namespace Prisma {
     designations?: boolean | User$designationsArgs<ExtArgs>
     uploadedMaterials?: boolean | User$uploadedMaterialsArgs<ExtArgs>
     collectionOverseers?: boolean | User$collectionOverseersArgs<ExtArgs>
+    assets?: boolean | User$assetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14828,6 +14957,7 @@ export namespace Prisma {
       designations: Prisma.$DesignationPayload<ExtArgs>[]
       uploadedMaterials: Prisma.$ProgramMaterialPayload<ExtArgs>[]
       collectionOverseers: Prisma.$CollectionOverseerPayload<ExtArgs>[]
+      assets: Prisma.$AssetPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15327,6 +15457,7 @@ export namespace Prisma {
     designations<T extends User$designationsArgs<ExtArgs> = {}>(args?: Subset<T, User$designationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DesignationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     uploadedMaterials<T extends User$uploadedMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, User$uploadedMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     collectionOverseers<T extends User$collectionOverseersArgs<ExtArgs> = {}>(args?: Subset<T, User$collectionOverseersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CollectionOverseerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assets<T extends User$assetsArgs<ExtArgs> = {}>(args?: Subset<T, User$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17650,6 +17781,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CollectionOverseerScalarFieldEnum | CollectionOverseerScalarFieldEnum[]
+  }
+
+  /**
+   * User.assets
+   */
+  export type User$assetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    where?: AssetWhereInput
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    cursor?: AssetWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
   }
 
   /**
@@ -88093,6 +88248,1199 @@ export namespace Prisma {
 
 
   /**
+   * Model Asset
+   */
+
+  export type AggregateAsset = {
+    _count: AssetCountAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  export type AssetMinAggregateOutputType = {
+    id: string | null
+    type: $Enums.AssetType | null
+    brand: string | null
+    model: string | null
+    serialNumber: string | null
+    imeiNumber: string | null
+    networkProvider: string | null
+    phoneNumber: string | null
+    userId: string | null
+    status: $Enums.AssetStatus | null
+    notes: string | null
+    assignedDate: Date | null
+    returnedDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetMaxAggregateOutputType = {
+    id: string | null
+    type: $Enums.AssetType | null
+    brand: string | null
+    model: string | null
+    serialNumber: string | null
+    imeiNumber: string | null
+    networkProvider: string | null
+    phoneNumber: string | null
+    userId: string | null
+    status: $Enums.AssetStatus | null
+    notes: string | null
+    assignedDate: Date | null
+    returnedDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetCountAggregateOutputType = {
+    id: number
+    type: number
+    brand: number
+    model: number
+    serialNumber: number
+    imeiNumber: number
+    networkProvider: number
+    phoneNumber: number
+    userId: number
+    status: number
+    notes: number
+    assignedDate: number
+    returnedDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AssetMinAggregateInputType = {
+    id?: true
+    type?: true
+    brand?: true
+    model?: true
+    serialNumber?: true
+    imeiNumber?: true
+    networkProvider?: true
+    phoneNumber?: true
+    userId?: true
+    status?: true
+    notes?: true
+    assignedDate?: true
+    returnedDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetMaxAggregateInputType = {
+    id?: true
+    type?: true
+    brand?: true
+    model?: true
+    serialNumber?: true
+    imeiNumber?: true
+    networkProvider?: true
+    phoneNumber?: true
+    userId?: true
+    status?: true
+    notes?: true
+    assignedDate?: true
+    returnedDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetCountAggregateInputType = {
+    id?: true
+    type?: true
+    brand?: true
+    model?: true
+    serialNumber?: true
+    imeiNumber?: true
+    networkProvider?: true
+    phoneNumber?: true
+    userId?: true
+    status?: true
+    notes?: true
+    assignedDate?: true
+    returnedDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AssetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Asset to aggregate.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Assets
+    **/
+    _count?: true | AssetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type GetAssetAggregateType<T extends AssetAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsset]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsset[P]>
+      : GetScalarType<T[P], AggregateAsset[P]>
+  }
+
+
+
+
+  export type AssetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetWhereInput
+    orderBy?: AssetOrderByWithAggregationInput | AssetOrderByWithAggregationInput[]
+    by: AssetScalarFieldEnum[] | AssetScalarFieldEnum
+    having?: AssetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssetCountAggregateInputType | true
+    _min?: AssetMinAggregateInputType
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type AssetGroupByOutputType = {
+    id: string
+    type: $Enums.AssetType
+    brand: string | null
+    model: string | null
+    serialNumber: string | null
+    imeiNumber: string | null
+    networkProvider: string | null
+    phoneNumber: string | null
+    userId: string
+    status: $Enums.AssetStatus
+    notes: string | null
+    assignedDate: Date
+    returnedDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AssetCountAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  type GetAssetGroupByPayload<T extends AssetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssetGroupByOutputType[P]>
+            : GetScalarType<T[P], AssetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    brand?: boolean
+    model?: boolean
+    serialNumber?: boolean
+    imeiNumber?: boolean
+    networkProvider?: boolean
+    phoneNumber?: boolean
+    userId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedDate?: boolean
+    returnedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    brand?: boolean
+    model?: boolean
+    serialNumber?: boolean
+    imeiNumber?: boolean
+    networkProvider?: boolean
+    phoneNumber?: boolean
+    userId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedDate?: boolean
+    returnedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    brand?: boolean
+    model?: boolean
+    serialNumber?: boolean
+    imeiNumber?: boolean
+    networkProvider?: boolean
+    phoneNumber?: boolean
+    userId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedDate?: boolean
+    returnedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectScalar = {
+    id?: boolean
+    type?: boolean
+    brand?: boolean
+    model?: boolean
+    serialNumber?: boolean
+    imeiNumber?: boolean
+    networkProvider?: boolean
+    phoneNumber?: boolean
+    userId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedDate?: boolean
+    returnedDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "brand" | "model" | "serialNumber" | "imeiNumber" | "networkProvider" | "phoneNumber" | "userId" | "status" | "notes" | "assignedDate" | "returnedDate" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+  export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AssetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AssetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AssetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Asset"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      type: $Enums.AssetType
+      brand: string | null
+      model: string | null
+      serialNumber: string | null
+      imeiNumber: string | null
+      networkProvider: string | null
+      phoneNumber: string | null
+      userId: string
+      status: $Enums.AssetStatus
+      notes: string | null
+      assignedDate: Date
+      returnedDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["asset"]>
+    composites: {}
+  }
+
+  type AssetGetPayload<S extends boolean | null | undefined | AssetDefaultArgs> = $Result.GetResult<Prisma.$AssetPayload, S>
+
+  type AssetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssetCountAggregateInputType | true
+    }
+
+  export interface AssetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Asset'], meta: { name: 'Asset' } }
+    /**
+     * Find zero or one Asset that matches the filter.
+     * @param {AssetFindUniqueArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssetFindUniqueArgs>(args: SelectSubset<T, AssetFindUniqueArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Asset that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssetFindUniqueOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssetFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssetFindFirstArgs>(args?: SelectSubset<T, AssetFindFirstArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssetFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Assets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Assets
+     * const assets = await prisma.asset.findMany()
+     * 
+     * // Get first 10 Assets
+     * const assets = await prisma.asset.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assetWithIdOnly = await prisma.asset.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssetFindManyArgs>(args?: SelectSubset<T, AssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Asset.
+     * @param {AssetCreateArgs} args - Arguments to create a Asset.
+     * @example
+     * // Create one Asset
+     * const Asset = await prisma.asset.create({
+     *   data: {
+     *     // ... data to create a Asset
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssetCreateArgs>(args: SelectSubset<T, AssetCreateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Assets.
+     * @param {AssetCreateManyArgs} args - Arguments to create many Assets.
+     * @example
+     * // Create many Assets
+     * const asset = await prisma.asset.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssetCreateManyArgs>(args?: SelectSubset<T, AssetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Assets and returns the data saved in the database.
+     * @param {AssetCreateManyAndReturnArgs} args - Arguments to create many Assets.
+     * @example
+     * // Create many Assets
+     * const asset = await prisma.asset.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Assets and only return the `id`
+     * const assetWithIdOnly = await prisma.asset.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AssetCreateManyAndReturnArgs>(args?: SelectSubset<T, AssetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Asset.
+     * @param {AssetDeleteArgs} args - Arguments to delete one Asset.
+     * @example
+     * // Delete one Asset
+     * const Asset = await prisma.asset.delete({
+     *   where: {
+     *     // ... filter to delete one Asset
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssetDeleteArgs>(args: SelectSubset<T, AssetDeleteArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Asset.
+     * @param {AssetUpdateArgs} args - Arguments to update one Asset.
+     * @example
+     * // Update one Asset
+     * const asset = await prisma.asset.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssetUpdateArgs>(args: SelectSubset<T, AssetUpdateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Assets.
+     * @param {AssetDeleteManyArgs} args - Arguments to filter Assets to delete.
+     * @example
+     * // Delete a few Assets
+     * const { count } = await prisma.asset.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssetDeleteManyArgs>(args?: SelectSubset<T, AssetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Assets
+     * const asset = await prisma.asset.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssetUpdateManyArgs>(args: SelectSubset<T, AssetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Assets and returns the data updated in the database.
+     * @param {AssetUpdateManyAndReturnArgs} args - Arguments to update many Assets.
+     * @example
+     * // Update many Assets
+     * const asset = await prisma.asset.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Assets and only return the `id`
+     * const assetWithIdOnly = await prisma.asset.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AssetUpdateManyAndReturnArgs>(args: SelectSubset<T, AssetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Asset.
+     * @param {AssetUpsertArgs} args - Arguments to update or create a Asset.
+     * @example
+     * // Update or create a Asset
+     * const asset = await prisma.asset.upsert({
+     *   create: {
+     *     // ... data to create a Asset
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Asset we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssetUpsertArgs>(args: SelectSubset<T, AssetUpsertArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetCountArgs} args - Arguments to filter Assets to count.
+     * @example
+     * // Count the number of Assets
+     * const count = await prisma.asset.count({
+     *   where: {
+     *     // ... the filter for the Assets we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssetCountArgs>(
+      args?: Subset<T, AssetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssetAggregateArgs>(args: Subset<T, AssetAggregateArgs>): Prisma.PrismaPromise<GetAssetAggregateType<T>>
+
+    /**
+     * Group by Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssetGroupByArgs['orderBy'] }
+        : { orderBy?: AssetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Asset model
+   */
+  readonly fields: AssetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Asset.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Asset model
+   */
+  interface AssetFieldRefs {
+    readonly id: FieldRef<"Asset", 'String'>
+    readonly type: FieldRef<"Asset", 'AssetType'>
+    readonly brand: FieldRef<"Asset", 'String'>
+    readonly model: FieldRef<"Asset", 'String'>
+    readonly serialNumber: FieldRef<"Asset", 'String'>
+    readonly imeiNumber: FieldRef<"Asset", 'String'>
+    readonly networkProvider: FieldRef<"Asset", 'String'>
+    readonly phoneNumber: FieldRef<"Asset", 'String'>
+    readonly userId: FieldRef<"Asset", 'String'>
+    readonly status: FieldRef<"Asset", 'AssetStatus'>
+    readonly notes: FieldRef<"Asset", 'String'>
+    readonly assignedDate: FieldRef<"Asset", 'DateTime'>
+    readonly returnedDate: FieldRef<"Asset", 'DateTime'>
+    readonly createdAt: FieldRef<"Asset", 'DateTime'>
+    readonly updatedAt: FieldRef<"Asset", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Asset findUnique
+   */
+  export type AssetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findUniqueOrThrow
+   */
+  export type AssetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findFirst
+   */
+  export type AssetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findFirstOrThrow
+   */
+  export type AssetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findMany
+   */
+  export type AssetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Assets to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset create
+   */
+  export type AssetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Asset.
+     */
+    data: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+  }
+
+  /**
+   * Asset createMany
+   */
+  export type AssetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Assets.
+     */
+    data: AssetCreateManyInput | AssetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Asset createManyAndReturn
+   */
+  export type AssetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * The data used to create many Assets.
+     */
+    data: AssetCreateManyInput | AssetCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Asset update
+   */
+  export type AssetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Asset.
+     */
+    data: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+    /**
+     * Choose, which Asset to update.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset updateMany
+   */
+  export type AssetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Assets.
+     */
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    /**
+     * Filter which Assets to update
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset updateManyAndReturn
+   */
+  export type AssetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * The data used to update Assets.
+     */
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    /**
+     * Filter which Assets to update
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Asset upsert
+   */
+  export type AssetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Asset to update in case it exists.
+     */
+    where: AssetWhereUniqueInput
+    /**
+     * In case the Asset found by the `where` argument doesn't exist, create a new Asset with this data.
+     */
+    create: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+    /**
+     * In case the Asset was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+  }
+
+  /**
+   * Asset delete
+   */
+  export type AssetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter which Asset to delete.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset deleteMany
+   */
+  export type AssetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Assets to delete
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset without action
+   */
+  export type AssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -89263,6 +90611,27 @@ export namespace Prisma {
   export type UniversityPaymentScalarFieldEnum = (typeof UniversityPaymentScalarFieldEnum)[keyof typeof UniversityPaymentScalarFieldEnum]
 
 
+  export const AssetScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    brand: 'brand',
+    model: 'model',
+    serialNumber: 'serialNumber',
+    imeiNumber: 'imeiNumber',
+    networkProvider: 'networkProvider',
+    phoneNumber: 'phoneNumber',
+    userId: 'userId',
+    status: 'status',
+    notes: 'notes',
+    assignedDate: 'assignedDate',
+    returnedDate: 'returnedDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -89712,6 +91081,34 @@ export namespace Prisma {
    * Reference to a field of type 'PayrollBatchStatus[]'
    */
   export type ListEnumPayrollBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PayrollBatchStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssetType'
+   */
+  export type EnumAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetType'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssetType[]'
+   */
+  export type ListEnumAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssetStatus'
+   */
+  export type EnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssetStatus[]'
+   */
+  export type ListEnumAssetStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetStatus[]'>
     
   /**
    * Deep Input Types
@@ -90302,6 +91699,7 @@ export namespace Prisma {
     designations?: DesignationListRelationFilter
     uploadedMaterials?: ProgramMaterialListRelationFilter
     collectionOverseers?: CollectionOverseerListRelationFilter
+    assets?: AssetListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -90408,6 +91806,7 @@ export namespace Prisma {
     designations?: DesignationOrderByRelationAggregateInput
     uploadedMaterials?: ProgramMaterialOrderByRelationAggregateInput
     collectionOverseers?: CollectionOverseerOrderByRelationAggregateInput
+    assets?: AssetOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -90517,6 +91916,7 @@ export namespace Prisma {
     designations?: DesignationListRelationFilter
     uploadedMaterials?: ProgramMaterialListRelationFilter
     collectionOverseers?: CollectionOverseerListRelationFilter
+    assets?: AssetListRelationFilter
   }, "id" | "userId" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -96589,6 +97989,111 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"UniversityPayment"> | Date | string
   }
 
+  export type AssetWhereInput = {
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    id?: StringFilter<"Asset"> | string
+    type?: EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
+    brand?: StringNullableFilter<"Asset"> | string | null
+    model?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    imeiNumber?: StringNullableFilter<"Asset"> | string | null
+    networkProvider?: StringNullableFilter<"Asset"> | string | null
+    phoneNumber?: StringNullableFilter<"Asset"> | string | null
+    userId?: StringFilter<"Asset"> | string
+    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
+    notes?: StringNullableFilter<"Asset"> | string | null
+    assignedDate?: DateTimeFilter<"Asset"> | Date | string
+    returnedDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AssetOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    imeiNumber?: SortOrderInput | SortOrder
+    networkProvider?: SortOrderInput | SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedDate?: SortOrder
+    returnedDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AssetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    type?: EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
+    brand?: StringNullableFilter<"Asset"> | string | null
+    model?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    imeiNumber?: StringNullableFilter<"Asset"> | string | null
+    networkProvider?: StringNullableFilter<"Asset"> | string | null
+    phoneNumber?: StringNullableFilter<"Asset"> | string | null
+    userId?: StringFilter<"Asset"> | string
+    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
+    notes?: StringNullableFilter<"Asset"> | string | null
+    assignedDate?: DateTimeFilter<"Asset"> | Date | string
+    returnedDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AssetOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    brand?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    imeiNumber?: SortOrderInput | SortOrder
+    networkProvider?: SortOrderInput | SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedDate?: SortOrder
+    returnedDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AssetCountOrderByAggregateInput
+    _max?: AssetMaxOrderByAggregateInput
+    _min?: AssetMinOrderByAggregateInput
+  }
+
+  export type AssetScalarWhereWithAggregatesInput = {
+    AND?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    OR?: AssetScalarWhereWithAggregatesInput[]
+    NOT?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Asset"> | string
+    type?: EnumAssetTypeWithAggregatesFilter<"Asset"> | $Enums.AssetType
+    brand?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    model?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    serialNumber?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    imeiNumber?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    networkProvider?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    phoneNumber?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    userId?: StringWithAggregatesFilter<"Asset"> | string
+    status?: EnumAssetStatusWithAggregatesFilter<"Asset"> | $Enums.AssetStatus
+    notes?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    assignedDate?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+    returnedDate?: DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -97266,6 +98771,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -97365,6 +98871,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -97464,6 +98971,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -97563,6 +99071,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -104068,6 +105577,131 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AssetCreateInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAssetsInput
+  }
+
+  export type AssetUncheckedCreateInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    userId: string
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAssetsNestedInput
+  }
+
+  export type AssetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetCreateManyInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    userId: string
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -105199,6 +106833,16 @@ export namespace Prisma {
   export type UniversityNullableScalarRelationFilter = {
     is?: UniversityWhereInput | null
     isNot?: UniversityWhereInput | null
+  }
+
+  export type AssetListRelationFilter = {
+    every?: AssetWhereInput
+    some?: AssetWhereInput
+    none?: AssetWhereInput
+  }
+
+  export type AssetOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -108685,6 +110329,94 @@ export namespace Prisma {
 
   export type UniversityPaymentSumOrderByAggregateInput = {
     amountPaid?: SortOrder
+  }
+
+  export type EnumAssetTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetType | EnumAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetTypeFilter<$PrismaModel> | $Enums.AssetType
+  }
+
+  export type EnumAssetStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetStatusFilter<$PrismaModel> | $Enums.AssetStatus
+  }
+
+  export type AssetCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    brand?: SortOrder
+    model?: SortOrder
+    serialNumber?: SortOrder
+    imeiNumber?: SortOrder
+    networkProvider?: SortOrder
+    phoneNumber?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedDate?: SortOrder
+    returnedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    brand?: SortOrder
+    model?: SortOrder
+    serialNumber?: SortOrder
+    imeiNumber?: SortOrder
+    networkProvider?: SortOrder
+    phoneNumber?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedDate?: SortOrder
+    returnedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    brand?: SortOrder
+    model?: SortOrder
+    serialNumber?: SortOrder
+    imeiNumber?: SortOrder
+    networkProvider?: SortOrder
+    phoneNumber?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedDate?: SortOrder
+    returnedDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumAssetTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetType | EnumAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetTypeWithAggregatesFilter<$PrismaModel> | $Enums.AssetType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssetTypeFilter<$PrismaModel>
+    _max?: NestedEnumAssetTypeFilter<$PrismaModel>
+  }
+
+  export type EnumAssetStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssetStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssetStatusFilter<$PrismaModel>
+    _max?: NestedEnumAssetStatusFilter<$PrismaModel>
   }
 
   export type AdmissionSessionCreateNestedManyWithoutOrganizationInput = {
@@ -112212,6 +113944,13 @@ export namespace Prisma {
     connect?: CollectionOverseerWhereUniqueInput | CollectionOverseerWhereUniqueInput[]
   }
 
+  export type AssetCreateNestedManyWithoutUserInput = {
+    create?: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput> | AssetCreateWithoutUserInput[] | AssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutUserInput | AssetCreateOrConnectWithoutUserInput[]
+    createMany?: AssetCreateManyUserInputEnvelope
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -112719,6 +114458,13 @@ export namespace Prisma {
     connectOrCreate?: CollectionOverseerCreateOrConnectWithoutUserInput | CollectionOverseerCreateOrConnectWithoutUserInput[]
     createMany?: CollectionOverseerCreateManyUserInputEnvelope
     connect?: CollectionOverseerWhereUniqueInput | CollectionOverseerWhereUniqueInput[]
+  }
+
+  export type AssetUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput> | AssetCreateWithoutUserInput[] | AssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutUserInput | AssetCreateOrConnectWithoutUserInput[]
+    createMany?: AssetCreateManyUserInputEnvelope
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -113805,6 +115551,20 @@ export namespace Prisma {
     deleteMany?: CollectionOverseerScalarWhereInput | CollectionOverseerScalarWhereInput[]
   }
 
+  export type AssetUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput> | AssetCreateWithoutUserInput[] | AssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutUserInput | AssetCreateOrConnectWithoutUserInput[]
+    upsert?: AssetUpsertWithWhereUniqueWithoutUserInput | AssetUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AssetCreateManyUserInputEnvelope
+    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    update?: AssetUpdateWithWhereUniqueWithoutUserInput | AssetUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AssetUpdateManyWithWhereWithoutUserInput | AssetUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -114809,6 +116569,20 @@ export namespace Prisma {
     update?: CollectionOverseerUpdateWithWhereUniqueWithoutUserInput | CollectionOverseerUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CollectionOverseerUpdateManyWithWhereWithoutUserInput | CollectionOverseerUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CollectionOverseerScalarWhereInput | CollectionOverseerScalarWhereInput[]
+  }
+
+  export type AssetUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput> | AssetCreateWithoutUserInput[] | AssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutUserInput | AssetCreateOrConnectWithoutUserInput[]
+    upsert?: AssetUpsertWithWhereUniqueWithoutUserInput | AssetUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AssetCreateManyUserInputEnvelope
+    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    update?: AssetUpdateWithWhereUniqueWithoutUserInput | AssetUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AssetUpdateManyWithWhereWithoutUserInput | AssetUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -120303,6 +122077,28 @@ export namespace Prisma {
     update?: XOR<XOR<UniversityUpdateToOneWithWhereWithoutUniversityPaymentsInput, UniversityUpdateWithoutUniversityPaymentsInput>, UniversityUncheckedUpdateWithoutUniversityPaymentsInput>
   }
 
+  export type UserCreateNestedOneWithoutAssetsInput = {
+    create?: XOR<UserCreateWithoutAssetsInput, UserUncheckedCreateWithoutAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumAssetTypeFieldUpdateOperationsInput = {
+    set?: $Enums.AssetType
+  }
+
+  export type EnumAssetStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AssetStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutAssetsNestedInput = {
+    create?: XOR<UserCreateWithoutAssetsInput, UserUncheckedCreateWithoutAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetsInput
+    upsert?: UserUpsertWithoutAssetsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssetsInput, UserUpdateWithoutAssetsInput>, UserUncheckedUpdateWithoutAssetsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -120971,6 +122767,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPayrollBatchStatusFilter<$PrismaModel>
     _max?: NestedEnumPayrollBatchStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAssetTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetType | EnumAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetTypeFilter<$PrismaModel> | $Enums.AssetType
+  }
+
+  export type NestedEnumAssetStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetStatusFilter<$PrismaModel> | $Enums.AssetStatus
+  }
+
+  export type NestedEnumAssetTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetType | EnumAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetType[] | ListEnumAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetTypeWithAggregatesFilter<$PrismaModel> | $Enums.AssetType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssetTypeFilter<$PrismaModel>
+    _max?: NestedEnumAssetTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssetStatus | EnumAssetStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AssetStatus[] | ListEnumAssetStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAssetStatusWithAggregatesFilter<$PrismaModel> | $Enums.AssetStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAssetStatusFilter<$PrismaModel>
+    _max?: NestedEnumAssetStatusFilter<$PrismaModel>
   }
 
   export type AdmissionSessionCreateWithoutOrganizationInput = {
@@ -123303,6 +125133,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -123401,6 +125232,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -126047,6 +127879,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -126145,6 +127978,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -126748,6 +128582,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -126846,6 +128681,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -126986,6 +128822,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -127084,6 +128921,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -127320,6 +129158,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -127418,6 +129257,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -131586,6 +133426,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -131684,6 +133525,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -131787,6 +133629,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -131885,6 +133728,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -132271,6 +134115,50 @@ export namespace Prisma {
 
   export type CollectionOverseerCreateManyUserInputEnvelope = {
     data: CollectionOverseerCreateManyUserInput | CollectionOverseerCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssetCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetCreateOrConnectWithoutUserInput = {
+    where: AssetWhereUniqueInput
+    create: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput>
+  }
+
+  export type AssetCreateManyUserInputEnvelope = {
+    data: AssetCreateManyUserInput | AssetCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -133993,6 +135881,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -134091,6 +135980,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -134388,6 +136278,43 @@ export namespace Prisma {
     data: XOR<CollectionOverseerUpdateManyMutationInput, CollectionOverseerUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type AssetUpsertWithWhereUniqueWithoutUserInput = {
+    where: AssetWhereUniqueInput
+    update: XOR<AssetUpdateWithoutUserInput, AssetUncheckedUpdateWithoutUserInput>
+    create: XOR<AssetCreateWithoutUserInput, AssetUncheckedCreateWithoutUserInput>
+  }
+
+  export type AssetUpdateWithWhereUniqueWithoutUserInput = {
+    where: AssetWhereUniqueInput
+    data: XOR<AssetUpdateWithoutUserInput, AssetUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AssetUpdateManyWithWhereWithoutUserInput = {
+    where: AssetScalarWhereInput
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AssetScalarWhereInput = {
+    AND?: AssetScalarWhereInput | AssetScalarWhereInput[]
+    OR?: AssetScalarWhereInput[]
+    NOT?: AssetScalarWhereInput | AssetScalarWhereInput[]
+    id?: StringFilter<"Asset"> | string
+    type?: EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
+    brand?: StringNullableFilter<"Asset"> | string | null
+    model?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    imeiNumber?: StringNullableFilter<"Asset"> | string | null
+    networkProvider?: StringNullableFilter<"Asset"> | string | null
+    phoneNumber?: StringNullableFilter<"Asset"> | string | null
+    userId?: StringFilter<"Asset"> | string
+    status?: EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
+    notes?: StringNullableFilter<"Asset"> | string | null
+    assignedDate?: DateTimeFilter<"Asset"> | Date | string
+    returnedDate?: DateTimeNullableFilter<"Asset"> | Date | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -134629,6 +136556,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -134727,6 +136655,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -134992,6 +136921,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -135090,6 +137020,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -135232,6 +137163,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -135330,6 +137262,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -135433,6 +137366,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -135531,6 +137465,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -135691,6 +137626,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -135789,6 +137725,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -136064,6 +138001,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -136162,6 +138100,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -136271,6 +138210,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -136369,6 +138309,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -136541,6 +138482,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -136639,6 +138581,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -136888,6 +138831,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -136986,6 +138930,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -137245,6 +139190,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -137343,6 +139289,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -137979,6 +139926,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -138077,6 +140025,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -140289,6 +142238,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -140387,6 +142337,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -140635,6 +142586,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -140733,6 +142685,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -140836,6 +142789,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -140934,6 +142888,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -141102,6 +143057,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -141200,6 +143156,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -141642,6 +143599,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -141740,6 +143698,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -142000,6 +143959,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -142098,6 +144058,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -142207,6 +144168,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -142305,6 +144267,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -142926,6 +144889,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -143024,6 +144988,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -143323,6 +145288,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -143421,6 +145387,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -143524,6 +145491,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -143622,6 +145590,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -144198,6 +146167,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -144296,6 +146266,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -144613,6 +146584,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -144711,6 +146683,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -144820,6 +146793,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -144918,6 +146892,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput = {
@@ -146041,6 +148016,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -146139,6 +148115,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -146404,6 +148381,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -146502,6 +148480,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -146600,6 +148579,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -146698,6 +148678,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -146957,6 +148938,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -147055,6 +149037,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -147449,6 +149432,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -147547,6 +149531,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -147812,6 +149797,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -147910,6 +149896,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -148153,6 +150140,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -148251,6 +150239,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -148516,6 +150505,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -148614,6 +150604,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -148914,6 +150905,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -149012,6 +151004,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -149340,6 +151333,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -149438,6 +151432,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -149889,6 +151884,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -149987,6 +151983,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -150090,6 +152087,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -150188,6 +152186,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -150291,6 +152290,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -150389,6 +152389,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -150711,6 +152712,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -150809,6 +152811,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -150918,6 +152921,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -151016,6 +153020,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -151125,6 +153130,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -151223,6 +153229,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -151472,6 +153479,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -151570,6 +153578,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -151673,6 +153682,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -151771,6 +153781,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -152019,6 +154030,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -152117,6 +154129,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -152231,6 +154244,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -152329,6 +154343,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -152438,6 +154453,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -152536,6 +154552,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -152796,6 +154813,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -152894,6 +154912,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -152992,6 +155011,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -153090,6 +155110,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -153193,6 +155214,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -153291,6 +155313,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -153394,6 +155417,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -153492,6 +155516,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -153740,6 +155765,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -153838,6 +155864,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -153941,6 +155968,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -154039,6 +156067,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -154153,6 +156182,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -154251,6 +156281,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -154360,6 +156391,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -154458,6 +156490,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -154567,6 +156600,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -154665,6 +156699,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -154925,6 +156960,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -155023,6 +157059,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -155132,6 +157169,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -155230,6 +157268,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -155328,6 +157367,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -155426,6 +157466,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -155872,6 +157913,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -155970,6 +158012,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -156240,6 +158283,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -156338,6 +158382,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -156895,6 +158940,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -156993,6 +159039,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -157298,6 +159345,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -157396,6 +159444,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -157738,6 +159787,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -157836,6 +159886,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -158589,6 +160640,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -158687,6 +160739,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -159701,6 +161754,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -159799,6 +161853,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -159902,6 +161957,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -160000,6 +162056,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -160639,6 +162696,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -160737,6 +162795,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -160846,6 +162905,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -160944,6 +163004,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -161481,6 +163542,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -161579,6 +163641,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -161682,6 +163745,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -161780,6 +163844,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -161883,6 +163948,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -161981,6 +164047,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -162519,6 +164586,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -162617,6 +164685,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -162756,6 +164825,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -162854,6 +164924,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutDeptReviewedEnrollmentsInput = {
@@ -162963,6 +165034,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -163061,6 +165133,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -163170,6 +165243,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -163268,6 +165342,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -163842,6 +165917,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -163940,6 +166016,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -164069,6 +166146,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -164167,6 +166245,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -164270,6 +166349,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -164368,6 +166448,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -164627,6 +166708,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -164725,6 +166807,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -164834,6 +166917,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -164932,6 +167016,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -165947,6 +168032,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -166045,6 +168131,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -166407,6 +168494,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -166505,6 +168593,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -166791,6 +168880,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -166889,6 +168979,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -167203,6 +169294,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -167301,6 +169393,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -167399,6 +169492,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -167497,6 +169591,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -167756,6 +169851,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -167854,6 +169950,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -168248,6 +170345,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -168346,6 +170444,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -168611,6 +170710,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -168709,6 +170809,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -169248,6 +171349,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -169346,6 +171448,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -169611,6 +171714,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -169709,6 +171813,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -169952,6 +172057,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -170050,6 +172156,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -170153,6 +172260,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -170251,6 +172359,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -170516,6 +172625,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -170614,6 +172724,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -170723,6 +172834,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -170821,6 +172933,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -171064,6 +173177,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -171162,6 +173276,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -171265,6 +173380,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -171363,6 +173479,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -171628,6 +173745,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -171726,6 +173844,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -171835,6 +173954,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -171933,6 +174053,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutDeptAdminEscalationsInput = {
@@ -172031,6 +174152,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -172129,6 +174251,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -172232,6 +174355,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -172330,6 +174454,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -172433,6 +174558,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -172531,6 +174657,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -172779,6 +174906,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -172877,6 +175005,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -173068,6 +175197,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -173166,6 +175296,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -173275,6 +175406,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -173373,6 +175505,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -173482,6 +175615,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -173580,6 +175714,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -173840,6 +175975,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -173938,6 +176074,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -174489,6 +176626,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -174587,6 +176725,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -175034,6 +177173,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -175132,6 +177272,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -175581,6 +177722,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -175679,6 +177821,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -175927,6 +178070,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -176025,6 +178169,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -176139,6 +178284,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -176237,6 +178383,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -176497,6 +178644,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -176595,6 +178743,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -176693,6 +178842,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -176791,6 +178941,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -177039,6 +179190,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -177137,6 +179289,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -177240,6 +179393,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -177338,6 +179492,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -177452,6 +179607,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -177550,6 +179706,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -177810,6 +179967,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -177908,6 +180066,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -178017,6 +180176,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -178115,6 +180275,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -178213,6 +180374,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -178311,6 +180473,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -178570,6 +180733,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -178668,6 +180832,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -178917,6 +181082,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -179015,6 +181181,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -179416,6 +181583,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -179514,6 +181682,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -180062,6 +182231,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -180160,6 +182330,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -180425,6 +182596,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -180523,6 +182695,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -181025,6 +183198,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -181123,6 +183297,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -181462,6 +183637,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -181560,6 +183736,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -181674,6 +183851,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -181772,6 +183950,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -182129,6 +184308,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -182227,6 +184407,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -182517,6 +184698,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -182615,6 +184797,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -182933,6 +185116,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -183031,6 +185215,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -183277,6 +185462,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -183375,6 +185561,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -183794,6 +185981,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -183892,6 +186080,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -184141,6 +186330,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -184239,6 +186429,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -184547,6 +186738,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -184645,6 +186837,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -184949,6 +187142,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -185047,6 +187241,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -185457,6 +187652,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -185555,6 +187751,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -186961,6 +189158,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -187059,6 +189257,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -187162,6 +189361,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -187260,6 +189460,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -187519,6 +189720,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -187617,6 +189819,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -187726,6 +189929,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -187824,6 +190028,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -188269,6 +190474,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -188367,6 +190573,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -188689,6 +190896,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -188787,6 +190995,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutPaymentSchedulesInput = {
@@ -189782,6 +191991,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -189880,6 +192090,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -190291,6 +192502,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -190389,6 +192601,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCollectionOverseersInput = {
@@ -190487,6 +192700,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    assets?: AssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -190585,6 +192799,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -190844,6 +193059,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -190942,6 +193158,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutCollectionOverseersInput = {
@@ -191693,6 +193910,418 @@ export namespace Prisma {
     studyCenters?: StudyCenterUncheckedUpdateManyWithoutAssociatedUniversitiesNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutUniversityNestedInput
+  }
+
+  export type UserCreateWithoutAssetsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAssetsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAssetsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssetsInput, UserUncheckedCreateWithoutAssetsInput>
+  }
+
+  export type UserUpsertWithoutAssetsInput = {
+    update: XOR<UserUpdateWithoutAssetsInput, UserUncheckedUpdateWithoutAssetsInput>
+    create: XOR<UserCreateWithoutAssetsInput, UserUncheckedCreateWithoutAssetsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssetsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssetsInput, UserUncheckedUpdateWithoutAssetsInput>
+  }
+
+  export type UserUpdateWithoutAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdmissionSessionCreateManyOrganizationInput = {
@@ -195097,6 +197726,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -195195,6 +197825,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -196218,6 +198849,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -196316,6 +198948,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -196471,6 +199104,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -196569,6 +199203,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -197819,6 +200454,23 @@ export namespace Prisma {
   export type CollectionOverseerCreateManyUserInput = {
     id?: string
     organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetCreateManyUserInput = {
+    id?: string
+    type: $Enums.AssetType
+    brand?: string | null
+    model?: string | null
+    serialNumber?: string | null
+    imeiNumber?: string | null
+    networkProvider?: string | null
+    phoneNumber?: string | null
+    status?: $Enums.AssetStatus
+    notes?: string | null
+    assignedDate?: Date | string
+    returnedDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -201614,6 +204266,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -201712,6 +204365,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -201956,6 +204610,57 @@ export namespace Prisma {
   export type CollectionOverseerUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    imeiNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    networkProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -202559,6 +205264,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -202657,6 +205363,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -204660,6 +207367,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -204758,6 +207466,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -205806,6 +208515,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -205904,6 +208614,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -206391,6 +209102,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -206489,6 +209201,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -206911,6 +209624,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -207009,6 +209723,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {

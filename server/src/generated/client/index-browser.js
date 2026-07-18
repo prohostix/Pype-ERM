@@ -1097,6 +1097,24 @@ exports.Prisma.UniversityPaymentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AssetScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  brand: 'brand',
+  model: 'model',
+  serialNumber: 'serialNumber',
+  imeiNumber: 'imeiNumber',
+  networkProvider: 'networkProvider',
+  phoneNumber: 'phoneNumber',
+  userId: 'userId',
+  status: 'status',
+  notes: 'notes',
+  assignedDate: 'assignedDate',
+  returnedDate: 'returnedDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1302,6 +1320,19 @@ exports.PayrollBatchStatus = exports.$Enums.PayrollBatchStatus = {
   completed: 'completed'
 };
 
+exports.AssetType = exports.$Enums.AssetType = {
+  COMPUTER: 'COMPUTER',
+  PHONE: 'PHONE',
+  OTHER: 'OTHER'
+};
+
+exports.AssetStatus = exports.$Enums.AssetStatus = {
+  ASSIGNED: 'ASSIGNED',
+  RETURNED: 'RETURNED',
+  LOST: 'LOST',
+  DAMAGED: 'DAMAGED'
+};
+
 exports.Prisma.ModelName = {
   Organization: 'Organization',
   License: 'License',
@@ -1362,7 +1393,8 @@ exports.Prisma.ModelName = {
   PaymentLink: 'PaymentLink',
   CollectionOverseer: 'CollectionOverseer',
   OrgInquiry: 'OrgInquiry',
-  UniversityPayment: 'UniversityPayment'
+  UniversityPayment: 'UniversityPayment',
+  Asset: 'Asset'
 };
 
 /**

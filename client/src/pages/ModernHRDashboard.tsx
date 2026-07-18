@@ -28,6 +28,7 @@ import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
 import { HRSettingsPanel } from '@/components/attendance/HRSettingsPanel';
+import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { SalaryConfigPanel } from '@/components/panels/SalaryConfigPanel';
 import { LeaveAllocationPanel } from '@/components/panels/LeaveAllocationPanel';
@@ -74,8 +75,8 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'att-settings': return <HRSettingsPanel />;
       case 'activity_report': return <EmployeeActivityReportPanel />;
       case 'my_payslips': return <PayrollPanel />;
-
       case 'notice-board': return <NoticeBoardPanel />;
+      case 'assets': return <AssetManagementPanel />;
       default: return null;
     }
   };
@@ -108,6 +109,7 @@ export function getHRNavItems() {
     { id: 'org-chart', label: 'Org Chart' },
     { id: 'managers', label: 'Managers' },
     { id: 'att-settings', label: 'Att. Settings' },
+    { id: 'assets', label: 'Assets' },
     { id: 'activity_report', label: 'Activity Report' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
     { id: 'my_leaves', label: 'My Leaves' },

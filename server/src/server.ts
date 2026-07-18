@@ -53,6 +53,7 @@ import enrollmentRoutes from './routes/enrollmentRoutes.js';
 import paymentScheduleRoutes from './routes/paymentScheduleRoutes.js';
 import studentPortalRoutes from './routes/studentPortalRoutes.js';
 import collectionsPanelRoutes from './routes/collectionsPanelRoutes.js';
+import assetRoutes from './routes/assetRoutes.js';
 
 const app: Application = express();
 
@@ -133,6 +134,7 @@ app.use(`/api/${API_VERSION}/enrollment`, enrollmentRoutes);
 app.use(`/api/${API_VERSION}/payment-schedules`, paymentScheduleRoutes);
 app.use(`/api/${API_VERSION}/student-portal`, studentPortalRoutes);
 app.use(`/api/${API_VERSION}/collections`, collectionsPanelRoutes);
+app.use(`/api/${API_VERSION}/assets`, assetRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {
