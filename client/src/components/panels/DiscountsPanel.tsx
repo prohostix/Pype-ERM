@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { useToast } from '../ui/use-toast';
+import { toast } from 'sonner';
 import { Tag, Plus, Loader2 } from 'lucide-react';
 import { api } from '../../lib/api';
 
@@ -38,19 +38,14 @@ export function DiscountsPanel() {
   const [amount, setAmount] = useState<string>('');
   const [reason, setReason] = useState<string>('');
   
-  const { toast } = useToast();
-
+  
   const fetchDiscounts = async () => {
     try {
       const res = await api.get('/finance/discounts');
       setDiscounts(res.data.data);
     } catch (error) {
       console.error('Failed to fetch discounts:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load discounts',
-        variant: 'destructive',
-      });
+      toast.error('Failed to load discounts');
     }
   };
 
@@ -71,11 +66,7 @@ export function DiscountsPanel() {
 
   const handleApplyDiscount = async () => {
     if (!selectedStudent || !amount) {
-      toast({
-        title: 'Error',
-        description: 'Please select a student and enter an amount',
-        variant: 'destructive',
-      });
+      toast.error('Please select a student and enter an amount');
       return;
     }
 
@@ -87,10 +78,7 @@ export function DiscountsPanel() {
         discountReason: reason
       });
       
-      toast({
-        title: 'Success',
-        description: 'Discount applied successfully',
-      });
+      toast.success('Discount applied successfully');
       
       setIsDialogOpen(false);
       setSelectedStudent('');
@@ -101,11 +89,7 @@ export function DiscountsPanel() {
       fetchDiscounts();
     } catch (error: any) {
       console.error('Failed to apply discount:', error);
-      toast({
-        title: 'Error',
-        description: error.response?.data?.message || 'Failed to apply discount',
-        variant: 'destructive',
-      });
+      toast.error(error.response?.data?.message || 'Failed to apply discount');
     } finally {
       setSubmitting(false);
     }
