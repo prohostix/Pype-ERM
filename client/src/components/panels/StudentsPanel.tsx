@@ -82,7 +82,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const [activeFilter, setActiveFilter] = useState<'all' | 'current' | 'previous'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [batchQuery, setBatchQuery] = useState('');
+  const [filterUniversityId, setFilterUniversityId] = useState('all');
+  const [filterSessionId, setFilterSessionId] = useState('all');
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -1011,15 +1012,29 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (!nameMatch && !emailMatch && !enrollMatch && !centerMatch) return false;
     }
 
-    // Batch query filter
-    if (batchQuery.trim() !== '') {
-      const b = batchQuery.toLowerCase();
-      // Match against session relation if populated
-      const sessionName = typeof s.sessionId === 'object' ? s.sessionId?.name?.toLowerCase() : '';
-      const sessionMatch = sessionName?.includes(b);
-      // Fallback check on string fields if present
-      const directSession = s.session ? s.session.toLowerCase().includes(b) : false;
-      if (!sessionMatch && !directSession) return false;
+    // University Filter
+    if (filterUniversityId !== 'all') {
+      const uId = s.universityId ||
+        (typeof s.program === 'object' ? s.program?.universityId : null) ||
+        (typeof s.programId === 'object' ? s.programId?.universityId : null);
+      if (uId !== filterUniversityId) return false;
+    }
+
+    // Session Filter
+    if (filterSessionId !== 'all') {
+      const sId = typeof s.sessionId === 'object' ? s.sessionId?.id : s.sessionId;
+      // also fallback to match session name if s.session string is present and sessionId is not object
+      if (sId !== filterSessionId) {
+        // If sId is not present, check if s.session string matches the selected session name
+        const selectedSession = sessions.find((sess: any) => sess.id === filterSessionId);
+        if (selectedSession && s.session) {
+          if (s.session.toLowerCase() !== selectedSession.name.toLowerCase()) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
     }
 
     return true;
@@ -2022,9 +2037,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           <CardTitle>Student Directory</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, or Center)</Label>
+              <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, Center)</Label>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input 
@@ -2036,16 +2051,32 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               </div>
             </div>
             <div>
-              <Label className="text-xs text-muted-foreground block mb-1">Search by Batch / Admission Session Name</Label>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="e.g. 2024-25, 2025-A..." 
-                  className="pl-8 text-sm"
-                  value={batchQuery}
-                  onChange={(e) => setBatchQuery(e.target.value)}
-                />
-              </div>
+              <Label className="text-xs text-muted-foreground block mb-1">Filter by University</Label>
+              <Select value={filterUniversityId} onValueChange={setFilterUniversityId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Universities" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Universities</SelectItem>
+                  {universities.map(u => (
+                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground block mb-1">Filter by Admission Session</Label>
+              <Select value={filterSessionId} onValueChange={setFilterSessionId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Sessions" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sessions</SelectItem>
+                  {sessions.map(s => (
+                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
