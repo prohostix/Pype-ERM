@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Edit2, Trash2, MonitorSmartphone } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Check, ChevronsUpDown, Plus, Edit2, Trash2, MonitorSmartphone } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
@@ -60,8 +63,10 @@ export function AssetManagementPanel() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [employees, setEmployees] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
   
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
+  const [openCombobox, setOpenCombobox] = useState(false);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
   const [formData, setFormData] = useState<Partial<Asset>>({
@@ -94,6 +99,9 @@ export function AssetManagementPanel() {
     }
   };
 
+  const selectedEmployee = employees.find(e => e.id === selectedEmployeeId);
+  const employeeAssets = assets.filter(a => a.userId === selectedEmployeeId);
+
   const handleOpenDialog = (asset?: Asset) => {
     if (asset) {
       setEditingAsset(asset);
@@ -108,6 +116,7 @@ export function AssetManagementPanel() {
         type: 'COMPUTER',
         status: 'ASSIGNED',
         assignedDate: new Date().toISOString().split('T')[0],
+        userId: selectedEmployeeId || undefined,
       });
     }
     setIsDialogOpen(true);
@@ -152,117 +161,151 @@ export function AssetManagementPanel() {
     }
   };
 
-  const filteredAssets = assets.filter(a => {
-    const searchString = `${a.brand} ${a.model} ${a.user?.name} ${a.serialNumber} ${a.imeiNumber}`.toLowerCase();
-    return searchString.includes(searchTerm.toLowerCase());
-  });
-
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <MonitorSmartphone className="w-6 h-6 text-primary" />
-              Asset Management
-            </CardTitle>
-          </div>
-          <Button onClick={() => handleOpenDialog()}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Asset
-          </Button>
+        <CardHeader>
+          <CardTitle className="text-2xl flex items-center gap-2">
+            <MonitorSmartphone className="w-6 h-6 text-primary" />
+            Employee Assets
+          </CardTitle>
+          <CardDescription>
+            Search and select an employee to view or manage their assigned assets.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center mb-6 max-w-sm">
-            <div className="relative w-full">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search assets..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 mb-6">
+            <div className="flex-1 max-w-sm flex flex-col space-y-2">
+              <Label>Select Employee</Label>
+              <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCombobox}
+                    className="w-full justify-between font-normal"
+                    disabled={loading}
+                  >
+                    {selectedEmployeeId
+                      ? `${selectedEmployee?.name} ${selectedEmployee?.employeeProfile?.employeeId ? `(${selectedEmployee.employeeProfile.employeeId})` : ''}`
+                      : "Search employee..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-0" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search employees..." />
+                    <CommandList>
+                      <CommandEmpty>No employee found.</CommandEmpty>
+                      <CommandGroup>
+                        {employees.map((emp) => (
+                          <CommandItem
+                            key={emp.id}
+                            value={`${emp.name} ${emp.employeeProfile?.employeeId || ''} ${emp.email}`}
+                            onSelect={() => {
+                              setSelectedEmployeeId(emp.id);
+                              setOpenCombobox(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedEmployeeId === emp.id ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {emp.name} {emp.employeeProfile?.employeeId ? `(${emp.employeeProfile.employeeId})` : ''}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
+            
+            {selectedEmployeeId && (
+              <div className="flex items-end">
+                <Button onClick={() => handleOpenDialog()}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Allot Asset
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Asset Details</TableHead>
-                  <TableHead>Identifiers</TableHead>
-                  <TableHead>Assigned To</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
+          {selectedEmployeeId ? (
+            <div className="rounded-md border mt-6">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8">Loading assets...</TableCell>
+                    <TableHead>Asset Details</TableHead>
+                    <TableHead>Identifiers</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Assigned Date</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
-                ) : filteredAssets.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      No assets found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredAssets.map(asset => (
-                    <TableRow key={asset.id}>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="font-medium">{asset.brand} {asset.model}</span>
-                          <span className="text-xs text-muted-foreground">{asset.type}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col text-sm">
-                          {asset.serialNumber && <span>SN: {asset.serialNumber}</span>}
-                          {asset.imeiNumber && <span>IMEI: {asset.imeiNumber}</span>}
-                          {asset.phoneNumber && <span>Phone: {asset.phoneNumber}</span>}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {asset.user ? (
-                          <div className="flex flex-col">
-                            <span className="font-medium">{asset.user.name}</span>
-                            <span className="text-xs text-muted-foreground">{asset.user.employeeProfile?.employeeId || asset.user.email}</span>
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">Unassigned</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={
-                          asset.status === 'ASSIGNED' ? 'default' :
-                          asset.status === 'RETURNED' ? 'secondary' :
-                          'destructive'
-                        }>
-                          {asset.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(asset)}>
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="text-red-500 hover:text-red-600">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                </TableHeader>
+                <TableBody>
+                  {employeeAssets.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                        No assets allotted to this employee
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : (
+                    employeeAssets.map(asset => (
+                      <TableRow key={asset.id}>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{asset.brand} {asset.model}</span>
+                            <span className="text-xs text-muted-foreground">{asset.type}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col text-sm">
+                            {asset.serialNumber && <span>SN: {asset.serialNumber}</span>}
+                            {asset.imeiNumber && <span>IMEI: {asset.imeiNumber}</span>}
+                            {asset.phoneNumber && <span>Phone: {asset.phoneNumber}</span>}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={
+                            asset.status === 'ASSIGNED' ? 'default' :
+                            asset.status === 'RETURNED' ? 'secondary' :
+                            'destructive'
+                          }>
+                            {asset.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {new Date(asset.assignedDate).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(asset)}>
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDelete(asset.id)} className="text-red-500 hover:text-red-600">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground bg-slate-50 dark:bg-slate-900 rounded-md mt-6">
+              Please select an employee to view or allot assets.
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{editingAsset ? 'Edit Asset' : 'Add New Asset'}</DialogTitle>
+            <DialogTitle>{editingAsset ? 'Edit Asset' : 'Allot New Asset'}</DialogTitle>
           </DialogHeader>
           
           <div className="grid grid-cols-2 gap-4 py-4">
@@ -288,6 +331,7 @@ export function AssetManagementPanel() {
               <Select 
                 value={formData.userId} 
                 onValueChange={(val) => setFormData({...formData, userId: val})}
+                disabled
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Employee" />
@@ -415,3 +459,4 @@ export function AssetManagementPanel() {
     </div>
   );
 }
+
