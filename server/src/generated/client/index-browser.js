@@ -335,7 +335,9 @@ exports.Prisma.StudentScalarFieldEnum = {
   isPrevious: 'isPrevious',
   credentials: 'credentials',
   admissionProgress: 'admissionProgress',
-  academicProgress: 'academicProgress'
+  academicProgress: 'academicProgress',
+  discountAmount: 'discountAmount',
+  discountReason: 'discountReason'
 };
 
 exports.Prisma.InvoiceScalarFieldEnum = {

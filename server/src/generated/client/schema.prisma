@@ -475,6 +475,8 @@ model Student {
   academicProgress   Json?                  @default("[]") // Array of yearly academic progress
   commissions        UniversityCommission[]
   universityPayments UniversityPayment[]
+  discountAmount     Float                  @default(0)
+  discountReason     String?
 
   @@index([organizationId, status])
   @@index([centerId])

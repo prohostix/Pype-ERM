@@ -23,6 +23,7 @@ import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsP
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
+import { DiscountsPanel } from '@/components/panels/DiscountsPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
@@ -70,7 +71,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
       case 'wallet_topup': return <WalletTopUpsPanel />;
       case 'student_collections': return <CollectionsPanel />;
       case 'fee_structures': return <FeeStructuresPanel />;
-      case 'discounts': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Discounts Module Coming Soon</div>;
+      case 'discounts': return <DiscountsPanel />;
       
       case 'expenses': return <ExpensesPanel />;
       case 'university_fee': return <UniversityPaymentsPanel />;

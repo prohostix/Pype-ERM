@@ -109,6 +109,11 @@ export function StudentPaymentsLogPanel() {
                         </td>
                         <td className="py-3 px-4 text-right font-medium text-foreground">
                           ₹{log.totalFee?.toLocaleString('en-IN') || 0}
+                          {log.discountAmount > 0 && (
+                            <div className="text-[10px] text-green-600 mt-0.5" title={log.discountReason}>
+                              (-₹{log.discountAmount.toLocaleString('en-IN')} off)
+                            </div>
+                          )}
                         </td>
                         <td className="py-3 px-4 text-right font-medium text-emerald-600">
                           ₹{log.totalPaid?.toLocaleString('en-IN') || 0}

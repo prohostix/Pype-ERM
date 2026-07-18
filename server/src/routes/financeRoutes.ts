@@ -54,6 +54,8 @@ import {
   getPaymentLinks,
   updatePaymentLinkStatus,
   getStudentPaymentsLog,
+  getDiscounts,
+  applyDiscount,
 } from '../controllers/financeExtController.js';
 import {
   getWalletTopUps,
@@ -120,6 +122,9 @@ router.route('/fees/:id')
   .get(getFeeStructure)
   .put(authorize('finance_admin'), updateFeeStructure)
   .delete(authorize('finance_admin'), deleteFeeStructure);
+
+// Discounts
+router.route('/discounts').get(getDiscounts).post(authorize('finance_admin'), applyDiscount);
 
 // University Auth Fees
 router.route('/auth-fees').get(authorize('finance_admin'), getAuthFees).post(authorize('finance_admin'), createAuthFee);

@@ -365,7 +365,9 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
           feeStructures: true
         }
       },
-      paymentSchedules: true
+      paymentSchedules: true,
+      discountAmount: true,
+      discountReason: true
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -429,6 +431,10 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
          balance: Math.max(0, scheduledFee - totalPaid)
        });
     }
+    
+    // Apply discount
+    const discount = student.discountAmount || 0;
+    totalFee = Math.max(0, totalFee - discount);
 
     const balance = totalFee - totalPaid;
     const status = (balance <= 0 && totalFee > 0) ? 'Completed' : 'Pending';
@@ -442,9 +448,68 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       totalPaid,
       balance,
       status,
-      breakdown
+      breakdown,
+      discountAmount: student.discountAmount || 0,
+      discountReason: student.discountReason
     };
   });
 
   res.status(200).json({ success: true, count: logs.length, data: logs });
+});
+
+export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const students = await prisma.student.findMany({
+    where: { 
+      organizationId: req.user.organizationId,
+      discountAmount: { gt: 0 }
+    },
+    select: {
+      id: true,
+      name: true,
+      enrollmentNo: true,
+      discountAmount: true,
+      discountReason: true,
+      program: { select: { name: true } },
+    },
+    orderBy: { updatedAt: 'desc' }
+  });
+
+  res.status(200).json({ success: true, count: students.length, data: students });
+});
+
+export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
+  const { studentId, discountAmount, discountReason } = req.body;
+
+  if (!studentId || discountAmount === undefined) {
+    return next(new ErrorResponse('Please provide studentId and discountAmount', 400));
+  }
+
+  const student = await prisma.student.findFirst({
+    where: {
+      id: studentId,
+      organizationId: req.user.organizationId
+    }
+  });
+
+  if (!student) {
+    return next(new ErrorResponse('Student not found', 404));
+  }
+
+  const updatedStudent = await prisma.student.update({
+    where: { id: studentId },
+    data: {
+      discountAmount: Number(discountAmount),
+      discountReason
+    },
+    select: {
+      id: true,
+      name: true,
+      enrollmentNo: true,
+      discountAmount: true,
+      discountReason: true,
+      program: { select: { name: true } },
+    }
+  });
+
+  res.status(200).json({ success: true, data: updatedStudent });
 });
