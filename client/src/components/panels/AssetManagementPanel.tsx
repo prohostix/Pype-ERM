@@ -28,7 +28,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Check, ChevronsUpDown, Plus, Edit2, Trash2, MonitorSmartphone } from 'lucide-react';
+import { Check, ChevronsUpDown, Plus, Edit2, Trash2, MonitorSmartphone, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -69,11 +69,11 @@ export function AssetManagementPanel() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
-  const [formData, setFormData] = useState<Partial<Asset>>({
-    type: 'COMPUTER',
-    status: 'ASSIGNED',
-    assignedDate: new Date().toISOString().split('T')[0]
-  });
+  
+  // Array to support multiple asset allocation
+  const [formsData, setFormsData] = useState<Partial<Asset>[]>([
+    { type: 'COMPUTER', status: 'ASSIGNED', assignedDate: new Date().toISOString().split('T')[0] }
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -105,19 +105,19 @@ export function AssetManagementPanel() {
   const handleOpenDialog = (asset?: Asset) => {
     if (asset) {
       setEditingAsset(asset);
-      setFormData({
+      setFormsData([{
         ...asset,
         assignedDate: asset.assignedDate ? asset.assignedDate.split('T')[0] : '',
         returnedDate: asset.returnedDate ? asset.returnedDate.split('T')[0] : null,
-      });
+      }]);
     } else {
       setEditingAsset(null);
-      setFormData({
+      setFormsData([{
         type: 'COMPUTER',
         status: 'ASSIGNED',
         assignedDate: new Date().toISOString().split('T')[0],
         userId: selectedEmployeeId || undefined,
-      });
+      }]);
     }
     setIsDialogOpen(true);
   };
@@ -125,27 +125,55 @@ export function AssetManagementPanel() {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
     setEditingAsset(null);
-    setFormData({});
+    setFormsData([]);
+  };
+
+  const updateFormData = (index: number, updates: Partial<Asset>) => {
+    const newFormsData = [...formsData];
+    newFormsData[index] = { ...newFormsData[index], ...updates };
+    setFormsData(newFormsData);
+  };
+
+  const addAnotherAsset = () => {
+    setFormsData([
+      ...formsData, 
+      { 
+        type: 'COMPUTER', 
+        status: 'ASSIGNED', 
+        assignedDate: new Date().toISOString().split('T')[0],
+        userId: formsData[0]?.userId // Keep the same employee
+      }
+    ]);
+  };
+
+  const removeAssetForm = (index: number) => {
+    const newFormsData = [...formsData];
+    newFormsData.splice(index, 1);
+    setFormsData(newFormsData);
   };
 
   const handleSubmit = async () => {
-    if (!formData.userId || !formData.type) {
-      toast.error('Please fill required fields (Type and Employee)');
-      return;
+    // Validate all forms
+    for (const data of formsData) {
+      if (!data.userId || !data.type) {
+        toast.error('Please fill required fields (Type and Employee) for all assets');
+        return;
+      }
     }
 
     try {
       if (editingAsset) {
-        await api.put(`/assets/${editingAsset.id}`, formData);
+        await api.put(`/assets/${editingAsset.id}`, formsData[0]);
         toast.success('Asset updated successfully');
       } else {
-        await api.post('/assets', formData);
-        toast.success('Asset created successfully');
+        // Submit all new assets
+        await Promise.all(formsData.map(data => api.post('/assets', data)));
+        toast.success(formsData.length > 1 ? 'Assets created successfully' : 'Asset created successfully');
       }
       handleCloseDialog();
       fetchData();
     } catch (error) {
-      toast.error(editingAsset ? 'Failed to update asset' : 'Failed to create asset');
+      toast.error(editingAsset ? 'Failed to update asset' : 'Failed to create assets');
     }
   };
 
@@ -227,7 +255,7 @@ export function AssetManagementPanel() {
               <div className="flex items-end">
                 <Button onClick={() => handleOpenDialog()}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Allot Asset
+                  Allot Asset(s)
                 </Button>
               </div>
             )}
@@ -303,156 +331,189 @@ export function AssetManagementPanel() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingAsset ? 'Edit Asset' : 'Allot New Asset'}</DialogTitle>
+            <DialogTitle>{editingAsset ? 'Edit Asset' : 'Allot New Asset(s)'}</DialogTitle>
           </DialogHeader>
           
-          <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="space-y-2">
-              <Label>Asset Type</Label>
-              <Select 
-                value={formData.type} 
-                onValueChange={(val: any) => setFormData({...formData, type: val})}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="COMPUTER">Computer</SelectItem>
-                  <SelectItem value="PHONE">Phone</SelectItem>
-                  <SelectItem value="OTHER">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Assign to Employee</Label>
-              <Select 
-                value={formData.userId} 
-                onValueChange={(val) => setFormData({...formData, userId: val})}
-                disabled
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Employee" />
-                </SelectTrigger>
-                <SelectContent>
-                  {employees.map(emp => (
-                    <SelectItem key={emp.id} value={emp.id}>
-                      {emp.name} {emp.employeeProfile?.employeeId ? `(${emp.employeeProfile.employeeId})` : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-6 py-4">
+            {formsData.map((formData, index) => (
+              <div key={index} className={cn("relative p-4 rounded-lg border", formsData.length > 1 ? "bg-slate-50 dark:bg-slate-900/50" : "")}>
+                {formsData.length > 1 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="absolute top-2 right-2 h-8 w-8 p-0 text-muted-foreground hover:text-red-500" 
+                    onClick={() => removeAssetForm(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+                
+                {formsData.length > 1 && (
+                  <h4 className="text-sm font-medium mb-4 text-muted-foreground">Asset #{index + 1}</h4>
+                )}
 
-            <div className="space-y-2">
-              <Label>Brand</Label>
-              <Input 
-                value={formData.brand || ''} 
-                onChange={e => setFormData({...formData, brand: e.target.value})} 
-                placeholder="e.g. Apple, Dell"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Model</Label>
-              <Input 
-                value={formData.model || ''} 
-                onChange={e => setFormData({...formData, model: e.target.value})} 
-                placeholder="e.g. MacBook Pro, iPhone 13"
-              />
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Asset Type</Label>
+                    <Select 
+                      value={formData.type} 
+                      onValueChange={(val: any) => updateFormData(index, { type: val })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="COMPUTER">Computer</SelectItem>
+                        <SelectItem value="PHONE">Phone</SelectItem>
+                        <SelectItem value="OTHER">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Assign to Employee</Label>
+                    <Select 
+                      value={formData.userId} 
+                      onValueChange={(val) => {
+                        // Update userId for all forms if changed in one
+                        const newFormsData = formsData.map(d => ({ ...d, userId: val }));
+                        setFormsData(newFormsData);
+                      }}
+                      disabled={true} // Usually disabled because we selected employee in the main view
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Employee" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees.map(emp => (
+                          <SelectItem key={emp.id} value={emp.id}>
+                            {emp.name} {emp.employeeProfile?.employeeId ? `(${emp.employeeProfile.employeeId})` : ''}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-            {formData.type === 'COMPUTER' && (
-              <div className="space-y-2">
-                <Label>Serial Number</Label>
-                <Input 
-                  value={formData.serialNumber || ''} 
-                  onChange={e => setFormData({...formData, serialNumber: e.target.value})} 
-                />
+                  <div className="space-y-2">
+                    <Label>Brand</Label>
+                    <Input 
+                      value={formData.brand || ''} 
+                      onChange={e => updateFormData(index, { brand: e.target.value })} 
+                      placeholder="e.g. Apple, Dell"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Model</Label>
+                    <Input 
+                      value={formData.model || ''} 
+                      onChange={e => updateFormData(index, { model: e.target.value })} 
+                      placeholder="e.g. MacBook Pro, iPhone 13"
+                    />
+                  </div>
+
+                  {formData.type === 'COMPUTER' && (
+                    <div className="space-y-2">
+                      <Label>Serial Number</Label>
+                      <Input 
+                        value={formData.serialNumber || ''} 
+                        onChange={e => updateFormData(index, { serialNumber: e.target.value })} 
+                      />
+                    </div>
+                  )}
+
+                  {formData.type === 'PHONE' && (
+                    <>
+                      <div className="space-y-2">
+                        <Label>IMEI Number</Label>
+                        <Input 
+                          value={formData.imeiNumber || ''} 
+                          onChange={e => updateFormData(index, { imeiNumber: e.target.value })} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Network Provider</Label>
+                        <Input 
+                          value={formData.networkProvider || ''} 
+                          onChange={e => updateFormData(index, { networkProvider: e.target.value })} 
+                          placeholder="e.g. AT&T, Verizon"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Phone Number</Label>
+                        <Input 
+                          value={formData.phoneNumber || ''} 
+                          onChange={e => updateFormData(index, { phoneNumber: e.target.value })} 
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <Select 
+                      value={formData.status} 
+                      onValueChange={(val: any) => updateFormData(index, { status: val })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ASSIGNED">Assigned</SelectItem>
+                        <SelectItem value="RETURNED">Returned</SelectItem>
+                        <SelectItem value="LOST">Lost</SelectItem>
+                        <SelectItem value="DAMAGED">Damaged</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Assigned Date</Label>
+                    <Input 
+                      type="date"
+                      value={formData.assignedDate || ''} 
+                      onChange={e => updateFormData(index, { assignedDate: e.target.value })} 
+                    />
+                  </div>
+
+                  {formData.status === 'RETURNED' && (
+                    <div className="space-y-2">
+                      <Label>Returned Date</Label>
+                      <Input 
+                        type="date"
+                        value={formData.returnedDate || ''} 
+                        onChange={e => updateFormData(index, { returnedDate: e.target.value })} 
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-2 col-span-2">
+                    <Label>Notes</Label>
+                    <Input 
+                      value={formData.notes || ''} 
+                      onChange={e => updateFormData(index, { notes: e.target.value })} 
+                      placeholder="Additional details..."
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {!editingAsset && (
+              <div className="pt-2">
+                <Button variant="outline" className="w-full border-dashed" onClick={addAnotherAsset}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Another Asset
+                </Button>
               </div>
             )}
-
-            {formData.type === 'PHONE' && (
-              <>
-                <div className="space-y-2">
-                  <Label>IMEI Number</Label>
-                  <Input 
-                    value={formData.imeiNumber || ''} 
-                    onChange={e => setFormData({...formData, imeiNumber: e.target.value})} 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Network Provider</Label>
-                  <Input 
-                    value={formData.networkProvider || ''} 
-                    onChange={e => setFormData({...formData, networkProvider: e.target.value})} 
-                    placeholder="e.g. AT&T, Verizon"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Phone Number</Label>
-                  <Input 
-                    value={formData.phoneNumber || ''} 
-                    onChange={e => setFormData({...formData, phoneNumber: e.target.value})} 
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="space-y-2">
-              <Label>Status</Label>
-              <Select 
-                value={formData.status} 
-                onValueChange={(val: any) => setFormData({...formData, status: val})}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ASSIGNED">Assigned</SelectItem>
-                  <SelectItem value="RETURNED">Returned</SelectItem>
-                  <SelectItem value="LOST">Lost</SelectItem>
-                  <SelectItem value="DAMAGED">Damaged</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Assigned Date</Label>
-              <Input 
-                type="date"
-                value={formData.assignedDate || ''} 
-                onChange={e => setFormData({...formData, assignedDate: e.target.value})} 
-              />
-            </div>
-
-            {formData.status === 'RETURNED' && (
-              <div className="space-y-2">
-                <Label>Returned Date</Label>
-                <Input 
-                  type="date"
-                  value={formData.returnedDate || ''} 
-                  onChange={e => setFormData({...formData, returnedDate: e.target.value})} 
-                />
-              </div>
-            )}
-
-            <div className="space-y-2 col-span-2">
-              <Label>Notes</Label>
-              <Input 
-                value={formData.notes || ''} 
-                onChange={e => setFormData({...formData, notes: e.target.value})} 
-                placeholder="Additional details..."
-              />
-            </div>
-
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleSubmit}>{editingAsset ? 'Update' : 'Save'}</Button>
+            <Button onClick={handleSubmit}>{editingAsset ? 'Update' : 'Save All'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
