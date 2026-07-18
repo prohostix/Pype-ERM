@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -10,6 +10,7 @@ export function StudentPaymentsLogPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchLogs();
@@ -28,6 +29,13 @@ export function StudentPaymentsLogPanel() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleRow = (studentId: string) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [studentId]: !prev[studentId],
+    }));
   };
 
   const filteredLogs = logs.filter((log: any) =>
@@ -85,35 +93,67 @@ export function StudentPaymentsLogPanel() {
                 </thead>
                 <tbody className="divide-y divide-border/60">
                   {filteredLogs.map((log: any) => (
-                    <tr key={log.studentId} className="hover:bg-background/20">
-                      <td className="py-3 px-4 pl-0">
-                        <span className="font-bold text-foreground block">{log.name}</span>
-                        <span className="text-[10px] text-muted-foreground">{log.enrollmentNo || 'No Enrollment No.'}</span>
-                      </td>
-                      <td className="py-3 px-4 text-muted-foreground">
-                        {log.programName}
-                      </td>
-                      <td className="py-3 px-4 text-right font-medium text-foreground">
-                        ₹{log.totalFee?.toLocaleString('en-IN') || 0}
-                      </td>
-                      <td className="py-3 px-4 text-right font-medium text-emerald-600">
-                        ₹{log.totalPaid?.toLocaleString('en-IN') || 0}
-                      </td>
-                      <td className="py-3 px-4 text-right font-semibold text-amber-600">
-                        ₹{log.balance?.toLocaleString('en-IN') || 0}
-                      </td>
-                      <td className="py-3 pl-4">
-                        {log.status === 'Completed' ? (
-                          <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none">
-                            Completed
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-none">
-                            Pending
-                          </Badge>
-                        )}
-                      </td>
-                    </tr>
+                    <React.Fragment key={log.studentId}>
+                      <tr className="hover:bg-background/20 cursor-pointer" onClick={() => toggleRow(log.studentId)}>
+                        <td className="py-3 px-4 pl-0">
+                          <div className="flex items-center gap-2">
+                            {expandedRows[log.studentId] ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+                            <div>
+                              <span className="font-bold text-foreground block">{log.name}</span>
+                              <span className="text-[10px] text-muted-foreground">{log.enrollmentNo || 'No Enrollment No.'}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-muted-foreground">
+                          {log.programName}
+                        </td>
+                        <td className="py-3 px-4 text-right font-medium text-foreground">
+                          ₹{log.totalFee?.toLocaleString('en-IN') || 0}
+                        </td>
+                        <td className="py-3 px-4 text-right font-medium text-emerald-600">
+                          ₹{log.totalPaid?.toLocaleString('en-IN') || 0}
+                        </td>
+                        <td className="py-3 px-4 text-right font-semibold text-amber-600">
+                          ₹{log.balance?.toLocaleString('en-IN') || 0}
+                        </td>
+                        <td className="py-3 pl-4">
+                          {log.status === 'Completed' ? (
+                            <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-none">
+                              Completed
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-none">
+                              Pending
+                            </Badge>
+                          )}
+                        </td>
+                      </tr>
+                      {expandedRows[log.studentId] && log.breakdown && log.breakdown.length > 0 && (
+                        <tr className="bg-muted/20">
+                          <td colSpan={6} className="p-4 border-l-2 border-primary">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                              {log.breakdown.map((b: any, i: number) => (
+                                <div key={i} className="bg-background rounded-md border border-border p-3 flex flex-col gap-1 shadow-sm">
+                                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{b.year}</span>
+                                  <div className="flex justify-between items-center text-sm mt-1">
+                                    <span className="text-muted-foreground">Total:</span>
+                                    <span className="font-semibold text-foreground">₹{b.totalFee?.toLocaleString('en-IN') || 0}</span>
+                                  </div>
+                                  <div className="flex justify-between items-center text-sm">
+                                    <span className="text-muted-foreground">Paid:</span>
+                                    <span className="font-medium text-emerald-600">₹{b.paid?.toLocaleString('en-IN') || 0}</span>
+                                  </div>
+                                  <div className="flex justify-between items-center text-sm border-t border-border mt-1 pt-1">
+                                    <span className="text-muted-foreground">Balance:</span>
+                                    <span className="font-semibold text-amber-600">₹{b.balance?.toLocaleString('en-IN') || 0}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

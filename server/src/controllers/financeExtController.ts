@@ -371,26 +371,65 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
   });
 
   const logs = students.map(student => {
-    let totalFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    let scheduledFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    const totalPaid = student.paymentSchedules
+      .filter(ps => ps.status === 'paid')
+      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
+      
+    let totalFee = scheduledFee;
+    let breakdown: any[] = [];
     
     if (student.program?.feeStructures?.length) {
       const feeSt = student.program.feeStructures[0];
-      let structureTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0) + (feeSt.universityFee || 0);
+      let baseTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0) + (feeSt.universityFee || 0);
       
-      if (Array.isArray(feeSt.yearlyFees)) {
+      let structureTotal = baseTotal;
+      let remainingPaid = totalPaid;
+      
+      if (Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.length > 0) {
         feeSt.yearlyFees.forEach((yf: any) => {
-          structureTotal += (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) + (Number(yf.universityFee) || 0);
+          const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) + (Number(yf.universityFee) || 0);
+          
+          let yfPaid = 0;
+          if (remainingPaid >= yfTotal) {
+            yfPaid = yfTotal;
+            remainingPaid -= yfTotal;
+          } else {
+            yfPaid = remainingPaid;
+            remainingPaid = 0;
+          }
+          
+          breakdown.push({
+            year: yf.year ? `Year ${yf.year}` : `Year ${breakdown.length + 1}`,
+            totalFee: yfTotal,
+            paid: yfPaid,
+            balance: yfTotal - yfPaid
+          });
+          
+          structureTotal += yfTotal;
+        });
+      } else {
+        // Fallback if no yearly fees defined
+        breakdown.push({
+          year: 'Program Fee',
+          totalFee: structureTotal,
+          paid: totalPaid,
+          balance: Math.max(0, structureTotal - totalPaid)
         });
       }
       
       if (structureTotal > totalFee) {
         totalFee = structureTotal;
       }
+    } else {
+       breakdown.push({
+         year: 'Total Fee',
+         totalFee: scheduledFee,
+         paid: totalPaid,
+         balance: Math.max(0, scheduledFee - totalPaid)
+       });
     }
 
-    const totalPaid = student.paymentSchedules
-      .filter(ps => ps.status === 'paid')
-      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
     const balance = totalFee - totalPaid;
     const status = (balance <= 0 && totalFee > 0) ? 'Completed' : 'Pending';
 
@@ -402,7 +441,8 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       totalFee,
       totalPaid,
       balance,
-      status
+      status,
+      breakdown
     };
   });
 

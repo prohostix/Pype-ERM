@@ -606,16 +606,7 @@ export function CollectionsPanel() {
                       <tbody className="divide-y divide-border/60">
                         {metrics?.studentStats?.total > 0 && (
                           (() => {
-                            const allSchedules = [
-                              ...(metrics?.expectedPaymentsStats?.overdueSchedules || []),
-                              ...(metrics?.upcomingStats?.schedules || []),
-                              ...(metrics?.expectedPaymentsStats?.pendingSchedules || []),
-                              ...(metrics?.todayCollectingStats?.collectedSchedules || []),
-                              ...(metrics?.todayCollectingStats?.dueSchedules || [])
-                            ];
-                            const uniqueStudents = Array.from(new Map(
-                              allSchedules.map((s: any) => [s.studentId, s.student])
-                            ).values()).filter(Boolean);
+                            const uniqueStudents = metrics?.studentStats?.students || [];
                             
                             if (uniqueStudents.length === 0) {
                               return <tr><td colSpan={5} className="text-center py-4 text-muted-foreground text-xs">No student database logs linked</td></tr>;

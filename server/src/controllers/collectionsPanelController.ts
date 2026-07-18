@@ -107,6 +107,13 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
       id: true,
       name: true,
       status: true,
+      enrollmentNo: true,
+      phone: true,
+      email: true,
+      fatherName: true,
+      fatherPhone: true,
+      motherName: true,
+      motherPhone: true,
       program: { select: { name: true } },
       enrollments: { select: { id: true } }
     }
@@ -231,7 +238,8 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
     data: {
       studentStats: {
         total: students.length,
-        statusCounts: studentStatusCounts
+        statusCounts: studentStatusCounts,
+        students: students
       },
       paymentPendingStats: {
         outstandingAmount: totalOutstanding,
