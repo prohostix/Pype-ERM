@@ -1028,7 +1028,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         // If sId is not present, check if s.session string matches the selected session name
         const selectedSession = sessions.find((sess: any) => sess.id === filterSessionId);
         if (selectedSession && s.session) {
-          if (s.session.toLowerCase() !== selectedSession.name.toLowerCase()) {
+          if (String(s.session).toLowerCase() !== String(selectedSession.name).toLowerCase()) {
             return false;
           }
         } else {
