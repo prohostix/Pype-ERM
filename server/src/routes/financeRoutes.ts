@@ -204,4 +204,9 @@ router.route('/university-payments')
   .get(getUniversityPayments)
   .post(authorize('finance_admin'), recordUniversityPayment);
 
+// Discounts
+router.route('/discounts')
+  .get(getDiscounts)
+  .post(authorize('finance_admin'), applyDiscount);
+
 export default router;
