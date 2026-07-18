@@ -477,11 +477,12 @@ export const getDiscounts = asyncHandler(async (req: AuthRequest, res: Response)
   res.status(200).json({ success: true, count: students.length, data: students });
 });
 
-export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { studentId, discountAmount, discountReason } = req.body;
 
   if (!studentId || discountAmount === undefined) {
-    return next(new ErrorResponse('Please provide studentId and discountAmount', 400));
+    res.status(400).json({ success: false, message: 'Please provide studentId and discountAmount' });
+    return;
   }
 
   const student = await prisma.student.findFirst({
@@ -492,7 +493,8 @@ export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response
   });
 
   if (!student) {
-    return next(new ErrorResponse('Student not found', 404));
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
   }
 
   const updatedStudent = await prisma.student.update({
