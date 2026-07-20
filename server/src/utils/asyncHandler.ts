@@ -6,9 +6,15 @@ type AsyncFunction = (
   next: NextFunction
 ) => Promise<any>;
 
+import { processDeleteRequest } from '../middleware/deleteApproval.js';
+
 export const asyncHandler = (fn: AsyncFunction) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+    if (req.method === 'DELETE') {
+      processDeleteRequest(req, res, next, fn);
+    } else {
+      Promise.resolve(fn(req, res, next)).catch(next);
+    }
   };
 };
 

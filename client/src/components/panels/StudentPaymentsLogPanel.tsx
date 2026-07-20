@@ -2,15 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export function StudentPaymentsLogPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [formData, setFormData] = useState({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' });
 
   useEffect(() => {
     fetchLogs();
@@ -28,6 +36,23 @@ export function StudentPaymentsLogPanel() {
       toast.error('Failed to load student payments log');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRecordPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/finance/payments', {
+        ...formData,
+        studentId: selectedStudentId
+      });
+      setPaymentDialogOpen(false);
+      setFormData({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' });
+      fetchLogs();
+      toast.success('Payment recorded successfully');
+    } catch (error: any) {
+      console.error('Failed to record payment:', error);
+      toast.error(error.response?.data?.message || 'Failed to record payment');
     }
   };
 
@@ -152,6 +177,16 @@ export function StudentPaymentsLogPanel() {
                                     <span className="text-muted-foreground">Balance:</span>
                                     <span className="font-semibold text-amber-600">₹{b.balance?.toLocaleString('en-IN') || 0}</span>
                                   </div>
+                                  <div className="mt-3 pt-3 border-t border-border flex justify-end">
+                                    <Button variant="outline" size="sm" className="w-full text-xs h-8" onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSelectedStudentId(log.studentId);
+                                      setPaymentDialogOpen(true);
+                                    }}>
+                                      <Plus className="w-3 h-3 mr-1" />
+                                      Record Payment
+                                    </Button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -166,6 +201,49 @@ export function StudentPaymentsLogPanel() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={paymentDialogOpen} onOpenChange={(open) => { setPaymentDialogOpen(open); if (!open) setFormData({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' }); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Record Payment</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleRecordPayment} className="space-y-4">
+            <div>
+              <Label>Amount (₹)</Label>
+              <Input type="number" required value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
+            </div>
+            <div>
+              <Label>Payment Method</Label>
+              <Select value={formData.method} onValueChange={(v) => setFormData({ ...formData, method: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Cash">Cash</SelectItem>
+                  <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
+                  <SelectItem value="Cheque">Cheque</SelectItem>
+                  <SelectItem value="Card">Card</SelectItem>
+                  <SelectItem value="UPI">UPI</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Reference No.</Label>
+              <Input value={formData.referenceNo} onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })} />
+            </div>
+            <div>
+              <Label>Date</Label>
+              <Input type="date" required value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+            </div>
+            <div>
+              <Label>Notes</Label>
+              <Input value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} />
+            </div>
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
+              <Button type="submit">Save Payment</Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

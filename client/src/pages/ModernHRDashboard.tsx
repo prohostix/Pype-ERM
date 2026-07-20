@@ -36,6 +36,7 @@ import { PollsPanel } from '@/components/panels/PollsPanel';
 import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
+import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
 
 export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -77,6 +78,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'my_payslips': return <PayrollPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
       case 'assets': return <AssetManagementPanel />;
+      case 'delete_approvals': return <DeleteRequestsPanel />;
       default: return null;
     }
   };
@@ -111,6 +113,7 @@ export function getHRNavItems() {
     { id: 'att-settings', label: 'Att. Settings' },
     { id: 'assets', label: 'Assets' },
     { id: 'activity_report', label: 'Activity Report' },
+    { id: 'delete_approvals', label: 'Delete Approvals' },
     { id: '__portal_section', label: 'My Portal', isSection: true },
     { id: 'my_leaves', label: 'My Leaves' },
     { id: 'my_attendance', label: 'My Attendance' },

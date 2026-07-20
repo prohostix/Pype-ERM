@@ -52,12 +52,18 @@ class ApiService {
     return this.api.post(url, data, config);
   }
 
-  put(url: string, data?: any, config?: any) {
-    return this.api.put(url, data, config);
+  delete<T = any>(url: string, config?: any): Promise<import('axios').AxiosResponse<T>> {
+    return new Promise((resolve, reject) => {
+      window.dispatchEvent(
+        new CustomEvent('requestDeleteApproval', {
+          detail: { url, config, resolve, reject, apiInstance: this.api },
+        })
+      );
+    });
   }
 
-  delete(url: string, config?: any) {
-    return this.api.delete(url, config);
+  put(url: string, data?: any, config?: any) {
+    return this.api.put(url, data, config);
   }
 
   patch(url: string, data?: any, config?: any) {

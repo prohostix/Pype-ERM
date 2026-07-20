@@ -107,8 +107,8 @@ export function CollectionsPanel() {
 
   const handleRemoveOverseer = async (userId: string) => {
     try {
-      const res = await api.delete(`/collections/overseers/${userId}`);
-      if (res.data.success) {
+      const res = await api.delete(`/collections/overseers/${userId}`) as any;
+      if (res?.data?.success) {
         toast.success('User removed from overseers list');
         fetchOverseers();
       }
