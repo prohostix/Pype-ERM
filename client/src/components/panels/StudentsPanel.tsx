@@ -84,6 +84,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [searchQuery, setSearchQuery] = useState('');
   const [filterUniversityId, setFilterUniversityId] = useState('all');
   const [filterSessionId, setFilterSessionId] = useState('all');
+  const [filterBranchId, setFilterBranchId] = useState('all');
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -1018,6 +1019,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         (typeof s.program === 'object' ? s.program?.universityId : null) ||
         (typeof s.programId === 'object' ? s.programId?.universityId : null);
       if (uId !== filterUniversityId) return false;
+    }
+
+    // Branch Filter
+    if (filterBranchId !== 'all') {
+      const bId = typeof s.branchId === 'object' ? s.branchId?.id : s.branchId;
+      if (bId !== filterBranchId) return false;
     }
 
     // Session Filter
@@ -2041,7 +2048,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           <CardTitle>Student Directory</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
             <div>
               <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, Center)</Label>
               <div className="relative">
@@ -2064,6 +2071,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   <SelectItem value="all">All Universities</SelectItem>
                   {universities.map(u => (
                     <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground block mb-1">Filter by Branch</Label>
+              <Select value={filterBranchId} onValueChange={setFilterBranchId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Branches" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Branches</SelectItem>
+                  {branches.map(b => (
+                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
