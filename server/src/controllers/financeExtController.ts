@@ -406,6 +406,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       let remainingPaid = totalPaid;
       
       if (Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.length > 0) {
+        structureTotal = 0; // Prevent double-counting as root fields are aggregates
         feeSt.yearlyFees.forEach((yf: any) => {
           const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) + (Number(yf.universityFee) || 0);
           
