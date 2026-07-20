@@ -359,9 +359,15 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       id: true,
       name: true,
       enrollmentNo: true,
+      sessionId: true,
       program: {
         select: { 
           name: true,
+          feeStructures: true
+        }
+      },
+      university: {
+        select: {
           feeStructures: true
         }
       },
@@ -381,8 +387,19 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
     
+    let feeSt: any = undefined;
+    
     if (student.program?.feeStructures?.length) {
-      const feeSt = student.program.feeStructures[0];
+       feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId);
+       if (!feeSt) feeSt = student.program.feeStructures[0];
+    }
+    
+    if (!feeSt && student.university?.feeStructures?.length) {
+       feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId);
+       if (!feeSt) feeSt = student.university.feeStructures[0];
+    }
+    
+    if (feeSt) {
       let baseTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0) + (feeSt.universityFee || 0);
       
       let structureTotal = baseTotal;
