@@ -1038,6 +1038,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     }
 
     return true;
+  }).sort((a, b) => {
+    const branchA = a.branch?.name || '';
+    const branchB = b.branch?.name || '';
+    return branchA.localeCompare(branchB);
   });
 
   if (triggerOpen !== undefined) {
@@ -2086,12 +2090,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             <div className="text-center py-8 text-muted-foreground">No students found matching this criteria</div>
           ) : (
             <div className="space-y-3">
-              {filteredStudents.map((student) => {
+              {filteredStudents.map((student, index) => {
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : '';
                 return (
                   <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3">
                     <div className="flex items-center gap-4">
+                      <div className="w-6 text-center text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+                        {index + 1}
+                      </div>
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
                           <img 
