@@ -1039,8 +1039,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
     return true;
   }).sort((a, b) => {
-    const branchA = a.branch?.name || '';
-    const branchB = b.branch?.name || '';
+    const branchA = (typeof a.branchId === 'object' ? a.branchId?.name : a.branch?.name) || '';
+    const branchB = (typeof b.branchId === 'object' ? b.branchId?.name : b.branch?.name) || '';
     return branchA.localeCompare(branchB);
   });
 
@@ -2091,8 +2091,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           ) : (
             <div className="space-y-3">
               {filteredStudents.map((student, index) => {
-                const centerName = typeof student.centerId === 'object' ? student.centerId?.name : '';
-                const programName = typeof student.programId === 'object' ? student.programId?.name : '';
+                const centerName = typeof student.centerId === 'object' ? student.centerId?.name : student.center?.name || '';
+                const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
+                const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
+                const branchName = typeof student.branchId === 'object' ? student.branchId?.name : student.branch?.name || '';
                 return (
                   <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3">
                     <div className="flex items-center gap-4">
@@ -2116,7 +2118,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           {student.isPrevious && <Badge variant="secondary" className="text-xs">Previous</Badge>}
                         </div>
                         <div className="text-sm text-muted-foreground font-medium mt-0.5">
-                          {student.enrollmentNo}{programName ? ` • ${programName}` : ''}{centerName ? ` • ${centerName}` : ''}
+                          {student.enrollmentNo}{universityName ? ` • ${universityName}` : ''}{branchName ? ` • ${branchName}` : ''}{programName ? ` • ${programName}` : ''}{centerName ? ` • ${centerName}` : ''}
                         </div>
                         <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
                           <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> {student.email}</span>
