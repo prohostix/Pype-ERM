@@ -360,6 +360,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       name: true,
       enrollmentNo: true,
       sessionId: true,
+      joinDate: true,
       program: {
         select: { 
           name: true,
@@ -419,11 +420,15 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
             remainingPaid = 0;
           }
           
+          const yearOffset = yf.year ? Number(yf.year) - 1 : breakdown.length;
+          const calculatedDueDate = student.joinDate ? new Date(new Date(student.joinDate).setFullYear(new Date(student.joinDate).getFullYear() + yearOffset)) : null;
+
           breakdown.push({
             year: yf.year ? `Year ${yf.year}` : `Year ${breakdown.length + 1}`,
             totalFee: yfTotal,
             paid: yfPaid,
-            balance: yfTotal - yfPaid
+            balance: yfTotal - yfPaid,
+            dueDate: calculatedDueDate
           });
           
           structureTotal += yfTotal;
@@ -434,7 +439,8 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
           year: 'Program Fee',
           totalFee: structureTotal,
           paid: totalPaid,
-          balance: Math.max(0, structureTotal - totalPaid)
+          balance: Math.max(0, structureTotal - totalPaid),
+          dueDate: student.joinDate ? new Date(student.joinDate) : null
         });
       }
       

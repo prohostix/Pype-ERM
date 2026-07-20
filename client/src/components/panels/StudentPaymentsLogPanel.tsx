@@ -164,7 +164,14 @@ export function StudentPaymentsLogPanel() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                               {log.breakdown.map((b: any, i: number) => (
                                 <div key={i} className="bg-background rounded-md border border-border p-3 flex flex-col gap-1 shadow-sm">
-                                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{b.year}</span>
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{b.year}</span>
+                                    {b.dueDate && (
+                                      <span className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground">
+                                        Due: {new Date(b.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                      </span>
+                                    )}
+                                  </div>
                                   <div className="flex justify-between items-center text-sm mt-1">
                                     <span className="text-muted-foreground">Total:</span>
                                     <span className="font-semibold text-foreground">₹{b.totalFee?.toLocaleString('en-IN') || 0}</span>
