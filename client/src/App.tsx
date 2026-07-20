@@ -36,6 +36,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   // Superadmin
   organizations: 'organizations',
   licenses: 'licenses',
+  inquiries: 'enquiries',
   // Org Admin
   hierarchy: 'hierarchy',
   branches: 'branches',

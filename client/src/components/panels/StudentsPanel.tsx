@@ -85,6 +85,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [filterUniversityId, setFilterUniversityId] = useState('all');
   const [filterSessionId, setFilterSessionId] = useState('all');
   const [filterBranchId, setFilterBranchId] = useState('all');
+  const [sortBy, setSortBy] = useState('name');
 
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
@@ -1046,9 +1047,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
     return true;
   }).sort((a, b) => {
-    const branchA = (typeof a.branchId === 'object' ? a.branchId?.name : a.branch?.name) || '';
-    const branchB = (typeof b.branchId === 'object' ? b.branchId?.name : b.branch?.name) || '';
-    return branchA.localeCompare(branchB);
+    if (sortBy === 'branch') {
+      const branchA = (typeof a.branchId === 'object' ? a.branchId?.name : a.branch?.name) || '';
+      const branchB = (typeof b.branchId === 'object' ? b.branchId?.name : b.branch?.name) || '';
+      return branchA.localeCompare(branchB);
+    } else if (sortBy === 'enrollmentNo') {
+      const enA = a.enrollmentNo || '';
+      const enB = b.enrollmentNo || '';
+      return enA.localeCompare(enB);
+    } else {
+      // Default to sorting by name
+      const nameA = a.name || '';
+      const nameB = b.name || '';
+      return nameA.localeCompare(nameB);
+    }
   });
 
   if (triggerOpen !== undefined) {
@@ -2048,7 +2060,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           <CardTitle>Student Directory</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
             <div>
               <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, Center)</Label>
               <div className="relative">
@@ -2100,6 +2112,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   {sessions.map(s => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground block mb-1">Sort By</Label>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sort By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="branch">Branch</SelectItem>
+                  <SelectItem value="enrollmentNo">Enrollment No.</SelectItem>
                 </SelectContent>
               </Select>
             </div>
