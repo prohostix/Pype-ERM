@@ -410,7 +410,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
           dob: s.dob ? new Date(s.dob) : undefined,
           admissionDate: s.admissionDate ? new Date(s.admissionDate) : undefined,
           credentials: { email: s.email, password: defaultPassword },
-          enrolledBy: salesUserId && salesUserId !== 'none' ? salesUserId : null
+          enrolledBy: SALES_ROLES.includes(req.user.role) ? req.user.id : (salesUserId && salesUserId !== 'none' ? salesUserId : null)
         }
       });
 

@@ -2273,7 +2273,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               </div>
             )}
 
-            {user?.role === 'org_admin' && salesUsers.length > 0 && (
+            {['superadmin', 'org_admin', 'ceo', 'ops_admin'].includes(user?.role || '') && salesUsers.length > 0 && (
               <div className="space-y-1.5">
                 <Label htmlFor="bulkSalesUserSelect" className="text-sm font-semibold">Assign Sales User (Optional)</Label>
                 <Select value={selectedSalesUserId} onValueChange={setSelectedSalesUserId}>
