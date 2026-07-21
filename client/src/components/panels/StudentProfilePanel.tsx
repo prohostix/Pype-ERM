@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { format } from 'date-fns';
 import api from '@/lib/api';
 
@@ -184,10 +185,55 @@ export function StudentProfilePanel({ student, onBack }: { student: any; onBack:
 
                 {/* Fees Tab */}
                 <TabsContent value="fees" className="mt-0">
-                  <div className="text-center py-10 space-y-3">
-                    <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
-                    <h4 className="text-base font-semibold">Fee records will appear here</h4>
-                    <p className="text-sm text-muted-foreground">This section is currently under development or waiting for records.</p>
+                  <div className="space-y-4">
+                    {student.paymentSchedules && student.paymentSchedules.length > 0 ? (
+                      <div className="border rounded-md">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Title</TableHead>
+                              <TableHead>Due Date</TableHead>
+                              <TableHead>Amount</TableHead>
+                              <TableHead>Status</TableHead>
+                              <TableHead>Paid At</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {student.paymentSchedules.map((schedule: any) => (
+                              <TableRow key={schedule.id}>
+                                <TableCell className="font-medium">
+                                  {schedule.title}
+                                  {schedule.isOldFee && <Badge variant="outline" className="ml-2 text-[10px]">OLD FEE</Badge>}
+                                </TableCell>
+                                <TableCell>
+                                  {schedule.dueDate ? format(new Date(schedule.dueDate), 'dd MMM yyyy') : 'N/A'}
+                                </TableCell>
+                                <TableCell>
+                                  {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(schedule.amount)}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge 
+                                    variant={schedule.status === 'paid' ? 'default' : schedule.status === 'overdue' ? 'destructive' : 'secondary'}
+                                    className={schedule.status === 'paid' ? "bg-green-500 hover:bg-green-600 uppercase" : "uppercase"}
+                                  >
+                                    {schedule.status}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>
+                                  {schedule.paidAt ? format(new Date(schedule.paidAt), 'dd MMM yyyy') : '-'}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    ) : (
+                      <div className="text-center py-10 space-y-3">
+                        <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
+                        <h4 className="text-base font-semibold">No Fee Records Found</h4>
+                        <p className="text-sm text-muted-foreground">This student does not have any payment schedules yet.</p>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
 
