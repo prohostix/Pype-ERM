@@ -292,7 +292,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                    ${metrics?.todayCollectingStats?.collectedAmount || 0}
+                    ₹{metrics?.todayCollectingStats?.collectedAmount?.toLocaleString('en-IN') || 0}
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-1">
                     {metrics?.todayCollectingStats?.collectedCount || 0} installments collected today
@@ -306,7 +306,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-primary">
-                    ${metrics?.paymentPendingStats?.outstandingAmount || 0}
+                    ₹{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString('en-IN') || 0}
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-1">
                     {metrics?.paymentPendingStats?.pendingSchedulesCount || 0} schedules awaiting payment
@@ -320,7 +320,7 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-amber-500">
-                    ${metrics?.upcomingStats?.dueAmount || 0}
+                    ₹{metrics?.upcomingStats?.dueAmount?.toLocaleString('en-IN') || 0}
                   </div>
                   <p className="text-[10px] text-muted-foreground mt-1">
                     {metrics?.upcomingStats?.dueCount || 0} upcoming installments
@@ -334,10 +334,10 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-destructive">
-                    ${metrics?.paymentPendingStats?.outstandingAmount || 0}
+                    ₹{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString('en-IN') || 0}
                   </div>
                   <p className="text-[10px] text-destructive mt-1 font-semibold">
-                    Includes ${metrics?.paymentPendingStats?.overdueAmount || 0} Overdue dues
+                    Includes ₹{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString('en-IN') || 0} Overdue dues
                   </p>
                 </CardContent>
               </Card>
@@ -349,8 +349,8 @@ export function CollectionsPanel() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-primary flex items-baseline gap-1">
-                    ${metrics?.targetStats?.achieved || 0} 
-                    <span className="text-xs font-semibold text-muted-foreground">/ ${metrics?.targetStats?.target || 50000}</span>
+                    ₹{metrics?.targetStats?.achieved?.toLocaleString('en-IN') || 0} 
+                    <span className="text-xs font-semibold text-muted-foreground">/ ₹{metrics?.targetStats?.target?.toLocaleString('en-IN') || 50000}</span>
                   </div>
                   <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden mt-2">
                     <div 
@@ -372,7 +372,7 @@ export function CollectionsPanel() {
               <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                    <CheckCircle2 className="w-5 h-5" /> Today's Collected Dues (${metrics?.todayCollectingStats?.collectedAmount || 0})
+                    <CheckCircle2 className="w-5 h-5" /> Today's Collected Dues (₹{(metrics?.todayCollectingStats?.collectedAmount || 0).toLocaleString('en-IN')})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
