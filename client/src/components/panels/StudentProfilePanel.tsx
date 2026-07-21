@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { 
   ArrowLeft,
   GraduationCap,
@@ -6,8 +7,12 @@ import {
   Phone,
   Mail,
   CreditCard,
-  FileText
+  FileText,
+  Key,
+  Copy,
+  RefreshCw
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +24,32 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { format } from 'date-fns';
 import api from '@/lib/api';
 
-export function StudentProfilePanel({ student, onBack }: { student: any; onBack: () => void }) {
+export function StudentProfilePanel({ student: initialStudent, onBack }: { student: any; onBack: () => void }) {
+  const [student, setStudent] = useState<any>(initialStudent);
+  const [isResetting, setIsResetting] = useState(false);
+  
+  const handleResetPassword = async () => {
+    try {
+      setIsResetting(true);
+      const newPassword = Math.random().toString(36).slice(-8);
+      const response = await api.put(`/students/${student.id}`, {
+        credentials: {
+          email: student.email,
+          password: newPassword
+        }
+      });
+      if (response.data.success) {
+        setStudent(response.data.data);
+        toast.success('Password reset successfully.');
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Failed to reset password');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   if (!student) return null;
 
   const photoUrl = student.photo 
@@ -267,7 +297,77 @@ export function StudentProfilePanel({ student, onBack }: { student: any; onBack:
 
                 {/* Student Portal Tab */}
                 <TabsContent value="portal" className="mt-0">
-                  <PlaceholderPanel title="Student Portal Management" description="Manage portal access for this student." />
+                  <div className="space-y-6">
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lg font-bold">Portal Access Credentials</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Students can log in to the student portal using these credentials to view their progress, download documents, and check fee statuses.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="border rounded-lg p-4 space-y-4 bg-muted/20">
+                        <div>
+                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Portal Login URL</p>
+                          <div className="flex items-center gap-2">
+                            <code className="text-sm bg-muted px-2 py-1 rounded select-all">
+                              {typeof window !== 'undefined' ? window.location.origin.replace('admin', 'student') + '/student-portal' : 'https://portal.example.com'}
+                            </code>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Login Email</p>
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-medium select-all">{student.email}</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-muted-foreground uppercase font-semibold mb-1">Current Password</p>
+                          <div className="flex items-center gap-2">
+                            <Key className="w-4 h-4 text-muted-foreground" />
+                            {student.credentials?.password ? (
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium tracking-wide font-mono select-all">{student.credentials.password}</span>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-6 w-6 ml-1" 
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(student.credentials.password);
+                                    toast.success('Password copied to clipboard');
+                                  }}
+                                  title="Copy Password"
+                                >
+                                  <Copy className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground italic text-sm">Not set or obscured</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col justify-center space-y-4 border rounded-lg p-6 bg-muted/10">
+                        <div className="text-center space-y-2 mb-2">
+                          <RefreshCw className="w-8 h-8 text-muted-foreground mx-auto" />
+                          <h4 className="font-semibold">Reset Password</h4>
+                          <p className="text-sm text-muted-foreground">Generate a new random password for this student. The old password will immediately become invalid.</p>
+                        </div>
+                        <Button 
+                          onClick={handleResetPassword} 
+                          disabled={isResetting} 
+                          className="w-full"
+                          variant="destructive"
+                        >
+                          {isResetting ? 'Resetting...' : 'Generate New Password'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 {/* Student Progress Tab */}
