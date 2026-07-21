@@ -111,7 +111,7 @@ export function StudentPaymentsLogPanel() {
                     <th className="pb-3 pr-4">Student Details</th>
                     <th className="pb-3 px-4">Program</th>
                     <th className="pb-3 px-4 text-right">Total Fee</th>
-                    <th className="pb-3 px-4 text-right">Amount Paid</th>
+                    <th className="pb-3 px-4 text-right">Amount Received</th>
                     <th className="pb-3 px-4 text-right">Balance</th>
                     <th className="pb-3 pl-4">Status</th>
                   </tr>
@@ -177,7 +177,7 @@ export function StudentPaymentsLogPanel() {
                                     <span className="font-semibold text-foreground">₹{b.totalFee?.toLocaleString('en-IN') || 0}</span>
                                   </div>
                                   <div className="flex justify-between items-center text-sm">
-                                    <span className="text-muted-foreground">Paid:</span>
+                                    <span className="text-muted-foreground">Received:</span>
                                     <span className="font-medium text-emerald-600">₹{b.paid?.toLocaleString('en-IN') || 0}</span>
                                   </div>
                                   <div className="flex justify-between items-center text-sm border-t border-border mt-1 pt-1">
@@ -191,7 +191,7 @@ export function StudentPaymentsLogPanel() {
                                       setPaymentDialogOpen(true);
                                     }}>
                                       <Plus className="w-3 h-3 mr-1" />
-                                      Record Payment
+                                      Record Receipt
                                     </Button>
                                   </div>
                                 </div>
@@ -212,7 +212,7 @@ export function StudentPaymentsLogPanel() {
       <Dialog open={paymentDialogOpen} onOpenChange={(open) => { setPaymentDialogOpen(open); if (!open) setFormData({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' }); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Record Payment</DialogTitle>
+            <DialogTitle>Record Receipt</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleRecordPayment} className="space-y-4">
             <div>
@@ -246,7 +246,7 @@ export function StudentPaymentsLogPanel() {
             </div>
             <div className="flex justify-end gap-2 pt-4 border-t">
               <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
-              <Button type="submit">Save Payment</Button>
+              <Button type="submit">Save Receipt</Button>
             </div>
           </form>
         </DialogContent>
