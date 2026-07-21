@@ -44,31 +44,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <div className="relative">
-          <TabsList className="w-full justify-start overflow-x-auto overflow-y-hidden no-scrollbar h-auto py-1 gap-1 bg-transparent border-b rounded-none flex-nowrap">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Overview</TabsTrigger>
-            <TabsTrigger value="hierarchy" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Hierarchy</TabsTrigger>
-            <TabsTrigger value="branches" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Branches</TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Users</TabsTrigger>
-            <TabsTrigger value="departments" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Departments</TabsTrigger>
-
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Tasks</TabsTrigger>
-            <TabsTrigger value="students" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Students</TabsTrigger>
-            <TabsTrigger value="universities" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Universities</TabsTrigger>
-            <TabsTrigger value="programs" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Programs</TabsTrigger>
-            <TabsTrigger value="centers" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Study Centers</TabsTrigger>
-            <TabsTrigger value="invoices" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Invoices</TabsTrigger>
-            <TabsTrigger value="payments" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Payments</TabsTrigger>
-            <TabsTrigger value="expenses" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Expenses</TabsTrigger>
-            <TabsTrigger value="employees" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Employees</TabsTrigger>
-            <TabsTrigger value="leaves" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leave Requests</TabsTrigger>
-            <TabsTrigger value="leads" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Leads</TabsTrigger>
-            <TabsTrigger value="sessions" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Sessions</TabsTrigger>
-            <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Enrollment Review</TabsTrigger>
-            <TabsTrigger value="collections" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Collections</TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-lg">Organisation Settings</TabsTrigger>
-          </TabsList>
-        </div>
+        {/* Sidebar navigation acts as the main router, so we don't render TabsList here */}
 
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

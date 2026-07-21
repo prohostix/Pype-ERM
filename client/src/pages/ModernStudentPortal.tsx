@@ -111,7 +111,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
             <td style="padding: 8px; border-bottom: 1px solid #eee;">${new Date(p.paymentDate).toLocaleDateString()}</td>
             <td style="padding: 8px; border-bottom: 1px solid #eee;">${p.transactionId || 'N/A'}</td>
             <td style="padding: 8px; border-bottom: 1px solid #eee; text-transform: uppercase;">${p.paymentMethod}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${p.amount}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">₹${p.amount}</td>
           </tr>
         `).join('')
       : '<tr><td colspan="4" style="padding: 8px; text-align: center; color: #888;">No payments received yet</td></tr>';
@@ -178,9 +178,9 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
             <tbody>
               <tr>
                 <td>Program Fee Installment / Service Fee</td>
-                <td style="text-align: right;">$${invoice.amount}</td>
-                <td style="text-align: right;">$${invoice.paidAmount}</td>
-                <td style="text-align: right;">$${invoice.balanceAmount}</td>
+                <td style="text-align: right;">₹${invoice.amount}</td>
+                <td style="text-align: right;">₹${invoice.paidAmount}</td>
+                <td style="text-align: right;">₹${invoice.balanceAmount}</td>
               </tr>
             </tbody>
           </table>
@@ -204,15 +204,15 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
             <table>
               <tr>
                 <td><strong>Subtotal:</strong></td>
-                <td style="text-align: right;">$${invoice.amount}</td>
+                <td style="text-align: right;">₹${invoice.amount}</td>
               </tr>
               <tr>
                 <td><strong>Total Paid:</strong></td>
-                <td style="text-align: right;">$${invoice.paidAmount}</td>
+                <td style="text-align: right;">₹${invoice.paidAmount}</td>
               </tr>
               <tr style="border-top: 2px solid #5a67d8; font-size: 18px; font-weight: bold;">
                 <td style="padding-top: 10px;">Balance Due:</td>
-                <td style="text-align: right; padding-top: 10px; color: ${invoice.balanceAmount > 0 ? '#e53e3e' : '#2f855a'};">$${invoice.balanceAmount}</td>
+                <td style="text-align: right; padding-top: 10px; color: ${invoice.balanceAmount > 0 ? '#e53e3e' : '#2f855a'};">₹${invoice.balanceAmount}</td>
               </tr>
             </table>
           </div>
