@@ -71,6 +71,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   programs: 'programs',
   study_centers: 'centers',
   admission_sessions: 'admission_sessions',
+  sessions: 'sessions',
   internal_marks: 'marks',
   announcements: 'announcements',
   pending_verification: 'pending_verification',
