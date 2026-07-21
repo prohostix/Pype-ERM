@@ -1,0 +1,395 @@
+import prisma from '../lib/prisma.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+function getDistanceInMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // metres
+    const phi1 = lat1 * Math.PI / 180;
+    const phi2 = lat2 * Math.PI / 180;
+    const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+    const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+        Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // in meters
+}
+export const punchIn = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.status(400).json({ success: false, message: 'Punch-in is only available for tenant organization employees.' });
+        return;
+    }
+    const { latitude, longitude, address } = req.body;
+    // Retrieve HR Settings
+    const settings = await prisma.hRSettings.findFirst({
+        where: { organizationId: req.user.organizationId }
+    });
+    // 1. Geofencing location check (if required by settings)
+    if (settings && settings.requireLocation) {
+        if (latitude === undefined || longitude === undefined) {
+            res.status(400).json({ success: false, message: 'Location coordinates are required to check in.' });
+            return;
+        }
+        let isWithinGeofence = false;
+        let allowedRadiusMsg = '';
+        // Check default office location
+        const defaultLoc = settings.location;
+        if (defaultLoc && defaultLoc.officeLatitude && defaultLoc.officeLongitude) {
+            const distance = getDistanceInMeters(latitude, longitude, defaultLoc.officeLatitude, defaultLoc.officeLongitude);
+            const radius = defaultLoc.allowedRadius || 100;
+            if (distance <= radius) {
+                isWithinGeofence = true;
+            }
+            else {
+                allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+            }
+        }
+        // Check other office locations
+        const locationsList = settings.locations;
+        if (!isWithinGeofence && Array.isArray(locationsList)) {
+            for (const loc of locationsList) {
+                if (loc.latitude && loc.longitude) {
+                    const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
+                    const radius = loc.allowedRadius || 100;
+                    if (distance <= radius) {
+                        isWithinGeofence = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!isWithinGeofence) {
+            res.status(400).json({
+                success: false,
+                message: `Check-in denied: You are outside the allowed office geofences. ${allowedRadiusMsg}`
+            });
+            return;
+        }
+    }
+    const now = new Date();
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    // Check if already checked in today (using 24h range check)
+    const existing = await prisma.attendance.findFirst({
+        where: {
+            employeeId: req.user.id,
+            date: {
+                gte: todayStart,
+                lte: todayEnd
+            }
+        }
+    });
+    if (existing) {
+        res.status(400).json({ success: false, message: 'You have already checked in today.' });
+        return;
+    }
+    const today = todayStart; // Save exact normalized midnight date to respect unique constraint
+    // 2. Late calculation
+    let isLate = false;
+    let lateMinutes = 0;
+    let status = 'present';
+    if (settings && settings.officeHours) {
+        const officeHours = settings.officeHours;
+        const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const currentDayName = weekdays[now.getDay()];
+        // Find if there is a day override for today
+        const overrides = officeHours.dayOverrides || [];
+        const dayOverride = overrides.find((o) => o.day === currentDayName);
+        const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
+        const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
+        // Parse shift target check-in time
+        const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+        const targetCheckInDate = new Date(now);
+        targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+        // Calculate time difference
+        const diffMs = now.getTime() - targetCheckInDate.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        if (diffMins > gracePeriod) {
+            isLate = true;
+            lateMinutes = diffMins;
+            status = 'late';
+        }
+    }
+    const attendance = await prisma.attendance.create({
+        data: {
+            employeeId: req.user.id,
+            organizationId: req.user.organizationId,
+            date: today,
+            checkIn: now,
+            checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+            status,
+            isLate,
+            lateMinutes
+        }
+    });
+    res.status(201).json({
+        success: true,
+        message: isLate ? `Punched in successfully! (Late by ${lateMinutes} mins)` : 'Punched in successfully!',
+        data: attendance
+    });
+});
+export const punchOut = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.status(400).json({ success: false, message: 'Punch-out is only available for tenant organization employees.' });
+        return;
+    }
+    const { latitude, longitude, address } = req.body;
+    const now = new Date();
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    // Retrieve today's check-in record
+    const attendanceRecord = await prisma.attendance.findFirst({
+        where: {
+            employeeId: req.user.id,
+            date: {
+                gte: todayStart,
+                lte: todayEnd
+            }
+        }
+    });
+    if (!attendanceRecord) {
+        res.status(400).json({ success: false, message: 'You must check in first before checking out.' });
+        return;
+    }
+    if (attendanceRecord.checkOut) {
+        res.status(400).json({ success: false, message: 'You have already checked out today.' });
+        return;
+    }
+    // Calculate working hours
+    const checkInTime = new Date(attendanceRecord.checkIn).getTime();
+    const workingHours = Number(((now.getTime() - checkInTime) / 3600000).toFixed(2));
+    const attendance = await prisma.attendance.update({
+        where: { id: attendanceRecord.id },
+        data: {
+            checkOut: now,
+            checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
+            workingHours
+        }
+    });
+    res.json({
+        success: true,
+        message: `Punched out successfully! Total duration: ${workingHours} hrs.`,
+        data: attendance
+    });
+});
+export const getTodayAttendance = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.json({ success: true, data: null });
+        return;
+    }
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    const attendance = await prisma.attendance.findFirst({
+        where: {
+            employeeId: req.user.id,
+            date: {
+                gte: todayStart,
+                lte: todayEnd
+            }
+        }
+    });
+    res.json({ success: true, data: attendance });
+});
+export const getMonthlyLateSummary = asyncHandler(async (req, res) => {
+    res.json({ success: true, data: {} });
+});
+export const getAttendances = asyncHandler(async (req, res) => {
+    const where = { organizationId: req.user.organizationId };
+    // Branch isolation
+    if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
+        where.user = { branchId: req.user.branchId };
+    }
+    let isDateFiltered = false;
+    let targetDate = new Date();
+    // Date filter
+    if (req.query.date) {
+        isDateFiltered = true;
+        const dateStr = req.query.date;
+        const start = new Date(dateStr);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(dateStr);
+        end.setHours(23, 59, 59, 999);
+        where.date = { gte: start, lte: end };
+        targetDate = start;
+    }
+    // Status filter
+    let requestedStatus = req.query.status;
+    if (requestedStatus && requestedStatus !== 'absent' && requestedStatus !== 'all') {
+        where.status = requestedStatus;
+    }
+    else if (requestedStatus === 'all') {
+        // do not apply status filter
+    }
+    else if (requestedStatus === 'absent') {
+        // we'll filter them later
+    }
+    const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
+    let finalAttendances = [...attendances];
+    if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
+        const orgQuery = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin'] } } };
+        if (where.user?.branchId)
+            orgQuery.branchId = where.user.branchId;
+        const allEmployees = await prisma.user.findMany({ where: orgQuery });
+        let presentEmployeeIds = new Set(attendances.map(a => a.employeeId));
+        if (requestedStatus === 'absent' || requestedStatus === 'all') {
+            const allAttendancesForDate = await prisma.attendance.findMany({
+                where: { organizationId: where.organizationId, date: where.date, ...(where.user ? { user: where.user } : {}) }
+            });
+            presentEmployeeIds = new Set(allAttendancesForDate.map(a => a.employeeId));
+        }
+        const absentEmployees = allEmployees.filter(emp => !presentEmployeeIds.has(emp.id));
+        const mockAbsentRecords = absentEmployees.map(emp => ({
+            id: `absent-${emp.id}-${targetDate.getTime()}`,
+            employeeId: emp.id,
+            organizationId: emp.organizationId,
+            branchId: emp.branchId,
+            date: targetDate,
+            status: 'absent',
+            checkIn: null,
+            checkOut: null,
+            checkInLocation: null,
+            checkOutLocation: null,
+            isLate: false,
+            lateMinutes: 0,
+            workingHours: 0,
+            notes: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            user: emp
+        }));
+        if (requestedStatus === 'absent') {
+            finalAttendances = mockAbsentRecords;
+        }
+        else {
+            finalAttendances = [...finalAttendances, ...mockAbsentRecords];
+        }
+        // re-sort by date and then by name if date is same
+        finalAttendances.sort((a, b) => {
+            const d1 = new Date(a.date).getTime();
+            const d2 = new Date(b.date).getTime();
+            if (d1 !== d2)
+                return d2 - d1;
+            const nameA = a.user?.name || '';
+            const nameB = b.user?.name || '';
+            return nameA.localeCompare(nameB);
+        });
+    }
+    res.json({ success: true, count: finalAttendances.length, data: finalAttendances });
+});
+export const getAttendance = asyncHandler(async (req, res) => {
+    const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
+    if (!attendance || attendance.organizationId !== req.user.organizationId) {
+        res.status(404).json({ success: false, message: 'Attendance record not found' });
+        return;
+    }
+    res.json({ success: true, data: attendance });
+});
+export const getAttendanceById = asyncHandler(async (req, res) => {
+    const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id }, include: { user: true } });
+    if (!attendance) {
+        res.status(404).json({ success: false, message: 'Attendance record not found' });
+        return;
+    }
+    res.json({ success: true, data: attendance });
+});
+export const createAttendance = asyncHandler(async (req, res) => {
+    const orgId = req.user.organizationId || req.body.organizationId;
+    if (!orgId) {
+        res.status(400).json({ success: false, message: 'Organization ID is required.' });
+        return;
+    }
+    const attendance = await prisma.attendance.create({ data: { ...req.body, organizationId: orgId } });
+    res.status(201).json({ success: true, data: attendance });
+});
+export const markAttendance = createAttendance;
+export const updateAttendance = asyncHandler(async (req, res) => {
+    const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
+    if (!attendance || attendance.organizationId !== req.user.organizationId) {
+        res.status(404).json({ success: false, message: 'Attendance record not found' });
+        return;
+    }
+    const { checkIn, checkOut, status, isLate, lateMinutes, workingHours, remarks } = req.body;
+    const updateData = {};
+    if (checkIn !== undefined)
+        updateData.checkIn = new Date(checkIn);
+    if (checkOut !== undefined)
+        updateData.checkOut = new Date(checkOut);
+    if (status !== undefined)
+        updateData.status = status;
+    if (isLate !== undefined)
+        updateData.isLate = isLate;
+    if (lateMinutes !== undefined)
+        updateData.lateMinutes = Number(lateMinutes);
+    if (workingHours !== undefined)
+        updateData.workingHours = Number(workingHours);
+    if (remarks !== undefined)
+        updateData.remarks = remarks;
+    const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
+    res.json({ success: true, data: updatedAttendance });
+});
+export const deleteAttendance = asyncHandler(async (req, res) => {
+    const attendance = await prisma.attendance.findUnique({ where: { id: req.params.id } });
+    if (!attendance) {
+        res.status(404).json({ success: false, message: 'Attendance record not found' });
+        return;
+    }
+    await prisma.attendance.delete({ where: { id: req.params.id } });
+    res.json({ success: true, data: {} });
+});
+export const getHRSettings = asyncHandler(async (req, res) => {
+    const orgId = req.user.organizationId || req.query.organizationId;
+    if (!orgId) {
+        res.status(400).json({ success: false, message: 'Organization ID is required.' });
+        return;
+    }
+    const settings = await prisma.hRSettings.findFirst({ where: { organizationId: orgId } });
+    const responseData = settings ? {
+        ...settings,
+        requireLocationForCheckIn: settings.requireLocation
+    } : null;
+    res.json({ success: true, data: responseData });
+});
+export const createOrUpdateHRSettings = asyncHandler(async (req, res) => {
+    const orgId = req.user.organizationId || req.body.organizationId;
+    if (!orgId) {
+        res.status(400).json({ success: false, message: 'Organization ID is required.' });
+        return;
+    }
+    const { requireLocationForCheckIn, ...rest } = req.body;
+    const updateData = { ...rest };
+    if (requireLocationForCheckIn !== undefined) {
+        updateData.requireLocation = requireLocationForCheckIn;
+    }
+    const settings = await prisma.hRSettings.upsert({
+        where: { organizationId: orgId },
+        update: updateData,
+        create: { ...updateData, organizationId: orgId }
+    });
+    const responseData = settings ? {
+        ...settings,
+        requireLocationForCheckIn: settings.requireLocation
+    } : null;
+    res.json({ success: true, data: responseData });
+});
+export const biometricSync = asyncHandler(async (req, res) => {
+    res.json({ success: true, message: 'Biometric sync triggered' });
+});
+export const getActivityReport = asyncHandler(async (req, res) => {
+    res.json({ success: true, data: [] });
+});
+export const getMyAttendance = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.json({ success: true, data: [] });
+        return;
+    }
+    const attendances = await prisma.attendance.findMany({ where: { employeeId: req.user.id }, orderBy: { date: 'desc' } });
+    res.json({ success: true, data: attendances });
+});
+export const getMyAttendanceSummary = asyncHandler(async (req, res) => {
+    res.json({ success: true, data: {} });
+});
+//# sourceMappingURL=attendanceController.js.map

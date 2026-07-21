@@ -1,0 +1,177 @@
+import prisma from '../lib/prisma.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+// CEO Panels
+export const createCeoPanel = asyncHandler(async (req, res) => {
+    const ceoPanel = await prisma.ceoPanel.create({ data: { ...req.body, organizationId: req.user.organizationId, createdBy: req.user.id } });
+    res.status(201).json({ success: true, data: ceoPanel });
+});
+export const getCeoPanels = asyncHandler(async (req, res) => {
+    const ceoPanels = await prisma.ceoPanel.findMany({ where: { organizationId: req.user.organizationId }, include: { user: true } });
+    res.json({ success: true, count: ceoPanels.length, data: ceoPanels });
+});
+export const getCeoPanel = asyncHandler(async (req, res) => {
+    const ceoPanel = await prisma.ceoPanel.findFirst({
+        where: { id: req.params.id, organizationId: req.user.organizationId }
+    });
+    if (!ceoPanel) {
+        res.status(404).json({ success: false, message: 'CEO Panel not found' });
+        return;
+    }
+    res.json({ success: true, data: ceoPanel });
+});
+export const updateCeoPanel = asyncHandler(async (req, res) => {
+    const exists = await prisma.ceoPanel.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+    if (!exists) {
+        res.status(404).json({ success: false, message: 'CEO Panel not found' });
+        return;
+    }
+    const { title, description, metrics, links } = req.body;
+    const updateData = {};
+    if (title !== undefined)
+        updateData.title = title;
+    if (description !== undefined)
+        updateData.description = description;
+    if (metrics !== undefined)
+        updateData.metrics = metrics;
+    if (links !== undefined)
+        updateData.links = links;
+    const ceoPanel = await prisma.ceoPanel.update({ where: { id: req.params.id }, data: updateData });
+    res.json({ success: true, data: ceoPanel });
+});
+export const deleteCeoPanel = asyncHandler(async (req, res) => {
+    const exists = await prisma.ceoPanel.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+    if (!exists) {
+        res.status(404).json({ success: false, message: 'CEO Panel not found' });
+        return;
+    }
+    await prisma.ceoPanel.delete({ where: { id: req.params.id } });
+    res.json({ success: true, data: {} });
+});
+// Departments
+export const createCustomDepartment = asyncHandler(async (req, res) => {
+    const department = await prisma.department.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+    res.status(201).json({ success: true, data: department });
+});
+export const getCustomDepartments = asyncHandler(async (req, res) => {
+    const departments = await prisma.department.findMany({ where: { organizationId: req.user.organizationId } });
+    res.json({ success: true, count: departments.length, data: departments });
+});
+// Hierarchy
+export const getOrgHierarchy = asyncHandler(async (req, res) => {
+    const [departments, users] = await Promise.all([
+        prisma.department.findMany({ where: { organizationId: req.user.organizationId } }),
+        prisma.user.findMany({ where: { organizationId: req.user.organizationId } })
+    ]);
+    res.json({ success: true, data: { departments, users } });
+});
+export const assignHierarchy = asyncHandler(async (req, res) => {
+    const { userId, reportingToId } = req.body;
+    const user = await prisma.user.update({ where: { id: userId }, data: { reportingTo: reportingToId } });
+    res.json({ success: true, data: user });
+});
+// Designations
+export const getDesignations = asyncHandler(async (req, res) => {
+    const designations = await prisma.designation.findMany({
+        where: { organizationId: req.user.organizationId },
+        include: {
+            department: true,
+            subDepartment: true,
+            filledBy: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                    designation: true,
+                    userId: true
+                }
+            },
+            parentDesignation: {
+                select: { id: true, title: true }
+            },
+            branch: {
+                select: { id: true, name: true, code: true }
+            }
+        }
+    });
+    // Map relations for frontend compatibility
+    const mapped = designations.map(d => ({
+        ...d,
+        filledBy: d.filledBy || [],
+        branchId: d.branch ? d.branch.id : null,
+        parentDesignationId: d.parentDesignation ? d.parentDesignation.id : null,
+        departmentId: d.department ? d.department.id : null,
+        subDepartmentId: d.subDepartment ? d.subDepartment.id : null,
+        allowedDeptIds: d.allowedDeptIds || [],
+        allowedBranchIds: d.allowedBranchIds || []
+    }));
+    res.json({ success: true, count: mapped.length, data: mapped });
+});
+export const createDesignation = asyncHandler(async (req, res) => {
+    const { allowedDeptIds, allowedBranchIds, ...rest } = req.body;
+    const designation = await prisma.designation.create({
+        data: {
+            ...rest,
+            organizationId: req.user.organizationId,
+            allowedDeptIds: allowedDeptIds || [],
+            allowedBranchIds: allowedBranchIds || []
+        }
+    });
+    res.status(201).json({ success: true, data: designation });
+});
+export const updateDesignation = asyncHandler(async (req, res) => {
+    const exists = await prisma.designation.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+    if (!exists) {
+        res.status(404).json({ success: false, message: 'Designation not found' });
+        return;
+    }
+    const { title, level, maxHeadcount, allowedDeptIds, allowedBranchIds, parentDesignationId, departmentId, subDepartmentId, branchId } = req.body;
+    const updateData = {};
+    if (title !== undefined)
+        updateData.title = title;
+    if (level !== undefined)
+        updateData.level = Number(level);
+    if (maxHeadcount !== undefined)
+        updateData.maxHeadcount = Number(maxHeadcount);
+    if (parentDesignationId !== undefined)
+        updateData.parentDesignationId = parentDesignationId;
+    if (departmentId !== undefined)
+        updateData.departmentId = departmentId;
+    if (subDepartmentId !== undefined)
+        updateData.subDepartmentId = subDepartmentId;
+    if (branchId !== undefined)
+        updateData.branchId = branchId;
+    if (allowedDeptIds !== undefined)
+        updateData.allowedDeptIds = allowedDeptIds;
+    if (allowedBranchIds !== undefined)
+        updateData.allowedBranchIds = allowedBranchIds;
+    const designation = await prisma.designation.update({
+        where: { id: req.params.id },
+        data: updateData
+    });
+    res.json({ success: true, data: designation });
+});
+export const deleteDesignation = asyncHandler(async (req, res) => {
+    const exists = await prisma.designation.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+    if (!exists) {
+        res.status(404).json({ success: false, message: 'Designation not found' });
+        return;
+    }
+    await prisma.designation.delete({ where: { id: req.params.id } });
+    res.json({ success: true, data: {} });
+});
+export const assignUserToDesignation = asyncHandler(async (req, res) => {
+    const user = await prisma.user.update({
+        where: { id: req.body.userId },
+        data: { designations: { connect: { id: req.params.id } } }
+    });
+    res.json({ success: true, data: user });
+});
+export const unassignUserFromDesignation = asyncHandler(async (req, res) => {
+    const user = await prisma.user.update({
+        where: { id: req.body.userId },
+        data: { designations: { disconnect: { id: req.params.id } } }
+    });
+    res.json({ success: true, data: user });
+});
+//# sourceMappingURL=orgAdminController.js.map

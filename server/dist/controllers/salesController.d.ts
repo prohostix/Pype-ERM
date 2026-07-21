@@ -1,0 +1,21 @@
+import { Response } from 'express';
+export declare const getLeads: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getLead: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createLead: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const updateLead: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteLead: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const convertLead: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getTargets: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getTarget: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createTarget: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const updateTarget: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteTarget: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const listMyInvites: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const generateInvite: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const regenerateInvite: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getTeamPerformance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyCenters: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyCenterAdmissions: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyCenterDetail: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getProgramsByUniversity: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+//# sourceMappingURL=salesController.d.ts.map

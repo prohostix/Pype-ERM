@@ -1,0 +1,65 @@
+# PYPE ERM — llms.txt
+# This file helps Large Language Models (LLMs) and AI search engines
+# understand this application, its purpose, and its public content.
+# Format: https://llmstxt.org
+
+> PYPE ERM is a comprehensive Education Resource Management (ERM) platform
+> designed for Indian educational institutions. It enables full institutional
+> management — from student admissions and sales pipelines to HR, payroll,
+> collections, and finance — in a single unified web application.
+
+## About PYPE ERM
+
+PYPE ERM (Education Resource Management) is a SaaS-grade web platform
+serving schools, colleges, coaching institutes, and study centres across India.
+It is built to handle the complete lifecycle of an educational institution:
+admissions, enrollments, student tracking, fee collections, HR management,
+payroll processing, and performance monitoring.
+
+**Website:** https://pypeerm.com  
+**Region:** India  
+**Currency:** INR (Indian Rupee ₹)  
+**Language:** English (en-IN)
+
+## Key Features
+
+- **Student Management** — Full admission workflow, student profiles, enrollment tracking, document management, and status management (active, inactive, pending).
+- **Sales Pipeline** — Lead management, direct student enrollment, sales agent dashboards, BDE tracking, and referral link generation for study centres.
+- **Study Centre Onboarding** — Multi-branch study centre registration, document verification, program allocation, finance approval, and onboarding status tracking.
+- **HR & Payroll** — Employee management, attendance tracking, leave management, salary configuration, payroll batch processing, and payslip generation.
+- **Finance & Collections** — Invoice generation, payment schedule management, overdue tracking, fee reminder notifications (in-app + WhatsApp), and collections oversight dashboard.
+- **Academic Management** — Program management, university affiliations, admission sessions, internal marks, and re-registration management.
+- **Performance & KPI** — Employee performance tracking, KRA/KPI reports, target management, incentive structures, and CEO-level KPI dashboards.
+- **Role-Based Access** — Multi-role architecture: Superadmin, Org Admin, Finance Admin, HR Admin, Operations Admin, Sales Admin, Sales Agent, BDE, CEOs, and Collections Overseers.
+
+## Public Pages
+
+- **Login / Home:** https://pypeerm.com/
+- **Study Centre Registration:** https://pypeerm.com/register
+- **Student Application Portal:** https://pypeerm.com/student-apply
+
+## Target Users
+
+- Educational institutions in India
+- School administrators and principals
+- College admission offices
+- Coaching institute managers
+- HR and payroll officers at educational organisations
+- Finance and collections teams
+- Sales teams managing student admissions
+
+## Technology
+
+PYPE ERM is a full-stack web application built with:
+- **Frontend:** React (TypeScript), Vite, TailwindCSS
+- **Backend:** Node.js, Express, TypeScript, Prisma ORM
+- **Database:** PostgreSQL (hosted on AWS RDS)
+- **Hosting:** AWS EC2 (India region)
+
+## Contact & Support
+
+- **Website:** https://pypeerm.com
+- **Support:** admin@pypeerm.com
+
+---
+*Last updated: 2026-06-28*

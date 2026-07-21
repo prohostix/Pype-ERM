@@ -1,0 +1,19 @@
+import { Response } from 'express';
+export declare const punchIn: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const punchOut: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getTodayAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMonthlyLateSummary: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getAttendances: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getAttendanceById: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const markAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const updateAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getHRSettings: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const createOrUpdateHRSettings: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const biometricSync: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getActivityReport: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyAttendanceSummary: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+//# sourceMappingURL=attendanceController.d.ts.map

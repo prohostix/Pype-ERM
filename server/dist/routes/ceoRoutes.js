@@ -1,0 +1,23 @@
+import express from 'express';
+import { getPerformanceMetrics, getRiskMetrics, getEscalations, handleEscalation, getAnalytics, getDepartmentManagers, assignTask, getKPIKRAReport, getCenterOnboardingOverview, getStudentEnrollmentOverview, } from '../controllers/ceoController.js';
+import { protect, authorize } from '../middleware/auth.js';
+const router = express.Router();
+router.use(protect);
+// router.use(authorize('ceo')); // Removed global restrict to allow specific roles on specific endpoints
+// Metrics routes
+router.get('/metrics/performance', authorize('ceo'), getPerformanceMetrics);
+router.get('/metrics/risk', authorize('ceo'), getRiskMetrics);
+router.get('/analytics', authorize('ceo'), getAnalytics);
+// Center onboarding & enrollment overview
+router.get('/center-onboarding', authorize('ceo'), getCenterOnboardingOverview);
+router.get('/enrollment-overview', authorize('ceo'), getStudentEnrollmentOverview);
+// Escalation routes
+router.get('/escalations', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), getEscalations);
+router.patch('/escalations/:id', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), handleEscalation);
+// Task assignment routes
+router.get('/managers', authorize('ceo'), getDepartmentManagers);
+router.post('/tasks', authorize('ceo'), assignTask);
+// KPI / KRA org-wide report
+router.get('/kpi-kra-report', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'hr_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
+export default router;
+//# sourceMappingURL=ceoRoutes.js.map

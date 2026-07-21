@@ -1,0 +1,62 @@
+import prisma from '../lib/prisma.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+export const getWalletTopUps = asyncHandler(async (req, res) => {
+    const where = { organizationId: req.user.organizationId };
+    if (req.query.status)
+        where.status = req.query.status;
+    else
+        where.status = 'pending';
+    const topUps = await prisma.walletTopUp.findMany({
+        where,
+        include: {
+            studyCenter: { select: { name: true, code: true } },
+            verifier: { select: { name: true, email: true } }
+        },
+        orderBy: { createdAt: 'desc' }
+    });
+    res.status(200).json({ success: true, count: topUps.length, data: topUps });
+});
+export const approveWalletTopUp = asyncHandler(async (req, res) => {
+    const topUp = await prisma.walletTopUp.findUnique({
+        where: { id: req.params.id }
+    });
+    if (!topUp || topUp.status !== 'pending') {
+        res.status(404).json({ success: false, message: 'Top-up request invalid or not pending' });
+        return;
+    }
+    // Update wallet and mark top-up as approved in a transaction
+    const [updatedTopUp, wallet] = await prisma.$transaction([
+        prisma.walletTopUp.update({
+            where: { id: topUp.id },
+            data: {
+                status: 'approved',
+                verifiedBy: req.user.id,
+                verifiedAt: new Date(),
+            }
+        }),
+        prisma.studyCenterWallet.upsert({
+            where: { studyCenterId: topUp.studyCenterId },
+            create: {
+                studyCenterId: topUp.studyCenterId,
+                organizationId: topUp.organizationId,
+                balance: topUp.amount
+            },
+            update: { balance: { increment: topUp.amount } }
+        })
+    ]);
+    res.status(200).json({ success: true, data: { topUp: updatedTopUp, wallet } });
+});
+export const rejectWalletTopUp = asyncHandler(async (req, res) => {
+    const { remarks } = req.body;
+    const topUp = await prisma.walletTopUp.update({
+        where: { id: req.params.id },
+        data: {
+            status: 'rejected',
+            remarks,
+            verifiedBy: req.user.id,
+            verifiedAt: new Date(),
+        }
+    });
+    res.status(200).json({ success: true, data: topUp });
+});
+//# sourceMappingURL=walletTopUpController.js.map
