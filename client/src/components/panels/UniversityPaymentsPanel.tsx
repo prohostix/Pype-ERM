@@ -105,7 +105,6 @@ export function UniversityPaymentsPanel() {
   const calculatePaymentData = (student: StudentWithPayments) => {
     const feeStructure = student.program?.feeStructures?.[0];
     let totalUniversityFee = 0;
-    let baseCommissionRate = 0;
 
     if (feeStructure) {
       if (feeStructure.billingCycle === 'per_year' && Array.isArray(feeStructure.yearlyFees) && feeStructure.yearlyFees.length > 0) {
@@ -126,16 +125,15 @@ export function UniversityPaymentsPanel() {
     let statusColor = 'bg-rose-500/10 text-rose-500 border-rose-500/20';
 
     if (received >= totalUniversityFee && totalUniversityFee > 0) {
-      statusLabel = 'Fully Received';
+      statusLabel = 'Fully Paid';
       statusColor = 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
     } else if (received > 0) {
-      statusLabel = 'Partially Received';
+      statusLabel = 'Partially Paid';
       statusColor = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
     }
 
     return {
       totalUniversityFee,
-      baseCommissionRate,
       received,
       balance,
       statusLabel,
@@ -208,8 +206,8 @@ export function UniversityPaymentsPanel() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Admissions &amp; Commissions Ledger</CardTitle>
-          <CardDescription>View expected payouts and recorded payments for each student</CardDescription>
+          <CardTitle>University Fee Ledger</CardTitle>
+          <CardDescription>View expected and recorded university fee payments for each student</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -224,9 +222,7 @@ export function UniversityPaymentsPanel() {
                     <th className="p-3 font-semibold text-muted-foreground">Student</th>
                     <th className="p-3 font-semibold text-muted-foreground">University &amp; Program</th>
                     <th className="p-3 font-semibold text-muted-foreground text-right">University Fee</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">Comm. Rate</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">Expected Payment</th>
-                    <th className="p-3 font-semibold text-muted-foreground text-right">Received</th>
+                    <th className="p-3 font-semibold text-muted-foreground text-right">Paid</th>
                     <th className="p-3 font-semibold text-muted-foreground text-right">Balance</th>
                     <th className="p-3 font-semibold text-muted-foreground">Status</th>
                     <th className="p-3 font-semibold text-muted-foreground text-center">Action</th>
@@ -241,7 +237,6 @@ export function UniversityPaymentsPanel() {
                     .map((student) => {
                       const {
                       totalUniversityFee,
-                      baseCommissionRate,
                       received,
                       balance,
                       statusLabel,
@@ -263,8 +258,6 @@ export function UniversityPaymentsPanel() {
                           </div>
                         </td>
                         <td className="p-3 text-right">₹{totalUniversityFee.toLocaleString('en-IN')}</td>
-                        <td className="p-3 text-right">{baseCommissionRate}%</td>
-                        <td className="p-3 text-right font-bold text-primary">₹{totalUniversityFee.toLocaleString('en-IN')}</td>
                         <td className="p-3 text-right text-emerald-500 font-medium">₹{received.toLocaleString('en-IN')}</td>
                         <td className="p-3 text-right text-amber-500 font-semibold">₹{balance.toLocaleString('en-IN')}</td>
                         <td className="p-3">
