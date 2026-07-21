@@ -284,158 +284,226 @@ export function CollectionsPanel() {
         {activePanelTab === 'overview' && (
           <div className="space-y-6">
             
+            {/* Top Banner: Collection Target */}
+            <Card className="border-none bg-primary/5 backdrop-blur-md shadow-sm relative overflow-hidden">
+              <div className="absolute -right-12 -top-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-primary tracking-wider block mb-1">Collection Target</span>
+                    <div className="text-3xl font-extrabold text-foreground flex items-baseline gap-2">
+                      ₹{metrics?.targetStats?.achieved?.toLocaleString('en-IN') || 0} 
+                      <span className="text-sm font-semibold text-muted-foreground">/ ₹{metrics?.targetStats?.target?.toLocaleString('en-IN') || 50000}</span>
+                    </div>
+                  </div>
+                  <div className="flex-1 max-w-md w-full">
+                    <div className="flex justify-between text-xs font-semibold text-muted-foreground mb-2">
+                      <span>Progress</span>
+                      <span className="text-primary">{Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100)}% Achieved</span>
+                    </div>
+                    <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden shadow-inner">
+                      <div 
+                        className="bg-primary h-full transition-all duration-1000 ease-out" 
+                        style={{ width: `${Math.min(100, Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100))}%` }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* KPI Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Today Collecting Payment</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card 
+                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-emerald-500/50 hover:border-emerald-500/50"
+                onClick={() => document.getElementById('today-settled')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+              >
+                <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Today's Collections</span>
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                     ₹{metrics?.todayCollectingStats?.collectedAmount?.toLocaleString('en-IN') || 0}
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">
-                    {metrics?.todayCollectingStats?.collectedCount || 0} installments collected today
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {metrics?.todayCollectingStats?.collectedCount || 0} installments collected
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Payment Pending Status</span>
+              <Card 
+                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-primary/50 hover:border-primary/50"
+                onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              >
+                <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Pending Collections</span>
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Clock className="w-4 h-4 text-primary" />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-primary">
                     ₹{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString('en-IN') || 0}
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {metrics?.paymentPendingStats?.pendingSchedulesCount || 0} schedules awaiting payment
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Upcoming Payments (7 Days)</span>
+              <Card 
+                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-amber-500/50 hover:border-amber-500/50"
+                onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              >
+                <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Upcoming (7 Days)</span>
+                  <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center">
+                    <Bell className="w-4 h-4 text-amber-500" />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-amber-500">
                     ₹{metrics?.upcomingStats?.dueAmount?.toLocaleString('en-IN') || 0}
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {metrics?.upcomingStats?.dueCount || 0} upcoming installments
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Expected Payments</span>
+              <Card 
+                className="border-border/50 bg-card/65 backdrop-blur-md shadow-sm hover:shadow-md transition-all cursor-pointer hover:ring-1 hover:ring-destructive/50 hover:border-destructive/50"
+                onClick={() => document.getElementById('expected-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              >
+                <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Overdue Amount</span>
+                  <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                    <ShieldAlert className="w-4 h-4 text-destructive" />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-destructive">
-                    ₹{metrics?.paymentPendingStats?.outstandingAmount?.toLocaleString('en-IN') || 0}
+                    ₹{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString('en-IN') || 0}
                   </div>
-                  <p className="text-[10px] text-destructive mt-1 font-semibold">
-                    Includes ₹{metrics?.paymentPendingStats?.overdueAmount?.toLocaleString('en-IN') || 0} Overdue dues
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
-                <CardHeader className="pb-2">
-                  <span className="text-[10px] uppercase font-bold text-primary tracking-wider block">Collection Target</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-primary flex items-baseline gap-1">
-                    ₹{metrics?.targetStats?.achieved?.toLocaleString('en-IN') || 0} 
-                    <span className="text-xs font-semibold text-muted-foreground">/ ₹{metrics?.targetStats?.target?.toLocaleString('en-IN') || 50000}</span>
-                  </div>
-                  <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden mt-2">
-                    <div 
-                      className="bg-primary h-full transition-all duration-500" 
-                      style={{ width: `${Math.min(100, Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100))}%` }} 
-                    />
-                  </div>
-                  <p className="text-[9px] text-muted-foreground mt-1">
-                    {Math.round(((metrics?.targetStats?.achieved || 0) / (metrics?.targetStats?.target || 50000)) * 100)}% Target Achieved
+                  <p className="text-xs text-muted-foreground mt-1 font-medium">
+                    Critical attention required
                   </p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Today's Collections Lists */}
+            {/* Today's Action Items */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               
               {/* Today Collected */}
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                    <CheckCircle2 className="w-5 h-5" /> Today's Collected Dues (₹{(metrics?.todayCollectingStats?.collectedAmount || 0).toLocaleString('en-IN')})
+              <Card id="today-settled" className="border-none bg-card/65 backdrop-blur-md shadow-sm flex flex-col scroll-mt-24">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <CardTitle className="text-sm font-semibold flex items-center justify-between text-emerald-600 dark:text-emerald-400">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4" /> 
+                      Settled Today
+                    </div>
+                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                      ₹{(metrics?.todayCollectingStats?.collectedAmount || 0).toLocaleString('en-IN')}
+                    </Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  {metrics?.todayCollectingStats?.collectedSchedules?.length === 0 ? (
-                    <div className="text-center py-6 text-xs text-muted-foreground">No payments received today.</div>
-                  ) : (
-                    <div className="space-y-3">
-                      {metrics?.todayCollectingStats?.collectedSchedules?.map((sc: any) => (
-                        <div key={sc.id} className="flex justify-between items-center p-3 rounded-lg border border-emerald-500/10 bg-emerald-500/5">
-                          <div>
-                            <span className="font-bold text-sm block">{sc.student?.name}</span>
-                            <span className="text-[10px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
-                          </div>
-                          <div className="text-right">
-                            <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-sm block">₹{sc.amount.toLocaleString('en-IN')}</span>
-                            <span className="text-[9px] text-muted-foreground">Settled</span>
-                          </div>
+                <CardContent className="pt-4 p-0 flex-1">
+                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6 pb-6">
+                    {metrics?.todayCollectingStats?.collectedSchedules?.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-8 text-center h-full">
+                        <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-muted-foreground/50" />
                         </div>
-                      ))}
-                    </div>
-                  )}
+                        <p className="text-sm font-medium text-foreground">No Collections Yet</p>
+                        <p className="text-xs text-muted-foreground mt-1">No payments have been recorded for today.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {metrics?.todayCollectingStats?.collectedSchedules?.map((sc: any) => (
+                          <div key={sc.id} className="group flex justify-between items-center p-3 rounded-xl border border-border bg-background/50 hover:border-emerald-500/30 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 font-bold text-sm">
+                                {sc.student?.name?.charAt(0)}
+                              </div>
+                              <div>
+                                <span className="font-semibold text-sm block text-foreground">{sc.student?.name}</span>
+                                <span className="text-[11px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm block">₹{sc.amount.toLocaleString('en-IN')}</span>
+                              <Badge variant="secondary" className="text-[9px] h-4 px-1.5 mt-1">Settled</Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
  
               {/* Today Due */}
-              <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-                <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2 text-amber-500">
-                    <Clock className="w-5 h-5" /> Today's Due Installments (₹{(metrics?.todayCollectingStats?.dueAmount || 0).toLocaleString('en-IN')})
+              <Card id="today-due" className="border-none bg-card/65 backdrop-blur-md shadow-sm flex flex-col scroll-mt-24">
+                <CardHeader className="border-b border-border/50 pb-4">
+                  <CardTitle className="text-sm font-semibold flex items-center justify-between text-amber-600 dark:text-amber-500">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4" /> 
+                      Due Today
+                    </div>
+                    <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20">
+                      ₹{(metrics?.todayCollectingStats?.dueAmount || 0).toLocaleString('en-IN')}
+                    </Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  {metrics?.todayCollectingStats?.dueSchedules?.length === 0 ? (
-                    <div className="text-center py-6 text-xs text-muted-foreground">No installments scheduled for today.</div>
-                  ) : (
-                    <div className="space-y-3">
-                      {metrics?.todayCollectingStats?.dueSchedules?.map((sc: any) => (
-                        <div key={sc.id} className="flex justify-between items-center p-3 rounded-lg border border-amber-500/10 bg-amber-500/5">
-                          <div>
-                            <span className="font-bold text-sm block">{sc.student?.name}</span>
-                            <span className="text-[10px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="font-semibold text-amber-600 text-sm">₹{sc.amount.toLocaleString('en-IN')}</span>
-                            <div className="flex gap-1">
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleSendNotification(sc)}>
-                                <Bell className="w-3.5 h-3.5 text-amber-500" />
-                              </Button>
-                              <Button variant="outline" size="icon" className="w-7 h-7" onClick={() => handleMarkPaid(sc)}>
-                                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                              </Button>
+                <CardContent className="pt-4 p-0 flex-1">
+                  <div className="max-h-[300px] overflow-y-auto custom-scrollbar px-6 pb-6">
+                    {metrics?.todayCollectingStats?.dueSchedules?.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-8 text-center h-full">
+                        <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-muted-foreground/50" />
+                        </div>
+                        <p className="text-sm font-medium text-foreground">All Clear</p>
+                        <p className="text-xs text-muted-foreground mt-1">No pending installments scheduled for today.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {metrics?.todayCollectingStats?.dueSchedules?.map((sc: any) => (
+                          <div key={sc.id} className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border border-border bg-background/50 hover:border-amber-500/30 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-bold text-sm">
+                                {sc.student?.name?.charAt(0)}
+                              </div>
+                              <div>
+                                <span className="font-semibold text-sm block text-foreground">{sc.student?.name}</span>
+                                <span className="text-[11px] text-muted-foreground">{sc.title} • {sc.student?.enrollmentNo}</span>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between sm:justify-end gap-4">
+                              <span className="font-bold text-amber-600 text-sm">₹{sc.amount.toLocaleString('en-IN')}</span>
+                              <div className="flex gap-1.5 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-amber-500/10 hover:text-amber-600" onClick={() => handleSendNotification(sc)} title="System Reminder">
+                                  <Bell className="w-3.5 h-3.5" />
+                                </Button>
+                                <Button variant="secondary" size="icon" className="w-8 h-8 rounded-full hover:bg-emerald-500/10 hover:text-emerald-600" onClick={() => handleMarkPaid(sc)} title="Mark Settled">
+                                  <Check className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Upcoming & Overdue List */}
-            <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
+            <Card id="expected-list" className="border-none bg-card/65 backdrop-blur-md shadow-md scroll-mt-24">
               <CardHeader>
                 <CardTitle className="text-base">Expected & Overdue Payments List</CardTitle>
                 <CardDescription>Comprehensive timeline of all outstanding receivables</CardDescription>
