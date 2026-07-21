@@ -276,7 +276,6 @@ function App() {
         { id: 'branches', label: 'Branches' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
-        { id: 'sub_departments', label: 'Sub-Departments' },
         { id: 'tasks', label: 'Tasks' },
         { id: 'students', label: 'Students' },
         { id: 'universities', label: 'Universities' },
@@ -285,10 +284,13 @@ function App() {
         { id: 'invoices', label: 'Invoices' },
         { id: 'payments', label: 'Payments' },
         { id: 'expenses', label: 'Expenses' },
-        { id: 'collections', label: 'Collections' },
         { id: 'employees', label: 'Employees' },
         { id: 'leave_requests', label: 'Leave Requests' },
         { id: 'leads', label: 'Leads' },
+        { id: 'sessions', label: 'Sessions' },
+        { id: 'enrollment_review', label: 'Enrollment Review' },
+        { id: 'collections', label: 'Collections' },
+        { id: 'settings', label: 'Organisation Settings' },
       ];
     }
 

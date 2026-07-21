@@ -181,6 +181,7 @@ export function PrismaLayout({
       case 'marks': return <FileText className={iconClass} />;
       case 'polls':
       case 'my_team': return <Users className={iconClass} />;
+      case 'settings':
       case 'salary-config':
       case 'att-settings': return <Settings className={iconClass} />;
       case 'org-chart': return <GitBranch className={iconClass} />;
