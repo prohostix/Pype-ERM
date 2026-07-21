@@ -40,6 +40,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   // Org Admin
   hierarchy: 'hierarchy',
   branches: 'branches',
+  settings: 'settings',
   // Shared
   users: 'users',
   departments: 'departments',
