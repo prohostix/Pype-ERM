@@ -237,21 +237,15 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
     { id: 'overview', label: 'Overview' },
     { id: 'enrolled_students', label: 'Enrolled Students' },
     { id: 'my_total_admissions', label: 'My Total Admissions' },
-    { id: 'student_details_status', label: 'Student Details & Status' },
     { id: 'payment_status', label: 'Payment Status' },
     { id: 'course_details_dash', label: 'Course Details' },
 
     { id: '__pipeline', label: 'Student Pipeline', isSection: true },
-    { id: 'create_student', label: 'Create Student / Enroll' },
     { id: 'invite_links', label: 'Generate Student Link' },
     { id: 'admission_status_overview', label: 'Admission Status Overview' },
-    { id: 'student_applications', label: 'Application Progress' },
-    { id: 'document_status', label: 'Document Status' },
 
     { id: '__tasks', label: 'Tasks', isSection: true },
     { id: 'tasks', label: 'My Tasks' },
-    { id: 'pending_tasks', label: 'Pending Tasks' },
-    { id: 'completed_tasks_counselor', label: 'Completed Tasks' },
 
     { id: '__performance', label: 'My Performance', isSection: true },
     { id: 'targets', label: 'Target' },
