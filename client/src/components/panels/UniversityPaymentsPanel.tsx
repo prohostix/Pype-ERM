@@ -107,7 +107,7 @@ export function UniversityPaymentsPanel() {
     let totalUniversityFee = 0;
 
     if (feeStructure) {
-      if (feeStructure.billingCycle === 'per_year' && Array.isArray(feeStructure.yearlyFees) && feeStructure.yearlyFees.length > 0) {
+      if ((feeStructure.billingCycle === 'per_year' || feeStructure.billingCycle === 'per_semester') && Array.isArray(feeStructure.yearlyFees) && feeStructure.yearlyFees.length > 0) {
         feeStructure.yearlyFees.forEach((yf: any) => {
           const uFee = Number(yf.universityFee || 0);
           totalUniversityFee += uFee;

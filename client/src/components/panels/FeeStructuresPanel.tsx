@@ -561,7 +561,20 @@ export function FeeStructuresPanel() {
             <div className="text-center py-8 text-muted-foreground">No fee structures found</div>
           ) : (
             <div className="space-y-2">
-              {[...fees]
+              {(() => {
+                const getFeeTotals = (f: any) => {
+                  let reg = Number(f.registrationFee) || 0;
+                  let tui = Number(f.tuitionFee) || 0;
+                  let ex = Number(f.examFee) || 0;
+                  if ((f.billingCycle === 'per_year' || f.billingCycle === 'per_semester') && Array.isArray(f.yearlyFees) && f.yearlyFees.length > 0) {
+                    reg = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0), 0);
+                    tui = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.tuitionFee) || 0), 0);
+                    ex = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.examFee) || 0), 0);
+                  }
+                  return { reg, tui, ex, total: reg + tui + ex };
+                };
+                
+                return [...fees]
                 // --- Apply filters ---
                 .filter(f => {
                   if (!f?.id) return false;
@@ -602,9 +615,9 @@ export function FeeStructuresPanel() {
                     const bSess = b.session?.name || '';
                     comparison = aSess.localeCompare(bSess);
                   } else if (sortBy === 'total_fee') {
-                    const aTotal = (a.registrationFee || 0) + (a.tuitionFee || 0) + (a.examFee || 0);
-                    const bTotal = (b.registrationFee || 0) + (b.tuitionFee || 0) + (b.examFee || 0);
-                    comparison = aTotal - bTotal;
+                    const aTotals = getFeeTotals(a);
+                    const bTotals = getFeeTotals(b);
+                    comparison = aTotals.total - bTotals.total;
                   }
                   return sortOrder === 'asc' ? comparison : -comparison;
                 })
@@ -613,7 +626,7 @@ export function FeeStructuresPanel() {
                 const progName = typeof f.programId === 'object' ? f.programId?.name : (f.program?.name || '');
                 const univName = typeof f.programId === 'object' ? f.programId?.university?.name : (f.program?.university?.name || '');
                 const sessionName = f.session?.name || '';
-                const total = (f.registrationFee || 0) + (f.tuitionFee || 0) + (f.examFee || 0);
+                const feeTotals = getFeeTotals(f);
                 
                 return (
                   <div key={fid} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
@@ -644,8 +657,8 @@ export function FeeStructuresPanel() {
                           )}
                         </div>
                         <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-2 items-center">
-                          <Badge variant="outline">{f.currency || 'INR'} {total.toLocaleString()} total</Badge>
-                          <span className="text-xs">Reg: {f.registrationFee} • Tuition: {f.tuitionFee} • Exam: {f.examFee} • GST: {f.gstPercentage}%</span>
+                          <Badge variant="outline">{f.currency || 'INR'} {feeTotals.total.toLocaleString()} total</Badge>
+                          <span className="text-xs">Reg: {feeTotals.reg} • Tuition: {feeTotals.tui} • Exam: {feeTotals.ex} • GST: {f.gstPercentage}%</span>
                           <Badge variant="secondary" className="capitalize text-xs">{f.billingCycle?.replace('_', ' ') || 'Per Year'}</Badge>
                         </div>
                         {Array.isArray(f.additionalFees) && f.additionalFees.length > 0 && (
@@ -669,7 +682,8 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
                 );
-              })}
+              });
+            })()}
             </div>
           )}
         </CardContent>
