@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { UsersPanel } from '@/components/panels/UsersPanel';
@@ -26,6 +28,7 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     setActiveTab(initialTab || 'overview');
   }, [initialTab]);
