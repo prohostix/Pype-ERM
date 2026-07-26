@@ -386,6 +386,53 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     });
   };
 
+  const renderFeeDisplay = () => {
+    const selectedProgramObj = filteredPrograms.find((p: any) => p.id === formData.programId);
+    const relevantFeeStructure = selectedProgramObj?.feeStructures?.[0];
+
+    if (!relevantFeeStructure) return null;
+
+    let periodName = '';
+    let amount = 0;
+    
+    if (relevantFeeStructure.billingCycle === 'per_year') {
+      periodName = 'First Year';
+      if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
+        amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].universityFee || 0);
+      } else {
+        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+      }
+    } else if (relevantFeeStructure.billingCycle === 'per_semester') {
+      periodName = 'First Semester';
+      if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
+        amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0) + 
+                 Number(relevantFeeStructure.yearlyFees[0].universityFee || 0);
+      } else {
+        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+      }
+    } else {
+      periodName = 'One Time';
+      amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+    }
+
+    return (
+      <div className="mt-4 p-3 rounded-lg border border-primary/20 bg-primary/5 flex items-center justify-between">
+        <div>
+          <h4 className="font-medium text-primary text-sm">Initial Fee Payable ({periodName})</h4>
+          <p className="text-xs text-muted-foreground">Based on {relevantFeeStructure.billingCycle.replace('_', ' ')} billing</p>
+        </div>
+        <div className="text-lg font-bold text-primary">
+          {relevantFeeStructure.currency || 'INR'} {amount.toLocaleString()}
+        </div>
+      </div>
+    );
+  };
+
   // Download Excel Template
   const handleDownloadTemplate = async () => {
     const XLSX = await import('xlsx');
@@ -1184,6 +1231,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                   </div>
 
+                  {renderFeeDisplay()}
+
                   {/* Enrollment & Admission Numbers */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -1703,6 +1752,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               </Select>
                             </div>
                           </div>
+
+                          {renderFeeDisplay()}
 
                           {/* Enrollment & Admission Numbers */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

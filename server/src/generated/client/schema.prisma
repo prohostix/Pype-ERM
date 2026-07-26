@@ -428,7 +428,7 @@ model Student {
   centerId           String?
   branchId           String?
   organizationId     String
-  enrollmentNo       String                 @unique
+  enrollmentNo       String?                @unique
   admissionNo        String?
   admissionDate      DateTime?
   name               String

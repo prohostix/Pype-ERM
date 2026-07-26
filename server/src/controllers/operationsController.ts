@@ -64,7 +64,7 @@ export const activateUniversity = asyncHandler(async (req: AuthRequest, res: Res
 
 // Programs
 export const getPrograms = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const programs = await prisma.program.findMany({ where: { organizationId: req.user.organizationId }, include: { university: true } });
+  const programs = await prisma.program.findMany({ where: { organizationId: req.user.organizationId }, include: { university: true, feeStructures: true } });
   res.json({ success: true, count: programs.length, data: programs });
 });
 export const getProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
