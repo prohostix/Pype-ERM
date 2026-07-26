@@ -1243,15 +1243,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
                       />
                     </div>
-                    <div>
-                      <Label className="font-medium">Admission Number</Label>
-                      <Input
-                        placeholder="Auto-generated on save"
-                        value={formData.admissionNo || ''}
-                        readOnly
-                        className="bg-slate-50 cursor-not-allowed text-muted-foreground"
-                      />
-                    </div>
+                    {editingId && (
+                      <div>
+                        <Label className="font-medium">Admission Number</Label>
+                        <Input
+                          placeholder="Auto-generated on save"
+                          value={formData.admissionNo || ''}
+                          readOnly
+                          className="bg-slate-50 cursor-not-allowed text-muted-foreground"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   {/* Admission Date & Status */}
@@ -1765,15 +1767,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
                               />
                             </div>
-                            <div>
-                              <Label className="font-medium">Admission Number</Label>
-                              <Input
-                                placeholder="Auto-generated on save"
-                                value={formData.admissionNo || ''}
-                                readOnly
-                                className="bg-slate-50 cursor-not-allowed text-muted-foreground"
-                              />
-                            </div>
+                            {editingId && (
+                              <div>
+                                <Label className="font-medium">Admission Number</Label>
+                                <Input
+                                  placeholder="Auto-generated on save"
+                                  value={formData.admissionNo || ''}
+                                  readOnly
+                                  className="bg-slate-50 cursor-not-allowed text-muted-foreground"
+                                />
+                              </div>
+                            )}
                           </div>
 
                           {/* Admission Date & Status */}
