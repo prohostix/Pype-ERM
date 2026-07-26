@@ -144,8 +144,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       email,
       phone,
       address: address || '',
-      enrollmentNo: req.body.enrollmentNo,
-      admissionNo: admissionNo || null,
+      enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
+      admissionNo: admissionNo || `ADM${Date.now().toString().slice(-6)}`,
       admissionDate: admissionDate ? new Date(admissionDate) : null,
       dob: dob ? new Date(dob) : null,
       fatherName: fatherName || null,
@@ -208,6 +208,9 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
 
   if (dataToUpdate.dob) dataToUpdate.dob = new Date(dataToUpdate.dob);
   if (dataToUpdate.admissionDate) dataToUpdate.admissionDate = new Date(dataToUpdate.admissionDate);
+  if ('enrollmentNo' in dataToUpdate) {
+    dataToUpdate.enrollmentNo = dataToUpdate.enrollmentNo ? dataToUpdate.enrollmentNo : null;
+  }
   if ('centerId' in dataToUpdate) {
     dataToUpdate.centerId = (dataToUpdate.centerId && dataToUpdate.centerId.trim() !== '') ? dataToUpdate.centerId : null;
   }

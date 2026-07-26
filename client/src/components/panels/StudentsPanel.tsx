@@ -1178,11 +1178,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                     <div>
                       <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})}>
-                        <SelectTrigger><SelectValue placeholder="Select session..." /></SelectTrigger>
+                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})} disabled={!formData.programId}>
+                        <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="__none__">— No Session —</SelectItem>
-                          {sessions.filter((s: any) => s && s.id).map((s: any) => (
+                          {sessions.filter((s: any) => s && s.id && s.programId === formData.programId).map((s: any) => (
                             <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                           ))}
                         </SelectContent>
@@ -1193,27 +1193,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   {/* Enrollment & Admission Numbers */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-medium">Enrollment Number *</Label>
+                      <Label className="font-medium">Enrollment Number <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
                       <Input
                         placeholder="e.g. PYPEER001"
                         value={formData.enrollmentNo}
                         onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
-                        required
                       />
                     </div>
                     <div>
                       <Label className="font-medium">Admission Number</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="Auto-generated"
-                          value={formData.admissionNo}
-                          onChange={(e) => setFormData({...formData, admissionNo: e.target.value})}
-                          readOnly
-                        />
-                        <Button type="button" variant="outline" onClick={() => setFormData({...formData, admissionNo: generateAdmissionNo()})}>
-                          Generate
-                        </Button>
-                      </div>
+                      <Input
+                        placeholder="Auto-generated on save"
+                        value={formData.admissionNo || ''}
+                        readOnly
+                        className="bg-slate-50 cursor-not-allowed text-muted-foreground"
+                      />
                     </div>
                   </div>
 
@@ -1704,11 +1698,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             </div>
                             <div>
                               <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})}>
-                                <SelectTrigger><SelectValue placeholder="Select session..." /></SelectTrigger>
+                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})} disabled={!formData.programId}>
+                                <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="__none__">— No Session —</SelectItem>
-                                  {sessions.filter((s: any) => s && s.id).map((s: any) => (
+                                  {sessions.filter((s: any) => s && s.id && s.programId === formData.programId).map((s: any) => (
                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                                   ))}
                                 </SelectContent>
@@ -1719,32 +1713,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           {/* Enrollment & Admission Numbers */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">Enrollment Number *</Label>
+                              <Label className="font-medium">Enrollment Number <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
                               <Input
                                 placeholder="e.g. PYPEER001"
-                                value={formData.enrollmentNo}
+                                value={formData.enrollmentNo || ''}
                                 onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
-                                required
                               />
                             </div>
                             <div>
                               <Label className="font-medium">Admission Number</Label>
-                              <div className="flex gap-2">
-                                <Input
-                                  placeholder="Auto-generated"
-                                  value={formData.admissionNo}
-                                  onChange={(e) => setFormData({...formData, admissionNo: e.target.value})}
-                                />
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  className="shrink-0"
-                                  onClick={() => setFormData({...formData, admissionNo: generateAdmissionNo()})}
-                                >
-                                  Generate
-                                </Button>
-                              </div>
+                              <Input
+                                placeholder="Auto-generated on save"
+                                value={formData.admissionNo || ''}
+                                readOnly
+                                className="bg-slate-50 cursor-not-allowed text-muted-foreground"
+                              />
                             </div>
                           </div>
 
