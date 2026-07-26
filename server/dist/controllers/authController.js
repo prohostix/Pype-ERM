@@ -7,8 +7,16 @@ import { hashPassword, comparePassword, generateUserId } from '../utils/authUtil
 // @access  Public (or Superadmin/OrgAdmin only)
 export const register = asyncHandler(async (req, res) => {
     const { organizationId, departmentId, subDepartmentId, email, password, name, role, phone, designation, reportingTo, } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
     // Check if user exists
-    const userExists = await prisma.user.findUnique({ where: { email } });
+    const userExists = await prisma.user.findFirst({
+        where: {
+            email: {
+                equals: normalizedEmail,
+                mode: 'insensitive'
+            }
+        }
+    });
     if (userExists) {
         res.status(400).json({ success: false, message: 'User already exists' });
         return;
@@ -25,7 +33,7 @@ export const register = asyncHandler(async (req, res) => {
             organizationId,
             departmentId,
             subDepartmentId,
-            email,
+            email: normalizedEmail,
             password: hashedPassword,
             name,
             role: assignedRole,
@@ -63,9 +71,15 @@ export const login = asyncHandler(async (req, res) => {
         });
         return;
     }
+    const normalizedEmail = email.trim();
     // Check for user
-    const user = await prisma.user.findUnique({
-        where: { email },
+    const user = await prisma.user.findFirst({
+        where: {
+            email: {
+                equals: normalizedEmail,
+                mode: 'insensitive'
+            }
+        },
         include: {
             organization: true,
             department: true,

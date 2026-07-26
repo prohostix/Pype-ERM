@@ -23,7 +23,25 @@ export const getEnrollablePrograms = asyncHandler(async (req, res) => {
     res.json({ success: true, count: programs.length, data: programs });
 });
 export const createEnrollment = asyncHandler(async (req, res) => {
-    const enrollment = await prisma.enrollment.create({ data: { ...req.body, organizationId: req.user.organizationId, studyCenterId: req.user.studyCenterId || '' } });
+    const { studentId, ...rest } = req.body;
+    const data = {
+        ...rest,
+        organizationId: req.user.organizationId,
+        studyCenterId: req.user.studyCenterId || ''
+    };
+    if (studentId) {
+        data.studentId = studentId;
+    }
+    const enrollment = await prisma.enrollment.create({ data });
+    if (studentId) {
+        const student = await prisma.student.findUnique({ where: { id: studentId } });
+        if (student && !student.admissionNo) {
+            await prisma.student.update({
+                where: { id: studentId },
+                data: { admissionNo: `ADM${Date.now().toString().slice(-6)}` }
+            });
+        }
+    }
     res.status(201).json({ success: true, data: enrollment });
 });
 export const getMyEnrollments = asyncHandler(async (req, res) => {

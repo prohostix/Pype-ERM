@@ -22,8 +22,17 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
     reportingTo,
   } = req.body;
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   // Check if user exists
-  const userExists = await prisma.user.findUnique({ where: { email } });
+  const userExists = await prisma.user.findFirst({ 
+    where: { 
+      email: {
+        equals: normalizedEmail,
+        mode: 'insensitive'
+      }
+    } 
+  });
   if (userExists) {
     res.status(400).json({ success: false, message: 'User already exists' });
     return;
@@ -43,7 +52,7 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
       organizationId,
       departmentId,
       subDepartmentId,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       name,
       role: assignedRole,
@@ -84,9 +93,16 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
     return;
   }
 
+  const normalizedEmail = email.trim();
+
   // Check for user
-  const user = await prisma.user.findUnique({ 
-    where: { email },
+  const user = await prisma.user.findFirst({ 
+    where: { 
+      email: {
+        equals: normalizedEmail,
+        mode: 'insensitive'
+      }
+    },
     include: {
       organization: true,
       department: true,

@@ -51,16 +51,21 @@ export function EnrollStudentPanel() {
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedFeeModeId, setSelectedFeeModeId] = useState<string>('');
   const [form, setForm] = useState({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+  const [students, setStudents] = useState<any[]>([]);
+  const [studentMode, setStudentMode] = useState<'new' | 'existing'>('new');
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('');
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [progsRes, walletRes] = await Promise.all([
+      const [progsRes, walletRes, studentsRes] = await Promise.all([
         api.get('/enrollment/programs'),
         api.get('/enrollment/wallet'),
+        api.get('/students').catch(() => ({ data: { data: [] } })),
       ]);
       setPrograms(progsRes.data.data || []);
       setWallet(walletRes.data.data);
+      setStudents(studentsRes.data.data || []);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load');
     } finally {
@@ -156,6 +161,7 @@ export function EnrollStudentPanel() {
     try {
       await api.post('/enrollment/enroll', { 
         ...form, 
+        studentId: studentMode === 'existing' ? selectedStudentId : undefined,
         programId: selectedProgram.id,
         feeMode: selectedFeeModeId 
       });
@@ -163,6 +169,8 @@ export function EnrollStudentPanel() {
       setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
       setSelectedProgram(null);
       setSelectedFeeModeId('');
+      setSelectedStudentId('');
+      setStudentMode('new');
       fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Enrollment failed');
@@ -300,21 +308,69 @@ export function EnrollStudentPanel() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="flex gap-4 border-b pb-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={studentMode === 'new'} onChange={() => {
+                  setStudentMode('new');
+                  setSelectedStudentId('');
+                  setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+                }} />
+                <span className="text-sm font-medium">New Student</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={studentMode === 'existing'} onChange={() => {
+                  setStudentMode('existing');
+                  setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+                }} />
+                <span className="text-sm font-medium">Existing Student</span>
+              </label>
+            </div>
+
+            {studentMode === 'existing' && (
+              <div className="space-y-1 pb-2 border-b">
+                <Label>Select Existing Student</Label>
+                <select 
+                  className="w-full border rounded-md p-2 bg-background text-sm"
+                  value={selectedStudentId}
+                  onChange={(e) => {
+                    const sid = e.target.value;
+                    setSelectedStudentId(sid);
+                    const s = students.find(st => st.id === sid);
+                    if (s) {
+                      setForm({
+                        studentName: s.name || '',
+                        studentEmail: s.email || '',
+                        studentPhone: s.phone || '',
+                        studentAddress: s.address || '',
+                      });
+                    } else {
+                      setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+                    }
+                  }}
+                >
+                  <option value="">-- Choose Student --</option>
+                  {students.map(s => (
+                    <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="space-y-1">
               <Label>Full Name</Label>
-              <Input value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Student full name" />
+              <Input value={form.studentName} disabled={studentMode === 'existing'} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Student full name" />
             </div>
             <div className="space-y-1">
               <Label>Email</Label>
-              <Input type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="student@email.com" />
+              <Input type="email" value={form.studentEmail} disabled={studentMode === 'existing'} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="student@email.com" />
             </div>
             <div className="space-y-1">
               <Label>Phone</Label>
-              <Input value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
+              <Input value={form.studentPhone} disabled={studentMode === 'existing'} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
             </div>
             <div className="space-y-1">
               <Label>Address</Label>
-              <Input value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Full address" />
+              <Input value={form.studentAddress} disabled={studentMode === 'existing'} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Full address" />
             </div>
             <Button
               className="w-full mt-2"

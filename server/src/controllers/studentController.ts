@@ -145,7 +145,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       phone,
       address: address || '',
       enrollmentNo: req.body.enrollmentNo ? req.body.enrollmentNo : null,
-      admissionNo: admissionNo || `ADM${Date.now().toString().slice(-6)}`,
+      admissionNo: admissionNo || null,
       admissionDate: admissionDate ? new Date(admissionDate) : null,
       dob: dob ? new Date(dob) : null,
       fatherName: fatherName || null,

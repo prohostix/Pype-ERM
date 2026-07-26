@@ -350,6 +350,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                     sessionId: enrollment.sessionId,
                     status: 'active',
                     referredBy: enrollment.salesUserId,
+                    admissionNo: `ADM${Date.now().toString().slice(-6)}`,
                     ...(generatedPassword !== '(Existing student account)' ? { credentials: { email: enrollment.studentEmail, password: generatedPassword } } : {})
                 },
             });
