@@ -14,6 +14,10 @@ export function StudentPaymentsLogPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [universityFilter, setUniversityFilter] = useState('all');
+  const [programFilter, setProgramFilter] = useState('all');
+  const [branchFilter, setBranchFilter] = useState('all');
+  const [sortOption, setSortOption] = useState('recent');
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
@@ -82,11 +86,29 @@ export function StudentPaymentsLogPanel() {
     }));
   };
 
-  const filteredLogs = logs.filter((log: any) =>
-    log.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    log.enrollmentNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    log.programName?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const universities = Array.from(new Set(logs.map(l => l.universityName).filter(Boolean)));
+  const programs = Array.from(new Set(logs.map(l => l.programName).filter(Boolean)));
+  const branches = Array.from(new Set(logs.map(l => l.branchName).filter(Boolean)));
+
+  const filteredLogs = logs.filter((log: any) => {
+    const matchesSearch = log.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          log.enrollmentNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          log.programName?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesUniversity = universityFilter === 'all' || log.universityName === universityFilter;
+    const matchesProgram = programFilter === 'all' || log.programName === programFilter;
+    const matchesBranch = branchFilter === 'all' || log.branchName === branchFilter;
+
+    return matchesSearch && matchesUniversity && matchesProgram && matchesBranch;
+  }).sort((a, b) => {
+    switch (sortOption) {
+      case 'name-asc': return (a.name || '').localeCompare(b.name || '');
+      case 'name-desc': return (b.name || '').localeCompare(a.name || '');
+      case 'balance-desc': return (b.balance || 0) - (a.balance || 0);
+      case 'balance-asc': return (a.balance || 0) - (b.balance || 0);
+      case 'recent': default: return 0;
+    }
+  });
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
@@ -100,19 +122,65 @@ export function StudentPaymentsLogPanel() {
       </div>
 
       <Card className="border-none bg-card/65 backdrop-blur-md shadow-md">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="text-base">Payment Logs Directory</CardTitle>
-            <CardDescription>View comprehensive status of student fee completion</CardDescription>
+        <CardHeader className="flex flex-col gap-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-base">Payment Logs Directory</CardTitle>
+              <CardDescription>View comprehensive status of student fee completion</CardDescription>
+            </div>
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name, enrollment, program..."
+                className="pl-9 h-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
-          <div className="relative w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, enrollment, program..."
-              className="pl-9 h-9"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="flex flex-wrap items-center gap-3">
+            <Select value={universityFilter} onValueChange={setUniversityFilter}>
+              <SelectTrigger className="w-[180px] h-8 text-xs">
+                <SelectValue placeholder="University" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Universities</SelectItem>
+                {universities.map(u => <SelectItem key={u} value={u as string}>{u as string}</SelectItem>)}
+              </SelectContent>
+            </Select>
+
+            <Select value={programFilter} onValueChange={setProgramFilter}>
+              <SelectTrigger className="w-[180px] h-8 text-xs">
+                <SelectValue placeholder="Program" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Programs</SelectItem>
+                {programs.map(p => <SelectItem key={p} value={p as string}>{p as string}</SelectItem>)}
+              </SelectContent>
+            </Select>
+
+            <Select value={branchFilter} onValueChange={setBranchFilter}>
+              <SelectTrigger className="w-[180px] h-8 text-xs">
+                <SelectValue placeholder="Branch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Branches</SelectItem>
+                {branches.map(b => <SelectItem key={b} value={b as string}>{b as string}</SelectItem>)}
+              </SelectContent>
+            </Select>
+
+            <Select value={sortOption} onValueChange={setSortOption}>
+              <SelectTrigger className="w-[180px] h-8 text-xs ml-auto">
+                <SelectValue placeholder="Sort By" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recent">Recently Added</SelectItem>
+                <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                <SelectItem value="balance-desc">Balance (High to Low)</SelectItem>
+                <SelectItem value="balance-asc">Balance (Low to High)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardHeader>
         <CardContent>

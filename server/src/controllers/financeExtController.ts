@@ -369,7 +369,15 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       },
       university: {
         select: {
+          id: true,
+          name: true,
           feeStructures: true
+        }
+      },
+      branch: {
+        select: {
+          id: true,
+          name: true
         }
       },
       paymentSchedules: true,
@@ -485,6 +493,8 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       name: student.name,
       enrollmentNo: student.enrollmentNo,
       programName: student.program?.name || 'N/A',
+      universityName: student.university?.name || 'N/A',
+      branchName: student.branch?.name || 'N/A',
       totalFee,
       totalPaid,
       balance,
