@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { GraduationCap, RefreshCw } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { GraduationCap, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,17 +9,39 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+interface University {
+  name: string;
+}
+
+interface FeeStructure {
+  id: string;
+  registrationFee: number;
+  tuitionFee: number;
+  examFee: number;
+  universityFee: number;
+  gstPercentage: number;
+  billingCycle: string;
+  yearlyFees: any;
+  additionalFees: { label: string; amount: number }[];
+}
+
 interface Program {
   id: string;
   name: string;
   code: string;
-  universityId?: { name: string };
-  feeStructure?: { baseFee: number; currency: string; additionalFees: { label: string; amount: number }[] };
+  university?: University;
+  feeStructures?: FeeStructure[];
 }
 
 interface WalletData {
   balance: number;
 }
+
+type FeeOption = {
+  id: string;
+  label: string;
+  totalAmount: number;
+};
 
 export function EnrollStudentPanel() {
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -27,6 +49,7 @@ export function EnrollStudentPanel() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [selectedFeeModeId, setSelectedFeeModeId] = useState<string>('');
   const [form, setForm] = useState({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
 
   const fetchData = async () => {
@@ -47,9 +70,79 @@ export function EnrollStudentPanel() {
 
   useEffect(() => { fetchData(); }, []);
 
-  const getTotalFee = (p: Program) => {
-    if (!p.feeStructure) return 0;
-    return p.feeStructure.baseFee + p.feeStructure.additionalFees.reduce((s, f) => s + f.amount, 0);
+  const getFeeOptions = (p: Program): FeeOption[] => {
+    if (!p.feeStructures || p.feeStructures.length === 0) return [];
+    const fs = p.feeStructures[0];
+    const options: FeeOption[] = [];
+
+    let additionalTotal = 0;
+    if (Array.isArray(fs.additionalFees)) {
+      additionalTotal = fs.additionalFees.reduce((sum: number, f: any) => sum + (Number(f.amount) || 0), 0);
+    }
+
+    const baseTotal = (Number(fs.registrationFee) || 0) + (Number(fs.tuitionFee) || 0) + (Number(fs.examFee) || 0) + (Number(fs.universityFee) || 0);
+    const yearlyFees = Array.isArray(fs.yearlyFees) ? fs.yearlyFees : [];
+
+    if (fs.billingCycle === 'per_semester') {
+      if (yearlyFees.length > 0) {
+        const sem1 = yearlyFees[0];
+        const sem1Total = (Number(sem1.registrationFee) || 0) + (Number(sem1.tuitionFee) || 0) + (Number(sem1.examFee) || 0) + (Number(sem1.universityFee) || 0);
+        options.push({ id: 'first_semester', label: 'First Semester', totalAmount: sem1Total + additionalTotal });
+        
+        if (yearlyFees.length >= 2) {
+          const sem2 = yearlyFees[1];
+          const sem2Total = (Number(sem2.registrationFee) || 0) + (Number(sem2.tuitionFee) || 0) + (Number(sem2.examFee) || 0) + (Number(sem2.universityFee) || 0);
+          options.push({ id: 'first_year', label: 'First Year (Sem 1 & 2)', totalAmount: sem1Total + sem2Total + additionalTotal });
+        }
+        
+        const fullCourse = yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0) + (Number(y.tuitionFee) || 0) + (Number(y.examFee) || 0) + (Number(y.universityFee) || 0), 0);
+        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: fullCourse + additionalTotal });
+      } else {
+        options.push({ id: 'first_semester', label: 'First Semester', totalAmount: baseTotal + additionalTotal });
+      }
+    } else if (fs.billingCycle === 'per_year') {
+      if (yearlyFees.length > 0) {
+        const year1 = yearlyFees[0];
+        const year1Total = (Number(year1.registrationFee) || 0) + (Number(year1.tuitionFee) || 0) + (Number(year1.examFee) || 0) + (Number(year1.universityFee) || 0);
+        options.push({ id: 'first_year', label: 'First Year', totalAmount: year1Total + additionalTotal });
+
+        const fullCourse = yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0) + (Number(y.tuitionFee) || 0) + (Number(y.examFee) || 0) + (Number(y.universityFee) || 0), 0);
+        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: fullCourse + additionalTotal });
+      } else {
+        options.push({ id: 'first_year', label: 'First Year', totalAmount: baseTotal + additionalTotal });
+      }
+    } else {
+      options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: baseTotal + additionalTotal });
+    }
+
+    return options;
+  };
+
+  const handleProgramSelect = (p: Program) => {
+    if (selectedProgram?.id === p.id) {
+      setSelectedProgram(null);
+      setSelectedFeeModeId('');
+    } else {
+      setSelectedProgram(p);
+      const options = getFeeOptions(p);
+      if (options.length > 0) {
+        setSelectedFeeModeId(options[0].id);
+      } else {
+        setSelectedFeeModeId('');
+      }
+    }
+  };
+
+  const currentFeeOptions = useMemo(() => selectedProgram ? getFeeOptions(selectedProgram) : [], [selectedProgram]);
+  
+  const getRequiredFee = (p: Program, modeId?: string) => {
+    const opts = getFeeOptions(p);
+    if (!opts || opts.length === 0) return 0;
+    if (modeId) {
+      const selected = opts.find(o => o.id === modeId);
+      if (selected) return selected.totalAmount;
+    }
+    return opts[0].totalAmount;
   };
 
   const handleEnroll = async () => {
@@ -61,10 +154,15 @@ export function EnrollStudentPanel() {
     }
     setSubmitting(true);
     try {
-      await api.post('/enrollment/enroll', { ...form, programId: selectedProgram.id });
+      await api.post('/enrollment/enroll', { 
+        ...form, 
+        programId: selectedProgram.id,
+        feeMode: selectedFeeModeId 
+      });
       toast.success('Enrollment submitted successfully');
       setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
       setSelectedProgram(null);
+      setSelectedFeeModeId('');
       fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Enrollment failed');
@@ -74,13 +172,14 @@ export function EnrollStudentPanel() {
   };
 
   const balance = wallet?.balance || 0;
+  const currentRequiredFee = selectedProgram ? getRequiredFee(selectedProgram, selectedFeeModeId) : 0;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Enroll a Student</h2>
-          <p className="text-muted-foreground text-sm mt-1">Select a program and fill in student details to enroll.</p>
+          <p className="text-muted-foreground text-sm mt-1">Select a program, fee structure, and fill in student details to enroll.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
@@ -97,8 +196,8 @@ export function EnrollStudentPanel() {
         {/* Program Selection */}
         <Card>
           <CardHeader>
-            <CardTitle>Select Program</CardTitle>
-            <CardDescription>Programs available for enrollment</CardDescription>
+            <CardTitle>Select Program & Fee</CardTitle>
+            <CardDescription>Choose program and fee payment plan</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
@@ -108,37 +207,81 @@ export function EnrollStudentPanel() {
             ) : (
               <div className="space-y-3">
                 {programs.map(p => {
-                  const total = getTotalFee(p);
-                  const canAfford = balance >= total;
                   const isSelected = selectedProgram?.id === p.id;
+                  const defaultTotal = getRequiredFee(p);
+                  const canAffordDefault = balance >= defaultTotal;
+                  
                   return (
-                    <button
-                      key={p.id}
-                      onClick={() => setSelectedProgram(isSelected ? null : p)}
-                      className={cn(
-                        'w-full text-left p-4 rounded-xl border transition-all',
-                        isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40',
-                        !canAfford && 'opacity-60'
+                    <div key={p.id} className="space-y-2">
+                      <button
+                        onClick={() => handleProgramSelect(p)}
+                        className={cn(
+                          'w-full text-left p-4 rounded-xl border transition-all',
+                          isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40',
+                          (!canAffordDefault && !isSelected) && 'opacity-60'
+                        )}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold text-sm">{p.name}</p>
+                            <p className="text-xs text-muted-foreground">{p.code} {p.university ? `• ${p.university.name}` : ''}</p>
+                          </div>
+                          {!isSelected && (
+                            <div className="text-right">
+                              <p className="font-bold text-sm">Starts at ₹{defaultTotal.toLocaleString()}</p>
+                              {!canAffordDefault && <Badge variant="destructive" className="text-[9px]">Insufficient</Badge>}
+                            </div>
+                          )}
+                          {isSelected && (
+                            <CheckCircle2 className="w-5 h-5 text-primary" />
+                          )}
+                        </div>
+                        {(p.feeStructures?.[0]?.additionalFees?.length ?? 0) > 0 && (
+                          <div className="flex gap-1 mt-2 flex-wrap">
+                            {p.feeStructures![0].additionalFees.map((f, i) => (
+                              <Badge key={i} variant="secondary" className="text-[10px]">{f.label}: ₹{f.amount}</Badge>
+                            ))}
+                          </div>
+                        )}
+                      </button>
+
+                      {/* Fee Options when selected */}
+                      {isSelected && (
+                        <div className="pl-4 pr-2 py-2 space-y-2 border-l-2 border-primary ml-2 mb-4 bg-muted/20 rounded-r-xl">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Select Payment Plan</p>
+                          {currentFeeOptions.length === 0 ? (
+                            <p className="text-sm text-destructive">No fee structure configured for this program.</p>
+                          ) : (
+                            currentFeeOptions.map(opt => {
+                              const canAffordOpt = balance >= opt.totalAmount;
+                              const isOptSelected = selectedFeeModeId === opt.id;
+                              return (
+                                <button
+                                  key={opt.id}
+                                  onClick={() => setSelectedFeeModeId(opt.id)}
+                                  className={cn(
+                                    "flex items-center justify-between w-full p-3 rounded-lg border text-sm transition-all",
+                                    isOptSelected ? "border-primary bg-primary/10 font-medium shadow-sm" : "border-border hover:border-primary/30 bg-background",
+                                    !canAffordOpt && "opacity-50"
+                                  )}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className={cn("w-4 h-4 rounded-full border flex items-center justify-center transition-colors", isOptSelected ? "border-primary" : "border-muted-foreground")}>
+                                      {isOptSelected && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                    </div>
+                                    <span>{opt.label}</span>
+                                  </div>
+                                  <div className="text-right">
+                                    <span>₹{opt.totalAmount.toLocaleString()}</span>
+                                    {!canAffordOpt && <span className="block text-[10px] text-destructive mt-0.5">Insufficient</span>}
+                                  </div>
+                                </button>
+                              );
+                            })
+                          )}
+                        </div>
                       )}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-sm">{p.name}</p>
-                          <p className="text-xs text-muted-foreground">{p.code} {p.universityId ? `• ${p.universityId.name}` : ''}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-sm">₹{total.toLocaleString()}</p>
-                          {!canAfford && <Badge variant="destructive" className="text-[9px]">Insufficient</Badge>}
-                        </div>
-                      </div>
-                      {p.feeStructure && p.feeStructure.additionalFees.length > 0 && (
-                        <div className="flex gap-1 mt-2 flex-wrap">
-                          {p.feeStructure.additionalFees.map((f, i) => (
-                            <Badge key={i} variant="secondary" className="text-[10px]">{f.label}: ₹{f.amount}</Badge>
-                          ))}
-                        </div>
-                      )}
-                    </button>
+                    </div>
                   );
                 })}
               </div>
@@ -152,7 +295,7 @@ export function EnrollStudentPanel() {
             <CardTitle>Student Details</CardTitle>
             <CardDescription>
               {selectedProgram
-                ? `Enrolling in: ${selectedProgram.name} — Fee: ₹${getTotalFee(selectedProgram).toLocaleString()}`
+                ? `Enrolling in: ${selectedProgram.name} — Fee: ₹${currentRequiredFee.toLocaleString()}`
                 : 'Select a program first'}
             </CardDescription>
           </CardHeader>
@@ -176,13 +319,13 @@ export function EnrollStudentPanel() {
             <Button
               className="w-full mt-2"
               onClick={handleEnroll}
-              disabled={!selectedProgram || submitting || (balance < getTotalFee(selectedProgram))}
+              disabled={!selectedProgram || !selectedFeeModeId || submitting || (balance < currentRequiredFee)}
             >
               <GraduationCap className="w-4 h-4 mr-2" />
               {submitting ? 'Enrolling...' : 'Enroll Student'}
             </Button>
-            {selectedProgram && balance < getTotalFee(selectedProgram) && (
-              <p className="text-xs text-destructive text-center">Insufficient wallet balance. Please top up first.</p>
+            {selectedProgram && balance < currentRequiredFee && (
+              <p className="text-xs text-destructive text-center">Insufficient wallet balance for selected plan. Please top up first.</p>
             )}
           </CardContent>
         </Card>

@@ -60,7 +60,7 @@ export const activateUniversity = asyncHandler(async (req, res) => {
 });
 // Programs
 export const getPrograms = asyncHandler(async (req, res) => {
-    const programs = await prisma.program.findMany({ where: { organizationId: req.user.organizationId }, include: { university: true } });
+    const programs = await prisma.program.findMany({ where: { organizationId: req.user.organizationId }, include: { university: true, feeStructures: true } });
     res.json({ success: true, count: programs.length, data: programs });
 });
 export const getProgram = asyncHandler(async (req, res) => {

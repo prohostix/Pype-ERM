@@ -26599,7 +26599,7 @@ export namespace Prisma {
     centerId: string | null
     branchId: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo: string | null
     admissionNo: string | null
     admissionDate: Date | null
     name: string
@@ -26926,7 +26926,7 @@ export namespace Prisma {
       centerId: string | null
       branchId: string | null
       organizationId: string
-      enrollmentNo: string
+      enrollmentNo: string | null
       admissionNo: string | null
       admissionDate: Date | null
       name: string
@@ -92827,7 +92827,7 @@ export namespace Prisma {
     centerId?: StringNullableFilter<"Student"> | string | null
     branchId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
-    enrollmentNo?: StringFilter<"Student"> | string
+    enrollmentNo?: StringNullableFilter<"Student"> | string | null
     admissionNo?: StringNullableFilter<"Student"> | string | null
     admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     name?: StringFilter<"Student"> | string
@@ -92885,7 +92885,7 @@ export namespace Prisma {
     centerId?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
-    enrollmentNo?: SortOrder
+    enrollmentNo?: SortOrderInput | SortOrder
     admissionNo?: SortOrderInput | SortOrder
     admissionDate?: SortOrderInput | SortOrder
     name?: SortOrder
@@ -93004,7 +93004,7 @@ export namespace Prisma {
     centerId?: SortOrderInput | SortOrder
     branchId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
-    enrollmentNo?: SortOrder
+    enrollmentNo?: SortOrderInput | SortOrder
     admissionNo?: SortOrderInput | SortOrder
     admissionDate?: SortOrderInput | SortOrder
     name?: SortOrder
@@ -93054,7 +93054,7 @@ export namespace Prisma {
     centerId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     branchId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     organizationId?: StringWithAggregatesFilter<"Student"> | string
-    enrollmentNo?: StringWithAggregatesFilter<"Student"> | string
+    enrollmentNo?: StringNullableWithAggregatesFilter<"Student"> | string | null
     admissionNo?: StringNullableWithAggregatesFilter<"Student"> | string | null
     admissionDate?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     name?: StringWithAggregatesFilter<"Student"> | string
@@ -100109,7 +100109,7 @@ export namespace Prisma {
 
   export type StudentCreateInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -100161,7 +100161,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -100207,7 +100207,7 @@ export namespace Prisma {
 
   export type StudentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -100259,7 +100259,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -100308,7 +100308,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -100347,7 +100347,7 @@ export namespace Prisma {
 
   export type StudentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -100383,7 +100383,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -124583,7 +124583,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutOrganizationInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -124633,7 +124633,7 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     branchId?: string | null
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -126982,7 +126982,7 @@ export namespace Prisma {
     centerId?: StringNullableFilter<"Student"> | string | null
     branchId?: StringNullableFilter<"Student"> | string | null
     organizationId?: StringFilter<"Student"> | string
-    enrollmentNo?: StringFilter<"Student"> | string
+    enrollmentNo?: StringNullableFilter<"Student"> | string | null
     admissionNo?: StringNullableFilter<"Student"> | string | null
     admissionDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     name?: StringFilter<"Student"> | string
@@ -132280,7 +132280,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutUserInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -132331,7 +132331,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -132381,7 +132381,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutReferrerInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -132432,7 +132432,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -132487,7 +132487,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutEnrolledByUserInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -132538,7 +132538,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -135345,7 +135345,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -135396,7 +135396,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -139569,7 +139569,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutUniversityInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -139620,7 +139620,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -141240,7 +141240,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutProgramInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -141291,7 +141291,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -142174,7 +142174,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutCenterInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -142224,7 +142224,7 @@ export namespace Prisma {
     id?: string
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -147333,7 +147333,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutInvoicesInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -147384,7 +147384,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -147766,7 +147766,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -147817,7 +147817,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -158220,7 +158220,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutBranchInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -158270,7 +158270,7 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -161706,7 +161706,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutSessionInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -161757,7 +161757,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -164456,7 +164456,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutEnrollmentsInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -164507,7 +164507,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -165779,7 +165779,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -165830,7 +165830,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -177040,7 +177040,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutInternalMarksInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -177091,7 +177091,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -177603,7 +177603,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutInternalMarksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -177654,7 +177654,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -188389,7 +188389,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutCommissionsInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -188440,7 +188440,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -188701,7 +188701,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutCommissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -188752,7 +188752,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -191321,7 +191321,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutPaymentSchedulesInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -191372,7 +191372,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -191674,7 +191674,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutPaymentSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -191725,7 +191725,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -191947,7 +191947,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutPaymentLinksInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -191998,7 +191998,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -192450,7 +192450,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutPaymentLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -192501,7 +192501,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -193651,7 +193651,7 @@ export namespace Prisma {
 
   export type StudentCreateWithoutUniversityPaymentsInput = {
     id?: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -193702,7 +193702,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -193963,7 +193963,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutUniversityPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -194014,7 +194014,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -195111,7 +195111,7 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     branchId?: string | null
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -197203,7 +197203,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -197253,7 +197253,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -197301,7 +197301,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -200334,7 +200334,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -200375,7 +200375,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -203411,7 +203411,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutReferrerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -203462,7 +203462,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -203510,7 +203510,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -203548,7 +203548,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutEnrolledByUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -203599,7 +203599,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -203647,7 +203647,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -204960,7 +204960,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -205112,7 +205112,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutUniversityInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -205163,7 +205163,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -205211,7 +205211,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -206086,7 +206086,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -206429,7 +206429,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -206480,7 +206480,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -206528,7 +206528,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -206884,7 +206884,7 @@ export namespace Prisma {
     id?: string
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -207336,7 +207336,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -207386,7 +207386,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -207434,7 +207434,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -208538,7 +208538,7 @@ export namespace Prisma {
     id?: string
     centerId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -208949,7 +208949,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -208999,7 +208999,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -209047,7 +209047,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -210012,7 +210012,7 @@ export namespace Prisma {
     centerId?: string | null
     branchId?: string | null
     organizationId: string
-    enrollmentNo: string
+    enrollmentNo?: string | null
     admissionNo?: string | null
     admissionDate?: Date | string | null
     name: string
@@ -210105,7 +210105,7 @@ export namespace Prisma {
 
   export type StudentUpdateWithoutSessionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -210156,7 +210156,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -210204,7 +210204,7 @@ export namespace Prisma {
     centerId?: NullableStringFieldUpdateOperationsInput | string | null
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
-    enrollmentNo?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
     admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     name?: StringFieldUpdateOperationsInput | string

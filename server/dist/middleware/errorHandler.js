@@ -22,6 +22,19 @@ export const errorHandler = (err, req, res, next) => {
             .join(', ');
         error = { name: 'ValidationError', message, statusCode: 400 };
     }
+    // Multer Errors (e.g., file size limit)
+    if (err.name === 'MulterError') {
+        const message = err.message;
+        error = { name: 'MulterError', message, statusCode: 400 };
+    }
+    // Custom File Extension Error from upload middleware
+    if (err.message && err.message.startsWith('Invalid file type')) {
+        error = { name: 'FileTypeError', message: err.message, statusCode: 400 };
+    }
+    // File System Errors (e.g. from multer/fs directory creation)
+    if (err.code === 'EACCES' || err.code === 'ENOENT') {
+        error = { name: 'FileSystemError', message: 'Storage access error on server.', statusCode: 500 };
+    }
     // Prisma unique constraint violation
     if (err.code === 'P2002') {
         const target = err.meta?.target;
