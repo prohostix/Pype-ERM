@@ -48,16 +48,25 @@ export function FeeStructuresPanel() {
     if (formData.programId && (formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester')) {
       const prog = programs.find(p => p.id === formData.programId);
       const durationMonths = prog?.duration || 12;
-      const periodsCount = formData.billingCycle === 'per_year'
-        ? Math.ceil(durationMonths / 12)
-        : Math.ceil(durationMonths / 6);
+      let periodsCount = 0;
+      let periodNames: string[] = [];
+
+      if (formData.billingCycle === 'per_semester' && prog?.hasSemesters && Array.isArray(prog.semesters) && prog.semesters.length > 0) {
+        periodsCount = prog.semesters.length;
+        periodNames = prog.semesters.map((s: any) => s.name);
+      } else if (formData.billingCycle === 'per_semester') {
+        periodsCount = Math.ceil(durationMonths / 6);
+        periodNames = Array.from({ length: periodsCount }, (_, i) => `Semester ${i + 1}`);
+      } else {
+        periodsCount = Math.ceil(durationMonths / 12);
+        periodNames = Array.from({ length: periodsCount }, (_, i) => `Year ${i + 1}`);
+      }
 
       setYearlyFees(prev => {
         const next = [...prev];
         while (next.length < periodsCount) {
           next.push({
             year: next.length + 1,
-            periodName: formData.billingCycle === 'per_year' ? `Year ${next.length + 1}` : `Semester ${next.length + 1}`,
             registrationFee: '0',
             tuitionFee: '0',
             universityFee: '0',
@@ -68,7 +77,7 @@ export function FeeStructuresPanel() {
         const synced = next.slice(0, periodsCount).map((item, idx) => ({
           ...item,
           year: idx + 1,
-          periodName: formData.billingCycle === 'per_year' ? `Year ${idx + 1}` : `Semester ${idx + 1}`
+          periodName: periodNames[idx] || (formData.billingCycle === 'per_year' ? `Year ${idx + 1}` : `Semester ${idx + 1}`)
         }));
         return synced;
       });
