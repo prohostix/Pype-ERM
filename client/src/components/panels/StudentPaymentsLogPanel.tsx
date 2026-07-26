@@ -23,6 +23,7 @@ export function StudentPaymentsLogPanel() {
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [extraFeeDialogOpen, setExtraFeeDialogOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' });
   const [extraFeeData, setExtraFeeData] = useState({ title: '', amount: '', dueDate: new Date().toISOString().split('T')[0], remarks: '' });
 
@@ -50,7 +51,8 @@ export function StudentPaymentsLogPanel() {
     try {
       await api.post('/finance/payments', {
         ...formData,
-        studentId: selectedStudentId
+        studentId: selectedStudentId,
+        ...(selectedScheduleId ? { scheduleId: selectedScheduleId } : {})
       });
       setPaymentDialogOpen(false);
       setFormData({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' });
@@ -285,6 +287,7 @@ export function StudentPaymentsLogPanel() {
                                     <Button variant="outline" size="sm" className="w-full text-xs h-8" onClick={(e) => {
                                       e.stopPropagation();
                                       setSelectedStudentId(log.studentId);
+                                      setSelectedScheduleId(b.scheduleId || null);
                                       setPaymentDialogOpen(true);
                                     }}>
                                       <Plus className="w-3 h-3 mr-1" />

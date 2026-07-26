@@ -381,6 +381,11 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
         }
       },
       paymentSchedules: true,
+      invoices: {
+        include: {
+          payments: true
+        }
+      },
       discountAmount: true,
       discountReason: true
     },
@@ -389,13 +394,24 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
 
   const logs = students.map(student => {
     let scheduledFee = student.paymentSchedules.reduce((sum, ps) => sum + (ps.amount || 0), 0);
-    const totalPaid = student.paymentSchedules
-      .filter(ps => ps.status === 'paid')
-      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    
+    // Calculate total extra fees paid from invoices linked to extra fee schedules
+    const extraFeesPaid = student.invoices.reduce((sum, inv) => {
+      const isExtra = student.paymentSchedules.some(ps => ps.id === inv.scheduleId && ps.isExtraFee);
+      if (isExtra) {
+        return sum + inv.payments.reduce((pSum, p) => pSum + p.amount, 0);
+      }
+      return sum;
+    }, 0);
 
-    const extraFeesPaid = student.paymentSchedules
-      .filter(ps => ps.isExtraFee && ps.status === 'paid')
-      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
+    // Calculate total standard fees paid from invoices NOT linked to extra fee schedules
+    const totalPaid = student.invoices.reduce((sum, inv) => {
+      const isExtra = student.paymentSchedules.some(ps => ps.id === inv.scheduleId && ps.isExtraFee);
+      if (!isExtra) {
+        return sum + inv.payments.reduce((pSum, p) => pSum + p.amount, 0);
+      }
+      return sum;
+    }, 0);
       
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
@@ -462,12 +478,17 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       
       // Append extra fees
       student.paymentSchedules.filter(ps => ps.isExtraFee).forEach(ps => {
-        const psPaid = ps.status === 'paid' ? ps.amount : 0;
+        const psPaid = student.invoices
+          .filter(inv => inv.scheduleId === ps.id)
+          .flatMap(inv => inv.payments)
+          .reduce((sum, p) => sum + p.amount, 0);
+          
         breakdown.push({
+          scheduleId: ps.id,
           year: ps.title,
           totalFee: ps.amount,
           paid: psPaid,
-          balance: ps.amount - psPaid,
+          balance: Math.max(0, ps.amount - psPaid),
           dueDate: ps.dueDate
         });
         totalFee += ps.amount;

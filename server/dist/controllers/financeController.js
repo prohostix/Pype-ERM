@@ -103,6 +103,14 @@ export const getPayment = asyncHandler(async (req, res) => {
 });
 export const createPayment = asyncHandler(async (req, res) => {
     let invoiceId = req.body.invoiceId;
+    const scheduleId = req.body.scheduleId;
+    // If a schedule is specified, try to find an existing invoice for it, or we will create one below
+    if (!invoiceId && scheduleId) {
+        const existingInvoice = await prisma.invoice.findFirst({ where: { scheduleId } });
+        if (existingInvoice) {
+            invoiceId = existingInvoice.id;
+        }
+    }
     // Auto-generate invoice if payment is recorded directly against student (no invoice selected)
     if (!invoiceId && req.body.studentId) {
         const student = await prisma.student.findUnique({
@@ -116,7 +124,16 @@ export const createPayment = asyncHandler(async (req, res) => {
         // Attempt to resolve program fee structure from db
         let invoiceTotal = Number(req.body.amount);
         let feeDescription = 'Program Admission Fees / Custom Invoice Item';
-        if (student.programId) {
+        let targetScheduleId = undefined;
+        if (scheduleId) {
+            const schedule = await prisma.paymentSchedule.findUnique({ where: { id: scheduleId } });
+            if (schedule) {
+                invoiceTotal = schedule.amount;
+                feeDescription = schedule.title;
+                targetScheduleId = schedule.id;
+            }
+        }
+        else if (student.programId) {
             const feeStructure = await prisma.feeStructure.findFirst({
                 where: { programId: student.programId }
             });
@@ -135,6 +152,7 @@ export const createPayment = asyncHandler(async (req, res) => {
                 organizationId: req.user.organizationId,
                 studentId: student.id,
                 centerId: student.centerId,
+                scheduleId: targetScheduleId,
                 invoiceNo,
                 amount: invoiceTotal,
                 tax: 0,
@@ -182,6 +200,12 @@ export const createPayment = asyncHandler(async (req, res) => {
             await prisma.invoice.update({
                 where: { id: invoice.id },
                 data: { status: newStatus, paidAt: totalPaid >= invoice.total ? new Date() : null }
+            });
+        }
+        if (newStatus === 'paid' && invoice.scheduleId) {
+            await prisma.paymentSchedule.update({
+                where: { id: invoice.scheduleId },
+                data: { status: 'paid', paidAt: new Date() }
             });
         }
     }
