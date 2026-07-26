@@ -152,13 +152,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     centerId: ''
   });
 
-  // Generate admission number helper
-  const generateAdmissionNo = () => {
-    const prefix = 'ADM';
-    const year = new Date().getFullYear().toString().slice(-2);
-    const random = Math.floor(10000 + Math.random() * 90000);
-    return `${prefix}${year}${random}`;
-  };
+
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
