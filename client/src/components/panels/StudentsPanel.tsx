@@ -400,24 +400,22 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
         amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
                  Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].universityFee || 0);
+                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
       } else {
-        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
       }
     } else if (relevantFeeStructure.billingCycle === 'per_semester') {
       periodName = 'First Semester';
       if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
         amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
                  Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].universityFee || 0);
+                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
       } else {
-        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
       }
     } else {
       periodName = 'One Time';
-      amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0) + Number(relevantFeeStructure.universityFee || 0);
+      amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
     }
 
     return (

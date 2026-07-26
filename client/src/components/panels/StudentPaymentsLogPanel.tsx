@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export function StudentPaymentsLogPanel() {
   const [logs, setLogs] = useState<any[]>([]);
@@ -17,8 +17,10 @@ export function StudentPaymentsLogPanel() {
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
 
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [extraFeeDialogOpen, setExtraFeeDialogOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState('');
   const [formData, setFormData] = useState({ amount: '', method: 'Bank Transfer', referenceNo: '', date: new Date().toISOString().split('T')[0], notes: '' });
+  const [extraFeeData, setExtraFeeData] = useState({ title: '', amount: '', dueDate: new Date().toISOString().split('T')[0], remarks: '' });
 
   useEffect(() => {
     fetchLogs();
@@ -53,6 +55,23 @@ export function StudentPaymentsLogPanel() {
     } catch (error: any) {
       console.error('Failed to record payment:', error);
       toast.error(error.response?.data?.message || 'Failed to record payment');
+    }
+  };
+
+  const handleAddExtraFee = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/finance/student-payments-log/extra-fee', {
+        ...extraFeeData,
+        studentId: selectedStudentId
+      });
+      setExtraFeeDialogOpen(false);
+      setExtraFeeData({ title: '', amount: '', dueDate: new Date().toISOString().split('T')[0], remarks: '' });
+      fetchLogs();
+      toast.success('Extra fee added successfully');
+    } catch (error: any) {
+      console.error('Failed to add extra fee:', error);
+      toast.error(error.response?.data?.message || 'Failed to add extra fee');
     }
   };
 
@@ -161,6 +180,16 @@ export function StudentPaymentsLogPanel() {
                       {expandedRows[log.studentId] && log.breakdown && log.breakdown.length > 0 && (
                         <tr className="bg-muted/20">
                           <td colSpan={6} className="p-4 border-l-2 border-primary">
+                            <div className="flex justify-between items-center mb-4">
+                              <h4 className="font-semibold text-foreground text-sm">Fee Breakdown</h4>
+                              <Button variant="outline" size="sm" onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedStudentId(log.studentId);
+                                setExtraFeeDialogOpen(true);
+                              }}>
+                                <Plus className="w-4 h-4 mr-1" /> Add Extra Fee
+                              </Button>
+                            </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                               {log.breakdown.map((b: any, i: number) => (
                                 <div key={i} className="bg-background rounded-md border border-border p-3 flex flex-col gap-1 shadow-sm">
@@ -247,6 +276,37 @@ export function StudentPaymentsLogPanel() {
             <div className="flex justify-end gap-2 pt-4 border-t">
               <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
               <Button type="submit">Save Receipt</Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={extraFeeDialogOpen} onOpenChange={(open) => { setExtraFeeDialogOpen(open); if (!open) setExtraFeeData({ title: '', amount: '', dueDate: new Date().toISOString().split('T')[0], remarks: '' }); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Extra Fee</DialogTitle>
+            <DialogDescription>Add a late fee, library fine, or other miscellaneous charge.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddExtraFee} className="space-y-4">
+            <div>
+              <Label>Fee Title</Label>
+              <Input required placeholder="e.g. Late Payment Fee" value={extraFeeData.title} onChange={(e) => setExtraFeeData({ ...extraFeeData, title: e.target.value })} />
+            </div>
+            <div>
+              <Label>Amount (₹)</Label>
+              <Input type="number" required min="1" value={extraFeeData.amount} onChange={(e) => setExtraFeeData({ ...extraFeeData, amount: e.target.value })} />
+            </div>
+            <div>
+              <Label>Due Date</Label>
+              <Input type="date" required value={extraFeeData.dueDate} onChange={(e) => setExtraFeeData({ ...extraFeeData, dueDate: e.target.value })} />
+            </div>
+            <div>
+              <Label>Remarks (Optional)</Label>
+              <Input value={extraFeeData.remarks} onChange={(e) => setExtraFeeData({ ...extraFeeData, remarks: e.target.value })} />
+            </div>
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button type="button" variant="outline" onClick={() => setExtraFeeDialogOpen(false)}>Cancel</Button>
+              <Button type="submit">Add Fee</Button>
             </div>
           </form>
         </DialogContent>

@@ -56,6 +56,7 @@ import {
   getStudentPaymentsLog,
   getDiscounts,
   applyDiscount,
+  addExtraFee,
 } from '../controllers/financeExtController.js';
 import {
   getWalletTopUps,
@@ -189,9 +190,9 @@ router.get('/payment-links', getPaymentLinks);
 router.post('/payment-links', authorize('finance_admin'), generatePaymentLink);
 router.put('/payment-links/:id/status', authorize('finance_admin'), updatePaymentLinkStatus);
 
-// Student Payments Log
-// Student Payments Log
-router.get('/student-payments-log', getStudentPaymentsLog);
+// Student Payments Log & Extras
+router.get('/student-payments-log', authorize('finance', 'finance_admin', 'superadmin'), getStudentPaymentsLog);
+router.post('/student-payments-log/extra-fee', authorize('finance', 'finance_admin', 'superadmin'), addExtraFee);
 
 // Commissions from Universities
 router.route('/commissions')

@@ -13,4 +13,5 @@ export declare const updatePaymentLinkStatus: (req: import("express").Request, r
 export declare const getStudentPaymentsLog: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getDiscounts: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const applyDiscount: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const addExtraFee: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=financeExtController.d.ts.map

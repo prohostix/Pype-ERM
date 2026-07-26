@@ -384,6 +384,10 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     const totalPaid = student.paymentSchedules
       .filter(ps => ps.status === 'paid')
       .reduce((sum, ps) => sum + (ps.amount || 0), 0);
+
+    const extraFeesPaid = student.paymentSchedules
+      .filter(ps => ps.isExtraFee && ps.status === 'paid')
+      .reduce((sum, ps) => sum + (ps.amount || 0), 0);
       
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
@@ -401,15 +405,15 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     }
     
     if (feeSt) {
-      let baseTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0) + (feeSt.universityFee || 0);
+      let baseTotal = (feeSt.registrationFee || 0) + (feeSt.tuitionFee || 0) + (feeSt.examFee || 0);
       
       let structureTotal = baseTotal;
-      let remainingPaid = totalPaid;
+      let remainingPaid = totalPaid - extraFeesPaid;
       
       if (Array.isArray(feeSt.yearlyFees) && feeSt.yearlyFees.length > 0) {
         structureTotal = 0; // Prevent double-counting as root fields are aggregates
         feeSt.yearlyFees.forEach((yf: any) => {
-          const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0) + (Number(yf.universityFee) || 0);
+          const yfTotal = (Number(yf.registrationFee) || 0) + (Number(yf.tuitionFee) || 0) + (Number(yf.examFee) || 0);
           
           let yfPaid = 0;
           if (remainingPaid >= yfTotal) {
@@ -447,6 +451,19 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       if (structureTotal > totalFee) {
         totalFee = structureTotal;
       }
+      
+      // Append extra fees
+      student.paymentSchedules.filter(ps => ps.isExtraFee).forEach(ps => {
+        const psPaid = ps.status === 'paid' ? ps.amount : 0;
+        breakdown.push({
+          year: ps.title,
+          totalFee: ps.amount,
+          paid: psPaid,
+          balance: ps.amount - psPaid,
+          dueDate: ps.dueDate
+        });
+        totalFee += ps.amount;
+      });
     } else {
        breakdown.push({
          year: 'Total Fee',
@@ -538,4 +555,39 @@ export const applyDiscount = asyncHandler(async (req: AuthRequest, res: Response
   });
 
   res.status(200).json({ success: true, data: updatedStudent });
+});
+
+export const addExtraFee = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const organizationId = req.user.organizationId;
+  const { studentId, title, amount, dueDate, remarks } = req.body;
+
+  if (!studentId || !title || !amount || !dueDate) {
+    return res.status(400).json({ success: false, message: 'Missing required fields' });
+  }
+
+  try {
+    const student = await prisma.student.findUnique({
+      where: { id: studentId, organizationId }
+    });
+
+    if (!student) {
+      return res.status(404).json({ success: false, message: 'Student not found' });
+    }
+
+    const extraFee = await prisma.paymentSchedule.create({
+      data: {
+        organizationId,
+        studentId,
+        title,
+        amount: parseFloat(amount),
+        dueDate: new Date(dueDate),
+        remarks,
+        isExtraFee: true
+      }
+    });
+
+    res.status(201).json({ success: true, data: extraFee });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add extra fee' });
+  }
 });

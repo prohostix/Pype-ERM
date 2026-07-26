@@ -82520,6 +82520,7 @@ export namespace Prisma {
     paidAt: Date | null
     remarks: string | null
     isOldFee: boolean | null
+    isExtraFee: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82535,6 +82536,7 @@ export namespace Prisma {
     paidAt: Date | null
     remarks: string | null
     isOldFee: boolean | null
+    isExtraFee: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82550,6 +82552,7 @@ export namespace Prisma {
     paidAt: number
     remarks: number
     isOldFee: number
+    isExtraFee: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -82575,6 +82578,7 @@ export namespace Prisma {
     paidAt?: true
     remarks?: true
     isOldFee?: true
+    isExtraFee?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82590,6 +82594,7 @@ export namespace Prisma {
     paidAt?: true
     remarks?: true
     isOldFee?: true
+    isExtraFee?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82605,6 +82610,7 @@ export namespace Prisma {
     paidAt?: true
     remarks?: true
     isOldFee?: true
+    isExtraFee?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -82707,6 +82713,7 @@ export namespace Prisma {
     paidAt: Date | null
     remarks: string | null
     isOldFee: boolean
+    isExtraFee: boolean
     createdAt: Date
     updatedAt: Date
     _count: PaymentScheduleCountAggregateOutputType | null
@@ -82741,6 +82748,7 @@ export namespace Prisma {
     paidAt?: boolean
     remarks?: boolean
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -82761,6 +82769,7 @@ export namespace Prisma {
     paidAt?: boolean
     remarks?: boolean
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -82778,6 +82787,7 @@ export namespace Prisma {
     paidAt?: boolean
     remarks?: boolean
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -82795,11 +82805,12 @@ export namespace Prisma {
     paidAt?: boolean
     remarks?: boolean
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PaymentScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "title" | "amount" | "dueDate" | "status" | "paidAt" | "remarks" | "isOldFee" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentSchedule"]>
+  export type PaymentScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "title" | "amount" | "dueDate" | "status" | "paidAt" | "remarks" | "isOldFee" | "isExtraFee" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentSchedule"]>
   export type PaymentScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -82835,6 +82846,7 @@ export namespace Prisma {
       paidAt: Date | null
       remarks: string | null
       isOldFee: boolean
+      isExtraFee: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["paymentSchedule"]>
@@ -83274,6 +83286,7 @@ export namespace Prisma {
     readonly paidAt: FieldRef<"PaymentSchedule", 'DateTime'>
     readonly remarks: FieldRef<"PaymentSchedule", 'String'>
     readonly isOldFee: FieldRef<"PaymentSchedule", 'Boolean'>
+    readonly isExtraFee: FieldRef<"PaymentSchedule", 'Boolean'>
     readonly createdAt: FieldRef<"PaymentSchedule", 'DateTime'>
     readonly updatedAt: FieldRef<"PaymentSchedule", 'DateTime'>
   }
@@ -90605,6 +90618,7 @@ export namespace Prisma {
     paidAt: 'paidAt',
     remarks: 'remarks',
     isOldFee: 'isOldFee',
+    isExtraFee: 'isExtraFee',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -97651,6 +97665,7 @@ export namespace Prisma {
     paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
     remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
     isOldFee?: BoolFilter<"PaymentSchedule"> | boolean
+    isExtraFee?: BoolFilter<"PaymentSchedule"> | boolean
     createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
     updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -97670,6 +97685,7 @@ export namespace Prisma {
     paidAt?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
     isOldFee?: SortOrder
+    isExtraFee?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
@@ -97692,6 +97708,7 @@ export namespace Prisma {
     paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
     remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
     isOldFee?: BoolFilter<"PaymentSchedule"> | boolean
+    isExtraFee?: BoolFilter<"PaymentSchedule"> | boolean
     createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
     updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -97711,6 +97728,7 @@ export namespace Prisma {
     paidAt?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
     isOldFee?: SortOrder
+    isExtraFee?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentScheduleCountOrderByAggregateInput
@@ -97734,6 +97752,7 @@ export namespace Prisma {
     paidAt?: DateTimeNullableWithAggregatesFilter<"PaymentSchedule"> | Date | string | null
     remarks?: StringNullableWithAggregatesFilter<"PaymentSchedule"> | string | null
     isOldFee?: BoolWithAggregatesFilter<"PaymentSchedule"> | boolean
+    isExtraFee?: BoolWithAggregatesFilter<"PaymentSchedule"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"PaymentSchedule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PaymentSchedule"> | Date | string
   }
@@ -105229,6 +105248,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
@@ -105248,6 +105268,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutScheduleInput
@@ -105263,6 +105284,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
@@ -105282,6 +105304,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutScheduleNestedInput
@@ -105299,6 +105322,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -105312,6 +105336,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -105327,6 +105352,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -110223,6 +110249,7 @@ export namespace Prisma {
     paidAt?: SortOrder
     remarks?: SortOrder
     isOldFee?: SortOrder
+    isExtraFee?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -110242,6 +110269,7 @@ export namespace Prisma {
     paidAt?: SortOrder
     remarks?: SortOrder
     isOldFee?: SortOrder
+    isExtraFee?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -110257,6 +110285,7 @@ export namespace Prisma {
     paidAt?: SortOrder
     remarks?: SortOrder
     isOldFee?: SortOrder
+    isExtraFee?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -125466,6 +125495,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutPaymentSchedulesInput
@@ -125483,6 +125513,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutScheduleInput
@@ -127535,6 +127566,7 @@ export namespace Prisma {
     paidAt?: DateTimeNullableFilter<"PaymentSchedule"> | Date | string | null
     remarks?: StringNullableFilter<"PaymentSchedule"> | string | null
     isOldFee?: BoolFilter<"PaymentSchedule"> | boolean
+    isExtraFee?: BoolFilter<"PaymentSchedule"> | boolean
     createdAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
     updatedAt?: DateTimeFilter<"PaymentSchedule"> | Date | string
   }
@@ -145743,6 +145775,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
@@ -145760,6 +145793,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutScheduleInput
@@ -147441,6 +147475,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
@@ -147459,6 +147494,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutScheduleInput
@@ -147880,6 +147916,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
@@ -147898,6 +147935,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutScheduleNestedInput
@@ -192055,6 +192093,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutPaymentSchedulesInput
@@ -192073,6 +192112,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     invoices?: InvoiceUncheckedCreateNestedManyWithoutScheduleInput
@@ -192564,6 +192604,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
@@ -192582,6 +192623,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutScheduleNestedInput
@@ -195364,6 +195406,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -198183,6 +198226,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutPaymentSchedulesNestedInput
@@ -198200,6 +198244,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutScheduleNestedInput
@@ -198216,6 +198261,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -208025,6 +208071,7 @@ export namespace Prisma {
     paidAt?: Date | string | null
     remarks?: string | null
     isOldFee?: boolean
+    isExtraFee?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -208271,6 +208318,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutPaymentSchedulesNestedInput
@@ -208288,6 +208336,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: InvoiceUncheckedUpdateManyWithoutScheduleNestedInput
@@ -208304,6 +208353,7 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     isOldFee?: BoolFieldUpdateOperationsInput | boolean
+    isExtraFee?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

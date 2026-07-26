@@ -1046,6 +1046,7 @@ exports.Prisma.PaymentScheduleScalarFieldEnum = {
   paidAt: 'paidAt',
   remarks: 'remarks',
   isOldFee: 'isOldFee',
+  isExtraFee: 'isExtraFee',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
