@@ -283,17 +283,19 @@ export function StudentPaymentsLogPanel() {
                                     <span className="text-muted-foreground">Balance:</span>
                                     <span className="font-semibold text-amber-600">₹{b.balance?.toLocaleString('en-IN') || 0}</span>
                                   </div>
-                                  <div className="mt-3 pt-3 border-t border-border flex justify-end">
-                                    <Button variant="outline" size="sm" className="w-full text-xs h-8" onClick={(e) => {
-                                      e.stopPropagation();
-                                      setSelectedStudentId(log.studentId);
-                                      setSelectedScheduleId(b.scheduleId || null);
-                                      setPaymentDialogOpen(true);
-                                    }}>
-                                      <Plus className="w-3 h-3 mr-1" />
-                                      Record Receipt
-                                    </Button>
-                                  </div>
+                                  {b.balance > 0 && (
+                                    <div className="mt-3 pt-3 border-t border-border flex justify-end">
+                                      <Button variant="outline" size="sm" className="w-full text-xs h-8" onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedStudentId(log.studentId);
+                                        setSelectedScheduleId(b.scheduleId || null);
+                                        setPaymentDialogOpen(true);
+                                      }}>
+                                        <Plus className="w-3 h-3 mr-1" />
+                                        Record Receipt
+                                      </Button>
+                                    </div>
+                                  )}
                                 </div>
                               ))}
                             </div>
