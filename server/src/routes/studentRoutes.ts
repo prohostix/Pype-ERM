@@ -34,7 +34,7 @@ router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'fi
 router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee'), upload.single('file'), uploadStudentDocument);
 
 router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin'), createStudent);
-router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
+router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/approve', authorize('finance_admin', 'ops_admin'), approveStudent);
 
 export default router;
