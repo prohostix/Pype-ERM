@@ -128,11 +128,30 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
   });
   const totalCollected = payments.reduce((sum, p) => sum + p.amount, 0);
 
-  // 3. Cash & Bank Balance
-  const wallets = await prisma.studyCenterWallet.findMany({
-    where: { organizationId: orgId }
+  // 3. Cash & Bank Balance (Absolute organization balance)
+  const allPayments = await prisma.paymentEntry.findMany({ where: { organizationId: orgId } });
+  const allTopups = await prisma.walletTopUp.findMany({ where: { organizationId: orgId } });
+  
+  const totalInflow = 
+    allPayments.reduce((sum, p) => sum + p.amount, 0) + 
+    allTopups.reduce((sum, t) => sum + t.amount, 0);
+
+  const allExpenses = await prisma.expenseClaim.findMany({ 
+    where: { organizationId: orgId, status: { in: ['approved', 'reimbursed'] } } 
   });
-  const cashAndBankBalance = wallets.reduce((sum, w) => sum + w.balance, 0);
+  const allPayrolls = await prisma.payrollBatch.findMany({
+    where: { organizationId: orgId, status: { in: ['completed', 'payment_in_progress'] } }
+  });
+  const allUniPayments = await prisma.universityPayment.findMany({
+    where: { organizationId: orgId, status: 'paid' }
+  });
+
+  const totalOutflow = 
+    allExpenses.reduce((sum, e) => sum + e.amount, 0) +
+    allPayrolls.reduce((sum, p) => sum + p.totalAmount, 0) +
+    allUniPayments.reduce((sum, u) => sum + u.amountPaid, 0);
+
+  const cashAndBankBalance = totalInflow - totalOutflow;
 
   // 4. Operational Expenses
   const expenses = await prisma.expenseClaim.findMany({
