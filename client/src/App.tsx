@@ -18,7 +18,6 @@ import { toast } from 'sonner';
 
 type ViewMode = 'dashboard' | 'table';
 
-// Basic employee nav items (non-sub-dept-manager employees)
 const EMPLOYEE_NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'tasks', label: 'My Tasks' },
@@ -29,6 +28,17 @@ const EMPLOYEE_NAV_ITEMS = [
   { id: 'notice-board', label: 'Notice Board' },
   { id: 'team', label: 'My Team' },
   { id: 'ld-portal', label: 'L&D Portal' },
+];
+
+const STUDENT_NAV_ITEMS = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'notifications', label: 'Notifications' },
+  { id: 'materials', label: 'Classes & E-Books' },
+  { id: 'fees', label: 'Fee details' },
+  { id: 'invoices', label: 'Invoices' },
+  { id: 'refer_admission', label: 'Refer Admission' },
+  { id: 'terms', label: 'Terms & Conditions' },
+  { id: 'help', label: 'Help & Support' },
 ];
 
 // Maps sidebar table IDs to the dashboard tab they should open
@@ -105,7 +115,6 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
   const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
 
-  // Set default table based on user role
   const getDefaultTable = (role?: string) => {
     switch (role) {
       case 'superadmin': return 'organizations';
@@ -115,6 +124,7 @@ function App() {
       case 'finance_admin':
       case 'hr_admin':
       case 'sales_admin': return 'overview';
+      case 'staff': return 'overview';
       default: return 'tasks';
     }
   };
@@ -333,7 +343,10 @@ function App() {
     }
 
     const result = (() => {
-      if (user.role === 'employee' || user.role === 'staff') {
+      if (user.role === 'staff') {
+        return STUDENT_NAV_ITEMS;
+      }
+      if (user.role === 'employee') {
         const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
         if (deptType) {
           if (isSubDeptManager) {

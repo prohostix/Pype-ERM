@@ -13,6 +13,7 @@ import { ModernStudyCenterDashboard } from './ModernStudyCenterDashboard';
 import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
+import { ModernStudentPortal } from './ModernStudentPortal';
 
 
 interface DashboardProps {
@@ -184,7 +185,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
   }
 
   if (user?.role === 'staff') {
-    return <ModernEmployeeDashboard initialTab={initialTab} />;
+    return <ModernStudentPortal initialTab={initialTab} />;
   }
 
   // Fallback for other staff/admin roles
