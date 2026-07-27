@@ -72,7 +72,7 @@ export function ExamRegistrationPanel() {
                       <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">{student.session?.program?.name || 'N/A'}</div>
+                      <div className="text-sm">{student.program?.name || 'N/A'}</div>
                     </TableCell>
                     <TableCell>Semester 1</TableCell>
                     <TableCell>5 Papers</TableCell>
