@@ -37,6 +37,9 @@ import { DocumentReceivedPanel } from '@/components/panels/DocumentReceivedPanel
 import { DocumentDispatchPanel } from '@/components/panels/DocumentDispatchPanel';
 import { CourierTrackingPanel } from '@/components/panels/CourierTrackingPanel';
 import { DeliveryConfirmationPanel } from '@/components/panels/DeliveryConfirmationPanel';
+import { BulkSmsPanel } from '@/components/panels/BulkSmsPanel';
+import { BulkWhatsAppPanel } from '@/components/panels/BulkWhatsAppPanel';
+import { EmailNotificationsPanel } from '@/components/panels/EmailNotificationsPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -87,9 +90,9 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'delivery_confirmation': return <DeliveryConfirmationPanel />;
 
       case 'announcements': return <AnnouncementsPanel />;
-      case 'bulk_sms': return <PlaceholderPanel title="Bulk SMS" description="Send bulk SMS to students/staff." />;
-      case 'bulk_whatsapp': return <PlaceholderPanel title="Bulk WhatsApp" description="Send bulk WhatsApp messages." />;
-      case 'email_notifications': return <PlaceholderPanel title="Email Notifications" description="Manage email notifications." />;
+      case 'bulk_sms': return <BulkSmsPanel />;
+      case 'bulk_whatsapp': return <BulkWhatsAppPanel />;
+      case 'email_notifications': return <EmailNotificationsPanel />;
 
       case 'tasks': return <TasksPanel />;
       case 'pending_tasks': return <PlaceholderPanel title="Pending Tasks" description="View your pending tasks." />;
