@@ -5,15 +5,14 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 export function DeleteRequestsPanel() {
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) setUser(JSON.parse(storedUser));
     fetchRequests();
   }, []);
 
@@ -70,7 +69,7 @@ export function DeleteRequestsPanel() {
                 </div>
                 
                 {/* Show actions based on role and request status */}
-                {((['superadmin', 'org_admin', 'ceo'].includes(user?.role) && req.status === 'pending_ceo') || 
+                {((['superadmin', 'org_admin', 'ceo'].includes(user?.role as string) && req.status === 'pending_ceo') || 
                   (user?.role !== 'ceo' && req.status === 'pending_manager')) && (
                   <div className="flex gap-2">
                     <Button variant="outline" className="text-destructive hover:bg-destructive/10" onClick={() => handleRespond(req.id, 'rejected')}>
