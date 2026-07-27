@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { RefreshCw, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -10,6 +11,7 @@ import api from '@/lib/api';
 export function ReRegistrationPanel() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -80,7 +82,7 @@ export function ReRegistrationPanel() {
                       <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="outline">View Details</Button>
+                      <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -89,6 +91,54 @@ export function ReRegistrationPanel() {
           </div>
         )}
       </CardContent>
+
+      {selectedStudent && (
+        <Dialog open={!!selectedStudent} onOpenChange={(open) => !open && setSelectedStudent(null)}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Re-registration Details</DialogTitle>
+              <DialogDescription>
+                Review and process re-registration for {selectedStudent.name}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Student Name</span>
+                <span className="col-span-3 text-sm font-medium">{selectedStudent.name}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Enrollment No</span>
+                <span className="col-span-3 text-sm">{selectedStudent.enrollmentNo || 'N/A'}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Program</span>
+                <span className="col-span-3 text-sm">{selectedStudent.session?.program?.name || 'N/A'}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Current Sem</span>
+                <span className="col-span-3 text-sm">Semester 1</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Next Sem</span>
+                <span className="col-span-3 text-sm">Semester 2</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="font-medium text-sm text-muted-foreground">Status</span>
+                <span className="col-span-3">
+                  <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
+                </span>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedStudent(null)}>Cancel</Button>
+              <Button onClick={() => {
+                toast.success('Fee reminder sent to student!');
+                setSelectedStudent(null);
+              }}>Send Fee Reminder</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </Card>
   );
 }
