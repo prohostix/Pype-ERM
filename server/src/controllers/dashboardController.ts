@@ -27,6 +27,43 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.totalPrograms = await prisma.program.count({ where: orgQuery });
   }
 
+  if (['ops_admin', 'ops_sub_admin', 'ceo', 'org_admin'].includes(role)) {
+    if (metrics.totalStudents === undefined) {
+      metrics.totalStudents = await prisma.student.count({ where: orgQuery });
+    }
+    
+    metrics.pendingApplications = await prisma.student.count({
+      where: { ...orgQuery, status: 'pending' }
+    });
+    
+    // Placeholder for uni submissions pending
+    metrics.uniSubmissionsPending = await prisma.student.count({
+      where: { ...orgQuery, status: 'pending' }
+    });
+    
+    metrics.enrollmentNumbersPending = await prisma.student.count({
+      where: { ...orgQuery, enrollmentNo: null }
+    });
+    
+    metrics.documentsPending = 0; // Requires JSON query or separate document tracking
+    metrics.reRegistrationPending = 0; // Requires re-registration model
+    
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    metrics.admissionAlerts = await prisma.student.count({
+      where: { ...orgQuery, status: 'pending', createdAt: { lte: thirtyDaysAgo } }
+    });
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    metrics.todaysTasks = await prisma.task.count({ 
+      where: { organizationId: orgId as string, targetDate: { gte: today, lt: tomorrow } } 
+    }).catch(() => 0);
+  }
+
   if (['hr_admin', 'ceo', 'org_admin'].includes(role)) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
