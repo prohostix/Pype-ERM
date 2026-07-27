@@ -40,6 +40,11 @@ import { DeliveryConfirmationPanel } from '@/components/panels/DeliveryConfirmat
 import { BulkSmsPanel } from '@/components/panels/BulkSmsPanel';
 import { BulkWhatsAppPanel } from '@/components/panels/BulkWhatsAppPanel';
 import { EmailNotificationsPanel } from '@/components/panels/EmailNotificationsPanel';
+import { StudentReportPanel } from '@/components/panels/StudentReportPanel';
+import { AdmissionReportPanel } from '@/components/panels/AdmissionReportPanel';
+import { EnrollmentReportPanel } from '@/components/panels/EnrollmentReportPanel';
+import { UniversityReportPanel } from '@/components/panels/UniversityReportPanel';
+import { ReRegistrationReportPanel } from '@/components/panels/ReRegistrationReportPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -99,11 +104,11 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'completed_tasks': return <PlaceholderPanel title="Completed Tasks" description="View your completed tasks." />;
       case 'follow_up_reminders': return <PlaceholderPanel title="Follow-up Reminders" description="Manage your follow-ups." />;
 
-      case 'student_report': return <PlaceholderPanel title="Student Report" description="Generate student reports." />;
-      case 'admission_report': return <PlaceholderPanel title="Admission Report" description="Generate admission reports." />;
-      case 'enrollment_report': return <PlaceholderPanel title="Enrollment Report" description="Generate enrollment reports." />;
-      case 'university_report': return <PlaceholderPanel title="University Report" description="Generate university reports." />;
-      case 're_registration_report': return <PlaceholderPanel title="Re-registration Report" description="Generate re-registration reports." />;
+      case 'student_report': return <StudentReportPanel />;
+      case 'admission_report': return <AdmissionReportPanel />;
+      case 'enrollment_report': return <EnrollmentReportPanel />;
+      case 'university_report': return <UniversityReportPanel />;
+      case 're_registration_report': return <ReRegistrationReportPanel />;
 
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_leaves': return <LeavesPanel />;
