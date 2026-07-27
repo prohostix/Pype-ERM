@@ -20,7 +20,7 @@ export function DeleteRequestsPanel() {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/edit-delete-requests');
+      const response = await api.get('/edit-delete/requests');
       setRequests(response.data.data || []);
     } catch (error) {
       toast.error('Failed to load delete requests');
@@ -31,7 +31,7 @@ export function DeleteRequestsPanel() {
 
   const handleRespond = async (id: string, status: 'approved' | 'rejected') => {
     try {
-      await api.post(`/edit-delete-requests/${id}/respond`, { status });
+      await api.patch(`/edit-delete/requests/${id}`, { status });
       toast.success(`Request ${status} successfully`);
       fetchRequests();
     } catch (error) {
