@@ -20,7 +20,7 @@ export function ExamRegistrationPanel() {
     try {
       // Mocking fetch for now
       const res = await api.get('/students');
-      setStudents(res.data.data?.slice(0, 3) || []);
+      setStudents(res.data.data || []);
     } catch (e) {
       console.error(e);
       toast.error('Failed to fetch exam registrations');
