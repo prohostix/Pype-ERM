@@ -10,6 +10,10 @@ const SALES_ROLES = ['sales_admin', 'sales', 'sales_agent', 'bde', 'employee', '
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
   if (req.query.status) where.status = req.query.status as string;
+  if (req.query.missingEnrollment === 'true') {
+    where.enrollmentNo = null;
+    where.status = 'admitted'; // Only admitted students need enrollment numbers
+  }
 
   // Branch-level isolation for students list
   if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
@@ -556,4 +560,25 @@ export const uploadStudentDocument = asyncHandler(async (req: AuthRequest, res: 
   });
 
   res.status(200).json({ success: true, data: updatedStudent });
+});
+
+export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { updates } = req.body;
+  if (!Array.isArray(updates)) {
+    res.status(400).json({ success: false, message: 'Invalid payloads' });
+    return;
+  }
+  
+  let updatedCount = 0;
+  for (const update of updates) {
+    if (update.id && update.enrollmentNo) {
+      await prisma.student.update({
+        where: { id: update.id, organizationId: req.user.organizationId },
+        data: { enrollmentNo: update.enrollmentNo }
+      });
+      updatedCount++;
+    }
+  }
+
+  res.status(200).json({ success: true, count: updatedCount, message: 'Enrollment numbers updated' });
 });

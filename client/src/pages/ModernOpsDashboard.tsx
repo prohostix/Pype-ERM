@@ -29,6 +29,10 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
+import { EnrollmentNumberUpdatePanel } from '@/components/panels/EnrollmentNumberUpdatePanel';
+import { UniversitySubmissionPanel } from '@/components/panels/UniversitySubmissionPanel';
+import { ReRegistrationPanel } from '@/components/panels/ReRegistrationPanel';
+import { ExamRegistrationPanel } from '@/components/panels/ExamRegistrationPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -62,11 +66,11 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'admission_verification': return <PlaceholderPanel title="Admission Verification" description="Verify admission details and documents." />;
 
       case 'universities': return <UniversitiesPanel />;
-      case 'university_submission': return <PlaceholderPanel title="University Submission" description="Manage submissions to universities." />;
+      case 'university_submission': return <UniversitySubmissionPanel />;
       case 'enrollment_management': return <PlaceholderPanel title="Enrollment Management" description="Manage university enrollments." />;
-      case 'enrollment_number_update': return <PlaceholderPanel title="Enrollment Number Update" description="Update student enrollment numbers." />;
-      case 're_registration': return <PlaceholderPanel title="Re-registration" description="Manage student re-registrations." />;
-      case 'exam_registration': return <PlaceholderPanel title="Exam Registration" description="Manage student exam registrations." />;
+      case 'enrollment_number_update': return <EnrollmentNumberUpdatePanel />;
+      case 're_registration': return <ReRegistrationPanel />;
+      case 'exam_registration': return <ExamRegistrationPanel />;
 
       case 'programs': return <ProgramsPanel />;
       case 'program_allocations': return <OpsProgramAllocationPanel />;
