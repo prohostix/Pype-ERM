@@ -38,6 +38,25 @@ export function DeleteRequestsPanel() {
     }
   };
 
+  const formatTarget = (url: string) => {
+    if (!url) return 'Unknown Target';
+    try {
+      const parts = url.split('/').filter(Boolean);
+      const relevantParts = parts.filter(p => p !== 'api' && p !== 'v1');
+      
+      const id = relevantParts.pop();
+      if (!id) return url;
+      
+      const entityName = relevantParts.map(p => 
+        p.split(/[-_]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      ).join(' > ');
+      
+      return `${entityName} (ID: ${id.length > 12 ? id.substring(0, 8) + '...' : id})`;
+    } catch (e) {
+      return url;
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -61,7 +80,9 @@ export function DeleteRequestsPanel() {
                     {req.status === 'approved' && <Badge className="bg-success text-success-foreground">Approved</Badge>}
                     {req.status === 'rejected' && <Badge className="bg-destructive text-destructive-foreground">Rejected</Badge>}
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">Target: {req.entityId}</p>
+                  <p className="text-sm text-muted-foreground mb-2" title={req.entityId}>
+                    Target: <span className="font-medium text-foreground">{formatTarget(req.entityId)}</span>
+                  </p>
                   <div className="bg-muted p-3 rounded-md text-sm border-l-4 border-primary">
                     <p className="font-medium text-xs mb-1">Reason for deletion:</p>
                     {req.reason}
