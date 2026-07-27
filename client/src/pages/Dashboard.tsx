@@ -95,7 +95,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     fetchDeptAndSubDept();
   }, [useDepartmentDashboard, user]);
 
-  const isBranchManager = Boolean((user as any)?.branchId);
+  const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {

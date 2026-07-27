@@ -307,7 +307,7 @@ function App() {
     }
 
     // Branch manager — takes priority over role-specific nav
-    if ((user as any)?.branchId) {
+    if ((user as any)?.branchId && user.role !== 'staff') {
       return getBranchManagerNavItems();
     }
 
@@ -392,7 +392,7 @@ function App() {
     const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
-    const isBranchManager = Boolean((user as any)?.branchId);
+    const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';
     const isStudentRole = user?.role === 'staff';
     if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager || isStudentRole)) {
       setViewMode('dashboard');
