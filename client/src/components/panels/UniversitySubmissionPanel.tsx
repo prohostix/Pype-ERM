@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { RefreshCw, CheckCircle, Send, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -98,7 +99,7 @@ export function UniversitySubmissionPanel() {
                           <div className="text-xs text-muted-foreground">{student.admissionNo || 'N/A'}</div>
                         </TableCell>
                         <TableCell>
-                          <div className="text-sm">{student.session?.program?.name || 'N/A'}</div>
+                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="flex w-fit items-center gap-1">
@@ -110,10 +111,28 @@ export function UniversitySubmissionPanel() {
                           <Badge variant="secondary" className="bg-green-100 text-green-700">Verified</Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button size="sm" onClick={() => markSubmitted(student.id)}>
-                            <Send className="w-4 h-4 mr-2" />
-                            Mark Submitted
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button size="sm">
+                                <Send className="w-4 h-4 mr-2" />
+                                Mark Submitted
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to mark {student.name}'s application as submitted to the university?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => markSubmitted(student.id)}>
+                                  Confirm
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -149,7 +168,7 @@ export function UniversitySubmissionPanel() {
                           <div className="text-xs text-muted-foreground">{student.admissionNo || 'N/A'}</div>
                         </TableCell>
                         <TableCell>
-                          <div className="text-sm">{student.session?.program?.name || 'N/A'}</div>
+                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="flex w-fit items-center gap-1">
