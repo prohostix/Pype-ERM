@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { createNotification } from './notificationController.js';
+import { NotificationType } from '../generated/client/index.js';
 
 export const submitEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
   const request = await prisma.editDeleteRequest.create({
@@ -65,6 +67,35 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
       respondedAt: new Date() 
     }
   });
+
+  if (newStatus === 'rejected') {
+    await createNotification(
+      request.organizationId,
+      request.userId,
+      NotificationType.general,
+      'Delete Request Rejected',
+      `Your delete request was rejected.`,
+      '/dashboard'
+    );
+  } else if (newStatus === 'approved') {
+    await createNotification(
+      request.organizationId,
+      request.userId,
+      NotificationType.general,
+      'Delete Request Approved',
+      `Your delete request was approved and executed.`,
+      '/dashboard'
+    );
+  } else if (newStatus === 'pending_ceo') {
+    await createNotification(
+      request.organizationId,
+      request.userId,
+      NotificationType.general,
+      'Delete Request Advanced',
+      `Your delete request was approved by management and is now pending CEO approval.`,
+      '/dashboard'
+    );
+  }
 
   // If fully approved, execute the actual deletion bypass!
   if (newStatus === 'approved') {
