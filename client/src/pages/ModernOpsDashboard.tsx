@@ -111,7 +111,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 're_registration_report': return <ReRegistrationReportPanel />;
 
       case 'my_attendance': return <AttendancePanel isMyPortal />;
-      case 'my_leaves': return <LeavesPanel />;
+      case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'holidays': return <HolidaysPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
       
