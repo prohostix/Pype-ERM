@@ -13,6 +13,8 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
   if (req.query.missingEnrollment === 'true') {
     where.enrollmentNo = null;
     where.status = 'admitted'; // Only admitted students need enrollment numbers
+  } else if (req.query.hasEnrollment === 'true') {
+    where.enrollmentNo = { not: null };
   }
 
   // Branch-level isolation for students list
