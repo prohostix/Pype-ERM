@@ -69,8 +69,8 @@ export function DeleteRequestsPanel() {
                 </div>
                 
                 {/* Show actions based on role and request status */}
-                {((['superadmin', 'org_admin', 'ceo'].includes(user?.role as string) && req.status === 'pending_ceo') || 
-                  (user?.role !== 'ceo' && req.status === 'pending_manager')) && (
+                {((['superadmin', 'org_admin', 'ceo'].includes(user?.role as string)) || 
+                  (req.status === 'pending_manager')) && (
                   <div className="flex gap-2">
                     <Button variant="outline" className="text-destructive hover:bg-destructive/10" onClick={() => handleRespond(req.id, 'rejected')}>
                       <XCircle className="w-4 h-4 mr-2" /> Reject
