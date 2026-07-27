@@ -22,7 +22,7 @@ export function ReRegistrationPanel() {
     try {
       // Mocking fetch for now
       const res = await api.get('/students');
-      setStudents(res.data.data?.slice(0, 3) || []);
+      setStudents(res.data.data || []);
     } catch (e) {
       console.error(e);
       toast.error('Failed to fetch re-registrations');
@@ -74,7 +74,7 @@ export function ReRegistrationPanel() {
                       <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">{student.session?.program?.name || 'N/A'}</div>
+                      <div className="text-sm">{student.program?.name || 'N/A'}</div>
                     </TableCell>
                     <TableCell>Semester 1</TableCell>
                     <TableCell>Semester 2</TableCell>
@@ -112,7 +112,7 @@ export function ReRegistrationPanel() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <span className="font-medium text-sm text-muted-foreground">Program</span>
-                <span className="col-span-3 text-sm">{selectedStudent.session?.program?.name || 'N/A'}</span>
+                <span className="col-span-3 text-sm">{selectedStudent.program?.name || 'N/A'}</span>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <span className="font-medium text-sm text-muted-foreground">Current Sem</span>
