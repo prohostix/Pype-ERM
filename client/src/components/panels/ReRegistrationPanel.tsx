@@ -19,7 +19,7 @@ export function ReRegistrationPanel() {
     setLoading(true);
     try {
       // Mocking fetch for now
-      const res = await api.get('/student');
+      const res = await api.get('/students');
       setStudents(res.data.data?.slice(0, 3) || []);
     } catch (e) {
       console.error(e);

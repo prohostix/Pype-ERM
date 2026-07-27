@@ -30,8 +30,8 @@ const checkCollectionOversightAccess = async (req: AuthRequest, res: Response, n
     return next();
   }
 
-  res.status(403).json({
-    success: false,
+  res.status(200).json({
+    success: true, data: { currentUserOversight: { isOverseer: false } },
     message: 'Access denied: You do not have permission to oversee collections'
   });
 };

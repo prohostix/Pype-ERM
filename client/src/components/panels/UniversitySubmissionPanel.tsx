@@ -19,7 +19,7 @@ export function UniversitySubmissionPanel() {
     setLoading(true);
     try {
       // Mocking fetch for now until we build the specific status filter
-      const res = await api.get('/student');
+      const res = await api.get('/students');
       setStudents(res.data.data?.slice(0, 5) || []);
     } catch (e) {
       console.error(e);

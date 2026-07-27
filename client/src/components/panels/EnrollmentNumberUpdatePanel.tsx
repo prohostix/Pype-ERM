@@ -21,7 +21,7 @@ export function EnrollmentNumberUpdatePanel() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/student?missingEnrollment=true');
+      const res = await api.get('/students?missingEnrollment=true');
       setStudents(res.data.data || []);
       setUpdates({});
     } catch (e) {
@@ -45,7 +45,7 @@ export function EnrollmentNumberUpdatePanel() {
     
     setSaving(true);
     try {
-      await api.post('/student/bulk-enrollment-update', { updates: payloads });
+      await api.post('/students/bulk-enrollment-update', { updates: payloads });
       toast.success(`Successfully updated ${payloads.length} enrollment numbers!`);
       fetchStudents();
     } catch (e) {
