@@ -33,6 +33,10 @@ import { EnrollmentNumberUpdatePanel } from '@/components/panels/EnrollmentNumbe
 import { UniversitySubmissionPanel } from '@/components/panels/UniversitySubmissionPanel';
 import { ReRegistrationPanel } from '@/components/panels/ReRegistrationPanel';
 import { ExamRegistrationPanel } from '@/components/panels/ExamRegistrationPanel';
+import { DocumentReceivedPanel } from '@/components/panels/DocumentReceivedPanel';
+import { DocumentDispatchPanel } from '@/components/panels/DocumentDispatchPanel';
+import { CourierTrackingPanel } from '@/components/panels/CourierTrackingPanel';
+import { DeliveryConfirmationPanel } from '@/components/panels/DeliveryConfirmationPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -77,10 +81,10 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       
       case 'centers': return <StudyCentersPanel />;
       
-      case 'document_received': return <PlaceholderPanel title="Document Received" description="Log received documents." />;
-      case 'document_dispatch': return <PlaceholderPanel title="Document Dispatch" description="Manage document dispatch." />;
-      case 'courier_tracking': return <PlaceholderPanel title="Courier Tracking" description="Track couriered documents." />;
-      case 'delivery_confirmation': return <PlaceholderPanel title="Delivery Confirmation" description="Confirm document deliveries." />;
+      case 'document_received': return <DocumentReceivedPanel />;
+      case 'document_dispatch': return <DocumentDispatchPanel />;
+      case 'courier_tracking': return <CourierTrackingPanel />;
+      case 'delivery_confirmation': return <DeliveryConfirmationPanel />;
 
       case 'announcements': return <AnnouncementsPanel />;
       case 'bulk_sms': return <PlaceholderPanel title="Bulk SMS" description="Send bulk SMS to students/staff." />;

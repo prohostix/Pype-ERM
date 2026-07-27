@@ -234,6 +234,7 @@ model User {
   uploadedMaterials             ProgramMaterial[]    @relation("MaterialUploadedBy")
   collectionOverseers           CollectionOverseer[]
   assets                        Asset[]              @relation("UserAssets")
+  documentLogs                  DocumentLog[]        @relation("DocumentLoggedBy")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -477,6 +478,7 @@ model Student {
   universityPayments UniversityPayment[]
   discountAmount     Float                  @default(0)
   discountReason     String?
+  documentLogs       DocumentLog[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -1727,4 +1729,34 @@ enum AssetStatus {
   RETURNED
   LOST
   DAMAGED
+}
+
+// ============================================
+// Phase 2: Document Management & Courier Tracking
+// ============================================
+
+model DocumentLog {
+  id             String   @id @default(uuid())
+  organizationId String
+  studentId      String?
+  student        Student? @relation(fields: [studentId], references: [id])
+  type           String   @default("received") // "received" | "dispatched"
+  documentName   String
+  documentType   String // "marksheet", "certificate", "id_card", "other"
+  status         String   @default("pending") // "pending", "verified", "rejected", "dispatched", "delivered"
+  notes          String?
+
+  // Dispatch Info
+  courierName    String?
+  trackingNumber String?
+  dispatchDate   DateTime?
+  deliveryDate   DateTime?
+
+  loggedBy     String
+  loggedByUser User     @relation("DocumentLoggedBy", fields: [loggedBy], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([studentId])
 }

@@ -1118,6 +1118,24 @@ exports.Prisma.AssetScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DocumentLogScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  type: 'type',
+  documentName: 'documentName',
+  documentType: 'documentType',
+  status: 'status',
+  notes: 'notes',
+  courierName: 'courierName',
+  trackingNumber: 'trackingNumber',
+  dispatchDate: 'dispatchDate',
+  deliveryDate: 'deliveryDate',
+  loggedBy: 'loggedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1397,7 +1415,8 @@ exports.Prisma.ModelName = {
   CollectionOverseer: 'CollectionOverseer',
   OrgInquiry: 'OrgInquiry',
   UniversityPayment: 'UniversityPayment',
-  Asset: 'Asset'
+  Asset: 'Asset',
+  DocumentLog: 'DocumentLog'
 };
 
 /**
