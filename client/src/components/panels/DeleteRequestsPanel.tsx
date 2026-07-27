@@ -80,7 +80,7 @@ export function DeleteRequestsPanel() {
                 {req.status === 'rejected' && <Badge className="bg-destructive text-destructive-foreground">Rejected</Badge>}
               </div>
               <p className="text-sm text-muted-foreground mb-2" title={req.entityId}>
-                Target: <span className="font-medium text-foreground">{formatTarget(req.entityId)}</span>
+                Target: <span className="font-medium text-foreground">{req.targetName || formatTarget(req.entityId)}</span>
               </p>
               <div className="bg-muted p-3 rounded-md text-sm border-l-4 border-primary">
                 <p className="font-medium text-xs mb-1">Reason for deletion:</p>

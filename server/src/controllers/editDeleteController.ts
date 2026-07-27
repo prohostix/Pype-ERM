@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { createNotification } from './notificationController.js';
 import { NotificationType } from '../generated/client/index.js';
+import { resolveTargetName } from '../utils/resolveEntity.js';
 
 export const submitEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
   const request = await prisma.editDeleteRequest.create({
@@ -35,7 +36,15 @@ export const getEditDeleteRequests = asyncHandler(async (req: AuthRequest, res: 
     },
     orderBy: { createdAt: 'desc' } 
   });
-  res.json({ success: true, count: requests.length, data: requests });
+  
+  const resolvedRequests = await Promise.all(
+    requests.map(async (req) => {
+      const targetName = await resolveTargetName(req.entityId);
+      return { ...req, targetName };
+    })
+  );
+  
+  res.json({ success: true, count: resolvedRequests.length, data: resolvedRequests });
 });
 
 export const getEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
