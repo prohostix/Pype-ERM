@@ -4,14 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RefreshCw, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
 export function ReRegistrationPanel() {
   const [students, setStudents] = useState<any[]>([]);
+  const [completedStudents, setCompletedStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState('pending');
 
   useEffect(() => {
     fetchStudents();
@@ -20,9 +23,12 @@ export function ReRegistrationPanel() {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      // Mocking fetch for now
-      const res = await api.get('/students');
-      setStudents(res.data.data || []);
+      const [pendingRes, completedRes] = await Promise.all([
+        api.get('/students?reregCompleted=false'),
+        api.get('/students?reregCompleted=true')
+      ]);
+      setStudents(pendingRes.data.data || []);
+      setCompletedStudents(completedRes.data.data || []);
     } catch (e) {
       console.error(e);
       toast.error('Failed to fetch re-registrations');
@@ -46,50 +52,105 @@ export function ReRegistrationPanel() {
         </div>
       </CardHeader>
       <CardContent>
-        {loading ? (
-          <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-        ) : students.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-            <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-            <p className="text-muted-foreground">No pending re-registrations!</p>
-          </div>
-        ) : (
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Program</TableHead>
-                  <TableHead>Current Sem</TableHead>
-                  <TableHead>Next Sem</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {students.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>
-                      <div className="font-medium">{student.name}</div>
-                      <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">{student.program?.name || 'N/A'}</div>
-                    </TableCell>
-                    <TableCell>Semester 1</TableCell>
-                    <TableCell>Semester 2</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        )}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="pending">Pending ({students.length})</TabsTrigger>
+            <TabsTrigger value="completed">Completed ({completedStudents.length})</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="pending" className="m-0">
+            {loading ? (
+              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : students.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
+                <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
+                <p className="text-muted-foreground">No pending re-registrations!</p>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Student</TableHead>
+                      <TableHead>Program</TableHead>
+                      <TableHead>Current Sem</TableHead>
+                      <TableHead>Next Sem</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {students.map((student) => (
+                      <TableRow key={student.id}>
+                        <TableCell>
+                          <div className="font-medium">{student.name}</div>
+                          <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
+                        </TableCell>
+                        <TableCell>Semester 1</TableCell>
+                        <TableCell>Semester 2</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="completed" className="m-0">
+            {loading ? (
+              <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+            ) : completedStudents.length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
+                <p className="text-muted-foreground">No completed re-registrations yet.</p>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Student</TableHead>
+                      <TableHead>Program</TableHead>
+                      <TableHead>Current Sem</TableHead>
+                      <TableHead>Next Sem</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {completedStudents.map((student) => (
+                      <TableRow key={student.id}>
+                        <TableCell>
+                          <div className="font-medium">{student.name}</div>
+                          <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
+                        </TableCell>
+                        <TableCell>Semester 1</TableCell>
+                        <TableCell>Semester 2</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Completed</Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </CardContent>
 
       {selectedStudent && (
@@ -131,10 +192,18 @@ export function ReRegistrationPanel() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setSelectedStudent(null)}>Cancel</Button>
-              <Button onClick={() => {
-                toast.success('Fee reminder sent to student!');
-                setSelectedStudent(null);
-              }}>Send Fee Reminder</Button>
+              {activeTab === 'pending' && (
+                <Button onClick={async () => {
+                  try {
+                    await api.patch(`/students/${selectedStudent.id}`, { reregStatus: { completed: true } });
+                    toast.success('Re-registration marked as completed!');
+                    setSelectedStudent(null);
+                    fetchStudents();
+                  } catch (e) {
+                    toast.error('Failed to update student');
+                  }
+                }}>Mark Completed</Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>

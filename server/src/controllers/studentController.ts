@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
@@ -15,6 +16,15 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     where.status = 'admitted'; // Only admitted students need enrollment numbers
   } else if (req.query.hasEnrollment === 'true') {
     where.enrollmentNo = { not: null };
+  }
+  
+  if (req.query.reregCompleted === 'true') {
+    where.reregStatus = { path: ['completed'], equals: true };
+  } else if (req.query.reregCompleted === 'false') {
+    where.OR = [
+      { reregStatus: { equals: Prisma.AnyNull } },
+      { reregStatus: { path: ['completed'], equals: false } }
+    ];
   }
 
   // Branch-level isolation for students list
