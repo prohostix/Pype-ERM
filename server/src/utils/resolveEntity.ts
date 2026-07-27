@@ -39,8 +39,8 @@ export async function resolveTargetName(url: string): Promise<string | null> {
       return t ? `Task: ${t.title}` : null;
     }
     if (endpoint === 'assets') {
-      const a = await prisma.asset.findUnique({ where: { id }, select: { name: true } });
-      return a ? `Asset: ${a.name}` : null;
+      const a = await prisma.asset.findUnique({ where: { id }, select: { brand: true, model: true, type: true } });
+      return a ? `Asset: ${a.brand || ''} ${a.model || a.type}` : null;
     }
     
     if (endpoint === 'org') {
@@ -60,8 +60,8 @@ export async function resolveTargetName(url: string): Promise<string | null> {
         return h ? `Holiday: ${h.name}` : null;
       }
       if (parts[1] === 'vacancies') {
-        const v = await prisma.vacancy.findUnique({ where: { id }, select: { title: true } });
-        return v ? `Vacancy: ${v.title}` : null;
+        const v = await prisma.vacancy.findUnique({ where: { id }, select: { designation: true } });
+        return v ? `Vacancy: ${v.designation}` : null;
       }
       if (parts[1] === 'announcements') {
         const a = await prisma.announcement.findUnique({ where: { id }, select: { title: true } });
@@ -79,12 +79,16 @@ export async function resolveTargetName(url: string): Promise<string | null> {
     
     if (endpoint === 'finance') {
       if (parts[1] === 'invoices') {
-        const i = await prisma.invoice.findUnique({ where: { id }, select: { invoiceNumber: true } });
-        return i ? `Invoice: ${i.invoiceNumber}` : null;
+        const i = await prisma.invoice.findUnique({ where: { id }, select: { invoiceNo: true } });
+        return i ? `Invoice: ${i.invoiceNo}` : null;
       }
       if (parts[1] === 'fees') {
-        const f = await prisma.feeStructure.findUnique({ where: { id }, select: { name: true } });
-        return f ? `Fee Structure: ${f.name}` : null;
+        const f = await prisma.feeStructure.findUnique({ where: { id }, select: { feeLevel: true } });
+        return f ? `Fee Structure: ${f.feeLevel}` : null;
+      }
+      if (parts[1] === 'payments') {
+        const p = await prisma.paymentEntry.findUnique({ where: { id }, select: { amount: true } });
+        return p ? `Payment: ${p.amount}` : null;
       }
     }
     
@@ -109,8 +113,8 @@ export async function resolveTargetName(url: string): Promise<string | null> {
     
     if (endpoint === 'sales') {
       if (parts[1] === 'leads') {
-        const l = await prisma.lead.findUnique({ where: { id }, select: { name: true } });
-        return l ? `Lead: ${l.name}` : null;
+        const l = await prisma.lead.findUnique({ where: { id }, select: { contactName: true } });
+        return l ? `Lead: ${l.contactName}` : null;
       }
     }
   } catch (e) {
