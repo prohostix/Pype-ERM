@@ -3,6 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RefreshCw, Send, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -10,9 +14,22 @@ import api from '@/lib/api';
 export function DocumentDispatchPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDispatchModal, setShowDispatchModal] = useState(false);
+  const [students, setStudents] = useState<any[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    studentId: '',
+    documentName: '',
+    documentType: 'mark_sheet',
+    courierName: '',
+    trackingNumber: '',
+    status: 'dispatched',
+    notes: ''
+  });
 
   useEffect(() => {
     fetchLogs();
+    api.get('/students').then(r => setStudents(r.data.data || [])).catch(() => {});
   }, []);
 
   const fetchLogs = async () => {
@@ -41,7 +58,7 @@ export function DocumentDispatchPanel() {
               <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Button size="sm">
+            <Button size="sm" onClick={() => setShowDispatchModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Log Dispatch
             </Button>
@@ -95,6 +112,103 @@ export function DocumentDispatchPanel() {
           </div>
         )}
       </CardContent>
+
+      <Dialog open={showDispatchModal} onOpenChange={setShowDispatchModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Log Document Dispatch</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Student</Label>
+              <Select value={formData.studentId} onValueChange={(val) => setFormData({ ...formData, studentId: val })}>
+                <SelectTrigger><SelectValue placeholder="Select Student" /></SelectTrigger>
+                <SelectContent>
+                  {students.map(s => <SelectItem key={s.id} value={s.id}>{s.name} ({s.enrollmentNo || 'N/A'})</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Document Type</Label>
+              <Select value={formData.documentType} onValueChange={(val) => setFormData({ ...formData, documentType: val })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="mark_sheet">Mark Sheet</SelectItem>
+                  <SelectItem value="degree_certificate">Degree Certificate</SelectItem>
+                  <SelectItem value="provisional">Provisional</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Document Name</Label>
+              <Input 
+                placeholder="e.g. Sem 1 Marksheet" 
+                value={formData.documentName} 
+                onChange={(e) => setFormData({ ...formData, documentName: e.target.value })} 
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Courier Name</Label>
+                <Input 
+                  placeholder="e.g. DTDC" 
+                  value={formData.courierName} 
+                  onChange={(e) => setFormData({ ...formData, courierName: e.target.value })} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Tracking Number</Label>
+                <Input 
+                  placeholder="Tracking ID" 
+                  value={formData.trackingNumber} 
+                  onChange={(e) => setFormData({ ...formData, trackingNumber: e.target.value })} 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Status</Label>
+              <Select value={formData.status} onValueChange={(val) => setFormData({ ...formData, status: val })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dispatched">Dispatched</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                  <SelectItem value="returned">Returned</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDispatchModal(false)}>Cancel</Button>
+            <Button disabled={isSubmitting} onClick={async () => {
+              if (!formData.studentId || !formData.documentName) {
+                toast.error('Student and Document Name are required');
+                return;
+              }
+              setIsSubmitting(true);
+              try {
+                await api.post('/documents', { ...formData, type: 'dispatched', dispatchDate: new Date().toISOString() });
+                toast.success('Document dispatch logged successfully');
+                setShowDispatchModal(false);
+                fetchLogs();
+                setFormData({
+                  studentId: '', documentName: '', documentType: 'mark_sheet', courierName: '', trackingNumber: '', status: 'dispatched', notes: ''
+                });
+              } catch (e) {
+                toast.error('Failed to log document');
+              } finally {
+                setIsSubmitting(false);
+              }
+            }}>
+              {isSubmitting ? 'Logging...' : 'Log Dispatch'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
