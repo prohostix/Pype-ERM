@@ -1,5 +1,8 @@
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { createNotification } from './notificationController.js';
+import { NotificationType } from '../generated/client/index.js';
+import { resolveTargetName } from '../utils/resolveEntity.js';
 export const submitEditDeleteRequest = asyncHandler(async (req, res) => {
     const request = await prisma.editDeleteRequest.create({
         data: { ...req.body, organizationId: req.user.organizationId, userId: req.user.id, status: 'pending' }
@@ -28,7 +31,11 @@ export const getEditDeleteRequests = asyncHandler(async (req, res) => {
         },
         orderBy: { createdAt: 'desc' }
     });
-    res.json({ success: true, count: requests.length, data: requests });
+    const resolvedRequests = await Promise.all(requests.map(async (req) => {
+        const targetName = await resolveTargetName(req.entityId);
+        return { ...req, targetName };
+    }));
+    res.json({ success: true, count: resolvedRequests.length, data: resolvedRequests });
 });
 export const getEditDeleteRequest = asyncHandler(async (req, res) => {
     const request = await prisma.editDeleteRequest.findUnique({ where: { id: req.params.id }, include: { user: { select: { id: true, name: true } } } });
@@ -57,6 +64,15 @@ export const respondToEditDeleteRequest = asyncHandler(async (req, res) => {
             respondedAt: new Date()
         }
     });
+    if (newStatus === 'rejected') {
+        await createNotification(request.organizationId, request.userId, NotificationType.general, 'Delete Request Rejected', `Your delete request was rejected.`, '/dashboard');
+    }
+    else if (newStatus === 'approved') {
+        await createNotification(request.organizationId, request.userId, NotificationType.general, 'Delete Request Approved', `Your delete request was approved and executed.`, '/dashboard');
+    }
+    else if (newStatus === 'pending_ceo') {
+        await createNotification(request.organizationId, request.userId, NotificationType.general, 'Delete Request Advanced', `Your delete request was approved by management and is now pending CEO approval.`, '/dashboard');
+    }
     // If fully approved, execute the actual deletion bypass!
     if (newStatus === 'approved') {
         try {
