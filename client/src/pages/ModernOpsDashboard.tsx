@@ -29,6 +29,7 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
+import { StudentPortalManagementPanel } from '@/components/panels/StudentPortalManagementPanel';
 import { EnrollmentNumberUpdatePanel } from '@/components/panels/EnrollmentNumberUpdatePanel';
 import { UniversitySubmissionPanel } from '@/components/panels/UniversitySubmissionPanel';
 import { ReRegistrationPanel } from '@/components/panels/ReRegistrationPanel';
@@ -68,7 +69,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       
       case 'students': return <StudentsPanel />;
       case 'student_verification': return <PlaceholderPanel title="Student Verification" description="Verify student documents and credentials." />;
-      case 'student_portal_management': return <PlaceholderPanel title="Student Portal Management" description="Manage student portal access and settings." />;
+      case 'student_portal_management': return <StudentPortalManagementPanel />;
       case 'student_documents': return <PlaceholderPanel title="Student Documents" description="Manage and verify all student documents." />;
       case 'student_timeline': return <PlaceholderPanel title="Student Timeline" description="View complete timeline of student activities." />;
       
