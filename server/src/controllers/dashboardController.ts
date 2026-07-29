@@ -18,7 +18,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
   if (['superadmin', 'ceo', 'org_admin'].includes(role)) {
     metrics.totalEmployees = await prisma.user.count({
-      where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin'] } } }
+      where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } } }
     });
     metrics.totalStudents = await prisma.student.count({ where: orgQuery });
     metrics.totalCenters = await prisma.studyCenter.count({ where: orgQuery });
@@ -70,7 +70,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
     if (metrics.totalEmployees === undefined) {
       metrics.totalEmployees = await prisma.user.count({
-        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin'] } } }
+        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } } }
       });
     }
 
