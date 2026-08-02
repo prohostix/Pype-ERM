@@ -58,7 +58,7 @@ export function MeetingsPanel() {
     try {
       setLoading(true);
       const res = await api.get('/meetings');
-      setMeetings(res.data);
+      setMeetings(res.data.data || res.data || []);
     } catch (error) {
       toast.error('Failed to fetch meetings');
     } finally {
@@ -69,7 +69,7 @@ export function MeetingsPanel() {
   const fetchUsers = async () => {
     try {
       const res = await api.get('/users');
-      setAllUsers(res.data);
+      setAllUsers(res.data.data || res.data || []);
     } catch (error) {
       console.error('Failed to fetch users', error);
     }
