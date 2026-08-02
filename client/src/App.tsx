@@ -264,6 +264,7 @@ function App() {
         { id: 'departments', label: 'Departments' },
         { id: 'inquiries', label: 'Enquiries' },
         { id: 'audit_logs', label: 'Audit Logs' },
+        { id: 'meetings', label: 'Meetings' },
       ];
     }
 
@@ -279,6 +280,7 @@ function App() {
         { id: 'invoices', label: 'Invoices' },
         { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
+        { id: 'meetings', label: 'Meetings' },
       ];
     }
 
@@ -304,6 +306,7 @@ function App() {
         { id: 'enrollment_review', label: 'Enrollment Review' },
         { id: 'collections', label: 'Collections' },
         { id: 'settings', label: 'Organisation Settings' },
+        { id: 'meetings', label: 'Meetings' },
       ];
     }
 
@@ -340,6 +343,7 @@ function App() {
         { id: 'center_enrollments', label: 'My Enrollments' },
         { id: 'center_programs', label: 'Programs & Materials' },
         { id: 'tasks', label: 'Tasks' },
+        { id: 'meetings', label: 'Meetings' },
       ];
     }
 

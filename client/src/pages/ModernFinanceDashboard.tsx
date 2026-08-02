@@ -161,6 +161,7 @@ export function getFinanceNavItems() {
     { id: 'my_leave_request', label: 'My Leave Request' },
     { id: 'pay_slips', label: 'Pay Slips' },
     { id: 'notice_board', label: 'Notice Board' },
+    { id: 'meetings', label: 'Meetings' },
   ];
 }
 

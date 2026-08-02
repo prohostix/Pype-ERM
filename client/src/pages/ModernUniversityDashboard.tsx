@@ -244,5 +244,6 @@ export function getUniversityNavItems() {
     { id: 'overview', label: 'Dashboard' },
     { id: 'pending-review', label: 'Pending Review' },
     { id: 'students', label: 'Enrolled Students' },
+    { id: 'meetings', label: 'Meetings' },
   ];
 }

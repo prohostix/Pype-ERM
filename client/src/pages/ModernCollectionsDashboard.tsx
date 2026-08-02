@@ -74,6 +74,7 @@ export function getCollectionsNavItems() {
     { id: 'my_attendance', label: 'Attendance' },
     { id: 'holidays', label: 'Holiday List' },
     { id: 'notice-board', label: 'Notice Board' },
+    { id: 'meetings', label: 'Meetings' },
   ];
 }
 

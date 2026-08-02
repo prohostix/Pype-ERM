@@ -58,6 +58,7 @@ export function getBranchManagerNavItems() {
     { id: 'my_payslips', label: 'Pay Slips' },
     { id: 'holidays', label: 'Holidays' },
     { id: 'notice-board', label: 'Notice Board' },
+    { id: 'meetings', label: 'Meetings' },
   ];
 }
 

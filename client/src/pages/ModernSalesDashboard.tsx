@@ -236,6 +236,7 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'holidays', label: 'Holidays' },
       { id: 'announcements', label: 'Announcements' },
       { id: 'notice-board', label: 'Notifications' },
+      { id: 'meetings', label: 'Meetings' },
     ];
   }
 
@@ -285,6 +286,7 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
     { id: '__admission_flow', label: 'Admission Flow', isSection: true },
     { id: 'lead_management', label: 'Lead Management Flow' },
+    { id: 'meetings', label: 'Meetings' },
   ];
 }
 

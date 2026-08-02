@@ -172,6 +172,7 @@ export function getOpsNavItems() {
     
     { id: '__tasks', label: 'Tasks', isSection: true },
     { id: 'tasks', label: 'My Tasks' },
+    { id: 'meetings', label: 'Meetings' },
     
     { id: '__reports', label: 'Reports', isSection: true },
     { id: 'student_report', label: 'Student Report' },

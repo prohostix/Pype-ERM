@@ -123,7 +123,7 @@ export function getHRNavItems() {
     { id: 'my_attendance', label: 'My Attendance' },
     { id: 'my_payslips', label: 'Pay Slips' },
     { id: 'notice-board', label: 'Notice Board' },
-
+    { id: 'meetings', label: 'Meetings' },
   ];
 }
 
