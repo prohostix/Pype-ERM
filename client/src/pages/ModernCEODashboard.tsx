@@ -370,6 +370,10 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
         <TabsContent value="delete_approvals">
           <DeleteRequestsPanel />
         </TabsContent>
+
+        <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
       </Tabs>
     </div>
   );
@@ -659,10 +663,7 @@ function EscalationsPanel() {
             </div>
           )}
         </TabsContent>
-              <TabsContent value="meetings">
-          <MeetingsPanel />
-        </TabsContent>
-</Tabs>
+      </Tabs>
 
       <Dialog open={actionDialog} onOpenChange={setActionDialog}>
         <DialogContent className="max-w-md">
