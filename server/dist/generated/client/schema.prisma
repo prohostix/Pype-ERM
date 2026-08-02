@@ -77,6 +77,7 @@ model Organization {
   programMaterials    ProgramMaterial[]
   paymentSchedules    PaymentSchedule[]
   paymentLinks        PaymentLink[]
+  meetings            Meeting[]
 
   @@index([status])
 }
@@ -235,6 +236,7 @@ model User {
   collectionOverseers           CollectionOverseer[]
   assets                        Asset[]              @relation("UserAssets")
   documentLogs                  DocumentLog[]        @relation("DocumentLoggedBy")
+  hostedMeetings                Meeting[]            @relation("MeetingHost")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -797,6 +799,27 @@ model Designation {
 
   @@index([organizationId, departmentId])
   @@index([parentDesignationId])
+}
+
+model Meeting {
+  id             String       @id @default(uuid())
+  organizationId String
+  title          String?
+  agenda         String
+  date           DateTime
+  time           String
+  duration       Int?
+  hostId         String
+  attendees      Json         @default("[]")
+  status         String       @default("scheduled")
+  minutes        String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  host           User         @relation("MeetingHost", fields: [hostId], references: [id])
+
+  @@index([organizationId, date])
+  @@index([hostId])
 }
 
 model Vacancy {

@@ -32,6 +32,7 @@ import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { 
   BarChart, 
   Bar, 
@@ -91,6 +92,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return (
         <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
       );

@@ -51,6 +51,7 @@ import studentPortalRoutes from './routes/studentPortalRoutes.js';
 import collectionsPanelRoutes from './routes/collectionsPanelRoutes.js';
 import assetRoutes from './routes/assetRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
+import meetingRoutes from './routes/meetingRoutes.js';
 const app = express();
 // Trust reverse proxy (Nginx) headers for rate limiting
 app.set('trust proxy', 1);
@@ -118,6 +119,7 @@ app.use(`/api/${API_VERSION}/student-portal`, studentPortalRoutes);
 app.use(`/api/${API_VERSION}/collections`, collectionsPanelRoutes);
 app.use(`/api/${API_VERSION}/assets`, assetRoutes);
 app.use(`/api/${API_VERSION}/documents`, documentRoutes);
+app.use(`/api/${API_VERSION}/meetings`, meetingRoutes);
 // Health check
 app.get('/health', async (req, res) => {
     try {

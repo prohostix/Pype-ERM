@@ -41,6 +41,7 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { StudentPaymentsLogPanel } from '@/components/panels/StudentPaymentsLogPanel';
 import { CollectionReportPanel } from '@/components/panels/CollectionReportPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -63,6 +64,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return <OverviewContent onNavigate={setActiveTab} />;
       case 'invoices': return <InvoicesPanel />;
       case 'student_payment_log': return <StudentPaymentsLogPanel />;

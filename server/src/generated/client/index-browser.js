@@ -557,6 +557,22 @@ exports.Prisma.DesignationScalarFieldEnum = {
   allowedBranchIds: 'allowedBranchIds'
 };
 
+exports.Prisma.MeetingScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  title: 'title',
+  agenda: 'agenda',
+  date: 'date',
+  time: 'time',
+  duration: 'duration',
+  hostId: 'hostId',
+  attendees: 'attendees',
+  status: 'status',
+  minutes: 'minutes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.VacancyScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -1379,6 +1395,7 @@ exports.Prisma.ModelName = {
   Branch: 'Branch',
   SubDepartment: 'SubDepartment',
   Designation: 'Designation',
+  Meeting: 'Meeting',
   Vacancy: 'Vacancy',
   AdmissionSession: 'AdmissionSession',
   Enrollment: 'Enrollment',

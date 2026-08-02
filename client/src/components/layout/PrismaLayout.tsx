@@ -22,7 +22,8 @@ import {
   Clock,
   Menu,
   GitBranch,
-  Bell
+  Bell,
+  Video
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -140,7 +141,8 @@ export function PrismaLayout({
       case 'my_tasks': return <CheckCircle2 className={iconClass} />;
       case 'calendar':
       case 'sessions':
-      case 'admission_sessions':
+      case 'admission_sessions': return <Calendar className={iconClass} />;
+      case 'meetings': return <Video className={iconClass} />;
       case 'holidays':
       case 'leaves':
       case 'leave_requests':

@@ -32,6 +32,7 @@ import { UsersPanel } from '@/components/panels/UsersPanel';
 import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { LicensesPanel } from '@/components/panels/LicensesPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 const globalActivity = [
   { time: '00:00', requests: 120, latency: 45 },
@@ -126,7 +127,10 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
         <TabsContent value="enquiries">
           <InquiriesPanel />
         </TabsContent>
-      </Tabs>
+              <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
+</Tabs>
     </div>
   );
 }

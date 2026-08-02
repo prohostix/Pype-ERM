@@ -21,6 +21,7 @@ import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { OrganizationSettingsPanel } from '@/components/panels/OrganizationSettingsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/api';
 
@@ -82,7 +83,10 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
         <TabsContent value="enrollment_review"><DeptEnrollmentReviewPanel /></TabsContent>
         <TabsContent value="settings"><OrganizationSettingsPanel /></TabsContent>
-      </Tabs>
+              <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
+</Tabs>
     </div>
   );
 }

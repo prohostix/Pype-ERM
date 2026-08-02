@@ -134,6 +134,11 @@ export type SubDepartment = $Result.DefaultSelection<Prisma.$SubDepartmentPayloa
  */
 export type Designation = $Result.DefaultSelection<Prisma.$DesignationPayload>
 /**
+ * Model Meeting
+ * 
+ */
+export type Meeting = $Result.DefaultSelection<Prisma.$MeetingPayload>
+/**
  * Model Vacancy
  * 
  */
@@ -1055,6 +1060,16 @@ export class PrismaClient<
   get designation(): Prisma.DesignationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.meeting`: Exposes CRUD operations for the **Meeting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Meetings
+    * const meetings = await prisma.meeting.findMany()
+    * ```
+    */
+  get meeting(): Prisma.MeetingDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.vacancy`: Exposes CRUD operations for the **Vacancy** model.
     * Example usage:
     * ```ts
@@ -1891,6 +1906,7 @@ export namespace Prisma {
     Branch: 'Branch',
     SubDepartment: 'SubDepartment',
     Designation: 'Designation',
+    Meeting: 'Meeting',
     Vacancy: 'Vacancy',
     AdmissionSession: 'AdmissionSession',
     Enrollment: 'Enrollment',
@@ -1944,7 +1960,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3721,6 +3737,80 @@ export namespace Prisma {
           count: {
             args: Prisma.DesignationCountArgs<ExtArgs>
             result: $Utils.Optional<DesignationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Meeting: {
+        payload: Prisma.$MeetingPayload<ExtArgs>
+        fields: Prisma.MeetingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MeetingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MeetingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          findFirst: {
+            args: Prisma.MeetingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MeetingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          findMany: {
+            args: Prisma.MeetingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          create: {
+            args: Prisma.MeetingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          createMany: {
+            args: Prisma.MeetingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MeetingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          delete: {
+            args: Prisma.MeetingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          update: {
+            args: Prisma.MeetingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          deleteMany: {
+            args: Prisma.MeetingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MeetingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MeetingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          upsert: {
+            args: Prisma.MeetingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          aggregate: {
+            args: Prisma.MeetingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMeeting>
+          }
+          groupBy: {
+            args: Prisma.MeetingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MeetingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MeetingCountArgs<ExtArgs>
+            result: $Utils.Optional<MeetingCountAggregateOutputType> | number
           }
         }
       }
@@ -6668,6 +6758,7 @@ export namespace Prisma {
     branch?: BranchOmit
     subDepartment?: SubDepartmentOmit
     designation?: DesignationOmit
+    meeting?: MeetingOmit
     vacancy?: VacancyOmit
     admissionSession?: AdmissionSessionOmit
     enrollment?: EnrollmentOmit
@@ -6841,6 +6932,7 @@ export namespace Prisma {
     programMaterials: number
     paymentSchedules: number
     paymentLinks: number
+    meetings: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6899,6 +6991,7 @@ export namespace Prisma {
     programMaterials?: boolean | OrganizationCountOutputTypeCountProgramMaterialsArgs
     paymentSchedules?: boolean | OrganizationCountOutputTypeCountPaymentSchedulesArgs
     paymentLinks?: boolean | OrganizationCountOutputTypeCountPaymentLinksArgs
+    meetings?: boolean | OrganizationCountOutputTypeCountMeetingsArgs
   }
 
   // Custom InputTypes
@@ -7297,6 +7390,13 @@ export namespace Prisma {
     where?: PaymentLinkWhereInput
   }
 
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
+  }
+
 
   /**
    * Count Type LicenseCountOutputType
@@ -7515,6 +7615,7 @@ export namespace Prisma {
     collectionOverseers: number
     assets: number
     documentLogs: number
+    hostedMeetings: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7587,6 +7688,7 @@ export namespace Prisma {
     collectionOverseers?: boolean | UserCountOutputTypeCountCollectionOverseersArgs
     assets?: boolean | UserCountOutputTypeCountAssetsArgs
     documentLogs?: boolean | UserCountOutputTypeCountDocumentLogsArgs
+    hostedMeetings?: boolean | UserCountOutputTypeCountHostedMeetingsArgs
   }
 
   // Custom InputTypes
@@ -8081,6 +8183,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountDocumentLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DocumentLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountHostedMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
   }
 
 
@@ -9223,6 +9332,7 @@ export namespace Prisma {
     programMaterials?: boolean | Organization$programMaterialsArgs<ExtArgs>
     paymentSchedules?: boolean | Organization$paymentSchedulesArgs<ExtArgs>
     paymentLinks?: boolean | Organization$paymentLinksArgs<ExtArgs>
+    meetings?: boolean | Organization$meetingsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -9332,6 +9442,7 @@ export namespace Prisma {
     programMaterials?: boolean | Organization$programMaterialsArgs<ExtArgs>
     paymentSchedules?: boolean | Organization$paymentSchedulesArgs<ExtArgs>
     paymentLinks?: boolean | Organization$paymentLinksArgs<ExtArgs>
+    meetings?: boolean | Organization$meetingsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9401,6 +9512,7 @@ export namespace Prisma {
       programMaterials: Prisma.$ProgramMaterialPayload<ExtArgs>[]
       paymentSchedules: Prisma.$PaymentSchedulePayload<ExtArgs>[]
       paymentLinks: Prisma.$PaymentLinkPayload<ExtArgs>[]
+      meetings: Prisma.$MeetingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9866,6 +9978,7 @@ export namespace Prisma {
     programMaterials<T extends Organization$programMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$programMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentSchedules<T extends Organization$paymentSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$paymentSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paymentLinks<T extends Organization$paymentLinksArgs<ExtArgs> = {}>(args?: Subset<T, Organization$paymentLinksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    meetings<T extends Organization$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11663,6 +11776,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentLinkScalarFieldEnum | PaymentLinkScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.meetings
+   */
+  export type Organization$meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    cursor?: MeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
   }
 
   /**
@@ -14786,6 +14923,7 @@ export namespace Prisma {
     collectionOverseers?: boolean | User$collectionOverseersArgs<ExtArgs>
     assets?: boolean | User$assetsArgs<ExtArgs>
     documentLogs?: boolean | User$documentLogsArgs<ExtArgs>
+    hostedMeetings?: boolean | User$hostedMeetingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -14963,6 +15101,7 @@ export namespace Prisma {
     collectionOverseers?: boolean | User$collectionOverseersArgs<ExtArgs>
     assets?: boolean | User$assetsArgs<ExtArgs>
     documentLogs?: boolean | User$documentLogsArgs<ExtArgs>
+    hostedMeetings?: boolean | User$hostedMeetingsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15070,6 +15209,7 @@ export namespace Prisma {
       collectionOverseers: Prisma.$CollectionOverseerPayload<ExtArgs>[]
       assets: Prisma.$AssetPayload<ExtArgs>[]
       documentLogs: Prisma.$DocumentLogPayload<ExtArgs>[]
+      hostedMeetings: Prisma.$MeetingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15571,6 +15711,7 @@ export namespace Prisma {
     collectionOverseers<T extends User$collectionOverseersArgs<ExtArgs> = {}>(args?: Subset<T, User$collectionOverseersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CollectionOverseerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assets<T extends User$assetsArgs<ExtArgs> = {}>(args?: Subset<T, User$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documentLogs<T extends User$documentLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$documentLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    hostedMeetings<T extends User$hostedMeetingsArgs<ExtArgs> = {}>(args?: Subset<T, User$hostedMeetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17942,6 +18083,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DocumentLogScalarFieldEnum | DocumentLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.hostedMeetings
+   */
+  export type User$hostedMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    cursor?: MeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
   }
 
   /**
@@ -44753,6 +44918,1211 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DesignationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Meeting
+   */
+
+  export type AggregateMeeting = {
+    _count: MeetingCountAggregateOutputType | null
+    _avg: MeetingAvgAggregateOutputType | null
+    _sum: MeetingSumAggregateOutputType | null
+    _min: MeetingMinAggregateOutputType | null
+    _max: MeetingMaxAggregateOutputType | null
+  }
+
+  export type MeetingAvgAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type MeetingSumAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type MeetingMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    title: string | null
+    agenda: string | null
+    date: Date | null
+    time: string | null
+    duration: number | null
+    hostId: string | null
+    status: string | null
+    minutes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    title: string | null
+    agenda: string | null
+    date: Date | null
+    time: string | null
+    duration: number | null
+    hostId: string | null
+    status: string | null
+    minutes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    title: number
+    agenda: number
+    date: number
+    time: number
+    duration: number
+    hostId: number
+    attendees: number
+    status: number
+    minutes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MeetingAvgAggregateInputType = {
+    duration?: true
+  }
+
+  export type MeetingSumAggregateInputType = {
+    duration?: true
+  }
+
+  export type MeetingMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    agenda?: true
+    date?: true
+    time?: true
+    duration?: true
+    hostId?: true
+    status?: true
+    minutes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    agenda?: true
+    date?: true
+    time?: true
+    duration?: true
+    hostId?: true
+    status?: true
+    minutes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    title?: true
+    agenda?: true
+    date?: true
+    time?: true
+    duration?: true
+    hostId?: true
+    attendees?: true
+    status?: true
+    minutes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MeetingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Meeting to aggregate.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Meetings
+    **/
+    _count?: true | MeetingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MeetingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MeetingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MeetingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MeetingMaxAggregateInputType
+  }
+
+  export type GetMeetingAggregateType<T extends MeetingAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeeting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMeeting[P]>
+      : GetScalarType<T[P], AggregateMeeting[P]>
+  }
+
+
+
+
+  export type MeetingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithAggregationInput | MeetingOrderByWithAggregationInput[]
+    by: MeetingScalarFieldEnum[] | MeetingScalarFieldEnum
+    having?: MeetingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MeetingCountAggregateInputType | true
+    _avg?: MeetingAvgAggregateInputType
+    _sum?: MeetingSumAggregateInputType
+    _min?: MeetingMinAggregateInputType
+    _max?: MeetingMaxAggregateInputType
+  }
+
+  export type MeetingGroupByOutputType = {
+    id: string
+    organizationId: string
+    title: string | null
+    agenda: string
+    date: Date
+    time: string
+    duration: number | null
+    hostId: string
+    attendees: JsonValue
+    status: string
+    minutes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MeetingCountAggregateOutputType | null
+    _avg: MeetingAvgAggregateOutputType | null
+    _sum: MeetingSumAggregateOutputType | null
+    _min: MeetingMinAggregateOutputType | null
+    _max: MeetingMaxAggregateOutputType | null
+  }
+
+  type GetMeetingGroupByPayload<T extends MeetingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MeetingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MeetingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MeetingGroupByOutputType[P]>
+            : GetScalarType<T[P], MeetingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MeetingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    agenda?: boolean
+    date?: boolean
+    time?: boolean
+    duration?: boolean
+    hostId?: boolean
+    attendees?: boolean
+    status?: boolean
+    minutes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    agenda?: boolean
+    date?: boolean
+    time?: boolean
+    duration?: boolean
+    hostId?: boolean
+    attendees?: boolean
+    status?: boolean
+    minutes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    agenda?: boolean
+    date?: boolean
+    time?: boolean
+    duration?: boolean
+    hostId?: boolean
+    attendees?: boolean
+    status?: boolean
+    minutes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    title?: boolean
+    agenda?: boolean
+    date?: boolean
+    time?: boolean
+    duration?: boolean
+    hostId?: boolean
+    attendees?: boolean
+    status?: boolean
+    minutes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "title" | "agenda" | "date" | "time" | "duration" | "hostId" | "attendees" | "status" | "minutes" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
+  export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Meeting"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      host: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      title: string | null
+      agenda: string
+      date: Date
+      time: string
+      duration: number | null
+      hostId: string
+      attendees: Prisma.JsonValue
+      status: string
+      minutes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["meeting"]>
+    composites: {}
+  }
+
+  type MeetingGetPayload<S extends boolean | null | undefined | MeetingDefaultArgs> = $Result.GetResult<Prisma.$MeetingPayload, S>
+
+  type MeetingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MeetingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MeetingCountAggregateInputType | true
+    }
+
+  export interface MeetingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Meeting'], meta: { name: 'Meeting' } }
+    /**
+     * Find zero or one Meeting that matches the filter.
+     * @param {MeetingFindUniqueArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MeetingFindUniqueArgs>(args: SelectSubset<T, MeetingFindUniqueArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Meeting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MeetingFindUniqueOrThrowArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MeetingFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Meeting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindFirstArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MeetingFindFirstArgs>(args?: SelectSubset<T, MeetingFindFirstArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Meeting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindFirstOrThrowArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MeetingFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Meetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Meetings
+     * const meetings = await prisma.meeting.findMany()
+     * 
+     * // Get first 10 Meetings
+     * const meetings = await prisma.meeting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const meetingWithIdOnly = await prisma.meeting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MeetingFindManyArgs>(args?: SelectSubset<T, MeetingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Meeting.
+     * @param {MeetingCreateArgs} args - Arguments to create a Meeting.
+     * @example
+     * // Create one Meeting
+     * const Meeting = await prisma.meeting.create({
+     *   data: {
+     *     // ... data to create a Meeting
+     *   }
+     * })
+     * 
+     */
+    create<T extends MeetingCreateArgs>(args: SelectSubset<T, MeetingCreateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Meetings.
+     * @param {MeetingCreateManyArgs} args - Arguments to create many Meetings.
+     * @example
+     * // Create many Meetings
+     * const meeting = await prisma.meeting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MeetingCreateManyArgs>(args?: SelectSubset<T, MeetingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Meetings and returns the data saved in the database.
+     * @param {MeetingCreateManyAndReturnArgs} args - Arguments to create many Meetings.
+     * @example
+     * // Create many Meetings
+     * const meeting = await prisma.meeting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Meetings and only return the `id`
+     * const meetingWithIdOnly = await prisma.meeting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MeetingCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Meeting.
+     * @param {MeetingDeleteArgs} args - Arguments to delete one Meeting.
+     * @example
+     * // Delete one Meeting
+     * const Meeting = await prisma.meeting.delete({
+     *   where: {
+     *     // ... filter to delete one Meeting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MeetingDeleteArgs>(args: SelectSubset<T, MeetingDeleteArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Meeting.
+     * @param {MeetingUpdateArgs} args - Arguments to update one Meeting.
+     * @example
+     * // Update one Meeting
+     * const meeting = await prisma.meeting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MeetingUpdateArgs>(args: SelectSubset<T, MeetingUpdateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Meetings.
+     * @param {MeetingDeleteManyArgs} args - Arguments to filter Meetings to delete.
+     * @example
+     * // Delete a few Meetings
+     * const { count } = await prisma.meeting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MeetingDeleteManyArgs>(args?: SelectSubset<T, MeetingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Meetings
+     * const meeting = await prisma.meeting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MeetingUpdateManyArgs>(args: SelectSubset<T, MeetingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Meetings and returns the data updated in the database.
+     * @param {MeetingUpdateManyAndReturnArgs} args - Arguments to update many Meetings.
+     * @example
+     * // Update many Meetings
+     * const meeting = await prisma.meeting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Meetings and only return the `id`
+     * const meetingWithIdOnly = await prisma.meeting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MeetingUpdateManyAndReturnArgs>(args: SelectSubset<T, MeetingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Meeting.
+     * @param {MeetingUpsertArgs} args - Arguments to update or create a Meeting.
+     * @example
+     * // Update or create a Meeting
+     * const meeting = await prisma.meeting.upsert({
+     *   create: {
+     *     // ... data to create a Meeting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Meeting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MeetingUpsertArgs>(args: SelectSubset<T, MeetingUpsertArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingCountArgs} args - Arguments to filter Meetings to count.
+     * @example
+     * // Count the number of Meetings
+     * const count = await prisma.meeting.count({
+     *   where: {
+     *     // ... the filter for the Meetings we want to count
+     *   }
+     * })
+    **/
+    count<T extends MeetingCountArgs>(
+      args?: Subset<T, MeetingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MeetingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Meeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MeetingAggregateArgs>(args: Subset<T, MeetingAggregateArgs>): Prisma.PrismaPromise<GetMeetingAggregateType<T>>
+
+    /**
+     * Group by Meeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MeetingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MeetingGroupByArgs['orderBy'] }
+        : { orderBy?: MeetingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MeetingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Meeting model
+   */
+  readonly fields: MeetingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Meeting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    host<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Meeting model
+   */
+  interface MeetingFieldRefs {
+    readonly id: FieldRef<"Meeting", 'String'>
+    readonly organizationId: FieldRef<"Meeting", 'String'>
+    readonly title: FieldRef<"Meeting", 'String'>
+    readonly agenda: FieldRef<"Meeting", 'String'>
+    readonly date: FieldRef<"Meeting", 'DateTime'>
+    readonly time: FieldRef<"Meeting", 'String'>
+    readonly duration: FieldRef<"Meeting", 'Int'>
+    readonly hostId: FieldRef<"Meeting", 'String'>
+    readonly attendees: FieldRef<"Meeting", 'Json'>
+    readonly status: FieldRef<"Meeting", 'String'>
+    readonly minutes: FieldRef<"Meeting", 'String'>
+    readonly createdAt: FieldRef<"Meeting", 'DateTime'>
+    readonly updatedAt: FieldRef<"Meeting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Meeting findUnique
+   */
+  export type MeetingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting findUniqueOrThrow
+   */
+  export type MeetingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting findFirst
+   */
+  export type MeetingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meetings.
+     */
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting findFirstOrThrow
+   */
+  export type MeetingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meetings.
+     */
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting findMany
+   */
+  export type MeetingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meetings to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meetings.
+     */
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting create
+   */
+  export type MeetingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Meeting.
+     */
+    data: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+  }
+
+  /**
+   * Meeting createMany
+   */
+  export type MeetingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Meetings.
+     */
+    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Meeting createManyAndReturn
+   */
+  export type MeetingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * The data used to create many Meetings.
+     */
+    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Meeting update
+   */
+  export type MeetingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Meeting.
+     */
+    data: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+    /**
+     * Choose, which Meeting to update.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting updateMany
+   */
+  export type MeetingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Meetings.
+     */
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which Meetings to update
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Meeting updateManyAndReturn
+   */
+  export type MeetingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * The data used to update Meetings.
+     */
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which Meetings to update
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Meeting upsert
+   */
+  export type MeetingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Meeting to update in case it exists.
+     */
+    where: MeetingWhereUniqueInput
+    /**
+     * In case the Meeting found by the `where` argument doesn't exist, create a new Meeting with this data.
+     */
+    create: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+    /**
+     * In case the Meeting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+  }
+
+  /**
+   * Meeting delete
+   */
+  export type MeetingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter which Meeting to delete.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting deleteMany
+   */
+  export type MeetingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Meetings to delete
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Meeting without action
+   */
+  export type MeetingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
   }
 
 
@@ -91421,6 +92791,25 @@ export namespace Prisma {
   export type DesignationScalarFieldEnum = (typeof DesignationScalarFieldEnum)[keyof typeof DesignationScalarFieldEnum]
 
 
+  export const MeetingScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    title: 'title',
+    agenda: 'agenda',
+    date: 'date',
+    time: 'time',
+    duration: 'duration',
+    hostId: 'hostId',
+    attendees: 'attendees',
+    status: 'status',
+    minutes: 'minutes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MeetingScalarFieldEnum = (typeof MeetingScalarFieldEnum)[keyof typeof MeetingScalarFieldEnum]
+
+
   export const VacancyScalarFieldEnum: {
     id: 'id',
     organizationId: 'organizationId',
@@ -92670,6 +94059,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialListRelationFilter
     paymentSchedules?: PaymentScheduleListRelationFilter
     paymentLinks?: PaymentLinkListRelationFilter
+    meetings?: MeetingListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -92742,6 +94132,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialOrderByRelationAggregateInput
     paymentSchedules?: PaymentScheduleOrderByRelationAggregateInput
     paymentLinks?: PaymentLinkOrderByRelationAggregateInput
+    meetings?: MeetingOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -92817,6 +94208,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialListRelationFilter
     paymentSchedules?: PaymentScheduleListRelationFilter
     paymentLinks?: PaymentLinkListRelationFilter
+    meetings?: MeetingListRelationFilter
   }, "id" | "email">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -93183,6 +94575,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerListRelationFilter
     assets?: AssetListRelationFilter
     documentLogs?: DocumentLogListRelationFilter
+    hostedMeetings?: MeetingListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -93291,6 +94684,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerOrderByRelationAggregateInput
     assets?: AssetOrderByRelationAggregateInput
     documentLogs?: DocumentLogOrderByRelationAggregateInput
+    hostedMeetings?: MeetingOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -93402,6 +94796,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerListRelationFilter
     assets?: AssetListRelationFilter
     documentLogs?: DocumentLogListRelationFilter
+    hostedMeetings?: MeetingListRelationFilter
   }, "id" | "userId" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -95937,6 +97332,106 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Designation"> | Date | string
     allowedDeptIds?: JsonNullableWithAggregatesFilter<"Designation">
     allowedBranchIds?: JsonNullableWithAggregatesFilter<"Designation">
+  }
+
+  export type MeetingWhereInput = {
+    AND?: MeetingWhereInput | MeetingWhereInput[]
+    OR?: MeetingWhereInput[]
+    NOT?: MeetingWhereInput | MeetingWhereInput[]
+    id?: StringFilter<"Meeting"> | string
+    organizationId?: StringFilter<"Meeting"> | string
+    title?: StringNullableFilter<"Meeting"> | string | null
+    agenda?: StringFilter<"Meeting"> | string
+    date?: DateTimeFilter<"Meeting"> | Date | string
+    time?: StringFilter<"Meeting"> | string
+    duration?: IntNullableFilter<"Meeting"> | number | null
+    hostId?: StringFilter<"Meeting"> | string
+    attendees?: JsonFilter<"Meeting">
+    status?: StringFilter<"Meeting"> | string
+    minutes?: StringNullableFilter<"Meeting"> | string | null
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    host?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type MeetingOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrderInput | SortOrder
+    agenda?: SortOrder
+    date?: SortOrder
+    time?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    hostId?: SortOrder
+    attendees?: SortOrder
+    status?: SortOrder
+    minutes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    host?: UserOrderByWithRelationInput
+  }
+
+  export type MeetingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MeetingWhereInput | MeetingWhereInput[]
+    OR?: MeetingWhereInput[]
+    NOT?: MeetingWhereInput | MeetingWhereInput[]
+    organizationId?: StringFilter<"Meeting"> | string
+    title?: StringNullableFilter<"Meeting"> | string | null
+    agenda?: StringFilter<"Meeting"> | string
+    date?: DateTimeFilter<"Meeting"> | Date | string
+    time?: StringFilter<"Meeting"> | string
+    duration?: IntNullableFilter<"Meeting"> | number | null
+    hostId?: StringFilter<"Meeting"> | string
+    attendees?: JsonFilter<"Meeting">
+    status?: StringFilter<"Meeting"> | string
+    minutes?: StringNullableFilter<"Meeting"> | string | null
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    host?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type MeetingOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrderInput | SortOrder
+    agenda?: SortOrder
+    date?: SortOrder
+    time?: SortOrder
+    duration?: SortOrderInput | SortOrder
+    hostId?: SortOrder
+    attendees?: SortOrder
+    status?: SortOrder
+    minutes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MeetingCountOrderByAggregateInput
+    _avg?: MeetingAvgOrderByAggregateInput
+    _max?: MeetingMaxOrderByAggregateInput
+    _min?: MeetingMinOrderByAggregateInput
+    _sum?: MeetingSumOrderByAggregateInput
+  }
+
+  export type MeetingScalarWhereWithAggregatesInput = {
+    AND?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
+    OR?: MeetingScalarWhereWithAggregatesInput[]
+    NOT?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Meeting"> | string
+    organizationId?: StringWithAggregatesFilter<"Meeting"> | string
+    title?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
+    agenda?: StringWithAggregatesFilter<"Meeting"> | string
+    date?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+    time?: StringWithAggregatesFilter<"Meeting"> | string
+    duration?: IntNullableWithAggregatesFilter<"Meeting"> | number | null
+    hostId?: StringWithAggregatesFilter<"Meeting"> | string
+    attendees?: JsonWithAggregatesFilter<"Meeting">
+    status?: StringWithAggregatesFilter<"Meeting"> | string
+    minutes?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
   }
 
   export type VacancyWhereInput = {
@@ -99776,6 +101271,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -99847,6 +101343,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -99918,6 +101415,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -99989,6 +101487,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -100386,6 +101885,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -100487,6 +101987,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserUpdateInput = {
@@ -100588,6 +102089,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -100689,6 +102191,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -103497,6 +105000,116 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
     allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type MeetingCreateInput = {
+    id?: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutMeetingsInput
+    host: UserCreateNestedOneWithoutHostedMeetingsInput
+  }
+
+  export type MeetingUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    hostId: string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutMeetingsNestedInput
+    host?: UserUpdateOneRequiredWithoutHostedMeetingsNestedInput
+  }
+
+  export type MeetingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    hostId?: StringFieldUpdateOperationsInput | string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingCreateManyInput = {
+    id?: string
+    organizationId: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    hostId: string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    hostId?: StringFieldUpdateOperationsInput | string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type VacancyCreateInput = {
@@ -107890,6 +109503,12 @@ export namespace Prisma {
     none?: PaymentLinkWhereInput
   }
 
+  export type MeetingListRelationFilter = {
+    every?: MeetingWhereInput
+    some?: MeetingWhereInput
+    none?: MeetingWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -108112,6 +109731,10 @@ export namespace Prisma {
   }
 
   export type PaymentLinkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MeetingOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -110207,6 +111830,87 @@ export namespace Prisma {
     maxHeadcount?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type MeetingCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    agenda?: SortOrder
+    date?: SortOrder
+    time?: SortOrder
+    duration?: SortOrder
+    hostId?: SortOrder
+    attendees?: SortOrder
+    status?: SortOrder
+    minutes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingAvgOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type MeetingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    agenda?: SortOrder
+    date?: SortOrder
+    time?: SortOrder
+    duration?: SortOrder
+    hostId?: SortOrder
+    status?: SortOrder
+    minutes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    title?: SortOrder
+    agenda?: SortOrder
+    date?: SortOrder
+    time?: SortOrder
+    duration?: SortOrder
+    hostId?: SortOrder
+    status?: SortOrder
+    minutes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingSumOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type VacancyCountOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
@@ -110251,17 +111955,6 @@ export namespace Prisma {
   export type VacancySumOrderByAggregateInput = {
     count?: SortOrder
     filled?: SortOrder
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type ProgramNullableScalarRelationFilter = {
@@ -110334,22 +112027,6 @@ export namespace Prisma {
 
   export type AdmissionSessionSumOrderByAggregateInput = {
     capacity?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnrollmentPaymentNullableScalarRelationFilter = {
@@ -112663,6 +114340,13 @@ export namespace Prisma {
     connect?: PaymentLinkWhereUniqueInput | PaymentLinkWhereUniqueInput[]
   }
 
+  export type MeetingCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput> | MeetingCreateWithoutOrganizationInput[] | MeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutOrganizationInput | MeetingCreateOrConnectWithoutOrganizationInput[]
+    createMany?: MeetingCreateManyOrganizationInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -113052,6 +114736,13 @@ export namespace Prisma {
     connectOrCreate?: PaymentLinkCreateOrConnectWithoutOrganizationInput | PaymentLinkCreateOrConnectWithoutOrganizationInput[]
     createMany?: PaymentLinkCreateManyOrganizationInputEnvelope
     connect?: PaymentLinkWhereUniqueInput | PaymentLinkWhereUniqueInput[]
+  }
+
+  export type MeetingUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput> | MeetingCreateWithoutOrganizationInput[] | MeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutOrganizationInput | MeetingCreateOrConnectWithoutOrganizationInput[]
+    createMany?: MeetingCreateManyOrganizationInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -113864,6 +115555,20 @@ export namespace Prisma {
     deleteMany?: PaymentLinkScalarWhereInput | PaymentLinkScalarWhereInput[]
   }
 
+  export type MeetingUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput> | MeetingCreateWithoutOrganizationInput[] | MeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutOrganizationInput | MeetingCreateOrConnectWithoutOrganizationInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutOrganizationInput | MeetingUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: MeetingCreateManyOrganizationInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutOrganizationInput | MeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutOrganizationInput | MeetingUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -114642,6 +116347,20 @@ export namespace Prisma {
     update?: PaymentLinkUpdateWithWhereUniqueWithoutOrganizationInput | PaymentLinkUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: PaymentLinkUpdateManyWithWhereWithoutOrganizationInput | PaymentLinkUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: PaymentLinkScalarWhereInput | PaymentLinkScalarWhereInput[]
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput> | MeetingCreateWithoutOrganizationInput[] | MeetingUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutOrganizationInput | MeetingCreateOrConnectWithoutOrganizationInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutOrganizationInput | MeetingUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: MeetingCreateManyOrganizationInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutOrganizationInput | MeetingUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutOrganizationInput | MeetingUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -115805,6 +117524,13 @@ export namespace Prisma {
     connect?: DocumentLogWhereUniqueInput | DocumentLogWhereUniqueInput[]
   }
 
+  export type MeetingCreateNestedManyWithoutHostInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -116326,6 +118052,13 @@ export namespace Prisma {
     connectOrCreate?: DocumentLogCreateOrConnectWithoutLoggedByUserInput | DocumentLogCreateOrConnectWithoutLoggedByUserInput[]
     createMany?: DocumentLogCreateManyLoggedByUserInputEnvelope
     connect?: DocumentLogWhereUniqueInput | DocumentLogWhereUniqueInput[]
+  }
+
+  export type MeetingUncheckedCreateNestedManyWithoutHostInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -117440,6 +119173,20 @@ export namespace Prisma {
     deleteMany?: DocumentLogScalarWhereInput | DocumentLogScalarWhereInput[]
   }
 
+  export type MeetingUpdateManyWithoutHostNestedInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutHostInput | MeetingUpsertWithWhereUniqueWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutHostInput | MeetingUpdateWithWhereUniqueWithoutHostInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutHostInput | MeetingUpdateManyWithWhereWithoutHostInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -118472,6 +120219,20 @@ export namespace Prisma {
     update?: DocumentLogUpdateWithWhereUniqueWithoutLoggedByUserInput | DocumentLogUpdateWithWhereUniqueWithoutLoggedByUserInput[]
     updateMany?: DocumentLogUpdateManyWithWhereWithoutLoggedByUserInput | DocumentLogUpdateManyWithWhereWithoutLoggedByUserInput[]
     deleteMany?: DocumentLogScalarWhereInput | DocumentLogScalarWhereInput[]
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutHostNestedInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutHostInput | MeetingUpsertWithWhereUniqueWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutHostInput | MeetingUpdateWithWhereUniqueWithoutHostInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutHostInput | MeetingUpdateManyWithWhereWithoutHostInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -121959,6 +123720,42 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type OrganizationCreateNestedOneWithoutMeetingsInput = {
+    create?: XOR<OrganizationCreateWithoutMeetingsInput, OrganizationUncheckedCreateWithoutMeetingsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutMeetingsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutHostedMeetingsInput = {
+    create?: XOR<UserCreateWithoutHostedMeetingsInput, UserUncheckedCreateWithoutHostedMeetingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutHostedMeetingsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutMeetingsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutMeetingsInput, OrganizationUncheckedCreateWithoutMeetingsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutMeetingsInput
+    upsert?: OrganizationUpsertWithoutMeetingsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutMeetingsInput, OrganizationUpdateWithoutMeetingsInput>, OrganizationUncheckedUpdateWithoutMeetingsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutHostedMeetingsNestedInput = {
+    create?: XOR<UserCreateWithoutHostedMeetingsInput, UserUncheckedCreateWithoutHostedMeetingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutHostedMeetingsInput
+    upsert?: UserUpsertWithoutHostedMeetingsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutHostedMeetingsInput, UserUpdateWithoutHostedMeetingsInput>, UserUncheckedUpdateWithoutHostedMeetingsInput>
+  }
+
   export type DepartmentCreateNestedOneWithoutVacanciesInput = {
     create?: XOR<DepartmentCreateWithoutVacanciesInput, DepartmentUncheckedCreateWithoutVacanciesInput>
     connectOrCreate?: DepartmentCreateOrConnectWithoutVacanciesInput
@@ -122077,14 +123874,6 @@ export namespace Prisma {
     connectOrCreate?: FeeStructureCreateOrConnectWithoutSessionInput | FeeStructureCreateOrConnectWithoutSessionInput[]
     createMany?: FeeStructureCreateManySessionInputEnvelope
     connect?: FeeStructureWhereUniqueInput | FeeStructureWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type AdmissionSessionUpdatesubDepartmentIdsInput = {
@@ -127102,6 +128891,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -127202,6 +128992,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -127403,6 +129194,46 @@ export namespace Prisma {
 
   export type PaymentLinkCreateManyOrganizationInputEnvelope = {
     data: PaymentLinkCreateManyOrganizationInput | PaymentLinkCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MeetingCreateWithoutOrganizationInput = {
+    id?: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    host: UserCreateNestedOneWithoutHostedMeetingsInput
+  }
+
+  export type MeetingUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    hostId: string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingCreateOrConnectWithoutOrganizationInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type MeetingCreateManyOrganizationInputEnvelope = {
+    data: MeetingCreateManyOrganizationInput | MeetingCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -129441,6 +131272,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PaymentLink"> | Date | string
   }
 
+  export type MeetingUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: MeetingWhereUniqueInput
+    update: XOR<MeetingUpdateWithoutOrganizationInput, MeetingUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<MeetingCreateWithoutOrganizationInput, MeetingUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type MeetingUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: MeetingWhereUniqueInput
+    data: XOR<MeetingUpdateWithoutOrganizationInput, MeetingUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type MeetingUpdateManyWithWhereWithoutOrganizationInput = {
+    where: MeetingScalarWhereInput
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type MeetingScalarWhereInput = {
+    AND?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    OR?: MeetingScalarWhereInput[]
+    NOT?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    id?: StringFilter<"Meeting"> | string
+    organizationId?: StringFilter<"Meeting"> | string
+    title?: StringNullableFilter<"Meeting"> | string | null
+    agenda?: StringFilter<"Meeting"> | string
+    date?: DateTimeFilter<"Meeting"> | Date | string
+    time?: StringFilter<"Meeting"> | string
+    duration?: IntNullableFilter<"Meeting"> | number | null
+    hostId?: StringFilter<"Meeting"> | string
+    attendees?: JsonFilter<"Meeting">
+    status?: StringFilter<"Meeting"> | string
+    minutes?: StringNullableFilter<"Meeting"> | string | null
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -129509,6 +131375,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -129579,6 +131446,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -129855,6 +131723,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -129955,6 +131824,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -130030,6 +131900,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -130100,6 +131971,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -130560,6 +132432,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -130660,6 +132533,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -130802,6 +132676,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -130902,6 +132777,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -131140,6 +133016,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -131240,6 +133117,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -131321,6 +133199,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -131391,6 +133270,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -135253,6 +137133,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -135323,6 +137204,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -135428,6 +137310,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -135528,6 +137411,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -135633,6 +137517,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -135733,6 +137618,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -136207,6 +138093,46 @@ export namespace Prisma {
 
   export type DocumentLogCreateManyLoggedByUserInputEnvelope = {
     data: DocumentLogCreateManyLoggedByUserInput | DocumentLogCreateManyLoggedByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MeetingCreateWithoutHostInput = {
+    id?: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutMeetingsInput
+  }
+
+  export type MeetingUncheckedCreateWithoutHostInput = {
+    id?: string
+    organizationId: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingCreateOrConnectWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput>
+  }
+
+  export type MeetingCreateManyHostInputEnvelope = {
+    data: MeetingCreateManyHostInput | MeetingCreateManyHostInput[]
     skipDuplicates?: boolean
   }
 
@@ -137756,6 +139682,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -137826,6 +139753,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -137937,6 +139865,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -138037,6 +139966,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -138408,6 +140338,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DocumentLog"> | Date | string
   }
 
+  export type MeetingUpsertWithWhereUniqueWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    update: XOR<MeetingUpdateWithoutHostInput, MeetingUncheckedUpdateWithoutHostInput>
+    create: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput>
+  }
+
+  export type MeetingUpdateWithWhereUniqueWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    data: XOR<MeetingUpdateWithoutHostInput, MeetingUncheckedUpdateWithoutHostInput>
+  }
+
+  export type MeetingUpdateManyWithWhereWithoutHostInput = {
+    where: MeetingScalarWhereInput
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutHostInput>
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -138476,6 +140422,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -138546,6 +140493,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -138651,6 +140599,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -138751,6 +140700,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -138837,6 +140787,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -138907,6 +140858,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -139018,6 +140970,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -139118,6 +141071,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -139262,6 +141216,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -139362,6 +141317,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -139467,6 +141423,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -139567,6 +141524,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -139729,6 +141687,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -139829,6 +141788,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -139904,6 +141864,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -139974,6 +141935,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -140106,6 +142068,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -140206,6 +142169,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -140317,6 +142281,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -140417,6 +142382,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -140591,6 +142557,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -140691,6 +142658,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -140772,6 +142740,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -140842,6 +142811,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -140942,6 +142912,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -141042,6 +143013,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -141117,6 +143089,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -141187,6 +143160,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -141303,6 +143277,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -141403,6 +143378,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -141484,6 +143460,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -141554,6 +143531,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentCreateWithoutUniversityInput = {
@@ -141844,6 +143822,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -141914,6 +143893,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -142047,6 +144027,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -142147,6 +144128,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -142589,6 +144571,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -142659,6 +144642,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -143045,6 +145029,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -143115,6 +145100,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -143632,6 +145618,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -143702,6 +145689,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -144373,6 +146361,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -144473,6 +146462,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -144548,6 +146538,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -144618,6 +146609,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -144723,6 +146715,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -144823,6 +146816,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -144928,6 +146922,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -145028,6 +147023,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -145198,6 +147194,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -145298,6 +147295,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -145742,6 +147740,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -145842,6 +147841,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -145923,6 +147923,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -145993,6 +147994,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -146104,6 +148106,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -146204,6 +148207,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -146315,6 +148319,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -146415,6 +148420,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -147038,6 +149044,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -147138,6 +149145,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -147213,6 +149221,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -147283,6 +149292,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -147439,6 +149449,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -147539,6 +149550,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -147644,6 +149656,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -147744,6 +149757,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -148368,6 +150382,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -148468,6 +150483,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -148549,6 +150565,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -148619,6 +150636,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -148787,6 +150805,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -148887,6 +150906,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -148998,6 +151018,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -149098,6 +151119,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type PaymentScheduleUpsertWithWhereUniqueWithoutStudentInput = {
@@ -149339,6 +151361,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -149409,6 +151432,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -149770,6 +151794,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -149840,6 +151865,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInvoicesInput = {
@@ -150080,6 +152106,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -150150,6 +152177,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -150255,6 +152283,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -150355,6 +152384,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -150441,6 +152471,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -150511,6 +152542,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -150622,6 +152654,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -150722,6 +152755,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -150822,6 +152856,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -150922,6 +152957,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -150997,6 +153033,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -151067,6 +153104,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -151183,6 +153221,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -151283,6 +153322,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -151364,6 +153404,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -151434,6 +153475,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -151504,6 +153546,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -151574,6 +153617,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -151679,6 +153723,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -151779,6 +153824,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -151865,6 +153911,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -151935,6 +153982,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -152046,6 +154094,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -152146,6 +154195,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -152216,6 +154266,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -152286,6 +154337,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -152391,6 +154443,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -152491,6 +154544,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -152577,6 +154631,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -152647,6 +154702,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -152758,6 +154814,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -152858,6 +154915,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -152985,6 +155043,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -153055,6 +155114,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -153160,6 +155220,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -153260,6 +155321,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -153409,6 +155471,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -153479,6 +155542,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -153590,6 +155654,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -153690,6 +155755,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -153760,6 +155826,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -153830,6 +155897,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -153916,6 +155984,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -153986,6 +156055,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -154143,6 +156213,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -154243,6 +156314,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -154348,6 +156420,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -154448,6 +156521,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -154553,6 +156627,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -154653,6 +156728,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -154728,6 +156804,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -154798,6 +156875,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -154977,6 +157055,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -155077,6 +157156,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -155188,6 +157268,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -155288,6 +157369,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -155399,6 +157481,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -155499,6 +157582,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -155580,6 +157664,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -155650,6 +157735,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -155750,6 +157836,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -155850,6 +157937,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -155955,6 +158043,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -156055,6 +158144,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -156130,6 +158220,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -156200,6 +158291,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -156305,6 +158397,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -156405,6 +158498,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -156521,6 +158615,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -156621,6 +158716,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -156732,6 +158828,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -156832,6 +158929,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -156913,6 +159011,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -156983,6 +159082,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -157094,6 +159194,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -157194,6 +159295,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -157294,6 +159396,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -157394,6 +159497,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -157499,6 +159603,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -157599,6 +159704,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -157704,6 +159810,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -157804,6 +159911,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -157879,6 +159987,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -157949,6 +160058,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -158054,6 +160164,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -158154,6 +160265,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -158259,6 +160371,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -158359,6 +160472,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -158475,6 +160589,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -158575,6 +160690,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -158686,6 +160802,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -158786,6 +160903,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -158897,6 +161015,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -158997,6 +161116,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -159078,6 +161198,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -159148,6 +161269,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -159259,6 +161381,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -159359,6 +161482,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -159470,6 +161594,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -159570,6 +161695,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -159670,6 +161796,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -159770,6 +161897,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -159902,6 +162030,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -159972,6 +162101,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -160218,6 +162348,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -160318,6 +162449,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -160596,6 +162728,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -160696,6 +162829,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -160840,6 +162974,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -160910,6 +163045,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -161255,6 +163391,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -161355,6 +163492,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -161430,6 +163568,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -161500,6 +163639,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -161662,6 +163802,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -161762,6 +163903,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -162106,6 +164248,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -162206,6 +164349,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -162287,6 +164431,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -162357,6 +164502,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -162658,6 +164804,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -162728,6 +164875,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -162961,6 +165109,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -163061,6 +165210,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -163263,6 +165413,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -163333,6 +165484,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -163461,6 +165613,726 @@ export namespace Prisma {
     data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutDesignationsInput>
   }
 
+  export type OrganizationCreateWithoutMeetingsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutMeetingsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutMeetingsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutMeetingsInput, OrganizationUncheckedCreateWithoutMeetingsInput>
+  }
+
+  export type UserCreateWithoutHostedMeetingsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutHostedMeetingsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutHostedMeetingsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutHostedMeetingsInput, UserUncheckedCreateWithoutHostedMeetingsInput>
+  }
+
+  export type OrganizationUpsertWithoutMeetingsInput = {
+    update: XOR<OrganizationUpdateWithoutMeetingsInput, OrganizationUncheckedUpdateWithoutMeetingsInput>
+    create: XOR<OrganizationCreateWithoutMeetingsInput, OrganizationUncheckedCreateWithoutMeetingsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutMeetingsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutMeetingsInput, OrganizationUncheckedUpdateWithoutMeetingsInput>
+  }
+
+  export type OrganizationUpdateWithoutMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type UserUpsertWithoutHostedMeetingsInput = {
+    update: XOR<UserUpdateWithoutHostedMeetingsInput, UserUncheckedUpdateWithoutHostedMeetingsInput>
+    create: XOR<UserCreateWithoutHostedMeetingsInput, UserUncheckedCreateWithoutHostedMeetingsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutHostedMeetingsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutHostedMeetingsInput, UserUncheckedUpdateWithoutHostedMeetingsInput>
+  }
+
+  export type UserUpdateWithoutHostedMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+  }
+
   export type DepartmentCreateWithoutVacanciesInput = {
     id?: string
     name: string
@@ -163586,6 +166458,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -163656,6 +166529,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -163805,6 +166679,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -163875,6 +166750,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentCreateWithoutSessionInput = {
@@ -164083,6 +166959,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -164183,6 +167060,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -164288,6 +167166,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -164388,6 +167267,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -164463,6 +167343,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -164533,6 +167414,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -165029,6 +167911,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -165129,6 +168012,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -165240,6 +168124,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -165340,6 +168225,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -165421,6 +168307,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -165491,6 +168378,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -165879,6 +168767,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -165979,6 +168868,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -166084,6 +168974,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -166184,6 +169075,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -166289,6 +169181,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -166389,6 +169282,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -166464,6 +169358,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -166534,6 +169429,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -166935,6 +169831,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -167035,6 +169932,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -167176,6 +170074,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -167276,6 +170175,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutDeptReviewedEnrollmentsInput = {
@@ -167387,6 +170287,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -167487,6 +170388,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -167598,6 +170500,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -167698,6 +170601,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -167779,6 +170683,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -167849,6 +170754,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -168280,6 +171186,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -168380,6 +171287,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -168511,6 +171419,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -168611,6 +171520,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -168716,6 +171626,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -168816,6 +171727,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -168891,6 +171803,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -168961,6 +171874,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -169077,6 +171991,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -169177,6 +172092,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -169288,6 +172204,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -169388,6 +172305,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -169469,6 +172387,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -169539,6 +172458,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -169639,6 +172559,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -169709,6 +172630,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -169902,6 +172824,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -169972,6 +172895,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -170139,6 +173063,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -170209,6 +173134,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -170405,6 +173331,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -170505,6 +173432,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -170591,6 +173519,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -170661,6 +173590,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -170869,6 +173799,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -170969,6 +173900,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -171082,6 +174014,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -171152,6 +174085,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -171257,6 +174191,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -171357,6 +174292,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -171492,6 +174428,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -171562,6 +174499,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -171673,6 +174611,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -171773,6 +174712,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -171873,6 +174813,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -171973,6 +174914,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -172048,6 +174990,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -172118,6 +175061,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -172234,6 +175178,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -172334,6 +175279,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -172415,6 +175361,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -172485,6 +175432,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -172555,6 +175503,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -172625,6 +175574,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -172730,6 +175680,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -172830,6 +175781,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -172916,6 +175868,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -172986,6 +175939,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -173097,6 +176051,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -173197,6 +176152,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -173267,6 +176223,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -173337,6 +176294,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -173423,6 +176381,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -173493,6 +176452,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -173563,6 +176523,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -173633,6 +176594,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -173738,6 +176700,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -173838,6 +176801,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -173924,6 +176888,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -173994,6 +176959,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -174105,6 +177071,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -174205,6 +177172,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -174275,6 +177243,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -174345,6 +177314,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -174450,6 +177420,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -174550,6 +177521,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -174655,6 +177627,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -174755,6 +177728,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -174841,6 +177815,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -174911,6 +177886,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -175022,6 +177998,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -175122,6 +178099,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -175233,6 +178211,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -175333,6 +178312,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -175403,6 +178383,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -175473,6 +178454,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -175578,6 +178560,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -175678,6 +178661,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -175783,6 +178767,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -175883,6 +178868,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -175969,6 +178955,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -176039,6 +179026,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -176150,6 +179138,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -176250,6 +179239,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -176361,6 +179351,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -176461,6 +179452,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutDeptAdminEscalationsInput = {
@@ -176561,6 +179553,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -176661,6 +179654,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -176766,6 +179760,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -176866,6 +179861,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -176971,6 +179967,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -177071,6 +180068,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -177146,6 +180144,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -177216,6 +180215,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -177321,6 +180321,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -177421,6 +180422,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -177614,6 +180616,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -177714,6 +180717,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -177825,6 +180829,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -177925,6 +180930,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -178036,6 +181042,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -178136,6 +181143,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -178217,6 +181225,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -178287,6 +181296,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -178398,6 +181408,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -178498,6 +181509,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -178680,6 +181692,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -178750,6 +181763,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -178881,6 +181895,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -178951,6 +181966,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -179051,6 +182067,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -179151,6 +182168,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -179226,6 +182244,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -179296,6 +182315,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -179606,6 +182626,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -179706,6 +182727,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -179787,6 +182809,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -179857,6 +182880,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -180163,6 +183187,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -180263,6 +183288,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -180338,6 +183364,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -180408,6 +183435,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -180513,6 +183541,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -180613,6 +183642,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -180729,6 +183759,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -180829,6 +183860,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -180910,6 +183942,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -180980,6 +184013,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -181091,6 +184125,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -181191,6 +184226,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -181291,6 +184327,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -181391,6 +184428,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -181466,6 +184504,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -181536,6 +184575,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -181641,6 +184681,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -181741,6 +184782,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -181846,6 +184888,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -181946,6 +184989,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -182062,6 +185106,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -182162,6 +185207,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -182243,6 +185289,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -182313,6 +185360,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -182424,6 +185472,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -182524,6 +185573,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -182635,6 +185685,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -182735,6 +185786,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -182835,6 +185887,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -182935,6 +185988,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -183010,6 +186064,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -183080,6 +186135,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -183196,6 +186252,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -183296,6 +186353,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -183377,6 +186435,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -183447,6 +186506,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -183547,6 +186607,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -183647,6 +186708,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -183813,6 +186875,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -183883,6 +186946,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -184050,6 +187114,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -184150,6 +187215,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -184328,6 +187394,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -184398,6 +187465,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -184525,6 +187593,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -184595,6 +187664,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -184700,6 +187770,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -184800,6 +187871,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -184886,6 +187958,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -184956,6 +188029,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -185067,6 +188141,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -185167,6 +188242,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -185237,6 +188313,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -185307,6 +188384,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -185444,6 +188522,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -185514,6 +188593,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -185671,6 +188751,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -185771,6 +188852,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -185937,6 +189019,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -186007,6 +189090,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -186112,6 +189196,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -186212,6 +189297,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -186328,6 +189414,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -186428,6 +189515,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -186606,6 +189694,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -186676,6 +189765,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -186787,6 +189877,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -186887,6 +189978,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -187004,6 +190096,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -187074,6 +190167,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -187179,6 +190273,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -187279,6 +190374,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -187418,6 +190514,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -187488,6 +190585,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -187599,6 +190697,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -187699,6 +190798,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -187947,6 +191047,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -188047,6 +191148,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -188122,6 +191224,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -188192,6 +191295,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -188468,6 +191572,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -188568,6 +191673,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -188649,6 +191755,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -188719,6 +191826,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -188819,6 +191927,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -188919,6 +192028,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -188994,6 +192104,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -189064,6 +192175,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -189229,6 +192341,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -189329,6 +192442,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -189410,6 +192524,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -189480,6 +192595,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -189635,6 +192751,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -189735,6 +192852,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -189810,6 +192928,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -189880,6 +192999,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -190147,6 +193267,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -190247,6 +193368,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -190328,6 +193450,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -190398,6 +193521,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructuresInput = {
@@ -190637,6 +193761,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommissionsInput = {
@@ -190707,6 +193832,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommissionsInput = {
@@ -190945,6 +194071,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommissionsInput = {
@@ -191015,6 +194142,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutCommissionsInput = {
@@ -191667,6 +194795,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -191767,6 +194896,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -191872,6 +195002,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -191972,6 +195103,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -192047,6 +195179,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -192117,6 +195250,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -192233,6 +195367,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -192333,6 +195468,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -192444,6 +195580,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -192544,6 +195681,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -192625,6 +195763,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -192695,6 +195834,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutProgramMaterialsInput = {
@@ -192765,6 +195905,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -192835,6 +195976,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -192991,6 +196133,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -193091,6 +196234,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -193177,6 +196321,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -193247,6 +196392,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -193415,6 +196561,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -193515,6 +196662,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutPaymentSchedulesInput = {
@@ -193585,6 +196733,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -193655,6 +196804,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -193934,6 +197084,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -194004,6 +197155,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentSchedulesInput = {
@@ -194215,6 +197367,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentLinksInput = {
@@ -194285,6 +197438,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentLinksInput = {
@@ -194532,6 +197686,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -194632,6 +197787,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -194718,6 +197874,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentLinksInput = {
@@ -194788,6 +197945,7 @@ export namespace Prisma {
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentLinksInput = {
@@ -195053,6 +198211,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -195153,6 +198312,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserCreateWithoutCollectionOverseersInput = {
@@ -195253,6 +198413,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     assets?: AssetCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -195353,6 +198514,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -195428,6 +198590,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCollectionOverseersInput = {
@@ -195498,6 +198661,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCollectionOverseersInput = {
@@ -195614,6 +198778,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -195714,6 +198879,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationUpsertWithoutCollectionOverseersInput = {
@@ -195795,6 +198961,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -195865,6 +199032,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -195935,6 +199103,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -196005,6 +199174,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -196243,6 +199413,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -196313,6 +199484,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutUniversityPaymentsInput = {
@@ -196577,6 +199749,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -196677,6 +199850,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -196793,6 +199967,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -196893,6 +200068,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type StudentCreateWithoutDocumentLogsInput = {
@@ -197096,6 +200272,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
     assets?: AssetCreateNestedManyWithoutUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -197196,6 +200373,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
     collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
     assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -197421,6 +200599,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -197521,6 +200700,7 @@ export namespace Prisma {
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type AdmissionSessionCreateManyOrganizationInput = {
@@ -198380,6 +201560,21 @@ export namespace Prisma {
     expiresAt: Date | string
     paidAt?: Date | string | null
     createdBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingCreateManyOrganizationInput = {
+    id?: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    hostId: string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -200938,6 +204133,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -201038,6 +204234,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -201275,6 +204472,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MeetingUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    host?: UserUpdateOneRequiredWithoutHostedMeetingsNestedInput
+  }
+
+  export type MeetingUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    hostId?: StringFieldUpdateOperationsInput | string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    hostId?: StringFieldUpdateOperationsInput | string
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganizationCreateManyLicenseInput = {
     id?: string
     name: string
@@ -201357,6 +204599,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -201427,6 +204670,7 @@ export namespace Prisma {
     programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -202066,6 +205310,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -202166,6 +205411,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -202323,6 +205569,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -202423,6 +205670,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -203711,6 +206959,21 @@ export namespace Prisma {
     trackingNumber?: string | null
     dispatchDate?: Date | string | null
     deliveryDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingCreateManyHostInput = {
+    id?: string
+    organizationId: string
+    title?: string | null
+    agenda: string
+    date: Date | string
+    time: string
+    duration?: number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: string
+    minutes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -207524,6 +210787,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -207624,6 +210888,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -207970,6 +211235,51 @@ export namespace Prisma {
     trackingNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dispatchDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUpdateWithoutHostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutMeetingsNestedInput
+  }
+
+  export type MeetingUncheckedUpdateWithoutHostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutHostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: StringFieldUpdateOperationsInput | string
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    attendees?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    minutes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -208585,6 +211895,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -208685,6 +211996,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -210710,6 +214022,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -210810,6 +214123,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -211934,6 +215248,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -212034,6 +215349,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -212531,6 +215847,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -212631,6 +215948,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -213055,6 +216373,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
     assets?: AssetUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -213155,6 +216474,7 @@ export namespace Prisma {
     collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
     assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
     documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {

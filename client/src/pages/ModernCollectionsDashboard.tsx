@@ -19,6 +19,7 @@ import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -38,6 +39,7 @@ export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div>

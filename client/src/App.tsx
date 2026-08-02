@@ -369,8 +369,13 @@ function App() {
     })();
 
     if (isCollectionsOverseer && !result.some(t => t.id === 'collections')) {
-      return [...result, { id: 'collections', label: 'Collections' }];
+      result.push({ id: 'collections', label: 'Collections' });
     }
+
+    if (user.role !== 'staff' && !result.some(t => t.id === 'meetings')) {
+      result.push({ id: 'meetings', label: 'Meetings' });
+    }
+
     return result;
   }
 

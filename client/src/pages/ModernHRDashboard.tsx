@@ -39,6 +39,7 @@ import { OrgHierarchyPanel } from '@/components/panels/OrgHierarchyPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -51,6 +52,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return (
         <OverviewContent 
           metrics={metrics} 

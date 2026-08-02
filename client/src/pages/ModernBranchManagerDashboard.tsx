@@ -30,6 +30,7 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function getBranchManagerNavItems() {
   return [
@@ -96,6 +97,7 @@ export function ModernBranchManagerDashboard({ initialTab }: { initialTab?: stri
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return <BranchOverview branch={branch} metrics={metrics} leads={leads} targets={targets} loading={loading} onNavigate={setActiveTab} />;
       // Sales
       case 'leads': return <LeadsPanel />;

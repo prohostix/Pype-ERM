@@ -62,6 +62,7 @@ import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentRev
 import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
@@ -657,7 +658,10 @@ function EscalationsPanel() {
             </div>
           )}
         </TabsContent>
-      </Tabs>
+              <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
+</Tabs>
 
       <Dialog open={actionDialog} onOpenChange={setActionDialog}>
         <DialogContent className="max-w-md">

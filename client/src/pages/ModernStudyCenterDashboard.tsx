@@ -10,6 +10,7 @@ import { StudyCenterEnrollmentsPanel } from '@/components/panels/StudyCenterEnro
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { InternalMarksPanel } from '@/components/panels/InternalMarksPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import api from '@/lib/api';
 
 export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string }) {
@@ -89,7 +90,10 @@ export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string
         <TabsContent value="marks"><InternalMarksPanel /></TabsContent>
         <TabsContent value="programs"><ProgramsPanel /></TabsContent>
         <TabsContent value="tasks"><TasksPanel /></TabsContent>
-      </Tabs>
+              <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
+</Tabs>
     </div>
   );
 }

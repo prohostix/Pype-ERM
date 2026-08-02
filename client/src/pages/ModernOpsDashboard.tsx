@@ -46,6 +46,7 @@ import { AdmissionReportPanel } from '@/components/panels/AdmissionReportPanel';
 import { EnrollmentReportPanel } from '@/components/panels/EnrollmentReportPanel';
 import { UniversityReportPanel } from '@/components/panels/UniversityReportPanel';
 import { ReRegistrationReportPanel } from '@/components/panels/ReRegistrationReportPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const [metrics, setMetrics] = useState<any>({});
@@ -67,6 +68,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'meetings': return <MeetingsPanel />;
       case 'overview': return <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"><div className="lg:col-span-3"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div></div>;
       
       case 'students': return <StudentsPanel />;

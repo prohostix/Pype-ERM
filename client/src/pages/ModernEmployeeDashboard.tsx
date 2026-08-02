@@ -31,6 +31,7 @@ import { SubOpsPortalPanel } from '@/components/panels/SubOpsPortalPanel';
 import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { EmployeeEscalationsPanel } from '@/components/panels/EmployeeEscalationsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string }) {
   const { user } = useAuth();
@@ -387,7 +388,10 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
         <TabsContent value="collections">
           <CollectionsPanel />
         </TabsContent>
-      </Tabs>
+              <TabsContent value="meetings">
+          <MeetingsPanel />
+        </TabsContent>
+</Tabs>
     </div>
   );
 }
