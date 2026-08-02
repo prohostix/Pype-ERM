@@ -194,11 +194,7 @@ class ApiService {
   }
 
   async updateStudentProgress(id: string, stepId: string, data: FormData) {
-    const response = await this.api.put(`/students/${id}/progress/${stepId}`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await this.api.put(`/students/${id}/progress/${stepId}`, data);
     return response.data;
   }
 
