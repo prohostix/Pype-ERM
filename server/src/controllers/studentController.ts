@@ -368,7 +368,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
             email: s.email,
             password: hashedPassword,
             name: s.name,
-            role: 'student',
+            role: 'staff',
             phone: s.phone || '',
             status: 'active',
             branchId: branchId || undefined,
