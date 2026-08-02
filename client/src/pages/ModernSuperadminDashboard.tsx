@@ -97,6 +97,7 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
 
           <TabsTrigger value="licenses">Licenses</TabsTrigger>
           <TabsTrigger value="enquiries">Enquiries</TabsTrigger>
+          <TabsTrigger value="meetings">Meetings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">

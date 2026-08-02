@@ -141,6 +141,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           <TabsTrigger value="university_commissions">Commissions</TabsTrigger>
           <TabsTrigger value="activity_report">Activity Report</TabsTrigger>
           <TabsTrigger value="delete_approvals">Delete Approvals</TabsTrigger>
+          <TabsTrigger value="meetings">Meetings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-8">

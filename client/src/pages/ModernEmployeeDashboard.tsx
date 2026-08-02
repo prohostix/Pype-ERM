@@ -148,6 +148,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
           <TabsTrigger value="ld-portal">L&amp;D Portal</TabsTrigger>
           <TabsTrigger value="escalations">Escalations</TabsTrigger>
           {isCollectionsOverseer && <TabsTrigger value="collections">Collections</TabsTrigger>}
+          <TabsTrigger value="meetings">Meetings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">

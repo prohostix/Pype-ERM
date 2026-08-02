@@ -55,6 +55,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   users: 'users',
   departments: 'departments',
   tasks: 'tasks',
+  meetings: 'meetings',
   // HR
   employees: 'employees',
   vacancies: 'vacancies',
