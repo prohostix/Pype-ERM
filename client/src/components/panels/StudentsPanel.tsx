@@ -566,15 +566,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           );
         }
         
-        // 6. Absolute fallbacks
+        // 6. Absolute fallbacks (scoped to the selected university)
         if (!matchedProgram) {
-          matchedProgram = programs.find(p => p.name.toLowerCase() === rowProgramName || p.code?.toLowerCase() === rowProgramName);
+          matchedProgram = univPrograms.find(p => p.name.toLowerCase() === rowProgramName || p.code?.toLowerCase() === rowProgramName);
         }
         if (!matchedProgram) {
-          matchedProgram = programs.find(p => cleanStr(p.name) === cleanRowProg || (p.code && cleanStr(p.code) === cleanRowProg));
+          matchedProgram = univPrograms.find(p => cleanStr(p.name) === cleanRowProg || (p.code && cleanStr(p.code) === cleanRowProg));
         }
         if (!matchedProgram && rowProgramName.length > 1) {
-          matchedProgram = programs.find(p => {
+          matchedProgram = univPrograms.find(p => {
              const pName = p.name.toLowerCase();
              return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
           });
