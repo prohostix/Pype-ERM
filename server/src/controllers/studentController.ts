@@ -584,11 +584,16 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
   let updatedCount = 0;
   for (const update of updates) {
     if (update.id && update.enrollmentNo) {
-      await prisma.student.update({
-        where: { id: update.id, organizationId: req.user.organizationId },
-        data: { enrollmentNo: update.enrollmentNo }
+      const student = await prisma.student.findFirst({
+        where: { id: update.id, organizationId: req.user.organizationId }
       });
-      updatedCount++;
+      if (student) {
+        await prisma.student.update({
+          where: { id: update.id },
+          data: { enrollmentNo: update.enrollmentNo }
+        });
+        updatedCount++;
+      }
     }
   }
 
@@ -599,7 +604,7 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
   const { id, stepId } = req.params;
   const { status } = req.body; // 'completed' or 'pending'
   
-  const student = await prisma.student.findUnique({
+  const student = await prisma.student.findFirst({
     where: { id, organizationId: req.user.organizationId }
   });
   
