@@ -36,7 +36,8 @@ import {
   BarChart2,
   User,
   BookOpen,
-  MonitorSmartphone
+  MonitorSmartphone,
+  Video
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -281,6 +282,12 @@ const navItems: NavItem[] = [
       { id: 'holidays', label: 'Holidays', icon: Calendar, roles: ['employee', 'ops_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'bde'] },
       { id: 'announcements', label: 'Announcements', icon: Bell, roles: ['employee', 'ops_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'bde'] },
     ],
+  },
+  {
+    id: 'meetings',
+    label: 'Meetings',
+    icon: Video,
+    roles: ['superadmin', 'org_admin', 'ceo', 'ops_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'bde', 'employee'],
   },
   {
     id: 'settings',
