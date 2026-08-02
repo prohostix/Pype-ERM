@@ -194,8 +194,17 @@ class ApiService {
   }
 
   async updateStudentProgress(id: string, stepId: string, data: FormData) {
-    const response = await this.api.put(`/students/${id}/progress/${stepId}`, data);
-    return response.data;
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/students/${id}/progress/${stepId}`, {
+      method: 'PUT',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: data,
+    });
+    const resData = await response.json();
+    if (!response.ok) {
+      throw { response: { data: resData } };
+    }
+    return resData;
   }
 
 
