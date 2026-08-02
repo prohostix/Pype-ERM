@@ -532,6 +532,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         let univPrograms = programs;
         if (matchedUniv) {
           univPrograms = programs.filter(p => p.universityId === matchedUniv.id);
+        } else if (rowUnivName) {
+          univPrograms = programs.filter(p => 
+            p.university?.name?.toLowerCase()?.includes(rowUnivName) || 
+            p.university?.code?.toLowerCase()?.includes(rowUnivName)
+          );
         }
         
         const cleanStr = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');

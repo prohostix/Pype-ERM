@@ -368,7 +368,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
             email: s.email,
             password: hashedPassword,
             name: s.name,
-            role: 'staff',
+            role: 'student',
             phone: s.phone || '',
             status: 'active',
             branchId: branchId || undefined,
@@ -614,8 +614,16 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
   }
   
   let admissionProgress: Record<string, any> = {};
-  if (student.admissionProgress && typeof student.admissionProgress === 'object') {
-    admissionProgress = student.admissionProgress as Record<string, any>;
+  if (student.admissionProgress) {
+    if (typeof student.admissionProgress === 'object') {
+      admissionProgress = student.admissionProgress as Record<string, any>;
+    } else if (typeof student.admissionProgress === 'string') {
+      try {
+        admissionProgress = JSON.parse(student.admissionProgress);
+      } catch (e) {
+        console.error('Failed to parse admissionProgress', e);
+      }
+    }
   }
 
   const currentStepData = admissionProgress[stepId] || {};
