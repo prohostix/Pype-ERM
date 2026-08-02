@@ -90,9 +90,9 @@ cp -R src/generated dist/
 
 # 9. Start Server via PM2
 echo "🚀 Starting backend server with PM2..."
-pm2 delete pype-backend 2>/dev/null || true
-pm2 start dist/server.js --name "pype-backend" --cwd /var/www/pype-erm/server
-pm2 save
+sudo -u ubuntu pm2 restart pype-erm-server
+
+sudo -u ubuntu pm2 save
 
 # 10. Build Client
 echo "🛠️  Building Frontend Client..."
