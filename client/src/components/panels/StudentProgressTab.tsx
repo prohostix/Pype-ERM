@@ -1,26 +1,56 @@
 import { useState } from 'react';
-import { CheckCircle2, Circle, FileText } from 'lucide-react';
+import { CheckCircle2, Circle, FileText, Eye, UploadCloud } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/useAuth';
+import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface StudentProgressTabProps {
   student: any;
+  onUpdate?: () => void;
 }
 
-export function StudentProgressTab({ student }: StudentProgressTabProps) {
-  // Mock data for progression (in a real app, this would come from the API)
+const ADMISSION_STEPS_CONFIG = [
+  { id: 'verification', label: 'Student Verification' },
+  { id: 'docs', label: 'Documents Verification' },
+  { id: 'uni_sub', label: 'University Submission' },
+  { id: 'enroll_no', label: 'Enrollment Number Updated' },
+  { id: 'portal', label: 'Student Portal Activated' },
+  { id: 'batch', label: 'Batch Allocation' },
+];
+
+export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProps) {
+  const { user } = useAuth();
+  
+  // Safely parse admission progress
+  const admissionProgressRaw = student?.admissionProgress;
+  const admissionProgressObj = typeof admissionProgressRaw === 'string' 
+    ? JSON.parse(admissionProgressRaw) 
+    : (admissionProgressRaw || {});
+
+  const [admissionSteps, setAdmissionSteps] = useState(
+    ADMISSION_STEPS_CONFIG.map(config => {
+      const dbData = admissionProgressObj[config.id] || {};
+      return {
+        id: config.id,
+        label: config.label,
+        completed: Boolean(dbData.completed),
+        proofUrl: dbData.proofUrl || null
+      };
+    })
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedStep, setSelectedStep] = useState<any>(null);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const isPgCourse = student?.program?.name?.toLowerCase().includes('pg') || student?.programId?.name?.toLowerCase().includes('pg');
   const yearsToRender = isPgCourse ? 2 : 3;
-  
-  const [admissionSteps, setAdmissionSteps] = useState([
-    { id: 'verification', label: 'Student Verification', completed: true },
-    { id: 'docs', label: 'Documents Verification', completed: true },
-    { id: 'uni_sub', label: 'University Submission', completed: false },
-    { id: 'enroll_no', label: 'Enrollment Number Updated', completed: false },
-    { id: 'portal', label: 'Student Portal Activated', completed: false },
-    { id: 'batch', label: 'Batch Allocation', completed: false },
-  ]);
 
   const [academicYears, setAcademicYears] = useState(
     Array.from({ length: yearsToRender }).map((_, i) => ({
@@ -28,15 +58,80 @@ export function StudentProgressTab({ student }: StudentProgressTabProps) {
       feeCollection: 'Auto',
       reRegistration: 'Pending',
       examRegistration: 'Pending',
-      resultStatus: 'Pending', // Pending, Passed, Failed, Supplementary, Withheld
+      resultStatus: 'Pending', 
       remarks: ''
     }))
   );
 
-  const toggleAdmissionStep = (id: string) => {
-    setAdmissionSteps(steps => steps.map(step => 
-      step.id === id ? { ...step, completed: !step.completed } : step
-    ));
+  const openCompletionModal = (step: any) => {
+    setSelectedStep(step);
+    setProofFile(null);
+    setModalOpen(true);
+  };
+
+  const handleToggleClick = (step: any) => {
+    if (step.completed) {
+      if (user?.role !== 'org_admin' && user?.role !== 'superadmin') {
+        toast.error('Only Organization Admins can revert progress steps.');
+        return;
+      }
+      if (window.confirm(`Are you sure you want to revert "${step.label}" to pending?`)) {
+        submitProgressUpdate(step.id, 'pending', null);
+      }
+    } else {
+      openCompletionModal(step);
+    }
+  };
+
+  const submitProgressUpdate = async (stepId: string, status: 'completed' | 'pending', file: File | null) => {
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append('status', status);
+      if (file) {
+        formData.append('proof', file);
+      }
+
+      const res = await api.updateStudentProgress(student.id, stepId, formData);
+      if (res.success) {
+        toast.success(`Step marked as ${status}`);
+        
+        // Update local state directly with DB returned data
+        const updatedProgressObj = typeof res.data.admissionProgress === 'string'
+          ? JSON.parse(res.data.admissionProgress)
+          : (res.data.admissionProgress || {});
+
+        setAdmissionSteps(steps => steps.map(s => {
+          if (s.id === stepId) {
+            const dbData = updatedProgressObj[stepId] || {};
+            return {
+              ...s,
+              completed: Boolean(dbData.completed),
+              proofUrl: dbData.proofUrl || null
+            };
+          }
+          return s;
+        }));
+        
+        if (onUpdate) onUpdate();
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to update progress');
+    } finally {
+      setIsSubmitting(false);
+      setModalOpen(false);
+    }
+  };
+
+  const handleConfirmCompletion = () => {
+    if (!proofFile) {
+      toast.error('Please upload a proof document to mark this step as completed.');
+      return;
+    }
+    if (selectedStep) {
+      submitProgressUpdate(selectedStep.id, 'completed', proofFile);
+    }
   };
 
   const updateAcademicYear = (yearIndex: number, field: string, value: string) => {
@@ -67,14 +162,28 @@ export function StudentProgressTab({ student }: StudentProgressTabProps) {
                     )}
                     <span className="font-medium text-sm">{step.label}</span>
                   </div>
-                  <Button 
-                    variant={step.completed ? "outline" : "default"} 
-                    size="sm" 
-                    className="h-7 text-xs"
-                    onClick={() => toggleAdmissionStep(step.id)}
-                  >
-                    {step.completed ? 'Completed' : 'Pending'}
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    {step.completed && step.proofUrl && (
+                      <a 
+                        href={`${import.meta.env.VITE_API_URL || ''}${step.proofUrl}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                      >
+                        <Button variant="ghost" size="sm" className="h-7 text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                          <Eye className="w-3 h-3" /> View Proof
+                        </Button>
+                      </a>
+                    )}
+                    <Button 
+                      variant={step.completed ? "outline" : "default"} 
+                      size="sm" 
+                      className="h-7 text-xs"
+                      onClick={() => handleToggleClick(step)}
+                      disabled={isSubmitting}
+                    >
+                      {step.completed ? 'Completed' : 'Pending'}
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -165,6 +274,41 @@ export function StudentProgressTab({ student }: StudentProgressTabProps) {
           </Card>
         </div>
       </div>
+
+      {/* Upload Proof Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Complete Step</DialogTitle>
+            <DialogDescription>
+              Please upload proof to mark "{selectedStep?.label}" as completed.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4 space-y-4">
+            <div className="border-2 border-dashed border-border rounded-lg p-6 flex flex-col items-center justify-center text-center">
+              <UploadCloud className="w-10 h-10 text-muted-foreground mb-2" />
+              <p className="text-sm font-medium mb-1">Upload Proof Document</p>
+              <p className="text-xs text-muted-foreground mb-4">Supported formats: PDF, JPG, PNG (Max 10MB)</p>
+              <Input 
+                type="file" 
+                className="max-w-xs"
+                onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isSubmitting}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmCompletion} disabled={!proofFile || isSubmitting}>
+              {isSubmitting ? 'Saving...' : 'Confirm & Complete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

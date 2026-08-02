@@ -193,6 +193,16 @@ class ApiService {
     return response.data;
   }
 
+  async updateStudentProgress(id: string, stepId: string, data: FormData) {
+    const response = await this.api.put(`/students/${id}/progress/${stepId}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+
+
   // HR
   async getLeaveRequests(params?: any) {
     const response = await this.api.get('/hr/leaves', { params });

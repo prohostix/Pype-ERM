@@ -1,4 +1,5 @@
 import prisma from '../lib/prisma.js';
+import { Prisma } from '../generated/client/index.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
@@ -10,6 +11,18 @@ export const getStudents = asyncHandler(async (req, res) => {
     if (req.query.missingEnrollment === 'true') {
         where.enrollmentNo = null;
         where.status = 'admitted'; // Only admitted students need enrollment numbers
+    }
+    else if (req.query.hasEnrollment === 'true') {
+        where.enrollmentNo = { not: null };
+    }
+    if (req.query.reregCompleted === 'true') {
+        where.reregStatus = { path: ['completed'], equals: true };
+    }
+    else if (req.query.reregCompleted === 'false') {
+        where.OR = [
+            { reregStatus: { equals: Prisma.AnyNull } },
+            { reregStatus: { path: ['completed'], equals: false } }
+        ];
     }
     // Branch-level isolation for students list
     if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
@@ -507,5 +520,53 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req, res) => {
         }
     }
     res.status(200).json({ success: true, count: updatedCount, message: 'Enrollment numbers updated' });
+});
+export const updateAdmissionProgress = asyncHandler(async (req, res) => {
+    const { id, stepId } = req.params;
+    const { status } = req.body; // 'completed' or 'pending'
+    const student = await prisma.student.findUnique({
+        where: { id, organizationId: req.user.organizationId }
+    });
+    if (!student) {
+        res.status(404).json({ success: false, message: 'Student not found' });
+        return;
+    }
+    let admissionProgress = {};
+    if (student.admissionProgress && typeof student.admissionProgress === 'object') {
+        admissionProgress = student.admissionProgress;
+    }
+    const currentStepData = admissionProgress[stepId] || {};
+    const isCurrentlyCompleted = currentStepData.completed === true;
+    // Checking authorization for reverting back to pending
+    if (isCurrentlyCompleted && status === 'pending') {
+        if (req.user.role !== 'org_admin' && req.user.role !== 'superadmin') {
+            res.status(403).json({ success: false, message: 'Only Organization Admins can revert progress steps.' });
+            return;
+        }
+    }
+    // Handle proof upload if marking as completed
+    let proofUrl = currentStepData.proofUrl;
+    if (status === 'completed' && req.file) {
+        // Generate URL based on uploaded file
+        proofUrl = `/uploads/${req.file.filename}`;
+    }
+    // If we are marking as pending, we might want to clear the proofUrl? Or keep it? The prompt doesn't explicitly state to clear it, but let's clear it so they have to upload again if they re-complete it.
+    if (status === 'pending') {
+        proofUrl = null;
+    }
+    const updatedProgress = {
+        ...admissionProgress,
+        [stepId]: {
+            completed: status === 'completed',
+            proofUrl,
+            updatedBy: req.user.id,
+            updatedAt: new Date().toISOString()
+        }
+    };
+    const updatedStudent = await prisma.student.update({
+        where: { id },
+        data: { admissionProgress: updatedProgress }
+    });
+    res.status(200).json({ success: true, data: updatedStudent });
 });
 //# sourceMappingURL=studentController.js.map

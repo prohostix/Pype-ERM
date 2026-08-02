@@ -594,3 +594,62 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
 
   res.status(200).json({ success: true, count: updatedCount, message: 'Enrollment numbers updated' });
 });
+
+export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id, stepId } = req.params;
+  const { status } = req.body; // 'completed' or 'pending'
+  
+  const student = await prisma.student.findUnique({
+    where: { id, organizationId: req.user.organizationId }
+  });
+  
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+  
+  let admissionProgress: Record<string, any> = {};
+  if (student.admissionProgress && typeof student.admissionProgress === 'object') {
+    admissionProgress = student.admissionProgress as Record<string, any>;
+  }
+
+  const currentStepData = admissionProgress[stepId] || {};
+  const isCurrentlyCompleted = currentStepData.completed === true;
+  
+  // Checking authorization for reverting back to pending
+  if (isCurrentlyCompleted && status === 'pending') {
+    if (req.user.role !== 'org_admin' && req.user.role !== 'superadmin') {
+      res.status(403).json({ success: false, message: 'Only Organization Admins can revert progress steps.' });
+      return;
+    }
+  }
+
+  // Handle proof upload if marking as completed
+  let proofUrl = currentStepData.proofUrl;
+  if (status === 'completed' && req.file) {
+    // Generate URL based on uploaded file
+    proofUrl = `/uploads/${req.file.filename}`;
+  }
+
+  // If we are marking as pending, we might want to clear the proofUrl? Or keep it? The prompt doesn't explicitly state to clear it, but let's clear it so they have to upload again if they re-complete it.
+  if (status === 'pending') {
+    proofUrl = null;
+  }
+
+  const updatedProgress = {
+    ...admissionProgress,
+    [stepId]: {
+      completed: status === 'completed',
+      proofUrl,
+      updatedBy: req.user.id,
+      updatedAt: new Date().toISOString()
+    }
+  };
+
+  const updatedStudent = await prisma.student.update({
+    where: { id },
+    data: { admissionProgress: updatedProgress }
+  });
+
+  res.status(200).json({ success: true, data: updatedStudent });
+});
