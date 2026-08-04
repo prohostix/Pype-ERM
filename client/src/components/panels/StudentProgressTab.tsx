@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, Circle, FileText, Eye, UploadCloud } from 'lucide-react';
+import { CheckCircle2, Circle, FileText, Eye, UploadCloud, Save } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -53,15 +53,23 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const yearsToRender = student?.program?.duration || (isPgCourse ? 2 : 3);
   const semestersToRender = yearsToRender * 2; // Default to 2 semesters per year
 
+  const parsedAcademicProgress = typeof student?.academicProgress === 'string'
+    ? JSON.parse(student.academicProgress)
+    : (student?.academicProgress || []);
+
   const [academicTerms, setAcademicTerms] = useState(
-    Array.from({ length: semestersToRender }).map((_, i) => ({
-      term: i + 1,
-      feeCollection: 'Auto',
-      reRegistration: 'Pending',
-      examRegistration: 'Pending',
-      resultStatus: 'Pending', 
-      remarks: ''
-    }))
+    Array.from({ length: semestersToRender }).map((_, i) => {
+      const existingTerm = parsedAcademicProgress.find((t: any) => t.term === i + 1);
+      return existingTerm || {
+        term: i + 1,
+        feeCollection: 'Auto',
+        reRegistration: 'Pending',
+        examRegistration: 'Pending',
+        resultStatus: 'Pending', 
+        remarks: '',
+        isSaved: false
+      };
+    })
   );
 
   const openCompletionModal = (step: any) => {
@@ -199,7 +207,10 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
           Academic Progress
         </h3>
         <div className="space-y-4">
-          {academicTerms.map((term, index) => (
+          {academicTerms.map((term, index) => {
+            const isTermDisabled = term.isSaved && (user?.role !== 'org_admin' && user?.role !== 'superadmin');
+
+            return (
             <Card key={index} className="shadow-sm border-border overflow-hidden">
               <div className="bg-muted/50 px-4 py-2 border-b border-border flex items-center justify-between">
                 <span className="font-bold text-sm">Semester {term.term}</span>
@@ -213,9 +224,10 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Re-registration</span>
                     <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
+                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
                       value={term.reRegistration}
                       onChange={(e) => updateAcademicTerm(index, 'reRegistration', e.target.value)}
+                      disabled={isTermDisabled}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
@@ -224,9 +236,10 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Exam Registration</span>
                     <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
+                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
                       value={term.examRegistration}
                       onChange={(e) => updateAcademicTerm(index, 'examRegistration', e.target.value)}
+                      disabled={isTermDisabled}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
@@ -235,9 +248,10 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Result Status</span>
                     <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
+                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
                       value={term.resultStatus}
                       onChange={(e) => updateAcademicTerm(index, 'resultStatus', e.target.value)}
+                      disabled={isTermDisabled}
                     >
                       <option value="Pending">⏳ Pending</option>
                       <option value="Passed">✅ Passed</option>
@@ -251,15 +265,29 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                 <div className="mt-4 pt-4 border-t border-border">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Remarks (Optional)</span>
                   <textarea 
-                    className="w-full min-h-[60px] text-sm bg-background border border-input rounded-md p-2 placeholder:text-muted-foreground/50"
+                    className="w-full min-h-[60px] text-sm bg-background border border-input rounded-md p-2 placeholder:text-muted-foreground/50 disabled:opacity-50"
                     placeholder="e.g. Failed in Mathematics Supplementary Exam on 15-Aug-2026"
                     value={term.remarks}
                     onChange={(e) => updateAcademicTerm(index, 'remarks', e.target.value)}
+                    disabled={isTermDisabled}
                   />
+                </div>
+                
+                <div className="mt-4 flex justify-end">
+                  <Button 
+                    size="sm" 
+                    variant={term.isSaved ? "secondary" : "default"}
+                    onClick={() => saveAcademicTerm(index)}
+                    disabled={isTermDisabled}
+                    className="gap-2"
+                  >
+                    <Save className="w-4 h-4" />
+                    {term.isSaved ? 'Saved' : 'Save'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )})} 
 
           {/* Final Steps */}
           <Card className="shadow-sm border-border bg-emerald-50 dark:bg-emerald-950/20">
