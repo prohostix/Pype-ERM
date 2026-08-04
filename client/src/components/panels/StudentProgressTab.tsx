@@ -149,6 +149,29 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     ));
   };
 
+  const saveAcademicTerm = async (termIndex: number) => {
+    try {
+      const updatedTerms = academicTerms.map((t, i) => 
+        i === termIndex ? { ...t, isSaved: true } : t
+      );
+      setAcademicTerms(updatedTerms);
+      
+      const res = await api.updateStudent(student.id, {
+        academicProgress: updatedTerms
+      });
+      
+      if (res.success) {
+        toast.success(`Semester ${updatedTerms[termIndex].term} progress saved successfully.`);
+        if (onUpdate) onUpdate();
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to save academic progress');
+      // Revert if failed
+      setAcademicTerms(academicTerms);
+    }
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
