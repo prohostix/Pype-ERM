@@ -50,8 +50,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isPgCourse = student?.program?.name?.toLowerCase().includes('pg') || student?.programId?.name?.toLowerCase().includes('pg');
-  const yearsToRender = student?.program?.duration || (isPgCourse ? 2 : 3);
-  const semestersToRender = yearsToRender * 2; // Default to 2 semesters per year
+  // Program duration is in months (e.g., 36 months = 6 semesters)
+  const semestersToRender = student?.program?.duration ? Math.ceil(student.program.duration / 6) : (isPgCourse ? 4 : 6);
 
   const parsedAcademicProgress = typeof student?.academicProgress === 'string'
     ? JSON.parse(student.academicProgress)
