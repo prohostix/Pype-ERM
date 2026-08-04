@@ -34,6 +34,10 @@ export function DiscountsPanel() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+  
   const [selectedStudent, setSelectedStudent] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [reason, setReason] = useState<string>('');
@@ -129,6 +133,11 @@ export function DiscountsPanel() {
               </TableRow>
             </TableHeader>
             <TableBody>
+              {(() => {
+                const totalPages = Math.max(1, Math.ceil(discounts.length / itemsPerPage));
+                const paginatedDiscounts = discounts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                return (
+                  <>
               {discounts.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
@@ -137,7 +146,7 @@ export function DiscountsPanel() {
                   </TableCell>
                 </TableRow>
               ) : (
-                discounts.map((discount) => (
+                paginatedDiscounts.map((discount) => (
                   <TableRow key={discount.id}>
                     <TableCell className="font-medium">{discount.name}</TableCell>
                     <TableCell>{discount.enrollmentNo}</TableCell>
@@ -149,8 +158,45 @@ export function DiscountsPanel() {
                   </TableRow>
                 ))
               )}
+                </>
+              );
+              })()}
             </TableBody>
           </Table>
+          
+          {/* Pagination Controls */}
+          {(() => {
+            const totalPages = Math.max(1, Math.ceil(discounts.length / itemsPerPage));
+            if (totalPages <= 1) return null;
+            return (
+              <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, discounts.length)} of {discounts.length} discounts
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </Button>
+                  <div className="text-sm font-medium px-2">
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 

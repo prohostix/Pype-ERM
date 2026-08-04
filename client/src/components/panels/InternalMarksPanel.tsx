@@ -20,6 +20,11 @@ export function InternalMarksPanel() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     studentId: '',
@@ -234,7 +239,13 @@ export function InternalMarksPanel() {
             </div>
           ) : (
             <div className="space-y-2">
-              {marks.filter(m => m && (m.id || m.id)).map((m) => {
+              {(() => {
+                const filteredMarks = marks.filter(m => m && (m.id || m.id));
+                const totalPages = Math.max(1, Math.ceil(filteredMarks.length / itemsPerPage));
+                const paginatedMarks = filteredMarks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                return (
+                  <>
+              {paginatedMarks.map((m) => {
                 const mid = m.id || m.id;
                 const studentName = typeof m.studentId === 'object' ? m.studentId?.name : 'Unknown Student';
                 const enrollNo = typeof m.studentId === 'object' ? m.studentId?.enrollmentNo : null;
@@ -273,6 +284,44 @@ export function InternalMarksPanel() {
                   </div>
                 );
               })}
+              
+              {/* Pagination Controls */}
+              {(() => {
+                const filteredMarks = marks.filter(m => m && (m.id || m.id));
+                const totalPages = Math.max(1, Math.ceil(filteredMarks.length / itemsPerPage));
+                if (totalPages <= 1) return null;
+                return (
+                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20 mt-4 rounded-md">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredMarks.length)} of {filteredMarks.length} records
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+                  </>
+                );
+              })()}
             </div>
           )}
         </CardContent>

@@ -47,6 +47,14 @@ export function UniversityStudentsPanel() {
   const [programFilter, setProgramFilter] = useState('all');
   const [programs, setPrograms] = useState<{ id: string; name: string }[]>([]);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, programFilter]);
+
   useEffect(() => { fetchUniversities(); }, []);
 
   const fetchUniversities = async () => {
@@ -148,6 +156,10 @@ export function UniversityStudentsPanel() {
   }
 
   // ── University detail view ────────────────────────────────────────────────
+  
+  const totalPages = Math.max(1, Math.ceil(enrollments.length / itemsPerPage));
+  const paginatedEnrollments = enrollments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -233,7 +245,7 @@ export function UniversityStudentsPanel() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {enrollments.map(e => (
+                  {paginatedEnrollments.map(e => (
                     <tr key={e.id} className="hover:bg-muted/30 transition-colors">
                       <td className="py-3 pr-4">
                         <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">
@@ -262,6 +274,36 @@ export function UniversityStudentsPanel() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+          
+          {/* Pagination Controls */}
+          {enrollments.length > 0 && totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 pb-2 mt-2">
+              <div className="text-sm text-muted-foreground">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, enrollments.length)} of {enrollments.length} students
+              </div>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <div className="text-sm font-medium px-2">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

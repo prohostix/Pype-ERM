@@ -17,6 +17,14 @@ export function EnrollmentNumberUpdatePanel() {
   const [updates, setUpdates] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('pending');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab]);
+
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -92,6 +100,10 @@ export function EnrollmentNumberUpdatePanel() {
             <TabsTrigger value="updated">Updated ({updatedStudents.length})</TabsTrigger>
           </TabsList>
 
+          {(() => {
+            const totalPendingPages = Math.max(1, Math.ceil(students.length / itemsPerPage));
+            const paginatedPending = students.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+            return (
           <TabsContent value="pending" className="m-0">
             {loading ? (
               <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
@@ -112,7 +124,7 @@ export function EnrollmentNumberUpdatePanel() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {students.map((student) => (
+                    {paginatedPending.map((student) => (
                       <TableRow key={student.id}>
                         <TableCell>
                           <div className="font-medium">{student.name}</div>
@@ -137,10 +149,45 @@ export function EnrollmentNumberUpdatePanel() {
                     ))}
                   </TableBody>
                 </Table>
+                {/* Pagination Controls */}
+                {totalPendingPages > 1 && (
+                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, students.length)} of {students.length} students
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPendingPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPendingPages, p + 1))}
+                        disabled={currentPage === totalPendingPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>
+          );
+          })()}
 
+          {(() => {
+            const totalUpdatedPages = Math.max(1, Math.ceil(updatedStudents.length / itemsPerPage));
+            const paginatedUpdated = updatedStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+            return (
           <TabsContent value="updated" className="m-0">
             {loading ? (
               <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
@@ -160,7 +207,7 @@ export function EnrollmentNumberUpdatePanel() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {updatedStudents.map((student) => (
+                    {paginatedUpdated.map((student) => (
                       <TableRow key={student.id}>
                         <TableCell>
                           <div className="font-medium">{student.name}</div>
@@ -180,9 +227,40 @@ export function EnrollmentNumberUpdatePanel() {
                     ))}
                   </TableBody>
                 </Table>
+                {/* Pagination Controls */}
+                {totalUpdatedPages > 1 && (
+                  <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, updatedStudents.length)} of {updatedStudents.length} students
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalUpdatedPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalUpdatedPages, p + 1))}
+                        disabled={currentPage === totalUpdatedPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>
+          );
+          })()}
         </Tabs>
       </CardContent>
     </Card>

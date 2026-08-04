@@ -45,6 +45,14 @@ export function SalesEnrolledStudentsPanel() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
   // Document upload state
   const [uploading, setUploading] = useState(false);
   const [docName, setDocName] = useState('');
@@ -143,6 +151,9 @@ export function SalesEnrolledStudentsPanel() {
     );
   });
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  const paginatedStudents = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -185,7 +196,7 @@ export function SalesEnrolledStudentsPanel() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {filtered.map(student => (
+          {paginatedStudents.map(student => (
             <Card
               key={student.id}
               className="hover:border-primary/40 cursor-pointer transition-all duration-250 hover:shadow-md"
@@ -228,6 +239,36 @@ export function SalesEnrolledStudentsPanel() {
               </CardContent>
             </Card>
           ))}
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
+              <div className="text-sm text-muted-foreground">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} students
+              </div>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <div className="text-sm font-medium px-2">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

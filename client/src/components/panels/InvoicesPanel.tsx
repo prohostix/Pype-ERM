@@ -20,6 +20,11 @@ export function InvoicesPanel() {
   const [billingTarget, setBillingTarget] = useState<'center' | 'student'>('center');
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Search states
@@ -500,7 +505,13 @@ export function InvoicesPanel() {
             <div className="text-center py-8 text-muted-foreground">No invoices found</div>
           ) : (
             <div className="space-y-2">
-              {invoices.filter(inv => inv?.id).map((inv) => {
+              {(() => {
+                const validInvoices = invoices.filter(inv => inv?.id);
+                const totalPages = Math.max(1, Math.ceil(validInvoices.length / itemsPerPage));
+                const paginatedInvoices = validInvoices.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                return (
+                  <>
+              {paginatedInvoices.map((inv) => {
                 const centerName = inv.center?.name || (typeof inv.centerId === 'object' ? inv.centerId?.name : '');
                 const studentName = inv.student?.name;
                 const billingDisplay = studentName
@@ -528,6 +539,44 @@ export function InvoicesPanel() {
                   </div>
                 );
               })}
+              
+              {/* Pagination Controls */}
+              {(() => {
+                const validInvoices = invoices.filter(inv => inv?.id);
+                const totalPages = Math.max(1, Math.ceil(validInvoices.length / itemsPerPage));
+                if (totalPages <= 1) return null;
+                return (
+                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, validInvoices.length)} of {validInvoices.length} invoices
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+                  </>
+                );
+              })()}
             </div>
           )}
         </CardContent>

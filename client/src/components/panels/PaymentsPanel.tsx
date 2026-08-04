@@ -13,6 +13,11 @@ export function PaymentsPanel() {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [students, setStudents] = useState<any[]>([]);
   const [paymentTarget, setPaymentTarget] = useState<'invoice' | 'student'>('invoice');
@@ -290,7 +295,13 @@ export function PaymentsPanel() {
             <div className="text-center py-8 text-muted-foreground">No payments found</div>
           ) : (
             <div className="space-y-2">
-              {payments.filter(p => p?.id).map((payment) => (
+              {(() => {
+                const validPayments = payments.filter(p => p?.id);
+                const totalPages = Math.max(1, Math.ceil(validPayments.length / itemsPerPage));
+                const paginatedPayments = validPayments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                return (
+                  <>
+              {paginatedPayments.map((payment) => (
                 <div key={payment.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center">
@@ -317,6 +328,44 @@ export function PaymentsPanel() {
                   </div>
                 </div>
               ))}
+              
+              {/* Pagination Controls */}
+              {(() => {
+                const validPayments = payments.filter(p => p?.id);
+                const totalPages = Math.max(1, Math.ceil(validPayments.length / itemsPerPage));
+                if (totalPages <= 1) return null;
+                return (
+                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, validPayments.length)} of {validPayments.length} payments
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+                  </>
+                );
+              })()}
             </div>
           )}
         </CardContent>

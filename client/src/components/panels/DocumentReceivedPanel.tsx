@@ -14,6 +14,10 @@ import api from '@/lib/api';
 export function DocumentReceivedPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
   const [showReceivedModal, setShowReceivedModal] = useState(false);
   const [students, setStudents] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -84,8 +88,13 @@ export function DocumentReceivedPanel() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {logs.map((log) => (
-                  <TableRow key={log.id}>
+                {(() => {
+                  const totalPages = Math.max(1, Math.ceil(logs.length / itemsPerPage));
+                  const paginatedLogs = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                  return (
+                    <>
+                      {paginatedLogs.map((log) => (
+                        <TableRow key={log.id}>
                     <TableCell>
                       <div className="font-medium">{log.student?.name || 'N/A'}</div>
                       <div className="text-xs text-muted-foreground">{log.student?.enrollmentNo || 'N/A'}</div>
@@ -96,12 +105,49 @@ export function DocumentReceivedPanel() {
                       <Badge variant="secondary">{log.status}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button size="sm" variant="outline">View</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        <Button size="sm" variant="outline">View</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              );
+            })()}
               </TableBody>
             </Table>
+            
+            {/* Pagination Controls */}
+            {(() => {
+              const totalPages = Math.max(1, Math.ceil(logs.length / itemsPerPage));
+              if (totalPages <= 1) return null;
+              return (
+                <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
+                  <div className="text-sm text-muted-foreground">
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, logs.length)} of {logs.length} logs
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <div className="text-sm font-medium px-2">
+                      Page {currentPage} of {totalPages}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </CardContent>

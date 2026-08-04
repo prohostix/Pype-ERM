@@ -14,6 +14,14 @@ export function StudentPortalManagementPanel() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
   
   // Dialog State
   const [manageDialogOpen, setManageDialogOpen] = useState(false);
@@ -87,6 +95,9 @@ export function StudentPortalManagementPanel() {
     s.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
+  const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <Card className="border-none shadow-none">
       <CardHeader>
@@ -138,7 +149,7 @@ export function StudentPortalManagementPanel() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredStudents.map(student => (
+                paginatedStudents.map(student => (
                   <TableRow key={student.id}>
                     <TableCell>
                       <div className="font-medium">{student.name}</div>
@@ -168,6 +179,36 @@ export function StudentPortalManagementPanel() {
               )}
             </TableBody>
           </Table>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
+              <div className="text-sm text-muted-foreground">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+              </div>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <div className="text-sm font-medium px-2">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
 

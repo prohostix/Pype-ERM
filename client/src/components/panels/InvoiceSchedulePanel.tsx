@@ -16,6 +16,14 @@ export function InvoiceSchedulePanel() {
   const [generating, setGenerating] = useState<string | null>(null);
   const [generatingAll, setGeneratingAll] = useState(false);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
   useEffect(() => {
     api.get('/students').then(r => setStudents(r.data.data || [])).catch(() => {});
   }, []);
@@ -60,6 +68,9 @@ export function InvoiceSchedulePanel() {
     s.enrollmentNo?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
+  const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const scheduleStatusIcon = (s: any) => {
     if (s.status === 'paid') return <CheckCircle className="w-4 h-4 text-emerald-500" />;
     if (s.status === 'overdue') return <AlertCircle className="w-4 h-4 text-rose-500" />;
@@ -96,7 +107,7 @@ export function InvoiceSchedulePanel() {
               <div className="text-center text-sm text-muted-foreground py-8">No students found</div>
             ) : (
               <div className="space-y-1.5">
-                {filteredStudents.map(s => (
+                {paginatedStudents.map(s => (
                   <button
                     key={s.id}
                     className={`w-full text-left p-2.5 rounded-lg border transition-colors text-sm
@@ -107,6 +118,38 @@ export function InvoiceSchedulePanel() {
                     <div className="text-xs text-muted-foreground">{s.enrollmentNo} • {s.program?.name || 'No program'}</div>
                   </button>
                 ))}
+              </div>
+            )}
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex flex-col items-center justify-center pt-4 pb-2 border-t mt-4 gap-2">
+                <div className="text-[10px] text-muted-foreground text-center">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="w-6 h-6"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    {'<'}
+                  </Button>
+                  <div className="text-[10px] font-medium px-1">
+                    {currentPage} / {totalPages}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="w-6 h-6"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    {'>'}
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>

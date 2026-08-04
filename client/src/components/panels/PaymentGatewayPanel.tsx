@@ -45,6 +45,11 @@ export function PaymentGatewayPanel() {
   const [qrOpen, setQrOpen] = useState(false);
   const [selectedLink, setSelectedLink] = useState<any>(null);
   const [search, setSearch] = useState('');
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
     studentId: '',
@@ -123,6 +128,10 @@ export function PaymentGatewayPanel() {
     l.student?.enrollmentNo?.toLowerCase().includes(search.toLowerCase())
   );
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
   return (
     <div className="space-y-4">
       <Card>
@@ -167,7 +176,12 @@ export function PaymentGatewayPanel() {
             </div>
           ) : (
             <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
-              {filtered.map(link => (
+              {(() => {
+                const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+                const paginatedFiltered = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                return (
+                  <>
+              {paginatedFiltered.map(link => (
                 <div key={link.id} className="flex items-center justify-between p-3.5 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                   <div className="flex items-center gap-3">
                     <div>{statusIcon(link.status)}</div>
@@ -202,6 +216,43 @@ export function PaymentGatewayPanel() {
                   </div>
                 </div>
               ))}
+              
+              {/* Pagination Controls */}
+              {(() => {
+                const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+                if (totalPages <= 1) return null;
+                return (
+                  <div className="flex items-center justify-between p-4 border-t mt-4 rounded-md bg-slate-50 dark:bg-slate-900/20">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length} links
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+                  </>
+                );
+              })()}
             </div>
           )}
         </CardContent>
