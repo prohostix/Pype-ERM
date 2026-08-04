@@ -172,6 +172,22 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     }
   };
 
+  const markAsCompleted = async () => {
+    try {
+      setIsSubmitting(true);
+      const res = await api.updateStudent(student.id, { isPrevious: true });
+      if (res.success) {
+        toast.success('Student marked as completed');
+        if (onUpdate) onUpdate();
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to mark student as completed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
@@ -320,7 +336,14 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <FileText className="w-5 h-5 text-emerald-600" />
                   <span className="font-semibold text-emerald-900 dark:text-emerald-100">Certificate Process & Course Completed</span>
                 </div>
-                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">Mark as Completed</Button>
+                <Button 
+                  size="sm" 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  onClick={markAsCompleted}
+                  disabled={isSubmitting || student.isPrevious}
+                >
+                  {student.isPrevious ? 'Completed' : 'Mark as Completed'}
+                </Button>
               </div>
             </CardContent>
           </Card>

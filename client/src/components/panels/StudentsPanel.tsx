@@ -2105,7 +2105,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         <TabsList>
           <TabsTrigger value="all">All Students ({students.length})</TabsTrigger>
           <TabsTrigger value="current">Current Students ({students.filter(s => s && !s.isPrevious).length})</TabsTrigger>
-          <TabsTrigger value="previous">Previous Students ({students.filter(s => s && s.isPrevious).length})</TabsTrigger>
+          <TabsTrigger value="previous">Completed Students ({students.filter(s => s && s.isPrevious).length})</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -2320,7 +2320,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 onChange={(e) => setBulkIsPrevious(e.target.checked)}
                 className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
-              <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Previous Students</Label>
+              <Label htmlFor="bulkIsPrevious" className="cursor-pointer">Mark all as Completed Students</Label>
             </div>
 
             <div className="space-y-1.5">
