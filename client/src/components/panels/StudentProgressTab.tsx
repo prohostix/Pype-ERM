@@ -50,11 +50,12 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isPgCourse = student?.program?.name?.toLowerCase().includes('pg') || student?.programId?.name?.toLowerCase().includes('pg');
-  const yearsToRender = isPgCourse ? 2 : 3;
+  const yearsToRender = student?.program?.duration || (isPgCourse ? 2 : 3);
+  const semestersToRender = yearsToRender * 2; // Default to 2 semesters per year
 
-  const [academicYears, setAcademicYears] = useState(
-    Array.from({ length: yearsToRender }).map((_, i) => ({
-      year: i + 1,
+  const [academicTerms, setAcademicTerms] = useState(
+    Array.from({ length: semestersToRender }).map((_, i) => ({
+      term: i + 1,
       feeCollection: 'Auto',
       reRegistration: 'Pending',
       examRegistration: 'Pending',
@@ -134,9 +135,9 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     }
   };
 
-  const updateAcademicYear = (yearIndex: number, field: string, value: string) => {
-    setAcademicYears(years => years.map((y, i) => 
-      i === yearIndex ? { ...y, [field]: value } : y
+  const updateAcademicTerm = (termIndex: number, field: string, value: string) => {
+    setAcademicTerms(terms => terms.map((t, i) => 
+      i === termIndex ? { ...t, [field]: value } : t
     ));
   };
 
@@ -198,10 +199,10 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
           Academic Progress
         </h3>
         <div className="space-y-4">
-          {academicYears.map((year, index) => (
+          {academicTerms.map((term, index) => (
             <Card key={index} className="shadow-sm border-border overflow-hidden">
               <div className="bg-muted/50 px-4 py-2 border-b border-border flex items-center justify-between">
-                <span className="font-bold text-sm">Year {year.year}</span>
+                <span className="font-bold text-sm">Semester {term.term}</span>
               </div>
               <CardContent className="p-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -213,8 +214,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Re-registration</span>
                     <select 
                       className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
-                      value={year.reRegistration}
-                      onChange={(e) => updateAcademicYear(index, 'reRegistration', e.target.value)}
+                      value={term.reRegistration}
+                      onChange={(e) => updateAcademicTerm(index, 'reRegistration', e.target.value)}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
@@ -224,8 +225,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Exam Registration</span>
                     <select 
                       className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
-                      value={year.examRegistration}
-                      onChange={(e) => updateAcademicYear(index, 'examRegistration', e.target.value)}
+                      value={term.examRegistration}
+                      onChange={(e) => updateAcademicTerm(index, 'examRegistration', e.target.value)}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
@@ -235,8 +236,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Result Status</span>
                     <select 
                       className="w-full h-8 text-sm bg-background border border-input rounded-md px-2"
-                      value={year.resultStatus}
-                      onChange={(e) => updateAcademicYear(index, 'resultStatus', e.target.value)}
+                      value={term.resultStatus}
+                      onChange={(e) => updateAcademicTerm(index, 'resultStatus', e.target.value)}
                     >
                       <option value="Pending">⏳ Pending</option>
                       <option value="Passed">✅ Passed</option>
@@ -252,8 +253,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <textarea 
                     className="w-full min-h-[60px] text-sm bg-background border border-input rounded-md p-2 placeholder:text-muted-foreground/50"
                     placeholder="e.g. Failed in Mathematics Supplementary Exam on 15-Aug-2026"
-                    value={year.remarks}
-                    onChange={(e) => updateAcademicYear(index, 'remarks', e.target.value)}
+                    value={term.remarks}
+                    onChange={(e) => updateAcademicTerm(index, 'remarks', e.target.value)}
                   />
                 </div>
               </CardContent>
