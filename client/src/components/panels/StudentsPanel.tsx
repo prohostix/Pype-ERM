@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign, Eye } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign, Eye, TrendingUp } from 'lucide-react';
+import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -171,6 +172,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   // --- Quick Payment Dialog state ---
   const [paymentDialogStudent, setPaymentDialogStudent] = useState<any>(null);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [progressDialogOpen, setProgressDialogOpen] = useState(false);
+  const [progressDialogStudent, setProgressDialogStudent] = useState<any>(null);
   const [paymentInvoices, setPaymentInvoices] = useState<any[]>([]);
   const [paymentInvoicesLoading, setPaymentInvoicesLoading] = useState(false);
   const [paymentForm, setPaymentForm] = useState({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
@@ -800,6 +803,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     setScheduleDialogOpen(true);
     setNewSchedule({ title: 'Tuition Fee Installment', amount: '', dueDate: '' });
     fetchSchedules(student.id);
+  };
+
+  const handleOpenProgress = (student: any) => {
+    setProgressDialogStudent(student);
+    setProgressDialogOpen(true);
   };
 
   const handleOpenPaymentDialog = async (student: any) => {
@@ -2242,9 +2250,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <CalendarDays className="w-4 h-4 text-indigo-500" />
                       </Button>
 
-                      {/* Log Payment */}
-                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenPaymentDialog(student)} title="Log Payment">
-                        <DollarSign className="w-4 h-4 text-emerald-600" />
+                      {/* Update Progress */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenProgress(student)} title="Update Progress">
+                        <TrendingUp className="w-4 h-4 text-emerald-600" />
                       </Button>
 
                       {/* View/Change Credentials */}
@@ -2592,6 +2600,24 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <Button variant="outline" onClick={() => setCredDialogOpen(false)}>Close</Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      
+      {/* Progress Dialog */}
+      <Dialog open={progressDialogOpen} onOpenChange={setProgressDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Update Progress - {progressDialogStudent?.name}</DialogTitle>
+          </DialogHeader>
+          {progressDialogStudent && (
+            <StudentProgressTab 
+              student={progressDialogStudent} 
+              onUpdate={() => {
+                fetchStudents();
+              }} 
+            />
+          )}
         </DialogContent>
       </Dialog>
 
