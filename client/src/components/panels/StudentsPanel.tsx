@@ -87,6 +87,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [filterBranchId, setFilterBranchId] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter, searchQuery, filterUniversityId, filterSessionId, filterBranchId, sortBy]);
+
   // Credentials Dialog State
   const [credDialogOpen, setCredDialogOpen] = useState(false);
   const [credTarget, setCredTarget] = useState<any>(null);
@@ -1106,6 +1114,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       return nameA.localeCompare(nameB);
     }
   });
+
+  const totalPages = Math.max(1, Math.ceil(filteredStudents.length / itemsPerPage));
+  const paginatedStudents = filteredStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   if (triggerOpen !== undefined) {
     return (
@@ -2171,7 +2182,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             <div className="text-center py-8 text-muted-foreground">No students found matching this criteria</div>
           ) : (
             <div className="space-y-3">
-              {filteredStudents.map((student, index) => {
+              {paginatedStudents.map((student, index) => {
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : student.center?.name || '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
                 const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
@@ -2180,7 +2191,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3">
                     <div className="flex items-center gap-4">
                       <div className="w-6 text-center text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0">
-                        {index + 1}
+                        {(currentPage - 1) * itemsPerPage + index + 1}
                       </div>
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
@@ -2251,6 +2262,36 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
                 );
               })}
+              
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
+                  <div className="text-sm text-muted-foreground">
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <div className="text-sm font-medium px-2">
+                      Page {currentPage} of {totalPages}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
