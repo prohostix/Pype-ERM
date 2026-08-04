@@ -4,6 +4,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle, 
+  AlertDialogTrigger 
+} from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
@@ -336,14 +347,29 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <FileText className="w-5 h-5 text-emerald-600" />
                   <span className="font-semibold text-emerald-900 dark:text-emerald-100">Certificate Process & Course Completed</span>
                 </div>
-                <Button 
-                  size="sm" 
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                  onClick={markAsCompleted}
-                  disabled={isSubmitting || student.isPrevious}
-                >
-                  {student.isPrevious ? 'Completed' : 'Mark as Completed'}
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      size="sm" 
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                      disabled={isSubmitting || student.isPrevious}
+                    >
+                      {student.isPrevious ? 'Completed' : 'Mark as Completed'}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will mark the student as completed and move them to the completed students list. Are you sure you want to proceed?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={markAsCompleted}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardContent>
           </Card>
