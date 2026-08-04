@@ -61,15 +61,19 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isPgCourse = student?.program?.name?.toLowerCase().includes('pg') || student?.programId?.name?.toLowerCase().includes('pg');
-  // Program duration is in months (e.g., 36 months = 6 semesters)
-  const semestersToRender = student?.program?.duration ? Math.ceil(student.program.duration / 6) : (isPgCourse ? 4 : 6);
+  // Program duration is in months (e.g., 36 months = 6 semesters or 3 years)
+  const hasSemesters = student?.program?.hasSemesters || student?.programId?.hasSemesters;
+  const divisor = hasSemesters ? 6 : 12;
+  const defaultTerms = isPgCourse ? (hasSemesters ? 4 : 2) : (hasSemesters ? 6 : 3);
+  const termsToRender = student?.program?.duration ? Math.ceil(student.program.duration / divisor) : defaultTerms;
+  const termLabel = hasSemesters ? 'Semester' : 'Year';
 
   const parsedAcademicProgress = typeof student?.academicProgress === 'string'
     ? JSON.parse(student.academicProgress)
     : (student?.academicProgress || []);
 
   const [academicTerms, setAcademicTerms] = useState(
-    Array.from({ length: semestersToRender }).map((_, i) => {
+    Array.from({ length: termsToRender }).map((_, i) => {
       const existingTerm = parsedAcademicProgress.find((t: any) => t.term === i + 1);
       return existingTerm || {
         term: i + 1,
@@ -172,7 +176,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
       });
       
       if (res.success) {
-        toast.success(`Semester ${updatedTerms[termIndex].term} progress saved successfully.`);
+        toast.success(`${termLabel} ${updatedTerms[termIndex].term} progress saved successfully.`);
         if (onUpdate) onUpdate();
       }
     } catch (err: any) {
@@ -263,7 +267,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
             return (
             <Card key={index} className="shadow-sm border-border overflow-hidden">
               <div className="bg-muted/50 px-4 py-2 border-b border-border flex items-center justify-between">
-                <span className="font-bold text-sm">Semester {term.term}</span>
+                <span className="font-bold text-sm">{termLabel} {term.term}</span>
               </div>
               <CardContent className="p-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

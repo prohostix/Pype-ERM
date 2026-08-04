@@ -86,6 +86,7 @@ export function HRUsersPanel() {
     additionalDepartmentIds: [] as string[],
     subDepartmentId: '',
     reportingTo: '',
+    branchId: 'none',
   });
 
   const [transferData, setTransferData] = useState({
@@ -206,6 +207,7 @@ export function HRUsersPanel() {
           additionalDepartmentIds: additionalDepts,
           subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
+          branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : null,
         });
       } else {
         await api.post('/users', {
@@ -214,6 +216,7 @@ export function HRUsersPanel() {
           departmentId: (formData.departmentId && formData.departmentId !== 'none') ? formData.departmentId : undefined,
           subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
+          branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : undefined,
         });
       }
       setDialogOpen(false);
@@ -335,6 +338,7 @@ export function HRUsersPanel() {
       additionalDepartmentIds: additionalIds,
       subDepartmentId: subDeptId?.toString() || '',
       reportingTo: reportingToId?.toString() || '',
+      branchId: bId?.toString() || 'none',
     });
     setDialogOpen(true);
   };
@@ -377,6 +381,7 @@ export function HRUsersPanel() {
       additionalDepartmentIds: [],
       subDepartmentId: '',
       reportingTo: '',
+      branchId: 'none',
     });
     setEditingUser(null);
   };
@@ -565,6 +570,27 @@ export function HRUsersPanel() {
                     {departments.map((dept) => (
                       <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id)!}>
                         {dept.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="branch">Branch <span className="text-xs text-muted-foreground font-normal">(Main Office if empty)</span></Label>
+                <Select
+                  value={formData.branchId}
+                  onValueChange={(value) => {
+                    setFormData({ ...formData, branchId: value });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select branch (optional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Main Office / No Branch</SelectItem>
+                    {branches.map((branch: any) => (
+                      <SelectItem key={branch.id} value={branch.id}>
+                        {branch.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
