@@ -90,6 +90,7 @@ const navItems: NavItem[] = [
       { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo'], badge: 1 },
       { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo'] },
       { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo'] },
+      { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo'] },
     ],
   },
   {
@@ -287,7 +288,7 @@ const navItems: NavItem[] = [
     id: 'meetings',
     label: 'Meetings',
     icon: Video,
-    roles: ['superadmin', 'org_admin', 'ceo', 'ops_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'bde', 'employee'],
+    // No roles array means visible to all users
   },
   {
     id: 'settings',
