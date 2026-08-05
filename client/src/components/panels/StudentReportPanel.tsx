@@ -19,6 +19,15 @@ export function StudentReportPanel() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [programFilter, setProgramFilter] = useState('all');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, programFilter]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -62,6 +71,12 @@ export function StudentReportPanel() {
       return matchesSearch && matchesStatus && matchesProgram;
     });
   }, [students, searchTerm, statusFilter, programFilter]);
+
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+  const paginatedStudents = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredStudents.slice(start, start + itemsPerPage);
+  }, [filteredStudents, currentPage]);
 
   // Aggregate Data for Charts
   const programData = useMemo(() => {
@@ -322,7 +337,7 @@ export function StudentReportPanel() {
                           </td>
                         </tr>
                       ) : (
-                        filteredStudents.slice(0, 50).map((student) => (
+                        paginatedStudents.map((student) => (
                           <tr key={student.id} className="border-b last:border-0 hover:bg-muted/50">
                             <td className="p-3 font-medium">{student.name}</td>
                             <td className="p-3">
@@ -357,9 +372,32 @@ export function StudentReportPanel() {
                     </tbody>
                   </table>
                 </div>
-                {filteredStudents.length > 50 && (
-                  <div className="mt-4 text-center text-sm text-muted-foreground">
-                    Showing top 50 of {filteredStudents.length} students. Export to CSV to see all.
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <div className="text-sm font-medium px-2">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
