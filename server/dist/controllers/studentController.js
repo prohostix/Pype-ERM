@@ -243,11 +243,6 @@ export const bulkImportStudents = asyncHandler(async (req, res) => {
             }
             // Check if student email is already registered
             const existingStudent = await prisma.student.findUnique({ where: { email: s.email } });
-            if (existingStudent) {
-                results.skipped++;
-                results.errors.push(`Student with email ${s.email} already exists`);
-                continue;
-            }
             // Resolve program
             let program = null;
             if (s.programId) {
@@ -359,36 +354,48 @@ export const bulkImportStudents = asyncHandler(async (req, res) => {
                     resolvedSessionId = sessionRec.id;
                 }
             }
-            // Create student record
-            await prisma.student.create({
-                data: {
-                    name: s.name,
-                    email: s.email,
-                    phone: s.phone || '',
-                    address: s.address || '',
-                    enrollmentNo: generatedUid,
-                    programId: program.id,
-                    universityId: program.universityId,
-                    centerId: resolvedCenterId || undefined,
-                    sessionId: resolvedSessionId || undefined,
-                    status: s.status || 'active',
-                    isPrevious: isPrevious || s.isPrevious || false,
-                    organizationId,
-                    branchId: branchId || undefined,
-                    dob: s.dob ? new Date(s.dob) : undefined,
-                    admissionDate: s.admissionDate ? new Date(s.admissionDate) : undefined,
-                    credentials: { email: s.email, password: defaultPassword },
-                    enrolledBy: SALES_ROLES.includes(req.user.role) ? req.user.id : (salesUserId && salesUserId !== 'none' ? salesUserId : null)
-                }
-            });
-            results.imported++;
-            // Send credentials email — wrapped separately so a mail failure
-            // does NOT mark an already-saved student record as failed.
-            try {
-                await sendEmail(s.email, 'Your Student Portal Credentials', `Hello ${s.name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${s.email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`, `<p>Hello <strong>${s.name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${s.email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`);
+            // Create or update student record
+            const studentData = {
+                name: s.name,
+                email: s.email,
+                phone: s.phone || '',
+                address: s.address || '',
+                enrollmentNo: generatedUid,
+                programId: program.id,
+                universityId: program.universityId,
+                centerId: resolvedCenterId || undefined,
+                sessionId: resolvedSessionId || undefined,
+                status: s.status || 'active',
+                isPrevious: isPrevious || s.isPrevious || false,
+                organizationId,
+                branchId: branchId || undefined,
+                dob: s.dob ? new Date(s.dob) : undefined,
+                admissionDate: s.admissionDate ? new Date(s.admissionDate) : undefined,
+                enrolledBy: SALES_ROLES.includes(req.user.role) ? req.user.id : (salesUserId && salesUserId !== 'none' ? salesUserId : null)
+            };
+            if (existingStudent) {
+                await prisma.student.update({
+                    where: { id: existingStudent.id },
+                    data: studentData
+                });
             }
-            catch (mailErr) {
-                results.errors.push(`Student ${s.name} (${s.email}) imported but email delivery failed: ${mailErr.message}`);
+            else {
+                await prisma.student.create({
+                    data: {
+                        ...studentData,
+                        credentials: { email: s.email, password: defaultPassword }
+                    }
+                });
+            }
+            results.imported++;
+            // Send credentials email only for new students
+            if (!existingStudent) {
+                try {
+                    await sendEmail(s.email, 'Your Student Portal Credentials', `Hello ${s.name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${s.email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`, `<p>Hello <strong>${s.name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${s.email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`);
+                }
+                catch (mailErr) {
+                    results.errors.push(`Student ${s.name} (${s.email}) imported but email delivery failed: ${mailErr.message}`);
+                }
             }
         }
         catch (err) {
@@ -537,8 +544,18 @@ export const updateAdmissionProgress = asyncHandler(async (req, res) => {
         return;
     }
     let admissionProgress = {};
-    if (student.admissionProgress && typeof student.admissionProgress === 'object') {
-        admissionProgress = student.admissionProgress;
+    if (student.admissionProgress) {
+        if (typeof student.admissionProgress === 'object') {
+            admissionProgress = student.admissionProgress;
+        }
+        else if (typeof student.admissionProgress === 'string') {
+            try {
+                admissionProgress = JSON.parse(student.admissionProgress);
+            }
+            catch (e) {
+                console.error('Failed to parse admissionProgress', e);
+            }
+        }
     }
     const currentStepData = admissionProgress[stepId] || {};
     const isCurrentlyCompleted = currentStepData.completed === true;

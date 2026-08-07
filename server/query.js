@@ -1,10 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 async function main() {
-  const schedules = await prisma.paymentSchedule.findMany({});
-  console.log("Total schedules:", schedules.length);
-  if (schedules.length > 0) {
-    console.log("Sample:", schedules[0]);
-  }
+  const branches = await prisma.branch.findMany({ select: { id: true, name: true } });
+  console.log(branches);
 }
-main().catch(console.error).finally(() => prisma.$disconnect());
+main();

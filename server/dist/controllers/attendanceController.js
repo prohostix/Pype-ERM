@@ -199,9 +199,10 @@ export const getMonthlyLateSummary = asyncHandler(async (req, res) => {
 });
 export const getAttendances = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
+    where.user = { role: { not: 'staff' } };
     // Branch isolation
     if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
-        where.user = { branchId: req.user.branchId };
+        where.user.branchId = req.user.branchId;
     }
     let isDateFiltered = false;
     let targetDate = new Date();

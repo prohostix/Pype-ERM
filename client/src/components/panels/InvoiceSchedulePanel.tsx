@@ -123,31 +123,29 @@ export function InvoiceSchedulePanel() {
             
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="flex flex-col items-center justify-center pt-4 pb-2 border-t mt-4 gap-2">
-                <div className="text-[10px] text-muted-foreground text-center">
+              <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
+                <div className="text-sm text-muted-foreground">
                   Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <Button 
                     variant="outline" 
-                    size="icon"
-                    className="w-6 h-6"
+                    size="sm" 
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
                   >
-                    {'<'}
+                    Previous
                   </Button>
-                  <div className="text-[10px] font-medium px-1">
-                    {currentPage} / {totalPages}
+                  <div className="text-sm font-medium px-2">
+                    Page {currentPage} of {totalPages}
                   </div>
                   <Button 
                     variant="outline" 
-                    size="icon"
-                    className="w-6 h-6"
+                    size="sm" 
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
                   >
-                    {'>'}
+                    Next
                   </Button>
                 </div>
               </div>

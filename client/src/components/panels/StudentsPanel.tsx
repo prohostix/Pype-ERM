@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, DollarSign, Eye, TrendingUp } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -57,6 +57,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
   const [bulkErrors, setBulkErrors] = useState<string[]>([]);
   const [bulkUniversityId, setBulkUniversityId] = useState<string>('');
+  const [bulkProgramId, setBulkProgramId] = useState<string>('none');
+  const [bulkSessionId, setBulkSessionId] = useState<string>('none');
 
   // Notification Dialog State
   const [notifDialogOpen, setNotifDialogOpen] = useState(false);
@@ -169,15 +171,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [salesUsers, setSalesUsers] = useState<any[]>([]);
   const [selectedSalesUserId, setSelectedSalesUserId] = useState<string>('none');
 
-  // --- Quick Payment Dialog state ---
-  const [paymentDialogStudent, setPaymentDialogStudent] = useState<any>(null);
-  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [progressDialogOpen, setProgressDialogOpen] = useState(false);
   const [progressDialogStudent, setProgressDialogStudent] = useState<any>(null);
-  const [paymentInvoices, setPaymentInvoices] = useState<any[]>([]);
-  const [paymentInvoicesLoading, setPaymentInvoicesLoading] = useState(false);
-  const [paymentForm, setPaymentForm] = useState({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
-  const [paymentSaving, setPaymentSaving] = useState(false);
 
   const fetchSalesUsers = async () => {
     try {
@@ -629,10 +624,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         phone: (s.phone || '').toString(),
         address: s.address || '',
         enrollmentNo: (s.enrollmentno || s.enrollmentNo || s.enrollment_no || s['enrollment no'] || s['enrollment no.'] || s['enrollmentno.'] || s.enrollment || s.entrollment || s.entrollmentno || s.entrollment_no || s.enrollmentnumber || s['enrollment number'] || s.enrollno || s['enroll no'] || s.enrollnumber || s['enroll number'] || s.regno || s.reg_no || s['reg no'] || s.registration || s.registration_no || s['registration no'] || '').toString().trim(),
-        programId: resolvedProgramId,
+        programId: (bulkProgramId && bulkProgramId !== 'none') ? bulkProgramId : resolvedProgramId,
         ...(resolvedCenterId ? { centerId: resolvedCenterId } : {}),
         ...(dob ? { dob: dob.toString() } : {}),
-        ...(resolvedSessionId ? { sessionId: resolvedSessionId } : (sessionStr ? { session: sessionStr } : {})),
+        ...((bulkSessionId && bulkSessionId !== 'none') ? { sessionId: bulkSessionId } : (resolvedSessionId ? { sessionId: resolvedSessionId } : (sessionStr ? { session: sessionStr } : {}))),
         ...(admissionDate ? { admissionDate: admissionDate.toString() } : {}),
         status: s.status || 'active',
         isPrevious: bulkIsPrevious
@@ -810,202 +805,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     setProgressDialogOpen(true);
   };
 
-  const handleOpenPaymentDialog = async (student: any) => {
-    setPaymentDialogStudent(student);
-    setPaymentDialogOpen(true);
-    setPaymentInvoicesLoading(true);
-    setPaymentForm({ invoiceId: '', amount: '', method: 'cash', referenceNo: '' });
-    try {
-      const res = await api.get(`/finance/invoices?studentId=${student.id}`);
-      setPaymentInvoices(res.data.data || []);
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to load student invoices');
-    } finally {
-      setPaymentInvoicesLoading(false);
-    }
-  };
 
-  const handleSavePayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!paymentForm.amount) {
-      toast.error('Please enter the payment amount');
-      return;
-    }
-    setPaymentSaving(true);
-    try {
-      const res = await api.post('/finance/payments', {
-        invoiceId: paymentForm.invoiceId === 'auto' ? undefined : paymentForm.invoiceId || undefined,
-        studentId: paymentDialogStudent.id,
-        amount: Number(paymentForm.amount),
-        method: paymentForm.method,
-        referenceNo: paymentForm.referenceNo
-      });
-      toast.success('Payment logged successfully!');
-      setPaymentDialogOpen(false);
-      
-      // Auto-trigger printable receipt receipt
-      if (res.data.success && res.data.data) {
-        printPaymentReceipt(res.data.data);
-      }
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.response?.data?.message || 'Failed to save payment');
-    } finally {
-      setPaymentSaving(false);
-    }
-  };
-
-  const printPaymentReceipt = (payment: any) => {
-    const invoice = payment.invoice || {};
-    const student = invoice.student || paymentDialogStudent || {};
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    // Fetch org details from currently logged-in user context
-    const orgName = user?.organization?.name || 'Pype ERM Institution';
-    const orgLogo = user?.organization?.logo 
-      ? (user.organization.logo.startsWith('http') ? user.organization.logo : `${api.getBaseUrl().replace('/api/v1', '')}${user.organization.logo}`)
-      : '';
-    const orgAddress = user?.organization?.address || student.center?.name || 'Main Study Center';
-
-    const dateStr = new Date(payment.receivedAt).toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-
-    // Compute balance remaining
-    const totalFee = Number(invoice.total) || Number(payment.amount);
-    const thisPay = Number(payment.amount);
-    const totalPaidOnInvoice = Array.isArray(invoice.payments)
-      ? invoice.payments.reduce((acc: number, p: any) => acc + p.amount, 0)
-      : thisPay;
-    const balanceDue = Math.max(0, totalFee - totalPaidOnInvoice);
-
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Payment Receipt - ${invoice.invoiceNo || 'Receipt'}</title>
-          <style>
-            body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; padding: 40px; line-height: 1.6; background-color: #ffffff; }
-            .receipt-container { max-width: 800px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
-            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #6366f1; padding-bottom: 24px; margin-bottom: 30px; }
-            .logo-area { display: flex; align-items: center; gap: 12px; }
-            .logo-img { max-height: 60px; max-width: 150px; object-fit: contain; }
-            .logo-txt { font-size: 22px; font-weight: 800; color: #4f46e5; }
-            .org-address { font-size: 13px; color: #64748b; margin-top: 4px; }
-            .title-area { text-align: right; }
-            .title { font-size: 26px; font-weight: 900; color: #0f172a; margin: 0; }
-            .meta-info { font-size: 13px; color: #475569; margin-top: 8px; line-height: 1.4; }
-            .details-grid { display: grid; grid-cols-2; display: flex; justify-content: space-between; margin-bottom: 35px; gap: 30px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #f1f5f9; }
-            .details-col h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #828fa9; margin: 0 0 8px 0; letter-spacing: 0.05em; }
-            .details-col p { margin: 0; font-size: 14px; color: #334155; line-height: 1.5; }
-            .details-col strong { color: #0f172a; }
-            .table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-            .table th { background: #f1f5f9; border-bottom: 2px solid #cbd5e1; padding: 12px 16px; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #475569; text-align: left; }
-            .table td { border-bottom: 1px solid #e2e8f0; padding: 14px 16px; font-size: 14px; color: #334155; }
-            .totals-container { display: flex; justify-content: flex-end; margin-bottom: 50px; }
-            .totals-table { width: 320px; border-collapse: collapse; }
-            .totals-table td { padding: 8px 12px; font-size: 14px; color: #475569; }
-            .totals-table tr.highlight td { font-weight: 700; font-size: 16px; color: #0f172a; border-top: 2px solid #e2e8f0; padding-top: 12px; }
-            .totals-table tr.balance td { font-weight: 700; font-size: 15px; color: #b91c1c; padding-top: 8px; }
-            .signatures { display: flex; justify-content: space-between; margin-top: 60px; padding: 0 20px; }
-            .sig-line { border-top: 1px solid #94a3b8; width: 220px; text-align: center; padding-top: 8px; font-size: 12px; font-weight: 600; color: #475569; }
-            .footer { border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center; font-size: 11px; color: #94a3b8; margin-top: 60px; }
-            @media print {
-              body { padding: 0; }
-              .receipt-container { border: none; box-shadow: none; padding: 0; }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="receipt-container">
-            <div class="header">
-              <div class="logo-area">
-                ${orgLogo ? `<img src="${orgLogo}" class="logo-img" alt="${orgName}"/>` : `<div class="logo-txt">${orgName}</div>`}
-                <div class="org-address">${orgAddress}</div>
-              </div>
-              <div class="title-area">
-                <h1 class="title">RECEIPT</h1>
-                <div class="meta-info">
-                  <strong>Receipt No:</strong> REC-${payment.id.slice(-6).toUpperCase()}<br/>
-                  <strong>Invoice Ref:</strong> ${invoice.invoiceNo || 'N/A'}<br/>
-                  <strong>Date:</strong> ${dateStr}
-                </div>
-              </div>
-            </div>
-            
-            <div class="details-grid">
-              <div class="details-col">
-                <h3>Received From:</h3>
-                <p>
-                  <strong>${student.name || 'N/A'}</strong><br/>
-                  Enrollment No: ${student.enrollmentNo || 'N/A'}<br/>
-                  Email: ${student.email || 'N/A'}<br/>
-                  Program: ${student.program?.name || 'N/A'}
-                </p>
-              </div>
-              <div class="details-col" style="text-align: right;">
-                <h3>Payment Details:</h3>
-                <p>
-                  Method: <strong style="text-transform: uppercase;">${payment.method}</strong><br/>
-                  Transaction Ref: <strong>${payment.referenceNo || 'N/A'}</strong>
-                </p>
-              </div>
-            </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th style="text-align: right;">Total Amount</th>
-                  <th style="text-align: right;">Paid Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Program Admission installment Fee & Allied Charges</td>
-                  <td style="text-align: right;">₹${totalFee.toLocaleString('en-IN')}</td>
-                  <td style="text-align: right; font-weight: 700; color: #15803d;">₹${thisPay.toLocaleString('en-IN')}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="totals-container">
-              <table class="totals-table">
-                <tr>
-                  <td>Total Invoiced Fee:</td>
-                  <td style="text-align: right;">₹${totalFee.toLocaleString('en-IN')}</td>
-                </tr>
-                <tr>
-                  <td>Total Payments Received:</td>
-                  <td style="text-align: right; color: #15803d;">₹${totalPaidOnInvoice.toLocaleString('en-IN')}</td>
-                </tr>
-                <tr class="balance">
-                  <td>Remaining Balance Due:</td>
-                  <td style="text-align: right; color: ${balanceDue > 0 ? '#b91c1c' : '#15803d'};">₹${balanceDue.toLocaleString('en-IN')}</td>
-                </tr>
-              </table>
-            </div>
-
-            <div class="signatures">
-              <div class="sig-line">Student Signature</div>
-              <div class="sig-line">Authorized Signatory</div>
-            </div>
-
-            <div class="footer">
-              This is a computer-generated document. No physical signature required.
-            </div>
-          </div>
-          <script>
-            window.onload = function() { window.print(); }
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-  };
 
   const fetchSchedules = async (studentId: string) => {
     try {
@@ -2339,6 +2139,44 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               </Select>
             </div>
 
+            {bulkUniversityId && (
+              <div className="space-y-1.5">
+                <Label htmlFor="bulkProgramSelect" className="text-sm font-semibold">Select Target Program (Optional)</Label>
+                <Select value={bulkProgramId} onValueChange={setBulkProgramId}>
+                  <SelectTrigger id="bulkProgramSelect" className="w-full">
+                    <SelectValue placeholder="Override program for all students (optional)..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Auto-detect from CSV</SelectItem>
+                    {programs.filter(p => p.universityId === bulkUniversityId).map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.name} ({p.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {bulkUniversityId && (
+              <div className="space-y-1.5">
+                <Label htmlFor="bulkSessionSelect" className="text-sm font-semibold">Select Target Session (Optional)</Label>
+                <Select value={bulkSessionId} onValueChange={setBulkSessionId}>
+                  <SelectTrigger id="bulkSessionSelect" className="w-full">
+                    <SelectValue placeholder="Override session for all students (optional)..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Auto-detect from CSV</SelectItem>
+                    {sessions.filter(s => !s.universityId || s.universityId === bulkUniversityId).map((s) => (
+                      <SelectItem key={s.id} value={s.id}>
+                        {s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             {branches.length > 0 && (
               <div className="space-y-1.5">
                 <Label htmlFor="bulkBranchSelect" className="text-sm font-semibold">Select Target Branch</Label>
@@ -2621,108 +2459,6 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         </DialogContent>
       </Dialog>
 
-      {/* Quick Log Payment Dialog */}
-      <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Log Payment — {paymentDialogStudent?.name}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSavePayment} className="space-y-4 py-2">
-            <div>
-              <Label>Invoice <span className="text-rose-500">*</span></Label>
-              {paymentInvoicesLoading ? (
-                <div className="text-sm text-muted-foreground mt-2">Loading invoices...</div>
-              ) : (
-                <Select
-                  value={paymentForm.invoiceId || 'auto'}
-                  onValueChange={(val) => {
-                    if (val === 'auto') {
-                      setPaymentForm({
-                        ...paymentForm,
-                        invoiceId: 'auto',
-                        amount: ''
-                      });
-                      return;
-                    }
-                    const selectedInv = paymentInvoices.find(i => i.id === val);
-                    const paid = (selectedInv?.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
-                    const balance = (selectedInv?.total || 0) - paid;
-                    setPaymentForm({
-                      ...paymentForm,
-                      invoiceId: val,
-                      amount: balance > 0 ? balance.toString() : ''
-                    });
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an invoice" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="auto">None (Auto-generate Invoice)</SelectItem>
-                    {paymentInvoices.map((inv) => {
-                      const paid = (inv.payments || []).reduce((acc: number, cur: any) => acc + cur.amount, 0);
-                      const balance = inv.total - paid;
-                      return (
-                        <SelectItem key={inv.id} value={inv.id}>
-                          {inv.invoiceNo} (Total: ₹{inv.total} | Bal: ₹{balance})
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              )}
-            </div>
-
-            <div>
-              <Label>Amount <span className="text-rose-500">*</span></Label>
-              <Input
-                type="number"
-                min="1"
-                required
-                value={paymentForm.amount}
-                onChange={(e) => setPaymentForm({ ...paymentForm, amount: e.target.value })}
-                placeholder="Enter amount"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <Label>Method</Label>
-                <Select
-                  value={paymentForm.method}
-                  onValueChange={(val) => setPaymentForm({ ...paymentForm, method: val })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="upi">UPI</SelectItem>
-                    <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                    <SelectItem value="cheque">Cheque</SelectItem>
-                    <SelectItem value="card">Card</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Reference No</Label>
-                <Input
-                  value={paymentForm.referenceNo}
-                  onChange={(e) => setPaymentForm({ ...paymentForm, referenceNo: e.target.value })}
-                  placeholder="e.g. UPI Ref / Txn ID"
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-2 justify-end pt-2">
-              <Button type="submit" disabled={paymentSaving}>
-                {paymentSaving ? 'Logging...' : 'Log Payment'}
-              </Button>
-              <Button type="button" variant="outline" onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
