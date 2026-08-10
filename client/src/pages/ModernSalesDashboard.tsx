@@ -108,7 +108,6 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
 
       // My Team
       case 'team_members':
-      case 'counselor_performance':
       case 'todays_performance':
       case 'my_team': return <TeamPerformancePanel />;
       case 'attendance_overview':
@@ -195,7 +194,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
       { id: '__my_team', label: 'My Team', isSection: true },
       { id: 'team_members', label: 'Team Members' },
-      { id: 'counselor_performance', label: 'Counselor Performance' },
       { id: 'attendance_overview', label: 'Attendance Overview' },
 
       { id: '__tasks', label: 'Task Management', isSection: true },
