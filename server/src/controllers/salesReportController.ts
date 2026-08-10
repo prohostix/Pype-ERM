@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { prisma } from '../config/postgres.js';
-import { asyncHandler } from '../middleware/asyncHandler.js';
-import { AuthRequest } from '../types/express.js';
+import { Response } from 'express';
+import prisma from '../lib/prisma.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { AuthRequest } from '../middleware/auth.js';
 
 // Helper to build hierarchy clause based on the authenticated user's role
 const buildHierarchyClause = (req: AuthRequest) => {
@@ -106,8 +106,8 @@ export const getCounselorReport = asyncHandler(async (req: AuthRequest, res: Res
     const convertedLeads = await prisma.lead.count({ where: { referredBy: c.id, status: 'converted' } });
     
     // Tasks 
-    const totalTasks = await prisma.task.count({ where: { assigneeId: c.id } });
-    const completedTasks = await prisma.task.count({ where: { assigneeId: c.id, status: 'completed' } });
+    const totalTasks = await prisma.task.count({ where: { assignedTo: c.id } });
+    const completedTasks = await prisma.task.count({ where: { assignedTo: c.id, status: 'completed' } });
 
     // Enrollments
     const enrollments = await prisma.student.count({

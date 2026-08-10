@@ -95,7 +95,7 @@ export function SalesConversionReportPanel() {
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   />
                   <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={40}>
-                    {data.funnel.map((entry: any, index: number) => (
+                    {data.funnel.map((_entry: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={funnelColors[index % funnelColors.length]} />
                     ))}
                   </Bar>
