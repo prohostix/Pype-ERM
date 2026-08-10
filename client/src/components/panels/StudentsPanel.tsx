@@ -17,7 +17,7 @@ import { StudentProfilePanel } from './StudentProfilePanel';
 
 export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean } = {}) {
   const { user } = useAuth();
-  const canWrite = ['org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
+  const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
   const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [students, setStudents] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
