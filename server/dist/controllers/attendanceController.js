@@ -199,11 +199,29 @@ export const getMonthlyLateSummary = asyncHandler(async (req, res) => {
 });
 export const getAttendances = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
-    where.user = { role: { not: 'staff' } };
-    // Branch isolation
-    if (req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.branchId) {
-        where.user.branchId = req.user.branchId;
+    const userFilters = { role: { not: 'staff' } };
+    if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
+        // See all users
     }
+    else if (req.user.role === 'center_admin') {
+        userFilters.OR = [];
+        if (req.user.branchId)
+            userFilters.OR.push({ branchId: req.user.branchId });
+        if (req.user.studyCenterId)
+            userFilters.OR.push({ studyCenterId: req.user.studyCenterId });
+        if (userFilters.OR.length === 0)
+            delete userFilters.OR;
+    }
+    else {
+        userFilters.OR = [
+            { reportingTo: req.user.id },
+            { id: req.user.id }
+        ];
+        if (req.user.departmentId) {
+            userFilters.OR.push({ departmentId: req.user.departmentId });
+        }
+    }
+    where.user = userFilters;
     let isDateFiltered = false;
     let targetDate = new Date();
     // Date filter
@@ -380,7 +398,122 @@ export const biometricSync = asyncHandler(async (req, res) => {
     res.json({ success: true, message: 'Biometric sync triggered' });
 });
 export const getActivityReport = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: [] });
+    const where = { organizationId: req.user.organizationId };
+    const userFilters = { role: { not: 'staff' } };
+    if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
+        // See all users
+    }
+    else if (req.user.role === 'center_admin') {
+        userFilters.OR = [];
+        if (req.user.branchId)
+            userFilters.OR.push({ branchId: req.user.branchId });
+        if (req.user.studyCenterId)
+            userFilters.OR.push({ studyCenterId: req.user.studyCenterId });
+        if (userFilters.OR.length === 0)
+            delete userFilters.OR;
+    }
+    else {
+        userFilters.OR = [
+            { reportingTo: req.user.id },
+            { id: req.user.id }
+        ];
+        if (req.user.departmentId) {
+            userFilters.OR.push({ departmentId: req.user.departmentId });
+        }
+    }
+    where.user = userFilters;
+    let targetDate = new Date();
+    if (req.query.date) {
+        targetDate = new Date(req.query.date);
+    }
+    const start = new Date(targetDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(targetDate);
+    end.setHours(23, 59, 59, 999);
+    const users = await prisma.user.findMany({
+        where: userFilters,
+        include: {
+            department: true,
+            attendances: {
+                where: { date: { gte: start, lte: end } }
+            },
+            assignedTasks: {
+                where: { createdAt: { gte: start, lte: end } }
+            }
+        }
+    });
+    const data = users.map(user => {
+        const attendance = user.attendances[0] || null;
+        const tasks = user.assignedTasks || [];
+        return {
+            userId: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            designation: user.designation,
+            department: user.department?.name || 'Unassigned',
+            departmentId: user.departmentId,
+            attendance: attendance ? {
+                status: attendance.status,
+                checkIn: attendance.checkIn,
+                checkOut: attendance.checkOut,
+                isLate: attendance.isLate,
+                lateMinutes: attendance.lateMinutes,
+                workingHours: attendance.workingHours
+            } : null,
+            productiveHours: attendance?.workingHours || 0,
+            scheduledHours: 8,
+            timeWasted: 0,
+            breakMinutes: 60,
+            erpActions: 0,
+            ermActivity: {},
+            tasks: {
+                total: tasks.length,
+                completedToday: tasks.filter((t) => t.status === 'completed').length,
+                inProgress: tasks.filter((t) => t.status === 'in_progress').length,
+                overdue: tasks.filter((t) => t.status === 'overdue').length,
+                list: tasks
+            }
+        };
+    });
+    const departmentsMap = {};
+    data.forEach(emp => {
+        const dId = emp.departmentId || 'unassigned';
+        if (!departmentsMap[dId]) {
+            departmentsMap[dId] = {
+                departmentId: dId,
+                name: emp.department,
+                totalEmployees: 0,
+                present: 0,
+                absent: 0,
+                late: 0,
+                avgProductiveHours: 0,
+                totalErmActions: 0,
+                totalTasksCompleted: 0
+            };
+        }
+        const d = departmentsMap[dId];
+        d.totalEmployees++;
+        if (emp.attendance?.status === 'present')
+            d.present++;
+        if (emp.attendance?.status === 'absent')
+            d.absent++;
+        if (emp.attendance?.status === 'late')
+            d.late++;
+        d.totalTasksCompleted += emp.tasks.completedToday;
+        d.avgProductiveHours += emp.productiveHours;
+    });
+    Object.values(departmentsMap).forEach(d => {
+        if (d.totalEmployees > 0)
+            d.avgProductiveHours /= d.totalEmployees;
+    });
+    res.json({
+        success: true,
+        data,
+        departments: Object.values(departmentsMap),
+        scheduledHours: 8,
+        breakMinutes: 60
+    });
 });
 export const getMyAttendance = asyncHandler(async (req, res) => {
     if (!req.user.organizationId) {

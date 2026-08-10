@@ -231,8 +231,10 @@ export const getAdmissionSession = asyncHandler(async (req, res) => {
     res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req, res) => {
-    const { examDate, ...rest } = req.body; // examDate not in schema — strip it
+    const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
     const data = { ...rest, organizationId: req.user.organizationId, createdBy: req.user.id };
+    if (universityId)
+        data.universityId = universityId;
     if (req.user.role === 'ops_admin') {
         data.status = 'pending';
     }
@@ -244,8 +246,10 @@ export const createAdmissionSession = asyncHandler(async (req, res) => {
     res.status(201).json({ success: true, data: session });
 });
 export const updateAdmissionSession = asyncHandler(async (req, res) => {
-    const { examDate, ...rest } = req.body; // examDate not in schema — strip it
+    const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
     const data = { ...rest };
+    if (universityId !== undefined)
+        data.universityId = universityId;
     if (req.user.role === 'ops_admin') {
         delete data.status;
     }

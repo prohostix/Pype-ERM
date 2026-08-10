@@ -172,14 +172,30 @@ export const regenerateInvite = asyncHandler(async (req, res) => {
 });
 // Performance
 export const getTeamPerformance = asyncHandler(async (req, res) => {
-    if (!req.user.departmentId) {
-        return res.json({ success: true, data: [] });
+    let whereClause = { organizationId: req.user.organizationId };
+    if (['superadmin', 'org_admin', 'ceo'].includes(req.user.role)) {
+        // See all users
+    }
+    else if (req.user.role === 'center_admin') {
+        whereClause.OR = [];
+        if (req.user.branchId)
+            whereClause.OR.push({ branchId: req.user.branchId });
+        if (req.user.studyCenterId)
+            whereClause.OR.push({ studyCenterId: req.user.studyCenterId });
+        if (whereClause.OR.length === 0)
+            delete whereClause.OR;
+    }
+    else {
+        whereClause.OR = [
+            { reportingTo: req.user.id },
+            { id: req.user.id }
+        ];
+        if (req.user.departmentId) {
+            whereClause.OR.push({ departmentId: req.user.departmentId });
+        }
     }
     const teammates = await prisma.user.findMany({
-        where: {
-            organizationId: req.user.organizationId,
-            departmentId: req.user.departmentId,
-        },
+        where: whereClause,
         select: {
             id: true,
             name: true,
@@ -196,6 +212,20 @@ export const getTeamPerformance = asyncHandler(async (req, res) => {
                 ]
             }
         });
+        const payments = await prisma.paymentEntry.aggregate({
+            _sum: { amount: true },
+            where: {
+                invoice: {
+                    student: {
+                        OR: [
+                            { referredBy: member.id },
+                            { enrolledBy: member.id }
+                        ]
+                    }
+                }
+            }
+        });
+        const revenue = payments._sum.amount || 0;
         const targets = await prisma.target.findMany({ where: { employeeId: member.id } });
         const targetTotal = targets.reduce((acc, t) => acc + t.target, 0);
         const targetProgress = targetTotal > 0 ? Math.round((enrollmentsCount / targetTotal) * 100) : 0;
@@ -206,6 +236,7 @@ export const getTeamPerformance = asyncHandler(async (req, res) => {
             designation: member.designation || 'Team Member',
             status: member.status,
             enrollments: enrollmentsCount,
+            revenue,
             targetCount: targets.length,
             targetTotal,
             targetProgress,
