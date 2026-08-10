@@ -26,6 +26,10 @@ import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
+import { SalesTeamReportPanel } from '@/components/panels/SalesTeamReportPanel';
+import { SalesCounselorReportPanel } from '@/components/panels/SalesCounselorReportPanel';
+import { SalesAdmissionReportPanel } from '@/components/panels/SalesAdmissionReportPanel';
+import { SalesConversionReportPanel } from '@/components/panels/SalesConversionReportPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
@@ -136,10 +140,10 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'completed_tasks': return <TasksPanel />;
 
       // Performance & Reports
-      case 'team_reports':
-      case 'counselor_reports':
-      case 'admission_reports':
-      case 'conversion_report': return <CEOKPIReportPanel />;
+      case 'team_reports': return <SalesTeamReportPanel />;
+      case 'counselor_reports': return <SalesCounselorReportPanel />;
+      case 'admission_reports': return <SalesAdmissionReportPanel />;
+      case 'conversion_report': return <SalesConversionReportPanel />;
 
       // Team Communication
       case 'team_announcements':

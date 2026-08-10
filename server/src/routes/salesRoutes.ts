@@ -27,6 +27,12 @@ import {
   approveSalesEnrollmentFinance,
   rejectSalesEnrollment,
 } from '../controllers/salesEnrollmentController.js';
+import {
+  getTeamReport,
+  getCounselorReport,
+  getAdmissionReport,
+  getConversionReport
+} from '../controllers/salesReportController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -63,5 +69,11 @@ router.post('/direct-enroll', createDirectEnrollment);
 router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin'), approveSalesEnrollmentOps);
 router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'superadmin'), approveSalesEnrollmentFinance);
 router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'superadmin'), rejectSalesEnrollment);
+
+// Sales Reports
+router.get('/reports/team', getTeamReport);
+router.get('/reports/counselor', getCounselorReport);
+router.get('/reports/admissions', getAdmissionReport);
+router.get('/reports/conversions', getConversionReport);
 
 export default router;
