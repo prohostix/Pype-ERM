@@ -14,7 +14,7 @@ export function ReRegistrationReportPanel() {
   const fetchReport = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/ops/reports/reregistrations');
+      const res = await api.get('/operations/reports/reregistrations');
       setData(res.data);
     } catch (error) {
       console.error('Failed to fetch re-registration report', error);

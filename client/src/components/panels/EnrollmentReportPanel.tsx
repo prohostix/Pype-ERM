@@ -14,7 +14,7 @@ export function EnrollmentReportPanel() {
   const fetchReport = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/ops/reports/enrollments');
+      const res = await api.get('/operations/reports/enrollments');
       setData(res.data);
     } catch (error) {
       console.error('Failed to fetch enrollment report', error);

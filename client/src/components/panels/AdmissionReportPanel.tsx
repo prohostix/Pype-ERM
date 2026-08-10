@@ -14,7 +14,7 @@ export function AdmissionReportPanel() {
   const fetchReport = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/ops/reports/admissions');
+      const res = await api.get('/operations/reports/admissions');
       setData(res.data);
     } catch (error) {
       console.error('Failed to fetch admission report', error);

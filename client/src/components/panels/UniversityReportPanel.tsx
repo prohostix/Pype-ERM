@@ -12,7 +12,7 @@ export function UniversityReportPanel() {
   const fetchReport = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/ops/reports/universities');
+      const res = await api.get('/operations/reports/universities');
       setData(res.data);
     } catch (error) {
       console.error('Failed to fetch university report', error);
