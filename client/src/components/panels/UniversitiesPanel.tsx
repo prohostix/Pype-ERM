@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Building2, GitBranch, Globe, Lock } from 'lucide-react';
+import { Plus, Edit, Trash2, Building2, GitBranch, Globe, Lock, BookOpen, Calendar } from 'lucide-react';
 // Card import removed — using custom sections instead
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
+import { ProgramFormDialog } from '../forms/ProgramFormDialog';
+import { SessionFormDialog } from '../forms/SessionFormDialog';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
@@ -31,6 +33,9 @@ export function UniversitiesPanel() {
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi'>('all');
+
+  const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
+  const [addSessionUniId, setAddSessionUniId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUniversities();
@@ -336,6 +341,14 @@ export function UniversitiesPanel() {
               <Badge variant={u.status === 'active' ? 'default' : 'secondary'} className="text-xs">{u.status}</Badge>
               {isOrgAdmin && (
                 <>
+                  <div className="h-4 border-l mx-1 border-slate-300"></div>
+                  <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50" onClick={() => setAddProgramUniId(u.id)} title="Add Program">
+                    <BookOpen className="w-3.5 h-3.5 mr-1" /> Program
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50" onClick={() => setAddSessionUniId(u.id)} title="Add Session">
+                    <Calendar className="w-3.5 h-3.5 mr-1" /> Session
+                  </Button>
+                  <div className="h-4 border-l mx-1 border-slate-300"></div>
                   <Button variant="ghost" size="sm" onClick={() => handleEdit(u)}><Edit className="w-3.5 h-3.5" /></Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDelete(u.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
                 </>
@@ -384,6 +397,23 @@ export function UniversitiesPanel() {
           </div>
         );
       })()}
+
+      {isOrgAdmin && (
+        <>
+          <ProgramFormDialog
+            open={!!addProgramUniId}
+            onOpenChange={(open) => { if (!open) setAddProgramUniId(null); }}
+            onSuccess={() => {}}
+            defaultUniversityId={addProgramUniId || undefined}
+          />
+          <SessionFormDialog
+            open={!!addSessionUniId}
+            onOpenChange={(open) => { if (!open) setAddSessionUniId(null); }}
+            onSuccess={() => {}}
+            defaultUniversityId={addSessionUniId || undefined}
+          />
+        </>
+      )}
     </div>
   );
 }

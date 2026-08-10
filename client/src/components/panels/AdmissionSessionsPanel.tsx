@@ -2,32 +2,21 @@ import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { SessionFormDialog } from '../forms/SessionFormDialog';
 
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
   const isFinance = user?.role === 'finance_admin';
-  const isOps = user?.role === 'ops_admin';
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    subDepartmentIds: [] as string[],
-    startDate: '',
-    endDate: '',
-    examDate: '',
-    status: 'pending'
-  });
+  const [editingSession, setEditingSession] = useState<any>(null);
 
   useEffect(() => {
     fetchSessions();
@@ -57,53 +46,8 @@ export function AdmissionSessionsPanel() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const payload: any = {
-        name: formData.name,
-        subDepartmentIds: formData.subDepartmentIds,
-        subDepartmentId: formData.subDepartmentIds.length > 0 ? formData.subDepartmentIds[0] : null,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        status: isOps ? 'pending' : formData.status
-      };
-      if (formData.examDate) payload.examDate = formData.examDate;
-
-      if (editingId) {
-        await api.put(`/operations/sessions/${editingId}`, payload);
-      } else {
-        await api.post('/operations/sessions', payload);
-      }
-      setDialogOpen(false);
-      resetForm();
-      fetchSessions();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save session');
-    }
-  };
-
   const handleEdit = (s: any) => {
-    let sDeptIds: string[] = [];
-    if (s.subDepartmentIds && s.subDepartmentIds.length > 0) {
-      sDeptIds = s.subDepartmentIds;
-    } else if (s.subDepartmentId) {
-      const subDeptId = typeof s.subDepartmentId === 'object'
-        ? (s.subDepartmentId?.id || s.subDepartmentId?.id)
-        : s.subDepartmentId;
-      if (subDeptId) {
-        sDeptIds = [subDeptId.toString()];
-      }
-    }
-    setEditingId(s.id || s.id);
-    setFormData({
-      name: s.name || '',
-      subDepartmentIds: sDeptIds,
-      startDate: s.startDate ? new Date(s.startDate).toISOString().split('T')[0] : '',
-      endDate: s.endDate ? new Date(s.endDate).toISOString().split('T')[0] : '',
-      examDate: s.examDate ? new Date(s.examDate).toISOString().split('T')[0] : '',
-      status: s.status || 'pending'
-    });
+    setEditingSession(s);
     setDialogOpen(true);
   };
 
@@ -126,11 +70,6 @@ export function AdmissionSessionsPanel() {
     }
   };
 
-  const resetForm = () => {
-    setEditingId(null);
-    setFormData({ name: '', subDepartmentIds: [], startDate: '', endDate: '', examDate: '', status: 'pending' });
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -139,97 +78,9 @@ export function AdmissionSessionsPanel() {
           <p className="text-muted-foreground">Manage admission sessions and cycles</p>
         </div>
         {canWrite && (
-          <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-            <DialogTrigger asChild>
-              <Button><Plus className="w-4 h-4 mr-2" />Add Session</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{editingId ? 'Edit Session' : 'Add New Session'}</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label>Session Name</Label>
-                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
-                </div>
-                <div>
-                  <Label className="block mb-2 font-medium">Departments (Sub-departments)</Label>
-                  <div className="border rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto">
-                    <div className="flex items-center gap-2 pb-2 border-b">
-                      <input
-                        type="checkbox"
-                        id="select-all-departments"
-                        checked={formData.subDepartmentIds.length === departments.length && departments.length > 0}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFormData({ ...formData, subDepartmentIds: departments.map(d => d.id) });
-                          } else {
-                            setFormData({ ...formData, subDepartmentIds: [] });
-                          }
-                        }}
-                        className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
-                      />
-                      <label htmlFor="select-all-departments" className="text-sm font-semibold cursor-pointer">
-                        Select All Departments
-                      </label>
-                    </div>
-                    {departments.map((d) => (
-                      <div key={d.id} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`dept-${d.id}`}
-                          checked={formData.subDepartmentIds.includes(d.id)}
-                          onChange={(e) => {
-                            const checked = e.target.checked;
-                            const nextIds = checked
-                              ? [...formData.subDepartmentIds, d.id]
-                              : formData.subDepartmentIds.filter(id => id !== d.id);
-                            setFormData({ ...formData, subDepartmentIds: nextIds });
-                          }}
-                          className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
-                        />
-                        <label htmlFor={`dept-${d.id}`} className="text-sm cursor-pointer">
-                          {d.name} {d.parentDept?.name ? `(${d.parentDept.name})` : ''}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label>Start Date</Label>
-                    <Input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
-                  </div>
-                  <div>
-                    <Label>End Date</Label>
-                    <Input type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} required />
-                  </div>
-                </div>
-                <div>
-                  <Label>Exam Date (optional)</Label>
-                  <Input type="date" value={formData.examDate} onChange={(e) => setFormData({ ...formData, examDate: e.target.value })} />
-                </div>
-                {!isOps && (
-                  <div>
-                    <Label>Status</Label>
-                    <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="approved">Approved</SelectItem>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="closed">Closed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <Button type="submit" className="flex-1">Save</Button>
-                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <Button onClick={() => { setEditingSession(null); setDialogOpen(true); }}>
+            <Plus className="w-4 h-4 mr-2" />Add Session
+          </Button>
         )}
       </div>
 
@@ -306,6 +157,13 @@ export function AdmissionSessionsPanel() {
           )}
         </CardContent>
       </Card>
+      
+      <SessionFormDialog 
+        open={dialogOpen} 
+        onOpenChange={(open) => { setDialogOpen(open); if (!open) setEditingSession(null); }}
+        onSuccess={fetchSessions}
+        editingSession={editingSession}
+      />
     </div>
   );
 }
