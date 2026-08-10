@@ -26,6 +26,7 @@ import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
 import { SalesTeamReportPanel } from '@/components/panels/SalesTeamReportPanel';
 import { SalesCounselorReportPanel } from '@/components/panels/SalesCounselorReportPanel';
 import { SalesAdmissionReportPanel } from '@/components/panels/SalesAdmissionReportPanel';
@@ -164,7 +165,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
       case 'support_requests': return <ComplaintsPanel />;
 
       // My Portal
-      case 'my_profile': return <PlaceholderPanel title="My Profile" />;
+      case 'my_profile': return <MyProfilePanel />;
       case 'my_leaves': return <LeavesPanel />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
@@ -787,7 +788,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
           case 'brochures': return <NoticeBoardPanel />;
           case 'approval_requests': return <EscalationsPanel />;
           case 'support_requests': return <ComplaintsPanel />;
-          case 'my_profile': return <PlaceholderPanel title="My Profile" />;
+          case 'my_profile': return <MyProfilePanel />;
           case 'lead_management': return <LeadsPanel />;
         }
       })()}
