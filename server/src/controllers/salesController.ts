@@ -174,7 +174,7 @@ export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Res
   if (['superadmin', 'org_admin', 'ceo'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'sales_admin') {
-    whereClause.role = { in: ['sales_admin', 'sales_agent', 'bde'] };
+    whereClause.role = { in: ['sales_admin', 'sales'] };
   } else if (req.user.role === 'center_admin') {
     whereClause.OR = [];
     if (req.user.branchId) whereClause.OR.push({ branchId: req.user.branchId });

@@ -243,7 +243,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'sales_admin') {
-    userFilters.role = { in: ['sales_admin', 'sales_agent', 'bde'] };
+    userFilters.role = { in: ['sales_admin', 'sales'] };
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
     if (req.user.branchId) userFilters.OR.push({ branchId: req.user.branchId });
@@ -453,7 +453,7 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
   if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'sales_admin') {
-    userFilters.role = { in: ['sales_admin', 'sales_agent', 'bde'] };
+    userFilters.role = { in: ['sales_admin', 'sales'] };
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
     if (req.user.branchId) userFilters.OR.push({ branchId: req.user.branchId });
