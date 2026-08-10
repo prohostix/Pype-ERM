@@ -209,7 +209,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
       { id: '__reports', label: 'Performance & Reports', isSection: true },
       { id: 'team_reports', label: 'Team Reports' },
-      { id: 'counselor_reports', label: 'Counselor Reports' },
       { id: 'admission_reports', label: 'Admission Reports' },
       { id: 'conversion_report', label: 'Conversion Report' },
       { id: 'daily_activity_report', label: 'Daily Activity Report' },
@@ -221,7 +220,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
       { id: '__resources', label: 'Sales Resources', isSection: true },
       { id: 'course_details', label: 'Course Details' },
-      { id: 'fee_structure', label: 'Fee Structure' },
       { id: 'university_details', label: 'University Details' },
       { id: 'sales_materials', label: 'Sales Materials' },
 
@@ -269,7 +267,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
     { id: '__resources', label: 'Sales Resources', isSection: true },
     { id: 'course_details_res', label: 'Course Details' },
-    { id: 'fee_structure_res', label: 'Fee Structure' },
     { id: 'university_details_res', label: 'University Details' },
     { id: 'brochures', label: 'Brochures & Materials' },
 
