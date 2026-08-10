@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { ProgramDetailPanel } from './ProgramDetailPanel';
 
 interface UniversityDetailPanelProps {
   university: any;
@@ -14,6 +15,7 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
   const [programs, setPrograms] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -50,6 +52,15 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
     }
   };
 
+  if (selectedProgramId) {
+    return (
+      <ProgramDetailPanel 
+        programId={selectedProgramId} 
+        onBack={() => setSelectedProgramId(null)} 
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -80,7 +91,7 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
             ) : (
               <div className="space-y-3">
                 {programs.map((p: any) => (
-                  <div key={p.id} className="p-3 border rounded-lg hover:bg-slate-50 transition-colors">
+                  <div key={p.id} onClick={() => setSelectedProgramId(p.id)} className="p-3 border rounded-lg hover:bg-slate-50 transition-colors cursor-pointer group">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold text-sm">{p.name}</p>
