@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { ProgramFormDialog } from '../forms/ProgramFormDialog';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
+import { UniversityDetailPanel } from './UniversityDetailPanel';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
@@ -36,6 +37,7 @@ export function UniversitiesPanel() {
 
   const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
   const [addSessionUniId, setAddSessionUniId] = useState<string | null>(null);
+  const [selectedUniversity, setSelectedUniversity] = useState<University | null>(null);
 
   useEffect(() => {
     fetchUniversities();
@@ -110,6 +112,10 @@ export function UniversitiesPanel() {
     setSelectedBranchIds([]);
     setAccessMode('all');
   };
+
+  if (selectedUniversity) {
+    return <UniversityDetailPanel university={selectedUniversity} onBack={() => setSelectedUniversity(null)} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -326,12 +332,12 @@ export function UniversitiesPanel() {
 
         const UniRow = ({ u }: { u: University }) => (
           <div className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition-colors">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer flex-1" onClick={() => setSelectedUniversity(u)}>
               <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                 <Building2 className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="font-medium text-sm">{u.name}</p>
+                <p className="font-medium text-sm hover:underline">{u.name}</p>
                 <p className="text-xs text-muted-foreground">
                   {u.code}{u.contact ? ` • ${u.contact}` : ''}{u.address ? ` • ${u.address}` : ''}
                 </p>
