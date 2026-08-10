@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { User, Mail, Phone, Briefcase, Building2, MapPin, Hash, ShieldCheck, Clock } from 'lucide-react';
@@ -104,7 +103,7 @@ export function MyProfilePanel() {
                   <p className="text-sm text-muted-foreground mb-1">Work Location</p>
                   <p className="font-medium flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-muted-foreground" />
-                    {user.organization?.city || 'Head Office'}
+                    {user.organization?.address || 'Head Office'}
                   </p>
                 </div>
                 <div>

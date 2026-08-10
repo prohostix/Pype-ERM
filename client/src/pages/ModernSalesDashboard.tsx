@@ -36,7 +36,6 @@ import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
-import { PlaceholderPanel } from '@/components/panels/PlaceholderPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { 
   BarChart, 
