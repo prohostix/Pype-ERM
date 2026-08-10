@@ -118,3 +118,16 @@ router.put('/programs/:programId/materials/:materialId', authorize('ops_admin', 
 router.delete('/programs/:programId/materials/:materialId', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), deleteProgramMaterial);
 
 export default router;
+
+// Operations Reports
+import {
+  getAdmissionReport,
+  getEnrollmentReport,
+  getUniversityReport,
+  getReRegistrationReport
+} from '../controllers/opsReportController.js';
+
+router.get('/reports/admissions', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getAdmissionReport);
+router.get('/reports/enrollments', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getEnrollmentReport);
+router.get('/reports/universities', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getUniversityReport);
+router.get('/reports/reregistrations', authorize('ops_admin', 'ops_sub_admin', 'org_admin', 'superadmin'), getReRegistrationReport);
