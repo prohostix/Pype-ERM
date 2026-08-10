@@ -64,7 +64,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => { fetchOpsMetrics(); }, []);
 
-  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
+  useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
 
   const renderContent = () => {
     switch (activeTab) {

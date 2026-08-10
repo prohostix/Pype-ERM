@@ -67,7 +67,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
+  useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
   // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => { fetchAll(); }, []);
 
@@ -562,7 +562,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
   }, [initialTab]);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect

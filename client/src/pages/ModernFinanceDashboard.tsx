@@ -60,7 +60,7 @@ import { toast } from 'sonner';
 
 export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
-  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
+  useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
 
   const renderContent = () => {
     switch (activeTab) {

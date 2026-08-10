@@ -48,7 +48,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
   const [isCollectionsOverseer, setIsCollectionsOverseer] = useState(false);
 
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
   }, [initialTab]);
 
   useEffect(() => { fetchAll(); }, []);

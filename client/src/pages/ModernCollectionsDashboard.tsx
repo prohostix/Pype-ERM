@@ -34,7 +34,7 @@ export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string
     }
   };
 
-  useEffect(() => { if (initialTab) setActiveTab(initialTab); }, [initialTab]);
+  useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
   useEffect(() => { fetchCollectionsMetrics(); }, []);
 
   const renderContent = () => {

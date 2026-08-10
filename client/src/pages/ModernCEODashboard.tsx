@@ -76,7 +76,7 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
 
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
   }, [initialTab]);
 
   useEffect(() => { fetchAll(); }, []);

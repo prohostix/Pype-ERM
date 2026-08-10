@@ -19,7 +19,7 @@ export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
-    if (initialTab) setActiveTab(initialTab);
+    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
   }, [initialTab]);
   useEffect(() => {
     api.get('/enrollment/wallet').then(r => setMetrics(r.data.data || {})).catch(() => {});
