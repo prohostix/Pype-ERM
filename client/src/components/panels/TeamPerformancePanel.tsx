@@ -12,6 +12,7 @@ interface TeamMember {
   designation: string;
   status: string;
   enrollments: number;
+  revenue: number;
   targetCount: number;
   targetTotal: number;
   targetProgress: number;
@@ -51,6 +52,7 @@ export function TeamPerformancePanel() {
   useEffect(() => { fetch(); }, []);
 
   const totalEnrollments = team.reduce((s, m) => s + m.enrollments, 0);
+  const totalRevenue = team.reduce((s, m) => s + m.revenue, 0);
   const avgScore = team.length ? Math.round(team.reduce((s, m) => s + m.score, 0) / team.length) : 0;
 
   return (
@@ -67,7 +69,7 @@ export function TeamPerformancePanel() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-xl bg-primary/10 text-primary">
@@ -87,6 +89,17 @@ export function TeamPerformancePanel() {
             <div>
               <p className="text-xs text-muted-foreground uppercase font-medium">Total Enrollments</p>
               <p className="text-2xl font-bold">{loading ? '...' : totalEnrollments}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-5 flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-success/10 text-success">
+              <span className="font-bold">₹</span>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground uppercase font-medium">Total Revenue</p>
+              <p className="text-2xl font-bold">{loading ? '...' : `₹${totalRevenue.toLocaleString()}`}</p>
             </div>
           </CardContent>
         </Card>
@@ -162,6 +175,10 @@ export function TeamPerformancePanel() {
                     <div className="text-center">
                       <p className="text-xs text-muted-foreground">Enrollments</p>
                       <p className="font-bold text-lg">{member.enrollments}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-muted-foreground">Revenue</p>
+                      <p className="font-bold text-lg text-success">₹{member.revenue.toLocaleString()}</p>
                     </div>
                     <div className="text-center min-w-[100px]">
                       <p className="text-xs text-muted-foreground">Target ({member.targetTotal})</p>
