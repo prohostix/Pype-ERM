@@ -353,7 +353,7 @@ export function HRUsersPanel() {
       additionalDepartmentIds: additionalIds,
       subDepartmentId: subDeptId?.toString() || '',
       reportingTo: reportingToId?.toString() || '',
-      branchId: bId?.toString() || 'none',
+      branchId: user.branchId?.toString() || 'none',
     });
     setDialogOpen(true);
   };
