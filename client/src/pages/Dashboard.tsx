@@ -134,6 +134,9 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
           return <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} />;
         case 'collections':
           return <ModernCollectionsDashboard initialTab={initialTab} />;
+        case 'ceo':
+        case 'general_manager':
+          return <ModernCEODashboard initialTab={initialTab} />;
         default:
           return <ModernEmployeeDashboard initialTab={initialTab} />;
       }
@@ -148,7 +151,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernSuperadminDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'ceo') {
+  if (user?.role === 'ceo' || user?.role === 'general_manager') {
     return <ModernCEODashboard initialTab={initialTab} />;
   }
 
