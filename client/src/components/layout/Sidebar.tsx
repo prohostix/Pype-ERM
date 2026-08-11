@@ -91,8 +91,8 @@ const navItems: NavItem[] = [
       { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo', 'general_manager'], badge: 1 },
       { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo', 'general_manager'] },
       { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo', 'general_manager'] },
-      { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo', 'general_manager'] },
-      { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'general_manager', 'org_admin'] },
+      { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo'] },
+      { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'org_admin'] },
     ],
   },
   {

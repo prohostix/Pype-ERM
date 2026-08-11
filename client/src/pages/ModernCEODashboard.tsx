@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   ArrowUpRight, 
   ArrowDownRight,
@@ -71,6 +72,7 @@ const DEPT_COLORS: Record<string, string> = {
 };
 
 export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<any>({});
   const [analytics, setAnalytics] = useState<any>({ employeePerformance: [], departmentEfficiency: [] });
   const [loadingMetrics, setLoadingMetrics] = useState(true);
@@ -141,9 +143,13 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           <TabsTrigger value="leads">Leads</TabsTrigger>
           <TabsTrigger value="university_commissions">Commissions</TabsTrigger>
           <TabsTrigger value="activity_report">Activity Report</TabsTrigger>
-          <TabsTrigger value="delete_approvals">Delete Approvals</TabsTrigger>
-          <TabsTrigger value="meetings">Meetings</TabsTrigger>
-          <TabsTrigger value="activity-logs">Activity Logs</TabsTrigger>
+          {user?.role === 'ceo' && (
+            <>
+              <TabsTrigger value="delete_approvals">Delete Approvals</TabsTrigger>
+              <TabsTrigger value="meetings">Meetings</TabsTrigger>
+              <TabsTrigger value="activity-logs">Activity Logs</TabsTrigger>
+            </>
+          )}
         </TabsList>
 
         <TabsContent value="overview" className="space-y-8">
@@ -369,17 +375,21 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
           <CollectionsPanel />
         </TabsContent>
 
-        <TabsContent value="delete_approvals">
-          <DeleteRequestsPanel />
-        </TabsContent>
+        {user?.role === 'ceo' && (
+          <>
+            <TabsContent value="delete_approvals">
+              <DeleteRequestsPanel />
+            </TabsContent>
 
-        <TabsContent value="meetings">
-          <MeetingsPanel />
-        </TabsContent>
+            <TabsContent value="meetings">
+              <MeetingsPanel />
+            </TabsContent>
 
-        <TabsContent value="activity-logs">
-          <ActivityLogPanel />
-        </TabsContent>
+            <TabsContent value="activity-logs">
+              <ActivityLogPanel />
+            </TabsContent>
+          </>
+        )}
       </Tabs>
     </div>
   );
