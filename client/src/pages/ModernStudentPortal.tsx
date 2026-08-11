@@ -431,11 +431,11 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground block">Session</span>
-                    <span className="font-semibold text-sm">{profile?.enrollments?.[0]?.session?.name || 'N/A'}</span>
+                    <span className="font-semibold text-sm">{profile?.session?.name || profile?.enrollments?.[0]?.session?.name || 'N/A'}</span>
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground block">Admission Number</span>
-                    <span className="font-semibold text-sm">{profile?.admissionNumber || 'N/A'}</span>
+                    <span className="font-semibold text-sm">{profile?.admissionNo || 'N/A'}</span>
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground block">Enrollment Status</span>

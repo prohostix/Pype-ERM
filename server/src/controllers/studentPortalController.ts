@@ -13,6 +13,7 @@ async function getLinkedStudent(userId: string) {
       program: true,
       center: true,
       organization: true,
+      session: true,
       enrollments: {
         include: { session: true, program: true },
         orderBy: { createdAt: 'desc' },
