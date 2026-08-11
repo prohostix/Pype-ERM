@@ -1054,6 +1054,9 @@ model EmployeeProfile {
   updatedAt          DateTime     @updatedAt
   organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user               User         @relation(fields: [userId], references: [id])
+  jdFile             String?
+  offerLetterFile    String?
+  sopFile            String?
 
   @@index([userId, organizationId])
 }
@@ -1370,6 +1373,7 @@ model FeeStructure {
   billingCycle    String            @default("per_year")
   currency        String            @default("INR")
   effectiveFrom   DateTime?
+  dueDate         DateTime?
   additionalFees  Json              @default("[]")
   createdBy       String?
   creator         User?             @relation("FeeCreatedBy", fields: [createdBy], references: [id])

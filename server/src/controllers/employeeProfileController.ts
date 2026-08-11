@@ -4,18 +4,43 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 export const getEmployeeProfile = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const profile = await prisma.user.findUnique({
-    where: { id: req.params.userId || req.user.id },
+  const userId = req.params.userId || req.user.id;
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
     include: { organization: true, department: true }
   });
-  res.json({ success: true, data: profile });
+  const profile = await prisma.employeeProfile.findUnique({
+    where: { userId }
+  });
+  const salaryConfig = await prisma.salaryConfig.findUnique({
+    where: { userId }
+  });
+  res.json({ success: true, data: { user, profile, salaryConfig } });
 });
 
 export const upsertEmployeeProfile = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { userId } = req.params;
-  const profile = await prisma.user.update({
-    where: { id: userId },
-    data: req.body
+  const data = req.body;
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+  
+  // Format dates if they are provided
+  if (data.dateOfBirth) data.dateOfBirth = new Date(data.dateOfBirth);
+  if (data.joinDate) data.joinDate = new Date(data.joinDate);
+  if (data.confirmationDate) data.confirmationDate = new Date(data.confirmationDate);
+  if (data.probationEndDate) data.probationEndDate = new Date(data.probationEndDate);
+
+  const profile = await prisma.employeeProfile.upsert({
+    where: { userId },
+    update: data,
+    create: {
+      userId,
+      organizationId: user.organizationId || req.user.organizationId,
+      ...data
+    }
   });
   res.json({ success: true, data: profile });
 });

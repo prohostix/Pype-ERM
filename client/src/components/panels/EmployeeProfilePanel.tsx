@@ -104,6 +104,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const [employmentForm, setEmploymentForm] = useState<any>({});
   const [salaryForm, setSalaryForm] = useState<any>({});
   const [salaryConfigForm, setSalaryConfigForm] = useState<SalaryConfig>({});
+  const [documentsForm, setDocumentsForm] = useState<any>({});
   const [kpis, setKpis] = useState<KPI[]>([]);
   const [kras, setKras] = useState<KRA[]>([]);
   const [reviewForm, setReviewForm] = useState<any>({});
@@ -154,6 +155,11 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         bankAccountNo: p.bankAccountNo || '',
         ifscCode: p.ifscCode || '',
         panNumber: p.panNumber || '',
+      });
+      setDocumentsForm({
+        jdFile: p.jdFile || '',
+        offerLetterFile: p.offerLetterFile || '',
+        sopFile: p.sopFile || '',
       });
       const sc = d.salaryConfig || {};
       setSalaryConfigForm({
@@ -263,6 +269,34 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
     } catch { toast.error('Save failed'); } finally { setSaving(false); }
   };
 
+  const saveDocuments = async () => {
+    setSaving(true);
+    try {
+      await api.put(`/hr/employee-profiles/${userId}`, documentsForm);
+      toast.success('Documents saved');
+      fetchProfile();
+    } catch { toast.error('Save failed'); } finally { setSaving(false); }
+  };
+
+  const uploadDocument = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    setSaving(true);
+    try {
+      const res = await api.post('/auth/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      if (res.data.success) {
+        setDocumentsForm(prev => ({ ...prev, [field]: res.data.fileUrl }));
+        toast.success('File uploaded');
+      }
+    } catch {
+      toast.error('Upload failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // ─── KPI helpers ──────────────────────────────────────────────────────────
   const openAddKpi = () => { setEditKpi({ title: '', target: 100, achieved: 0, unit: '%', period: '', status: 'on_track' }); setKpiIdx(null); setKpiDialog(true); };
   const openEditKpi = (kpi: KPI, idx: number) => { setEditKpi({ ...kpi }); setKpiIdx(idx); setKpiDialog(true); };
@@ -334,9 +368,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         ) : (
           <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
             <TabsList className="flex-wrap h-auto gap-1 mx-6 mt-4 justify-start bg-transparent border-b rounded-none pb-0">
-              {['overview', 'personal', 'employment', 'salary', 'kpi', 'kra', 'review'].map(t => (
+              {['overview', 'personal', 'employment', 'salary', 'kpi', 'kra', 'review', 'documents'].map(t => (
                 <TabsTrigger key={t} value={t} className="capitalize rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
-                  {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t.charAt(0).toUpperCase() + t.slice(1)}
+                  {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t === 'documents' ? 'Documents' : t.charAt(0).toUpperCase() + t.slice(1)}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -418,6 +452,64 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                     </CardContent>
                   </Card>
                 )}
+              </TabsContent>
+
+              {/* ── DOCUMENTS ── */}
+              <TabsContent value="documents" className="space-y-4 mt-0">
+                <SectionTitle icon={Building2} title="Employee Documents" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Job Description (JD)</CardTitle></CardHeader>
+                    <CardContent className="space-y-2">
+                      {documentsForm.jdFile ? (
+                        <div className="flex items-center justify-between p-2 border rounded text-sm">
+                          <a href={documentsForm.jdFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View JD Document</a>
+                          <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, jdFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Label>Upload JD</Label>
+                          <Input type="file" onChange={(e) => uploadDocument(e, 'jdFile')} disabled={saving} />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Offer Letter</CardTitle></CardHeader>
+                    <CardContent className="space-y-2">
+                      {documentsForm.offerLetterFile ? (
+                        <div className="flex items-center justify-between p-2 border rounded text-sm">
+                          <a href={documentsForm.offerLetterFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View Offer Letter</a>
+                          <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, offerLetterFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Label>Upload Offer Letter</Label>
+                          <Input type="file" onChange={(e) => uploadDocument(e, 'offerLetterFile')} disabled={saving} />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">SOP</CardTitle></CardHeader>
+                    <CardContent className="space-y-2">
+                      {documentsForm.sopFile ? (
+                        <div className="flex items-center justify-between p-2 border rounded text-sm">
+                          <a href={documentsForm.sopFile} target="_blank" rel="noreferrer" className="text-primary hover:underline truncate">View SOP Document</a>
+                          <Button variant="ghost" size="sm" onClick={() => setDocumentsForm({...documentsForm, sopFile: ''})}><Trash2 className="w-4 h-4 text-red-500"/></Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Label>Upload SOP</Label>
+                          <Input type="file" onChange={(e) => uploadDocument(e, 'sopFile')} disabled={saving} />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="flex justify-end pt-4"><Button onClick={saveDocuments} disabled={saving}>{saving ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />} Save Documents</Button></div>
               </TabsContent>
 
               {/* ── PERSONAL ── */}

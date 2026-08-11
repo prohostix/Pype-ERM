@@ -56493,6 +56493,9 @@ export namespace Prisma {
     reviewRemarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    jdFile: string | null
+    offerLetterFile: string | null
+    sopFile: string | null
   }
 
   export type EmployeeProfileMaxAggregateOutputType = {
@@ -56525,6 +56528,9 @@ export namespace Prisma {
     reviewRemarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    jdFile: string | null
+    offerLetterFile: string | null
+    sopFile: string | null
   }
 
   export type EmployeeProfileCountAggregateOutputType = {
@@ -56561,6 +56567,9 @@ export namespace Prisma {
     reviewRemarks: number
     createdAt: number
     updatedAt: number
+    jdFile: number
+    offerLetterFile: number
+    sopFile: number
     _all: number
   }
 
@@ -56607,6 +56616,9 @@ export namespace Prisma {
     reviewRemarks?: true
     createdAt?: true
     updatedAt?: true
+    jdFile?: true
+    offerLetterFile?: true
+    sopFile?: true
   }
 
   export type EmployeeProfileMaxAggregateInputType = {
@@ -56639,6 +56651,9 @@ export namespace Prisma {
     reviewRemarks?: true
     createdAt?: true
     updatedAt?: true
+    jdFile?: true
+    offerLetterFile?: true
+    sopFile?: true
   }
 
   export type EmployeeProfileCountAggregateInputType = {
@@ -56675,6 +56690,9 @@ export namespace Prisma {
     reviewRemarks?: true
     createdAt?: true
     updatedAt?: true
+    jdFile?: true
+    offerLetterFile?: true
+    sopFile?: true
     _all?: true
   }
 
@@ -56798,6 +56816,9 @@ export namespace Prisma {
     reviewRemarks: string | null
     createdAt: Date
     updatedAt: Date
+    jdFile: string | null
+    offerLetterFile: string | null
+    sopFile: string | null
     _count: EmployeeProfileCountAggregateOutputType | null
     _avg: EmployeeProfileAvgAggregateOutputType | null
     _sum: EmployeeProfileSumAggregateOutputType | null
@@ -56853,6 +56874,9 @@ export namespace Prisma {
     reviewRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    jdFile?: boolean
+    offerLetterFile?: boolean
+    sopFile?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employeeProfile"]>
@@ -56891,6 +56915,9 @@ export namespace Prisma {
     reviewRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    jdFile?: boolean
+    offerLetterFile?: boolean
+    sopFile?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employeeProfile"]>
@@ -56929,6 +56956,9 @@ export namespace Prisma {
     reviewRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    jdFile?: boolean
+    offerLetterFile?: boolean
+    sopFile?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employeeProfile"]>
@@ -56967,9 +56997,12 @@ export namespace Prisma {
     reviewRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    jdFile?: boolean
+    offerLetterFile?: boolean
+    sopFile?: boolean
   }
 
-  export type EmployeeProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "dateOfBirth" | "gender" | "bloodGroup" | "address" | "city" | "state" | "pincode" | "emergencyContact" | "employeeCode" | "joinDate" | "confirmationDate" | "probationEndDate" | "employmentType" | "workLocation" | "reportingManagerId" | "ctc" | "basicSalary" | "bankName" | "bankAccountNo" | "ifscCode" | "panNumber" | "documents" | "kpis" | "kras" | "lastReviewDate" | "nextReviewDate" | "overallRating" | "reviewRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["employeeProfile"]>
+  export type EmployeeProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "dateOfBirth" | "gender" | "bloodGroup" | "address" | "city" | "state" | "pincode" | "emergencyContact" | "employeeCode" | "joinDate" | "confirmationDate" | "probationEndDate" | "employmentType" | "workLocation" | "reportingManagerId" | "ctc" | "basicSalary" | "bankName" | "bankAccountNo" | "ifscCode" | "panNumber" | "documents" | "kpis" | "kras" | "lastReviewDate" | "nextReviewDate" | "overallRating" | "reviewRemarks" | "createdAt" | "updatedAt" | "jdFile" | "offerLetterFile" | "sopFile", ExtArgs["result"]["employeeProfile"]>
   export type EmployeeProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -57023,6 +57056,9 @@ export namespace Prisma {
       reviewRemarks: string | null
       createdAt: Date
       updatedAt: Date
+      jdFile: string | null
+      offerLetterFile: string | null
+      sopFile: string | null
     }, ExtArgs["result"]["employeeProfile"]>
     composites: {}
   }
@@ -57481,6 +57517,9 @@ export namespace Prisma {
     readonly reviewRemarks: FieldRef<"EmployeeProfile", 'String'>
     readonly createdAt: FieldRef<"EmployeeProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"EmployeeProfile", 'DateTime'>
+    readonly jdFile: FieldRef<"EmployeeProfile", 'String'>
+    readonly offerLetterFile: FieldRef<"EmployeeProfile", 'String'>
+    readonly sopFile: FieldRef<"EmployeeProfile", 'String'>
   }
     
 
@@ -77964,6 +78003,7 @@ export namespace Prisma {
     billingCycle: string | null
     currency: string | null
     effectiveFrom: Date | null
+    dueDate: Date | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -77985,6 +78025,7 @@ export namespace Prisma {
     billingCycle: string | null
     currency: string | null
     effectiveFrom: Date | null
+    dueDate: Date | null
     createdBy: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -78008,6 +78049,7 @@ export namespace Prisma {
     billingCycle: number
     currency: number
     effectiveFrom: number
+    dueDate: number
     additionalFees: number
     createdBy: number
     createdAt: number
@@ -78050,6 +78092,7 @@ export namespace Prisma {
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
+    dueDate?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -78071,6 +78114,7 @@ export namespace Prisma {
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
+    dueDate?: true
     createdBy?: true
     createdAt?: true
     updatedAt?: true
@@ -78094,6 +78138,7 @@ export namespace Prisma {
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
+    dueDate?: true
     additionalFees?: true
     createdBy?: true
     createdAt?: true
@@ -78205,6 +78250,7 @@ export namespace Prisma {
     billingCycle: string
     currency: string
     effectiveFrom: Date | null
+    dueDate: Date | null
     additionalFees: JsonValue
     createdBy: string | null
     createdAt: Date
@@ -78248,6 +78294,7 @@ export namespace Prisma {
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
+    dueDate?: boolean
     additionalFees?: boolean
     createdBy?: boolean
     createdAt?: boolean
@@ -78277,6 +78324,7 @@ export namespace Prisma {
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
+    dueDate?: boolean
     additionalFees?: boolean
     createdBy?: boolean
     createdAt?: boolean
@@ -78306,6 +78354,7 @@ export namespace Prisma {
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
+    dueDate?: boolean
     additionalFees?: boolean
     createdBy?: boolean
     createdAt?: boolean
@@ -78335,13 +78384,14 @@ export namespace Prisma {
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
+    dueDate?: boolean
     additionalFees?: boolean
     createdBy?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "universityId" | "feeLevel" | "sessionId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "universityFee" | "commissionRate" | "yearlyFees" | "otherCharges" | "gstPercentage" | "billingCycle" | "currency" | "effectiveFrom" | "additionalFees" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
+  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "universityId" | "feeLevel" | "sessionId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "universityFee" | "commissionRate" | "yearlyFees" | "otherCharges" | "gstPercentage" | "billingCycle" | "currency" | "effectiveFrom" | "dueDate" | "additionalFees" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
   export type FeeStructureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | FeeStructure$creatorArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -78391,6 +78441,7 @@ export namespace Prisma {
       billingCycle: string
       currency: string
       effectiveFrom: Date | null
+      dueDate: Date | null
       additionalFees: Prisma.JsonValue
       createdBy: string | null
       createdAt: Date
@@ -78840,6 +78891,7 @@ export namespace Prisma {
     readonly billingCycle: FieldRef<"FeeStructure", 'String'>
     readonly currency: FieldRef<"FeeStructure", 'String'>
     readonly effectiveFrom: FieldRef<"FeeStructure", 'DateTime'>
+    readonly dueDate: FieldRef<"FeeStructure", 'DateTime'>
     readonly additionalFees: FieldRef<"FeeStructure", 'Json'>
     readonly createdBy: FieldRef<"FeeStructure", 'String'>
     readonly createdAt: FieldRef<"FeeStructure", 'DateTime'>
@@ -93019,7 +93071,10 @@ export namespace Prisma {
     overallRating: 'overallRating',
     reviewRemarks: 'reviewRemarks',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    jdFile: 'jdFile',
+    offerLetterFile: 'offerLetterFile',
+    sopFile: 'sopFile'
   };
 
   export type EmployeeProfileScalarFieldEnum = (typeof EmployeeProfileScalarFieldEnum)[keyof typeof EmployeeProfileScalarFieldEnum]
@@ -93319,6 +93374,7 @@ export namespace Prisma {
     billingCycle: 'billingCycle',
     currency: 'currency',
     effectiveFrom: 'effectiveFrom',
+    dueDate: 'dueDate',
     additionalFees: 'additionalFees',
     createdBy: 'createdBy',
     createdAt: 'createdAt',
@@ -98399,6 +98455,9 @@ export namespace Prisma {
     reviewRemarks?: StringNullableFilter<"EmployeeProfile"> | string | null
     createdAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
     updatedAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
+    jdFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    offerLetterFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    sopFile?: StringNullableFilter<"EmployeeProfile"> | string | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -98437,6 +98496,9 @@ export namespace Prisma {
     reviewRemarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    jdFile?: SortOrderInput | SortOrder
+    offerLetterFile?: SortOrderInput | SortOrder
+    sopFile?: SortOrderInput | SortOrder
     organization?: OrganizationOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -98478,6 +98540,9 @@ export namespace Prisma {
     reviewRemarks?: StringNullableFilter<"EmployeeProfile"> | string | null
     createdAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
     updatedAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
+    jdFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    offerLetterFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    sopFile?: StringNullableFilter<"EmployeeProfile"> | string | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
@@ -98516,6 +98581,9 @@ export namespace Prisma {
     reviewRemarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    jdFile?: SortOrderInput | SortOrder
+    offerLetterFile?: SortOrderInput | SortOrder
+    sopFile?: SortOrderInput | SortOrder
     _count?: EmployeeProfileCountOrderByAggregateInput
     _avg?: EmployeeProfileAvgOrderByAggregateInput
     _max?: EmployeeProfileMaxOrderByAggregateInput
@@ -98560,6 +98628,9 @@ export namespace Prisma {
     reviewRemarks?: StringNullableWithAggregatesFilter<"EmployeeProfile"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EmployeeProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"EmployeeProfile"> | Date | string
+    jdFile?: StringNullableWithAggregatesFilter<"EmployeeProfile"> | string | null
+    offerLetterFile?: StringNullableWithAggregatesFilter<"EmployeeProfile"> | string | null
+    sopFile?: StringNullableWithAggregatesFilter<"EmployeeProfile"> | string | null
   }
 
   export type HRSettingsWhereInput = {
@@ -100086,6 +100157,7 @@ export namespace Prisma {
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
+    dueDate?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
     additionalFees?: JsonFilter<"FeeStructure">
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     createdAt?: DateTimeFilter<"FeeStructure"> | Date | string
@@ -100115,6 +100187,7 @@ export namespace Prisma {
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
     additionalFees?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -100147,6 +100220,7 @@ export namespace Prisma {
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
+    dueDate?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
     additionalFees?: JsonFilter<"FeeStructure">
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     createdAt?: DateTimeFilter<"FeeStructure"> | Date | string
@@ -100176,6 +100250,7 @@ export namespace Prisma {
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
     additionalFees?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -100208,6 +100283,7 @@ export namespace Prisma {
     billingCycle?: StringWithAggregatesFilter<"FeeStructure"> | string
     currency?: StringWithAggregatesFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableWithAggregatesFilter<"FeeStructure"> | Date | string | null
+    dueDate?: DateTimeNullableWithAggregatesFilter<"FeeStructure"> | Date | string | null
     additionalFees?: JsonWithAggregatesFilter<"FeeStructure">
     createdBy?: StringNullableWithAggregatesFilter<"FeeStructure"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FeeStructure"> | Date | string
@@ -106125,6 +106201,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
     organization: OrganizationCreateNestedOneWithoutEmployeeProfilesInput
     user: UserCreateNestedOneWithoutEmployeeProfileDetailInput
   }
@@ -106163,6 +106242,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
   }
 
   export type EmployeeProfileUpdateInput = {
@@ -106197,6 +106279,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUpdateOneRequiredWithoutEmployeeProfilesNestedInput
     user?: UserUpdateOneRequiredWithoutEmployeeProfileDetailNestedInput
   }
@@ -106235,6 +106320,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployeeProfileCreateManyInput = {
@@ -106271,6 +106359,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
   }
 
   export type EmployeeProfileUpdateManyMutationInput = {
@@ -106305,6 +106396,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployeeProfileUncheckedUpdateManyInput = {
@@ -106341,6 +106435,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type HRSettingsCreateInput = {
@@ -107884,6 +107981,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -107912,6 +108010,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -107932,6 +108031,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107960,6 +108060,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107984,6 +108085,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -108004,6 +108106,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108027,6 +108130,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112498,6 +112602,9 @@ export namespace Prisma {
     reviewRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    jdFile?: SortOrder
+    offerLetterFile?: SortOrder
+    sopFile?: SortOrder
   }
 
   export type EmployeeProfileAvgOrderByAggregateInput = {
@@ -112536,6 +112643,9 @@ export namespace Prisma {
     reviewRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    jdFile?: SortOrder
+    offerLetterFile?: SortOrder
+    sopFile?: SortOrder
   }
 
   export type EmployeeProfileMinOrderByAggregateInput = {
@@ -112568,6 +112678,9 @@ export namespace Prisma {
     reviewRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    jdFile?: SortOrder
+    offerLetterFile?: SortOrder
+    sopFile?: SortOrder
   }
 
   export type EmployeeProfileSumOrderByAggregateInput = {
@@ -113351,6 +113464,7 @@ export namespace Prisma {
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
+    dueDate?: SortOrder
     additionalFees?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
@@ -113382,6 +113496,7 @@ export namespace Prisma {
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
+    dueDate?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -113403,6 +113518,7 @@ export namespace Prisma {
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
+    dueDate?: SortOrder
     createdBy?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -127120,6 +127236,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
     user: UserCreateNestedOneWithoutEmployeeProfileDetailInput
   }
 
@@ -127156,6 +127275,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
   }
 
   export type EmployeeProfileCreateOrConnectWithoutOrganizationInput = {
@@ -127370,6 +127492,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -127396,6 +127519,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -129732,6 +129856,9 @@ export namespace Prisma {
     reviewRemarks?: StringNullableFilter<"EmployeeProfile"> | string | null
     createdAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
     updatedAt?: DateTimeFilter<"EmployeeProfile"> | Date | string
+    jdFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    offerLetterFile?: StringNullableFilter<"EmployeeProfile"> | string | null
+    sopFile?: StringNullableFilter<"EmployeeProfile"> | string | null
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -129923,6 +130050,7 @@ export namespace Prisma {
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
+    dueDate?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
     additionalFees?: JsonFilter<"FeeStructure">
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     createdAt?: DateTimeFilter<"FeeStructure"> | Date | string
@@ -134121,6 +134249,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
     organization: OrganizationCreateNestedOneWithoutEmployeeProfilesInput
   }
 
@@ -134157,6 +134288,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
   }
 
   export type EmployeeProfileCreateOrConnectWithoutUserInput = {
@@ -135768,6 +135902,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -135795,6 +135930,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -138500,6 +138636,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUpdateOneRequiredWithoutEmployeeProfilesNestedInput
   }
 
@@ -138536,6 +138675,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutDepartmentReviewerInput = {
@@ -144368,6 +144510,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -144394,6 +144537,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -144953,6 +145097,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -144979,6 +145124,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -167788,6 +167934,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -167814,6 +167961,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -200973,6 +201121,9 @@ export namespace Prisma {
     reviewRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    jdFile?: string | null
+    offerLetterFile?: string | null
+    sopFile?: string | null
   }
 
   export type EnrollmentCreateManyOrganizationInput = {
@@ -201064,6 +201215,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -202235,6 +202387,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutEmployeeProfileDetailNestedInput
   }
 
@@ -202271,6 +202426,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployeeProfileUncheckedUpdateManyWithoutOrganizationInput = {
@@ -202306,6 +202464,9 @@ export namespace Prisma {
     reviewRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    jdFile?: NullableStringFieldUpdateOperationsInput | string | null
+    offerLetterFile?: NullableStringFieldUpdateOperationsInput | string | null
+    sopFile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutOrganizationInput = {
@@ -202542,6 +202703,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -202568,6 +202730,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -202591,6 +202754,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -206581,6 +206745,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -209499,6 +209664,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -209526,6 +209692,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -209549,6 +209716,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -211546,6 +211714,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -212334,6 +212503,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -212360,6 +212530,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -212383,6 +212554,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -212530,6 +212702,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -212787,6 +212960,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -212813,6 +212987,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -212836,6 +213011,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216672,6 +216848,7 @@ export namespace Prisma {
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
+    dueDate?: Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: string | null
     createdAt?: Date | string
@@ -216929,6 +217106,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216955,6 +217133,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216978,6 +217157,7 @@ export namespace Prisma {
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
