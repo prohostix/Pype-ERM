@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown } from 'lucide-react';
+import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -311,6 +311,21 @@ export function HRUsersPanel() {
     } catch (error) {
       console.error('Failed to delete user:', error);
       alert('Failed to delete user. Please try again.');
+    }
+  };
+
+  const handleToggleStatus = async (user: any) => {
+    try {
+      const userId = user.id || user.id;
+      const newStatus = user.status === 'active' ? 'inactive' : 'active';
+      if (!window.confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'suspend'} this user?`)) {
+        return;
+      }
+      await api.put(`/users/${userId}`, { status: newStatus });
+      fetchUsers();
+    } catch (error) {
+      console.error('Failed to toggle user status:', error);
+      alert('Failed to update user status. Please try again.');
     }
   };
 
@@ -781,13 +796,24 @@ export function HRUsersPanel() {
                       variant="outline"
                       size="sm"
                       onClick={() => openEditDialog(user)}
+                      title="Edit User"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => handleToggleStatus(user)}
+                      title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
+                      className={user.status === 'active' ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'}
+                    >
+                      {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleDelete(userId)}
+                      title="Delete User"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
