@@ -745,7 +745,10 @@ exports.Prisma.EmployeeProfileScalarFieldEnum = {
   overallRating: 'overallRating',
   reviewRemarks: 'reviewRemarks',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  jdFile: 'jdFile',
+  offerLetterFile: 'offerLetterFile',
+  sopFile: 'sopFile'
 };
 
 exports.Prisma.HRSettingsScalarFieldEnum = {
@@ -991,6 +994,7 @@ exports.Prisma.FeeStructureScalarFieldEnum = {
   billingCycle: 'billingCycle',
   currency: 'currency',
   effectiveFrom: 'effectiveFrom',
+  dueDate: 'dueDate',
   additionalFees: 'additionalFees',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
