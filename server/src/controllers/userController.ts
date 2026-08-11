@@ -17,11 +17,12 @@ const USER_SELECT = {
 
 // Roles each creator level is allowed to create
 const CREATABLE_ROLES: Record<string, string[]> = {
-  superadmin: ['superadmin', 'org_admin', 'ceo', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
-  org_admin: ['ceo', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
-  ceo: ['finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  org_admin: ['ceo', 'general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  ceo: ['general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  general_manager: ['finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
   finance_admin: ['staff', 'employee'],
-  hr_admin: ['hr_admin', 'finance_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'sales_agent', 'bde', 'staff', 'employee'],
+  hr_admin: ['hr_admin', 'general_manager', 'finance_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'sales_agent', 'bde', 'staff', 'employee'],
   ops_admin: ['ops_sub_admin', 'staff', 'employee'],
   sales_admin: ['sales', 'sales_agent', 'bde', 'staff', 'employee'],
   collections_admin: ['staff', 'employee'],
