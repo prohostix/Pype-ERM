@@ -17,8 +17,8 @@ router.get('/enrollments', authorize('center_admin', 'sales_admin', 'bde', 'sub_
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
 // Dept/Sub-dept manager review routes
-router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo'), getDeptReviewEnrollments);
-router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo'), approveDeptEnrollment);
-router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo'), rejectDeptEnrollment);
+router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);
+router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), approveDeptEnrollment);
+router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), rejectDeptEnrollment);
 export default router;
 //# sourceMappingURL=enrollmentRoutes.js.map

@@ -86,11 +86,11 @@ router.put('/centers/:id/approve', authorize('ops_admin', 'finance_admin'), appr
 router.put('/centers/:id/suspend', authorize('org_admin', 'superadmin'), suspendStudyCenter);
 
 // Admission Sessions
-router.route('/sessions').get(getAdmissionSessions).post(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo'), createAdmissionSession);
+router.route('/sessions').get(getAdmissionSessions).post(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), createAdmissionSession);
 router.route('/sessions/:id')
   .get(getAdmissionSession)
-  .put(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo'), updateAdmissionSession)
-  .delete(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo'), deleteAdmissionSession);
+  .put(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), updateAdmissionSession)
+  .delete(authorize('org_admin', 'superadmin', 'ops_admin', 'ceo', 'general_manager'), deleteAdmissionSession);
 router.put('/sessions/:id/approve', authorize('finance_admin'), approveAdmissionSession);
 
 // Internal Marks — study centers enter marks, ops has read-only

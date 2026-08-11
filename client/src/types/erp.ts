@@ -12,9 +12,10 @@ export type UserRole =
   | 'bde' 
   | 'center_admin' 
   | 'employee'
-  | 'staff';
+  | 'staff'
+  | 'general_manager';
 
-export type DepartmentType = 'operations' | 'finance' | 'hr' | 'sales' | 'custom';
+export type DepartmentType = 'operations' | 'finance' | 'hr' | 'sales' | 'custom' | 'general_manager' | 'ceo' | 'org_admin' | 'study_center';
 export type SubDepartmentType = 'openschool' | 'online' | 'skill' | 'bvoc';
 
 export interface Organization {

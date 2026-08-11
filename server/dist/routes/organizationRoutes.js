@@ -8,7 +8,7 @@ router.get('/inquiries', authorize('superadmin'), getOrgInquiries);
 router.patch('/inquiries/:id', authorize('superadmin'), updateOrgInquiryStatus);
 router
     .route('/')
-    .get(authorize('superadmin', 'org_admin', 'ceo', 'hr_admin', 'finance_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'), getOrganizations)
+    .get(authorize('superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'), getOrganizations)
     .post(authorize('superadmin'), auditLog('create', 'Organization'), createOrganization);
 router
     .route('/:id')

@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/validate/:slug', validateReferralSlug);
 // All other routes require authentication
 router.use(protect);
-const ALL_ROLES = ['superadmin', 'org_admin', 'ceo', 'hr_admin', 'finance_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'];
+const ALL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'];
 // Generate and manage own referral links
 router
     .route('/generate')
@@ -17,7 +17,7 @@ router
 // Admin routes for managing all referral links
 router
     .route('/links')
-    .get(authorize('sales_admin', 'org_admin', 'ceo', 'superadmin'), getAllReferralLinks);
+    .get(authorize('sales_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getAllReferralLinks);
 router
     .route('/links/:id')
     .patch(authorize('sales_admin', 'org_admin', 'superadmin'), updateReferralLinkStatus);
@@ -33,6 +33,6 @@ router
     .get(authorize(...ALL_ROLES), getReferralMetrics);
 router
     .route('/leaderboard')
-    .get(authorize('sales_admin', 'org_admin', 'ceo', 'superadmin'), getReferralLeaderboard);
+    .get(authorize('sales_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getReferralLeaderboard);
 export default router;
 //# sourceMappingURL=referralRoutes.js.map

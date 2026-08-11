@@ -3,7 +3,7 @@ import { getAssets, createAsset, updateAsset, deleteAsset } from '../controllers
 import { protect, authorize } from '../middleware/auth.js';
 const router = express.Router();
 router.use(protect);
-router.use(authorize('hr_admin', 'ceo', 'superadmin'));
+router.use(authorize('hr_admin', 'ceo', 'general_manager', 'superadmin'));
 router.route('/')
     .get(getAssets)
     .post(createAsset);
