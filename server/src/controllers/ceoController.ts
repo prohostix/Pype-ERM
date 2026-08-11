@@ -62,3 +62,15 @@ export const getStudentEnrollmentOverview = asyncHandler(async (req: AuthRequest
   const enrollments = await prisma.enrollment.findMany({ where: { organizationId: req.user.organizationId } });
   res.json({ success: true, data: enrollments });
 });
+
+export const getActivityLogs = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const logs = await prisma.auditLog.findMany({
+    where: { organizationId: req.user.organizationId },
+    include: {
+      user: { select: { id: true, name: true, email: true, role: true } }
+    },
+    orderBy: { timestamp: 'desc' },
+    take: 500
+  });
+  res.json({ success: true, count: logs.length, data: logs });
+});

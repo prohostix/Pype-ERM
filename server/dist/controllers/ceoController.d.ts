@@ -9,4 +9,5 @@ export declare const assignTask: (req: import("express").Request, res: Response,
 export declare const getKPIKRAReport: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getCenterOnboardingOverview: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getStudentEnrollmentOverview: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getActivityLogs: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=ceoController.d.ts.map

@@ -241,7 +241,7 @@ export function InternalMarksPanel() {
             <div className="space-y-2">
               {(() => {
                 const filteredMarks = marks.filter(m => m && (m.id || m.id));
-                const totalPages = Math.max(1, Math.ceil(filteredMarks.length / itemsPerPage));
+
                 const paginatedMarks = filteredMarks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                 return (
                   <>

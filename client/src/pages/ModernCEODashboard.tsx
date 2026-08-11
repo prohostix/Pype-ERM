@@ -63,6 +63,7 @@ import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommis
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
@@ -373,6 +374,10 @@ export function ModernCEODashboard({ initialTab }: { initialTab?: string }) {
 
         <TabsContent value="meetings">
           <MeetingsPanel />
+        </TabsContent>
+
+        <TabsContent value="activity-logs">
+          <ActivityLogPanel />
         </TabsContent>
       </Tabs>
     </div>

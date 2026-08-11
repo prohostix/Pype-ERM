@@ -92,7 +92,7 @@ export function DocumentDispatchPanel() {
               </TableHeader>
               <TableBody>
                 {(() => {
-                  const totalPages = Math.max(1, Math.ceil(logs.length / itemsPerPage));
+
                   const paginatedLogs = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                   return (
                     <>

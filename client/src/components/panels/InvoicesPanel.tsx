@@ -507,7 +507,7 @@ export function InvoicesPanel() {
             <div className="space-y-2">
               {(() => {
                 const validInvoices = invoices.filter(inv => inv?.id);
-                const totalPages = Math.max(1, Math.ceil(validInvoices.length / itemsPerPage));
+
                 const paginatedInvoices = validInvoices.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                 return (
                   <>

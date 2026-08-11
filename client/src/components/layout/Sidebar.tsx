@@ -37,7 +37,8 @@ import {
   User,
   BookOpen,
   MonitorSmartphone,
-  Video
+  Video,
+  Activity
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -91,6 +92,7 @@ const navItems: NavItem[] = [
       { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo'] },
       { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo'] },
       { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo'] },
+      { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'org_admin'] },
     ],
   },
   {

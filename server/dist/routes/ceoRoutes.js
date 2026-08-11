@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPerformanceMetrics, getRiskMetrics, getEscalations, handleEscalation, getAnalytics, getDepartmentManagers, assignTask, getKPIKRAReport, getCenterOnboardingOverview, getStudentEnrollmentOverview, } from '../controllers/ceoController.js';
+import { getPerformanceMetrics, getRiskMetrics, getEscalations, handleEscalation, getAnalytics, getDepartmentManagers, assignTask, getKPIKRAReport, getCenterOnboardingOverview, getStudentEnrollmentOverview, getActivityLogs, } from '../controllers/ceoController.js';
 import { protect, authorize } from '../middleware/auth.js';
 const router = express.Router();
 router.use(protect);
@@ -19,5 +19,7 @@ router.get('/managers', authorize('ceo'), getDepartmentManagers);
 router.post('/tasks', authorize('ceo'), assignTask);
 // KPI / KRA org-wide report
 router.get('/kpi-kra-report', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'hr_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
+// Activity logs for ceo/org_admin
+router.get('/activity-logs', authorize('ceo', 'org_admin'), getActivityLogs);
 export default router;
 //# sourceMappingURL=ceoRoutes.js.map

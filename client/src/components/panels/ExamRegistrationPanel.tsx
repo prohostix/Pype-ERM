@@ -70,7 +70,7 @@ export function ExamRegistrationPanel() {
               </TableHeader>
               <TableBody>
                 {(() => {
-                  const totalPages = Math.max(1, Math.ceil(students.length / itemsPerPage));
+
                   const paginatedStudents = students.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                   return (
                     <>
