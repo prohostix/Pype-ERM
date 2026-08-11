@@ -92,16 +92,15 @@ export function EnrollStudentPanel() {
       if (yearlyFees.length > 0) {
         const sem1 = yearlyFees[0];
         const sem1Total = (Number(sem1.registrationFee) || 0) + (Number(sem1.tuitionFee) || 0) + (Number(sem1.examFee) || 0);
-        options.push({ id: 'first_semester', label: 'First Semester', totalAmount: sem1Total + additionalTotal });
+        const sem2 = yearlyFees.length > 1 ? yearlyFees[1] : null;
+        const sem2Total = sem2 ? (Number(sem2.registrationFee) || 0) + (Number(sem2.tuitionFee) || 0) + (Number(sem2.examFee) || 0) : 0;
         
-        if (yearlyFees.length >= 2) {
-          const sem2 = yearlyFees[1];
-          const sem2Total = (Number(sem2.registrationFee) || 0) + (Number(sem2.tuitionFee) || 0) + (Number(sem2.examFee) || 0);
+        options.push({ id: 'first_semester', label: 'First Semester', totalAmount: sem1Total + additionalTotal });
+        if (sem2) {
           options.push({ id: 'first_year', label: 'First Year (Sem 1 & 2)', totalAmount: sem1Total + sem2Total + additionalTotal });
         }
         
-        const fullCourse = yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0) + (Number(y.tuitionFee) || 0) + (Number(y.examFee) || 0), 0);
-        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: fullCourse + additionalTotal });
+        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: baseTotal + additionalTotal });
       } else {
         options.push({ id: 'first_semester', label: 'First Semester', totalAmount: baseTotal + additionalTotal });
       }
@@ -111,8 +110,7 @@ export function EnrollStudentPanel() {
         const year1Total = (Number(year1.registrationFee) || 0) + (Number(year1.tuitionFee) || 0) + (Number(year1.examFee) || 0);
         options.push({ id: 'first_year', label: 'First Year', totalAmount: year1Total + additionalTotal });
 
-        const fullCourse = yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0) + (Number(y.tuitionFee) || 0) + (Number(y.examFee) || 0), 0);
-        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: fullCourse + additionalTotal });
+        options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: baseTotal + additionalTotal });
       } else {
         options.push({ id: 'first_year', label: 'First Year', totalAmount: baseTotal + additionalTotal });
       }

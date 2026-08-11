@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, DollarSign, Search, X } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Save, Building2, BookOpen, Calculator } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -11,49 +10,59 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 export function FeeStructuresPanel() {
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
-  const [sessions, setSessions] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
-  const [selectedUniversityId, setSelectedUniversityId] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const [selectedUniv, setSelectedUniv] = useState<any>(null);
+  const [selectedProg, setSelectedProg] = useState<any>(null);
+  const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
-    programId: '',
-    universityId: '',
-    feeLevel: 'program' as 'program' | 'university',
-    sessionId: 'standard_all',
     registrationFee: '0',
     tuitionFee: '0',
     examFee: '0',
-    universityFee: '0',
     commissionRate: '0',
-    gstPercentage: '18',
     billingCycle: 'per_year',
-    currency: 'INR',
-    effectiveFrom: '',
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
-  const [sortBy, setSortBy] = useState<'university' | 'program' | 'session' | 'total_fee'>('program');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  // Filter bar state
-  const [filterUniversity, setFilterUniversity] = useState<string>('all');
-  const [filterProgram, setFilterProgram] = useState<string>('all');
-  const [filterSession, setFilterSession] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
-    if (formData.programId && (formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester')) {
-      const prog = programs.find(p => p.id === formData.programId);
-      const durationMonths = prog?.duration || 12;
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [fRes, pRes, uRes] = await Promise.all([
+        api.get('/finance/fees'),
+        api.get('/operations/programs'),
+        api.get('/operations/universities')
+      ]);
+      setFees(fRes.data.data || []);
+      setPrograms(pRes.data.data || []);
+      setUniversities(uRes.data.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (step === 3 && selectedProg) {
+      const durationMonths = selectedProg.duration || 12;
       let periodsCount = 0;
       let periodNames: string[] = [];
 
-      if (formData.billingCycle === 'per_semester' && prog?.hasSemesters && Array.isArray(prog.semesters) && prog.semesters.length > 0) {
-        periodsCount = prog.semesters.length;
-        periodNames = prog.semesters.map((s: any) => s.name);
+      if (formData.billingCycle === 'per_semester' && selectedProg.hasSemesters && Array.isArray(selectedProg.semesters) && selectedProg.semesters.length > 0) {
+        periodsCount = selectedProg.semesters.length;
+        periodNames = selectedProg.semesters.map((s: any) => s.name);
       } else if (formData.billingCycle === 'per_semester') {
         periodsCount = Math.ceil(durationMonths / 6);
         periodNames = Array.from({ length: periodsCount }, (_, i) => `Semester ${i + 1}`);
@@ -69,72 +78,72 @@ export function FeeStructuresPanel() {
             year: next.length + 1,
             registrationFee: '0',
             tuitionFee: '0',
-            universityFee: '0',
             examFee: '0',
-            commissionRate: '0'
+            commissionRate: '0',
+            dueDate: ''
           });
         }
-        const synced = next.slice(0, periodsCount).map((item, idx) => ({
+        return next.slice(0, periodsCount).map((item, idx) => ({
           ...item,
           year: idx + 1,
           periodName: periodNames[idx] || (formData.billingCycle === 'per_year' ? `Year ${idx + 1}` : `Semester ${idx + 1}`)
         }));
-        return synced;
       });
+    }
+  }, [formData.billingCycle, selectedProg, step]);
+
+  const handleSelectUniv = (u: any) => {
+    setSelectedUniv(u);
+    setStep(2);
+  };
+
+  const handleSelectProg = (p: any) => {
+    setSelectedProg(p);
+    
+    // Load existing fee if any
+    const existing = fees.find(f => {
+      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+      return pid === p.id;
+    });
+
+    if (existing) {
+      setEditingFeeId(existing.id);
+      setFormData({
+        registrationFee: existing.registrationFee?.toString() || '0',
+        tuitionFee: existing.tuitionFee?.toString() || '0',
+        examFee: existing.examFee?.toString() || '0',
+        commissionRate: existing.commissionRate?.toString() || '0',
+        billingCycle: existing.billingCycle || 'per_year',
+        additionalFees: Array.isArray(existing.additionalFees) ? existing.additionalFees.map((af: any) => `${af.label}:${af.amount}`).join(', ') : ''
+      });
+      const yf = Array.isArray(existing.yearlyFees) ? existing.yearlyFees : [];
+      setYearlyFees(yf.map((y: any) => ({
+        year: y.year,
+        registrationFee: y.registrationFee?.toString() || '0',
+        tuitionFee: y.tuitionFee?.toString() || '0',
+        examFee: y.examFee?.toString() || '0',
+        commissionRate: y.commissionRate?.toString() || '0',
+        dueDate: y.dueDate || ''
+      })));
     } else {
+      setEditingFeeId(null);
+      setFormData({
+        registrationFee: '0',
+        tuitionFee: '0',
+        examFee: '0',
+        commissionRate: '0',
+        billingCycle: 'per_year',
+        additionalFees: ''
+      });
       setYearlyFees([]);
     }
-  }, [formData.programId, formData.billingCycle, programs]);
-
-  useEffect(() => {
-    fetchFees();
-    fetchPrograms();
-    fetchSessions();
-    fetchUniversities();
-  }, []);
-
-  const fetchFees = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/finance/fees');
-      setFees(res.data.data || []);
-    } catch (err) {
-      console.error('Failed to fetch fees:', err);
-    } finally {
-      setLoading(false);
-    }
+    setStep(3);
   };
 
-  const fetchPrograms = async () => {
-    try {
-      const res = await api.get('/operations/programs');
-      setPrograms(res.data.data || []);
-    } catch (err) {
-      console.error('Failed to fetch programs:', err);
-    }
-  };
-
-  const fetchSessions = async () => {
-    try {
-      const res = await api.get('/operations/sessions');
-      setSessions(res.data.data || []);
-    } catch (err) {
-      console.error('Failed to fetch sessions:', err);
-    }
-  };
-
-  const fetchUniversities = async () => {
-    try {
-      const res = await api.get('/operations/universities');
-      setUniversities(res.data.data || []);
-    } catch (err) {
-      console.error('Failed to fetch universities:', err);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSave = async () => {
+    if (!selectedProg) return;
+    
+    setSaving(true);
     const additionalFees = formData.additionalFees
       ? formData.additionalFees.split(',').map(s => {
           const [label, amount] = s.trim().split(':');
@@ -146,577 +155,260 @@ export function FeeStructuresPanel() {
       year: Number(yf.year),
       registrationFee: Number(yf.registrationFee || 0),
       tuitionFee: Number(yf.tuitionFee || 0),
-      universityFee: Number(yf.universityFee || 0),
       examFee: Number(yf.examFee || 0),
       commissionRate: Number(yf.commissionRate || 0),
       dueDate: yf.dueDate || null
     }));
 
-    const payload: any = {
-      feeLevel: formData.feeLevel,
-      sessionId: formData.sessionId === 'standard_all' || !formData.sessionId ? null : formData.sessionId,
+    const payload = {
+      programId: selectedProg.id,
+      universityId: selectedUniv?.id || null,
+      feeLevel: 'program',
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
       examFee: Number(formData.examFee),
-      universityFee: Number(formData.universityFee),
       commissionRate: Number(formData.commissionRate),
-      yearlyFees: formattedYearlyFees,
-      gstPercentage: Number(formData.gstPercentage),
       billingCycle: formData.billingCycle,
-      currency: formData.currency,
-      effectiveFrom: formData.effectiveFrom || null,
-      dueDate: formData.dueDate || null,
+      yearlyFees: formattedYearlyFees,
       additionalFees
     };
 
-    if (!formData.programId) { toast.error('Please select a Program'); return; }
-    payload.programId = formData.programId;
-    payload.universityId = selectedUniversityId;
-
     try {
-      if (editingId) {
-        await api.put(`/finance/fees/${editingId}`, payload);
-        toast.success('Fee structure updated successfully');
+      if (editingFeeId) {
+        await api.put(`/finance/fees/${editingFeeId}`, payload);
+        toast.success('Fee structure updated');
       } else {
         await api.post('/finance/fees', payload);
-        toast.success('Fee structure created successfully');
+        toast.success('Fee structure created');
       }
-      setDialogOpen(false);
-      resetForm();
-      fetchFees();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to save fee structure');
+      await fetchData();
+      setStep(2);
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to save');
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleEdit = (f: any) => {
-    const progId = typeof f.programId === 'object' ? (f.programId?.id || f.programId?.id) : f.programId;
-    const sessId = typeof f.sessionId === 'object' ? (f.sessionId?.id || f.sessionId?.id) : f.sessionId;
-    const addFeesStr = Array.isArray(f.additionalFees)
-      ? f.additionalFees.map((af: any) => `${af.label}:${af.amount}`).join(', ')
-      : '';
-
-    const programObj = programs.find(p => p.id === progId);
-    const univId = programObj?.universityId || '';
-    const feeLevelVal = f.feeLevel || (f.universityId && !f.programId ? 'university' : 'program');
-    const universityIdVal = f.universityId || univId || '';
-    setSelectedUniversityId(universityIdVal);
-
-    const savedYearlyFees = Array.isArray(f.yearlyFees) ? f.yearlyFees : [];
-    setYearlyFees(savedYearlyFees.map((yf: any) => ({
-      year: yf.year,
-      registrationFee: yf.registrationFee?.toString() || '0',
-      tuitionFee: yf.tuitionFee?.toString() || '0',
-      universityFee: yf.universityFee?.toString() || '0',
-      examFee: yf.examFee?.toString() || '0',
-      commissionRate: yf.commissionRate?.toString() || '0',
-      dueDate: yf.dueDate || ''
-    })));
-
-    setEditingId(f.id);
-    setFormData({
-      programId: progId?.toString() || '',
-      universityId: universityIdVal?.toString() || '',
-      feeLevel: feeLevelVal as 'program' | 'university',
-      sessionId: sessId?.toString() || 'standard_all',
-      registrationFee: f.registrationFee?.toString() || '0',
-      tuitionFee: f.tuitionFee?.toString() || '0',
-      examFee: f.examFee?.toString() || '0',
-      universityFee: f.universityFee?.toString() || '0',
-      commissionRate: f.commissionRate?.toString() || '0',
-      gstPercentage: f.gstPercentage?.toString() || '18',
-      billingCycle: f.billingCycle || 'per_year',
-      currency: f.currency || 'INR',
-      effectiveFrom: f.effectiveFrom ? f.effectiveFrom.slice(0, 10) : '',
-      dueDate: f.dueDate ? f.dueDate.slice(0, 10) : '',
-      additionalFees: addFeesStr
-    });
-    setDialogOpen(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this fee structure?')) return;
-    try {
-      await api.delete(`/finance/fees/${id}`);
-      toast.success('Fee structure deleted successfully');
-      fetchFees();
-    } catch (err) {
-      console.error('Failed to delete fee structure:', err);
-    }
-  };
-
-  const resetForm = () => {
-    setEditingId(null);
-    setSelectedUniversityId('');
-    setYearlyFees([]);
-    setFormData({
-      programId: '',
-      universityId: '',
-      feeLevel: 'program',
-      sessionId: 'standard_all',
-      registrationFee: '0',
-      tuitionFee: '0',
-      examFee: '0',
-      universityFee: '0',
-      commissionRate: '0',
-      gstPercentage: '18',
-      billingCycle: 'per_year',
-      currency: 'INR',
-      effectiveFrom: '',
-      dueDate: '',
-      additionalFees: ''
-    });
-  };
-
-  // Filter programs based on selected university
-  const filteredPrograms = selectedUniversityId
-    ? programs.filter(p => p.universityId === selectedUniversityId)
-    : [];
+  const progsForUniv = programs.filter(p => p.universityId === selectedUniv?.id);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Fee Structure Management</h2>
-          <p className="text-muted-foreground">Manage program fees and billing structures</p>
+          <p className="text-muted-foreground text-sm mt-1">Configure program fees and billing structures step by step.</p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Fee Structure</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Fee Structure' : 'Add New Fee Structure'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>University <span className="text-rose-500">*</span></Label>
-                <Select value={selectedUniversityId} onValueChange={(v) => { setSelectedUniversityId(v); setFormData({ ...formData, programId: '', universityId: v }); }}>
-                  <SelectTrigger><SelectValue placeholder="Select university first" /></SelectTrigger>
-                  <SelectContent>
-                    {universities.filter(u => u && u.id).map((u) => (
-                      <SelectItem key={u.id} value={u.id.toString()}>
-                        {u.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+      </div>
 
-              <div>
-                <Label>Program <span className="text-rose-500">*</span></Label>
-                <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v })} disabled={!selectedUniversityId}>
-                  <SelectTrigger><SelectValue placeholder={selectedUniversityId ? "Select program" : "Select university first"}/></SelectTrigger>
-                  <SelectContent>
-                    {filteredPrograms.map((p) => (
-                      <SelectItem key={p.id} value={p.id.toString()}>
-                        {p.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label>Admission Session</Label>
-                <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v })}>
-                  <SelectTrigger><SelectValue placeholder="Standard / All Sessions" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="standard_all">Standard / All Sessions</SelectItem>
-                    {sessions.filter(s => s && s.id).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name} ({s.status})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label>Billing Cycle</Label>
-                  <Select value={formData.billingCycle} onValueChange={(v) => setFormData({ ...formData, billingCycle: v })}>
-                    <SelectTrigger><SelectValue placeholder="Billing Cycle" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="per_semester">Per Semester</SelectItem>
-                      <SelectItem value="per_year">Per Year</SelectItem>
-                      <SelectItem value="total">Total (one-time)</SelectItem>
-                    </SelectContent>
-                  </Select>
+      {loading ? (
+        <div className="flex justify-center p-12"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>
+      ) : (
+        <>
+          {step === 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>1. Select University</CardTitle>
+                <CardDescription>Choose a university to manage its programs' fee structures.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {universities.map(u => (
+                    <button
+                      key={u.id}
+                      onClick={() => handleSelectUniv(u)}
+                      className="flex items-center gap-4 p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left"
+                    >
+                      <div className="p-3 rounded-full bg-primary/10 text-primary">
+                        <Building2 className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{u.name}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{u.code}</p>
+                      </div>
+                    </button>
+                  ))}
+                  {universities.length === 0 && <p className="text-muted-foreground">No universities found.</p>}
                 </div>
-                <div>
-                  <Label>Currency</Label>
-                  <Input value={formData.currency} onChange={(e) => setFormData({ ...formData, currency: e.target.value })} required placeholder="INR" />
-                </div>
-              </div>
+              </CardContent>
+            </Card>
+          )}
 
-              {(formData.billingCycle === 'per_year' || formData.billingCycle === 'per_semester') && yearlyFees.length > 0 ? (
-                <div className="space-y-4 border-t pt-4">
-                  <h3 className="font-semibold text-sm">
-                    {formData.billingCycle === 'per_year' ? 'Yearly' : 'Semester'} Fee Breakdown ({yearlyFees.length} {formData.billingCycle === 'per_year' ? 'Years' : 'Semesters'})
-                  </h3>
-                  {yearlyFees.map((yf, idx) => (
-                    <Card key={yf.year} className="bg-muted/20 border">
-                      <CardContent className="p-4 space-y-3">
-                        <h4 className="font-medium text-xs text-primary">{yf.periodName}</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div>
-                            <Label className="text-[10px] uppercase">Registration Fee</Label>
-                            <Input type="number" min="0" value={yf.registrationFee} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].registrationFee = e.target.value;
-                              setYearlyFees(updated);
-                            }} required />
+          {step === 2 && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" onClick={() => setStep(1)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <div>
+                    <CardTitle>2. Select Program</CardTitle>
+                    <CardDescription>{selectedUniv?.name} - Choose a program to configure its fees.</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {progsForUniv.map(p => {
+                    const hasFee = fees.some(f => (typeof f.programId === 'object' ? f.programId?.id : f.programId) === p.id);
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => handleSelectProg(p)}
+                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                            <BookOpen className="w-5 h-5" />
                           </div>
                           <div>
-                            <Label className="text-[10px] uppercase">Tuition / Base Fee</Label>
-                            <Input type="number" min="0" value={yf.tuitionFee} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].tuitionFee = e.target.value;
-                              setYearlyFees(updated);
-                            }} required />
+                            <p className="font-semibold text-sm line-clamp-1">{p.name}</p>
+                            <p className="text-xs text-muted-foreground">{p.code}</p>
                           </div>
-                          <div>
-                            <Label className="text-[10px] uppercase">Due Date</Label>
-                            <Input type="date" value={yf.dueDate || ''} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].dueDate = e.target.value;
-                              setYearlyFees(updated);
+                        </div>
+                        <div className="mt-auto pt-4 flex justify-between items-center">
+                           <Badge variant={hasFee ? 'default' : 'secondary'} className="text-[10px]">
+                             {hasFee ? 'Configured' : 'Not Configured'}
+                           </Badge>
+                        </div>
+                      </button>
+                    );
+                  })}
+                  {progsForUniv.length === 0 && <p className="text-muted-foreground">No programs found for this university.</p>}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {step === 3 && (
+            <Card className="border-primary/20 shadow-md">
+              <CardHeader className="bg-muted/30 border-b border-border pb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
+                    <div>
+                      <CardTitle>3. Configure Fee Structure</CardTitle>
+                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code})</CardDescription>
+                    </div>
+                  </div>
+                  <Button onClick={handleSave} disabled={saving} className="gap-2">
+                    <Save className="w-4 h-4" /> Save Fee Structure
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                
+                {/* One Time Pricing Section */}
+                <div className="mb-10">
+                  <div className="flex items-center gap-2 mb-4 border-b pb-2">
+                    <Calculator className="w-5 h-5 text-primary" />
+                    <h3 className="text-lg font-semibold">One-Time Payment Plan (Lump Sum)</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">Set the pricing for students who choose to pay the entire course fee upfront. This is usually discounted.</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-muted/20 p-5 rounded-xl border border-border">
+                    <div className="space-y-2">
+                      <Label>Registration Fee</Label>
+                      <Input type="number" value={formData.registrationFee} onChange={e => setFormData({...formData, registrationFee: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Tuition Fee</Label>
+                      <Input type="number" value={formData.tuitionFee} onChange={e => setFormData({...formData, tuitionFee: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Exam Fee</Label>
+                      <Input type="number" value={formData.examFee} onChange={e => setFormData({...formData, examFee: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Center Commission Rate (Flat)</Label>
+                      <Input type="number" value={formData.commissionRate} onChange={e => setFormData({...formData, commissionRate: e.target.value})} />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <Label>Additional One-Time Fees (Format: Label:Amount, e.g., Library:5000, ID Card:500)</Label>
+                    <Input value={formData.additionalFees} onChange={e => setFormData({...formData, additionalFees: e.target.value})} placeholder="Hostel:20000, Transport:10000" />
+                  </div>
+                </div>
+
+                {/* Installment Pricing Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-4 border-b pb-2">
+                    <Calculator className="w-5 h-5 text-blue-500" />
+                    <h3 className="text-lg font-semibold">Installment Payment Plan</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">Set the pricing breakdown for students who pay in installments (per year or per semester).</p>
+
+                  <div className="w-64 mb-6">
+                    <Label className="mb-2 block">Installment Cycle</Label>
+                    <Select value={formData.billingCycle} onValueChange={v => setFormData({...formData, billingCycle: v})}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="per_year">Year-wise</SelectItem>
+                        <SelectItem value="per_semester">Semester-wise</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-4">
+                    {yearlyFees.map((yf, idx) => (
+                      <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
+                        <div className="font-semibold text-primary">{yf.periodName}</div>
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs">Reg Fee</Label>
+                            <Input type="number" className="h-8" value={yf.registrationFee} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].registrationFee = e.target.value;
+                              setYearlyFees(next);
+                            }} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Tuition Fee</Label>
+                            <Input type="number" className="h-8" value={yf.tuitionFee} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].tuitionFee = e.target.value;
+                              setYearlyFees(next);
+                            }} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Exam Fee</Label>
+                            <Input type="number" className="h-8" value={yf.examFee} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].examFee = e.target.value;
+                              setYearlyFees(next);
+                            }} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Commission (Flat)</Label>
+                            <Input type="number" className="h-8" value={yf.commissionRate} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].commissionRate = e.target.value;
+                              setYearlyFees(next);
+                            }} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Due Date</Label>
+                            <Input type="date" className="h-8" value={yf.dueDate || ''} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].dueDate = e.target.value;
+                              setYearlyFees(next);
                             }} />
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                          <div>
-                            <Label className="text-[10px] uppercase">University Fee</Label>
-                            <Input type="number" min="0" value={yf.universityFee} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].universityFee = e.target.value;
-                              setYearlyFees(updated);
-                            }} required />
-                          </div>
-                          <div>
-                            <Label className="text-[10px] uppercase">Exam Fee</Label>
-                            <Input type="number" min="0" value={yf.examFee} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].examFee = e.target.value;
-                              setYearlyFees(updated);
-                            }} required />
-                          </div>
-                          <div>
-                            <Label className="text-[10px] uppercase">Commission Rate (%)</Label>
-                            <Input type="number" min="0" max="100" value={yf.commissionRate} onChange={(e) => {
-                              const updated = [...yearlyFees];
-                              updated[idx].commissionRate = e.target.value;
-                              setYearlyFees(updated);
-                            }} required />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label>Registration Fee</Label>
-                      <Input type="number" min="0" value={formData.registrationFee} onChange={(e) => setFormData({ ...formData, registrationFee: e.target.value })} required />
-                    </div>
-                    <div>
-                      <Label>Tuition / Base Fee</Label>
-                      <Input type="number" min="0" value={formData.tuitionFee} onChange={(e) => setFormData({ ...formData, tuitionFee: e.target.value })} required />
-                    </div>
-                    <div>
-                      <Label>University Fee</Label>
-                      <Input type="number" min="0" value={formData.universityFee} onChange={(e) => setFormData({ ...formData, universityFee: e.target.value })} required />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label>Exam Fee</Label>
-                      <Input type="number" min="0" value={formData.examFee} onChange={(e) => setFormData({ ...formData, examFee: e.target.value })} required />
-                    </div>
-                    <div>
-                      <Label>GST %</Label>
-                      <Input type="number" min="0" max="100" value={formData.gstPercentage} onChange={(e) => setFormData({ ...formData, gstPercentage: e.target.value })} required />
-                    </div>
-                    <div>
-                      <Label>Commission Rate (%)</Label>
-                      <Input type="number" min="0" max="100" value={formData.commissionRate} onChange={(e) => setFormData({ ...formData, commissionRate: e.target.value })} required />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label>Effective From</Label>
-                  <Input type="date" value={formData.effectiveFrom} onChange={(e) => setFormData({ ...formData, effectiveFrom: e.target.value })} />
-                </div>
-                <div>
-                  <Label>Due Date (For One-off Fees)</Label>
-                  <Input type="date" value={formData.dueDate || ''} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <Label>Additional Fees <span className="text-muted-foreground text-xs">(label:amount, comma-separated)</span></Label>
-                  <Input value={formData.additionalFees} onChange={(e) => setFormData({ ...formData, additionalFees: e.target.value })} placeholder="Registration:500, Exam:200" />
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <Card>
-        <CardHeader className="space-y-3 pb-3">
-          <CardTitle>Fee Structures</CardTitle>
-
-          {/* Search bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              className="pl-9 h-9 text-sm"
-              placeholder="Search by program, university or session..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                onClick={() => setSearchQuery('')}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Filter + Sort row */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* University filter */}
-            <Select value={filterUniversity} onValueChange={setFilterUniversity}>
-              <SelectTrigger className="h-8 text-xs w-40">
-                <SelectValue placeholder="All Universities" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Universities</SelectItem>
-                {universities.filter(u => u?.id).map(u => (
-                  <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Program filter */}
-            <Select value={filterProgram} onValueChange={setFilterProgram}>
-              <SelectTrigger className="h-8 text-xs w-36">
-                <SelectValue placeholder="All Programs" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Programs</SelectItem>
-                {programs.filter(p => p?.id).map(p => (
-                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Session filter */}
-            <Select value={filterSession} onValueChange={setFilterSession}>
-              <SelectTrigger className="h-8 text-xs w-44">
-                <SelectValue placeholder="All Sessions" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Sessions</SelectItem>
-                {sessions.filter(s => s?.id).map(s => (
-                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div className="h-4 w-px bg-border mx-1" />
-
-            {/* Sort by */}
-            <span className="text-xs text-muted-foreground">Sort:</span>
-            <Select value={sortBy} onValueChange={(v: any) => setSortBy(v)}>
-              <SelectTrigger className="h-8 text-xs w-36">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="university">University</SelectItem>
-                <SelectItem value="program">Program</SelectItem>
-                <SelectItem value="session">Session</SelectItem>
-                <SelectItem value="total_fee">Total Fee</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={(v: any) => setSortOrder(v)}>
-              <SelectTrigger className="h-8 text-xs w-24">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">Asc ↑</SelectItem>
-                <SelectItem value="desc">Desc ↓</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Reset button — shown only when any filter is active */}
-            {(filterUniversity !== 'all' || filterProgram !== 'all' || filterSession !== 'all' || searchQuery) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 text-xs text-rose-500 hover:text-rose-600"
-                onClick={() => {
-                  setFilterUniversity('all');
-                  setFilterProgram('all');
-                  setFilterSession('all');
-                  setSearchQuery('');
-                }}
-              >
-                <X className="w-3 h-3 mr-1" /> Reset Filters
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="text-center py-8">Loading...</div>
-          ) : fees.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No fee structures found</div>
-          ) : (
-            <div className="space-y-2">
-              {(() => {
-                const getFeeTotals = (f: any) => {
-                  let reg = Number(f.registrationFee) || 0;
-                  let tui = Number(f.tuitionFee) || 0;
-                  let ex = Number(f.examFee) || 0;
-                  if ((f.billingCycle === 'per_year' || f.billingCycle === 'per_semester') && Array.isArray(f.yearlyFees) && f.yearlyFees.length > 0) {
-                    reg = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.registrationFee) || 0), 0);
-                    tui = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.tuitionFee) || 0), 0);
-                    ex = f.yearlyFees.reduce((sum: number, y: any) => sum + (Number(y.examFee) || 0), 0);
-                  }
-                  return { reg, tui, ex, total: reg + tui + ex };
-                };
-                
-                return [...fees]
-                // --- Apply filters ---
-                .filter(f => {
-                  if (!f?.id) return false;
-                  const progName = (typeof f.programId === 'object' ? f.programId?.name : f.program?.name) || '';
-                  const univName = (typeof f.programId === 'object' ? f.programId?.university?.name : f.program?.university?.name) || f.university?.name || '';
-                  const univId   = (typeof f.programId === 'object' ? f.programId?.universityId : f.program?.universityId) || f.universityId || '';
-                  const progId   = (typeof f.programId === 'object' ? f.programId?.id : f.programId) || f.program?.id || '';
-                  const sessId   = (typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId) || f.session?.id || '';
-                  const sessName = f.session?.name || '';
-
-                  if (filterUniversity !== 'all' && univId !== filterUniversity) return false;
-                  if (filterProgram   !== 'all' && progId !== filterProgram)   return false;
-                  if (filterSession   !== 'all' && sessId !== filterSession)   return false;
-
-                  if (searchQuery) {
-                    const q = searchQuery.toLowerCase();
-                    if (
-                      !progName.toLowerCase().includes(q) &&
-                      !univName.toLowerCase().includes(q) &&
-                      !sessName.toLowerCase().includes(q)
-                    ) return false;
-                  }
-                  return true;
-                })
-                // --- Sort ---
-                .sort((a, b) => {
-                  let comparison = 0;
-                  if (sortBy === 'university') {
-                    const aUniv = a.university?.name || (typeof a.programId === 'object' ? a.programId?.university?.name : a.program?.university?.name) || '';
-                    const bUniv = b.university?.name || (typeof b.programId === 'object' ? b.programId?.university?.name : b.program?.university?.name) || '';
-                    comparison = aUniv.localeCompare(bUniv);
-                  } else if (sortBy === 'program') {
-                    const aProg = typeof a.programId === 'object' ? a.programId?.name : (a.program?.name || '');
-                    const bProg = typeof b.programId === 'object' ? b.programId?.name : (b.program?.name || '');
-                    comparison = aProg.localeCompare(bProg);
-                  } else if (sortBy === 'session') {
-                    const aSess = a.session?.name || '';
-                    const bSess = b.session?.name || '';
-                    comparison = aSess.localeCompare(bSess);
-                  } else if (sortBy === 'total_fee') {
-                    const aTotals = getFeeTotals(a);
-                    const bTotals = getFeeTotals(b);
-                    comparison = aTotals.total - bTotals.total;
-                  }
-                  return sortOrder === 'asc' ? comparison : -comparison;
-                })
-                .map((f) => {
-                  const fid = f.id;
-                const progName = typeof f.programId === 'object' ? f.programId?.name : (f.program?.name || '');
-                const univName = typeof f.programId === 'object' ? f.programId?.university?.name : (f.program?.university?.name || '');
-                const sessionName = f.session?.name || '';
-                const feeTotals = getFeeTotals(f);
-                
-                return (
-                  <div key={fid} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <DollarSign className="w-5 h-5 text-green-600" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium flex items-center gap-2 flex-wrap">
-                          {f.feeLevel === 'university' ? (
-                            <>
-                              <span>{f.university?.name || univName || 'Unknown University'}</span>
-                              <Badge className="text-[10px] bg-amber-100 text-amber-700 dark:bg-amber-900/30">University Level</Badge>
-                            </>
-                          ) : (
-                            <>
-                              {progName || 'Unknown Program'}
-                              {(univName || f.university?.name) && (
-                                <span className="text-sm text-muted-foreground">({univName || f.university?.name})</span>
-                              )}
-                              <Badge className="text-[10px] bg-blue-100 text-blue-700 dark:bg-blue-900/30">Program Level</Badge>
-                            </>
-                          )}
-                          {sessionName && (
-                            <span className="text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 font-normal">
-                              {sessionName}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-2 items-center">
-                          <Badge variant="outline">{f.currency || 'INR'} {feeTotals.total.toLocaleString()} total</Badge>
-                          <span className="text-xs">Reg: {feeTotals.reg} • Tuition: {feeTotals.tui} • Exam: {feeTotals.ex} • GST: {f.gstPercentage}%</span>
-                          <Badge variant="secondary" className="capitalize text-xs">{f.billingCycle?.replace('_', ' ') || 'Per Year'}</Badge>
-                        </div>
-                        {Array.isArray(f.additionalFees) && f.additionalFees.length > 0 && (
-                          <div className="flex items-center gap-2 mt-2 flex-wrap">
-                            <span className="text-xs text-muted-foreground">Additional:</span>
-                            {f.additionalFees.map((af: any, idx: number) => (
-                              <Badge key={idx} variant="outline" className="text-[10px]">{af.label}: {af.amount}</Badge>
-                            ))}
-                          </div>
-                        )}
-                        {f.effectiveFrom && (
-                          <div className="text-[11px] text-muted-foreground mt-1">
-                            Effective From: {new Date(f.effectiveFrom).toLocaleDateString()}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(f)}><Edit className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(fid)}><Trash2 className="w-4 h-4" /></Button>
-                    </div>
+                    ))}
+                    {yearlyFees.length === 0 && (
+                      <p className="text-sm text-muted-foreground">Select an installment cycle to view periods.</p>
+                    )}
                   </div>
-                );
-              });
-            })()}
-            </div>
+                </div>
+
+              </CardContent>
+            </Card>
           )}
-        </CardContent>
-      </Card>
+        </>
+      )}
     </div>
   );
 }
