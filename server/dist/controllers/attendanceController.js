@@ -399,7 +399,10 @@ export const biometricSync = asyncHandler(async (req, res) => {
 });
 export const getActivityReport = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
-    const userFilters = { role: { not: 'staff' } };
+    const userFilters = {
+        role: { not: 'staff' },
+        organizationId: req.user.organizationId
+    };
     if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
         // See all users
     }

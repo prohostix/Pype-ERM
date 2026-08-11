@@ -8,7 +8,7 @@ export const getProgramMaterials = asyncHandler(async (req, res) => {
     res.json({ success: true, count: materials.length, data: materials });
 });
 export const getProgramDetail = asyncHandler(async (req, res) => {
-    const program = await prisma.program.findUnique({ where: { id: req.params.programId }, include: { university: true } });
+    const program = await prisma.program.findUnique({ where: { id: req.params.programId }, include: { university: true, feeStructures: true } });
     if (!program) {
         res.status(404).json({ success: false, message: 'Program not found' });
         return;
