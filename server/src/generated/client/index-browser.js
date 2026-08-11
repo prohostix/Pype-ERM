@@ -266,6 +266,7 @@ exports.Prisma.ProgramScalarFieldEnum = {
   hasSemesters: 'hasSemesters',
   semesters: 'semesters',
   specialisations: 'specialisations',
+  syllabus: 'syllabus',
   status: 'status'
 };
 

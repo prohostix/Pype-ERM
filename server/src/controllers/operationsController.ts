@@ -73,13 +73,33 @@ export const getProgram = asyncHandler(async (req: AuthRequest, res: Response) =
   res.json({ success: true, data: program });
 });
 export const createProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const program = await prisma.program.create({ data: { ...req.body, organizationId: req.user.organizationId } });
+  const { registrationFee, tuitionFee, syllabus, ...programData } = req.body;
+  const program = await prisma.program.create({ 
+    data: { 
+      ...programData, 
+      syllabus,
+      organizationId: req.user.organizationId 
+    } 
+  });
+
+  if (registrationFee !== undefined || tuitionFee !== undefined) {
+    await prisma.feeStructure.create({
+      data: {
+        programId: program.id,
+        organizationId: req.user.organizationId,
+        feeLevel: 'program',
+        registrationFee: Number(registrationFee) || 0,
+        tuitionFee: Number(tuitionFee) || 0
+      }
+    });
+  }
+
   res.status(201).json({ success: true, data: program });
 });
 export const updateProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
   const exists = await prisma.program.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
   if (!exists) { res.status(404).json({ success: false, message: 'Program not found' }); return; }
-  const { name, code, duration, description, status, universityId, sessionId } = req.body;
+  const { name, code, duration, description, status, universityId, sessionId, syllabus, courseType, hasSemesters, semesters, specialisations, subDepartmentId, registrationFee, tuitionFee } = req.body;
   const updateData: any = {};
   if (name !== undefined) updateData.name = name;
   if (code !== undefined) updateData.code = code;
@@ -88,7 +108,38 @@ export const updateProgram = asyncHandler(async (req: AuthRequest, res: Response
   if (status !== undefined) updateData.status = status;
   if (universityId !== undefined) updateData.universityId = universityId;
   if (sessionId !== undefined) updateData.sessionId = sessionId || null;
+  if (syllabus !== undefined) updateData.syllabus = syllabus;
+  if (courseType !== undefined) updateData.courseType = courseType;
+  if (hasSemesters !== undefined) updateData.hasSemesters = hasSemesters;
+  if (semesters !== undefined) updateData.semesters = semesters;
+  if (specialisations !== undefined) updateData.specialisations = specialisations;
+  if (subDepartmentId !== undefined) updateData.subDepartmentId = subDepartmentId;
+
   const program = await prisma.program.update({ where: { id: req.params.id }, data: updateData });
+
+  if (registrationFee !== undefined || tuitionFee !== undefined) {
+    const existingFee = await prisma.feeStructure.findFirst({ where: { programId: program.id, feeLevel: 'program' } });
+    if (existingFee) {
+      await prisma.feeStructure.update({
+        where: { id: existingFee.id },
+        data: {
+          registrationFee: registrationFee !== undefined ? Number(registrationFee) : existingFee.registrationFee,
+          tuitionFee: tuitionFee !== undefined ? Number(tuitionFee) : existingFee.tuitionFee
+        }
+      });
+    } else {
+      await prisma.feeStructure.create({
+        data: {
+          programId: program.id,
+          organizationId: req.user.organizationId,
+          feeLevel: 'program',
+          registrationFee: Number(registrationFee) || 0,
+          tuitionFee: Number(tuitionFee) || 0
+        }
+      });
+    }
+  }
+
   res.json({ success: true, data: program });
 });
 export const deleteProgram = asyncHandler(async (req: AuthRequest, res: Response) => {

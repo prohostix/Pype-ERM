@@ -355,6 +355,7 @@ model Program {
   hasSemesters       Boolean             @default(false)
   semesters          Json                @default("[]")
   specialisations    String[]            @default([])
+  syllabus           String?             @db.Text
   status             String              @default("active")
   admissionSessions  AdmissionSession[]
   enrollments        Enrollment[]

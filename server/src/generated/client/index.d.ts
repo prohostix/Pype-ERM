@@ -23325,6 +23325,7 @@ export namespace Prisma {
     courseType: $Enums.CourseType | null
     duration: number | null
     hasSemesters: boolean | null
+    syllabus: string | null
     status: string | null
   }
 
@@ -23338,6 +23339,7 @@ export namespace Prisma {
     courseType: $Enums.CourseType | null
     duration: number | null
     hasSemesters: boolean | null
+    syllabus: string | null
     status: string | null
   }
 
@@ -23353,6 +23355,7 @@ export namespace Prisma {
     hasSemesters: number
     semesters: number
     specialisations: number
+    syllabus: number
     status: number
     _all: number
   }
@@ -23376,6 +23379,7 @@ export namespace Prisma {
     courseType?: true
     duration?: true
     hasSemesters?: true
+    syllabus?: true
     status?: true
   }
 
@@ -23389,6 +23393,7 @@ export namespace Prisma {
     courseType?: true
     duration?: true
     hasSemesters?: true
+    syllabus?: true
     status?: true
   }
 
@@ -23404,6 +23409,7 @@ export namespace Prisma {
     hasSemesters?: true
     semesters?: true
     specialisations?: true
+    syllabus?: true
     status?: true
     _all?: true
   }
@@ -23506,6 +23512,7 @@ export namespace Prisma {
     hasSemesters: boolean
     semesters: JsonValue
     specialisations: string[]
+    syllabus: string | null
     status: string
     _count: ProgramCountAggregateOutputType | null
     _avg: ProgramAvgAggregateOutputType | null
@@ -23540,6 +23547,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: boolean
     specialisations?: boolean
+    syllabus?: boolean
     status?: boolean
     admissionSessions?: boolean | Program$admissionSessionsArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
@@ -23567,6 +23575,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: boolean
     specialisations?: boolean
+    syllabus?: boolean
     status?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     university?: boolean | UniversityDefaultArgs<ExtArgs>
@@ -23584,6 +23593,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: boolean
     specialisations?: boolean
+    syllabus?: boolean
     status?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     university?: boolean | UniversityDefaultArgs<ExtArgs>
@@ -23601,10 +23611,11 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: boolean
     specialisations?: boolean
+    syllabus?: boolean
     status?: boolean
   }
 
-  export type ProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "universityId" | "organizationId" | "subDepartmentId" | "name" | "code" | "courseType" | "duration" | "hasSemesters" | "semesters" | "specialisations" | "status", ExtArgs["result"]["program"]>
+  export type ProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "universityId" | "organizationId" | "subDepartmentId" | "name" | "code" | "courseType" | "duration" | "hasSemesters" | "semesters" | "specialisations" | "syllabus" | "status", ExtArgs["result"]["program"]>
   export type ProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | Program$admissionSessionsArgs<ExtArgs>
     enrollments?: boolean | Program$enrollmentsArgs<ExtArgs>
@@ -23655,6 +23666,7 @@ export namespace Prisma {
       hasSemesters: boolean
       semesters: Prisma.JsonValue
       specialisations: string[]
+      syllabus: string | null
       status: string
     }, ExtArgs["result"]["program"]>
     composites: {}
@@ -24101,6 +24113,7 @@ export namespace Prisma {
     readonly hasSemesters: FieldRef<"Program", 'Boolean'>
     readonly semesters: FieldRef<"Program", 'Json'>
     readonly specialisations: FieldRef<"Program", 'String[]'>
+    readonly syllabus: FieldRef<"Program", 'String'>
     readonly status: FieldRef<"Program", 'String'>
   }
     
@@ -92452,6 +92465,7 @@ export namespace Prisma {
     hasSemesters: 'hasSemesters',
     semesters: 'semesters',
     specialisations: 'specialisations',
+    syllabus: 'syllabus',
     status: 'status'
   };
 
@@ -95315,6 +95329,7 @@ export namespace Prisma {
     hasSemesters?: BoolFilter<"Program"> | boolean
     semesters?: JsonFilter<"Program">
     specialisations?: StringNullableListFilter<"Program">
+    syllabus?: StringNullableFilter<"Program"> | string | null
     status?: StringFilter<"Program"> | string
     admissionSessions?: AdmissionSessionListRelationFilter
     enrollments?: EnrollmentListRelationFilter
@@ -95341,6 +95356,7 @@ export namespace Prisma {
     hasSemesters?: SortOrder
     semesters?: SortOrder
     specialisations?: SortOrder
+    syllabus?: SortOrderInput | SortOrder
     status?: SortOrder
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
@@ -95370,6 +95386,7 @@ export namespace Prisma {
     hasSemesters?: BoolFilter<"Program"> | boolean
     semesters?: JsonFilter<"Program">
     specialisations?: StringNullableListFilter<"Program">
+    syllabus?: StringNullableFilter<"Program"> | string | null
     status?: StringFilter<"Program"> | string
     admissionSessions?: AdmissionSessionListRelationFilter
     enrollments?: EnrollmentListRelationFilter
@@ -95396,6 +95413,7 @@ export namespace Prisma {
     hasSemesters?: SortOrder
     semesters?: SortOrder
     specialisations?: SortOrder
+    syllabus?: SortOrderInput | SortOrder
     status?: SortOrder
     _count?: ProgramCountOrderByAggregateInput
     _avg?: ProgramAvgOrderByAggregateInput
@@ -95419,6 +95437,7 @@ export namespace Prisma {
     hasSemesters?: BoolWithAggregatesFilter<"Program"> | boolean
     semesters?: JsonWithAggregatesFilter<"Program">
     specialisations?: StringNullableListFilter<"Program">
+    syllabus?: StringNullableWithAggregatesFilter<"Program"> | string | null
     status?: StringWithAggregatesFilter<"Program"> | string
   }
 
@@ -102765,6 +102784,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -102791,6 +102811,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -102813,6 +102834,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -102839,6 +102861,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -102863,6 +102886,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
   }
 
@@ -102876,6 +102900,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 
@@ -102891,6 +102916,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 
@@ -110699,6 +110725,7 @@ export namespace Prisma {
     hasSemesters?: SortOrder
     semesters?: SortOrder
     specialisations?: SortOrder
+    syllabus?: SortOrder
     status?: SortOrder
   }
 
@@ -110716,6 +110743,7 @@ export namespace Prisma {
     courseType?: SortOrder
     duration?: SortOrder
     hasSemesters?: SortOrder
+    syllabus?: SortOrder
     status?: SortOrder
   }
 
@@ -110729,6 +110757,7 @@ export namespace Prisma {
     courseType?: SortOrder
     duration?: SortOrder
     hasSemesters?: SortOrder
+    syllabus?: SortOrder
     status?: SortOrder
   }
 
@@ -127995,6 +128024,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -128019,6 +128049,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -130467,6 +130498,7 @@ export namespace Prisma {
     hasSemesters?: BoolFilter<"Program"> | boolean
     semesters?: JsonFilter<"Program">
     specialisations?: StringNullableListFilter<"Program">
+    syllabus?: StringNullableFilter<"Program"> | string | null
     status?: StringFilter<"Program"> | string
   }
 
@@ -143708,6 +143740,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -143732,6 +143765,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -147358,6 +147392,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -147383,6 +147418,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -149310,6 +149346,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -149335,6 +149372,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -150660,6 +150698,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -150685,6 +150724,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -164017,6 +164057,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -164042,6 +164083,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -167432,6 +167474,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
     feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
@@ -167457,6 +167500,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
@@ -168402,6 +168446,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
@@ -168427,6 +168472,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
@@ -169447,6 +169493,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     feeStructures?: FeeStructureCreateNestedManyWithoutProgramInput
@@ -169472,6 +169519,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutProgramInput
@@ -170778,6 +170826,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutProgramNestedInput
@@ -170803,6 +170852,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutProgramNestedInput
@@ -186964,6 +187014,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -186989,6 +187040,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -187489,6 +187541,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -187514,6 +187567,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -188402,6 +188456,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -188427,6 +188482,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -188617,6 +188673,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -188642,6 +188699,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -193017,6 +193075,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -193042,6 +193101,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -193545,6 +193605,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -193570,6 +193631,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -195994,6 +196056,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentCreateNestedManyWithoutProgramInput
@@ -196019,6 +196082,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutProgramInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutProgramInput
@@ -196416,6 +196480,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -196441,6 +196506,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -201219,6 +201285,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
   }
 
@@ -203154,6 +203221,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -203178,6 +203246,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -203201,6 +203270,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 
@@ -211422,6 +211492,7 @@ export namespace Prisma {
     hasSemesters?: boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramCreatespecialisationsInput | string[]
+    syllabus?: string | null
     status?: string
   }
 
@@ -211720,6 +211791,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -211744,6 +211816,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -211767,6 +211840,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 
@@ -214205,6 +214279,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -214230,6 +214305,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -214253,6 +214329,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 
@@ -216100,6 +216177,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUpdateManyWithoutProgramNestedInput
@@ -216125,6 +216203,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutProgramNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutProgramNestedInput
@@ -216148,6 +216227,7 @@ export namespace Prisma {
     hasSemesters?: BoolFieldUpdateOperationsInput | boolean
     semesters?: JsonNullValueInput | InputJsonValue
     specialisations?: ProgramUpdatespecialisationsInput | string[]
+    syllabus?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
   }
 

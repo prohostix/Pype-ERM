@@ -22,6 +22,7 @@ interface Program {
   id: string; name: string; code: string; courseType: string;
   duration: number; hasSemesters: boolean; semesters: { number: number; name: string; durationMonths: number }[];
   status: string; universityId: any; subDepartmentId?: any;
+  syllabus?: string; feeStructures?: any[];
 }
 
 interface Material {
@@ -275,6 +276,43 @@ export function ProgramDetailPanel({
           ))}
         </div>
       )}
+
+      {/* Syllabus and Fees */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
+          <Card className="h-full">
+            <CardContent className="p-4 h-full">
+              <h3 className="font-semibold mb-2">Syllabus</h3>
+              {program.syllabus ? (
+                <div className="text-sm text-slate-700 whitespace-pre-wrap">{program.syllabus}</div>
+              ) : (
+                <p className="text-sm text-muted-foreground italic">No syllabus provided.</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+        <div className="space-y-4">
+          <Card className="h-full">
+            <CardContent className="p-4 h-full">
+              <h3 className="font-semibold mb-2">Program Fees</h3>
+              <div className="space-y-2 text-sm mt-4">
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-muted-foreground">Registration Fee:</span>
+                  <span className="font-medium">
+                    ₹{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.registrationFee || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between pt-1">
+                  <span className="text-muted-foreground">Tuition Fee:</span>
+                  <span className="font-medium">
+                    ₹{((program.feeStructures || []).find((f: any) => f.feeLevel === 'program')?.tuitionFee || 0).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">

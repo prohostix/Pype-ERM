@@ -58,6 +58,9 @@ export function ProgramFormDialog({
     duration: 12, status: 'active',
     hasSemesters: false,
     specialisations: [] as string[],
+    syllabus: '',
+    registrationFee: 0,
+    tuitionFee: 0,
   });
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [specInput, setSpecInput] = useState('');
@@ -70,6 +73,7 @@ export function ProgramFormDialog({
         const p = editingProgram;
         const uniId = typeof p.universityId === 'object' ? (p.universityId?.id || p.universityId?.id) : p.universityId;
         const subDeptId = typeof p.subDepartmentId === 'object' ? (p.subDepartmentId?.id || p.subDepartmentId?.id) : p.subDepartmentId;
+        const programFee = (p.feeStructures || []).find((f: any) => f.feeLevel === 'program');
         setForm({
           name: p.name, code: p.code,
           universityId: uniId?.toString() || '',
@@ -79,6 +83,9 @@ export function ProgramFormDialog({
           status: p.status,
           hasSemesters: p.hasSemesters || false,
           specialisations: Array.isArray(p.specialisations) ? p.specialisations : [],
+          syllabus: p.syllabus || '',
+          registrationFee: programFee?.registrationFee || 0,
+          tuitionFee: programFee?.tuitionFee || 0,
         });
         setSemesters(p.semesters || []);
         setSpecInput('');
@@ -103,15 +110,11 @@ export function ProgramFormDialog({
   };
 
   const resetForm = () => {
-    setForm({ 
-      name: '', code: '', 
-      universityId: defaultUniversityId || '', 
-      subDepartmentId: '', 
-      courseType: 'OnlineDegree', 
-      duration: 12, 
-      status: 'active', 
-      hasSemesters: false, 
-      specialisations: [] 
+    setForm({
+      name: '', code: '', universityId: defaultUniversityId || '', subDepartmentId: '',
+      courseType: 'OnlineDegree', duration: 12, status: 'active',
+      hasSemesters: false, specialisations: [],
+      syllabus: '', registrationFee: 0, tuitionFee: 0
     });
     setSemesters([]);
     setSpecInput('');
@@ -260,6 +263,29 @@ export function ProgramFormDialog({
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Fees */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4">
+            <div className="space-y-1">
+              <Label>Registration Fee</Label>
+              <Input type="number" min="0" value={form.registrationFee} onChange={e => setForm(f => ({ ...f, registrationFee: parseFloat(e.target.value) || 0 }))} />
+            </div>
+            <div className="space-y-1">
+              <Label>Tuition Fee</Label>
+              <Input type="number" min="0" value={form.tuitionFee} onChange={e => setForm(f => ({ ...f, tuitionFee: parseFloat(e.target.value) || 0 }))} />
+            </div>
+          </div>
+
+          {/* Syllabus */}
+          <div className="space-y-1 border-t pt-4">
+            <Label>Syllabus</Label>
+            <textarea
+              className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="Enter program syllabus..."
+              value={form.syllabus}
+              onChange={e => setForm(f => ({ ...f, syllabus: e.target.value }))}
+            />
           </div>
 
           {/* Course Type */}
