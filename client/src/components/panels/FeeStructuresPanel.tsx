@@ -25,6 +25,7 @@ export function FeeStructuresPanel() {
     registrationFee: '0',
     tuitionFee: '0',
     examFee: '0',
+    universityFee: '0',
     commissionRate: '0',
     billingCycle: 'per_year',
     additionalFees: ''
@@ -79,6 +80,7 @@ export function FeeStructuresPanel() {
             registrationFee: '0',
             tuitionFee: '0',
             examFee: '0',
+            universityFee: '0',
             commissionRate: '0',
             dueDate: ''
           });
@@ -112,6 +114,7 @@ export function FeeStructuresPanel() {
         registrationFee: existing.registrationFee?.toString() || '0',
         tuitionFee: existing.tuitionFee?.toString() || '0',
         examFee: existing.examFee?.toString() || '0',
+        universityFee: existing.universityFee?.toString() || '0',
         commissionRate: existing.commissionRate?.toString() || '0',
         billingCycle: existing.billingCycle || 'per_year',
         additionalFees: Array.isArray(existing.additionalFees) ? existing.additionalFees.map((af: any) => `${af.label}:${af.amount}`).join(', ') : ''
@@ -122,6 +125,7 @@ export function FeeStructuresPanel() {
         registrationFee: y.registrationFee?.toString() || '0',
         tuitionFee: y.tuitionFee?.toString() || '0',
         examFee: y.examFee?.toString() || '0',
+        universityFee: y.universityFee?.toString() || '0',
         commissionRate: y.commissionRate?.toString() || '0',
         dueDate: y.dueDate || ''
       })));
@@ -131,6 +135,7 @@ export function FeeStructuresPanel() {
         registrationFee: '0',
         tuitionFee: '0',
         examFee: '0',
+        universityFee: '0',
         commissionRate: '0',
         billingCycle: 'per_year',
         additionalFees: ''
@@ -156,6 +161,7 @@ export function FeeStructuresPanel() {
       registrationFee: Number(yf.registrationFee || 0),
       tuitionFee: Number(yf.tuitionFee || 0),
       examFee: Number(yf.examFee || 0),
+      universityFee: Number(yf.universityFee || 0),
       commissionRate: Number(yf.commissionRate || 0),
       dueDate: yf.dueDate || null
     }));
@@ -167,6 +173,7 @@ export function FeeStructuresPanel() {
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
       examFee: Number(formData.examFee),
+      universityFee: Number(formData.universityFee),
       commissionRate: Number(formData.commissionRate),
       billingCycle: formData.billingCycle,
       yearlyFees: formattedYearlyFees,
@@ -304,7 +311,7 @@ export function FeeStructuresPanel() {
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">Set the pricing for students who choose to pay the entire course fee upfront. This is usually discounted.</p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-muted/20 p-5 rounded-xl border border-border">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 bg-muted/20 p-5 rounded-xl border border-border">
                     <div className="space-y-2">
                       <Label>Registration Fee</Label>
                       <Input type="number" value={formData.registrationFee} onChange={e => setFormData({...formData, registrationFee: e.target.value})} />
@@ -316,6 +323,10 @@ export function FeeStructuresPanel() {
                     <div className="space-y-2">
                       <Label>Exam Fee</Label>
                       <Input type="number" value={formData.examFee} onChange={e => setFormData({...formData, examFee: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>University Fee</Label>
+                      <Input type="number" value={formData.universityFee} onChange={e => setFormData({...formData, universityFee: e.target.value})} />
                     </div>
                     <div className="space-y-2">
                       <Label>Center Commission Rate (Flat)</Label>
@@ -354,7 +365,7 @@ export function FeeStructuresPanel() {
                     {yearlyFees.map((yf, idx) => (
                       <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
                         <div className="font-semibold text-primary">{yf.periodName}</div>
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
                           <div className="space-y-1">
                             <Label className="text-xs">Reg Fee</Label>
                             <Input type="number" className="h-8" value={yf.registrationFee} onChange={e => {
@@ -376,6 +387,14 @@ export function FeeStructuresPanel() {
                             <Input type="number" className="h-8" value={yf.examFee} onChange={e => {
                               const next = [...yearlyFees];
                               next[idx].examFee = e.target.value;
+                              setYearlyFees(next);
+                            }} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Univ Fee</Label>
+                            <Input type="number" className="h-8" value={yf.universityFee} onChange={e => {
+                              const next = [...yearlyFees];
+                              next[idx].universityFee = e.target.value;
                               setYearlyFees(next);
                             }} />
                           </div>

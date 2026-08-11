@@ -85,15 +85,15 @@ export function EnrollStudentPanel() {
       additionalTotal = fs.additionalFees.reduce((sum: number, f: any) => sum + (Number(f.amount) || 0), 0);
     }
 
-    const baseTotal = (Number(fs.registrationFee) || 0) + (Number(fs.tuitionFee) || 0) + (Number(fs.examFee) || 0);
+    const baseTotal = (Number(fs.registrationFee) || 0) + (Number(fs.tuitionFee) || 0) + (Number(fs.examFee) || 0) + (Number(fs.universityFee) || 0);
     const yearlyFees = Array.isArray(fs.yearlyFees) ? fs.yearlyFees : [];
 
     if (fs.billingCycle === 'per_semester') {
       if (yearlyFees.length > 0) {
         const sem1 = yearlyFees[0];
-        const sem1Total = (Number(sem1.registrationFee) || 0) + (Number(sem1.tuitionFee) || 0) + (Number(sem1.examFee) || 0);
+        const sem1Total = (Number(sem1.registrationFee) || 0) + (Number(sem1.tuitionFee) || 0) + (Number(sem1.examFee) || 0) + (Number(sem1.universityFee) || 0);
         const sem2 = yearlyFees.length > 1 ? yearlyFees[1] : null;
-        const sem2Total = sem2 ? (Number(sem2.registrationFee) || 0) + (Number(sem2.tuitionFee) || 0) + (Number(sem2.examFee) || 0) : 0;
+        const sem2Total = sem2 ? (Number(sem2.registrationFee) || 0) + (Number(sem2.tuitionFee) || 0) + (Number(sem2.examFee) || 0) + (Number(sem2.universityFee) || 0) : 0;
         
         options.push({ id: 'first_semester', label: 'First Semester', totalAmount: sem1Total + additionalTotal });
         if (sem2) {
@@ -107,7 +107,7 @@ export function EnrollStudentPanel() {
     } else if (fs.billingCycle === 'per_year') {
       if (yearlyFees.length > 0) {
         const year1 = yearlyFees[0];
-        const year1Total = (Number(year1.registrationFee) || 0) + (Number(year1.tuitionFee) || 0) + (Number(year1.examFee) || 0);
+        const year1Total = (Number(year1.registrationFee) || 0) + (Number(year1.tuitionFee) || 0) + (Number(year1.examFee) || 0) + (Number(year1.universityFee) || 0);
         options.push({ id: 'first_year', label: 'First Year', totalAmount: year1Total + additionalTotal });
 
         options.push({ id: 'one_time', label: 'Full Course (One Time)', totalAmount: baseTotal + additionalTotal });
