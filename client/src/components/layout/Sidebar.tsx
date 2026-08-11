@@ -84,15 +84,15 @@ const navItems: NavItem[] = [
   },
   {
     id: 'ceo-dashboard',
-    label: 'CEO Dashboard',
+    label: 'CEO / GM Dashboard',
     icon: UserCog,
-    roles: ['ceo'],
+    roles: ['ceo', 'general_manager'],
     children: [
-      { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo'], badge: 1 },
-      { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo'] },
-      { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo'] },
-      { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo'] },
-      { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'org_admin'] },
+      { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo', 'general_manager'], badge: 1 },
+      { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo', 'general_manager'] },
+      { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo', 'general_manager'] },
+      { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo', 'general_manager'] },
+      { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'general_manager', 'org_admin'] },
     ],
   },
   {

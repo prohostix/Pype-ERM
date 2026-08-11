@@ -551,6 +551,7 @@ export function HRUsersPanel() {
                     <SelectItem value="bde">BDE</SelectItem>
                     <SelectItem value="collections_admin">Collections Admin</SelectItem>
                     <SelectItem value="center_admin">Center Admin</SelectItem>
+                    <SelectItem value="general_manager">General Manager</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -999,6 +1000,7 @@ export function HRUsersPanel() {
                   <SelectItem value="bde">BDE</SelectItem>
                   <SelectItem value="collections_admin">Collections Admin</SelectItem>
                   <SelectItem value="center_admin">Center Admin</SelectItem>
+                  <SelectItem value="general_manager">General Manager</SelectItem>
                 </SelectContent>
               </Select>
             </div>

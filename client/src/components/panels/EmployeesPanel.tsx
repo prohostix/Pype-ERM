@@ -225,6 +225,7 @@ export function EmployeesPanel() {
                       <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
                       <SelectItem value="sales_admin">Sales Admin</SelectItem>
                       <SelectItem value="center_admin">Center Admin</SelectItem>
+                      <SelectItem value="general_manager">General Manager</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

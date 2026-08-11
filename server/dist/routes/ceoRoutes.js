@@ -5,21 +5,21 @@ const router = express.Router();
 router.use(protect);
 // router.use(authorize('ceo')); // Removed global restrict to allow specific roles on specific endpoints
 // Metrics routes
-router.get('/metrics/performance', authorize('ceo'), getPerformanceMetrics);
-router.get('/metrics/risk', authorize('ceo'), getRiskMetrics);
-router.get('/analytics', authorize('ceo'), getAnalytics);
+router.get('/metrics/performance', authorize('ceo', 'general_manager'), getPerformanceMetrics);
+router.get('/metrics/risk', authorize('ceo', 'general_manager'), getRiskMetrics);
+router.get('/analytics', authorize('ceo', 'general_manager'), getAnalytics);
 // Center onboarding & enrollment overview
-router.get('/center-onboarding', authorize('ceo'), getCenterOnboardingOverview);
-router.get('/enrollment-overview', authorize('ceo'), getStudentEnrollmentOverview);
+router.get('/center-onboarding', authorize('ceo', 'general_manager'), getCenterOnboardingOverview);
+router.get('/enrollment-overview', authorize('ceo', 'general_manager'), getStudentEnrollmentOverview);
 // Escalation routes
-router.get('/escalations', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), getEscalations);
-router.patch('/escalations/:id', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), handleEscalation);
+router.get('/escalations', authorize('ceo', 'general_manager', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), getEscalations);
+router.patch('/escalations/:id', authorize('ceo', 'general_manager', 'sales_admin', 'bde', 'sub_department_manager', 'ops_admin', 'org_admin', 'superadmin'), handleEscalation);
 // Task assignment routes
-router.get('/managers', authorize('ceo'), getDepartmentManagers);
-router.post('/tasks', authorize('ceo'), assignTask);
+router.get('/managers', authorize('ceo', 'general_manager'), getDepartmentManagers);
+router.post('/tasks', authorize('ceo', 'general_manager'), assignTask);
 // KPI / KRA org-wide report
-router.get('/kpi-kra-report', authorize('ceo', 'sales_admin', 'bde', 'sub_department_manager', 'hr_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
+router.get('/kpi-kra-report', authorize('ceo', 'general_manager', 'sales_admin', 'bde', 'sub_department_manager', 'hr_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
 // Activity logs for ceo/org_admin
-router.get('/activity-logs', authorize('ceo', 'org_admin'), getActivityLogs);
+router.get('/activity-logs', authorize('ceo', 'general_manager', 'org_admin'), getActivityLogs);
 export default router;
 //# sourceMappingURL=ceoRoutes.js.map

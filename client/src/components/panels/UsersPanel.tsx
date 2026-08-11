@@ -387,6 +387,7 @@ export function UsersPanel() {
                     <SelectItem value="sales_admin">Sales Admin</SelectItem>
                     <SelectItem value="center_admin">Center Admin</SelectItem>
                     <SelectItem value="employee">Employee</SelectItem>
+                    <SelectItem value="general_manager">General Manager</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
