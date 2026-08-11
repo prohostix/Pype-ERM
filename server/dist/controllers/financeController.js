@@ -530,7 +530,150 @@ export const createStudyCenter = asyncHandler(async (req, res) => {
 });
 // Reports
 export const getIncomeExpenditureReport = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: { totals: { income: 0, expenditure: 0, netProfit: 0 } } });
+    const { from, to } = req.query;
+    const organizationId = req.user.organizationId;
+    const fromDate = from ? new Date(from) : new Date(new Date().getFullYear(), 3, 1);
+    const toDate = to ? new Date(to) : new Date();
+    toDate.setHours(23, 59, 59, 999);
+    // 1. Get Invoices (billed amount)
+    const invoices = await prisma.invoice.findMany({
+        where: {
+            organizationId,
+            createdAt: { gte: fromDate, lte: toDate },
+            status: { not: 'cancelled' }
+        }
+    });
+    // 2. Get Payments (actual received money)
+    const payments = await prisma.paymentEntry.findMany({
+        where: {
+            organizationId,
+            receivedAt: { gte: fromDate, lte: toDate }
+        }
+    });
+    // 3. Get Enrollment Payments
+    const enrollments = await prisma.enrollmentPayment.findMany({
+        where: {
+            enrollment: { organizationId },
+            debitedAt: { gte: fromDate, lte: toDate }
+        },
+        include: { enrollment: true }
+    });
+    // 4. Get Expenses
+    const expenses = await prisma.expenseClaim.findMany({
+        where: {
+            organizationId,
+            status: { in: ['approved', 'reimbursed'] },
+            createdAt: { gte: fromDate, lte: toDate }
+        }
+    });
+    // 5. Get Payrolls
+    const payrolls = await prisma.payroll.findMany({
+        where: {
+            organizationId,
+            status: { in: ['paid', 'transferred_to_finance'] },
+            updatedAt: { gte: fromDate, lte: toDate }
+        }
+    });
+    // Aggregate by month (YYYY-MM)
+    const monthlyData = {};
+    const getMonthKey = (d) => {
+        const dt = new Date(d);
+        return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+    };
+    const ensureMonth = (key) => {
+        if (!monthlyData[key]) {
+            monthlyData[key] = {
+                month: key,
+                income: { invoices: 0, enrollments: 0, payments: 0, total: 0 },
+                expenditure: { expenses: 0, salaries: 0, total: 0 },
+                net: 0
+            };
+        }
+    };
+    invoices.forEach(inv => {
+        const m = getMonthKey(inv.createdAt);
+        ensureMonth(m);
+        monthlyData[m].income.invoices += inv.total;
+        monthlyData[m].income.total += inv.total;
+    });
+    payments.forEach(pay => {
+        const m = getMonthKey(pay.receivedAt);
+        ensureMonth(m);
+        monthlyData[m].income.payments += pay.amount;
+        monthlyData[m].income.total += pay.amount;
+    });
+    enrollments.forEach(enr => {
+        const m = getMonthKey(enr.debitedAt);
+        ensureMonth(m);
+        monthlyData[m].income.enrollments += enr.amount;
+        monthlyData[m].income.total += enr.amount;
+    });
+    expenses.forEach(exp => {
+        const m = getMonthKey(exp.createdAt);
+        ensureMonth(m);
+        monthlyData[m].expenditure.expenses += exp.amount;
+        monthlyData[m].expenditure.total += exp.amount;
+    });
+    payrolls.forEach(pay => {
+        const m = getMonthKey(pay.updatedAt);
+        ensureMonth(m);
+        monthlyData[m].expenditure.salaries += pay.netSalary;
+        monthlyData[m].expenditure.total += pay.netSalary;
+    });
+    const totals = {
+        income: 0,
+        expenditure: 0,
+        netProfit: 0,
+        profitMargin: 0
+    };
+    const incomeBreakdown = {
+        invoices: 0,
+        enrollments: 0,
+        payments: 0
+    };
+    const expenditureBreakdown = {
+        salaries: 0,
+        expenses: 0,
+        byCategory: []
+    };
+    const expenseCategories = {};
+    Object.values(monthlyData).forEach((row) => {
+        row.net = row.income.total - row.expenditure.total;
+        totals.income += row.income.total;
+        totals.expenditure += row.expenditure.total;
+        totals.netProfit += row.net;
+        incomeBreakdown.invoices += row.income.invoices;
+        incomeBreakdown.enrollments += row.income.enrollments;
+        incomeBreakdown.payments += row.income.payments;
+        expenditureBreakdown.salaries += row.expenditure.salaries;
+        expenditureBreakdown.expenses += row.expenditure.expenses;
+    });
+    expenses.forEach(exp => {
+        if (!expenseCategories[exp.category])
+            expenseCategories[exp.category] = { amount: 0, count: 0 };
+        expenseCategories[exp.category].amount += exp.amount;
+        expenseCategories[exp.category].count += 1;
+    });
+    expenditureBreakdown.byCategory = Object.keys(expenseCategories).map(k => ({
+        id: k,
+        amount: expenseCategories[k].amount,
+        count: expenseCategories[k].count
+    })).sort((a, b) => b.amount - a.amount);
+    if (totals.income > 0) {
+        totals.profitMargin = (totals.netProfit / totals.income) * 100;
+    }
+    // Sort monthly
+    const monthly = Object.values(monthlyData).sort((a, b) => a.month.localeCompare(b.month));
+    res.json({
+        success: true,
+        data: {
+            period: { from: fromDate.toISOString(), to: toDate.toISOString() },
+            monthly,
+            totals,
+            incomeBreakdown,
+            expenditureBreakdown
+        }
+    });
 });
 export const getFinanceSalesUsers = asyncHandler(async (req, res) => {
     const users = await prisma.user.findMany({
