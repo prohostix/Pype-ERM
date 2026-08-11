@@ -1370,6 +1370,7 @@ model FeeStructure {
   billingCycle    String            @default("per_year")
   currency        String            @default("INR")
   effectiveFrom   DateTime?
+  dueDate         DateTime?
   additionalFees  Json              @default("[]")
   createdBy       String?
   creator         User?             @relation("FeeCreatedBy", fields: [createdBy], references: [id])

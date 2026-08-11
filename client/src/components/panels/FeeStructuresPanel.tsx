@@ -148,7 +148,8 @@ export function FeeStructuresPanel() {
       tuitionFee: Number(yf.tuitionFee || 0),
       universityFee: Number(yf.universityFee || 0),
       examFee: Number(yf.examFee || 0),
-      commissionRate: Number(yf.commissionRate || 0)
+      commissionRate: Number(yf.commissionRate || 0),
+      dueDate: yf.dueDate || null
     }));
 
     const payload: any = {
@@ -164,6 +165,7 @@ export function FeeStructuresPanel() {
       billingCycle: formData.billingCycle,
       currency: formData.currency,
       effectiveFrom: formData.effectiveFrom || null,
+      dueDate: formData.dueDate || null,
       additionalFees
     };
 
@@ -207,7 +209,8 @@ export function FeeStructuresPanel() {
       tuitionFee: yf.tuitionFee?.toString() || '0',
       universityFee: yf.universityFee?.toString() || '0',
       examFee: yf.examFee?.toString() || '0',
-      commissionRate: yf.commissionRate?.toString() || '0'
+      commissionRate: yf.commissionRate?.toString() || '0',
+      dueDate: yf.dueDate || ''
     })));
 
     setEditingId(f.id);
@@ -225,6 +228,7 @@ export function FeeStructuresPanel() {
       billingCycle: f.billingCycle || 'per_year',
       currency: f.currency || 'INR',
       effectiveFrom: f.effectiveFrom ? f.effectiveFrom.slice(0, 10) : '',
+      dueDate: f.dueDate ? f.dueDate.slice(0, 10) : '',
       additionalFees: addFeesStr
     });
     setDialogOpen(true);
@@ -259,6 +263,7 @@ export function FeeStructuresPanel() {
       billingCycle: 'per_year',
       currency: 'INR',
       effectiveFrom: '',
+      dueDate: '',
       additionalFees: ''
     });
   };
@@ -371,6 +376,14 @@ export function FeeStructuresPanel() {
                               setYearlyFees(updated);
                             }} required />
                           </div>
+                          <div>
+                            <Label className="text-[10px] uppercase">Due Date</Label>
+                            <Input type="date" value={yf.dueDate || ''} onChange={(e) => {
+                              const updated = [...yearlyFees];
+                              updated[idx].dueDate = e.target.value;
+                              setYearlyFees(updated);
+                            }} />
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                           <div>
@@ -435,11 +448,18 @@ export function FeeStructuresPanel() {
                 </>
               )}
 
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>Effective From</Label>
                   <Input type="date" value={formData.effectiveFrom} onChange={(e) => setFormData({ ...formData, effectiveFrom: e.target.value })} />
                 </div>
+                <div>
+                  <Label>Due Date (For One-off Fees)</Label>
+                  <Input type="date" value={formData.dueDate || ''} onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <Label>Additional Fees <span className="text-muted-foreground text-xs">(label:amount, comma-separated)</span></Label>
                   <Input value={formData.additionalFees} onChange={(e) => setFormData({ ...formData, additionalFees: e.target.value })} placeholder="Registration:500, Exam:200" />

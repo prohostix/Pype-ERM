@@ -422,6 +422,7 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     billingCycle,
     currency,
     effectiveFrom,
+    dueDate,
     additionalFees
   } = req.body;
 
@@ -474,6 +475,7 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     billingCycle,
     currency,
     effectiveFrom,
+    dueDate,
     additionalFees
   } = req.body;
 
