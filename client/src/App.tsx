@@ -268,7 +268,7 @@ function App() {
       ];
     }
 
-    if (user.role === 'ceo') {
+    if (user.role === 'ceo' || user.role === 'general_manager') {
       return [
         { id: 'dashboard', label: 'Dashboard' },
         { id: 'performance', label: 'Performance' },
@@ -280,7 +280,7 @@ function App() {
         { id: 'invoices', label: 'Invoices' },
         { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
-        { id: 'meetings', label: 'Meetings' },
+        ...(user.role === 'ceo' ? [{ id: 'meetings', label: 'Meetings' }] : []),
       ];
     }
 
