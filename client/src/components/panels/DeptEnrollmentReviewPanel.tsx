@@ -25,9 +25,32 @@ interface Enrollment {
   studyCenter: { name: string; code?: string } | null;
   session: { name: string } | null;
   status: string;
+  statusHistory: { status: string; changedAt: string; remarks?: string; changedBy?: string }[];
+  departmentRemarks?: string;
+  financeRemarks?: string;
+  universityRemarks?: string;
+  departmentReviewedAt?: string;
+  financeReviewedAt?: string;
+  enrolledAt?: string;
   createdAt: string;
   student?: any;
   payment?: any;
+}
+
+const STATUS_META: Record<string, { label: string; color: string }> = {
+  payment_pending:     { label: 'Fee Pending',      color: 'bg-orange-100 text-orange-700' },
+  document_review:     { label: 'Document Review',  color: 'bg-blue-100 text-blue-700' },
+  dept_review:         { label: 'Dept Review',      color: 'bg-purple-100 text-purple-700' },
+  finance_review:      { label: 'Finance Review',   color: 'bg-yellow-100 text-yellow-700' },
+  university_review:   { label: 'Univ. Review',     color: 'bg-indigo-100 text-indigo-700' },
+  enrolled:            { label: 'Enrolled',          color: 'bg-green-100 text-green-700' },
+  rejected:            { label: 'Rejected',          color: 'bg-red-100 text-red-700' },
+  department_rejected: { label: 'Dept Rejected',    color: 'bg-red-100 text-red-700' },
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const meta = STATUS_META[status] || { label: status.replace(/_/g, ' '), color: 'bg-muted text-muted-foreground' };
+  return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.color}`}>{meta.label}</span>;
 }
 
 function InfoField({ label, value }: { label: string; value?: string | null }) {
@@ -220,6 +243,64 @@ export function DeptEnrollmentReviewPanel() {
                   <InfoField label="Address" value={val(viewStudent, 'studentAddress', 'address')} />
                   <InfoField label="Pin Code" value={val(viewStudent, 'pinCode', 'pinCode')} />
                 </div>
+              </div>
+
+              {/* Enrollment Status & History */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Enrollment Status</h4>
+                <div className="flex items-center gap-3 mb-4">
+                  <StatusBadge status={viewStudent.status} />
+                  {viewStudent.enrolledAt && (
+                    <span className="text-xs text-muted-foreground">Enrolled on {new Date(viewStudent.enrolledAt).toLocaleDateString('en-IN')}</span>
+                  )}
+                  {viewStudent.enrollmentNumber && (
+                    <span className="text-xs font-mono bg-muted px-2 py-0.5 rounded">{viewStudent.enrollmentNumber}</span>
+                  )}
+                </div>
+
+                {/* Remarks */}
+                {(viewStudent.departmentRemarks || viewStudent.financeRemarks || viewStudent.universityRemarks) && (
+                  <div className="space-y-2 mb-4">
+                    {viewStudent.departmentRemarks && (
+                      <div className="text-xs bg-red-50 border border-red-100 rounded-lg p-2.5">
+                        <span className="font-semibold text-red-700">Dept Remarks: </span>
+                        <span className="text-red-600">{viewStudent.departmentRemarks}</span>
+                      </div>
+                    )}
+                    {viewStudent.financeRemarks && (
+                      <div className="text-xs bg-yellow-50 border border-yellow-100 rounded-lg p-2.5">
+                        <span className="font-semibold text-yellow-700">Finance Remarks: </span>
+                        <span className="text-yellow-600">{viewStudent.financeRemarks}</span>
+                      </div>
+                    )}
+                    {viewStudent.universityRemarks && (
+                      <div className="text-xs bg-blue-50 border border-blue-100 rounded-lg p-2.5">
+                        <span className="font-semibold text-blue-700">University Remarks: </span>
+                        <span className="text-blue-600">{viewStudent.universityRemarks}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Timeline */}
+                {Array.isArray(viewStudent.statusHistory) && viewStudent.statusHistory.length > 0 && (
+                  <div className="relative pl-4 border-l-2 border-muted space-y-3">
+                    {[...viewStudent.statusHistory].reverse().map((h, i) => (
+                      <div key={i} className="relative">
+                        <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <StatusBadge status={h.status} />
+                            {h.remarks && <p className="text-xs text-muted-foreground mt-1">{h.remarks}</p>}
+                          </div>
+                          <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
+                            {new Date(h.changedAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Documents */}
