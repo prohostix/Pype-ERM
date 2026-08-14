@@ -23,8 +23,13 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
       include: {
         program: {
           include: {
-            university: { select: { id: true, name: true, location: true } },
-            feeStructures: { select: { id: true, name: true, amount: true, frequency: true } },
+            university: { select: { id: true, name: true, address: true, code: true } },
+            feeStructures: {
+              select: {
+                id: true, registrationFee: true, tuitionFee: true,
+                examFee: true, universityFee: true, billingCycle: true, yearlyFees: true,
+              }
+            },
           },
         },
         studyCenter: { select: { name: true, code: true } },

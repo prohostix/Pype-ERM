@@ -318,7 +318,8 @@ export function FinanceEnrollmentsPanel() {
                 <div className="grid grid-cols-2 gap-3">
                   <Field label="Program" value={(viewStudent as any).program?.name ? `${(viewStudent as any).program.name} (${(viewStudent as any).program.code})` : getProgramName(viewStudent)} />
                   <Field label="University" value={(viewStudent as any).program?.university?.name} />
-                  <Field label="Location" value={(viewStudent as any).program?.university?.location} />
+                  <Field label="Univ. Code" value={(viewStudent as any).program?.university?.code} />
+                  <Field label="Univ. Address" value={(viewStudent as any).program?.university?.address} />
                   <Field label="Session" value={(viewStudent as any).session?.name} />
                   <Field label="Study Center" value={getCenterName(viewStudent)} />
                   <Field label="Status" value={STATUS_META[viewStudent.status]?.label || viewStudent.status} />
@@ -336,17 +337,23 @@ export function FinanceEnrollmentsPanel() {
                           <tr>
                             <th className="text-left px-3 py-2 font-medium text-muted-foreground">Fee Type</th>
                             <th className="text-right px-3 py-2 font-medium text-muted-foreground">Amount</th>
-                            <th className="text-right px-3 py-2 font-medium text-muted-foreground">Frequency</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          {(viewStudent as any).program.feeStructures.map((f: any, i: number) => (
-                            <tr key={i}>
-                              <td className="px-3 py-2">{f.name || 'Fee'}</td>
-                              <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(f.amount).toLocaleString()}</td>
-                              <td className="px-3 py-2 text-right text-muted-foreground capitalize">{f.frequency || '—'}</td>
-                            </tr>
-                          ))}
+                          {(viewStudent as any).program.feeStructures.map((f: any, i: number) => {
+                            const rows = [
+                              { label: 'Registration Fee', val: f.registrationFee },
+                              { label: 'Tuition Fee', val: f.tuitionFee },
+                              { label: 'Exam Fee', val: f.examFee },
+                              { label: 'University Fee', val: f.universityFee },
+                            ].filter(r => r.val && Number(r.val) > 0);
+                            return rows.map((r, j) => (
+                              <tr key={`${i}-${j}`}>
+                                <td className="px-3 py-2">{r.label} <span className="text-muted-foreground capitalize">({f.billingCycle || 'per year'})</span></td>
+                                <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(r.val).toLocaleString()}</td>
+                              </tr>
+                            ));
+                          })}
                         </tbody>
                       </table>
                     </div>
