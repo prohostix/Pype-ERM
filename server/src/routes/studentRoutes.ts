@@ -34,7 +34,7 @@ router.post('/bulk-enrollment-update', authorize('org_admin', 'superadmin', 'ops
 router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'employee'), notifyStudent);
 router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee'), upload.single('file'), uploadStudentDocument);
 
-router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin'), createStudent);
+router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_manager', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager'), createStudent);
 router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/approve', authorize('finance_admin', 'ops_admin'), approveStudent);
