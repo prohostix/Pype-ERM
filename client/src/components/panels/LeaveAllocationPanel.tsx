@@ -120,7 +120,7 @@ export function LeaveAllocationPanel() {
   const unallocatedUsers = users.filter(u => !allocatedUserIds.has(u.id));
 
   const filtered = allocations.filter(a => {
-    const name = (typeof a.userId === 'object' ? a.userId.name : '') || '';
+    const name = (a.userId && typeof a.userId === 'object' ? a.userId.name : '') || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
 

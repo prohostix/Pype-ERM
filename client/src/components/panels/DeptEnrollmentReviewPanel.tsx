@@ -64,10 +64,10 @@ export function DeptEnrollmentReviewPanel() {
   };
 
   const getProgramName = (e: Enrollment) =>
-    typeof e.programId === 'object' ? `${e.programId.name} (${e.programId.code})` : e.programId;
+    (e.programId && typeof e.programId === 'object') ? `${e.programId.name} (${e.programId.code})` : e.programId;
 
   const getCenterName = (e: Enrollment) =>
-    typeof e.studyCenterId === 'object' ? e.studyCenterId.name : e.studyCenterId;
+    (e.studyCenterId && typeof e.studyCenterId === 'object') ? e.studyCenterId.name : e.studyCenterId;
 
   return (
     <div className="space-y-6">

@@ -70,7 +70,7 @@ export function WalletTopUpsPanel() {
   };
 
   const getCenterName = (t: TopUp) =>
-    typeof t.studyCenterId === 'object' ? t.studyCenterId.name || 'Unknown' : t.studyCenterId;
+    (t.studyCenterId && typeof t.studyCenterId === 'object') ? t.studyCenterId.name || 'Unknown' : t.studyCenterId;
 
   return (
     <div className="space-y-6">

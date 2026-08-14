@@ -119,7 +119,7 @@ export function SalaryConfigPanel() {
   const unconfiguredUsers = users.filter(u => !configuredUserIds.has(u.id));
 
   const filtered = configs.filter(c => {
-    const name = (typeof c.userId === 'object' ? c.userId.name : '') || '';
+    const name = (c.userId && typeof c.userId === 'object' ? c.userId.name : '') || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
 

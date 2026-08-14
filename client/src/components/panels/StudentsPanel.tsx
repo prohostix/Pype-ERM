@@ -1116,18 +1116,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
                       />
                     </div>
-                    <div>
-                      <Label className="font-medium">Status</Label>
-                      <Select value={!editingId ? 'pending' : formData.status} onValueChange={(v) => setFormData({...formData, status: v})} disabled={!editingId}>
-                        <SelectTrigger className={!editingId ? 'bg-slate-50 text-slate-500' : ''}><SelectValue placeholder="Select status..." /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="document_review">Document Review</SelectItem>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {editingId && (
+                      <div>
+                        <Label className="font-medium">Status</Label>
+                        <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                          <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="dropped">Dropped</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -1656,19 +1658,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 required={formData.isPrevious}
                               />
                             </div>
-                            <div>
-                              <Label className="font-medium">Status</Label>
-                              <Select value={!editingId ? 'pending' : formData.status} onValueChange={(v) => setFormData({...formData, status: v})} disabled={!editingId}>
-                                <SelectTrigger className={!editingId ? 'bg-slate-50 text-slate-500' : ''}><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="pending">Pending</SelectItem>
-                                  <SelectItem value="document_review">Document Review</SelectItem>
-                                  <SelectItem value="active">Active</SelectItem>
-                                  <SelectItem value="inactive">Inactive</SelectItem>
-                                  <SelectItem value="completed">Completed</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
+                            {editingId && (
+                              <div>
+                                <Label className="font-medium">Status</Label>
+                                <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                                  <SelectTrigger><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="document_review">Document Review</SelectItem>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                    <SelectItem value="completed">Completed</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
