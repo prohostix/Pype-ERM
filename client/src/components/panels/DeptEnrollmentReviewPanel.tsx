@@ -322,9 +322,11 @@ export function DeptEnrollmentReviewPanel() {
                             <StatusBadge status={h.status} />
                             {h.remarks && <p className="text-xs text-muted-foreground mt-1">{h.remarks}</p>}
                           </div>
-                          <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
-                            {new Date(h.changedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                          </span>
+                          {h.changedAt && !isNaN(new Date(h.changedAt).getTime()) && (
+                            <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
+                              {new Date(h.changedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          )}
                         </div>
                       </div>
                     ))}
