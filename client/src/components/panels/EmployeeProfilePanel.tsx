@@ -287,7 +287,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
     try {
       const res = await api.post('/auth/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       if (res.data.success) {
-        setDocumentsForm(prev => ({ ...prev, [field]: res.data.fileUrl }));
+        setDocumentsForm((prev: Record<string, any>) => ({ ...prev, [field]: res.data.fileUrl }));
         toast.success('File uploaded');
       }
     } catch {
