@@ -1979,7 +1979,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Universities</SelectItem>
-                  {universities.map(u => (
+                  {universities.filter((u: any) => u && u.id).map((u: any) => (
                     <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                   ))}
                 </SelectContent>
@@ -1993,7 +1993,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Branches</SelectItem>
-                  {branches.map(b => (
+                  {branches.filter((b: any) => b && b.id).map((b: any) => (
                     <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                   ))}
                 </SelectContent>
@@ -2007,7 +2007,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Sessions</SelectItem>
-                  {sessions.map(s => (
+                  {sessions.filter((s: any) => s && s.id).map((s: any) => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>
@@ -2192,10 +2192,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Auto-detect from CSV</SelectItem>
-                    {programs.filter(p => p.universityId === bulkUniversityId).map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {p.name} ({p.code})
-                      </SelectItem>
+                    {programs.filter((p: any) => p && p.id && p.universityId === bulkUniversityId).map((p: any) => (
+                      <SelectItem key={p.id} value={p.id}>{p.name} {p.code ? `(${p.code})` : ''}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -2211,10 +2209,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Auto-detect from CSV</SelectItem>
-                    {sessions.filter(s => !s.universityId || s.universityId === bulkUniversityId).map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
-                        {s.name}
-                      </SelectItem>
+                    {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === bulkUniversityId)).map((s: any) => (
+                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -2248,10 +2244,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">None (Assign to Organisation)</SelectItem>
-                    {salesUsers.map((su) => (
-                      <SelectItem key={su.id} value={su.id}>
-                        {su.name} ({su.role})
-                      </SelectItem>
+                    {salesUsers.filter((su: any) => su && su.id).map((su: any) => (
+                      <SelectItem key={su.id} value={su.id}>{su.name} ({su.role})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
