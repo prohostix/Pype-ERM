@@ -18,9 +18,9 @@ interface Enrollment {
   studentPhone: string;
   studentAddress: string;
   createdAt: string;
-  program: { id: string; name: string; code: string; courseType: string };
-  studyCenter: { id: string; name: string; code: string };
-  session: { id: string; name: string };
+  program?: { id: string; name: string; code: string; courseType: string };
+  studyCenter?: { id: string; name: string; code: string };
+  session?: { id: string; name: string };
 }
 
 export function UniversityEnrollmentReviewPanel() {
@@ -111,15 +111,15 @@ export function UniversityEnrollmentReviewPanel() {
                       {e.enrollmentNumber && (
                         <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{e.enrollmentNumber}</span>
                       )}
-                      <Badge variant="secondary" className="text-xs">{e.program.courseType}</Badge>
+                      <Badge variant="secondary" className="text-xs">{e.program?.courseType || 'Unknown'}</Badge>
                     </div>
                     <h4 className="font-semibold text-base">{e.studentName}</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-0.5 mt-2 text-sm text-muted-foreground">
                       <span>{e.studentEmail}</span>
                       <span>{e.studentPhone}</span>
-                      <span className="font-medium text-foreground">{e.program.name} ({e.program.code})</span>
-                      <span>Partner: {e.studyCenter.name}</span>
-                      <span>Session: {e.session.name}</span>
+                      <span className="font-medium text-foreground">{e.program?.name} ({e.program?.code})</span>
+                      <span>Partner: {e.studyCenter?.name || 'N/A'}</span>
+                      <span>Session: {e.session?.name || 'N/A'}</span>
                       <span>Submitted: {new Date(e.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>

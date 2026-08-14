@@ -119,10 +119,10 @@ export function OpsProgramAllocationPanel() {
               {allocations.map(a => (
                 <div key={a.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
                   <div>
-                    <span className="font-medium text-sm">{a.programId.name}</span>
-                    <span className="text-muted-foreground text-xs ml-2">({a.programId.code})</span>
-                    {a.programId.courseType && (
-                      <Badge variant="outline" className="ml-2 text-[10px]">{a.programId.courseType}</Badge>
+                    <span className="font-medium text-sm">{a.programId?.name}</span>
+                    <span className="text-muted-foreground text-xs ml-2">({a.programId?.code})</span>
+                    {a.programId?.courseType && (
+                      <Badge variant="outline" className="ml-2 text-[10px]">{a.programId?.courseType}</Badge>
                     )}
                   </div>
                   <Button variant="ghost" size="sm" className="text-error hover:text-error" onClick={() => handleRemove(a.id)}>
