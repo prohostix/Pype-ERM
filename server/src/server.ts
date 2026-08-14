@@ -78,6 +78,7 @@ app.use(
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
+app.use('/api/v1/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
 
 // Body parser
 app.use(express.json({ limit: '5mb' }));

@@ -176,7 +176,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       photo: photo || null,
       documents: documents || [],
       isPrevious: Boolean(isPrevious),
-      status: status || 'pending',
+      status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
       programId,
       universityId: universityId || null,
       centerId: (centerId && centerId.trim() !== '') ? centerId : null,
@@ -188,6 +188,64 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       enrolledBy: req.user.id
     }
   });
+
+  if (req.body.isPipelineApplication) {
+    const now = new Date();
+    await prisma.enrollment.create({
+      data: {
+        organizationId: req.user.organizationId,
+        studentId: student.id,
+        studentName: student.name,
+        studentEmail: student.email,
+        studentPhone: student.phone,
+        studentAddress: student.address,
+        fatherName: student.fatherName,
+        dob: student.dob,
+        programId: student.programId,
+        studyCenterId: student.centerId,
+        sessionId: student.sessionId,
+        status: 'document_review',
+        salesUserId: req.user.id,
+        statusHistory: [
+          {
+            status: 'submitted',
+            actorId: req.user.id,
+            actorName: req.user.name,
+            actorRole: req.user.role,
+            timestamp: now.toISOString(),
+            note: `Sales rep ${req.user.name} directly enrolled student via wizard`,
+          },
+          {
+            status: 'document_review',
+            actorId: 'system',
+            timestamp: now.toISOString(),
+            note: 'Forwarded to Operations for document verification',
+          },
+        ],
+      } as any,
+    });
+
+    // Notify ops admins
+    try {
+      const opsAdmins = await prisma.user.findMany({
+        where: { organizationId: req.user.organizationId, role: 'ops_admin', status: 'active' },
+        select: { id: true },
+      });
+      for (const admin of opsAdmins) {
+        await prisma.notification.create({
+          data: {
+            organizationId: req.user.organizationId,
+            userId: admin.id,
+            title: 'New Student Application for Review',
+            message: `${student.name} has been directly enrolled by ${req.user.name} and is ready for review.`,
+            type: 'general',
+            priority: 'medium',
+            link: 'enrollment_review',
+          },
+        });
+      }
+    } catch (_) { /* non-critical */ }
+  }
 
   // Send credentials email — failure must not fail the creation
   try {
