@@ -314,22 +314,26 @@ export function DeptEnrollmentReviewPanel() {
                 {/* Timeline */}
                 {Array.isArray(viewStudent.statusHistory) && viewStudent.statusHistory.length > 0 && (
                   <div className="relative pl-4 border-l-2 border-muted space-y-3">
-                    {[...viewStudent.statusHistory].reverse().map((h, i) => (
-                      <div key={i} className="relative">
-                        <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <StatusBadge status={h.status} />
-                            {h.remarks && <p className="text-xs text-muted-foreground mt-1">{h.remarks}</p>}
-                          </div>
-                          {h.changedAt && !isNaN(new Date(h.changedAt).getTime()) && (
+                    {[...viewStudent.statusHistory].reverse().map((h, i) => {
+                      const rawDate = h.changedAt && !isNaN(new Date(h.changedAt).getTime())
+                        ? h.changedAt
+                        : viewStudent.createdAt;
+                      const displayDate = new Date(rawDate).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                      return (
+                        <div key={i} className="relative">
+                          <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <StatusBadge status={h.status} />
+                              {h.remarks && <p className="text-xs text-muted-foreground mt-1">{h.remarks}</p>}
+                            </div>
                             <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
-                              {new Date(h.changedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                              {displayDate}
                             </span>
-                          )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>

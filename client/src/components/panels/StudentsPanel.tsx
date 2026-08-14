@@ -2615,20 +2615,26 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <div>
                         <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">Status Timeline</p>
                         <div className="relative pl-4 border-l-2 border-muted space-y-2">
-                          {history.map((h: any, i: number) => (
-                            <div key={i} className="relative">
-                              <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
-                              <div className="flex items-center justify-between gap-2">
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${STATUS_COLORS[h.status] || 'bg-muted text-muted-foreground'}`}>
-                                  {statusLabel(h.status)}
-                                </span>
-                                <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-                                  {new Date(h.changedAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
-                                </span>
+                          {history.map((h: any, i: number) => {
+                            const rawDate = h.changedAt && !isNaN(new Date(h.changedAt).getTime())
+                              ? h.changedAt
+                              : enr.createdAt;
+                            const displayDate = new Date(rawDate).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                            return (
+                              <div key={i} className="relative">
+                                <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${STATUS_COLORS[h.status] || 'bg-muted text-muted-foreground'}`}>
+                                    {statusLabel(h.status)}
+                                  </span>
+                                  <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+                                    {displayDate}
+                                  </span>
+                                </div>
+                                {h.remarks && <p className="text-xs text-muted-foreground mt-0.5 ml-0.5">{h.remarks}</p>}
                               </div>
-                              {h.remarks && <p className="text-xs text-muted-foreground mt-0.5 ml-0.5">{h.remarks}</p>}
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
