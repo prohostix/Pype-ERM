@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Eye, FileText } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,11 +15,28 @@ interface Enrollment {
   enrollmentNumber?: string;
   studentName: string;
   studentEmail: string;
-  programId: { name: string; code: string } | string;
-  studyCenterId: { name: string } | string;
+  studentPhone?: string;
+  studentAddress?: string;
+  fatherName?: string;
+  dob?: string;
+  altPhone?: string;
+  pinCode?: string;
+  program: { name: string; code: string; university?: { name: string } } | null;
+  studyCenter: { name: string; code?: string } | null;
+  session: { name: string } | null;
   status: string;
   createdAt: string;
   student?: any;
+  payment?: any;
+}
+
+function InfoField({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div>
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground block mb-0.5">{label}</span>
+      <span className="text-sm">{value || <span className="text-muted-foreground italic">N/A</span>}</span>
+    </div>
+  );
 }
 
 export function DeptEnrollmentReviewPanel() {
@@ -29,7 +46,7 @@ export function DeptEnrollmentReviewPanel() {
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
   const [remarks, setRemarks] = useState('');
 
-  const fetch = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
       const res = await api.get('/enrollment/review');
@@ -41,13 +58,13 @@ export function DeptEnrollmentReviewPanel() {
     }
   };
 
-  useEffect(() => { fetch(); }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const handleApprove = async (id: string) => {
     try {
       await api.put(`/enrollment/review/${id}/approve`);
       toast.success('Enrollment approved — forwarded to Finance');
-      fetch();
+      fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to approve');
     }
@@ -59,17 +76,27 @@ export function DeptEnrollmentReviewPanel() {
       toast.success('Enrollment rejected');
       setRejectDialog({ open: false, id: '' });
       setRemarks('');
-      fetch();
+      fetchData();
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to reject');
     }
   };
 
   const getProgramName = (e: Enrollment) =>
-    (e.programId && typeof e.programId === 'object') ? `${e.programId.name} (${e.programId.code})` : e.programId;
+    e.program ? `${e.program.name} (${e.program.code})` : 'N/A';
 
   const getCenterName = (e: Enrollment) =>
-    (e.studyCenterId && typeof e.studyCenterId === 'object') ? e.studyCenterId.name : e.studyCenterId;
+    e.studyCenter?.name || 'N/A';
+
+  // Pull value preferring enrollment form data, fallback to linked student profile
+  const val = (enrollment: Enrollment, enrollKey: keyof Enrollment, studentKey?: string): string | null => {
+    const direct = enrollment[enrollKey];
+    if (direct && typeof direct === 'string') return direct;
+    if (studentKey && enrollment.student?.[studentKey]) return String(enrollment.student[studentKey]);
+    return null;
+  };
+
+  const formatDate = (d?: string | null) => d ? new Date(d).toLocaleDateString('en-IN') : null;
 
   return (
     <div className="space-y-6">
@@ -78,7 +105,7 @@ export function DeptEnrollmentReviewPanel() {
           <h2 className="text-2xl font-bold">Enrollment Review</h2>
           <p className="text-muted-foreground text-sm mt-1">Review and approve student enrollments before finance processing.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetch} disabled={loading}>
+        <Button variant="outline" size="sm" onClick={fetchData} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
         </Button>
       </div>
@@ -124,6 +151,7 @@ export function DeptEnrollmentReviewPanel() {
         </div>
       )}
 
+      {/* Reject Dialog */}
       <Dialog open={rejectDialog.open} onOpenChange={o => setRejectDialog(d => ({ ...d, open: o }))}>
         <DialogContent>
           <DialogHeader><DialogTitle>Reject Enrollment</DialogTitle></DialogHeader>
@@ -138,42 +166,90 @@ export function DeptEnrollmentReviewPanel() {
         </DialogContent>
       </Dialog>
 
+      {/* Full Student Details Dialog */}
       <Dialog open={!!viewStudent} onOpenChange={o => !o && setViewStudent(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Student Details</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Student Enrollment Details</DialogTitle>
+          </DialogHeader>
           {viewStudent && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div><span className="font-semibold text-muted-foreground block">Name</span>{viewStudent.student?.name || viewStudent.studentName}</div>
-                <div><span className="font-semibold text-muted-foreground block">Email</span>{viewStudent.student?.email || viewStudent.studentEmail}</div>
-                <div><span className="font-semibold text-muted-foreground block">Phone</span>{viewStudent.student?.phone || 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">Alt Phone</span>{viewStudent.student?.altPhone || 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">DOB</span>{viewStudent.student?.dob ? new Date(viewStudent.student.dob).toLocaleDateString() : 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">Father's Name</span>{viewStudent.student?.fatherName || 'N/A'}</div>
-                <div className="col-span-2"><span className="font-semibold text-muted-foreground block">Address</span>{viewStudent.student?.address || 'N/A'}</div>
-              </div>
-              
-              <h4 className="font-bold border-b pb-2 mt-6">Documents</h4>
-              {!viewStudent.student?.documents || viewStudent.student.documents.length === 0 ? (
-                <div className="text-muted-foreground text-sm py-4">No documents uploaded.</div>
-              ) : (
-                <div className="grid grid-cols-2 gap-3 mt-2">
-                  {viewStudent.student.documents.map((doc: any, i: number) => {
-                    if (!doc) return null;
-                    return (
-                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border rounded hover:bg-slate-50 transition-colors">
-                        <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium truncate">{doc.type}</p>
-                          <p className="text-xs text-muted-foreground truncate">{doc.name || 'Document'}</p>
-                        </div>
-                      </a>
-                    );
-                  })}
+            <div className="space-y-6 pb-2">
+
+              {/* Photo + Identity */}
+              <div className="flex gap-5 items-start">
+                <div className="shrink-0">
+                  {viewStudent.student?.photo ? (
+                    <img src={viewStudent.student.photo} alt="Student" className="w-24 h-24 rounded-xl object-cover border" />
+                  ) : (
+                    <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center border">
+                      <User className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                  )}
                 </div>
-              )}
+                <div className="flex-1 grid grid-cols-2 gap-3">
+                  <InfoField label="Full Name" value={val(viewStudent, 'studentName', 'name')} />
+                  <InfoField label="Email" value={val(viewStudent, 'studentEmail', 'email')} />
+                  <InfoField label="Phone" value={val(viewStudent, 'studentPhone', 'phone')} />
+                  <InfoField label="Alt Phone" value={val(viewStudent, 'altPhone', 'altPhone')} />
+                  <InfoField label="Date of Birth" value={formatDate(viewStudent.dob) || formatDate(viewStudent.student?.dob)} />
+                  <InfoField label="Enrollment #" value={viewStudent.enrollmentNumber} />
+                </div>
+              </div>
+
+              {/* Program & Institution */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; Institution</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <InfoField label="Program" value={viewStudent.program ? `${viewStudent.program.name} (${viewStudent.program.code})` : null} />
+                  <InfoField label="University" value={viewStudent.program?.university?.name} />
+                  <InfoField label="Study Center" value={viewStudent.studyCenter?.name} />
+                  <InfoField label="Session" value={viewStudent.session?.name} />
+                </div>
+              </div>
+
+              {/* Personal Details */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Personal Details</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <InfoField label="Father's Name" value={val(viewStudent, 'fatherName', 'fatherName')} />
+                  <InfoField label="Mother's Name" value={viewStudent.student?.motherName} />
+                  <InfoField label="Father's Phone" value={viewStudent.student?.fatherPhone} />
+                  <InfoField label="Mother's Phone" value={viewStudent.student?.motherPhone} />
+                  <InfoField label="Religion" value={viewStudent.student?.religion} />
+                  <InfoField label="Caste" value={viewStudent.student?.caste} />
+                  <InfoField label="Address" value={val(viewStudent, 'studentAddress', 'address')} />
+                  <InfoField label="Pin Code" value={val(viewStudent, 'pinCode', 'pinCode')} />
+                </div>
+              </div>
+
+              {/* Documents */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Uploaded Documents</h4>
+                {(() => {
+                  const docs: any[] = Array.isArray(viewStudent.student?.documents)
+                    ? viewStudent.student.documents.filter(Boolean)
+                    : [];
+                  return docs.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic py-2">No documents uploaded.</p>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+                      {docs.map((doc: any, i: number) => (
+                        <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors group">
+                          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
+                            <FileText className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium truncate">{doc.type || 'Document'}</p>
+                            <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+
             </div>
           )}
         </DialogContent>
