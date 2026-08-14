@@ -54,7 +54,7 @@ export const getStudent = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, data: student });
 });
 export const createStudent = asyncHandler(async (req, res) => {
-    const { email, name, phone, centerId, branchId, universityId, programId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status } = req.body;
+    const { email, name, phone, centerId, branchId, universityId, programId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan } = req.body;
     if (!programId || programId.trim() === '') {
         res.status(400).json({ success: false, message: 'Program is required' });
         return;
@@ -146,6 +146,7 @@ export const createStudent = asyncHandler(async (req, res) => {
             branchId: (branchId && branchId.trim() !== '') ? branchId : null,
             organizationId: req.user.organizationId,
             credentials: { email, password: defaultPassword },
+            admissionProgress: { paymentPlan: paymentPlan || 'full' },
             // Track who enrolled this student (sales user)
             enrolledBy: req.user.id
         }
@@ -194,6 +195,13 @@ export const updateStudent = asyncHandler(async (req, res) => {
     }
     if ('universityId' in dataToUpdate) {
         dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
+    }
+    if (dataToUpdate.paymentPlan) {
+        dataToUpdate.admissionProgress = {
+            ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
+            paymentPlan: dataToUpdate.paymentPlan
+        };
+        delete dataToUpdate.paymentPlan;
     }
     const student = await prisma.student.update({
         where: { id: req.params.id },

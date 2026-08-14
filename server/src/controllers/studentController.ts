@@ -84,7 +84,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     altPhone,
     photo,
     documents,
-    status
+    status,
+    paymentPlan
   } = req.body;
   
   if (!programId || programId.trim() === '') {
@@ -182,6 +183,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
       credentials: { email, password: defaultPassword },
+      admissionProgress: { paymentPlan: paymentPlan || 'full' },
       // Track who enrolled this student (sales user)
       enrolledBy: req.user.id
     }
@@ -239,6 +241,14 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
 
   if ('universityId' in dataToUpdate) {
     dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
+  }
+  
+  if (dataToUpdate.paymentPlan) {
+    dataToUpdate.admissionProgress = {
+      ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
+      paymentPlan: dataToUpdate.paymentPlan
+    };
+    delete dataToUpdate.paymentPlan;
   }
 
   const student = await prisma.student.update({

@@ -160,7 +160,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     motherPhone: '',
     // Documents stored as array of {type, url}
     documents: [] as any[],
-    centerId: ''
+    centerId: '',
+    paymentPlan: 'full' // 'full' or 'per_year_sem'
   });
 
 
@@ -340,7 +341,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       motherName: student.motherName || '',
       motherPhone: student.motherPhone || '',
       documents: student.documents || [],
-      centerId: centerId?.toString() || ''
+      centerId: centerId?.toString() || '',
+      paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full'
     });
     const otherDoc = (student.documents || []).find((d: any) => d.type === 'Other');
     setCustomOtherName(otherDoc?.label || '');
@@ -401,27 +403,38 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     let periodName = '';
     let amount = 0;
     
-    if (relevantFeeStructure.billingCycle === 'per_year') {
-      periodName = 'First Year';
+    if (formData.paymentPlan === 'full') {
+      periodName = 'One Time (Full Payment)';
       if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
-        amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
-      } else {
-        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
-      }
-    } else if (relevantFeeStructure.billingCycle === 'per_semester') {
-      periodName = 'First Semester';
-      if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
-        amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                 Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
+        amount = relevantFeeStructure.yearlyFees.reduce((acc: number, yf: any) => {
+          return acc + Number(yf.tuitionFee || 0) + Number(yf.registrationFee || 0) + Number(yf.examFee || 0);
+        }, 0);
       } else {
         amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
       }
     } else {
-      periodName = 'One Time';
-      amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
+      if (relevantFeeStructure.billingCycle === 'per_year') {
+        periodName = 'First Year';
+        if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
+          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
+                   Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
+                   Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
+        } else {
+          amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
+        }
+      } else if (relevantFeeStructure.billingCycle === 'per_semester') {
+        periodName = 'First Semester';
+        if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
+          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
+                   Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
+                   Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
+        } else {
+          amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
+        }
+      } else {
+        periodName = 'One Time';
+        amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
+      }
     }
 
     return (
@@ -1572,6 +1585,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                   {sessions.filter((s: any) => s && s.id && s.programId === formData.programId).map((s: any) => (
                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                                   ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+
+                          {/* Payment Plan & Fee */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label className="font-medium">Payment Plan *</Label>
+                              <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
+                                <SelectTrigger><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="full">Full (One Time)</SelectItem>
+                                  <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
