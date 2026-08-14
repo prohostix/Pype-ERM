@@ -7563,6 +7563,7 @@ export namespace Prisma {
     financeReviewedEnrollments: number
     universityReviewedEnrollments: number
     salesLedEnrollments: number
+    verifiedReceipts: number
     deptAdminEscalations: number
     employeeEscalations: number
     handledEscalations: number
@@ -7636,6 +7637,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: boolean | UserCountOutputTypeCountFinanceReviewedEnrollmentsArgs
     universityReviewedEnrollments?: boolean | UserCountOutputTypeCountUniversityReviewedEnrollmentsArgs
     salesLedEnrollments?: boolean | UserCountOutputTypeCountSalesLedEnrollmentsArgs
+    verifiedReceipts?: boolean | UserCountOutputTypeCountVerifiedReceiptsArgs
     deptAdminEscalations?: boolean | UserCountOutputTypeCountDeptAdminEscalationsArgs
     employeeEscalations?: boolean | UserCountOutputTypeCountEmployeeEscalationsArgs
     handledEscalations?: boolean | UserCountOutputTypeCountHandledEscalationsArgs
@@ -7806,6 +7808,13 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountSalesLedEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnrollmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerifiedReceiptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnrollmentWhereInput
   }
 
@@ -14861,6 +14870,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: boolean | User$financeReviewedEnrollmentsArgs<ExtArgs>
     universityReviewedEnrollments?: boolean | User$universityReviewedEnrollmentsArgs<ExtArgs>
     salesLedEnrollments?: boolean | User$salesLedEnrollmentsArgs<ExtArgs>
+    verifiedReceipts?: boolean | User$verifiedReceiptsArgs<ExtArgs>
     deptAdminEscalations?: boolean | User$deptAdminEscalationsArgs<ExtArgs>
     employeeEscalations?: boolean | User$employeeEscalationsArgs<ExtArgs>
     handledEscalations?: boolean | User$handledEscalationsArgs<ExtArgs>
@@ -15039,6 +15049,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: boolean | User$financeReviewedEnrollmentsArgs<ExtArgs>
     universityReviewedEnrollments?: boolean | User$universityReviewedEnrollmentsArgs<ExtArgs>
     salesLedEnrollments?: boolean | User$salesLedEnrollmentsArgs<ExtArgs>
+    verifiedReceipts?: boolean | User$verifiedReceiptsArgs<ExtArgs>
     deptAdminEscalations?: boolean | User$deptAdminEscalationsArgs<ExtArgs>
     employeeEscalations?: boolean | User$employeeEscalationsArgs<ExtArgs>
     handledEscalations?: boolean | User$handledEscalationsArgs<ExtArgs>
@@ -15147,6 +15158,7 @@ export namespace Prisma {
       financeReviewedEnrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       universityReviewedEnrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       salesLedEnrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+      verifiedReceipts: Prisma.$EnrollmentPayload<ExtArgs>[]
       deptAdminEscalations: Prisma.$EscalationPayload<ExtArgs>[]
       employeeEscalations: Prisma.$EscalationPayload<ExtArgs>[]
       handledEscalations: Prisma.$EscalationPayload<ExtArgs>[]
@@ -15649,6 +15661,7 @@ export namespace Prisma {
     financeReviewedEnrollments<T extends User$financeReviewedEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$financeReviewedEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     universityReviewedEnrollments<T extends User$universityReviewedEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$universityReviewedEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     salesLedEnrollments<T extends User$salesLedEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$salesLedEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    verifiedReceipts<T extends User$verifiedReceiptsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deptAdminEscalations<T extends User$deptAdminEscalationsArgs<ExtArgs> = {}>(args?: Subset<T, User$deptAdminEscalationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EscalationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     employeeEscalations<T extends User$employeeEscalationsArgs<ExtArgs> = {}>(args?: Subset<T, User$employeeEscalationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EscalationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     handledEscalations<T extends User$handledEscalationsArgs<ExtArgs> = {}>(args?: Subset<T, User$handledEscalationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EscalationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -16581,6 +16594,30 @@ export namespace Prisma {
    * User.salesLedEnrollments
    */
   export type User$salesLedEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enrollment
+     */
+    select?: EnrollmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Enrollment
+     */
+    omit?: EnrollmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnrollmentInclude<ExtArgs> | null
+    where?: EnrollmentWhereInput
+    orderBy?: EnrollmentOrderByWithRelationInput | EnrollmentOrderByWithRelationInput[]
+    cursor?: EnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnrollmentScalarFieldEnum | EnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.verifiedReceipts
+   */
+  export type User$verifiedReceiptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Enrollment
      */
@@ -48848,6 +48885,10 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    receiptUrl: string | null
+    receiptVerified: boolean | null
+    receiptVerifiedAt: Date | null
+    receiptVerifiedBy: string | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -48880,6 +48921,10 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    receiptUrl: string | null
+    receiptVerified: boolean | null
+    receiptVerifiedAt: Date | null
+    receiptVerifiedBy: string | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -48913,6 +48958,10 @@ export namespace Prisma {
     universityReviewedAt: number
     universityReviewedBy: number
     salesUserId: number
+    receiptUrl: number
+    receiptVerified: number
+    receiptVerifiedAt: number
+    receiptVerifiedBy: number
     _all: number
   }
 
@@ -48947,6 +48996,10 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    receiptUrl?: true
+    receiptVerified?: true
+    receiptVerifiedAt?: true
+    receiptVerifiedBy?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -48979,6 +49032,10 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    receiptUrl?: true
+    receiptVerified?: true
+    receiptVerifiedAt?: true
+    receiptVerifiedBy?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -49012,6 +49069,10 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    receiptUrl?: true
+    receiptVerified?: true
+    receiptVerifiedAt?: true
+    receiptVerifiedBy?: true
     _all?: true
   }
 
@@ -49118,6 +49179,10 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    receiptUrl: string | null
+    receiptVerified: boolean
+    receiptVerifiedAt: Date | null
+    receiptVerifiedBy: string | null
     _count: EnrollmentCountAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
@@ -49168,6 +49233,10 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    receiptUrl?: boolean
+    receiptVerified?: boolean
+    receiptVerifiedAt?: boolean
+    receiptVerifiedBy?: boolean
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -49176,6 +49245,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
     payment?: boolean | Enrollment$paymentArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -49211,6 +49281,10 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    receiptUrl?: boolean
+    receiptVerified?: boolean
+    receiptVerifiedAt?: boolean
+    receiptVerifiedBy?: boolean
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -49219,6 +49293,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
@@ -49253,6 +49328,10 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    receiptUrl?: boolean
+    receiptVerified?: boolean
+    receiptVerifiedAt?: boolean
+    receiptVerifiedBy?: boolean
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -49261,6 +49340,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
@@ -49295,9 +49375,13 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    receiptUrl?: boolean
+    receiptVerified?: boolean
+    receiptVerifiedAt?: boolean
+    receiptVerifiedBy?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "fatherName" | "dob" | "altPhone" | "pinCode" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "fatherName" | "dob" | "altPhone" | "pinCode" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
@@ -49307,6 +49391,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
     payment?: boolean | Enrollment$paymentArgs<ExtArgs>
   }
@@ -49319,6 +49404,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
   }
   export type EnrollmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -49330,6 +49416,7 @@ export namespace Prisma {
     session?: boolean | Enrollment$sessionArgs<ExtArgs>
     student?: boolean | Enrollment$studentArgs<ExtArgs>
     studyCenter?: boolean | Enrollment$studyCenterArgs<ExtArgs>
+    receiptVerifier?: boolean | Enrollment$receiptVerifierArgs<ExtArgs>
     universityReviewer?: boolean | Enrollment$universityReviewerArgs<ExtArgs>
   }
 
@@ -49344,6 +49431,7 @@ export namespace Prisma {
       session: Prisma.$AdmissionSessionPayload<ExtArgs> | null
       student: Prisma.$StudentPayload<ExtArgs> | null
       studyCenter: Prisma.$StudyCenterPayload<ExtArgs> | null
+      receiptVerifier: Prisma.$UserPayload<ExtArgs> | null
       universityReviewer: Prisma.$UserPayload<ExtArgs> | null
       payment: Prisma.$EnrollmentPaymentPayload<ExtArgs> | null
     }
@@ -49378,6 +49466,10 @@ export namespace Prisma {
       universityReviewedAt: Date | null
       universityReviewedBy: string | null
       salesUserId: string | null
+      receiptUrl: string | null
+      receiptVerified: boolean
+      receiptVerifiedAt: Date | null
+      receiptVerifiedBy: string | null
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -49780,6 +49872,7 @@ export namespace Prisma {
     session<T extends Enrollment$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$sessionArgs<ExtArgs>>): Prisma__AdmissionSessionClient<$Result.GetResult<Prisma.$AdmissionSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     student<T extends Enrollment$studentArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     studyCenter<T extends Enrollment$studyCenterArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$studyCenterArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    receiptVerifier<T extends Enrollment$receiptVerifierArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$receiptVerifierArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     universityReviewer<T extends Enrollment$universityReviewerArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$universityReviewerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     payment<T extends Enrollment$paymentArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$paymentArgs<ExtArgs>>): Prisma__EnrollmentPaymentClient<$Result.GetResult<Prisma.$EnrollmentPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -49841,6 +49934,10 @@ export namespace Prisma {
     readonly universityReviewedAt: FieldRef<"Enrollment", 'DateTime'>
     readonly universityReviewedBy: FieldRef<"Enrollment", 'String'>
     readonly salesUserId: FieldRef<"Enrollment", 'String'>
+    readonly receiptUrl: FieldRef<"Enrollment", 'String'>
+    readonly receiptVerified: FieldRef<"Enrollment", 'Boolean'>
+    readonly receiptVerifiedAt: FieldRef<"Enrollment", 'DateTime'>
+    readonly receiptVerifiedBy: FieldRef<"Enrollment", 'String'>
   }
     
 
@@ -50353,6 +50450,25 @@ export namespace Prisma {
      */
     include?: StudyCenterInclude<ExtArgs> | null
     where?: StudyCenterWhereInput
+  }
+
+  /**
+   * Enrollment.receiptVerifier
+   */
+  export type Enrollment$receiptVerifierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -80757,8 +80873,8 @@ export namespace Prisma {
   export type EnrollmentPaymentGroupByOutputType = {
     id: string
     enrollmentId: string
-    studyCenterId: string
-    walletId: string
+    studyCenterId: string | null
+    walletId: string | null
     amount: number
     debitedAt: Date
     createdAt: Date
@@ -80794,8 +80910,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }, ExtArgs["result"]["enrollmentPayment"]>
 
   export type EnrollmentPaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -80808,8 +80924,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }, ExtArgs["result"]["enrollmentPayment"]>
 
   export type EnrollmentPaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -80822,8 +80938,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }, ExtArgs["result"]["enrollmentPayment"]>
 
   export type EnrollmentPaymentSelectScalar = {
@@ -80840,32 +80956,32 @@ export namespace Prisma {
   export type EnrollmentPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrollmentId" | "studyCenterId" | "walletId" | "amount" | "debitedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["enrollmentPayment"]>
   export type EnrollmentPaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }
   export type EnrollmentPaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }
   export type EnrollmentPaymentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollment?: boolean | EnrollmentDefaultArgs<ExtArgs>
-    studyCenter?: boolean | StudyCenterDefaultArgs<ExtArgs>
-    wallet?: boolean | StudyCenterWalletDefaultArgs<ExtArgs>
+    studyCenter?: boolean | EnrollmentPayment$studyCenterArgs<ExtArgs>
+    wallet?: boolean | EnrollmentPayment$walletArgs<ExtArgs>
   }
 
   export type $EnrollmentPaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "EnrollmentPayment"
     objects: {
       enrollment: Prisma.$EnrollmentPayload<ExtArgs>
-      studyCenter: Prisma.$StudyCenterPayload<ExtArgs>
-      wallet: Prisma.$StudyCenterWalletPayload<ExtArgs>
+      studyCenter: Prisma.$StudyCenterPayload<ExtArgs> | null
+      wallet: Prisma.$StudyCenterWalletPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       enrollmentId: string
-      studyCenterId: string
-      walletId: string
+      studyCenterId: string | null
+      walletId: string | null
       amount: number
       debitedAt: Date
       createdAt: Date
@@ -81265,8 +81381,8 @@ export namespace Prisma {
   export interface Prisma__EnrollmentPaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     enrollment<T extends EnrollmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EnrollmentDefaultArgs<ExtArgs>>): Prisma__EnrollmentClient<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    studyCenter<T extends StudyCenterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterDefaultArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    wallet<T extends StudyCenterWalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterWalletDefaultArgs<ExtArgs>>): Prisma__StudyCenterWalletClient<$Result.GetResult<Prisma.$StudyCenterWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    studyCenter<T extends EnrollmentPayment$studyCenterArgs<ExtArgs> = {}>(args?: Subset<T, EnrollmentPayment$studyCenterArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    wallet<T extends EnrollmentPayment$walletArgs<ExtArgs> = {}>(args?: Subset<T, EnrollmentPayment$walletArgs<ExtArgs>>): Prisma__StudyCenterWalletClient<$Result.GetResult<Prisma.$StudyCenterWalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -81702,6 +81818,44 @@ export namespace Prisma {
      * Limit how many EnrollmentPayments to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EnrollmentPayment.studyCenter
+   */
+  export type EnrollmentPayment$studyCenterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudyCenter
+     */
+    select?: StudyCenterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudyCenter
+     */
+    omit?: StudyCenterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudyCenterInclude<ExtArgs> | null
+    where?: StudyCenterWhereInput
+  }
+
+  /**
+   * EnrollmentPayment.wallet
+   */
+  export type EnrollmentPayment$walletArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudyCenterWallet
+     */
+    select?: StudyCenterWalletSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudyCenterWallet
+     */
+    omit?: StudyCenterWalletOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudyCenterWalletInclude<ExtArgs> | null
+    where?: StudyCenterWalletWhereInput
   }
 
   /**
@@ -92947,7 +93101,11 @@ export namespace Prisma {
     universityRemarks: 'universityRemarks',
     universityReviewedAt: 'universityReviewedAt',
     universityReviewedBy: 'universityReviewedBy',
-    salesUserId: 'salesUserId'
+    salesUserId: 'salesUserId',
+    receiptUrl: 'receiptUrl',
+    receiptVerified: 'receiptVerified',
+    receiptVerifiedAt: 'receiptVerifiedAt',
+    receiptVerifiedBy: 'receiptVerifiedBy'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -94583,6 +94741,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentListRelationFilter
     universityReviewedEnrollments?: EnrollmentListRelationFilter
     salesLedEnrollments?: EnrollmentListRelationFilter
+    verifiedReceipts?: EnrollmentListRelationFilter
     deptAdminEscalations?: EscalationListRelationFilter
     employeeEscalations?: EscalationListRelationFilter
     handledEscalations?: EscalationListRelationFilter
@@ -94692,6 +94851,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentOrderByRelationAggregateInput
     universityReviewedEnrollments?: EnrollmentOrderByRelationAggregateInput
     salesLedEnrollments?: EnrollmentOrderByRelationAggregateInput
+    verifiedReceipts?: EnrollmentOrderByRelationAggregateInput
     deptAdminEscalations?: EscalationOrderByRelationAggregateInput
     employeeEscalations?: EscalationOrderByRelationAggregateInput
     handledEscalations?: EscalationOrderByRelationAggregateInput
@@ -94804,6 +94964,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentListRelationFilter
     universityReviewedEnrollments?: EnrollmentListRelationFilter
     salesLedEnrollments?: EnrollmentListRelationFilter
+    verifiedReceipts?: EnrollmentListRelationFilter
     deptAdminEscalations?: EscalationListRelationFilter
     employeeEscalations?: EscalationListRelationFilter
     handledEscalations?: EscalationListRelationFilter
@@ -97774,6 +97935,10 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
+    receiptVerified?: BoolFilter<"Enrollment"> | boolean
+    receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -97782,6 +97947,7 @@ export namespace Prisma {
     session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    receiptVerifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     universityReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     payment?: XOR<EnrollmentPaymentNullableScalarRelationFilter, EnrollmentPaymentWhereInput> | null
   }
@@ -97817,6 +97983,10 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    receiptUrl?: SortOrderInput | SortOrder
+    receiptVerified?: SortOrder
+    receiptVerifiedAt?: SortOrderInput | SortOrder
+    receiptVerifiedBy?: SortOrderInput | SortOrder
     salesUser?: UserOrderByWithRelationInput
     departmentReviewer?: UserOrderByWithRelationInput
     financeReviewer?: UserOrderByWithRelationInput
@@ -97825,6 +97995,7 @@ export namespace Prisma {
     session?: AdmissionSessionOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
     studyCenter?: StudyCenterOrderByWithRelationInput
+    receiptVerifier?: UserOrderByWithRelationInput
     universityReviewer?: UserOrderByWithRelationInput
     payment?: EnrollmentPaymentOrderByWithRelationInput
   }
@@ -97864,6 +98035,10 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
+    receiptVerified?: BoolFilter<"Enrollment"> | boolean
+    receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -97872,6 +98047,7 @@ export namespace Prisma {
     session?: XOR<AdmissionSessionNullableScalarRelationFilter, AdmissionSessionWhereInput> | null
     student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
     studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    receiptVerifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     universityReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     payment?: XOR<EnrollmentPaymentNullableScalarRelationFilter, EnrollmentPaymentWhereInput> | null
   }, "id" | "enrollmentNumber" | "studentId_programId_sessionId">
@@ -97907,6 +98083,10 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    receiptUrl?: SortOrderInput | SortOrder
+    receiptVerified?: SortOrder
+    receiptVerifiedAt?: SortOrderInput | SortOrder
+    receiptVerifiedBy?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
     _min?: EnrollmentMinOrderByAggregateInput
@@ -97946,6 +98126,10 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    receiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    receiptVerified?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    receiptVerifiedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+    receiptVerifiedBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
   }
 
   export type ExpenseClaimWhereInput = {
@@ -100386,22 +100570,22 @@ export namespace Prisma {
     NOT?: EnrollmentPaymentWhereInput | EnrollmentPaymentWhereInput[]
     id?: StringFilter<"EnrollmentPayment"> | string
     enrollmentId?: StringFilter<"EnrollmentPayment"> | string
-    studyCenterId?: StringFilter<"EnrollmentPayment"> | string
-    walletId?: StringFilter<"EnrollmentPayment"> | string
+    studyCenterId?: StringNullableFilter<"EnrollmentPayment"> | string | null
+    walletId?: StringNullableFilter<"EnrollmentPayment"> | string | null
     amount?: FloatFilter<"EnrollmentPayment"> | number
     debitedAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     createdAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     updatedAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
-    studyCenter?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
-    wallet?: XOR<StudyCenterWalletScalarRelationFilter, StudyCenterWalletWhereInput>
+    studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    wallet?: XOR<StudyCenterWalletNullableScalarRelationFilter, StudyCenterWalletWhereInput> | null
   }
 
   export type EnrollmentPaymentOrderByWithRelationInput = {
     id?: SortOrder
     enrollmentId?: SortOrder
-    studyCenterId?: SortOrder
-    walletId?: SortOrder
+    studyCenterId?: SortOrderInput | SortOrder
+    walletId?: SortOrderInput | SortOrder
     amount?: SortOrder
     debitedAt?: SortOrder
     createdAt?: SortOrder
@@ -100417,22 +100601,22 @@ export namespace Prisma {
     AND?: EnrollmentPaymentWhereInput | EnrollmentPaymentWhereInput[]
     OR?: EnrollmentPaymentWhereInput[]
     NOT?: EnrollmentPaymentWhereInput | EnrollmentPaymentWhereInput[]
-    studyCenterId?: StringFilter<"EnrollmentPayment"> | string
-    walletId?: StringFilter<"EnrollmentPayment"> | string
+    studyCenterId?: StringNullableFilter<"EnrollmentPayment"> | string | null
+    walletId?: StringNullableFilter<"EnrollmentPayment"> | string | null
     amount?: FloatFilter<"EnrollmentPayment"> | number
     debitedAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     createdAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     updatedAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     enrollment?: XOR<EnrollmentScalarRelationFilter, EnrollmentWhereInput>
-    studyCenter?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
-    wallet?: XOR<StudyCenterWalletScalarRelationFilter, StudyCenterWalletWhereInput>
+    studyCenter?: XOR<StudyCenterNullableScalarRelationFilter, StudyCenterWhereInput> | null
+    wallet?: XOR<StudyCenterWalletNullableScalarRelationFilter, StudyCenterWalletWhereInput> | null
   }, "id" | "enrollmentId">
 
   export type EnrollmentPaymentOrderByWithAggregationInput = {
     id?: SortOrder
     enrollmentId?: SortOrder
-    studyCenterId?: SortOrder
-    walletId?: SortOrder
+    studyCenterId?: SortOrderInput | SortOrder
+    walletId?: SortOrderInput | SortOrder
     amount?: SortOrder
     debitedAt?: SortOrder
     createdAt?: SortOrder
@@ -100450,8 +100634,8 @@ export namespace Prisma {
     NOT?: EnrollmentPaymentScalarWhereWithAggregatesInput | EnrollmentPaymentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"EnrollmentPayment"> | string
     enrollmentId?: StringWithAggregatesFilter<"EnrollmentPayment"> | string
-    studyCenterId?: StringWithAggregatesFilter<"EnrollmentPayment"> | string
-    walletId?: StringWithAggregatesFilter<"EnrollmentPayment"> | string
+    studyCenterId?: StringNullableWithAggregatesFilter<"EnrollmentPayment"> | string | null
+    walletId?: StringNullableWithAggregatesFilter<"EnrollmentPayment"> | string | null
     amount?: FloatWithAggregatesFilter<"EnrollmentPayment"> | number
     debitedAt?: DateTimeWithAggregatesFilter<"EnrollmentPayment"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"EnrollmentPayment"> | Date | string
@@ -101918,6 +102102,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -102027,6 +102212,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -102122,6 +102308,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -102231,6 +102418,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -105472,6 +105660,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -105480,6 +105671,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -105515,6 +105707,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -105540,6 +105736,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -105548,6 +105747,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -105583,6 +105783,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -105617,6 +105821,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -105641,6 +105849,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -105674,6 +105885,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ExpenseClaimCreateInput = {
@@ -108234,15 +108449,15 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutPaymentInput
-    studyCenter: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
-    wallet: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
+    wallet?: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
   }
 
   export type EnrollmentPaymentUncheckedCreateInput = {
     id?: string
     enrollmentId: string
-    studyCenterId: string
-    walletId: string
+    studyCenterId?: string | null
+    walletId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -108256,15 +108471,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutPaymentNestedInput
-    studyCenter?: StudyCenterUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
-    wallet?: StudyCenterWalletUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutEnrollmentPaymentsNestedInput
+    wallet?: StudyCenterWalletUpdateOneWithoutEnrollmentPaymentsNestedInput
   }
 
   export type EnrollmentPaymentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    studyCenterId?: StringFieldUpdateOperationsInput | string
-    walletId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    walletId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108274,8 +108489,8 @@ export namespace Prisma {
   export type EnrollmentPaymentCreateManyInput = {
     id?: string
     enrollmentId: string
-    studyCenterId: string
-    walletId: string
+    studyCenterId?: string | null
+    walletId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -108293,8 +108508,8 @@ export namespace Prisma {
   export type EnrollmentPaymentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    studyCenterId?: StringFieldUpdateOperationsInput | string
-    walletId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    walletId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112206,6 +112421,10 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    receiptUrl?: SortOrder
+    receiptVerified?: SortOrder
+    receiptVerifiedAt?: SortOrder
+    receiptVerifiedBy?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -112238,6 +112457,10 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    receiptUrl?: SortOrder
+    receiptVerified?: SortOrder
+    receiptVerifiedAt?: SortOrder
+    receiptVerifiedBy?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -112270,6 +112493,10 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    receiptUrl?: SortOrder
+    receiptVerified?: SortOrder
+    receiptVerifiedAt?: SortOrder
+    receiptVerifiedBy?: SortOrder
   }
 
   export type EnumExpenseStatusFilter<$PrismaModel = never> = {
@@ -113585,11 +113812,6 @@ export namespace Prisma {
   export type EnrollmentScalarRelationFilter = {
     is?: EnrollmentWhereInput
     isNot?: EnrollmentWhereInput
-  }
-
-  export type StudyCenterWalletScalarRelationFilter = {
-    is?: StudyCenterWalletWhereInput
-    isNot?: StudyCenterWalletWhereInput
   }
 
   export type EnrollmentPaymentCountOrderByAggregateInput = {
@@ -117235,6 +117457,13 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
+  export type EnrollmentCreateNestedManyWithoutReceiptVerifierInput = {
+    create?: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput> | EnrollmentCreateWithoutReceiptVerifierInput[] | EnrollmentUncheckedCreateWithoutReceiptVerifierInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutReceiptVerifierInput | EnrollmentCreateOrConnectWithoutReceiptVerifierInput[]
+    createMany?: EnrollmentCreateManyReceiptVerifierInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
   export type EscalationCreateNestedManyWithoutDeptAdminInput = {
     create?: XOR<EscalationCreateWithoutDeptAdminInput, EscalationUncheckedCreateWithoutDeptAdminInput> | EscalationCreateWithoutDeptAdminInput[] | EscalationUncheckedCreateWithoutDeptAdminInput[]
     connectOrCreate?: EscalationCreateOrConnectWithoutDeptAdminInput | EscalationCreateOrConnectWithoutDeptAdminInput[]
@@ -117804,6 +118033,13 @@ export namespace Prisma {
     create?: XOR<EnrollmentCreateWithoutSalesUserInput, EnrollmentUncheckedCreateWithoutSalesUserInput> | EnrollmentCreateWithoutSalesUserInput[] | EnrollmentUncheckedCreateWithoutSalesUserInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutSalesUserInput | EnrollmentCreateOrConnectWithoutSalesUserInput[]
     createMany?: EnrollmentCreateManySalesUserInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput = {
+    create?: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput> | EnrollmentCreateWithoutReceiptVerifierInput[] | EnrollmentUncheckedCreateWithoutReceiptVerifierInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutReceiptVerifierInput | EnrollmentCreateOrConnectWithoutReceiptVerifierInput[]
+    createMany?: EnrollmentCreateManyReceiptVerifierInputEnvelope
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
@@ -118463,6 +118699,20 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     update?: EnrollmentUpdateWithWhereUniqueWithoutSalesUserInput | EnrollmentUpdateWithWhereUniqueWithoutSalesUserInput[]
     updateMany?: EnrollmentUpdateManyWithWhereWithoutSalesUserInput | EnrollmentUpdateManyWithWhereWithoutSalesUserInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type EnrollmentUpdateManyWithoutReceiptVerifierNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput> | EnrollmentCreateWithoutReceiptVerifierInput[] | EnrollmentUncheckedCreateWithoutReceiptVerifierInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutReceiptVerifierInput | EnrollmentCreateOrConnectWithoutReceiptVerifierInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutReceiptVerifierInput | EnrollmentUpsertWithWhereUniqueWithoutReceiptVerifierInput[]
+    createMany?: EnrollmentCreateManyReceiptVerifierInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutReceiptVerifierInput | EnrollmentUpdateWithWhereUniqueWithoutReceiptVerifierInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutReceiptVerifierInput | EnrollmentUpdateManyWithWhereWithoutReceiptVerifierInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
@@ -119581,6 +119831,20 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     update?: EnrollmentUpdateWithWhereUniqueWithoutSalesUserInput | EnrollmentUpdateWithWhereUniqueWithoutSalesUserInput[]
     updateMany?: EnrollmentUpdateManyWithWhereWithoutSalesUserInput | EnrollmentUpdateManyWithWhereWithoutSalesUserInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput> | EnrollmentCreateWithoutReceiptVerifierInput[] | EnrollmentUncheckedCreateWithoutReceiptVerifierInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutReceiptVerifierInput | EnrollmentCreateOrConnectWithoutReceiptVerifierInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutReceiptVerifierInput | EnrollmentUpsertWithWhereUniqueWithoutReceiptVerifierInput[]
+    createMany?: EnrollmentCreateManyReceiptVerifierInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutReceiptVerifierInput | EnrollmentUpdateWithWhereUniqueWithoutReceiptVerifierInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutReceiptVerifierInput | EnrollmentUpdateManyWithWhereWithoutReceiptVerifierInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
@@ -124233,6 +124497,12 @@ export namespace Prisma {
     connect?: StudyCenterWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutVerifiedReceiptsInput = {
+    create?: XOR<UserCreateWithoutVerifiedReceiptsInput, UserUncheckedCreateWithoutVerifiedReceiptsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerifiedReceiptsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput = {
     create?: XOR<UserCreateWithoutUniversityReviewedEnrollmentsInput, UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput>
     connectOrCreate?: UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput
@@ -124325,6 +124595,16 @@ export namespace Prisma {
     delete?: StudyCenterWhereInput | boolean
     connect?: StudyCenterWhereUniqueInput
     update?: XOR<XOR<StudyCenterUpdateToOneWithWhereWithoutEnrollmentsInput, StudyCenterUpdateWithoutEnrollmentsInput>, StudyCenterUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type UserUpdateOneWithoutVerifiedReceiptsNestedInput = {
+    create?: XOR<UserCreateWithoutVerifiedReceiptsInput, UserUncheckedCreateWithoutVerifiedReceiptsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerifiedReceiptsInput
+    upsert?: UserUpsertWithoutVerifiedReceiptsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerifiedReceiptsInput, UserUpdateWithoutVerifiedReceiptsInput>, UserUncheckedUpdateWithoutVerifiedReceiptsInput>
   }
 
   export type UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput = {
@@ -125600,18 +125880,22 @@ export namespace Prisma {
     update?: XOR<XOR<EnrollmentUpdateToOneWithWhereWithoutPaymentInput, EnrollmentUpdateWithoutPaymentInput>, EnrollmentUncheckedUpdateWithoutPaymentInput>
   }
 
-  export type StudyCenterUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput = {
+  export type StudyCenterUpdateOneWithoutEnrollmentPaymentsNestedInput = {
     create?: XOR<StudyCenterCreateWithoutEnrollmentPaymentsInput, StudyCenterUncheckedCreateWithoutEnrollmentPaymentsInput>
     connectOrCreate?: StudyCenterCreateOrConnectWithoutEnrollmentPaymentsInput
     upsert?: StudyCenterUpsertWithoutEnrollmentPaymentsInput
+    disconnect?: StudyCenterWhereInput | boolean
+    delete?: StudyCenterWhereInput | boolean
     connect?: StudyCenterWhereUniqueInput
     update?: XOR<XOR<StudyCenterUpdateToOneWithWhereWithoutEnrollmentPaymentsInput, StudyCenterUpdateWithoutEnrollmentPaymentsInput>, StudyCenterUncheckedUpdateWithoutEnrollmentPaymentsInput>
   }
 
-  export type StudyCenterWalletUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput = {
+  export type StudyCenterWalletUpdateOneWithoutEnrollmentPaymentsNestedInput = {
     create?: XOR<StudyCenterWalletCreateWithoutEnrollmentPaymentsInput, StudyCenterWalletUncheckedCreateWithoutEnrollmentPaymentsInput>
     connectOrCreate?: StudyCenterWalletCreateOrConnectWithoutEnrollmentPaymentsInput
     upsert?: StudyCenterWalletUpsertWithoutEnrollmentPaymentsInput
+    disconnect?: StudyCenterWalletWhereInput | boolean
+    delete?: StudyCenterWalletWhereInput | boolean
     connect?: StudyCenterWalletWhereUniqueInput
     update?: XOR<XOR<StudyCenterWalletUpdateToOneWithWhereWithoutEnrollmentPaymentsInput, StudyCenterWalletUpdateWithoutEnrollmentPaymentsInput>, StudyCenterWalletUncheckedUpdateWithoutEnrollmentPaymentsInput>
   }
@@ -127314,6 +127598,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -127321,6 +127608,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -127355,6 +127643,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -128985,6 +129277,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -129092,6 +129385,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -129913,6 +130207,10 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
+    receiptVerified?: BoolFilter<"Enrollment"> | boolean
+    receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
   }
 
   export type EscalationUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -131821,6 +132119,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -131929,6 +132228,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -132531,6 +132831,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -132638,6 +132939,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -132775,6 +133077,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -132883,6 +133186,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -133114,6 +133418,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -133222,6 +133527,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -134322,6 +134628,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -134329,6 +134638,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -134363,6 +134673,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -134398,6 +134712,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -134405,6 +134722,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -134439,6 +134757,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -134474,6 +134796,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -134482,6 +134807,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -134515,6 +134841,10 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -134550,6 +134880,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -134557,6 +134890,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -134591,6 +134925,10 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -134601,6 +134939,90 @@ export namespace Prisma {
 
   export type EnrollmentCreateManySalesUserInputEnvelope = {
     data: EnrollmentCreateManySalesUserInput | EnrollmentCreateManySalesUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EnrollmentCreateWithoutReceiptVerifierInput = {
+    id?: string
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
+    departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
+    financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
+    organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
+    program: ProgramCreateNestedOneWithoutEnrollmentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
+    student?: StudentCreateNestedOneWithoutEnrollmentsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
+    payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutReceiptVerifierInput = {
+    id?: string
+    organizationId: string
+    studentId?: string | null
+    programId: string
+    studyCenterId?: string | null
+    sessionId?: string | null
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedBy?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedBy?: string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    universityReviewedBy?: string | null
+    salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutReceiptVerifierInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput>
+  }
+
+  export type EnrollmentCreateManyReceiptVerifierInputEnvelope = {
+    data: EnrollmentCreateManyReceiptVerifierInput | EnrollmentCreateManyReceiptVerifierInput[]
     skipDuplicates?: boolean
   }
 
@@ -137417,6 +137839,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -137525,6 +137948,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -137624,6 +138048,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -137731,6 +138156,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -138744,6 +139170,22 @@ export namespace Prisma {
   export type EnrollmentUpdateManyWithWhereWithoutSalesUserInput = {
     where: EnrollmentScalarWhereInput
     data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutSalesUserInput>
+  }
+
+  export type EnrollmentUpsertWithWhereUniqueWithoutReceiptVerifierInput = {
+    where: EnrollmentWhereUniqueInput
+    update: XOR<EnrollmentUpdateWithoutReceiptVerifierInput, EnrollmentUncheckedUpdateWithoutReceiptVerifierInput>
+    create: XOR<EnrollmentCreateWithoutReceiptVerifierInput, EnrollmentUncheckedCreateWithoutReceiptVerifierInput>
+  }
+
+  export type EnrollmentUpdateWithWhereUniqueWithoutReceiptVerifierInput = {
+    where: EnrollmentWhereUniqueInput
+    data: XOR<EnrollmentUpdateWithoutReceiptVerifierInput, EnrollmentUncheckedUpdateWithoutReceiptVerifierInput>
+  }
+
+  export type EnrollmentUpdateManyWithWhereWithoutReceiptVerifierInput = {
+    where: EnrollmentScalarWhereInput
+    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutReceiptVerifierInput>
   }
 
   export type EscalationUpsertWithWhereUniqueWithoutDeptAdminInput = {
@@ -139978,6 +140420,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -140086,6 +140529,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -140711,6 +141155,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -140819,6 +141264,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -141082,6 +141528,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -141190,6 +141637,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -141329,6 +141777,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -141437,6 +141886,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -141536,6 +141986,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -141644,6 +142095,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -141800,6 +142252,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -141908,6 +142361,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -142181,6 +142635,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -142289,6 +142744,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -142394,6 +142850,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -142502,6 +142959,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -142670,6 +143128,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -142778,6 +143237,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -143024,6 +143484,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -143132,6 +143593,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -143389,6 +143851,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -143497,6 +143960,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -144142,6 +144606,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -144249,6 +144714,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -145031,6 +145497,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -145038,6 +145507,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -145072,6 +145542,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -146103,6 +146577,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -146110,6 +146587,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -146144,6 +146622,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -146164,13 +146646,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutPaymentInput
-    wallet: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
+    wallet?: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
   }
 
   export type EnrollmentPaymentUncheckedCreateWithoutStudyCenterInput = {
     id?: string
     enrollmentId: string
-    walletId: string
+    walletId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -146480,6 +146962,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -146588,6 +147071,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -146834,6 +147318,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -146942,6 +147427,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -147041,6 +147527,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -147149,6 +147636,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -147313,6 +147801,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -147420,6 +147909,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -147727,8 +148217,8 @@ export namespace Prisma {
     NOT?: EnrollmentPaymentScalarWhereInput | EnrollmentPaymentScalarWhereInput[]
     id?: StringFilter<"EnrollmentPayment"> | string
     enrollmentId?: StringFilter<"EnrollmentPayment"> | string
-    studyCenterId?: StringFilter<"EnrollmentPayment"> | string
-    walletId?: StringFilter<"EnrollmentPayment"> | string
+    studyCenterId?: StringNullableFilter<"EnrollmentPayment"> | string | null
+    walletId?: StringNullableFilter<"EnrollmentPayment"> | string | null
     amount?: FloatFilter<"EnrollmentPayment"> | number
     debitedAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
     createdAt?: DateTimeFilter<"EnrollmentPayment"> | Date | string
@@ -147861,6 +148351,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -147969,6 +148460,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -148227,6 +148719,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -148335,6 +148828,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -148440,6 +148934,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -148548,6 +149043,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -148854,6 +149350,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -148861,6 +149360,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -148895,6 +149395,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -149165,6 +149669,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -149273,6 +149778,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -149572,6 +150078,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -149680,6 +150187,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -149779,6 +150287,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -149887,6 +150396,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -150505,6 +151015,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -150613,6 +151124,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -150930,6 +151442,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -151038,6 +151551,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -151143,6 +151657,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -151251,6 +151766,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -152408,6 +152924,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -152516,6 +153033,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -152779,6 +153297,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -152887,6 +153406,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -152980,6 +153500,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -153088,6 +153609,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -153345,6 +153867,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -153453,6 +153976,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -153848,6 +154372,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -153956,6 +154481,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -154219,6 +154745,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -154327,6 +154854,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -154567,6 +155095,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -154675,6 +155204,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -154938,6 +155468,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -155046,6 +155577,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -155344,6 +155876,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -155452,6 +155985,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -155778,6 +156312,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -155886,6 +156421,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -156338,6 +156874,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -156446,6 +156983,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -156545,6 +157083,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -156653,6 +157192,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -156752,6 +157292,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -156860,6 +157401,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -157180,6 +157722,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -157288,6 +157831,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -157393,6 +157937,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -157501,6 +158046,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -157606,6 +158152,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -157714,6 +158261,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -157961,6 +158509,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -158069,6 +158618,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -158168,6 +158718,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -158276,6 +158827,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -158522,6 +159074,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -158630,6 +159183,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -158740,6 +159294,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -158848,6 +159403,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -158953,6 +159509,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -159061,6 +159618,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -159319,6 +159877,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -159427,6 +159986,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -159521,6 +160081,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -159629,6 +160190,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -159728,6 +160290,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -159836,6 +160399,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -159935,6 +160499,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -160043,6 +160608,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -160289,6 +160855,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -160397,6 +160964,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -160496,6 +161064,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -160604,6 +161173,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -160714,6 +161284,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -160822,6 +161393,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -160927,6 +161499,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -161035,6 +161608,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -161140,6 +161714,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -161248,6 +161823,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -161506,6 +162082,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -161614,6 +162191,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -161719,6 +162297,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -161827,6 +162406,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -161920,6 +162500,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -162028,6 +162609,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -162473,6 +163055,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -162580,6 +163163,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -162852,6 +163436,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -162960,6 +163545,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -163516,6 +164102,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -163624,6 +164211,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -163927,6 +164515,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -164034,6 +164623,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -164375,6 +164965,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -164483,6 +165074,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -165236,6 +165828,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -165344,6 +165937,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -165985,6 +166579,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -166093,6 +166688,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -166356,6 +166952,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -166464,6 +167061,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -167085,6 +167683,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -167193,6 +167792,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -167292,6 +167892,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -167400,6 +168001,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -167868,6 +168470,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -167875,6 +168480,7 @@ export namespace Prisma {
     program: ProgramCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
     payment?: EnrollmentPaymentCreateNestedOneWithoutEnrollmentInput
   }
@@ -167909,6 +168515,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
 
@@ -168041,6 +168651,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -168149,6 +168760,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -168254,6 +168866,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -168362,6 +168975,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -168899,6 +169513,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -169007,6 +169622,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -169106,6 +169722,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -169214,6 +169831,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -169313,6 +169931,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -169421,6 +170040,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -169931,6 +170551,215 @@ export namespace Prisma {
     create: XOR<StudyCenterCreateWithoutEnrollmentsInput, StudyCenterUncheckedCreateWithoutEnrollmentsInput>
   }
 
+  export type UserCreateWithoutVerifiedReceiptsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+  }
+
+  export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+  }
+
+  export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerifiedReceiptsInput, UserUncheckedCreateWithoutVerifiedReceiptsInput>
+  }
+
   export type UserCreateWithoutUniversityReviewedEnrollmentsInput = {
     id?: string
     userId?: string | null
@@ -169965,6 +170794,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -170073,6 +170903,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -170144,14 +170975,14 @@ export namespace Prisma {
     debitedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    studyCenter: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
-    wallet: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
+    wallet?: StudyCenterWalletCreateNestedOneWithoutEnrollmentPaymentsInput
   }
 
   export type EnrollmentPaymentUncheckedCreateWithoutEnrollmentInput = {
     id?: string
-    studyCenterId: string
-    walletId: string
+    studyCenterId?: string | null
+    walletId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -170208,6 +171039,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -170316,6 +171148,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -170421,6 +171254,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -170529,6 +171363,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -170634,6 +171469,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -170742,6 +171578,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -171277,6 +172114,221 @@ export namespace Prisma {
     associatedUniversities?: UniversityUncheckedUpdateManyWithoutStudyCentersNestedInput
   }
 
+  export type UserUpsertWithoutVerifiedReceiptsInput = {
+    update: XOR<UserUpdateWithoutVerifiedReceiptsInput, UserUncheckedUpdateWithoutVerifiedReceiptsInput>
+    create: XOR<UserCreateWithoutVerifiedReceiptsInput, UserUncheckedCreateWithoutVerifiedReceiptsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerifiedReceiptsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerifiedReceiptsInput, UserUncheckedUpdateWithoutVerifiedReceiptsInput>
+  }
+
+  export type UserUpdateWithoutVerifiedReceiptsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+  }
+
   export type UserUpsertWithoutUniversityReviewedEnrollmentsInput = {
     update: XOR<UserUpdateWithoutUniversityReviewedEnrollmentsInput, UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput>
     create: XOR<UserCreateWithoutUniversityReviewedEnrollmentsInput, UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput>
@@ -171322,6 +172374,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -171430,6 +172483,7 @@ export namespace Prisma {
     deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -171507,14 +172561,14 @@ export namespace Prisma {
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    studyCenter?: StudyCenterUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
-    wallet?: StudyCenterWalletUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutEnrollmentPaymentsNestedInput
+    wallet?: StudyCenterWalletUpdateOneWithoutEnrollmentPaymentsNestedInput
   }
 
   export type EnrollmentPaymentUncheckedUpdateWithoutEnrollmentInput = {
     id?: StringFieldUpdateOperationsInput | string
-    studyCenterId?: StringFieldUpdateOperationsInput | string
-    walletId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    walletId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -171556,6 +172610,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -171664,6 +172719,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -171763,6 +172819,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -171871,6 +172928,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -172128,6 +173186,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -172236,6 +173295,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -172341,6 +173401,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -172449,6 +173510,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -172668,13 +173730,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollment: EnrollmentCreateNestedOneWithoutPaymentInput
-    studyCenter: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentPaymentsInput
   }
 
   export type EnrollmentPaymentUncheckedCreateWithoutWalletInput = {
     id?: string
     enrollmentId: string
-    studyCenterId: string
+    studyCenterId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -173468,6 +174530,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -173576,6 +174639,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -173936,6 +175000,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -174044,6 +175109,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -174328,6 +175394,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -174436,6 +175503,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -174748,6 +175816,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -174856,6 +175925,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -174950,6 +176020,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -175058,6 +176129,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -175315,6 +176387,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -175423,6 +176496,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -175816,6 +176890,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -175924,6 +176999,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -176187,6 +177263,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -176295,6 +177372,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -176836,6 +177914,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -176944,6 +178023,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -177207,6 +178287,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -177315,6 +178396,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -177556,6 +178638,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -177664,6 +178747,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -177763,6 +178847,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -177871,6 +178956,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -178134,6 +179220,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -178242,6 +179329,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -178347,6 +179435,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -178455,6 +179544,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -178696,6 +179786,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -178804,6 +179895,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -178903,6 +179995,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -179011,6 +180104,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -179274,6 +180368,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -179382,6 +180477,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -179487,6 +180583,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -179595,6 +180692,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -179690,6 +180788,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
     resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
@@ -179798,6 +180897,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
     resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
@@ -179897,6 +180997,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
     resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
@@ -180005,6 +181106,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
     resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
@@ -180104,6 +181206,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
@@ -180212,6 +181315,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
@@ -180458,6 +181562,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -180566,6 +181671,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -180753,6 +181859,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
     resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
@@ -180861,6 +181968,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
     resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
@@ -180966,6 +182074,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
     resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
@@ -181074,6 +182183,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
     resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
@@ -181179,6 +182289,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
@@ -181287,6 +182398,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
@@ -181545,6 +182657,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -181653,6 +182766,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -182204,6 +183318,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -182312,6 +183427,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -182763,6 +183879,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -182871,6 +183988,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -183324,6 +184442,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -183432,6 +184551,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -183678,6 +184798,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -183786,6 +184907,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -183896,6 +185018,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -184004,6 +185127,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -184262,6 +185386,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -184370,6 +185495,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -184464,6 +185590,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -184572,6 +185699,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -184818,6 +185946,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -184926,6 +186055,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -185025,6 +186155,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -185133,6 +186264,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -185243,6 +186375,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -185351,6 +186484,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -185609,6 +186743,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -185717,6 +186852,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -185822,6 +186958,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -185930,6 +187067,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -186024,6 +187162,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -186132,6 +187271,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -186389,6 +187529,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -186497,6 +187638,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -186744,6 +187886,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -186852,6 +187995,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -187253,6 +188397,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -187361,6 +188506,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -187911,6 +189057,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -188019,6 +189166,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -188282,6 +189430,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -188390,6 +189539,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -188896,6 +190046,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -189004,6 +190155,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -189341,6 +190493,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -189449,6 +190602,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -189559,6 +190713,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -189667,6 +190822,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -190022,6 +191178,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -190130,6 +191287,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -190418,6 +191576,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -190526,6 +191685,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -190842,6 +192002,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -190950,6 +192111,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -191192,6 +192354,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -191300,6 +192463,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -191717,6 +192881,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -191825,6 +192990,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -192072,6 +193238,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -192180,6 +193347,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -192486,6 +193654,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -192594,6 +193763,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -192896,6 +194066,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -193004,6 +194175,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -193414,6 +194586,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -193522,6 +194695,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -194543,6 +195717,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
     salesUser?: UserCreateNestedOneWithoutSalesLedEnrollmentsInput
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -194551,6 +195728,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutEnrollmentsInput
     student?: StudentCreateNestedOneWithoutEnrollmentsInput
     studyCenter?: StudyCenterCreateNestedOneWithoutEnrollmentsInput
+    receiptVerifier?: UserCreateNestedOneWithoutVerifiedReceiptsInput
     universityReviewer?: UserCreateNestedOneWithoutUniversityReviewedEnrollmentsInput
   }
 
@@ -194585,6 +195763,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentCreateOrConnectWithoutPaymentInput = {
@@ -194739,6 +195921,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -194747,6 +195932,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
   }
 
@@ -194781,6 +195967,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudyCenterUpsertWithoutEnrollmentPaymentsInput = {
@@ -194944,6 +196134,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -195052,6 +196243,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -195151,6 +196343,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -195259,6 +196452,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -195516,6 +196710,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -195624,6 +196819,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -195729,6 +196925,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -195837,6 +197034,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -196284,6 +197482,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -196392,6 +197591,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -196714,6 +197914,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -196822,6 +198023,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -197839,6 +199041,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -197947,6 +199150,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -198364,6 +199568,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -198472,6 +199677,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -198566,6 +199772,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -198674,6 +199881,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -198931,6 +200139,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -199039,6 +200248,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -199902,6 +201112,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -200010,6 +201221,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -200120,6 +201332,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -200228,6 +201441,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -200425,6 +201639,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
@@ -200533,6 +201748,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
     universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
     salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
     deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
     employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
     handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
@@ -200752,6 +201968,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -200860,6 +202077,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -201158,6 +202376,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EscalationCreateManyOrganizationInput = {
@@ -202493,6 +203715,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -202500,6 +203725,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -202534,6 +203760,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -202567,6 +203797,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EscalationUpdateWithoutOrganizationInput = {
@@ -204306,6 +205540,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -204413,6 +205648,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -205483,6 +206719,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -205590,6 +206827,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -205742,6 +206980,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -205850,6 +207089,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -206132,6 +207372,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentCreateManyFinanceReviewerInput = {
@@ -206164,6 +207408,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentCreateManyUniversityReviewerInput = {
@@ -206196,6 +207444,10 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentCreateManySalesUserInput = {
@@ -206228,6 +207480,46 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
+  }
+
+  export type EnrollmentCreateManyReceiptVerifierInput = {
+    id?: string
+    organizationId: string
+    studentId?: string | null
+    programId: string
+    studyCenterId?: string | null
+    sessionId?: string | null
+    enrollmentNumber?: string | null
+    studentName: string
+    studentEmail: string
+    studentPhone: string
+    studentAddress: string
+    fatherName?: string | null
+    dob?: Date | string | null
+    altPhone?: string | null
+    pinCode?: string | null
+    status?: string
+    departmentRemarks?: string | null
+    financeRemarks?: string | null
+    departmentReviewedBy?: string | null
+    departmentReviewedAt?: Date | string | null
+    financeReviewedBy?: string | null
+    financeReviewedAt?: Date | string | null
+    enrolledAt?: Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    universityRemarks?: string | null
+    universityReviewedAt?: Date | string | null
+    universityReviewedBy?: string | null
+    salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
   }
 
   export type EscalationCreateManyDeptAdminInput = {
@@ -207777,6 +209069,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -207784,6 +209079,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -207818,6 +209114,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -207851,6 +209151,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutFinanceReviewerInput = {
@@ -207875,6 +209179,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -207882,6 +209189,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -207916,6 +209224,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -207949,6 +209261,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutUniversityReviewerInput = {
@@ -207973,6 +209289,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -207981,6 +209300,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -208014,6 +209334,10 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -208047,6 +209371,10 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutSalesUserInput = {
@@ -208071,6 +209399,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -208078,6 +209409,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -208112,6 +209444,10 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -208145,6 +209481,120 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EnrollmentUpdateWithoutReceiptVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
+    departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
+    financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
+    student?: StudentUpdateOneWithoutEnrollmentsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
+    payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutReceiptVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutReceiptVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: NullableStringFieldUpdateOperationsInput | string | null
+    programId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    studentName?: StringFieldUpdateOperationsInput | string
+    studentEmail?: StringFieldUpdateOperationsInput | string
+    studentPhone?: StringFieldUpdateOperationsInput | string
+    studentAddress?: StringFieldUpdateOperationsInput | string
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    departmentRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    financeRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    financeReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    financeReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    statusHistory?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EscalationUpdateWithoutDeptAdminInput = {
@@ -210964,6 +212414,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -211071,6 +212522,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -212077,6 +213529,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -212184,6 +213637,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -212685,6 +214139,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type FeeStructureCreateManyProgramInput = {
@@ -212872,6 +214330,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -212879,6 +214340,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -212913,6 +214375,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -212946,6 +214412,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FeeStructureUpdateWithoutProgramInput = {
@@ -213469,12 +214939,16 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type EnrollmentPaymentCreateManyStudyCenterInput = {
     id?: string
     enrollmentId: string
-    walletId: string
+    walletId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -213719,6 +215193,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -213726,6 +215203,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -213760,6 +215238,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -213793,6 +215275,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentPaymentUpdateWithoutStudyCenterInput = {
@@ -213802,13 +215288,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutPaymentNestedInput
-    wallet?: StudyCenterWalletUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
+    wallet?: StudyCenterWalletUpdateOneWithoutEnrollmentPaymentsNestedInput
   }
 
   export type EnrollmentPaymentUncheckedUpdateWithoutStudyCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    walletId?: StringFieldUpdateOperationsInput | string
+    walletId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -213818,7 +215304,7 @@ export namespace Prisma {
   export type EnrollmentPaymentUncheckedUpdateManyWithoutStudyCenterInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    walletId?: StringFieldUpdateOperationsInput | string
+    walletId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -214211,6 +215697,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -214318,6 +215805,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -214646,6 +216134,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type InternalMarkCreateManyStudentInput = {
@@ -214773,6 +216265,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -214780,6 +216275,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     session?: AdmissionSessionUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -214814,6 +216310,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -214847,6 +216347,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InternalMarkUpdateWithoutStudentInput = {
@@ -215440,6 +216944,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -215547,6 +217052,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -216039,6 +217545,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -216146,6 +217653,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -216568,6 +218076,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
@@ -216676,6 +218185,7 @@ export namespace Prisma {
     financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
     universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
     salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
     deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
     employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
     handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
@@ -216831,6 +218341,10 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    receiptUrl?: string | null
+    receiptVerified?: boolean
+    receiptVerifiedAt?: Date | string | null
+    receiptVerifiedBy?: string | null
   }
 
   export type FeeStructureCreateManySessionInput = {
@@ -217018,6 +218532,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUser?: UserUpdateOneWithoutSalesLedEnrollmentsNestedInput
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -217025,6 +218542,7 @@ export namespace Prisma {
     program?: ProgramUpdateOneRequiredWithoutEnrollmentsNestedInput
     student?: StudentUpdateOneWithoutEnrollmentsNestedInput
     studyCenter?: StudyCenterUpdateOneWithoutEnrollmentsNestedInput
+    receiptVerifier?: UserUpdateOneWithoutVerifiedReceiptsNestedInput
     universityReviewer?: UserUpdateOneWithoutUniversityReviewedEnrollmentsNestedInput
     payment?: EnrollmentPaymentUpdateOneWithoutEnrollmentNestedInput
   }
@@ -217059,6 +218577,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
 
@@ -217092,6 +218614,10 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptVerified?: BoolFieldUpdateOperationsInput | boolean
+    receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FeeStructureUpdateWithoutSessionInput = {
@@ -217169,7 +218695,7 @@ export namespace Prisma {
   export type EnrollmentPaymentCreateManyWalletInput = {
     id?: string
     enrollmentId: string
-    studyCenterId: string
+    studyCenterId?: string | null
     amount: number
     debitedAt?: Date | string
     createdAt?: Date | string
@@ -217183,13 +218709,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollment?: EnrollmentUpdateOneRequiredWithoutPaymentNestedInput
-    studyCenter?: StudyCenterUpdateOneRequiredWithoutEnrollmentPaymentsNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutEnrollmentPaymentsNestedInput
   }
 
   export type EnrollmentPaymentUncheckedUpdateWithoutWalletInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    studyCenterId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -217199,7 +218725,7 @@ export namespace Prisma {
   export type EnrollmentPaymentUncheckedUpdateManyWithoutWalletInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrollmentId?: StringFieldUpdateOperationsInput | string
-    studyCenterId?: StringFieldUpdateOperationsInput | string
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: FloatFieldUpdateOperationsInput | number
     debitedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

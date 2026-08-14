@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -193,6 +193,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     motherPhone: '',
     // Documents stored as array of {type, url}
     documents: [] as any[],
+    receiptUrl: '',
     centerId: '',
     paymentPlan: 'full' // 'full' or 'per_year_sem'
   });
@@ -316,6 +317,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       setFormStep(3); // Redirect to documents step
       return;
     }
+    // Receipt is optional but we should ensure they reach step 5
+    if (formStep < 4) {
+      setFormStep(4);
+      return;
+    }
     try {
       if (editingId) {
         await api.put(`/students/${editingId}`, formData);
@@ -375,6 +381,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       motherName: student.motherName || '',
       motherPhone: student.motherPhone || '',
       documents: student.documents || [],
+      receiptUrl: student.receiptUrl || '',
       centerId: centerId?.toString() || '',
       paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full'
     });
@@ -424,6 +431,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       motherName: '',
       motherPhone: '',
       documents: [],
+      receiptUrl: '',
       centerId: ''
     });
   };
@@ -981,7 +989,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
             {/* Step indicator */}
             <div className="flex items-center gap-1 pt-2">
-              {['Admission Info', 'Personal Details', 'Family Info', 'Documents'].map((step, i) => (
+              {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
                 <button
                   key={i}
                   type="button"
@@ -996,6 +1004,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   {i === 1 && <User className="w-3 h-3" />}
                   {i === 2 && <Building2 className="w-3 h-3" />}
                   {i === 3 && <FileText className="w-3 h-3" />}
+                  {i === 4 && <CreditCard className="w-3 h-3" />}
                   {step}
                 </button>
               ))}
@@ -1464,6 +1473,56 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 </div>
               )}
 
+              {/* ── STEP 4: PAYMENT RECEIPT ── */}
+              {formStep === 4 && (
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
+                  </p>
+                  
+                  <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-900/10 space-y-3">
+                    <h4 className="font-semibold text-sm">Upload Receipt (Optional at submission)</h4>
+                    
+                    <div className="flex items-center gap-4">
+                      {formData.receiptUrl && (
+                        <div className="w-16 h-16 rounded overflow-hidden border">
+                          <img src={formData.receiptUrl.startsWith('http') ? formData.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${formData.receiptUrl}`} alt="Receipt Preview" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <Label htmlFor="receipt-upload" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                          <Upload className="w-4 h-4 mr-2" />
+                          {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
+                        </Label>
+                        <input
+                          type="file"
+                          id="receipt-upload"
+                          className="hidden"
+                          accept="image/*,.pdf"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const uploadData = new FormData();
+                              uploadData.append('file', file);
+                              uploadData.append('type', 'receipt');
+                              try {
+                                const res = await api.post('/documents/upload', uploadData, {
+                                  headers: { 'Content-Type': 'multipart/form-data' }
+                                });
+                                setFormData({ ...formData, receiptUrl: res.data.fileUrl });
+                                toast.success('Receipt uploaded successfully');
+                              } catch (err: any) {
+                                toast.error('Failed to upload receipt');
+                              }
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
 
             {/* Footer buttons */}
@@ -1471,8 +1530,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
                 ← Back
               </Button>
-              <div className="text-xs text-muted-foreground">Step {formStep + 1} of 4</div>
-              {formStep < 3 ? (
+              <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
+              {formStep < 4 ? (
                 <Button type="button" onClick={() => setFormStep(formStep + 1)}>
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -1522,7 +1581,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
                     {/* Step indicator */}
                     <div className="flex items-center gap-1 pt-2">
-                      {['Admission Info', 'Personal Details', 'Family Info', 'Documents'].map((step, i) => (
+                      {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
                         <button
                           key={i}
                           type="button"
@@ -1537,6 +1596,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           {i === 1 && <User className="w-3 h-3" />}
                           {i === 2 && <Building2 className="w-3 h-3" />}
                           {i === 3 && <FileText className="w-3 h-3" />}
+                          {i === 4 && <CreditCard className="w-3 h-3" />}
                           {step}
                         </button>
                       ))}
@@ -1955,6 +2015,56 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         </div>
                       )}
 
+                      {/* ── STEP 4: PAYMENT RECEIPT ── */}
+                      {formStep === 4 && (
+                        <div className="space-y-4">
+                          <p className="text-sm text-slate-600 dark:text-slate-400">
+                            Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
+                          </p>
+                          
+                          <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-900/10 space-y-3">
+                            <h4 className="font-semibold text-sm">Upload Receipt (Optional at submission)</h4>
+                            
+                            <div className="flex items-center gap-4">
+                              {formData.receiptUrl && (
+                                <div className="w-16 h-16 rounded overflow-hidden border">
+                                  <img src={formData.receiptUrl.startsWith('http') ? formData.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${formData.receiptUrl}`} alt="Receipt Preview" className="w-full h-full object-cover" />
+                                </div>
+                              )}
+                              <div className="flex-1">
+                                <Label htmlFor="receipt-upload" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                  <Upload className="w-4 h-4 mr-2" />
+                                  {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
+                                </Label>
+                                <input
+                                  type="file"
+                                  id="receipt-upload"
+                                  className="hidden"
+                                  accept="image/*,.pdf"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const uploadData = new FormData();
+                                      uploadData.append('file', file);
+                                      uploadData.append('type', 'receipt');
+                                      try {
+                                        const res = await api.post('/documents/upload', uploadData, {
+                                          headers: { 'Content-Type': 'multipart/form-data' }
+                                        });
+                                        setFormData({ ...formData, receiptUrl: res.data.fileUrl });
+                                        toast.success('Receipt uploaded successfully');
+                                      } catch (err: any) {
+                                        toast.error('Failed to upload receipt');
+                                      }
+                                    }
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                     </div>
 
                     {/* Footer buttons */}
@@ -1962,8 +2072,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Button type="button" variant="outline" onClick={() => setFormStep(Math.max(0, formStep - 1))} disabled={formStep === 0}>
                         ← Back
                       </Button>
-                      <div className="text-xs text-muted-foreground">Step {formStep + 1} of 4</div>
-                      {formStep < 3 ? (
+                      <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
+                      {formStep < 4 ? (
                         <Button type="button" onClick={() => setFormStep(formStep + 1)}>
                           Next <ChevronRight className="w-4 h-4 ml-1" />
                         </Button>

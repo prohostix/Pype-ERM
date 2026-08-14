@@ -24,10 +24,15 @@ interface Enrollment {
   createdAt: string;
   enrolledAt?: string;
   student?: any;
+  receiptUrl?: string | null;
+  receiptVerified?: boolean;
+  receiptVerifiedAt?: string | null;
+  receiptVerifiedBy?: string | null;
 }
 
 interface Summary {
   payment_pending: number;
+  receipt_submitted: number;
   document_review: number;
   finance_review: number;
   enrolled: number;
@@ -37,6 +42,7 @@ interface Summary {
 
 const STATUS_META: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   payment_pending:     { label: 'Fee Pending',      color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400', icon: <Clock className="w-3 h-3" /> },
+  receipt_submitted:   { label: 'Receipt Uploaded', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400',       icon: <FileText className="w-3 h-3" /> },
   document_review:     { label: 'Doc Review',       color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',         icon: <AlertCircle className="w-3 h-3" /> },
   finance_review:      { label: 'Finance Review',   color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', icon: <Clock className="w-3 h-3" /> },
   enrolled:            { label: 'Enrolled',         color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle className="w-3 h-3" /> },
@@ -47,6 +53,7 @@ const STATUS_META: Record<string, { label: string; color: string; icon: React.Re
 const FILTER_TABS = [
   { key: '', label: 'All' },
   { key: 'payment_pending', label: 'Fee Pending' },
+  { key: 'receipt_submitted', label: 'Receipt Uploaded' },
   { key: 'document_review', label: 'Doc Review' },
   { key: 'finance_review', label: 'Finance Review' },
   { key: 'enrolled', label: 'Enrolled' },
@@ -113,6 +120,17 @@ export function FinanceEnrollmentsPanel() {
     }
   };
 
+  const handleVerifyReceipt = async (id: string) => {
+    try {
+      await api.post(`/finance/enrollments/${id}/verify-receipt`);
+      toast.success('Receipt verified and payment recorded successfully');
+      setViewStudent(null);
+      fetchData();
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to verify receipt');
+    }
+  };
+
   const getProgramName = (e: Enrollment) =>
     (e.programId && typeof e.programId === 'object')
       ? `${e.programId.name || 'Unknown'} (${e.programId.code || ''})`
@@ -138,8 +156,9 @@ export function FinanceEnrollmentsPanel() {
 
       {/* Summary Cards */}
       {summary && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-7 gap-4">
           <SummaryCard label="Fee Pending" count={summary.payment_pending} icon={<Clock className="w-4 h-4" />} color="text-orange-500 bg-orange-50 dark:bg-orange-900/20" onClick={() => handleTabChange('payment_pending')} />
+          <SummaryCard label="Receipt Uploaded" count={summary.receipt_submitted} icon={<FileText className="w-4 h-4" />} color="text-cyan-500 bg-cyan-50 dark:bg-cyan-900/20" onClick={() => handleTabChange('receipt_submitted')} />
           <SummaryCard label="Doc Review" count={summary.document_review} icon={<AlertCircle className="w-4 h-4" />} color="text-blue-500 bg-blue-50 dark:bg-blue-900/20" onClick={() => handleTabChange('document_review')} />
           <SummaryCard label="Finance Review" count={summary.finance_review} icon={<Clock className="w-4 h-4" />} color="text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20" onClick={() => handleTabChange('finance_review')} />
           <SummaryCard label="Enrolled" count={summary.enrolled} icon={<GraduationCap className="w-4 h-4" />} color="text-green-500 bg-green-50 dark:bg-green-900/20" onClick={() => handleTabChange('enrolled')} />
@@ -433,6 +452,37 @@ export function FinanceEnrollmentsPanel() {
                   </div>
                 )}
               </div>
+
+              {/* Payment Receipt */}
+              {(viewStudent.receiptUrl || viewStudent.status === 'receipt_submitted') && (
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1 flex justify-between items-center">
+                    Payment Receipt
+                    {viewStudent.receiptVerified && <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700">VERIFIED</span>}
+                  </h4>
+                  <div className="p-4 border rounded-xl bg-slate-50 dark:bg-slate-900/10 flex items-start gap-4">
+                    {viewStudent.receiptUrl ? (
+                      <>
+                        <a href={viewStudent.receiptUrl} target="_blank" rel="noreferrer" className="w-20 h-20 rounded border bg-white overflow-hidden shrink-0 block">
+                          <img src={viewStudent.receiptUrl.startsWith('http') ? viewStudent.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${viewStudent.receiptUrl}`} alt="Receipt" className="w-full h-full object-cover" />
+                        </a>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium mb-1">Receipt Uploaded</p>
+                          {!viewStudent.receiptVerified ? (
+                            <Button size="sm" onClick={() => handleVerifyReceipt(viewStudent.id)}>
+                              Verify Receipt & Record Payment
+                            </Button>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">Receipt has been verified and payment recorded.</p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground italic">No receipt file uploaded yet.</p>
+                    )}
+                  </div>
+                </div>
+              )}
 
             </div>
           )}

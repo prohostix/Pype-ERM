@@ -56,7 +56,7 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
   const summaryMap = summary.reduce((acc: any, s: any) => {
     acc[s.status] = s._count.status;
     return acc;
-  }, { payment_pending: 0, document_review: 0, finance_review: 0, enrolled: 0, rejected: 0, department_rejected: 0 });
+  }, { payment_pending: 0, receipt_submitted: 0, document_review: 0, finance_review: 0, enrolled: 0, rejected: 0, department_rejected: 0 });
 
   res.status(200).json({ success: true, count: enrollments.length, data: enrollments, summary: summaryMap });
 });
@@ -94,4 +94,90 @@ export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res
     data: { status: 'rejected', financeReviewedBy: req.user.id, financeReviewedAt: new Date(), financeRemarks: req.body.remarks }
   });
   res.json({ success: true, data: enrollment });
+});
+
+export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const enrollmentId = req.params.id;
+
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: enrollmentId },
+    include: {
+      program: {
+        include: {
+          feeStructures: true
+        }
+      }
+    }
+  });
+
+  if (!enrollment) {
+    res.status(404);
+    throw new Error('Enrollment not found');
+  }
+
+  if (enrollment.receiptVerified) {
+    res.status(400);
+    throw new Error('Receipt already verified');
+  }
+
+  // Calculate amount paid based on billing cycle
+  let amountPaid = 0;
+  const feeStructure = enrollment.program?.feeStructures?.[0]; // Assuming one fee structure for simplicity or we should match by session
+
+  if (feeStructure) {
+    if (feeStructure.billingCycle === 'one_time') {
+      amountPaid = feeStructure.registrationFee + feeStructure.tuitionFee + feeStructure.examFee + feeStructure.universityFee;
+    } else if (feeStructure.billingCycle === 'per_year') {
+      // Use yearlyFees if available, else tuitionFee
+      const yearlyFees = (feeStructure.yearlyFees as any[]) || [];
+      if (yearlyFees.length > 0 && yearlyFees[0].amount) {
+        amountPaid = Number(yearlyFees[0].amount);
+      } else {
+        amountPaid = feeStructure.tuitionFee;
+      }
+    } else if (feeStructure.billingCycle === 'per_semester') {
+      // First semester fee
+      const yearlyFees = (feeStructure.yearlyFees as any[]) || [];
+      if (yearlyFees.length > 0 && yearlyFees[0].amount) {
+        amountPaid = Number(yearlyFees[0].amount); // Assuming yearlyFees actually holds semester fees if per_semester
+      } else {
+        amountPaid = feeStructure.tuitionFee / 2;
+      }
+    } else {
+      amountPaid = feeStructure.tuitionFee;
+    }
+  }
+
+  // Create payment record
+  await prisma.enrollmentPayment.create({
+    data: {
+      enrollmentId: enrollment.id,
+      amount: amountPaid,
+      // studyCenterId and walletId are now optional
+      ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {})
+    }
+  });
+
+  // Update enrollment
+  const historyEntry = {
+    status: 'document_review',
+    changedAt: new Date().toISOString(),
+    changedBy: req.user.id,
+    remarks: 'Receipt verified by Finance'
+  };
+
+  const updatedEnrollment = await prisma.enrollment.update({
+    where: { id: enrollment.id },
+    data: {
+      receiptVerified: true,
+      receiptVerifiedAt: new Date(),
+      receiptVerifiedBy: req.user.id,
+      status: 'document_review', // Move forward
+      statusHistory: {
+        push: historyEntry
+      }
+    }
+  });
+
+  res.json({ success: true, data: updatedEnrollment });
 });

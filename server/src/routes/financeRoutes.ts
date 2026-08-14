@@ -64,10 +64,11 @@ import {
   rejectWalletTopUp,
 } from '../controllers/walletTopUpController.js';
 import {
+  getAllEnrollments,
   getFinanceEnrollments,
   approveFinanceEnrollment,
   rejectFinanceEnrollment,
-  getAllEnrollments,
+  verifyReceipt,
 } from '../controllers/financeEnrollmentController.js';
 import {
   getFinanceSalaryConfigs,
@@ -148,6 +149,7 @@ router.get('/enrollments/all', authorize('finance_admin'), getAllEnrollments);
 router.get('/enrollments', authorize('finance_admin'), getFinanceEnrollments);
 router.put('/enrollments/:id/approve', authorize('finance_admin'), approveFinanceEnrollment);
 router.put('/enrollments/:id/reject', authorize('finance_admin'), rejectFinanceEnrollment);
+router.post('/enrollments/:id/verify-receipt', authorize('finance_admin'), verifyReceipt);
 
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin'), getIncomeExpenditureReport);

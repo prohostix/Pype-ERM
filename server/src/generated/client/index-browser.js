@@ -637,7 +637,11 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   universityRemarks: 'universityRemarks',
   universityReviewedAt: 'universityReviewedAt',
   universityReviewedBy: 'universityReviewedBy',
-  salesUserId: 'salesUserId'
+  salesUserId: 'salesUserId',
+  receiptUrl: 'receiptUrl',
+  receiptVerified: 'receiptVerified',
+  receiptVerifiedAt: 'receiptVerifiedAt',
+  receiptVerifiedBy: 'receiptVerifiedBy'
 };
 
 exports.Prisma.ExpenseClaimScalarFieldEnum = {

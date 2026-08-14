@@ -8,6 +8,7 @@ import {
   getMyEnrollments,
   getMyCenterStatus,
   submitMyCenterPayment,
+  uploadReceipt,
 } from '../controllers/enrollmentController.js';
 import {
   getDeptReviewEnrollments,
@@ -34,6 +35,7 @@ router.get('/enrollments', authorize('center_admin', 'sales_admin', 'bde', 'sub_
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
+router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), upload.single('receipt'), uploadReceipt);
 
 // Dept/Sub-dept manager review routes
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);

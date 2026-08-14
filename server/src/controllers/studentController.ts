@@ -204,7 +204,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         programId: student.programId,
         studyCenterId: student.centerId,
         sessionId: student.sessionId,
-        status: 'document_review',
+        status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
+        receiptUrl: req.body.receiptUrl || null,
         salesUserId: req.user.id,
         statusHistory: [
           {
@@ -216,10 +217,10 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
             note: `Sales rep ${req.user.name} directly enrolled student via wizard`,
           },
           {
-            status: 'document_review',
+            status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
             actorId: 'system',
             timestamp: now.toISOString(),
-            note: 'Forwarded to Operations for document verification',
+            note: req.body.receiptUrl ? 'Receipt uploaded, awaiting Finance verification' : 'Awaiting payment receipt upload',
           },
         ],
       } as any,
