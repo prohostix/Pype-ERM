@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Search, GraduationCap, Clock, AlertCircle, Ban } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Search, GraduationCap, Clock, AlertCircle, Ban, Eye, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -23,6 +23,7 @@ interface Enrollment {
   payment?: { amount: number; debitedAt: string } | null;
   createdAt: string;
   enrolledAt?: string;
+  student?: any;
 }
 
 interface Summary {
@@ -60,6 +61,7 @@ export function FinanceEnrollmentsPanel() {
   const [search, setSearch] = useState('');
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
   const [remarks, setRemarks] = useState('');
+  const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
 
   const fetchData = async (status = statusFilter, q = search) => {
     setLoading(true);
@@ -243,16 +245,21 @@ export function FinanceEnrollmentsPanel() {
                       {new Date(e.createdAt).toLocaleDateString()}
                     </td>
                     <td className="p-3 text-right">
-                      {e.status === 'finance_review' && (
-                        <div className="flex gap-1.5 justify-end">
-                          <Button size="sm" variant="outline" className="h-7 text-xs text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20" onClick={() => handleApprove(e.id)}>
-                            <CheckCircle className="w-3 h-3 mr-1" />Enroll
-                          </Button>
-                          <Button size="sm" variant="outline" className="h-7 text-xs text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
-                            <XCircle className="w-3 h-3 mr-1" />Reject
-                          </Button>
-                        </div>
-                      )}
+                      <div className="flex gap-1.5 justify-end">
+                        <Button size="sm" variant="outline" className="h-7 text-xs text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
+                          <Eye className="w-3 h-3 mr-1" />View
+                        </Button>
+                        {e.status === 'finance_review' && (
+                          <>
+                            <Button size="sm" variant="outline" className="h-7 text-xs text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-900/20" onClick={() => handleApprove(e.id)}>
+                              <CheckCircle className="w-3 h-3 mr-1" />Enroll
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-7 text-xs text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
+                              <XCircle className="w-3 h-3 mr-1" />Reject
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -274,6 +281,48 @@ export function FinanceEnrollmentsPanel() {
             <Button variant="outline" onClick={() => setRejectDialog({ open: false, id: '' })}>Cancel</Button>
             <Button variant="destructive" onClick={handleReject} disabled={!remarks.trim()}>Reject</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Student Details Dialog */}
+      <Dialog open={!!viewStudent} onOpenChange={o => !o && setViewStudent(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>Student Details</DialogTitle></DialogHeader>
+          {viewStudent && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><span className="font-semibold text-muted-foreground block">Name</span>{viewStudent.student?.name || viewStudent.studentName}</div>
+                <div><span className="font-semibold text-muted-foreground block">Email</span>{viewStudent.student?.email || viewStudent.studentEmail}</div>
+                <div><span className="font-semibold text-muted-foreground block">Phone</span>{viewStudent.student?.phone || 'N/A'}</div>
+                <div><span className="font-semibold text-muted-foreground block">Alt Phone</span>{viewStudent.student?.altPhone || 'N/A'}</div>
+                <div><span className="font-semibold text-muted-foreground block">DOB</span>{viewStudent.student?.dob ? new Date(viewStudent.student.dob).toLocaleDateString() : 'N/A'}</div>
+                <div><span className="font-semibold text-muted-foreground block">Father's Name</span>{viewStudent.student?.fatherName || 'N/A'}</div>
+                <div className="col-span-2"><span className="font-semibold text-muted-foreground block">Address</span>{viewStudent.student?.address || 'N/A'}</div>
+              </div>
+              
+              <h4 className="font-bold border-b pb-2 mt-6">Documents</h4>
+              {!viewStudent.student?.documents || viewStudent.student.documents.length === 0 ? (
+                <div className="text-muted-foreground text-sm py-4">No documents uploaded.</div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  {viewStudent.student.documents.map((doc: any, i: number) => {
+                    if (!doc) return null;
+                    return (
+                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border rounded hover:bg-slate-50 transition-colors">
+                        <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium truncate">{doc.type}</p>
+                          <p className="text-xs text-muted-foreground truncate">{doc.name || 'Document'}</p>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
