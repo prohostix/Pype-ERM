@@ -19,7 +19,7 @@ export const getAllEnrollments = asyncHandler(async (req: AuthRequest, res: Resp
 export const getFinanceEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollments = await prisma.enrollment.findMany({
     where: { organizationId: req.user.organizationId, status: 'finance_review' },
-    include: { program: true, studyCenter: true },
+    include: { program: true, studyCenter: true, student: true },
     orderBy: { createdAt: 'asc' }
   });
   res.json({ success: true, count: enrollments.length, data: enrollments });
