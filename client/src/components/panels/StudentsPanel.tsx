@@ -288,9 +288,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');
       } else {
-        const payload = { ...formData, isPipelineApplication: isSalesMode };
+        const payload = { ...formData, isPipelineApplication: true };
         await api.post('/students', payload);
-        toast.success('Student added successfully');
+        toast.success('Student added successfully and sent to pipeline for review');
       }
       setDialogOpen(false);
       resetForm();
@@ -1657,10 +1657,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             </div>
                             <div>
                               <Label className="font-medium">Status</Label>
-                              <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
-                                <SelectTrigger><SelectValue /></SelectTrigger>
+                              <Select value={!editingId ? 'pending' : formData.status} onValueChange={(v) => setFormData({...formData, status: v})} disabled={!editingId}>
+                                <SelectTrigger className={!editingId ? 'bg-slate-50 text-slate-500' : ''}><SelectValue /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="pending">Pending</SelectItem>
+                                  <SelectItem value="document_review">Document Review</SelectItem>
                                   <SelectItem value="active">Active</SelectItem>
                                   <SelectItem value="inactive">Inactive</SelectItem>
                                   <SelectItem value="completed">Completed</SelectItem>

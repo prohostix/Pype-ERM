@@ -380,7 +380,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
       generatedPassword = '(Existing student account)';
     }
 
-    // 2. Provision Student record if not exists
+    // 2. Provision Student record if not exists, or update existing to active
     let studentRecord = await prisma.student.findUnique({ where: { email: enrollment.studentEmail } });
     if (!studentRecord) {
       studentRecord = await prisma.student.create({
@@ -403,6 +403,16 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           admissionNo: `ADM${Date.now().toString().slice(-6)}`,
           ...(generatedPassword !== '(Existing student account)' ? { credentials: { email: enrollment.studentEmail, password: generatedPassword } } : {})
         },
+      });
+    } else {
+      // If student already exists (e.g. from pipeline wizard), activate them
+      studentRecord = await prisma.student.update({
+        where: { id: studentRecord.id },
+        data: {
+          status: 'active',
+          enrollmentNo: studentRecord.enrollmentNo || generatedUid,
+          admissionNo: studentRecord.admissionNo || `ADM${Date.now().toString().slice(-6)}`
+        }
       });
     }
     studentRecordId = studentRecord.id;
