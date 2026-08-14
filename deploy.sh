@@ -90,7 +90,7 @@ cp -R src/generated dist/
 
 # 9. Start Server via PM2
 echo "🚀 Starting backend server with PM2..."
-sudo -u ubuntu pm2 restart pype-erm-server || sudo -u ubuntu pm2 start dist/index.js --name pype-erm-server
+sudo -u ubuntu pm2 restart pype-erm-server || sudo -u ubuntu pm2 start dist/server.js --name pype-erm-server
 
 sudo -u ubuntu pm2 save
 
