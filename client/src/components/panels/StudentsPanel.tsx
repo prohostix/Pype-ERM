@@ -1066,6 +1066,20 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                   </div>
 
+                  {/* Payment Plan & Fee */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <Label className="font-medium">Payment Plan *</Label>
+                      <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="full">Full (One Time)</SelectItem>
+                          <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
                   {renderFeeDisplay()}
 
                   {/* Enrollment & Admission Numbers */}
