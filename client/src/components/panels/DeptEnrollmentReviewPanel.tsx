@@ -158,17 +158,20 @@ export function DeptEnrollmentReviewPanel() {
                 <div className="text-muted-foreground text-sm py-4">No documents uploaded.</div>
               ) : (
                 <div className="grid grid-cols-2 gap-3 mt-2">
-                  {viewStudent.student.documents.map((doc: any, i: number) => (
-                    <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border rounded hover:bg-slate-50 transition-colors">
-                      <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                        <FileText className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium truncate">{doc.type}</p>
-                        <p className="text-xs text-muted-foreground truncate">{doc.name || 'Document'}</p>
-                      </div>
-                    </a>
-                  ))}
+                  {viewStudent.student.documents.map((doc: any, i: number) => {
+                    if (!doc) return null;
+                    return (
+                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border rounded hover:bg-slate-50 transition-colors">
+                        <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium truncate">{doc.type}</p>
+                          <p className="text-xs text-muted-foreground truncate">{doc.name || 'Document'}</p>
+                        </div>
+                      </a>
+                    );
+                  })}
                 </div>
               )}
             </div>
