@@ -14,7 +14,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
       organizationId: req.user.organizationId,
       status: { in: ['dept_review', 'document_review'] }
     },
-    include: { program: true, studyCenter: true }
+    include: { program: true, studyCenter: true, student: true }
   });
   res.json({ success: true, count: enrollments.length, data: enrollments });
 });
