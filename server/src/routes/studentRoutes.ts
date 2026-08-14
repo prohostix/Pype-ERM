@@ -16,6 +16,7 @@ import {
   uploadStudentDocument,
   bulkEnrollmentUpdate,
   updateAdmissionProgress,
+  getStudentEnrollments,
 } from '../controllers/studentController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -38,5 +39,6 @@ router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'ce
 router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
 router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/approve', authorize('finance_admin', 'ops_admin'), approveStudent);
+router.get('/:id/enrollments', getStudentEnrollments);
 
 export default router;

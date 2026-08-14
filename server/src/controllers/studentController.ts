@@ -741,3 +741,22 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
 
   res.status(200).json({ success: true, data: updatedStudent });
 });
+
+// GET /students/:id/enrollments — full enrollment history for a student
+export const getStudentEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+
+  const enrollments = await prisma.enrollment.findMany({
+    where: { studentId: id, organizationId: req.user.organizationId },
+    include: {
+      program: { include: { university: { select: { name: true } } } },
+      studyCenter: { select: { name: true, code: true } },
+      session: { select: { name: true } },
+      payment: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  res.status(200).json({ success: true, data: enrollments });
+});
+

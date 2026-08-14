@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -103,6 +103,39 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [credTarget, setCredTarget] = useState<any>(null);
   const [credPassword, setCredPassword] = useState('');
   const [savingCred, setSavingCred] = useState(false);
+
+  // Enrollment History Dialog State
+  const [enrollHistoryOpen, setEnrollHistoryOpen] = useState(false);
+  const [enrollHistoryStudent, setEnrollHistoryStudent] = useState<any>(null);
+  const [enrollHistoryData, setEnrollHistoryData] = useState<any[]>([]);
+  const [enrollHistoryLoading, setEnrollHistoryLoading] = useState(false);
+
+  const STATUS_COLORS: Record<string, string> = {
+    payment_pending:     'bg-orange-100 text-orange-700',
+    document_review:     'bg-blue-100 text-blue-700',
+    dept_review:         'bg-purple-100 text-purple-700',
+    finance_review:      'bg-yellow-100 text-yellow-700',
+    university_review:   'bg-indigo-100 text-indigo-700',
+    enrolled:            'bg-green-100 text-green-700',
+    rejected:            'bg-red-100 text-red-700',
+    department_rejected: 'bg-red-100 text-red-700',
+  };
+
+  const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+  const handleOpenEnrollHistory = async (student: any) => {
+    setEnrollHistoryStudent(student);
+    setEnrollHistoryOpen(true);
+    setEnrollHistoryLoading(true);
+    try {
+      const res = await api.get(`/students/${student.id}/enrollments`);
+      setEnrollHistoryData(res.data.data || []);
+    } catch {
+      toast.error('Failed to load enrollment history');
+    } finally {
+      setEnrollHistoryLoading(false);
+    }
+  };
 
   const handleOpenCredentials = (student: any) => {
     setCredTarget(student);
@@ -2108,6 +2141,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <Key className="w-4 h-4 text-cyan-500" />
                       </Button>
 
+                      {/* Enrollment History */}
+                      <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenEnrollHistory(student)} title="Enrollment History">
+                        <History className="w-4 h-4 text-violet-500" />
+                      </Button>
+
                       {canWrite && (
                         <Button variant="ghost" size="icon" className="w-8 h-8" onClick={() => handleEdit(student)}><Edit className="w-4 h-4" /></Button>
                       )}
@@ -2497,6 +2535,107 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 fetchStudents();
               }} 
             />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Enrollment History Dialog */}
+      <Dialog open={enrollHistoryOpen} onOpenChange={setEnrollHistoryOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <History className="w-5 h-5 text-violet-500" />
+              Enrollment History — {enrollHistoryStudent?.name}
+            </DialogTitle>
+          </DialogHeader>
+
+          {enrollHistoryLoading ? (
+            <div className="space-y-3 py-4">{[1,2].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}</div>
+          ) : enrollHistoryData.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-8 text-center">No enrollment records found for this student.</p>
+          ) : (
+            <div className="space-y-4 pb-2">
+              {enrollHistoryData.map((enr: any, idx: number) => {
+                const history: any[] = Array.isArray(enr.statusHistory) ? [...enr.statusHistory].reverse() : [];
+                const colorClass = STATUS_COLORS[enr.status] || 'bg-muted text-muted-foreground';
+                return (
+                  <div key={enr.id} className="border rounded-xl p-4 space-y-3">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${colorClass}`}>
+                            {statusLabel(enr.status)}
+                          </span>
+                          {enr.enrollmentNumber && (
+                            <span className="text-xs font-mono bg-muted px-2 py-0.5 rounded">{enr.enrollmentNumber}</span>
+                          )}
+                          <span className="text-xs text-muted-foreground">#{idx + 1}</span>
+                        </div>
+                        <p className="text-sm font-medium mt-1">
+                          {enr.program?.name}{enr.program?.code ? ` (${enr.program.code})` : ''}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {enr.program?.university?.name}
+                          {enr.session?.name ? ` · ${enr.session.name}` : ''}
+                          {enr.studyCenter?.name ? ` · ${enr.studyCenter.name}` : ''}
+                        </p>
+                      </div>
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {new Date(enr.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })}
+                      </span>
+                    </div>
+
+                    {/* Remarks */}
+                    {(enr.departmentRemarks || enr.financeRemarks || enr.universityRemarks) && (
+                      <div className="space-y-1.5">
+                        {enr.departmentRemarks && (
+                          <div className="text-xs bg-red-50 border border-red-100 rounded p-2">
+                            <span className="font-semibold text-red-700">Dept: </span>
+                            <span className="text-red-600">{enr.departmentRemarks}</span>
+                          </div>
+                        )}
+                        {enr.financeRemarks && (
+                          <div className="text-xs bg-yellow-50 border border-yellow-100 rounded p-2">
+                            <span className="font-semibold text-yellow-700">Finance: </span>
+                            <span className="text-yellow-600">{enr.financeRemarks}</span>
+                          </div>
+                        )}
+                        {enr.universityRemarks && (
+                          <div className="text-xs bg-blue-50 border border-blue-100 rounded p-2">
+                            <span className="font-semibold text-blue-700">University: </span>
+                            <span className="text-blue-600">{enr.universityRemarks}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Status Timeline */}
+                    {history.length > 0 && (
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-2">Status Timeline</p>
+                        <div className="relative pl-4 border-l-2 border-muted space-y-2">
+                          {history.map((h: any, i: number) => (
+                            <div key={i} className="relative">
+                              <div className="absolute -left-[1.35rem] top-1 w-3 h-3 rounded-full bg-primary/20 border-2 border-primary" />
+                              <div className="flex items-center justify-between gap-2">
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${STATUS_COLORS[h.status] || 'bg-muted text-muted-foreground'}`}>
+                                  {statusLabel(h.status)}
+                                </span>
+                                <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+                                  {new Date(h.changedAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
+                                </span>
+                              </div>
+                              {h.remarks && <p className="text-xs text-muted-foreground mt-0.5 ml-0.5">{h.remarks}</p>}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           )}
         </DialogContent>
       </Dialog>
