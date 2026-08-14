@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
@@ -50,7 +51,11 @@ const STATUS_META: Record<string, { label: string; color: string }> = {
 
 function StatusBadge({ status }: { status: string }) {
   const meta = STATUS_META[status] || { label: status.replace(/_/g, ' '), color: 'bg-muted text-muted-foreground' };
-  return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.color}`}>{meta.label}</span>;
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.color}`}>
+      {meta.label}
+    </span>
+  );
 }
 
 function InfoField({ label, value }: { label: string; value?: string | null }) {
@@ -63,16 +68,17 @@ function InfoField({ label, value }: { label: string; value?: string | null }) {
 }
 
 export function DeptEnrollmentReviewPanel() {
+  const [tab, setTab] = useState<'pending' | 'completed'>('pending');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(false);
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
   const [remarks, setRemarks] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = async (t = tab) => {
     setLoading(true);
     try {
-      const res = await api.get('/enrollment/review');
+      const res = await api.get('/enrollment/review', { params: { tab: t } });
       setEnrollments(res.data.data || []);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load');
@@ -81,15 +87,15 @@ export function DeptEnrollmentReviewPanel() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => { fetchData(tab); }, [tab]);
 
   const handleApprove = async (id: string) => {
     try {
       await api.put(`/enrollment/review/${id}/approve`);
-      toast.success('Enrollment approved — forwarded to Finance');
+      toast.success('Approved — forwarded to Finance');
       fetchData();
     } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to approve');
+      toast.error(e.response?.data?.message || 'Failed');
     }
   };
 
@@ -101,17 +107,10 @@ export function DeptEnrollmentReviewPanel() {
       setRemarks('');
       fetchData();
     } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to reject');
+      toast.error(e.response?.data?.message || 'Failed');
     }
   };
 
-  const getProgramName = (e: Enrollment) =>
-    e.program ? `${e.program.name} (${e.program.code})` : 'N/A';
-
-  const getCenterName = (e: Enrollment) =>
-    e.studyCenter?.name || 'N/A';
-
-  // Pull value preferring enrollment form data, fallback to linked student profile
   const val = (enrollment: Enrollment, enrollKey: keyof Enrollment, studentKey?: string): string | null => {
     const direct = enrollment[enrollKey];
     if (direct && typeof direct === 'string') return direct;
@@ -122,51 +121,81 @@ export function DeptEnrollmentReviewPanel() {
   const formatDate = (d?: string | null) => d ? new Date(d).toLocaleDateString('en-IN') : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Enrollment Review</h2>
-          <p className="text-muted-foreground text-sm mt-1">Review and approve student enrollments before finance processing.</p>
+          <p className="text-muted-foreground text-sm mt-1">
+            {tab === 'pending' ? 'Review and approve student enrollments before finance processing.' : 'Enrollments already reviewed by this department.'}
+          </p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchData} disabled={loading}>
+        <Button variant="outline" size="sm" onClick={() => fetchData()} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
         </Button>
       </div>
 
+      {/* Tabs */}
+      <Tabs value={tab} onValueChange={v => setTab(v as 'pending' | 'completed')}>
+        <TabsList className="grid w-full max-w-xs grid-cols-2">
+          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="completed">Completed</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      {/* List */}
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
       ) : enrollments.length === 0 ? (
-        <Card><CardContent className="py-16 text-center text-muted-foreground">No enrollments pending review.</CardContent></Card>
+        <Card>
+          <CardContent className="py-16 text-center text-muted-foreground">
+            {tab === 'pending' ? 'No enrollments pending review.' : 'No completed reviews yet.'}
+          </CardContent>
+        </Card>
       ) : (
         <div className="space-y-3">
           {enrollments.map(e => (
             <Card key={e.id} className="hover:border-primary/30 transition-colors">
               <CardContent className="p-5 flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Badge className="bg-warning/10 text-warning text-[10px] uppercase font-bold">
-                      {e.status.replace(/_/g, ' ')}
-                    </Badge>
-                    {e.enrollmentNumber && <span className="text-xs text-muted-foreground">{e.enrollmentNumber}</span>}
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <StatusBadge status={e.status} />
+                    {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
                   </div>
                   <h4 className="font-semibold">{e.studentName}</h4>
-                  <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground flex-wrap">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
                     <span>{e.studentEmail}</span>
-                    <span>{getProgramName(e)}</span>
-                    <span>{getCenterName(e)}</span>
-                    <span>{new Date(e.createdAt).toLocaleDateString()}</span>
+                    {e.program && <span>{e.program.name} ({e.program.code})</span>}
+                    {e.studyCenter && <span>{e.studyCenter.name}</span>}
+                    <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
                   </div>
+                  {/* Show dept remarks on completed tab */}
+                  {tab === 'completed' && e.departmentRemarks && (
+                    <p className="text-xs mt-1.5 text-red-600 bg-red-50 px-2 py-1 rounded inline-block">
+                      Rejected: {e.departmentRemarks}
+                    </p>
+                  )}
+                  {tab === 'completed' && e.departmentReviewedAt && !e.departmentRemarks && (
+                    <p className="text-xs mt-1.5 text-green-600">
+                      ✓ Approved on {new Date(e.departmentReviewedAt).toLocaleDateString('en-IN')}
+                    </p>
+                  )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                   <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
                     <Eye className="w-4 h-4 mr-1" />View
                   </Button>
-                  <Button size="sm" variant="outline" className="text-success border-success/30 hover:bg-success/10" onClick={() => handleApprove(e.id)}>
-                    <CheckCircle className="w-4 h-4 mr-1" />Approve
-                  </Button>
-                  <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10" onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
-                    <XCircle className="w-4 h-4 mr-1" />Reject
-                  </Button>
+                  {tab === 'pending' && (
+                    <>
+                      <Button size="sm" variant="outline" className="text-success border-success/30 hover:bg-success/10" onClick={() => handleApprove(e.id)}>
+                        <CheckCircle className="w-4 h-4 mr-1" />Approve
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                        onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
+                        <XCircle className="w-4 h-4 mr-1" />Reject
+                      </Button>
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -248,13 +277,13 @@ export function DeptEnrollmentReviewPanel() {
               {/* Enrollment Status & History */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Enrollment Status</h4>
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3 mb-4 flex-wrap">
                   <StatusBadge status={viewStudent.status} />
                   {viewStudent.enrolledAt && (
-                    <span className="text-xs text-muted-foreground">Enrolled on {new Date(viewStudent.enrolledAt).toLocaleDateString('en-IN')}</span>
+                    <span className="text-xs text-muted-foreground">Enrolled on {formatDate(viewStudent.enrolledAt)}</span>
                   )}
-                  {viewStudent.enrollmentNumber && (
-                    <span className="text-xs font-mono bg-muted px-2 py-0.5 rounded">{viewStudent.enrollmentNumber}</span>
+                  {viewStudent.departmentReviewedAt && (
+                    <span className="text-xs text-muted-foreground">Dept reviewed {formatDate(viewStudent.departmentReviewedAt)}</span>
                   )}
                 </div>
 
@@ -294,7 +323,7 @@ export function DeptEnrollmentReviewPanel() {
                             {h.remarks && <p className="text-xs text-muted-foreground mt-1">{h.remarks}</p>}
                           </div>
                           <span className="text-[11px] text-muted-foreground whitespace-nowrap shrink-0">
-                            {new Date(h.changedAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
+                            {new Date(h.changedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
                       </div>
