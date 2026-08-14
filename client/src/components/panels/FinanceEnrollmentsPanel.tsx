@@ -286,45 +286,160 @@ export function FinanceEnrollmentsPanel() {
 
       {/* View Student Details Dialog */}
       <Dialog open={!!viewStudent} onOpenChange={o => !o && setViewStudent(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>Student Details</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>Enrollment Details</DialogTitle></DialogHeader>
           {viewStudent && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div><span className="font-semibold text-muted-foreground block">Name</span>{viewStudent.student?.name || viewStudent.studentName}</div>
-                <div><span className="font-semibold text-muted-foreground block">Email</span>{viewStudent.student?.email || viewStudent.studentEmail}</div>
-                <div><span className="font-semibold text-muted-foreground block">Phone</span>{viewStudent.student?.phone || 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">Alt Phone</span>{viewStudent.student?.altPhone || 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">DOB</span>{viewStudent.student?.dob ? new Date(viewStudent.student.dob).toLocaleDateString() : 'N/A'}</div>
-                <div><span className="font-semibold text-muted-foreground block">Father's Name</span>{viewStudent.student?.fatherName || 'N/A'}</div>
-                <div className="col-span-2"><span className="font-semibold text-muted-foreground block">Address</span>{viewStudent.student?.address || 'N/A'}</div>
+            <div className="space-y-6 pb-2 text-sm">
+
+              {/* Photo + Identity */}
+              <div className="flex gap-5 items-start">
+                <div className="shrink-0">
+                  {viewStudent.student?.photo ? (
+                    <img src={viewStudent.student.photo} alt="Student" className="w-24 h-24 rounded-xl object-cover border shadow-sm" />
+                  ) : (
+                    <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center border">
+                      <GraduationCap className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 grid grid-cols-2 gap-3">
+                  <Field label="Full Name" value={viewStudent.student?.name || viewStudent.studentName} />
+                  <Field label="Email" value={viewStudent.student?.email || viewStudent.studentEmail} />
+                  <Field label="Phone" value={viewStudent.student?.phone || viewStudent.studentPhone} />
+                  <Field label="Alt Phone" value={viewStudent.student?.altPhone} />
+                  <Field label="Date of Birth" value={viewStudent.student?.dob ? new Date(viewStudent.student.dob).toLocaleDateString('en-IN') : null} />
+                  <Field label="Enrollment #" value={viewStudent.enrollmentNumber} />
+                </div>
               </div>
-              
-              <h4 className="font-bold border-b pb-2 mt-6">Documents</h4>
-              {!viewStudent.student?.documents || viewStudent.student.documents.length === 0 ? (
-                <div className="text-muted-foreground text-sm py-4">No documents uploaded.</div>
-              ) : (
-                <div className="grid grid-cols-2 gap-3 mt-2">
-                  {viewStudent.student.documents.map((doc: any, i: number) => {
-                    if (!doc) return null;
-                    return (
-                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border rounded hover:bg-slate-50 transition-colors">
-                        <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
+
+              {/* Program & University */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; University</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Program" value={(viewStudent as any).program?.name ? `${(viewStudent as any).program.name} (${(viewStudent as any).program.code})` : getProgramName(viewStudent)} />
+                  <Field label="University" value={(viewStudent as any).program?.university?.name} />
+                  <Field label="Location" value={(viewStudent as any).program?.university?.location} />
+                  <Field label="Session" value={(viewStudent as any).session?.name} />
+                  <Field label="Study Center" value={getCenterName(viewStudent)} />
+                  <Field label="Status" value={STATUS_META[viewStudent.status]?.label || viewStudent.status} />
+                </div>
+              </div>
+
+              {/* Fee Details */}
+              {((viewStudent as any).program?.feeStructures?.length > 0 || viewStudent.payment) && (
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Fee Details</h4>
+                  {(viewStudent as any).program?.feeStructures?.length > 0 && (
+                    <div className="rounded-lg border overflow-hidden mb-3">
+                      <table className="w-full text-xs">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th className="text-left px-3 py-2 font-medium text-muted-foreground">Fee Type</th>
+                            <th className="text-right px-3 py-2 font-medium text-muted-foreground">Amount</th>
+                            <th className="text-right px-3 py-2 font-medium text-muted-foreground">Frequency</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {(viewStudent as any).program.feeStructures.map((f: any, i: number) => (
+                            <tr key={i}>
+                              <td className="px-3 py-2">{f.name || 'Fee'}</td>
+                              <td className="px-3 py-2 text-right font-medium text-green-600">₹{Number(f.amount).toLocaleString()}</td>
+                              <td className="px-3 py-2 text-right text-muted-foreground capitalize">{f.frequency || '—'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {viewStudent.payment && (
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-100">
+                      <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
+                      <div>
+                        <p className="font-semibold text-green-700">Fee Paid: ₹{viewStudent.payment.amount?.toLocaleString()}</p>
+                        {viewStudent.payment.debitedAt && (
+                          <p className="text-xs text-green-600">on {new Date(viewStudent.payment.debitedAt).toLocaleDateString('en-IN')}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {!viewStudent.payment && (
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100">
+                      <Clock className="w-4 h-4 text-orange-500 shrink-0" />
+                      <p className="text-orange-700 font-medium text-xs">Fee not yet received</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Personal Details */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Personal Details</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Father's Name" value={viewStudent.student?.fatherName} />
+                  <Field label="Mother's Name" value={viewStudent.student?.motherName} />
+                  <Field label="Father's Phone" value={viewStudent.student?.fatherPhone} />
+                  <Field label="Mother's Phone" value={viewStudent.student?.motherPhone} />
+                  <Field label="Religion" value={viewStudent.student?.religion} />
+                  <Field label="Caste" value={viewStudent.student?.caste} />
+                  <Field label="Address" value={viewStudent.student?.address} />
+                  <Field label="Pin Code" value={viewStudent.student?.pinCode} />
+                </div>
+              </div>
+
+              {/* Remarks */}
+              {(viewStudent.departmentRemarks || viewStudent.financeRemarks) && (
+                <div className="space-y-2">
+                  {viewStudent.departmentRemarks && (
+                    <div className="text-xs bg-red-50 border border-red-100 rounded-lg p-2.5">
+                      <span className="font-semibold text-red-700">Dept Remarks: </span>
+                      <span className="text-red-600">{viewStudent.departmentRemarks}</span>
+                    </div>
+                  )}
+                  {viewStudent.financeRemarks && (
+                    <div className="text-xs bg-yellow-50 border border-yellow-100 rounded-lg p-2.5">
+                      <span className="font-semibold text-yellow-700">Finance Remarks: </span>
+                      <span className="text-yellow-600">{viewStudent.financeRemarks}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Documents */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Uploaded Documents</h4>
+                {!viewStudent.student?.documents || viewStudent.student.documents.filter(Boolean).length === 0 ? (
+                  <p className="text-muted-foreground italic py-2">No documents uploaded.</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {viewStudent.student.documents.filter(Boolean).map((doc: any, i: number) => (
+                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors group">
+                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20">
                           <FileText className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium truncate">{doc.type}</p>
-                          <p className="text-xs text-muted-foreground truncate">{doc.name || 'Document'}</p>
+                          <p className="text-sm font-medium truncate">{doc.type || 'Document'}</p>
+                          <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
                         </div>
                       </a>
-                    );
-                  })}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </div>
+
             </div>
           )}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function Field({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div>
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground block mb-0.5">{label}</span>
+      <span className="text-sm">{value || <span className="text-muted-foreground italic">N/A</span>}</span>
     </div>
   );
 }
@@ -342,3 +457,4 @@ function SummaryCard({ label, count, icon, color, onClick }: { label: string; co
     </Card>
   );
 }
+
