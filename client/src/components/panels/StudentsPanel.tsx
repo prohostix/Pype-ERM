@@ -2914,12 +2914,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
             <div className="space-y-1.5">
               <Label>University</Label>
-              <Select value={bulkActionUniversityId} onValueChange={(v) => { setBulkActionUniversityId(v); setBulkActionProgramId(''); }}>
+              <Select value={bulkActionUniversityId || '__none__'} onValueChange={(v) => { setBulkActionUniversityId(v === '__none__' ? '' : v); setBulkActionProgramId(''); }}>
                 <SelectTrigger>
                   <SelectValue placeholder="— Keep unchanged —" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">— Keep unchanged —</SelectItem>
+                  <SelectItem value="__none__">— Keep unchanged —</SelectItem>
                   {universities.filter((u: any) => u?.id).map((u: any) => (
                     <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                   ))}
@@ -2929,12 +2929,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
             <div className="space-y-1.5">
               <Label>Program</Label>
-              <Select value={bulkActionProgramId} onValueChange={setBulkActionProgramId}>
+              <Select value={bulkActionProgramId || '__none__'} onValueChange={(v) => setBulkActionProgramId(v === '__none__' ? '' : v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="— Keep unchanged —" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">— Keep unchanged —</SelectItem>
+                  <SelectItem value="__none__">— Keep unchanged —</SelectItem>
                   {programs
                     .filter((p: any) => {
                       if (!bulkActionUniversityId) return true;
