@@ -761,3 +761,126 @@ export const getStudentEnrollments = asyncHandler(async (req: AuthRequest, res: 
   res.status(200).json({ success: true, data: enrollments });
 });
 
+/**
+ * POST /students/bulk-update-program
+ * Org admin: update university + program on the latest enrollment for a set of students
+ */
+export const bulkUpdateProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { studentIds, universityId, programId } = req.body as {
+    studentIds: string[];
+    universityId?: string;
+    programId?: string;
+  };
+
+  if (!Array.isArray(studentIds) || studentIds.length === 0) {
+    res.status(400).json({ success: false, message: 'studentIds must be a non-empty array' });
+    return;
+  }
+  if (!universityId && !programId) {
+    res.status(400).json({ success: false, message: 'Provide at least universityId or programId' });
+    return;
+  }
+
+  let updatedStudents = 0;
+  let updatedEnrollments = 0;
+
+  for (const studentId of studentIds) {
+    const student = await prisma.student.findFirst({
+      where: { id: studentId, organizationId: req.user.organizationId }
+    });
+    if (!student) continue;
+
+    // Build student update payload
+    const studentData: any = {};
+    if (universityId) studentData.universityId = universityId;
+    if (programId) studentData.programId = programId;
+
+    await prisma.student.update({ where: { id: studentId }, data: studentData });
+    updatedStudents++;
+
+    // Also update the most recent enrollment for this student
+    const latestEnrollment = await prisma.enrollment.findFirst({
+      where: { studentId, organizationId: req.user.organizationId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    if (latestEnrollment) {
+      const enrollData: any = {};
+      if (programId) enrollData.programId = programId;
+      await prisma.enrollment.update({ where: { id: latestEnrollment.id }, data: enrollData });
+      updatedEnrollments++;
+    }
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `Updated ${updatedStudents} student(s) and ${updatedEnrollments} enrollment(s)`
+  });
+});
+
+/**
+ * POST /students/bulk-record-payment
+ * Org admin: manually record a payment against the latest enrollment for a set of students
+ */
+export const bulkRecordPayment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { studentIds, amount, note } = req.body as {
+    studentIds: string[];
+    amount: number;
+    note?: string;
+  };
+
+  if (!Array.isArray(studentIds) || studentIds.length === 0) {
+    res.status(400).json({ success: false, message: 'studentIds must be a non-empty array' });
+    return;
+  }
+  if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+    res.status(400).json({ success: false, message: 'Valid amount is required' });
+    return;
+  }
+
+  let recorded = 0;
+
+  for (const studentId of studentIds) {
+    const student = await prisma.student.findFirst({
+      where: { id: studentId, organizationId: req.user.organizationId }
+    });
+    if (!student) continue;
+
+    // Find the latest enrollment
+    const enrollment = await prisma.enrollment.findFirst({
+      where: { studentId, organizationId: req.user.organizationId },
+      orderBy: { createdAt: 'desc' }
+    });
+    if (!enrollment) continue;
+
+    // Create a payment record
+    await prisma.enrollmentPayment.create({
+      data: {
+        enrollmentId: enrollment.id,
+        amount: Number(amount),
+        ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {}),
+      }
+    });
+
+    // Log to status history
+    const historyEntry = {
+      status: enrollment.status,
+      changedAt: new Date().toISOString(),
+      changedBy: req.user.id,
+      remarks: note || `Manual fee entry of ₹${amount} by ${req.user.name || req.user.role}`
+    };
+    await prisma.enrollment.update({
+      where: { id: enrollment.id },
+      data: {
+        statusHistory: { push: historyEntry }
+      }
+    });
+
+    recorded++;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `Payment of ₹${amount} recorded for ${recorded} student(s)`
+  });
+});

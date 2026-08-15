@@ -15,6 +15,8 @@ import {
   deleteInternalMark,
   uploadStudentDocument,
   bulkEnrollmentUpdate,
+  bulkUpdateProgram,
+  bulkRecordPayment,
   updateAdmissionProgress,
   getStudentEnrollments,
 } from '../controllers/studentController.js';
@@ -32,6 +34,8 @@ router.route('/marks/:id').get(getInternalMark).put(authorize('ops_admin', 'empl
 // Student routes
 router.post('/bulk-import', authorize('org_admin', 'superadmin', 'center_admin'), bulkImportStudents);
 router.post('/bulk-enrollment-update', authorize('org_admin', 'superadmin', 'ops_admin', 'employee'), bulkEnrollmentUpdate);
+router.post('/bulk-update-program', authorize('org_admin', 'superadmin'), bulkUpdateProgram);
+router.post('/bulk-record-payment', authorize('org_admin', 'superadmin'), bulkRecordPayment);
 router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'employee'), notifyStudent);
 router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee'), upload.single('file'), uploadStudentDocument);
 

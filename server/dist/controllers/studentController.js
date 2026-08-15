@@ -139,7 +139,7 @@ export const createStudent = asyncHandler(async (req, res) => {
             photo: photo || null,
             documents: documents || [],
             isPrevious: Boolean(isPrevious),
-            status: status || 'pending',
+            status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
             programId,
             universityId: universityId || null,
             centerId: (centerId && centerId.trim() !== '') ? centerId : null,
@@ -151,6 +151,64 @@ export const createStudent = asyncHandler(async (req, res) => {
             enrolledBy: req.user.id
         }
     });
+    if (req.body.isPipelineApplication) {
+        const now = new Date();
+        await prisma.enrollment.create({
+            data: {
+                organizationId: req.user.organizationId,
+                studentId: student.id,
+                studentName: student.name,
+                studentEmail: student.email,
+                studentPhone: student.phone,
+                studentAddress: student.address,
+                fatherName: student.fatherName,
+                dob: student.dob,
+                programId: student.programId,
+                studyCenterId: student.centerId,
+                sessionId: student.sessionId,
+                status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
+                receiptUrl: req.body.receiptUrl || null,
+                salesUserId: req.user.id,
+                statusHistory: [
+                    {
+                        status: 'submitted',
+                        actorId: req.user.id,
+                        actorName: req.user.name,
+                        actorRole: req.user.role,
+                        timestamp: now.toISOString(),
+                        note: `Sales rep ${req.user.name} directly enrolled student via wizard`,
+                    },
+                    {
+                        status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
+                        actorId: 'system',
+                        timestamp: now.toISOString(),
+                        note: req.body.receiptUrl ? 'Receipt uploaded, awaiting Finance verification' : 'Awaiting payment receipt upload',
+                    },
+                ],
+            },
+        });
+        // Notify ops admins
+        try {
+            const opsAdmins = await prisma.user.findMany({
+                where: { organizationId: req.user.organizationId, role: 'ops_admin', status: 'active' },
+                select: { id: true },
+            });
+            for (const admin of opsAdmins) {
+                await prisma.notification.create({
+                    data: {
+                        organizationId: req.user.organizationId,
+                        userId: admin.id,
+                        title: 'New Student Application for Review',
+                        message: `${student.name} has been directly enrolled by ${req.user.name} and is ready for review.`,
+                        type: 'general',
+                        priority: 'medium',
+                        link: 'enrollment_review',
+                    },
+                });
+            }
+        }
+        catch (_) { /* non-critical */ }
+    }
     // Send credentials email — failure must not fail the creation
     try {
         await sendEmail(email, 'Your Student Portal Credentials', `Hello ${name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`, `<p>Hello <strong>${name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`);
@@ -598,5 +656,124 @@ export const updateAdmissionProgress = asyncHandler(async (req, res) => {
         data: { admissionProgress: updatedProgress }
     });
     res.status(200).json({ success: true, data: updatedStudent });
+});
+// GET /students/:id/enrollments — full enrollment history for a student
+export const getStudentEnrollments = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const enrollments = await prisma.enrollment.findMany({
+        where: { studentId: id, organizationId: req.user.organizationId },
+        include: {
+            program: { include: { university: { select: { name: true } } } },
+            studyCenter: { select: { name: true, code: true } },
+            session: { select: { name: true } },
+            payment: true,
+        },
+        orderBy: { createdAt: 'desc' },
+    });
+    res.status(200).json({ success: true, data: enrollments });
+});
+/**
+ * POST /students/bulk-update-program
+ * Org admin: update university + program on the latest enrollment for a set of students
+ */
+export const bulkUpdateProgram = asyncHandler(async (req, res) => {
+    const { studentIds, universityId, programId } = req.body;
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+        res.status(400).json({ success: false, message: 'studentIds must be a non-empty array' });
+        return;
+    }
+    if (!universityId && !programId) {
+        res.status(400).json({ success: false, message: 'Provide at least universityId or programId' });
+        return;
+    }
+    let updatedStudents = 0;
+    let updatedEnrollments = 0;
+    for (const studentId of studentIds) {
+        const student = await prisma.student.findFirst({
+            where: { id: studentId, organizationId: req.user.organizationId }
+        });
+        if (!student)
+            continue;
+        // Build student update payload
+        const studentData = {};
+        if (universityId)
+            studentData.universityId = universityId;
+        if (programId)
+            studentData.programId = programId;
+        await prisma.student.update({ where: { id: studentId }, data: studentData });
+        updatedStudents++;
+        // Also update the most recent enrollment for this student
+        const latestEnrollment = await prisma.enrollment.findFirst({
+            where: { studentId, organizationId: req.user.organizationId },
+            orderBy: { createdAt: 'desc' }
+        });
+        if (latestEnrollment) {
+            const enrollData = {};
+            if (programId)
+                enrollData.programId = programId;
+            await prisma.enrollment.update({ where: { id: latestEnrollment.id }, data: enrollData });
+            updatedEnrollments++;
+        }
+    }
+    res.status(200).json({
+        success: true,
+        message: `Updated ${updatedStudents} student(s) and ${updatedEnrollments} enrollment(s)`
+    });
+});
+/**
+ * POST /students/bulk-record-payment
+ * Org admin: manually record a payment against the latest enrollment for a set of students
+ */
+export const bulkRecordPayment = asyncHandler(async (req, res) => {
+    const { studentIds, amount, note } = req.body;
+    if (!Array.isArray(studentIds) || studentIds.length === 0) {
+        res.status(400).json({ success: false, message: 'studentIds must be a non-empty array' });
+        return;
+    }
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+        res.status(400).json({ success: false, message: 'Valid amount is required' });
+        return;
+    }
+    let recorded = 0;
+    for (const studentId of studentIds) {
+        const student = await prisma.student.findFirst({
+            where: { id: studentId, organizationId: req.user.organizationId }
+        });
+        if (!student)
+            continue;
+        // Find the latest enrollment
+        const enrollment = await prisma.enrollment.findFirst({
+            where: { studentId, organizationId: req.user.organizationId },
+            orderBy: { createdAt: 'desc' }
+        });
+        if (!enrollment)
+            continue;
+        // Create a payment record
+        await prisma.enrollmentPayment.create({
+            data: {
+                enrollmentId: enrollment.id,
+                amount: Number(amount),
+                ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {}),
+            }
+        });
+        // Log to status history
+        const historyEntry = {
+            status: enrollment.status,
+            changedAt: new Date().toISOString(),
+            changedBy: req.user.id,
+            remarks: note || `Manual fee entry of ₹${amount} by ${req.user.name || req.user.role}`
+        };
+        await prisma.enrollment.update({
+            where: { id: enrollment.id },
+            data: {
+                statusHistory: { push: historyEntry }
+            }
+        });
+        recorded++;
+    }
+    res.status(200).json({
+        success: true,
+        message: `Payment of ₹${amount} recorded for ${recorded} student(s)`
+    });
 });
 //# sourceMappingURL=studentController.js.map

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, GraduationCap, Upload, Bell, CalendarDays, ExternalLink, MessageSquare, Key, Download, User, BookOpen, Building2, FileText, ChevronRight, Search, Eye, TrendingUp, History, CreditCard, CheckSquare, Square, DollarSign, RefreshCw, X } from 'lucide-react';
 import { StudentProgressTab } from '@/components/panels/StudentProgressTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -109,6 +109,85 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [enrollHistoryStudent, setEnrollHistoryStudent] = useState<any>(null);
   const [enrollHistoryData, setEnrollHistoryData] = useState<any[]>([]);
   const [enrollHistoryLoading, setEnrollHistoryLoading] = useState(false);
+
+  // Bulk Selection State
+  const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
+  const [bulkProgramDialogOpen, setBulkProgramDialogOpen] = useState(false);
+  const [bulkPaymentDialogOpen, setBulkPaymentDialogOpen] = useState(false);
+  const [bulkActionUniversityId, setBulkActionUniversityId] = useState('');
+  const [bulkActionProgramId, setBulkActionProgramId] = useState('');
+  const [bulkPaymentAmount, setBulkPaymentAmount] = useState('');
+  const [bulkPaymentNote, setBulkPaymentNote] = useState('');
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
+
+  const isOrgAdmin = ['org_admin', 'superadmin'].includes(user?.role || '');
+
+  const toggleStudentSelection = (id: string) => {
+    setSelectedStudentIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedStudentIds.size === paginatedStudents.length) {
+      setSelectedStudentIds(new Set());
+    } else {
+      setSelectedStudentIds(new Set(paginatedStudents.map((s: any) => s.id)));
+    }
+  };
+
+  const handleBulkUpdateProgram = async () => {
+    if (!bulkActionUniversityId && !bulkActionProgramId) {
+      toast.error('Select at least a university or program');
+      return;
+    }
+    setBulkActionLoading(true);
+    try {
+      const res = await api.post('/students/bulk-update-program', {
+        studentIds: Array.from(selectedStudentIds),
+        universityId: bulkActionUniversityId || undefined,
+        programId: bulkActionProgramId || undefined,
+      });
+      toast.success(res.data.message);
+      setBulkProgramDialogOpen(false);
+      setSelectedStudentIds(new Set());
+      setBulkActionUniversityId('');
+      setBulkActionProgramId('');
+      fetchStudents();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to update');
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
+  const handleBulkRecordPayment = async () => {
+    if (!bulkPaymentAmount || isNaN(Number(bulkPaymentAmount)) || Number(bulkPaymentAmount) <= 0) {
+      toast.error('Enter a valid amount');
+      return;
+    }
+    setBulkActionLoading(true);
+    try {
+      const res = await api.post('/students/bulk-record-payment', {
+        studentIds: Array.from(selectedStudentIds),
+        amount: Number(bulkPaymentAmount),
+        note: bulkPaymentNote || undefined,
+      });
+      toast.success(res.data.message);
+      setBulkPaymentDialogOpen(false);
+      setSelectedStudentIds(new Set());
+      setBulkPaymentAmount('');
+      setBulkPaymentNote('');
+      fetchStudents();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to record payment');
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
 
   const STATUS_COLORS: Record<string, string> = {
     payment_pending:     'bg-orange-100 text-orange-700',
@@ -2181,17 +2260,46 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             <div className="text-center py-8 text-muted-foreground">No students found matching this criteria</div>
           ) : (
             <div className="space-y-3">
+              {/* Select all row */}
+              {isOrgAdmin && paginatedStudents.length > 0 && (
+                <div className="flex items-center gap-2 px-1 pb-1 border-b">
+                  <button
+                    onClick={toggleSelectAll}
+                    className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+                  >
+                    {selectedStudentIds.size === paginatedStudents.length
+                      ? <CheckSquare className="w-4 h-4 text-blue-600" />
+                      : <Square className="w-4 h-4" />}
+                    <span>{selectedStudentIds.size === paginatedStudents.length ? 'Deselect all' : 'Select all on page'}</span>
+                  </button>
+                  {selectedStudentIds.size > 0 && (
+                    <span className="ml-auto text-xs text-blue-600 font-medium">{selectedStudentIds.size} selected</span>
+                  )}
+                </div>
+              )}
               {paginatedStudents.map((student, index) => {
                 const centerName = typeof student.centerId === 'object' ? student.centerId?.name : student.center?.name || '';
                 const programName = typeof student.programId === 'object' ? student.programId?.name : student.program?.name || '';
                 const universityName = typeof student.universityId === 'object' ? student.universityId?.name : student.university?.name || '';
                 const branchName = typeof student.branchId === 'object' ? student.branchId?.name : student.branch?.name || '';
                 return (
-                  <div key={student.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3">
+                  <div key={student.id} className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 border rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors gap-3 ${selectedStudentIds.has(student.id) ? 'ring-2 ring-blue-500 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}>
                     <div className="flex items-center gap-4">
-                      <div className="w-6 text-center text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0">
-                        {(currentPage - 1) * itemsPerPage + index + 1}
-                      </div>
+                      {/* Row number / Checkbox (org_admin only) */}
+                      {isOrgAdmin ? (
+                        <button
+                          onClick={() => toggleStudentSelection(student.id)}
+                          className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-blue-600 transition-colors shrink-0"
+                        >
+                          {selectedStudentIds.has(student.id)
+                            ? <CheckSquare className="w-5 h-5 text-blue-600" />
+                            : <Square className="w-5 h-5" />}
+                        </button>
+                      ) : (
+                        <div className="w-6 text-center text-sm font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+                          {(currentPage - 1) * itemsPerPage + index + 1}
+                        </div>
+                      )}
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
                           <img 
@@ -2267,6 +2375,39 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 );
               })}
               
+              {/* Bulk Floating Action Bar */}
+              {isOrgAdmin && selectedStudentIds.size > 0 && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl shadow-2xl px-5 py-3 border border-slate-700">
+                  <span className="text-sm font-semibold">{selectedStudentIds.size} selected</span>
+                  <div className="w-px h-5 bg-slate-600" />
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="bg-blue-600 hover:bg-blue-700 text-white border-0 gap-1.5"
+                    onClick={() => { setBulkActionUniversityId(''); setBulkActionProgramId(''); setBulkProgramDialogOpen(true); }}
+                  >
+                    <GraduationCap className="w-4 h-4" />
+                    Change University / Program
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 gap-1.5"
+                    onClick={() => { setBulkPaymentAmount(''); setBulkPaymentNote(''); setBulkPaymentDialogOpen(true); }}
+                  >
+                    <DollarSign className="w-4 h-4" />
+                    Record Fee Received
+                  </Button>
+                  <button
+                    onClick={() => setSelectedStudentIds(new Set())}
+                    className="ml-1 text-slate-400 hover:text-white transition-colors"
+                    title="Clear selection"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
               {/* Pagination Controls */}
               {totalPages > 1 && (
                 <div className="flex items-center justify-between pt-4 pb-2 border-t mt-4">
@@ -2753,6 +2894,129 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               })}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Bulk Change University / Program Dialog */}
+      <Dialog open={bulkProgramDialogOpen} onOpenChange={setBulkProgramDialogOpen}>
+        <DialogContent className="max-w-md w-full rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-blue-600" />
+              Change University / Program
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              Applying to <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedStudentIds.size}</span> selected student(s).
+              Leave a field blank to keep it unchanged.
+            </p>
+
+            <div className="space-y-1.5">
+              <Label>University</Label>
+              <Select value={bulkActionUniversityId} onValueChange={(v) => { setBulkActionUniversityId(v); setBulkActionProgramId(''); }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="— Keep unchanged —" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">— Keep unchanged —</SelectItem>
+                  {universities.filter((u: any) => u?.id).map((u: any) => (
+                    <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Program</Label>
+              <Select value={bulkActionProgramId} onValueChange={setBulkActionProgramId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="— Keep unchanged —" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">— Keep unchanged —</SelectItem>
+                  {programs
+                    .filter((p: any) => {
+                      if (!bulkActionUniversityId) return true;
+                      return p?.universityId === bulkActionUniversityId || p?.university?.id === bulkActionUniversityId;
+                    })
+                    .filter((p: any) => p?.id)
+                    .map((p: any) => (
+                      <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button variant="outline" className="flex-1" onClick={() => setBulkProgramDialogOpen(false)} disabled={bulkActionLoading}>
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={handleBulkUpdateProgram}
+                disabled={bulkActionLoading || (!bulkActionUniversityId && !bulkActionProgramId)}
+              >
+                {bulkActionLoading ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : null}
+                Apply to {selectedStudentIds.size} Student(s)
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Bulk Record Fee Received Dialog */}
+      <Dialog open={bulkPaymentDialogOpen} onOpenChange={setBulkPaymentDialogOpen}>
+        <DialogContent className="max-w-md w-full rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-emerald-600" />
+              Record Fee Received
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              Recording a manual fee payment for <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedStudentIds.size}</span> selected student(s).
+              This will be logged against each student's latest enrollment.
+            </p>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="bulkFeeAmount">Amount Received (₹) <span className="text-red-500">*</span></Label>
+              <Input
+                id="bulkFeeAmount"
+                type="number"
+                min="1"
+                placeholder="e.g. 25000"
+                value={bulkPaymentAmount}
+                onChange={(e) => setBulkPaymentAmount(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="bulkFeeNote">Note / Remarks (optional)</Label>
+              <Textarea
+                id="bulkFeeNote"
+                placeholder="e.g. Cash payment received at center"
+                value={bulkPaymentNote}
+                onChange={(e) => setBulkPaymentNote(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button variant="outline" className="flex-1" onClick={() => setBulkPaymentDialogOpen(false)} disabled={bulkActionLoading}>
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={handleBulkRecordPayment}
+                disabled={bulkActionLoading || !bulkPaymentAmount}
+              >
+                {bulkActionLoading ? <RefreshCw className="w-4 h-4 animate-spin mr-2" /> : null}
+                Record for {selectedStudentIds.size} Student(s)
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 

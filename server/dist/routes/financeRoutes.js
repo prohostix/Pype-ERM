@@ -2,7 +2,7 @@ import express from 'express';
 import { getInvoices, getInvoice, createInvoice, updateInvoice, deleteInvoice, approveInvoice, getPayments, getPayment, createPayment, updatePayment, deletePayment, getExpenses, getExpense, createExpense, updateExpense, deleteExpense, approveExpense, getTargets, getTarget, createTarget, updateTarget, deleteTarget, getFeeStructures, getFeeStructure, createFeeStructure, updateFeeStructure, deleteFeeStructure, getAuthFees, createAuthFee, updateAuthFee, getPendingPaymentCenters, financeVerifyCenter, createStudyCenter, getIncomeExpenditureReport, getFinanceSalesUsers, getUniversityCommissions, getUniversityPayments, recordUniversityPayment, recordUniversityCommission, getCollectionReport, } from '../controllers/financeController.js';
 import { getOverdueSchedules, sendPaymentReminder, generateReceipt, getStudentPaymentPlan, generateInvoiceFromSchedule, generateAllInvoicesForStudent, bulkCreateOldFees, getOldFees, generatePaymentLink, getPaymentLinks, updatePaymentLinkStatus, getStudentPaymentsLog, getDiscounts, applyDiscount, addExtraFee, } from '../controllers/financeExtController.js';
 import { getWalletTopUps, approveWalletTopUp, rejectWalletTopUp, } from '../controllers/walletTopUpController.js';
-import { getFinanceEnrollments, approveFinanceEnrollment, rejectFinanceEnrollment, getAllEnrollments, } from '../controllers/financeEnrollmentController.js';
+import { getAllEnrollments, getFinanceEnrollments, approveFinanceEnrollment, rejectFinanceEnrollment, verifyReceipt, } from '../controllers/financeEnrollmentController.js';
 import { getFinanceSalaryConfigs, approveSalaryConfig, } from '../controllers/salaryController.js';
 import { getPayrollBatches, getPayrollBatch, financeApprovePayrollBatch, financeRejectPayrollBatch, markBatchPaymentInProgress, completeBatchPayment, } from '../controllers/payrollController.js';
 import { protect, authorize } from '../middleware/auth.js';
@@ -58,6 +58,7 @@ router.get('/enrollments/all', authorize('finance_admin'), getAllEnrollments);
 router.get('/enrollments', authorize('finance_admin'), getFinanceEnrollments);
 router.put('/enrollments/:id/approve', authorize('finance_admin'), approveFinanceEnrollment);
 router.put('/enrollments/:id/reject', authorize('finance_admin'), rejectFinanceEnrollment);
+router.post('/enrollments/:id/verify-receipt', authorize('finance_admin'), verifyReceipt);
 // Reports
 router.get('/reports/income-expenditure', authorize('finance_admin'), getIncomeExpenditureReport);
 router.get('/reports/collections', getCollectionReport);

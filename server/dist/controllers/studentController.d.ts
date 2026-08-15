@@ -15,4 +15,15 @@ export declare const deleteInternalMark: (req: import("express").Request, res: R
 export declare const uploadStudentDocument: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const bulkEnrollmentUpdate: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const updateAdmissionProgress: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getStudentEnrollments: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+/**
+ * POST /students/bulk-update-program
+ * Org admin: update university + program on the latest enrollment for a set of students
+ */
+export declare const bulkUpdateProgram: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+/**
+ * POST /students/bulk-record-payment
+ * Org admin: manually record a payment against the latest enrollment for a set of students
+ */
+export declare const bulkRecordPayment: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=studentController.d.ts.map

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getWallet, submitTopUp, getTopUpHistory, getEnrollablePrograms, createEnrollment, getMyEnrollments, getMyCenterStatus, submitMyCenterPayment, } from '../controllers/enrollmentController.js';
+import { getWallet, submitTopUp, getTopUpHistory, getEnrollablePrograms, createEnrollment, getMyEnrollments, getMyCenterStatus, submitMyCenterPayment, uploadReceipt, } from '../controllers/enrollmentController.js';
 import { getDeptReviewEnrollments, approveDeptEnrollment, rejectDeptEnrollment, } from '../controllers/enrollmentReviewController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -16,6 +16,7 @@ router.get('/enrollments', authorize('center_admin', 'sales_admin', 'bde', 'sub_
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
+router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'bde', 'sub_department_manager'), upload.single('receipt'), uploadReceipt);
 // Dept/Sub-dept manager review routes
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);
 router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), approveDeptEnrollment);

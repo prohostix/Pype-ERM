@@ -55,4 +55,38 @@ export const getMyCenterStatus = asyncHandler(async (req, res) => {
 export const submitMyCenterPayment = asyncHandler(async (req, res) => {
     res.json({ success: true, message: 'Payment submitted' });
 });
+export const uploadReceipt = asyncHandler(async (req, res) => {
+    const enrollmentId = req.params.id;
+    if (!req.file) {
+        res.status(400);
+        throw new Error('No receipt file uploaded');
+    }
+    const fileUrl = `/uploads/${req.file.filename}`;
+    const enrollment = await prisma.enrollment.findUnique({
+        where: { id: enrollmentId }
+    });
+    if (!enrollment) {
+        res.status(404);
+        throw new Error('Enrollment not found');
+    }
+    // Optional: Add to statusHistory if transitioning to 'receipt_submitted'
+    const historyEntry = {
+        status: 'receipt_submitted',
+        changedAt: new Date().toISOString(),
+        changedBy: req.user.id,
+        remarks: 'Payment receipt uploaded'
+    };
+    const updated = await prisma.enrollment.update({
+        where: { id: enrollmentId },
+        data: {
+            receiptUrl: fileUrl,
+            receiptVerified: false,
+            status: 'receipt_submitted', // Move from payment_pending -> receipt_submitted
+            statusHistory: {
+                push: historyEntry
+            }
+        }
+    });
+    res.json({ success: true, data: updated });
+});
 //# sourceMappingURL=enrollmentController.js.map
