@@ -53,7 +53,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
   if (!student) return null;
 
   const photoUrl = student.photo 
-    ? (student.photo.startsWith('http') ? student.photo : `${api.getBaseUrl().replace('/api/v1', '')}${student.photo}`) 
+    ? api.getFileUrl(student.photo)
     : undefined;
 
   const universityName = student.university?.name || student.universityId?.name || 'Not Assigned';
@@ -279,7 +279,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                               <p className="text-sm font-semibold truncate">{doc.name || 'Document'}</p>
                               <p className="text-xs text-muted-foreground uppercase">{doc.type || 'Unknown Type'}</p>
                             </div>
-                            <Button variant="ghost" size="sm" className="ml-auto" onClick={() => window.open(doc.url.startsWith('http') ? doc.url : `${api.getBaseUrl().replace('/api/v1', '')}${doc.url}`, '_blank')}>
+                            <Button variant="ghost" size="sm" className="ml-auto" onClick={() => window.open(api.getFileUrl(doc.url), '_blank')}>
                               View
                             </Button>
                           </div>

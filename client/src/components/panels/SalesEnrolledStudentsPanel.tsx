@@ -207,7 +207,7 @@ export function SalesEnrolledStudentsPanel() {
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0 overflow-hidden border border-slate-200">
                     {student.photo ? (
                       <img 
-                        src={student.photo.startsWith('http') ? student.photo : `${api.getBaseUrl().replace('/api/v1', '')}${student.photo}`} 
+                        src={api.getFileUrl(student.photo)}
                         alt={student.name} 
                         className="w-full h-full object-cover"
                       />
@@ -282,7 +282,7 @@ export function SalesEnrolledStudentsPanel() {
                   <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center text-primary shrink-0 overflow-hidden border border-slate-200">
                     {selectedStudent.photo ? (
                       <img 
-                        src={selectedStudent.photo.startsWith('http') ? selectedStudent.photo : `${api.getBaseUrl().replace('/api/v1', '')}${selectedStudent.photo}`} 
+                        src={api.getFileUrl(selectedStudent.photo)}
                         alt={selectedStudent.name} 
                         className="w-full h-full object-cover"
                       />

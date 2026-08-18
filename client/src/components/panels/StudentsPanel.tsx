@@ -1482,7 +1482,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           <div className="flex items-center gap-2 shrink-0">
                             {existing?.url && (
                               <a
-                                href={existing.url.startsWith('http') ? existing.url : `${api.getBaseUrl().replace('/api/v1', '')}${existing.url}`}
+                                href={api.getFileUrl(existing.url)}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
@@ -1565,7 +1565,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <div className="flex items-center gap-4">
                       {formData.receiptUrl && (
                         <div className="w-16 h-16 rounded overflow-hidden border">
-                          <img src={formData.receiptUrl.startsWith('http') ? formData.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${formData.receiptUrl}`} alt="Receipt Preview" className="w-full h-full object-cover" />
+                          <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
                         </div>
                       )}
                       <div className="flex-1">
@@ -2024,7 +2024,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                   <div className="flex items-center gap-2 shrink-0">
                                     {existing?.url && (
                                       <a
-                                        href={existing.url.startsWith('http') ? existing.url : `${api.getBaseUrl().replace('/api/v1', '')}${existing.url}`}
+                                        href={existing.url.startsWith('http') ? existing.url : api.getFileUrl(existing.url)}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
@@ -2107,7 +2107,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <div className="flex items-center gap-4">
                               {formData.receiptUrl && (
                                 <div className="w-16 h-16 rounded overflow-hidden border">
-                                  <img src={formData.receiptUrl.startsWith('http') ? formData.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${formData.receiptUrl}`} alt="Receipt Preview" className="w-full h-full object-cover" />
+                                  <img src={api.getFileUrl(formData.receiptUrl)} alt="Receipt Preview" className="w-full h-full object-cover" />
                                 </div>
                               )}
                               <div className="flex-1">

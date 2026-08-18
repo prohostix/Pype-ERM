@@ -248,6 +248,7 @@ exports.Prisma.UniversityScalarFieldEnum = {
   subDepartmentId: 'subDepartmentId',
   name: 'name',
   code: 'code',
+  logo: 'logo',
   address: 'address',
   contact: 'contact',
   country: 'country',

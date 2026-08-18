@@ -324,6 +324,7 @@ model University {
   subDepartmentId    String?
   name               String
   code               String
+  logo               String?
   address            String?
   contact            String?
   country            String?

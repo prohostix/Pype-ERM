@@ -69,9 +69,16 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
         </Button>
       </div>
 
-      <div>
-        <h2 className="text-2xl font-bold">{university.name}</h2>
-        <p className="text-muted-foreground">{university.code} {university.contact ? `• ${university.contact}` : ''} {university.address ? `• ${university.address}` : ''}</p>
+      <div className="flex items-center gap-4">
+        {university.logo ? (
+          <div className="w-16 h-16 rounded-lg bg-white border overflow-hidden shrink-0">
+            <img src={api.getFileUrl(university.logo)} alt={university.name} className="w-full h-full object-contain" />
+          </div>
+        ) : null}
+        <div>
+          <h2 className="text-2xl font-bold">{university.name}</h2>
+          <p className="text-muted-foreground">{university.code} {university.contact ? `• ${university.contact}` : ''} {university.address ? `• ${university.address}` : ''}</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

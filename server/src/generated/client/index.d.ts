@@ -21925,6 +21925,7 @@ export namespace Prisma {
     subDepartmentId: string | null
     name: string | null
     code: string | null
+    logo: string | null
     address: string | null
     contact: string | null
     country: string | null
@@ -21937,6 +21938,7 @@ export namespace Prisma {
     subDepartmentId: string | null
     name: string | null
     code: string | null
+    logo: string | null
     address: string | null
     contact: string | null
     country: string | null
@@ -21949,6 +21951,7 @@ export namespace Prisma {
     subDepartmentId: number
     name: number
     code: number
+    logo: number
     address: number
     contact: number
     country: number
@@ -21963,6 +21966,7 @@ export namespace Prisma {
     subDepartmentId?: true
     name?: true
     code?: true
+    logo?: true
     address?: true
     contact?: true
     country?: true
@@ -21975,6 +21979,7 @@ export namespace Prisma {
     subDepartmentId?: true
     name?: true
     code?: true
+    logo?: true
     address?: true
     contact?: true
     country?: true
@@ -21987,6 +21992,7 @@ export namespace Prisma {
     subDepartmentId?: true
     name?: true
     code?: true
+    logo?: true
     address?: true
     contact?: true
     country?: true
@@ -22072,6 +22078,7 @@ export namespace Prisma {
     subDepartmentId: string | null
     name: string
     code: string
+    logo: string | null
     address: string | null
     contact: string | null
     country: string | null
@@ -22101,6 +22108,7 @@ export namespace Prisma {
     subDepartmentId?: boolean
     name?: boolean
     code?: boolean
+    logo?: boolean
     address?: boolean
     contact?: boolean
     country?: boolean
@@ -22126,6 +22134,7 @@ export namespace Prisma {
     subDepartmentId?: boolean
     name?: boolean
     code?: boolean
+    logo?: boolean
     address?: boolean
     contact?: boolean
     country?: boolean
@@ -22139,6 +22148,7 @@ export namespace Prisma {
     subDepartmentId?: boolean
     name?: boolean
     code?: boolean
+    logo?: boolean
     address?: boolean
     contact?: boolean
     country?: boolean
@@ -22152,13 +22162,14 @@ export namespace Prisma {
     subDepartmentId?: boolean
     name?: boolean
     code?: boolean
+    logo?: boolean
     address?: boolean
     contact?: boolean
     country?: boolean
     status?: boolean
   }
 
-  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status", ExtArgs["result"]["university"]>
+  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "logo" | "address" | "contact" | "country" | "status", ExtArgs["result"]["university"]>
   export type UniversityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     students?: boolean | University$studentsArgs<ExtArgs>
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
@@ -22203,6 +22214,7 @@ export namespace Prisma {
       subDepartmentId: string | null
       name: string
       code: string
+      logo: string | null
       address: string | null
       contact: string | null
       country: string | null
@@ -22647,6 +22659,7 @@ export namespace Prisma {
     readonly subDepartmentId: FieldRef<"University", 'String'>
     readonly name: FieldRef<"University", 'String'>
     readonly code: FieldRef<"University", 'String'>
+    readonly logo: FieldRef<"University", 'String'>
     readonly address: FieldRef<"University", 'String'>
     readonly contact: FieldRef<"University", 'String'>
     readonly country: FieldRef<"University", 'String'>
@@ -92652,6 +92665,7 @@ export namespace Prisma {
     subDepartmentId: 'subDepartmentId',
     name: 'name',
     code: 'code',
+    logo: 'logo',
     address: 'address',
     contact: 'contact',
     country: 'country',
@@ -95433,6 +95447,7 @@ export namespace Prisma {
     subDepartmentId?: StringNullableFilter<"University"> | string | null
     name?: StringFilter<"University"> | string
     code?: StringFilter<"University"> | string
+    logo?: StringNullableFilter<"University"> | string | null
     address?: StringNullableFilter<"University"> | string | null
     contact?: StringNullableFilter<"University"> | string | null
     country?: StringNullableFilter<"University"> | string | null
@@ -95457,6 +95472,7 @@ export namespace Prisma {
     subDepartmentId?: SortOrderInput | SortOrder
     name?: SortOrder
     code?: SortOrder
+    logo?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     contact?: SortOrderInput | SortOrder
     country?: SortOrderInput | SortOrder
@@ -95485,6 +95501,7 @@ export namespace Prisma {
     subDepartmentId?: StringNullableFilter<"University"> | string | null
     name?: StringFilter<"University"> | string
     code?: StringFilter<"University"> | string
+    logo?: StringNullableFilter<"University"> | string | null
     address?: StringNullableFilter<"University"> | string | null
     contact?: StringNullableFilter<"University"> | string | null
     country?: StringNullableFilter<"University"> | string | null
@@ -95509,6 +95526,7 @@ export namespace Prisma {
     subDepartmentId?: SortOrderInput | SortOrder
     name?: SortOrder
     code?: SortOrder
+    logo?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     contact?: SortOrderInput | SortOrder
     country?: SortOrderInput | SortOrder
@@ -95527,6 +95545,7 @@ export namespace Prisma {
     subDepartmentId?: StringNullableWithAggregatesFilter<"University"> | string | null
     name?: StringWithAggregatesFilter<"University"> | string
     code?: StringWithAggregatesFilter<"University"> | string
+    logo?: StringNullableWithAggregatesFilter<"University"> | string | null
     address?: StringNullableWithAggregatesFilter<"University"> | string | null
     contact?: StringNullableWithAggregatesFilter<"University"> | string | null
     country?: StringNullableWithAggregatesFilter<"University"> | string | null
@@ -102918,6 +102937,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -102942,6 +102962,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -102964,6 +102985,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -102988,6 +103010,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -103011,6 +103034,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -103022,6 +103046,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -103034,6 +103059,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110984,6 +111010,7 @@ export namespace Prisma {
     subDepartmentId?: SortOrder
     name?: SortOrder
     code?: SortOrder
+    logo?: SortOrder
     address?: SortOrder
     contact?: SortOrder
     country?: SortOrder
@@ -110996,6 +111023,7 @@ export namespace Prisma {
     subDepartmentId?: SortOrder
     name?: SortOrder
     code?: SortOrder
+    logo?: SortOrder
     address?: SortOrder
     contact?: SortOrder
     country?: SortOrder
@@ -111008,6 +111036,7 @@ export namespace Prisma {
     subDepartmentId?: SortOrder
     name?: SortOrder
     code?: SortOrder
+    logo?: SortOrder
     address?: SortOrder
     contact?: SortOrder
     country?: SortOrder
@@ -129097,6 +129126,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -129119,6 +129149,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -131420,6 +131451,7 @@ export namespace Prisma {
     subDepartmentId?: StringNullableFilter<"University"> | string | null
     name?: StringFilter<"University"> | string
     code?: StringFilter<"University"> | string
+    logo?: StringNullableFilter<"University"> | string | null
     address?: StringNullableFilter<"University"> | string | null
     contact?: StringNullableFilter<"University"> | string | null
     country?: StringNullableFilter<"University"> | string | null
@@ -138364,6 +138396,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -138387,6 +138420,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -140765,6 +140799,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -140788,6 +140823,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -145769,6 +145805,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -145792,6 +145829,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -146364,6 +146402,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -146387,6 +146426,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148119,6 +148159,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -148142,6 +148183,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -149233,6 +149275,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -149256,6 +149299,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -150675,6 +150719,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -150698,6 +150743,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163239,6 +163285,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -163262,6 +163309,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -164843,6 +164891,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -164866,6 +164915,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -168404,6 +168454,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -168427,6 +168478,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -169408,6 +169460,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -169431,6 +169484,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -193564,6 +193618,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -193587,6 +193642,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -193992,6 +194048,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194015,6 +194072,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194445,6 +194503,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -194468,6 +194527,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -194983,6 +195043,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195006,6 +195067,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195334,6 +195396,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -195357,6 +195420,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -195656,6 +195720,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195679,6 +195744,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -200716,6 +200782,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -200739,6 +200806,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -201038,6 +201106,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201061,6 +201130,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202875,6 +202945,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     name: string
     code: string
+    logo?: string | null
     address?: string | null
     contact?: string | null
     country?: string | null
@@ -205356,6 +205427,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205378,6 +205450,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205400,6 +205473,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -216053,6 +216127,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -216076,6 +216151,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -216098,6 +216174,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217142,6 +217219,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217165,6 +217243,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217187,6 +217266,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217922,6 +218002,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217945,6 +218026,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
@@ -217967,6 +218049,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     contact?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null

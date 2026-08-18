@@ -86,9 +86,7 @@ export function OrganizationSettingsPanel() {
     return <div className="text-center py-12">Loading settings...</div>;
   }
 
-  const logoUrl = formData.logo
-    ? (formData.logo.startsWith('http') ? formData.logo : `${api.getBaseUrl().replace('/api/v1', '')}${formData.logo}`)
-    : '';
+  const logoUrl = api.getFileUrl(formData.logo);
 
   return (
     <Card className="max-w-2xl mx-auto shadow-md">

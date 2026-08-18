@@ -43,6 +43,16 @@ class ApiService {
     return API_BASE_URL;
   }
 
+  getFileUrl(path: string | undefined | null) {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const baseUrl = this.getBaseUrl().replace(/\/$/, '');
+    if (path.startsWith('/')) {
+      return `${baseUrl}${path}`;
+    }
+    return `${baseUrl}/${path}`;
+  }
+
   // Generic HTTP methods for direct access
   get(url: string, config?: any) {
     return this.api.get(url, config);

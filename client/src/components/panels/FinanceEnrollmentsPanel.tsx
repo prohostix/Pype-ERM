@@ -463,8 +463,8 @@ export function FinanceEnrollmentsPanel() {
                   <div className="p-4 border rounded-xl bg-slate-50 dark:bg-slate-900/10 flex items-start gap-4">
                     {viewStudent.receiptUrl ? (
                       <>
-                        <a href={viewStudent.receiptUrl} target="_blank" rel="noreferrer" className="w-20 h-20 rounded border bg-white overflow-hidden shrink-0 block">
-                          <img src={viewStudent.receiptUrl.startsWith('http') ? viewStudent.receiptUrl : `${api.getBaseUrl().replace('/api/v1', '')}${viewStudent.receiptUrl}`} alt="Receipt" className="w-full h-full object-cover" />
+                        <a href={api.getFileUrl(viewStudent.receiptUrl)} target="_blank" rel="noreferrer" className="w-20 h-20 rounded border bg-white overflow-hidden shrink-0 block">
+                          <img src={api.getFileUrl(viewStudent.receiptUrl)} alt="Receipt" className="w-full h-full object-cover" />
                         </a>
                         <div className="flex-1">
                           <p className="text-sm font-medium mb-1">Receipt Uploaded</p>

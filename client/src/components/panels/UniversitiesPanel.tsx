@@ -12,11 +12,12 @@ import api from '@/lib/api';
 import { ProgramFormDialog } from '../forms/ProgramFormDialog';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
 import { UniversityDetailPanel } from './UniversityDetailPanel';
+import { toast } from 'sonner';
 
 interface Branch { id: string; name: string; code: string; }
 interface University {
   id: string; name: string; code: string; address?: string;
-  contact?: string; status: string;
+  contact?: string; status: string; logo?: string;
   allowedBranchIds: Branch[];
 }
 
@@ -30,7 +31,7 @@ export function UniversitiesPanel() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: '', code: '', address: '', contact: '', status: 'active',
+    name: '', code: '', address: '', contact: '', status: 'active', logo: ''
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi'>('all');
@@ -87,7 +88,7 @@ export function UniversitiesPanel() {
 
   const handleEdit = (u: University) => {
     setEditingId(u.id);
-    setFormData({ name: u.name, code: u.code, address: u.address || '', contact: u.contact || '', status: u.status });
+    setFormData({ name: u.name, code: u.code, address: u.address || '', contact: u.contact || '', status: u.status, logo: u.logo || '' });
     const ids = (u.allowedBranchIds || []).map(b => b.id);
     setSelectedBranchIds(ids);
     if (ids.length === 0) setAccessMode('all');
@@ -108,7 +109,7 @@ export function UniversitiesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', code: '', address: '', contact: '', status: 'active' });
+    setFormData({ name: '', code: '', address: '', contact: '', status: 'active', logo: '' });
     setSelectedBranchIds([]);
     setAccessMode('all');
   };
@@ -135,6 +136,46 @@ export function UniversitiesPanel() {
               <DialogTitle>{editingId ? 'Edit University' : 'Add New University'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label>University Logo</Label>
+                <div className="mt-2 flex items-center gap-4">
+                  <div className="w-16 h-16 rounded border bg-slate-50 flex items-center justify-center overflow-hidden">
+                    {formData.logo ? (
+                      <img src={api.getFileUrl(formData.logo)} alt="Logo" className="w-full h-full object-contain" />
+                    ) : (
+                      <Building2 className="h-6 w-6 text-slate-300" />
+                    )}
+                  </div>
+                  <div>
+                    <Button type="button" variant="outline" size="sm" onClick={() => document.getElementById('uni-logo-input')?.click()}>
+                      Upload Logo
+                    </Button>
+                    <input 
+                      id="uni-logo-input" 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const toastId = toast.loading('Uploading logo...');
+                        try {
+                          const uploadData = new FormData();
+                          uploadData.append('file', file);
+                          const res = await api.post('/auth/upload', uploadData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                          });
+                          setFormData(prev => ({ ...prev, logo: res.data.url }));
+                          toast.success('Logo uploaded successfully!', { id: toastId });
+                        } catch (err) {
+                          console.error(err);
+                          toast.error('Failed to upload logo', { id: toastId });
+                        }
+                      }} 
+                    />
+                  </div>
+                </div>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label>University Name</Label>
@@ -333,8 +374,12 @@ export function UniversitiesPanel() {
         const UniRow = ({ u }: { u: University }) => (
           <div className="flex items-center justify-between px-4 py-3 hover:bg-muted/40 transition-colors">
             <div className="flex items-center gap-3 cursor-pointer flex-1" onClick={() => setSelectedUniversity(u)}>
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <Building2 className="w-4 h-4 text-primary" />
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden border">
+                {u.logo ? (
+                  <img src={api.getFileUrl(u.logo)} alt={u.name} className="w-full h-full object-contain bg-white" />
+                ) : (
+                  <Building2 className="w-4 h-4 text-primary" />
+                )}
               </div>
               <div>
                 <p className="font-medium text-sm hover:underline">{u.name}</p>
