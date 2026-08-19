@@ -204,6 +204,14 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     where.reportingTo = req.user.id;
   }
 
+  // Exclude students from subordinates list
+  const studentQuery = where.organizationId ? { organizationId: where.organizationId } : {};
+  const students = await prisma.student.findMany({ where: studentQuery, select: { email: true } });
+  const studentEmails = students.map((s: any) => s.email);
+  if (studentEmails.length > 0) {
+    where.email = { notIn: studentEmails };
+  }
+
   const users = await prisma.user.findMany({
     where,
     select: {
