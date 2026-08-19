@@ -221,6 +221,14 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     });
   } catch (_) { /* non-critical */ }
 
+  // Update invite link to 'used'
+  try {
+    await prisma.studyCenterInvite.update({
+      where: { id: invite.id },
+      data: { status: 'used', usedAt: new Date() },
+    });
+  } catch (_) { /* non-critical */ }
+
   res.status(201).json({
     success: true,
     message: 'Application submitted successfully. You will be notified once reviewed.',
