@@ -109,33 +109,9 @@ export default function TeamPermissionsPanel() {
     return items.filter(item => !item.isSection && item.id !== 'overview' && item.id !== 'dashboard' && item.id !== 'team_permissions');
   };
 
-  const getAllPossiblePermissions = () => {
-    const items = [
-      ...getOpsNavItems(),
-      ...getFinanceNavItems(),
-      ...getHRNavItems(),
-      ...getCollectionsNavItems(),
-      { id: 'dashboard', label: 'Dashboard' },
-      { id: 'overview', label: 'Overview' },
-      { id: 'notifications', label: 'Notifications' },
-      { id: 'materials', label: 'Classes & E-Books' },
-      { id: 'fees', label: 'Fee details' },
-      { id: 'invoices', label: 'Invoices' },
-      { id: 'refer_admission', label: 'Refer Admission' },
-      { id: 'terms', label: 'Terms & Conditions' },
-      { id: 'help', label: 'Help & Support' },
-      { id: 'tasks', label: 'My Tasks' },
-      { id: 'leaves', label: 'My Leaves' },
-      { id: 'attendance', label: 'Attendance' },
-      { id: 'holidays', label: 'Holiday List' },
-      { id: 'announcements', label: 'Announcements' },
-      { id: 'notice-board', label: 'Notice Board' },
-      { id: 'team', label: 'My Team' },
-      { id: 'ld-portal', label: 'L&D Portal' },
-      { id: 'users', label: 'Users' },
-      { id: 'departments', label: 'Departments' },
-      { id: 'meetings', label: 'Meetings' }
-    ];
+  const getModalPermissions = () => {
+    if (!selectedUser) return [];
+    const items = getAvailablePermissions(selectedUser);
 
     const unique: any[] = [];
     const ids = new Set();
@@ -306,7 +282,7 @@ export default function TeamPermissionsPanel() {
             </div>
 
             <div className="space-y-3 mt-4 h-64 overflow-y-auto pr-2">
-              {selectedUser && getAllPossiblePermissions().map(perm => (
+              {getModalPermissions().map(perm => (
                 <div key={perm.id} className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
                   <Checkbox 
                     id={`perm-${perm.id}`} 
