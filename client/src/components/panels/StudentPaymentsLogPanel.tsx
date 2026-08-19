@@ -219,7 +219,14 @@ export function StudentPaymentsLogPanel() {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-muted-foreground">
-                          {log.programName}
+                          <div className="flex flex-col">
+                            <span>{log.programName}</span>
+                            {log.paymentPlan && log.paymentPlan !== 'N/A' && (
+                              <span className="text-[10px] bg-secondary/50 text-secondary-foreground w-fit px-1.5 py-0.5 rounded mt-1 capitalize">
+                                {log.paymentPlan.replace('_', ' ')} Plan
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="py-3 px-4 text-right font-medium text-foreground">
                           ₹{log.totalFee?.toLocaleString('en-IN') || 0}

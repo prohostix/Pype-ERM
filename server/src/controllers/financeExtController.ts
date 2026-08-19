@@ -386,6 +386,14 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
           payments: true
         }
       },
+      enrollments: {
+        select: {
+          paymentPlan: true,
+          initialPaymentAmount: true
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 1
+      },
       discountAmount: true,
       discountReason: true
     },
@@ -404,14 +412,20 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       return sum;
     }, 0);
 
+    const enrollment = student.enrollments?.[0];
+    const initialPayment = enrollment?.initialPaymentAmount || 0;
+    const paymentPlan = enrollment?.paymentPlan || 'N/A';
+
     // Calculate total standard fees paid from invoices NOT linked to extra fee schedules
-    const totalPaid = student.invoices.reduce((sum, inv) => {
+    let totalPaid = student.invoices.reduce((sum, inv) => {
       const isExtra = student.paymentSchedules.some(ps => ps.id === inv.scheduleId && ps.isExtraFee);
       if (!isExtra) {
         return sum + inv.payments.reduce((pSum, p) => pSum + p.amount, 0);
       }
       return sum;
     }, 0);
+    
+    totalPaid += initialPayment;
       
     let totalFee = scheduledFee;
     let breakdown: any[] = [];
@@ -516,6 +530,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       programName: student.program?.name || 'N/A',
       universityName: student.university?.name || 'N/A',
       branchName: student.branch?.name || 'N/A',
+      paymentPlan,
       totalFee,
       totalPaid,
       balance,
