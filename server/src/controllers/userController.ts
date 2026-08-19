@@ -199,6 +199,11 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     where.organizationId = req.user.organizationId;
   }
 
+  // Filter to only show direct subordinates for department-level admins
+  if (!['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
+    where.reportingTo = req.user.id;
+  }
+
   const users = await prisma.user.findMany({
     where,
     select: {

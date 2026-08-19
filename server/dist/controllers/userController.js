@@ -170,13 +170,19 @@ export const getSubordinates = asyncHandler(async (req, res) => {
     else if (adminRole === 'ops_admin') {
         targetRoles = ['ops_sub_admin', 'center_admin', 'staff'];
     }
-    else if (adminRole === 'superadmin' || adminRole === 'org_admin') {
+    else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
         targetRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
     }
     const where = {
-        organizationId: req.user.organizationId,
         role: { in: targetRoles }
     };
+    if (adminRole !== 'superadmin' && req.user.organizationId) {
+        where.organizationId = req.user.organizationId;
+    }
+    // Filter to only show direct subordinates for department-level admins
+    if (!['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
+        where.reportingTo = req.user.id;
+    }
     const users = await prisma.user.findMany({
         where,
         select: {
@@ -185,7 +191,14 @@ export const getSubordinates = asyncHandler(async (req, res) => {
             email: true,
             role: true,
             departmentId: true,
-            permissions: true
+            permissions: true,
+            subDepartmentId: true,
+            branchId: true,
+            department: {
+                select: {
+                    type: true
+                }
+            }
         }
     });
     res.json({ success: true, data: users });
@@ -199,8 +212,27 @@ export const updateUserPermissions = asyncHandler(async (req, res) => {
     }
     // Ensure user exists and belongs to the same org
     const targetUser = await prisma.user.findUnique({ where: { id } });
-    if (!targetUser || targetUser.organizationId !== req.user.organizationId) {
+    if (!targetUser || (req.user.role !== 'superadmin' && targetUser.organizationId !== req.user.organizationId)) {
         res.status(404).json({ success: false, message: 'User not found' });
+        return;
+    }
+    // Security check: Verify the admin is allowed to manage this user's role
+    const adminRole = req.user.role;
+    let allowedRoles = [];
+    if (adminRole === 'finance_admin') {
+        allowedRoles = ['finance', 'collections', 'collections_admin'];
+    }
+    else if (adminRole === 'hr_admin') {
+        allowedRoles = ['employee', 'staff'];
+    }
+    else if (adminRole === 'ops_admin') {
+        allowedRoles = ['ops_sub_admin', 'center_admin', 'staff'];
+    }
+    else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
+        allowedRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
+    }
+    if (!allowedRoles.includes(targetUser.role)) {
+        res.status(403).json({ success: false, message: 'Forbidden: You cannot modify permissions for this user role' });
         return;
     }
     const updatedUser = await prisma.user.update({
