@@ -201,7 +201,24 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
 
   // Filter to only show direct subordinates for department-level admins
   if (!['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
-    where.reportingTo = req.user.id;
+    const currentUser = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { designations: { select: { id: true } } }
+    });
+
+    const designationIds = currentUser?.designations?.map((d: any) => d.id) || [];
+
+    if (designationIds.length > 0) {
+      // If user has a role in the modern Org Chart, fetch subordinates based on designation hierarchy
+      where.designations = {
+        some: {
+          parentDesignationId: { in: designationIds }
+        }
+      };
+    } else {
+      // Fallback to legacy reportingTo field
+      where.reportingTo = req.user.id;
+    }
   }
 
   // Exclude students from subordinates list
