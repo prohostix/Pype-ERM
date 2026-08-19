@@ -86,7 +86,7 @@ export function SalesStudentPipelinePanel() {
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
-    setVerifyForm({ ...enrollment, initialPaymentAmount: '' });
+    setVerifyForm({ ...enrollment, initialPaymentAmount: enrollment.initialPaymentAmount || '' });
     setVerifyDialogOpen(true);
   };
 
@@ -636,27 +636,37 @@ export function SalesStudentPipelinePanel() {
                         </button>
                       </div>
                     ) : (
-                      <Input 
-                        type="file" 
-                        accept="image/*,application/pdf"
-                        className="text-xs file:h-7 file:py-0 file:px-2 w-full max-w-sm"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          const toastId = toast.loading('Uploading receipt...');
-                          try {
-                            const data = new FormData();
-                            data.append('file', file);
-                            const res = await api.post('/auth/upload', data, {
-                              headers: { 'Content-Type': 'multipart/form-data' }
-                            });
-                            setVerifyForm({ ...verifyForm, receiptUrl: res.data.url });
-                            toast.success('Receipt uploaded', { id: toastId });
-                          } catch (err) {
-                            toast.error('Failed to upload receipt', { id: toastId });
-                          }
-                        }}
-                      />
+                      <div className="w-full max-w-sm">
+                        <Input 
+                          id="fee-receipt-upload"
+                          type="file" 
+                          accept="image/*,application/pdf"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const toastId = toast.loading('Uploading receipt...');
+                            try {
+                              const data = new FormData();
+                              data.append('file', file);
+                              const res = await api.post('/auth/upload', data, {
+                                headers: { 'Content-Type': 'multipart/form-data' }
+                              });
+                              setVerifyForm({ ...verifyForm, receiptUrl: res.data.url });
+                              toast.success('Receipt uploaded', { id: toastId });
+                            } catch (err) {
+                              toast.error('Failed to upload receipt', { id: toastId });
+                            }
+                          }}
+                        />
+                        <Label
+                          htmlFor="fee-receipt-upload"
+                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border bg-white dark:bg-slate-800 hover:bg-slate-100 cursor-pointer text-xs font-semibold shadow-sm transition-all w-full justify-center"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          Upload Screenshot
+                        </Label>
+                      </div>
                     )}
                   </div>
                 </div>
