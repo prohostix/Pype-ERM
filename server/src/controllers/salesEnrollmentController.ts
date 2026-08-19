@@ -721,7 +721,9 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     fatherPhone,
     guardianName,
     familyPhone,
-    documents
+    documents,
+    photo,
+    receiptUrl
   } = req.body;
 
   const enrollment = await prisma.enrollment.findUnique({
@@ -770,6 +772,8 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       guardianName: guardianName !== undefined ? guardianName : enrollment.guardianName,
       familyPhone: familyPhone !== undefined ? familyPhone : enrollment.familyPhone,
       documents: documents !== undefined ? documents : enrollment.documents,
+      photo: photo !== undefined ? photo : enrollment.photo,
+      receiptUrl: receiptUrl !== undefined ? receiptUrl : enrollment.receiptUrl,
       paymentPlan: paymentPlan || enrollment.paymentPlan,
       initialPaymentAmount: initialPaymentAmount !== undefined ? Number(initialPaymentAmount) : enrollment.initialPaymentAmount,
       status: 'document_review',

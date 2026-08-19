@@ -595,31 +595,72 @@ export function SalesStudentPipelinePanel() {
                 </div>
               </div>
 
-              {verifyingStudent?.program?.feeStructures?.[0]?.allowInitialFee && (
-              <div className="border-t pt-4 mt-4 grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label>Payment Plan (Optional)</Label>
-                  <select 
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={verifyForm.paymentPlan || ''}
-                    onChange={e => setVerifyForm({...verifyForm, paymentPlan: e.target.value})}
-                  >
-                    <option value="">Select a plan</option>
-                    <option value="lumpsum">One-Time Payment (Lump Sum)</option>
-                    <option value="installment">Installment Plan</option>
-                  </select>
+              <div className="border-t pt-4 mt-4 space-y-4">
+                <h4 className="font-medium text-sm">Fee Details</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label>Payment Plan (Optional)</Label>
+                    <select 
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={verifyForm.paymentPlan || ''}
+                      onChange={e => setVerifyForm({...verifyForm, paymentPlan: e.target.value})}
+                    >
+                      <option value="">Select a plan</option>
+                      <option value="lumpsum">One-Time Payment (Lump Sum)</option>
+                      <option value="installment">Installment Plan</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Initial Fee Amount Paid</Label>
+                    <Input 
+                      type="number"
+                      placeholder="e.g. 5000"
+                      value={verifyForm.initialPaymentAmount || ''} 
+                      onChange={e => setVerifyForm({...verifyForm, initialPaymentAmount: e.target.value})} 
+                    />
+                  </div>
                 </div>
+                
                 <div className="space-y-1.5">
-                  <Label>Initial Fee Amount (Optional)</Label>
-                  <Input 
-                    type="number"
-                    placeholder="e.g. 5000"
-                    value={verifyForm.initialPaymentAmount || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, initialPaymentAmount: e.target.value})} 
-                  />
+                  <Label>Fee Payment Screenshot / Receipt</Label>
+                  <div className="flex items-center gap-4">
+                    {verifyForm.receiptUrl ? (
+                      <div className="relative group inline-block">
+                        <img src={api.getFileUrl(verifyForm.receiptUrl)} alt="Receipt" className="h-20 w-auto object-contain border rounded" />
+                        <button
+                          type="button"
+                          onClick={() => setVerifyForm({...verifyForm, receiptUrl: ''})}
+                          className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 shadow"
+                        >
+                          <XCircle className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <Input 
+                        type="file" 
+                        accept="image/*,application/pdf"
+                        className="text-xs file:h-7 file:py-0 file:px-2 w-full max-w-sm"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const toastId = toast.loading('Uploading receipt...');
+                          try {
+                            const data = new FormData();
+                            data.append('file', file);
+                            const res = await api.post('/auth/upload', data, {
+                              headers: { 'Content-Type': 'multipart/form-data' }
+                            });
+                            setVerifyForm({ ...verifyForm, receiptUrl: res.data.url });
+                            toast.success('Receipt uploaded', { id: toastId });
+                          } catch (err) {
+                            toast.error('Failed to upload receipt', { id: toastId });
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
-              )}
             </div>
           )}
           <DialogFooter>
