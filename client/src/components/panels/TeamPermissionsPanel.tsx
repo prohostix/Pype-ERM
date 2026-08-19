@@ -109,6 +109,45 @@ export default function TeamPermissionsPanel() {
     return items.filter(item => !item.isSection && item.id !== 'overview' && item.id !== 'dashboard' && item.id !== 'team_permissions');
   };
 
+  const getAllPossiblePermissions = () => {
+    const items = [
+      ...getOpsNavItems(),
+      ...getFinanceNavItems(),
+      ...getHRNavItems(),
+      ...getCollectionsNavItems(),
+      { id: 'dashboard', label: 'Dashboard' },
+      { id: 'overview', label: 'Overview' },
+      { id: 'notifications', label: 'Notifications' },
+      { id: 'materials', label: 'Classes & E-Books' },
+      { id: 'fees', label: 'Fee details' },
+      { id: 'invoices', label: 'Invoices' },
+      { id: 'refer_admission', label: 'Refer Admission' },
+      { id: 'terms', label: 'Terms & Conditions' },
+      { id: 'help', label: 'Help & Support' },
+      { id: 'tasks', label: 'My Tasks' },
+      { id: 'leaves', label: 'My Leaves' },
+      { id: 'attendance', label: 'Attendance' },
+      { id: 'holidays', label: 'Holiday List' },
+      { id: 'announcements', label: 'Announcements' },
+      { id: 'notice-board', label: 'Notice Board' },
+      { id: 'team', label: 'My Team' },
+      { id: 'ld-portal', label: 'L&D Portal' },
+      { id: 'users', label: 'Users' },
+      { id: 'departments', label: 'Departments' },
+      { id: 'meetings', label: 'Meetings' }
+    ];
+
+    const unique: any[] = [];
+    const ids = new Set();
+    for (const item of items) {
+      if (!item.isSection && item.id !== 'dashboard' && item.id !== 'overview' && item.id !== 'team_permissions' && !ids.has(item.id)) {
+        unique.push({ id: item.id, label: item.label });
+        ids.add(item.id);
+      }
+    }
+    return unique.sort((a, b) => a.label.localeCompare(b.label));
+  };
+
   const handleManage = (u: any) => {
     setSelectedUser(u);
     // Remove __custom__ for UI, we will add it back on save
@@ -266,8 +305,8 @@ export default function TeamPermissionsPanel() {
               </div>
             </div>
 
-            <div className="space-y-3 mt-4">
-              {selectedUser && getAvailablePermissions(selectedUser.role).map(perm => (
+            <div className="space-y-3 mt-4 h-64 overflow-y-auto pr-2">
+              {selectedUser && getAllPossiblePermissions().map(perm => (
                 <div key={perm.id} className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
                   <Checkbox 
                     id={`perm-${perm.id}`} 
