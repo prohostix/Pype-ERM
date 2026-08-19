@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
@@ -28,6 +29,7 @@ export function FeeStructuresPanel() {
     universityFee: '0',
     commissionRate: '0',
     billingCycle: 'per_year',
+    allowInitialFee: false,
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
@@ -117,6 +119,7 @@ export function FeeStructuresPanel() {
         universityFee: existing.universityFee?.toString() || '0',
         commissionRate: existing.commissionRate?.toString() || '0',
         billingCycle: existing.billingCycle || 'per_year',
+        allowInitialFee: existing.allowInitialFee || false,
         additionalFees: Array.isArray(existing.additionalFees) ? existing.additionalFees.map((af: any) => `${af.label}:${af.amount}`).join(', ') : ''
       });
       const yf = Array.isArray(existing.yearlyFees) ? existing.yearlyFees : [];
@@ -138,6 +141,7 @@ export function FeeStructuresPanel() {
         universityFee: '0',
         commissionRate: '0',
         billingCycle: 'per_year',
+        allowInitialFee: false,
         additionalFees: ''
       });
       setYearlyFees([]);
@@ -176,6 +180,7 @@ export function FeeStructuresPanel() {
       universityFee: Number(formData.universityFee),
       commissionRate: Number(formData.commissionRate),
       billingCycle: formData.billingCycle,
+      allowInitialFee: formData.allowInitialFee,
       yearlyFees: formattedYearlyFees,
       additionalFees
     };
@@ -359,6 +364,22 @@ export function FeeStructuresPanel() {
                         <SelectItem value="per_semester">Semester-wise</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div className="mb-6 flex items-center space-x-2 bg-muted/30 p-4 rounded-lg border border-border">
+                    <Checkbox 
+                      id="allowInitialFee" 
+                      checked={formData.allowInitialFee}
+                      onCheckedChange={(c) => setFormData({...formData, allowInitialFee: !!c})}
+                    />
+                    <div className="space-y-1 leading-none">
+                      <label htmlFor="allowInitialFee" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        Allow Initial Fee Collection
+                      </label>
+                      <p className="text-sm text-muted-foreground">
+                        If enabled, sales users will be able to enter a custom initial fee collected from the student during enrollment.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="space-y-4">

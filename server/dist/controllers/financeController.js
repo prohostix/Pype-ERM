@@ -406,7 +406,7 @@ export const getFeeStructure = asyncHandler(async (req, res) => {
     res.json({ success: true, data: fee });
 });
 export const createFeeStructure = asyncHandler(async (req, res) => {
-    const { programId, universityId, feeLevel, sessionId, registrationFee, tuitionFee, examFee, universityFee, commissionRate, yearlyFees, gstPercentage, billingCycle, currency, effectiveFrom, dueDate, additionalFees } = req.body;
+    const { programId, universityId, feeLevel, sessionId, registrationFee, tuitionFee, examFee, universityFee, commissionRate, yearlyFees, gstPercentage, billingCycle, currency, effectiveFrom, dueDate, additionalFees, allowInitialFee } = req.body;
     const data = {
         organizationId: req.user.organizationId,
         createdBy: req.user.id,
@@ -423,6 +423,7 @@ export const createFeeStructure = asyncHandler(async (req, res) => {
         gstPercentage: gstPercentage ? parseFloat(gstPercentage) : 18,
         billingCycle: billingCycle || 'per_year',
         currency: currency || 'INR',
+        allowInitialFee: allowInitialFee === true || allowInitialFee === 'true',
         additionalFees: additionalFees || []
     };
     if (effectiveFrom) {
@@ -437,7 +438,7 @@ export const updateFeeStructure = asyncHandler(async (req, res) => {
         res.status(404).json({ success: false, message: 'Fee structure not found' });
         return;
     }
-    const { programId, universityId, feeLevel, sessionId, registrationFee, tuitionFee, examFee, universityFee, commissionRate, yearlyFees, gstPercentage, billingCycle, currency, effectiveFrom, dueDate, additionalFees } = req.body;
+    const { programId, universityId, feeLevel, sessionId, registrationFee, tuitionFee, examFee, universityFee, commissionRate, yearlyFees, gstPercentage, billingCycle, currency, effectiveFrom, dueDate, additionalFees, allowInitialFee } = req.body;
     const data = {
         feeLevel: feeLevel || 'program',
         programId: feeLevel === 'program' ? programId : null,
@@ -452,6 +453,7 @@ export const updateFeeStructure = asyncHandler(async (req, res) => {
         gstPercentage: gstPercentage ? parseFloat(gstPercentage) : 18,
         billingCycle: billingCycle || 'per_year',
         currency: currency || 'INR',
+        allowInitialFee: allowInitialFee === true || allowInitialFee === 'true',
         additionalFees: additionalFees || []
     };
     if (effectiveFrom) {

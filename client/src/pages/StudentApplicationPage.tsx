@@ -15,6 +15,7 @@ interface Program {
   code: string;
   courseType: string;
   university: { name: string; code: string };
+  feeStructures?: { allowInitialFee: boolean }[];
 }
 
 interface InviteData {
@@ -44,6 +45,7 @@ export default function StudentApplicationPage() {
     dob: '',
     altPhone: '',
     pinCode: '',
+    paymentPlan: '',
   });
 
   useEffect(() => {
@@ -235,6 +237,21 @@ export default function StudentApplicationPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {inviteData?.programs.find(p => p.id === form.programId)?.feeStructures?.[0]?.allowInitialFee && (
+                <div className="space-y-1">
+                  <Label>Payment Plan (Optional)</Label>
+                  <Select value={form.paymentPlan} onValueChange={v => setForm(f => ({ ...f, paymentPlan: v }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a plan" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lumpsum">One-Time Payment (Lump Sum)</SelectItem>
+                      <SelectItem value="installment">Installment Plan</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {error && (
                 <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">

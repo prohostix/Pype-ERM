@@ -23,6 +23,7 @@ import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
+import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -69,6 +70,7 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
   const renderContent = () => {
     switch (activeTab) {
       case 'meetings': return <MeetingsPanel />;
+      case 'team_permissions': return <TeamPermissionsPanel />;
       case 'overview': return <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"><div className="lg:col-span-3"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div></div>;
       
       case 'students': return <StudentsPanel />;
@@ -136,6 +138,7 @@ export function getOpsNavItems() {
   return [
     { id: '__dashboard', label: 'Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
+    { id: 'team_permissions', label: 'Team Permissions' },
     
     { id: '__students', label: 'Students', isSection: true },
     { id: 'students', label: 'Student List' },

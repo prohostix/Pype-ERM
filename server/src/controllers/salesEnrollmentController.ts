@@ -44,6 +44,7 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
     },
     include: {
       university: { select: { id: true, name: true, code: true } },
+      feeStructures: { select: { allowInitialFee: true } },
     },
   });
 
@@ -163,7 +164,8 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       programId,
       studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
-      status: 'document_review',
+      paymentPlan: req.body.paymentPlan || null,
+      status: 'sales_verification_pending',
       salesUserId,
       statusHistory: [
         {
@@ -174,10 +176,10 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
           note: 'Student submitted application via sales invite link',
         },
         {
-          status: 'document_review',
+          status: 'sales_verification_pending',
           actorId: 'system',
           timestamp: now.toISOString(),
-          note: 'Forwarded to Operations for document verification',
+          note: 'Awaiting verification by the sales user who generated the invite.',
         },
       ],
     } as any,
@@ -190,33 +192,12 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
         organizationId: orgId,
         userId: salesUserId,
         title: 'New Student Application',
-        message: `${studentName} has submitted an application for ${program.name} via your invite link.`,
+        message: `${studentName} has submitted an application for ${program.name} via your invite link and is awaiting your verification.`,
         type: 'general',
         priority: 'medium',
         link: 'student-applications',
       },
     });
-  } catch (_) { /* non-critical */ }
-
-  // Notify ops admins
-  try {
-    const opsAdmins = await prisma.user.findMany({
-      where: { organizationId: orgId, role: 'ops_admin', status: 'active' },
-      select: { id: true },
-    });
-    for (const admin of opsAdmins) {
-      await prisma.notification.create({
-        data: {
-          organizationId: orgId,
-          userId: admin.id,
-          title: 'New Student Application for Review',
-          message: `${studentName} has applied for ${program.name}. Please review the documents.`,
-          type: 'general',
-          priority: 'medium',
-          link: 'enrollment_review',
-        },
-      });
-    }
   } catch (_) { /* non-critical */ }
 
   res.status(201).json({
@@ -238,7 +219,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
       salesUserId,
     },
     include: {
-      program: { select: { id: true, name: true, code: true, courseType: true } },
+      program: { select: { id: true, name: true, code: true, courseType: true, feeStructures: { select: { allowInitialFee: true } } } },
       studyCenter: { select: { id: true, name: true, code: true } },
       session: { select: { id: true, name: true } },
       departmentReviewer: { select: { id: true, name: true, email: true } },
@@ -250,6 +231,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   // Build pipeline summary
   const summary = {
     total: enrollments.length,
+    sales_verification_pending: enrollments.filter((e: any) => e.status === 'sales_verification_pending').length,
     document_review: enrollments.filter((e: any) => e.status === 'document_review').length,
     finance_review: enrollments.filter((e: any) => e.status === 'finance_review').length,
     enrolled: enrollments.filter((e: any) => e.status === 'enrolled').length,
@@ -624,6 +606,8 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
       programId,
       studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
+      paymentPlan: req.body.paymentPlan || null,
+      initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
       status: 'document_review',
       salesUserId,
       statusHistory: [
@@ -673,3 +657,96 @@ export const createDirectEnrollment = asyncHandler(async (req: AuthRequest, res:
   });
 });
 
+
+// ─── Sales: Verify student enrollment from invite link ───────────────────────
+
+export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const orgId = req.user.organizationId;
+  const salesUserId = req.user.id;
+  
+  const {
+    studentName,
+    studentEmail,
+    studentPhone,
+    studentAddress,
+    fatherName,
+    dob,
+    altPhone,
+    pinCode,
+    paymentPlan,
+    initialPaymentAmount
+  } = req.body;
+
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id },
+    include: { program: true }
+  });
+
+  if (!enrollment) {
+    res.status(404).json({ success: false, message: 'Enrollment not found' });
+    return;
+  }
+
+  if (enrollment.organizationId !== orgId || enrollment.salesUserId !== salesUserId) {
+    res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
+    return;
+  }
+
+  if (enrollment.status !== 'sales_verification_pending') {
+    res.status(400).json({ success: false, message: 'Enrollment is not pending sales verification' });
+    return;
+  }
+
+  const now = new Date();
+
+  // Update enrollment with new details and move to document_review
+  const updatedEnrollment = await prisma.enrollment.update({
+    where: { id },
+    data: {
+      studentName: studentName || enrollment.studentName,
+      studentEmail: studentEmail || enrollment.studentEmail,
+      studentPhone: studentPhone || enrollment.studentPhone,
+      studentAddress: studentAddress || enrollment.studentAddress,
+      fatherName: fatherName !== undefined ? fatherName : enrollment.fatherName,
+      dob: dob ? new Date(dob) : enrollment.dob,
+      altPhone: altPhone !== undefined ? altPhone : enrollment.altPhone,
+      pinCode: pinCode !== undefined ? pinCode : enrollment.pinCode,
+      paymentPlan: paymentPlan || enrollment.paymentPlan,
+      initialPaymentAmount: initialPaymentAmount !== undefined ? Number(initialPaymentAmount) : enrollment.initialPaymentAmount,
+      status: 'document_review',
+      statusHistory: {
+        push: {
+          status: 'document_review',
+          actorId: salesUserId,
+          actorName: req.user.name,
+          timestamp: now.toISOString(),
+          note: 'Sales user verified application and forwarded to Operations for document verification.',
+        }
+      }
+    }
+  });
+
+  // Notify ops admins
+  try {
+    const opsAdmins = await prisma.user.findMany({
+      where: { organizationId: orgId, role: 'ops_admin', status: 'active' },
+      select: { id: true },
+    });
+    for (const admin of opsAdmins) {
+      await prisma.notification.create({
+        data: {
+          organizationId: orgId,
+          userId: admin.id,
+          title: 'New Student Application for Review',
+          message: `${updatedEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review the documents.`,
+          type: 'general',
+          priority: 'medium',
+          link: 'enrollment_review',
+        },
+      });
+    }
+  } catch (_) { /* non-critical */ }
+
+  res.json({ success: true, message: 'Enrollment verified and submitted to Operations.', data: updatedEnrollment });
+});

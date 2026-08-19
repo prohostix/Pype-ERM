@@ -141,6 +141,7 @@ model User {
   ceoPanelId                    String?
   studyCenterId                 String?
   universityId                  String?
+  permissions                   Json?                @default("[]")
   email                         String               @unique
   password                      String
   name                          String
@@ -907,6 +908,8 @@ model Enrollment {
   universityReviewedAt DateTime?
   universityReviewedBy String?
   salesUserId          String?
+  paymentPlan          String?
+  initialPaymentAmount Float?
   salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
   departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
@@ -1377,6 +1380,7 @@ model FeeStructure {
   yearlyFees      Json              @default("[]")
   otherCharges    Json              @default("{}")
   gstPercentage   Float             @default(18)
+  allowInitialFee Boolean           @default(false)
   billingCycle    String            @default("per_year")
   currency        String            @default("INR")
   effectiveFrom   DateTime?

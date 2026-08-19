@@ -319,7 +319,7 @@ function App() {
       return getOpsNavItems();
     }
 
-    if (user.role === 'finance_admin') {
+    if (user.role === 'finance_admin' || user.role === 'finance') {
       return getFinanceNavItems();
     }
 
@@ -381,7 +381,38 @@ function App() {
       result.push({ id: 'meetings', label: 'Meetings' });
     }
 
-    return result;
+    let finalResult = result;
+    const adminRolesForTeams = ['finance_admin', 'hr_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
+    if (!adminRolesForTeams.includes(user.role)) {
+      finalResult = finalResult.filter(item => item.id !== 'team_permissions');
+    }
+
+    if (user.permissions && Array.isArray(user.permissions) && user.permissions.includes('__custom__')) {
+      const allowed = finalResult.filter(item => {
+        if (item.isSection || item.id === 'overview' || item.id === 'dashboard' || item.id === 'team_permissions' || item.id.startsWith('__')) return true;
+        return user.permissions.includes(item.id);
+      });
+
+      // Remove sections that have no children
+      const sectionsToRemove = new Set<string>();
+      for (let i = 0; i < allowed.length; i++) {
+        if (allowed[i].isSection) {
+          let hasChildren = false;
+          for (let j = i + 1; j < allowed.length; j++) {
+            if (allowed[j].isSection) break;
+            hasChildren = true;
+            break;
+          }
+          if (!hasChildren) {
+            sectionsToRemove.add(allowed[i].id);
+          }
+        }
+      }
+
+      return allowed.filter(item => !sectionsToRemove.has(item.id));
+    }
+
+    return finalResult;
   }
 
 
@@ -399,7 +430,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';

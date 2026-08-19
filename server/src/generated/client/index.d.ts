@@ -14624,6 +14624,7 @@ export namespace Prisma {
     ceoPanelId: number
     studyCenterId: number
     universityId: number
+    permissions: number
     email: number
     password: number
     name: number
@@ -14699,6 +14700,7 @@ export namespace Prisma {
     ceoPanelId?: true
     studyCenterId?: true
     universityId?: true
+    permissions?: true
     email?: true
     password?: true
     name?: true
@@ -14797,6 +14799,7 @@ export namespace Prisma {
     ceoPanelId: string | null
     studyCenterId: string | null
     universityId: string | null
+    permissions: JsonValue | null
     email: string
     password: string
     name: string
@@ -14839,6 +14842,7 @@ export namespace Prisma {
     ceoPanelId?: boolean
     studyCenterId?: boolean
     universityId?: boolean
+    permissions?: boolean
     email?: boolean
     password?: boolean
     name?: boolean
@@ -14950,6 +14954,7 @@ export namespace Prisma {
     ceoPanelId?: boolean
     studyCenterId?: boolean
     universityId?: boolean
+    permissions?: boolean
     email?: boolean
     password?: boolean
     name?: boolean
@@ -14982,6 +14987,7 @@ export namespace Prisma {
     ceoPanelId?: boolean
     studyCenterId?: boolean
     universityId?: boolean
+    permissions?: boolean
     email?: boolean
     password?: boolean
     name?: boolean
@@ -15014,6 +15020,7 @@ export namespace Prisma {
     ceoPanelId?: boolean
     studyCenterId?: boolean
     universityId?: boolean
+    permissions?: boolean
     email?: boolean
     password?: boolean
     name?: boolean
@@ -15028,7 +15035,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "permissions" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -15236,6 +15243,7 @@ export namespace Prisma {
       ceoPanelId: string | null
       studyCenterId: string | null
       universityId: string | null
+      permissions: Prisma.JsonValue | null
       email: string
       password: string
       name: string
@@ -15766,6 +15774,7 @@ export namespace Prisma {
     readonly ceoPanelId: FieldRef<"User", 'String'>
     readonly studyCenterId: FieldRef<"User", 'String'>
     readonly universityId: FieldRef<"User", 'String'>
+    readonly permissions: FieldRef<"User", 'Json'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
@@ -48864,8 +48873,18 @@ export namespace Prisma {
 
   export type AggregateEnrollment = {
     _count: EnrollmentCountAggregateOutputType | null
+    _avg: EnrollmentAvgAggregateOutputType | null
+    _sum: EnrollmentSumAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
+  }
+
+  export type EnrollmentAvgAggregateOutputType = {
+    initialPaymentAmount: number | null
+  }
+
+  export type EnrollmentSumAggregateOutputType = {
+    initialPaymentAmount: number | null
   }
 
   export type EnrollmentMinAggregateOutputType = {
@@ -48898,6 +48917,8 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    paymentPlan: string | null
+    initialPaymentAmount: number | null
     receiptUrl: string | null
     receiptVerified: boolean | null
     receiptVerifiedAt: Date | null
@@ -48934,6 +48955,8 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    paymentPlan: string | null
+    initialPaymentAmount: number | null
     receiptUrl: string | null
     receiptVerified: boolean | null
     receiptVerifiedAt: Date | null
@@ -48971,6 +48994,8 @@ export namespace Prisma {
     universityReviewedAt: number
     universityReviewedBy: number
     salesUserId: number
+    paymentPlan: number
+    initialPaymentAmount: number
     receiptUrl: number
     receiptVerified: number
     receiptVerifiedAt: number
@@ -48978,6 +49003,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type EnrollmentAvgAggregateInputType = {
+    initialPaymentAmount?: true
+  }
+
+  export type EnrollmentSumAggregateInputType = {
+    initialPaymentAmount?: true
+  }
 
   export type EnrollmentMinAggregateInputType = {
     id?: true
@@ -49009,6 +49042,8 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    paymentPlan?: true
+    initialPaymentAmount?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -49045,6 +49080,8 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    paymentPlan?: true
+    initialPaymentAmount?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -49082,6 +49119,8 @@ export namespace Prisma {
     universityReviewedAt?: true
     universityReviewedBy?: true
     salesUserId?: true
+    paymentPlan?: true
+    initialPaymentAmount?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -49127,6 +49166,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: EnrollmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EnrollmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: EnrollmentMinAggregateInputType
@@ -49157,6 +49208,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: EnrollmentCountAggregateInputType | true
+    _avg?: EnrollmentAvgAggregateInputType
+    _sum?: EnrollmentSumAggregateInputType
     _min?: EnrollmentMinAggregateInputType
     _max?: EnrollmentMaxAggregateInputType
   }
@@ -49192,11 +49245,15 @@ export namespace Prisma {
     universityReviewedAt: Date | null
     universityReviewedBy: string | null
     salesUserId: string | null
+    paymentPlan: string | null
+    initialPaymentAmount: number | null
     receiptUrl: string | null
     receiptVerified: boolean
     receiptVerifiedAt: Date | null
     receiptVerifiedBy: string | null
     _count: EnrollmentCountAggregateOutputType | null
+    _avg: EnrollmentAvgAggregateOutputType | null
+    _sum: EnrollmentSumAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
   }
@@ -49246,6 +49303,8 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    paymentPlan?: boolean
+    initialPaymentAmount?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -49294,6 +49353,8 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    paymentPlan?: boolean
+    initialPaymentAmount?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -49341,6 +49402,8 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    paymentPlan?: boolean
+    initialPaymentAmount?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -49388,13 +49451,15 @@ export namespace Prisma {
     universityReviewedAt?: boolean
     universityReviewedBy?: boolean
     salesUserId?: boolean
+    paymentPlan?: boolean
+    initialPaymentAmount?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
     receiptVerifiedBy?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "fatherName" | "dob" | "altPhone" | "pinCode" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "fatherName" | "dob" | "altPhone" | "pinCode" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "paymentPlan" | "initialPaymentAmount" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     salesUser?: boolean | Enrollment$salesUserArgs<ExtArgs>
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
@@ -49479,6 +49544,8 @@ export namespace Prisma {
       universityReviewedAt: Date | null
       universityReviewedBy: string | null
       salesUserId: string | null
+      paymentPlan: string | null
+      initialPaymentAmount: number | null
       receiptUrl: string | null
       receiptVerified: boolean
       receiptVerifiedAt: Date | null
@@ -49947,6 +50014,8 @@ export namespace Prisma {
     readonly universityReviewedAt: FieldRef<"Enrollment", 'DateTime'>
     readonly universityReviewedBy: FieldRef<"Enrollment", 'String'>
     readonly salesUserId: FieldRef<"Enrollment", 'String'>
+    readonly paymentPlan: FieldRef<"Enrollment", 'String'>
+    readonly initialPaymentAmount: FieldRef<"Enrollment", 'Float'>
     readonly receiptUrl: FieldRef<"Enrollment", 'String'>
     readonly receiptVerified: FieldRef<"Enrollment", 'Boolean'>
     readonly receiptVerifiedAt: FieldRef<"Enrollment", 'DateTime'>
@@ -78131,6 +78200,7 @@ export namespace Prisma {
     universityFee: number | null
     commissionRate: number | null
     gstPercentage: number | null
+    allowInitialFee: boolean | null
     billingCycle: string | null
     currency: string | null
     effectiveFrom: Date | null
@@ -78153,6 +78223,7 @@ export namespace Prisma {
     universityFee: number | null
     commissionRate: number | null
     gstPercentage: number | null
+    allowInitialFee: boolean | null
     billingCycle: string | null
     currency: string | null
     effectiveFrom: Date | null
@@ -78177,6 +78248,7 @@ export namespace Prisma {
     yearlyFees: number
     otherCharges: number
     gstPercentage: number
+    allowInitialFee: number
     billingCycle: number
     currency: number
     effectiveFrom: number
@@ -78220,6 +78292,7 @@ export namespace Prisma {
     universityFee?: true
     commissionRate?: true
     gstPercentage?: true
+    allowInitialFee?: true
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
@@ -78242,6 +78315,7 @@ export namespace Prisma {
     universityFee?: true
     commissionRate?: true
     gstPercentage?: true
+    allowInitialFee?: true
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
@@ -78266,6 +78340,7 @@ export namespace Prisma {
     yearlyFees?: true
     otherCharges?: true
     gstPercentage?: true
+    allowInitialFee?: true
     billingCycle?: true
     currency?: true
     effectiveFrom?: true
@@ -78378,6 +78453,7 @@ export namespace Prisma {
     yearlyFees: JsonValue
     otherCharges: JsonValue
     gstPercentage: number
+    allowInitialFee: boolean
     billingCycle: string
     currency: string
     effectiveFrom: Date | null
@@ -78422,6 +78498,7 @@ export namespace Prisma {
     yearlyFees?: boolean
     otherCharges?: boolean
     gstPercentage?: boolean
+    allowInitialFee?: boolean
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
@@ -78452,6 +78529,7 @@ export namespace Prisma {
     yearlyFees?: boolean
     otherCharges?: boolean
     gstPercentage?: boolean
+    allowInitialFee?: boolean
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
@@ -78482,6 +78560,7 @@ export namespace Prisma {
     yearlyFees?: boolean
     otherCharges?: boolean
     gstPercentage?: boolean
+    allowInitialFee?: boolean
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
@@ -78512,6 +78591,7 @@ export namespace Prisma {
     yearlyFees?: boolean
     otherCharges?: boolean
     gstPercentage?: boolean
+    allowInitialFee?: boolean
     billingCycle?: boolean
     currency?: boolean
     effectiveFrom?: boolean
@@ -78522,7 +78602,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "universityId" | "feeLevel" | "sessionId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "universityFee" | "commissionRate" | "yearlyFees" | "otherCharges" | "gstPercentage" | "billingCycle" | "currency" | "effectiveFrom" | "dueDate" | "additionalFees" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
+  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "universityId" | "feeLevel" | "sessionId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "universityFee" | "commissionRate" | "yearlyFees" | "otherCharges" | "gstPercentage" | "allowInitialFee" | "billingCycle" | "currency" | "effectiveFrom" | "dueDate" | "additionalFees" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
   export type FeeStructureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | FeeStructure$creatorArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -78569,6 +78649,7 @@ export namespace Prisma {
       yearlyFees: Prisma.JsonValue
       otherCharges: Prisma.JsonValue
       gstPercentage: number
+      allowInitialFee: boolean
       billingCycle: string
       currency: string
       effectiveFrom: Date | null
@@ -79019,6 +79100,7 @@ export namespace Prisma {
     readonly yearlyFees: FieldRef<"FeeStructure", 'Json'>
     readonly otherCharges: FieldRef<"FeeStructure", 'Json'>
     readonly gstPercentage: FieldRef<"FeeStructure", 'Float'>
+    readonly allowInitialFee: FieldRef<"FeeStructure", 'Boolean'>
     readonly billingCycle: FieldRef<"FeeStructure", 'String'>
     readonly currency: FieldRef<"FeeStructure", 'String'>
     readonly effectiveFrom: FieldRef<"FeeStructure", 'DateTime'>
@@ -92580,6 +92662,7 @@ export namespace Prisma {
     ceoPanelId: 'ceoPanelId',
     studyCenterId: 'studyCenterId',
     universityId: 'universityId',
+    permissions: 'permissions',
     email: 'email',
     password: 'password',
     name: 'name',
@@ -93116,6 +93199,8 @@ export namespace Prisma {
     universityReviewedAt: 'universityReviewedAt',
     universityReviewedBy: 'universityReviewedBy',
     salesUserId: 'salesUserId',
+    paymentPlan: 'paymentPlan',
+    initialPaymentAmount: 'initialPaymentAmount',
     receiptUrl: 'receiptUrl',
     receiptVerified: 'receiptVerified',
     receiptVerifiedAt: 'receiptVerifiedAt',
@@ -93545,6 +93630,7 @@ export namespace Prisma {
     yearlyFees: 'yearlyFees',
     otherCharges: 'otherCharges',
     gstPercentage: 'gstPercentage',
+    allowInitialFee: 'allowInitialFee',
     billingCycle: 'billingCycle',
     currency: 'currency',
     effectiveFrom: 'effectiveFrom',
@@ -94724,6 +94810,7 @@ export namespace Prisma {
     ceoPanelId?: StringNullableFilter<"User"> | string | null
     studyCenterId?: StringNullableFilter<"User"> | string | null
     universityId?: StringNullableFilter<"User"> | string | null
+    permissions?: JsonNullableFilter<"User">
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
@@ -94834,6 +94921,7 @@ export namespace Prisma {
     ceoPanelId?: SortOrderInput | SortOrder
     studyCenterId?: SortOrderInput | SortOrder
     universityId?: SortOrderInput | SortOrder
+    permissions?: SortOrderInput | SortOrder
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
@@ -94948,6 +95036,7 @@ export namespace Prisma {
     ceoPanelId?: StringNullableFilter<"User"> | string | null
     studyCenterId?: StringNullableFilter<"User"> | string | null
     universityId?: StringNullableFilter<"User"> | string | null
+    permissions?: JsonNullableFilter<"User">
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
@@ -95057,6 +95146,7 @@ export namespace Prisma {
     ceoPanelId?: SortOrderInput | SortOrder
     studyCenterId?: SortOrderInput | SortOrder
     universityId?: SortOrderInput | SortOrder
+    permissions?: SortOrderInput | SortOrder
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
@@ -95088,6 +95178,7 @@ export namespace Prisma {
     ceoPanelId?: StringNullableWithAggregatesFilter<"User"> | string | null
     studyCenterId?: StringNullableWithAggregatesFilter<"User"> | string | null
     universityId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    permissions?: JsonNullableWithAggregatesFilter<"User">
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
@@ -97954,6 +98045,8 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -98002,6 +98095,8 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    paymentPlan?: SortOrderInput | SortOrder
+    initialPaymentAmount?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrderInput | SortOrder
@@ -98054,6 +98149,8 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -98102,13 +98199,17 @@ export namespace Prisma {
     universityReviewedAt?: SortOrderInput | SortOrder
     universityReviewedBy?: SortOrderInput | SortOrder
     salesUserId?: SortOrderInput | SortOrder
+    paymentPlan?: SortOrderInput | SortOrder
+    initialPaymentAmount?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrderInput | SortOrder
     receiptVerifiedBy?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
+    _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
     _min?: EnrollmentMinOrderByAggregateInput
+    _sum?: EnrollmentSumOrderByAggregateInput
   }
 
   export type EnrollmentScalarWhereWithAggregatesInput = {
@@ -98145,6 +98246,8 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    paymentPlan?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    initialPaymentAmount?: FloatNullableWithAggregatesFilter<"Enrollment"> | number | null
     receiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     receiptVerified?: BoolWithAggregatesFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
@@ -100359,6 +100462,7 @@ export namespace Prisma {
     yearlyFees?: JsonFilter<"FeeStructure">
     otherCharges?: JsonFilter<"FeeStructure">
     gstPercentage?: FloatFilter<"FeeStructure"> | number
+    allowInitialFee?: BoolFilter<"FeeStructure"> | boolean
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
@@ -100389,6 +100493,7 @@ export namespace Prisma {
     yearlyFees?: SortOrder
     otherCharges?: SortOrder
     gstPercentage?: SortOrder
+    allowInitialFee?: SortOrder
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
@@ -100422,6 +100527,7 @@ export namespace Prisma {
     yearlyFees?: JsonFilter<"FeeStructure">
     otherCharges?: JsonFilter<"FeeStructure">
     gstPercentage?: FloatFilter<"FeeStructure"> | number
+    allowInitialFee?: BoolFilter<"FeeStructure"> | boolean
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
@@ -100452,6 +100558,7 @@ export namespace Prisma {
     yearlyFees?: SortOrder
     otherCharges?: SortOrder
     gstPercentage?: SortOrder
+    allowInitialFee?: SortOrder
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrderInput | SortOrder
@@ -100485,6 +100592,7 @@ export namespace Prisma {
     yearlyFees?: JsonWithAggregatesFilter<"FeeStructure">
     otherCharges?: JsonWithAggregatesFilter<"FeeStructure">
     gstPercentage?: FloatWithAggregatesFilter<"FeeStructure"> | number
+    allowInitialFee?: BoolWithAggregatesFilter<"FeeStructure"> | boolean
     billingCycle?: StringWithAggregatesFilter<"FeeStructure"> | string
     currency?: StringWithAggregatesFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableWithAggregatesFilter<"FeeStructure"> | Date | string | null
@@ -102091,6 +102199,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -102200,6 +102309,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -102297,6 +102407,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -102406,6 +102517,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -102509,6 +102621,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -102528,6 +102641,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -102552,6 +102666,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -105686,6 +105801,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -105733,6 +105850,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -105762,6 +105881,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105809,6 +105930,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105847,6 +105970,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -105875,6 +106000,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105911,6 +106038,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -108221,6 +108350,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -108250,6 +108380,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -108271,6 +108402,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -108300,6 +108432,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -108325,6 +108458,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -108346,6 +108480,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -108370,6 +108505,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -110628,6 +110764,7 @@ export namespace Prisma {
     ceoPanelId?: SortOrder
     studyCenterId?: SortOrder
     universityId?: SortOrder
+    permissions?: SortOrder
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
@@ -112450,10 +112587,16 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    paymentPlan?: SortOrder
+    initialPaymentAmount?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
     receiptVerifiedBy?: SortOrder
+  }
+
+  export type EnrollmentAvgOrderByAggregateInput = {
+    initialPaymentAmount?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -112486,6 +112629,8 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    paymentPlan?: SortOrder
+    initialPaymentAmount?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
@@ -112522,10 +112667,16 @@ export namespace Prisma {
     universityReviewedAt?: SortOrder
     universityReviewedBy?: SortOrder
     salesUserId?: SortOrder
+    paymentPlan?: SortOrder
+    initialPaymentAmount?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
     receiptVerifiedBy?: SortOrder
+  }
+
+  export type EnrollmentSumOrderByAggregateInput = {
+    initialPaymentAmount?: SortOrder
   }
 
   export type EnumExpenseStatusFilter<$PrismaModel = never> = {
@@ -113719,6 +113870,7 @@ export namespace Prisma {
     yearlyFees?: SortOrder
     otherCharges?: SortOrder
     gstPercentage?: SortOrder
+    allowInitialFee?: SortOrder
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
@@ -113751,6 +113903,7 @@ export namespace Prisma {
     universityFee?: SortOrder
     commissionRate?: SortOrder
     gstPercentage?: SortOrder
+    allowInitialFee?: SortOrder
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
@@ -113773,6 +113926,7 @@ export namespace Prisma {
     universityFee?: SortOrder
     commissionRate?: SortOrder
     gstPercentage?: SortOrder
+    allowInitialFee?: SortOrder
     billingCycle?: SortOrder
     currency?: SortOrder
     effectiveFrom?: SortOrder
@@ -127627,6 +127781,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -127672,6 +127828,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -127812,6 +127970,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -127839,6 +127998,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -129278,6 +129438,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -129385,6 +129546,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -130238,6 +130400,8 @@ export namespace Prisma {
     universityReviewedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     universityReviewedBy?: StringNullableFilter<"Enrollment"> | string | null
     salesUserId?: StringNullableFilter<"Enrollment"> | string | null
+    paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
+    initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -130378,6 +130542,7 @@ export namespace Prisma {
     yearlyFees?: JsonFilter<"FeeStructure">
     otherCharges?: JsonFilter<"FeeStructure">
     gstPercentage?: FloatFilter<"FeeStructure"> | number
+    allowInitialFee?: BoolFilter<"FeeStructure"> | boolean
     billingCycle?: StringFilter<"FeeStructure"> | string
     currency?: StringFilter<"FeeStructure"> | string
     effectiveFrom?: DateTimeNullableFilter<"FeeStructure"> | Date | string | null
@@ -131581,6 +131746,7 @@ export namespace Prisma {
     ceoPanelId?: StringNullableFilter<"User"> | string | null
     studyCenterId?: StringNullableFilter<"User"> | string | null
     universityId?: StringNullableFilter<"User"> | string | null
+    permissions?: JsonNullableFilter<"User">
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
@@ -132122,6 +132288,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -132230,6 +132397,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -132833,6 +133001,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -132940,6 +133109,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -133079,6 +133249,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -133187,6 +133358,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -133421,6 +133593,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -133529,6 +133702,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -134660,6 +134834,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134705,6 +134881,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134744,6 +134922,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134789,6 +134969,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134828,6 +135010,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134873,6 +135057,8 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134912,6 +135098,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134957,6 +135145,8 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -134996,6 +135186,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -135042,6 +135234,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -136355,6 +136549,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -136383,6 +136578,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -137841,6 +138037,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -137949,6 +138146,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -138050,6 +138248,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -138158,6 +138357,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -140424,6 +140624,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -140532,6 +140733,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -141162,6 +141364,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -141270,6 +141473,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -141535,6 +141739,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -141643,6 +141848,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -141783,6 +141989,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -141891,6 +142098,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -141992,6 +142200,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -142100,6 +142309,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -142258,6 +142468,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -142366,6 +142577,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -142641,6 +142853,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -142749,6 +142962,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -142856,6 +143070,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -142964,6 +143179,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -143134,6 +143350,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -143242,6 +143459,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -143491,6 +143709,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -143599,6 +143818,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -143858,6 +144078,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -143966,6 +144187,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -144612,6 +144834,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -144719,6 +144942,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     ceoPanelId?: string | null
     studyCenterId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -145011,6 +145235,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -145038,6 +145263,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -145533,6 +145759,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -145578,6 +145806,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -145606,6 +145836,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -145633,6 +145864,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -146617,6 +146849,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -146662,6 +146896,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -146972,6 +147208,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147080,6 +147317,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147328,6 +147566,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147436,6 +147675,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147537,6 +147777,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147645,6 +147886,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147811,6 +148053,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -147918,6 +148161,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     ceoPanelId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -148363,6 +148607,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -148471,6 +148716,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -148731,6 +148977,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -148839,6 +149086,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -148946,6 +149194,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -149054,6 +149303,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -149394,6 +149644,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -149439,6 +149691,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -149683,6 +149937,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -149791,6 +150046,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -150092,6 +150348,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -150200,6 +150457,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -150301,6 +150559,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -150409,6 +150668,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -151031,6 +151291,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -151139,6 +151400,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -151458,6 +151720,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -151566,6 +151829,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -151673,6 +151937,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -151781,6 +152046,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -152940,6 +153206,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -153048,6 +153315,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -153313,6 +153581,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -153421,6 +153690,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -153517,6 +153787,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -153625,6 +153896,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -153884,6 +154156,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -153992,6 +154265,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -154388,6 +154662,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -154496,6 +154771,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -154761,6 +155037,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -154869,6 +155146,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -155112,6 +155390,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -155220,6 +155499,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -155485,6 +155765,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -155593,6 +155874,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -155893,6 +156175,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -156001,6 +156284,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -156329,6 +156613,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -156437,6 +156722,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -156890,6 +157176,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -156998,6 +157285,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -157099,6 +157387,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -157207,6 +157496,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -157308,6 +157598,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -157416,6 +157707,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -157738,6 +158030,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -157846,6 +158139,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -157953,6 +158247,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -158061,6 +158356,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -158168,6 +158464,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -158276,6 +158573,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -158525,6 +158823,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -158633,6 +158932,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -158734,6 +159034,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -158842,6 +159143,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -159090,6 +159392,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -159198,6 +159501,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -159310,6 +159614,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -159418,6 +159723,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -159525,6 +159831,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -159633,6 +159940,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -159893,6 +160201,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -160001,6 +160310,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -160097,6 +160407,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160205,6 +160516,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160306,6 +160618,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160414,6 +160727,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160515,6 +160829,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160623,6 +160938,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160871,6 +161187,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -160979,6 +161296,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -161080,6 +161398,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -161188,6 +161507,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -161300,6 +161620,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -161408,6 +161729,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -161515,6 +161837,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -161623,6 +161946,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -161730,6 +162054,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -161838,6 +162163,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -162098,6 +162424,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -162206,6 +162533,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -162313,6 +162641,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -162421,6 +162750,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -162517,6 +162847,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -162625,6 +162956,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -163071,6 +163403,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -163178,6 +163511,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -163455,6 +163789,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -163563,6 +163898,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -164120,6 +164456,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -164228,6 +164565,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -164533,6 +164871,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -164640,6 +164979,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -164985,6 +165325,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -165093,6 +165434,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -165848,6 +166190,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -165956,6 +166299,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -166599,6 +166943,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -166707,6 +167052,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -166972,6 +167318,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -167080,6 +167427,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -167704,6 +168052,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -167812,6 +168161,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -167913,6 +168263,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -168021,6 +168372,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -168522,6 +168874,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -168567,6 +168921,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -168595,6 +168951,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -168622,6 +168979,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -168674,6 +169032,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -168782,6 +169141,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -168889,6 +169249,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -168997,6 +169358,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -169538,6 +169900,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -169646,6 +170009,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -169747,6 +170111,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -169855,6 +170220,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -169956,6 +170322,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -170064,6 +170431,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -170610,6 +170978,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -170718,6 +171087,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -170819,6 +171189,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -170927,6 +171298,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -171064,6 +171436,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -171172,6 +171545,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -171279,6 +171653,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -171387,6 +171762,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -171494,6 +171870,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -171602,6 +171979,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -172184,6 +172562,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -172292,6 +172671,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -172399,6 +172779,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -172507,6 +172888,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -172634,6 +173016,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -172742,6 +173125,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -172843,6 +173227,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -172951,6 +173336,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -173210,6 +173596,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -173318,6 +173705,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -173425,6 +173813,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -173533,6 +173922,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -174554,6 +174944,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -174662,6 +175053,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -175024,6 +175416,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -175132,6 +175525,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -175418,6 +175812,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -175526,6 +175921,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -175840,6 +176236,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -175948,6 +176345,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -176044,6 +176442,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -176152,6 +176551,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -176411,6 +176811,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -176519,6 +176920,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -176915,6 +177317,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -177023,6 +177426,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -177288,6 +177692,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -177396,6 +177801,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -177939,6 +178345,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -178047,6 +178454,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -178312,6 +178720,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -178420,6 +178829,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -178663,6 +179073,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -178771,6 +179182,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -178872,6 +179284,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -178980,6 +179393,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -179245,6 +179659,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -179353,6 +179768,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -179460,6 +179876,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -179568,6 +179985,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -179811,6 +180229,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -179919,6 +180338,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -180020,6 +180440,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -180128,6 +180549,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -180393,6 +180815,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -180501,6 +180924,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -180608,6 +181032,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -180716,6 +181141,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -180812,6 +181238,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -180920,6 +181347,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181021,6 +181449,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181129,6 +181558,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181230,6 +181660,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181338,6 +181769,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181586,6 +182018,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181694,6 +182127,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -181883,6 +182317,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -181991,6 +182426,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182098,6 +182534,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182206,6 +182643,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182313,6 +182751,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182421,6 +182860,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182681,6 +183121,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -182789,6 +183230,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -183342,6 +183784,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -183450,6 +183893,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -183903,6 +184347,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -184011,6 +184456,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -184466,6 +184912,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -184574,6 +185021,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -184822,6 +185270,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -184930,6 +185379,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -185042,6 +185492,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -185150,6 +185601,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -185410,6 +185862,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -185518,6 +185971,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -185614,6 +186068,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -185722,6 +186177,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -185970,6 +186426,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -186078,6 +186535,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -186179,6 +186637,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -186287,6 +186746,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -186399,6 +186859,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -186507,6 +186968,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -186767,6 +187229,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -186875,6 +187338,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -186982,6 +187446,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -187090,6 +187555,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -187186,6 +187652,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -187294,6 +187761,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -187553,6 +188021,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -187661,6 +188130,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -187910,6 +188380,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -188018,6 +188489,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -188421,6 +188893,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -188529,6 +189002,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -189081,6 +189555,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -189189,6 +189664,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -189454,6 +189930,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -189562,6 +190039,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -190070,6 +190548,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -190178,6 +190657,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -190517,6 +190997,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -190625,6 +191106,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -190737,6 +191219,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -190845,6 +191328,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -191202,6 +191686,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -191310,6 +191795,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -191600,6 +192086,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -191708,6 +192195,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -192026,6 +192514,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -192134,6 +192623,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -192378,6 +192868,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -192486,6 +192977,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -192905,6 +193397,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -193013,6 +193506,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -193262,6 +193756,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -193370,6 +193865,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -193680,6 +194176,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -193788,6 +194285,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -194094,6 +194592,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -194202,6 +194701,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -194616,6 +195116,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -194724,6 +195225,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -195783,6 +196285,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -195829,6 +196333,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -195987,6 +196493,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -196033,6 +196541,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -196170,6 +196680,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -196278,6 +196789,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -196379,6 +196891,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -196487,6 +197000,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -196746,6 +197260,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -196854,6 +197369,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -196961,6 +197477,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -197069,6 +197586,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -197518,6 +198036,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -197626,6 +198145,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -197950,6 +198470,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -198058,6 +198579,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -199077,6 +199599,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -199185,6 +199708,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -199604,6 +200128,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -199712,6 +200237,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -199808,6 +200334,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -199916,6 +200443,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -200175,6 +200703,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -200283,6 +200812,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -201152,6 +201682,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -201260,6 +201791,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -201372,6 +201904,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -201480,6 +202013,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -201679,6 +202213,7 @@ export namespace Prisma {
     userId?: string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -201787,6 +202322,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -202008,6 +202544,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -202116,6 +202653,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -202446,6 +202984,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -202506,6 +203046,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -202995,6 +203536,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -203786,6 +204328,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203831,6 +204375,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203868,6 +204414,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -204007,6 +204555,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -204034,6 +204583,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -204058,6 +204608,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -205584,6 +206135,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -205691,6 +206243,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -205793,6 +206346,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -206355,6 +206909,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -206763,6 +207318,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -206870,6 +207426,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -206972,6 +207529,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -207024,6 +207582,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -207132,6 +207691,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -207234,6 +207794,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -207446,6 +208007,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -207482,6 +208045,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -207518,6 +208083,8 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -207554,6 +208121,8 @@ export namespace Prisma {
     universityRemarks?: string | null
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -207591,6 +208160,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -208110,6 +208681,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -208485,6 +209057,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -209143,6 +209716,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209188,6 +209763,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209225,6 +209802,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209253,6 +209832,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209298,6 +209879,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209335,6 +209918,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209363,6 +209948,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209408,6 +209995,8 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209445,6 +210034,8 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209473,6 +210064,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209518,6 +210111,8 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209555,6 +210150,8 @@ export namespace Prisma {
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209583,6 +210180,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209629,6 +210228,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209666,6 +210267,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -211187,6 +211790,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -211215,6 +211819,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -211239,6 +211844,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -212458,6 +213064,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -212566,6 +213173,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -212668,6 +213276,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -213211,6 +213820,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     ceoPanelId?: string | null
     studyCenterId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -213239,6 +213849,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -213573,6 +214184,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -213680,6 +214292,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -213782,6 +214395,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -214030,6 +214644,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214057,6 +214672,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214081,6 +214697,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214213,6 +214830,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -214233,6 +214852,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -214404,6 +215024,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214449,6 +215071,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214486,6 +215110,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214503,6 +215129,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214530,6 +215157,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -214554,6 +215182,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215013,6 +215642,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -215150,6 +215781,7 @@ export namespace Prisma {
     subDepartmentId?: string | null
     ceoPanelId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -215267,6 +215899,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215312,6 +215946,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215349,6 +215985,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215741,6 +216379,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -215848,6 +216487,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -215950,6 +216590,7 @@ export namespace Prisma {
     subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -216211,6 +216852,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -216342,6 +216985,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -216387,6 +217032,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -216424,6 +217071,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -216837,6 +217486,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -216991,6 +217641,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -217098,6 +217749,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -217200,6 +217852,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -217458,6 +218111,7 @@ export namespace Prisma {
     ceoPanelId?: string | null
     studyCenterId?: string | null
     universityId?: string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email: string
     password: string
     name: string
@@ -217595,6 +218249,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -217702,6 +218357,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -217804,6 +218460,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -218129,6 +218786,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -218237,6 +218895,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -218339,6 +218998,7 @@ export namespace Prisma {
     ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
     studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
     universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: NullableJsonNullValueInput | InputJsonValue
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -218424,6 +219084,8 @@ export namespace Prisma {
     universityReviewedAt?: Date | string | null
     universityReviewedBy?: string | null
     salesUserId?: string | null
+    paymentPlan?: string | null
+    initialPaymentAmount?: number | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -218444,6 +219106,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: number
+    allowInitialFee?: boolean
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -218615,6 +219278,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     universityRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218660,6 +219325,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218697,6 +219364,8 @@ export namespace Prisma {
     universityReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     universityReviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     salesUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218714,6 +219383,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218741,6 +219411,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218765,6 +219436,7 @@ export namespace Prisma {
     yearlyFees?: JsonNullValueInput | InputJsonValue
     otherCharges?: JsonNullValueInput | InputJsonValue
     gstPercentage?: FloatFieldUpdateOperationsInput | number
+    allowInitialFee?: BoolFieldUpdateOperationsInput | boolean
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

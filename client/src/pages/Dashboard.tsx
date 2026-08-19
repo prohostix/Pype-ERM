@@ -159,7 +159,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernOrgAdminDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'finance_admin') {
+  if (user?.role === 'finance_admin' || user?.role === 'finance') {
     return <ModernFinanceDashboard initialTab={initialTab} />;
   }
 

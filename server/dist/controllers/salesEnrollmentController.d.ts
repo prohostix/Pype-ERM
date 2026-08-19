@@ -6,4 +6,5 @@ export declare const approveSalesEnrollmentOps: (req: Request, res: Response, ne
 export declare const approveSalesEnrollmentFinance: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const rejectSalesEnrollment: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const createDirectEnrollment: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const verifySalesEnrollment: (req: Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=salesEnrollmentController.d.ts.map

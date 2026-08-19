@@ -71,13 +71,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Simplified permission check - in real app, would check user's permissions
     if (!user) return false;
     
-    const rolePermissions: Record<UserRole, string[]> = {
+    const rolePermissions: Record<string, string[]> = {
       superadmin: ['all'],
       org_admin: ['organizations', 'departments', 'users', 'settings'],
       ceo: ['dashboard', 'reports', 'escalations', 'approvals', 'all_departments'],
       ops_admin: ['operations', 'universities', 'courses', 'centers', 'students', 'marks'],
       ops_sub_admin: ['operations', 'students', 'marks'],
       finance_admin: ['finance', 'invoices', 'payments', 'expenses', 'targets', 'approvals'],
+      finance: ['finance', 'invoices', 'payments', 'expenses'],
+      collections_admin: ['finance', 'payments', 'collections'],
+      collections: ['finance', 'collections'],
       hr_admin: ['hr', 'employees', 'attendance', 'leave', 'recruitment', 'complaints'],
       sales_admin: ['sales', 'leads', 'deals', 'referrals', 'targets'],
       center_admin: ['center', 'students', 'invoices', 'marks'],
@@ -86,7 +89,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       bde: ['sales', 'leads', 'deals', 'tasks', 'attendance', 'leave', 'profile'],
     };
 
-    const userPermissions = rolePermissions[user.role] || [];
+    const hasCustomPermissions = Array.isArray(user.permissions) && user.permissions.includes('__custom__');
+    
+    const userPermissions = hasCustomPermissions 
+      ? user.permissions 
+      : (rolePermissions[user.role] || []);
+
     return userPermissions.includes('all') || userPermissions.includes(module);
   }, [user]);
 

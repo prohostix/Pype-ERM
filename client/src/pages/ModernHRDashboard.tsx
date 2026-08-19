@@ -26,6 +26,7 @@ import { EmployeesPanel } from '@/components/panels/EmployeesPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { HRUsersPanel } from '@/components/panels/HRUsersPanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
+import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
@@ -61,6 +62,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       );
       case 'users': return <HRUsersPanel />;
       case 'employees': return <EmployeesPanel />;
+      case 'team_permissions': return <TeamPermissionsPanel />;
       case 'leaves': return <LeavesPanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;
       case 'attendance': return <AttendancePanel />;
@@ -100,6 +102,7 @@ export function getHRNavItems() {
     { id: 'overview', label: 'Overview' },
     { id: 'users', label: 'Users' },
     { id: 'employees', label: 'Employees' },
+    { id: 'team_permissions', label: 'Team Permissions' },
     { id: 'leaves', label: 'Leave Requests' },
     { id: 'attendance', label: 'Attendance' },
     { id: 'vacancies', label: 'Vacancies' },

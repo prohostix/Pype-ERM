@@ -183,7 +183,10 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
       credentials: { email, password: defaultPassword },
-      admissionProgress: { paymentPlan: paymentPlan || 'full' },
+      admissionProgress: { 
+        paymentPlan: paymentPlan || 'full',
+        initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null
+      },
       // Track who enrolled this student (sales user)
       enrolledBy: req.user.id
     }
@@ -204,6 +207,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         programId: student.programId,
         studyCenterId: student.centerId,
         sessionId: student.sessionId,
+        paymentPlan: req.body.paymentPlan || null,
+        initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
         status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
         receiptUrl: req.body.receiptUrl || null,
         salesUserId: req.user.id,
@@ -302,12 +307,18 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
   }
   
-  if (dataToUpdate.paymentPlan) {
+  if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined) {
     dataToUpdate.admissionProgress = {
       ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
-      paymentPlan: dataToUpdate.paymentPlan
     };
+    if (dataToUpdate.paymentPlan) {
+      dataToUpdate.admissionProgress.paymentPlan = dataToUpdate.paymentPlan;
+    }
+    if (dataToUpdate.initialPaymentAmount !== undefined) {
+      dataToUpdate.admissionProgress.initialPaymentAmount = dataToUpdate.initialPaymentAmount ? Number(dataToUpdate.initialPaymentAmount) : null;
+    }
     delete dataToUpdate.paymentPlan;
+    delete dataToUpdate.initialPaymentAmount;
   }
 
   const student = await prisma.student.update({

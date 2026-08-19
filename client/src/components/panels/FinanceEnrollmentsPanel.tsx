@@ -26,6 +26,7 @@ interface Enrollment {
   student?: any;
   receiptUrl?: string | null;
   receiptVerified?: boolean;
+  initialPaymentAmount?: number | null;
   receiptVerifiedAt?: string | null;
   receiptVerifiedBy?: string | null;
 }
@@ -378,14 +379,22 @@ export function FinanceEnrollmentsPanel() {
                     </div>
                   )}
                   {viewStudent.payment && (
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-100">
-                      <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
-                      <div>
-                        <p className="font-semibold text-green-700">Fee Paid: ₹{viewStudent.payment.amount?.toLocaleString()}</p>
-                        {viewStudent.payment.debitedAt && (
-                          <p className="text-xs text-green-600">on {new Date(viewStudent.payment.debitedAt).toLocaleDateString('en-IN')}</p>
-                        )}
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-green-50 border border-green-100">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
+                        <div>
+                          <p className="font-semibold text-green-700">Fee Paid: ₹{viewStudent.payment.amount?.toLocaleString()}</p>
+                          {viewStudent.payment.debitedAt && (
+                            <p className="text-xs text-green-600">on {new Date(viewStudent.payment.debitedAt).toLocaleDateString('en-IN')}</p>
+                          )}
+                        </div>
                       </div>
+                      {viewStudent.initialPaymentAmount && (
+                        <div className="text-right">
+                          <p className="text-xs font-semibold text-amber-600">Initial Fee Paid</p>
+                          <p className="text-[10px] text-amber-700 font-medium opacity-80">(Deducted from Total)</p>
+                        </div>
+                      )}
                     </div>
                   )}
                   {!viewStudent.payment && (

@@ -176,3 +176,96 @@ export const deleteUser = asyncHandler(async (req: AuthRequest, res: Response) =
   await prisma.user.delete({ where: { id: req.params.id } });
   res.status(200).json({ success: true, data: {} });
 });
+
+export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const adminRole = req.user.role;
+  let targetRoles: string[] = [];
+
+  if (adminRole === 'finance_admin') {
+    targetRoles = ['finance', 'collections', 'collections_admin'];
+  } else if (adminRole === 'hr_admin') {
+    targetRoles = ['employee', 'staff'];
+  } else if (adminRole === 'ops_admin') {
+    targetRoles = ['ops_sub_admin', 'center_admin', 'staff'];
+  } else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
+    targetRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
+  }
+
+  const where: any = {
+    role: { in: targetRoles }
+  };
+
+  if (adminRole !== 'superadmin' && req.user.organizationId) {
+    where.organizationId = req.user.organizationId;
+  }
+
+  const users = await prisma.user.findMany({
+    where,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      departmentId: true,
+      permissions: true,
+      subDepartmentId: true,
+      branchId: true,
+      department: {
+        select: {
+          type: true
+        }
+      }
+    }
+  });
+
+  res.json({ success: true, data: users });
+});
+
+export const updateUserPermissions = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const { permissions } = req.body;
+
+  if (!Array.isArray(permissions)) {
+    res.status(400).json({ success: false, message: 'Permissions must be an array' });
+    return;
+  }
+
+  // Ensure user exists and belongs to the same org
+  const targetUser = await prisma.user.findUnique({ where: { id } });
+  if (!targetUser || (req.user.role !== 'superadmin' && targetUser.organizationId !== req.user.organizationId)) {
+    res.status(404).json({ success: false, message: 'User not found' });
+    return;
+  }
+
+  // Security check: Verify the admin is allowed to manage this user's role
+  const adminRole = req.user.role;
+  let allowedRoles: string[] = [];
+
+  if (adminRole === 'finance_admin') {
+    allowedRoles = ['finance', 'collections', 'collections_admin'];
+  } else if (adminRole === 'hr_admin') {
+    allowedRoles = ['employee', 'staff'];
+  } else if (adminRole === 'ops_admin') {
+    allowedRoles = ['ops_sub_admin', 'center_admin', 'staff'];
+  } else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
+    allowedRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
+  }
+
+  if (!allowedRoles.includes(targetUser.role)) {
+    res.status(403).json({ success: false, message: 'Forbidden: You cannot modify permissions for this user role' });
+    return;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id },
+    data: { permissions },
+    select: {
+      id: true,
+      name: true,
+      role: true,
+      permissions: true
+    }
+  });
+
+  res.json({ success: true, data: updatedUser, message: 'Permissions updated successfully' });
+});

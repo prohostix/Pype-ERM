@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle } from 'lucide-react';
+import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle, Upload } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
@@ -39,6 +41,7 @@ interface Enrollment {
 
 interface Summary {
   total: number;
+  sales_verification_pending: number;
   document_review: number;
   finance_review: number;
   enrolled: number;
@@ -47,6 +50,7 @@ interface Summary {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
   document_review: { label: 'Ops Review', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
   finance_review: { label: 'Finance Review', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
   enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
@@ -73,6 +77,18 @@ export function SalesStudentPipelinePanel() {
 
   // Direct Enrollment Trigger State
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
+
+  // Verification Modal State
+  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
+  const [verifyingStudent, setVerifyingStudent] = useState<Enrollment | null>(null);
+  const [verifyForm, setVerifyForm] = useState<any>({});
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const openVerifyDialog = (enrollment: Enrollment) => {
+    setVerifyingStudent(enrollment);
+    setVerifyForm({ ...enrollment, initialPaymentAmount: '' });
+    setVerifyDialogOpen(true);
+  };
 
   const fetchPipeline = async () => {
     setLoading(true);
@@ -141,6 +157,7 @@ export function SalesStudentPipelinePanel() {
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {[
             { key: 'total', label: 'Total', color: 'text-foreground' },
+            { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
             { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },
             { key: 'finance_review', label: 'Finance', color: 'text-blue-600' },
             { key: 'enrolled', label: 'Enrolled', color: 'text-green-600' },
@@ -261,6 +278,19 @@ export function SalesStudentPipelinePanel() {
                           </a>
                         </Button>
                       </div>
+
+                      {/* Verification Action */}
+                      {e.status === 'sales_verification_pending' && (
+                        <div className="mt-4">
+                          <Button variant="default" size="sm" className="bg-purple-600 hover:bg-purple-700" onClick={(evt) => {
+                            evt.stopPropagation();
+                            openVerifyDialog(e);
+                          }}>
+                            Verify & Submit to Ops
+                          </Button>
+                        </div>
+                      )}
+
                       {/* Current handler */}
                       {e.status === 'document_review' && (
                         <p className="text-xs text-yellow-600 mt-1 font-medium">📋 Waiting for Operations review</p>
@@ -338,6 +368,189 @@ export function SalesStudentPipelinePanel() {
           })}
         </div>
       )}
+
+      {/* Verification Dialog */}
+      <Dialog open={verifyDialogOpen} onOpenChange={setVerifyDialogOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Verify Student Application</DialogTitle>
+          </DialogHeader>
+          {verifyingStudent && (
+            <div className="space-y-4 py-2">
+              <p className="text-sm text-muted-foreground">
+                Review and complete the student's details before submitting it to Operations.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label>Student Name</Label>
+                  <Input 
+                    value={verifyForm.studentName || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, studentName: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Email</Label>
+                  <Input 
+                    value={verifyForm.studentEmail || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, studentEmail: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Phone</Label>
+                  <Input 
+                    value={verifyForm.studentPhone || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, studentPhone: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Father's Name</Label>
+                  <Input 
+                    value={verifyForm.fatherName || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, fatherName: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Date of Birth</Label>
+                  <Input 
+                    type="date"
+                    value={verifyForm.dob ? new Date(verifyForm.dob).toISOString().split('T')[0] : ''} 
+                    onChange={e => setVerifyForm({...verifyForm, dob: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Alternate Phone</Label>
+                  <Input 
+                    value={verifyForm.altPhone || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, altPhone: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5 col-span-2">
+                  <Label>Address</Label>
+                  <Input 
+                    value={verifyForm.studentAddress || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, studentAddress: e.target.value})} 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>PIN Code</Label>
+                  <Input 
+                    value={verifyForm.pinCode || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, pinCode: e.target.value})} 
+                  />
+                </div>
+              </div>
+
+              <div className="border-t pt-4 mt-4 space-y-4">
+                <h4 className="font-medium text-sm">Verify Documents</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                    const existing = (verifyForm.documents || []).find((d: any) => d.type === docType);
+                    const elementId = `sales-doc-upload-${docType.replace(/\s+/g, '-')}`;
+                    return (
+                      <div key={docType} className="p-3 rounded-lg border bg-slate-50 dark:bg-slate-900/10 flex flex-col justify-between">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-sm font-medium">{docType}</span>
+                          {existing?.url && (
+                            <a 
+                              href={api.getFileUrl(existing.url)} 
+                              target="_blank" 
+                              rel="noreferrer"
+                              className="text-xs text-primary hover:underline"
+                            >
+                              View
+                            </a>
+                          )}
+                        </div>
+                        <div>
+                          <input
+                            type="file"
+                            id={elementId}
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const toastId = toast.loading(`Uploading ${docType}...`);
+                              try {
+                                const uploadData = new FormData();
+                                uploadData.append('file', file);
+                                const res = await api.post('/auth/upload', uploadData, {
+                                  headers: { 'Content-Type': 'multipart/form-data' }
+                                });
+                                const newDocs = (verifyForm.documents || []).filter((d: any) => d.type !== docType);
+                                newDocs.push({
+                                  type: docType,
+                                  url: res.data.url,
+                                  label: docType === 'Other' ? 'Other Document' : docType
+                                });
+                                setVerifyForm({ ...verifyForm, documents: newDocs });
+                                toast.success(`${docType} uploaded successfully`, { id: toastId });
+                              } catch (err) {
+                                console.error(err);
+                                toast.error(`Failed to upload ${docType}`, { id: toastId });
+                              }
+                            }}
+                          />
+                          <Label
+                            htmlFor={elementId}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border bg-white dark:bg-slate-800 hover:bg-slate-100 cursor-pointer text-xs font-semibold shadow-sm transition-all w-full justify-center"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            {existing?.url ? 'Change File' : 'Upload File'}
+                          </Label>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {verifyingStudent?.program?.feeStructures?.[0]?.allowInitialFee && (
+              <div className="border-t pt-4 mt-4 grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label>Payment Plan (Optional)</Label>
+                  <select 
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    value={verifyForm.paymentPlan || ''}
+                    onChange={e => setVerifyForm({...verifyForm, paymentPlan: e.target.value})}
+                  >
+                    <option value="">Select a plan</option>
+                    <option value="lumpsum">One-Time Payment (Lump Sum)</option>
+                    <option value="installment">Installment Plan</option>
+                  </select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Initial Fee Amount (Optional)</Label>
+                  <Input 
+                    type="number"
+                    placeholder="e.g. 5000"
+                    value={verifyForm.initialPaymentAmount || ''} 
+                    onChange={e => setVerifyForm({...verifyForm, initialPaymentAmount: e.target.value})} 
+                  />
+                </div>
+              </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setVerifyDialogOpen(false)}>Cancel</Button>
+            <Button disabled={isVerifying} onClick={async () => {
+              setIsVerifying(true);
+              try {
+                await api.put(`/sales/student-applications/${verifyingStudent?.id}/verify`, verifyForm);
+                toast.success('Application verified and submitted!');
+                setVerifyDialogOpen(false);
+                fetchPipeline();
+              } catch (e: any) {
+                toast.error(e.response?.data?.message || 'Verification failed');
+              } finally {
+                setIsVerifying(false);
+              }
+            }}>
+              {isVerifying ? 'Submitting...' : 'Submit to Operations'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

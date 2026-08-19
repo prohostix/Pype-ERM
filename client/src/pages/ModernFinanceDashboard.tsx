@@ -23,6 +23,7 @@ import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
 import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
+import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { DiscountsPanel } from '@/components/panels/DiscountsPanel';
@@ -65,6 +66,7 @@ export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) 
   const renderContent = () => {
     switch (activeTab) {
       case 'meetings': return <MeetingsPanel />;
+      case 'team_permissions': return <TeamPermissionsPanel />;
       case 'overview': return <OverviewContent onNavigate={setActiveTab} />;
       case 'invoices': return <InvoicesPanel />;
       case 'student_payment_log': return <StudentPaymentsLogPanel />;
@@ -117,6 +119,7 @@ export function getFinanceNavItems() {
   return [
     { id: '__dashboard_section', label: '📊 Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
+    { id: 'team_permissions', label: 'Team Permissions' },
     
     { id: '__collections_section', label: '💳 Collections', isSection: true },
     { id: 'student_collections', label: 'Student Collections' },

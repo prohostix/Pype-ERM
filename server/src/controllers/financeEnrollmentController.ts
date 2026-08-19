@@ -124,7 +124,9 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
   let amountPaid = 0;
   const feeStructure = enrollment.program?.feeStructures?.[0]; // Assuming one fee structure for simplicity or we should match by session
 
-  if (feeStructure) {
+  if (enrollment.initialPaymentAmount !== null && enrollment.initialPaymentAmount !== undefined) {
+    amountPaid = enrollment.initialPaymentAmount;
+  } else if (feeStructure) {
     if (feeStructure.billingCycle === 'one_time') {
       amountPaid = feeStructure.registrationFee + feeStructure.tuitionFee + feeStructure.examFee + feeStructure.universityFee;
     } else if (feeStructure.billingCycle === 'per_year') {

@@ -274,7 +274,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     documents: [] as any[],
     receiptUrl: '',
     centerId: '',
-    paymentPlan: 'full' // 'full' or 'per_year_sem'
+    paymentPlan: 'full', // 'full' or 'per_year_sem'
+    initialPaymentAmount: ''
   });
 
 
@@ -462,7 +463,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       documents: student.documents || [],
       receiptUrl: student.receiptUrl || '',
       centerId: centerId?.toString() || '',
-      paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full'
+      paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full',
+      initialPaymentAmount: (student.admissionProgress as any)?.initialPaymentAmount || ''
     });
     const otherDoc = (student.documents || []).find((d: any) => d.type === 'Other');
     setCustomOtherName(otherDoc?.label || '');
@@ -1189,6 +1191,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
 
                   {/* Payment Plan & Fee */}
+                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.feeStructures?.[0]?.allowInitialFee && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                     <div>
                       <Label className="font-medium">Payment Plan *</Label>
@@ -1200,7 +1203,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         </SelectContent>
                       </Select>
                     </div>
+                    <div>
+                      <Label className="font-medium">Initial Fee Amount (Optional)</Label>
+                      <Input 
+                        type="number"
+                        placeholder="e.g. 5000"
+                        value={formData.initialPaymentAmount || ''} 
+                        onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
+                      />
+                    </div>
                   </div>
+                  )}
 
                   {renderFeeDisplay()}
 
@@ -1781,6 +1794,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
 
                           {/* Payment Plan & Fee */}
+                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.feeStructures?.[0]?.allowInitialFee && (
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div>
                               <Label className="font-medium">Payment Plan *</Label>
@@ -1792,7 +1806,17 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 </SelectContent>
                               </Select>
                             </div>
+                            <div>
+                              <Label className="font-medium">Initial Fee Amount (Optional)</Label>
+                              <Input 
+                                type="number"
+                                placeholder="e.g. 5000"
+                                value={formData.initialPaymentAmount || ''} 
+                                onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
+                              />
+                            </div>
                           </div>
+                          )}
 
                           {renderFeeDisplay()}
 
