@@ -43,7 +43,7 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
       ...(invite.universityIds.length > 0 ? { universityId: { in: invite.universityIds } } : {}),
     },
     include: {
-      university: { select: { id: true, name: true, code: true } },
+      university: { select: { id: true, name: true, code: true, logo: true } },
       feeStructures: { select: { allowInitialFee: true } },
     },
   });
@@ -74,7 +74,19 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     fatherName,
     dob,
     altPhone,
-    pinCode
+    pinCode,
+    gender,
+    category,
+    religion,
+    maritalStatus,
+    employmentStatus,
+    caste,
+    motherName,
+    motherPhone,
+    fatherPhone,
+    guardianName,
+    familyPhone,
+    photo
   } = req.body;
 
   // Validate required fields
@@ -82,11 +94,7 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
   if (!studentName) missing.push('studentName');
   if (!studentEmail) missing.push('studentEmail');
   if (!studentPhone) missing.push('studentPhone');
-  if (!studentAddress) missing.push('studentAddress');
   if (!programId) missing.push('programId');
-  if (!fatherName) missing.push('fatherName');
-  if (!dob) missing.push('dob');
-  if (!pinCode) missing.push('pinCode');
   if (missing.length > 0) {
     res.status(400).json({ success: false, message: `Missing required fields: ${missing.join(', ')}` });
     return;
@@ -156,11 +164,24 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       studentName,
       studentEmail,
       studentPhone,
-      studentAddress,
+      studentAddress: studentAddress || '',
       fatherName,
       dob: dob ? new Date(dob) : null,
       altPhone,
       pinCode,
+      gender,
+      category,
+      religion,
+      maritalStatus,
+      employmentStatus,
+      caste,
+      motherName,
+      motherPhone,
+      fatherPhone,
+      guardianName,
+      familyPhone,
+      photo,
+      documents: documents || [],
       programId,
       studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
@@ -378,6 +399,19 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           dob: enrollment.dob,
           altPhone: enrollment.altPhone,
           pinCode: enrollment.pinCode,
+          gender: enrollment.gender,
+          category: enrollment.category,
+          religion: enrollment.religion,
+          maritalStatus: enrollment.maritalStatus,
+          employmentStatus: enrollment.employmentStatus,
+          caste: enrollment.caste,
+          motherName: enrollment.motherName,
+          motherPhone: enrollment.motherPhone,
+          fatherPhone: enrollment.fatherPhone,
+          guardianName: enrollment.guardianName,
+          familyPhone: enrollment.familyPhone,
+          photo: enrollment.photo,
+          documents: enrollment.documents ? enrollment.documents : undefined,
           programId: enrollment.programId,
           sessionId: enrollment.sessionId,
           status: 'active',
@@ -675,7 +709,19 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     altPhone,
     pinCode,
     paymentPlan,
-    initialPaymentAmount
+    initialPaymentAmount,
+    gender,
+    category,
+    religion,
+    maritalStatus,
+    employmentStatus,
+    caste,
+    motherName,
+    motherPhone,
+    fatherPhone,
+    guardianName,
+    familyPhone,
+    documents
   } = req.body;
 
   const enrollment = await prisma.enrollment.findUnique({
@@ -712,6 +758,18 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       dob: dob ? new Date(dob) : enrollment.dob,
       altPhone: altPhone !== undefined ? altPhone : enrollment.altPhone,
       pinCode: pinCode !== undefined ? pinCode : enrollment.pinCode,
+      gender: gender !== undefined ? gender : enrollment.gender,
+      category: category !== undefined ? category : enrollment.category,
+      religion: religion !== undefined ? religion : enrollment.religion,
+      maritalStatus: maritalStatus !== undefined ? maritalStatus : enrollment.maritalStatus,
+      employmentStatus: employmentStatus !== undefined ? employmentStatus : enrollment.employmentStatus,
+      caste: caste !== undefined ? caste : enrollment.caste,
+      motherName: motherName !== undefined ? motherName : enrollment.motherName,
+      motherPhone: motherPhone !== undefined ? motherPhone : enrollment.motherPhone,
+      fatherPhone: fatherPhone !== undefined ? fatherPhone : enrollment.fatherPhone,
+      guardianName: guardianName !== undefined ? guardianName : enrollment.guardianName,
+      familyPhone: familyPhone !== undefined ? familyPhone : enrollment.familyPhone,
+      documents: documents !== undefined ? documents : enrollment.documents,
       paymentPlan: paymentPlan || enrollment.paymentPlan,
       initialPaymentAmount: initialPaymentAmount !== undefined ? Number(initialPaymentAmount) : enrollment.initialPaymentAmount,
       status: 'document_review',

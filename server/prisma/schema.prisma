@@ -26,6 +26,7 @@ model Organization {
   auditLogs           AuditLog[]
   branches            Branch[]
   ceoPanels           CeoPanel[]
+  collectionOverseers CollectionOverseer[]
   complaints          Complaint[]
   credentialRequests  CredentialRequest[]
   departments         Department[]
@@ -47,19 +48,22 @@ model Organization {
   leads               Lead[]
   leaveAllocations    LeaveAllocation[]
   leaveRequests       LeaveRequest[]
+  meetings            Meeting[]
   notifications       Notification[]
   license             License?               @relation(fields: [licenseId], references: [id])
   payments            PaymentEntry[]
+  paymentLinks        PaymentLink[]
+  paymentSchedules    PaymentSchedule[]
   payrolls            Payroll[]
   payrollBatches      PayrollBatch[]
   polls               Poll[]
   programs            Program[]
   programAllocations  ProgramAllocation[]
+  programMaterials    ProgramMaterial[]
   referralLinks       ReferralLink[]
   reregRules          ReregRule[]
   salaryConfigs       SalaryConfig[]
   sessionReqs         SessionRequest[]
-  collectionOverseers CollectionOverseer[]
   students            Student[]
   studyCenters        StudyCenter[]
   studyCenterInvites  StudyCenterInvite[]
@@ -68,16 +72,12 @@ model Organization {
   targets             Target[]
   tasks               Task[]
   universities        University[]
+  authFees            UniversityAuthFee[]
   commissions         UniversityCommission[]
   universityPayments  UniversityPayment[]
-  authFees            UniversityAuthFee[]
   users               User[]
   vacancies           Vacancy[]
   walletTopUps        WalletTopUp[]
-  programMaterials    ProgramMaterial[]
-  paymentSchedules    PaymentSchedule[]
-  paymentLinks        PaymentLink[]
-  meetings            Meeting[]
 
   @@index([status])
 }
@@ -141,7 +141,6 @@ model User {
   ceoPanelId                    String?
   studyCenterId                 String?
   universityId                  String?
-  permissions                   Json?                @default("[]")
   email                         String               @unique
   password                      String
   name                          String
@@ -154,32 +153,37 @@ model User {
   lastLogin                     DateTime?
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
+  permissions                   Json?                @default("[]")
   approvedSessions              AdmissionSession[]   @relation("SessionApprovedBy")
   createdSessions               AdmissionSession[]   @relation("SessionCreatedBy")
   postedAnnouncements           Announcement[]
+  assets                        Asset[]              @relation("UserAssets")
   attendances                   Attendance[]
   auditLogs                     AuditLog[]
   managedBranch                 Branch?              @relation("BranchManager")
   ceoPanel                      CeoPanel?
+  collectionOverseers           CollectionOverseer[]
   complaints                    Complaint[]
   credentialResponder           CredentialRequest[]  @relation("CredentialResponder")
   credentialRequester           CredentialRequest[]  @relation("CredentialRequester")
   managedDepartments            Department[]         @relation("DepartmentManager")
+  documentLogs                  DocumentLog[]        @relation("DocumentLoggedBy")
   editDeleteResponder           EditDeleteRequest[]  @relation("EditDeleteResponder")
   editDeleteRequester           EditDeleteRequest[]  @relation("EditDeleteRequester")
   employeeProfile               Employee?
   employeeProfileDetail         EmployeeProfile?
   deptReviewedEnrollments       Enrollment[]         @relation("DeptReviewedBy")
   financeReviewedEnrollments    Enrollment[]         @relation("FinanceReviewedBy")
-  universityReviewedEnrollments Enrollment[]         @relation("UniversityReviewedBy")
-  salesLedEnrollments           Enrollment[]         @relation("SalesUserEnrollments")
   verifiedReceipts              Enrollment[]         @relation("ReceiptVerifiedBy")
+  salesLedEnrollments           Enrollment[]         @relation("SalesUserEnrollments")
+  universityReviewedEnrollments Enrollment[]         @relation("UniversityReviewedBy")
   deptAdminEscalations          Escalation[]         @relation("EscalationDeptAdmin")
   employeeEscalations           Escalation[]         @relation("EscalationEmployee")
   handledEscalations            Escalation[]         @relation("EscalationHandledBy")
   resolvedEscalations           Escalation[]         @relation("EscalatedResolvedBy")
   approvedExpenseClaims         ExpenseClaim[]       @relation("ExpenseApprovedBy")
   expenseClaims                 ExpenseClaim[]       @relation("EmployeeExpenses")
+  createdFees                   FeeStructure[]       @relation("FeeCreatedBy")
   createdGstSettings            GSTSetting[]         @relation("GstSettingCreatedBy")
   approvedIncentives            IncentiveStructure[] @relation("IncentiveApprovedBy")
   createdIncentives             IncentiveStructure[] @relation("IncentiveCreatedBy")
@@ -190,8 +194,10 @@ model User {
   deptApprovedLeaves            LeaveRequest[]       @relation("DeptApprovedBy")
   leaveRequests                 LeaveRequest[]       @relation("EmployeeLeaves")
   hrApprovedLeaves              LeaveRequest[]       @relation("HrApprovedBy")
+  hostedMeetings                Meeting[]            @relation("MeetingHost")
   notifications                 Notification[]
   receivedPayments              PaymentEntry[]       @relation("PaymentReceivedBy")
+  createdPaymentLinks           PaymentLink[]        @relation("PaymentLinkCreatedBy")
   confirmedPayrolls             Payroll[]            @relation("PayrollConfirmedBy")
   payrolls                      Payroll[]            @relation("EmployeePayroll")
   financeApprovedPayrolls       Payroll[]            @relation("PayrollFinanceApprovedBy")
@@ -202,8 +208,7 @@ model User {
   batchTransferred              PayrollBatch[]       @relation("BatchTransferredBy")
   createdPolls                  Poll[]               @relation("PollCreatedBy")
   programAllocations            ProgramAllocation[]  @relation("AllocatedBy")
-  createdFees                   FeeStructure[]       @relation("FeeCreatedBy")
-  createdPaymentLinks           PaymentLink[]        @relation("PaymentLinkCreatedBy")
+  uploadedMaterials             ProgramMaterial[]    @relation("MaterialUploadedBy")
   referralLink                  ReferralLink?
   salaryApproved                SalaryConfig[]       @relation("SalaryApprovedBy")
   salaryCreated                 SalaryConfig[]       @relation("SalaryCreatedBy")
@@ -211,8 +216,8 @@ model User {
   approvedRequests              SessionRequest[]     @relation("RequestApprovedBy")
   sessionRequests               SessionRequest[]
   studentProfile                Student?
-  referredStudents              Student[]            @relation("StudentReferredBy")
   enrolledStudents              Student[]            @relation("StudentEnrolledBy")
+  referredStudents              Student[]            @relation("StudentReferredBy")
   financeApprovedCenters        StudyCenter[]        @relation("FinanceApprovedBy")
   referredStudyCenters          StudyCenter[]        @relation("ReferredBy")
   verifiedStudyCenters          StudyCenter[]        @relation("VerifiedBy")
@@ -234,11 +239,6 @@ model User {
   verifiedWalletTopUps          WalletTopUp[]        @relation("TopUpVerifiedBy")
   assistantManagedDepartments   Department[]         @relation("AssistantManagers")
   designations                  Designation[]        @relation("DesignationFilledBy")
-  uploadedMaterials             ProgramMaterial[]    @relation("MaterialUploadedBy")
-  collectionOverseers           CollectionOverseer[]
-  assets                        Asset[]              @relation("UserAssets")
-  documentLogs                  DocumentLog[]        @relation("DocumentLoggedBy")
-  hostedMeetings                Meeting[]            @relation("MeetingHost")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -318,29 +318,28 @@ model Attendance {
 }
 
 model University {
-  students Student[]
-
   id                 String                 @id @default(uuid())
   organizationId     String
   subDepartmentId    String?
   name               String
   code               String
-  logo               String?
   address            String?
   contact            String?
   country            String?
   status             String                 @default("active")
+  logo               String?
   admissionSessions  AdmissionSession[]
+  feeStructures      FeeStructure[]
   programs           Program[]
+  students           Student[]
   organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   authFees           UniversityAuthFee[]
+  commissions        UniversityCommission[]
+  universityPayments UniversityPayment[]
   admins             User[]                 @relation("UniversityAdmin")
   assignedSubDepts   SubDepartment[]        @relation("SubDeptToUniversity")
   allowedBranches    Branch[]               @relation("UniversityToBranch")
   studyCenters       StudyCenter[]          @relation("UniversityToStudyCenter")
-  feeStructures      FeeStructure[]
-  commissions        UniversityCommission[]
-  universityPayments UniversityPayment[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -357,20 +356,20 @@ model Program {
   duration           Int
   hasSemesters       Boolean             @default(false)
   semesters          Json                @default("[]")
-  specialisations    String[]            @default([])
-  syllabus           String?             @db.Text
   status             String              @default("active")
+  specialisations    String[]            @default([])
+  syllabus           String?
   admissionSessions  AdmissionSession[]
   enrollments        Enrollment[]
   feeStructures      FeeStructure[]
   organization       Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   university         University          @relation(fields: [universityId], references: [id])
   programAllocations ProgramAllocation[]
+  materials          ProgramMaterial[]
   reregRules         ReregRule[]
   students           Student[]
   studyCenters       StudyCenter[]       @relation("ProgramToStudyCenter")
   assignedSubDepts   SubDepartment[]     @relation("SubDeptToProgram")
-  materials          ProgramMaterial[]
 
   @@index([universityId])
   @@index([organizationId])
@@ -428,32 +427,15 @@ model StudyCenter {
 }
 
 model Student {
-  university University?       @relation(fields: [universityId], references: [id])
-  session    AdmissionSession? @relation(fields: [sessionId], references: [id])
-
   id                 String                 @id @default(uuid())
   centerId           String?
-  branchId           String?
   organizationId     String
   enrollmentNo       String?                @unique
-  admissionNo        String?
-  admissionDate      DateTime?
   name               String
   email              String                 @unique
   phone              String
   address            String
-  fatherName         String?
-  motherName         String?
-  fatherPhone        String?
-  motherPhone        String?
-  religion           String?
-  caste              String?
-  dob                DateTime?
-  altPhone           String?
-  pinCode            String?
-  photo              String?
   programId          String
-  universityId       String?
   sessionId          String?
   status             String                 @default("pending")
   joinDate           DateTime               @default(now())
@@ -462,29 +444,51 @@ model Student {
   createdAt          DateTime               @default(now())
   updatedAt          DateTime               @updatedAt
   referredBy         String?
-  enrolledBy         String? // ID of the sales user who enrolled this student
-  documents          Json?                  @default("[]")
-  enrollments        Enrollment[]
-  internalMarks      InternalMark[]
-  invoices           Invoice[]
-  center             StudyCenter?           @relation(fields: [centerId], references: [id])
-  branch             Branch?                @relation(fields: [branchId], references: [id])
-  user               User                   @relation(fields: [email], references: [email])
-  organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program            Program                @relation(fields: [programId], references: [id])
-  referrer           User?                  @relation("StudentReferredBy", fields: [referredBy], references: [id])
-  enrolledByUser     User?                  @relation("StudentEnrolledBy", fields: [enrolledBy], references: [id])
   isPrevious         Boolean                @default(false)
-  paymentSchedules   PaymentSchedule[]
-  paymentLinks       PaymentLink[]
   credentials        Json?
-  admissionProgress  Json?                  @default("{}") // Tracks Admission Progress Checklist
-  academicProgress   Json?                  @default("[]") // Array of yearly academic progress
-  commissions        UniversityCommission[]
-  universityPayments UniversityPayment[]
+  altPhone           String?
+  dob                DateTime?
+  fatherName         String?
+  pinCode            String?
+  documents          Json?                  @default("[]")
+  admissionDate      DateTime?
+  admissionNo        String?
+  branchId           String?
+  caste              String?
+  fatherPhone        String?
+  motherName         String?
+  motherPhone        String?
+  photo              String?
+  religion           String?
+  gender             String?
+  category           String?
+  maritalStatus      String?
+  employmentStatus   String?
+  guardianName       String?
+  familyPhone        String?
+  universityId       String?
+  enrolledBy         String?
+  academicProgress   Json?                  @default("[]")
+  admissionProgress  Json?                  @default("{}")
   discountAmount     Float                  @default(0)
   discountReason     String?
   documentLogs       DocumentLog[]
+  enrollments        Enrollment[]
+  internalMarks      InternalMark[]
+  invoices           Invoice[]
+  paymentLinks       PaymentLink[]
+  paymentSchedules   PaymentSchedule[]
+  branch             Branch?                @relation(fields: [branchId], references: [id])
+  center             StudyCenter?           @relation(fields: [centerId], references: [id])
+  user               User                   @relation(fields: [email], references: [email])
+  enrolledByUser     User?                  @relation("StudentEnrolledBy", fields: [enrolledBy], references: [id])
+  organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program            Program                @relation(fields: [programId], references: [id])
+  referrer           User?                  @relation("StudentReferredBy", fields: [referredBy], references: [id])
+  session            AdmissionSession?      @relation(fields: [sessionId], references: [id])
+  university         University?            @relation(fields: [universityId], references: [id])
+  commissions        UniversityCommission[]
+  universityPayments UniversityPayment[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -506,14 +510,14 @@ model Invoice {
   items          Json             @default("[]")
   dueDate        DateTime?
   paidAt         DateTime?
-  scheduleId     String?
-  notes          String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  notes          String?
+  scheduleId     String?
   center         StudyCenter?     @relation(fields: [centerId], references: [id])
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student?         @relation(fields: [studentId], references: [id])
   schedule       PaymentSchedule? @relation(fields: [scheduleId], references: [id])
+  student        Student?         @relation(fields: [studentId], references: [id])
   payments       PaymentEntry[]
 
   @@index([organizationId, status])
@@ -745,10 +749,10 @@ model Branch {
   organization      Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   salesDept         Department?         @relation("BranchSalesDept", fields: [salesDeptId], references: [id])
   designations      Designation[]
+  students          Student[]
   invites           StudyCenterInvite[]
   users             User[]
   universities      University[]        @relation("UniversityToBranch")
-  students          Student[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -791,6 +795,8 @@ model Designation {
   status              String         @default("active")
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
+  allowedBranchIds    Json?          @default("[]")
+  allowedDeptIds      Json?          @default("[]")
   branch              Branch?        @relation(fields: [branchId], references: [id])
   department          Department?    @relation(fields: [departmentId], references: [id])
   organization        Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -798,8 +804,6 @@ model Designation {
   childDesignations   Designation[]  @relation("DesignationHierarchy")
   subDepartment       SubDepartment? @relation(fields: [subDepartmentId], references: [id])
   filledBy            User[]         @relation("DesignationFilledBy")
-  allowedDeptIds      Json?          @default("[]")
-  allowedBranchIds    Json?          @default("[]")
 
   @@index([organizationId, departmentId])
   @@index([parentDesignationId])
@@ -819,8 +823,8 @@ model Meeting {
   minutes        String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   host           User         @relation("MeetingHost", fields: [hostId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId, date])
   @@index([hostId])
@@ -844,8 +848,6 @@ model Vacancy {
 }
 
 model AdmissionSession {
-  students Student[]
-
   id               String         @id @default(uuid())
   organizationId   String
   name             String
@@ -860,10 +862,10 @@ model AdmissionSession {
   approvedBy       String?
   approvedAt       DateTime?
   subDepartmentId  String?
-  subDepartmentIds String[]       @default([])
-  branchIds        String[]       @default([])
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+  branchIds        String[]       @default([])
+  subDepartmentIds String[]       @default([])
   approver         User?          @relation("SessionApprovedBy", fields: [approvedBy], references: [id])
   creator          User?          @relation("SessionCreatedBy", fields: [createdBy], references: [id])
   organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -873,6 +875,7 @@ model AdmissionSession {
   university       University?    @relation(fields: [universityId], references: [id])
   enrollments      Enrollment[]
   feeStructures    FeeStructure[]
+  students         Student[]
 
   @@index([organizationId])
 }
@@ -889,10 +892,6 @@ model Enrollment {
   studentEmail         String
   studentPhone         String
   studentAddress       String
-  fatherName           String?
-  dob                  DateTime?
-  altPhone             String?
-  pinCode              String?
   status               String             @default("payment_pending")
   departmentRemarks    String?
   financeRemarks       String?
@@ -908,21 +907,38 @@ model Enrollment {
   universityReviewedAt DateTime?
   universityReviewedBy String?
   salesUserId          String?
-  paymentPlan          String?
-  initialPaymentAmount Float?
-  salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
-  departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
-  financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
-  organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program              Program            @relation(fields: [programId], references: [id])
-  session              AdmissionSession?  @relation(fields: [sessionId], references: [id])
-  student              Student?           @relation(fields: [studentId], references: [id])
-  studyCenter          StudyCenter?       @relation(fields: [studyCenterId], references: [id])
+  altPhone             String?
+  dob                  DateTime?
+  fatherName           String?
+  pinCode              String?
+  gender               String?
+  category             String?
+  religion             String?
+  maritalStatus        String?
+  employmentStatus     String?
+  caste                String?
+  motherName           String?
+  motherPhone          String?
+  fatherPhone          String?
+  guardianName         String?
+  familyPhone          String?
+  photo                String?
+  documents            Json?              @default("[]")
   receiptUrl           String?
   receiptVerified      Boolean            @default(false)
   receiptVerifiedAt    DateTime?
   receiptVerifiedBy    String?
+  initialPaymentAmount Float?
+  paymentPlan          String?
+  departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
+  financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
+  organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program              Program            @relation(fields: [programId], references: [id])
   receiptVerifier      User?              @relation("ReceiptVerifiedBy", fields: [receiptVerifiedBy], references: [id])
+  salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
+  session              AdmissionSession?  @relation(fields: [sessionId], references: [id])
+  student              Student?           @relation(fields: [studentId], references: [id])
+  studyCenter          StudyCenter?       @relation(fields: [studyCenterId], references: [id])
   universityReviewer   User?              @relation("UniversityReviewedBy", fields: [universityReviewedBy], references: [id])
   payment              EnrollmentPayment?
 
@@ -1062,11 +1078,11 @@ model EmployeeProfile {
   reviewRemarks      String?
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
-  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user               User         @relation(fields: [userId], references: [id])
   jdFile             String?
   offerLetterFile    String?
   sopFile            String?
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user               User         @relation(fields: [userId], references: [id])
 
   @@index([userId, organizationId])
 }
@@ -1368,32 +1384,32 @@ model UniversityAuthFee {
 model FeeStructure {
   id              String            @id @default(uuid())
   programId       String?
-  universityId    String?
-  feeLevel        String            @default("program") // "program" | "university"
-  sessionId       String?
   organizationId  String
   registrationFee Float             @default(0)
   tuitionFee      Float             @default(0)
   examFee         Float             @default(0)
-  universityFee   Float             @default(0)
-  commissionRate  Float             @default(0)
-  yearlyFees      Json              @default("[]")
   otherCharges    Json              @default("{}")
   gstPercentage   Float             @default(18)
-  allowInitialFee Boolean           @default(false)
-  billingCycle    String            @default("per_year")
-  currency        String            @default("INR")
-  effectiveFrom   DateTime?
-  dueDate         DateTime?
-  additionalFees  Json              @default("[]")
-  createdBy       String?
-  creator         User?             @relation("FeeCreatedBy", fields: [createdBy], references: [id])
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+  sessionId       String?
+  additionalFees  Json              @default("[]")
+  billingCycle    String            @default("per_year")
+  createdBy       String?
+  currency        String            @default("INR")
+  effectiveFrom   DateTime?
+  feeLevel        String            @default("program")
+  universityId    String?
+  commissionRate  Float             @default(0)
+  universityFee   Float             @default(0)
+  yearlyFees      Json              @default("[]")
+  dueDate         DateTime?
+  allowInitialFee Boolean           @default(false)
+  creator         User?             @relation("FeeCreatedBy", fields: [createdBy], references: [id])
   organization    Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program         Program?          @relation(fields: [programId], references: [id])
-  university      University?       @relation(fields: [universityId], references: [id])
   session         AdmissionSession? @relation(fields: [sessionId], references: [id])
+  university      University?       @relation(fields: [universityId], references: [id])
 
   @@index([organizationId])
   @@index([universityId])
@@ -1406,7 +1422,7 @@ model UniversityCommission {
   universityId   String
   amountReceived Float
   dateReceived   DateTime     @default(now())
-  status         String       @default("pending") // "received" | "pending"
+  status         String       @default("pending")
   notes          String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -1416,16 +1432,16 @@ model UniversityCommission {
 }
 
 model EnrollmentPayment {
-  id            String            @id @default(uuid())
-  enrollmentId  String            @unique
+  id            String             @id @default(uuid())
+  enrollmentId  String             @unique
   studyCenterId String?
   walletId      String?
   amount        Float
-  debitedAt     DateTime          @default(now())
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  enrollment    Enrollment        @relation(fields: [enrollmentId], references: [id])
-  studyCenter   StudyCenter?      @relation(fields: [studyCenterId], references: [id])
+  debitedAt     DateTime           @default(now())
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  enrollment    Enrollment         @relation(fields: [enrollmentId], references: [id])
+  studyCenter   StudyCenter?       @relation(fields: [studyCenterId], references: [id])
   wallet        StudyCenterWallet? @relation(fields: [walletId], references: [id])
 
   @@index([studyCenterId])
@@ -1454,6 +1470,156 @@ model IncentiveStructure {
   @@index([organizationId, status])
 }
 
+model ProgramMaterial {
+  id             String       @id @default(uuid())
+  programId      String
+  organizationId String
+  title          String
+  description    String?
+  fileUrl        String
+  uploadedBy     String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program        Program      @relation(fields: [programId], references: [id])
+  uploader       User         @relation("MaterialUploadedBy", fields: [uploadedBy], references: [id])
+
+  @@index([programId])
+  @@index([organizationId])
+}
+
+model PaymentSchedule {
+  id             String        @id @default(uuid())
+  organizationId String
+  studentId      String
+  title          String
+  amount         Float
+  dueDate        DateTime
+  status         String        @default("pending")
+  paidAt         DateTime?
+  remarks        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  isOldFee       Boolean       @default(false)
+  isExtraFee     Boolean       @default(false)
+  invoices       Invoice[]
+  paymentLinks   PaymentLink[]
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+  @@index([studentId])
+}
+
+model PaymentLink {
+  id             String           @id @default(uuid())
+  organizationId String
+  studentId      String
+  scheduleId     String?
+  invoiceId      String?
+  token          String           @unique @default(uuid())
+  amount         Float
+  description    String?
+  status         String           @default("active")
+  expiresAt      DateTime
+  paidAt         DateTime?
+  createdBy      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  creator        User?            @relation("PaymentLinkCreatedBy", fields: [createdBy], references: [id])
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  schedule       PaymentSchedule? @relation(fields: [scheduleId], references: [id])
+  student        Student          @relation(fields: [studentId], references: [id])
+
+  @@index([organizationId])
+  @@index([studentId])
+  @@index([token])
+}
+
+model CollectionOverseer {
+  id             String       @id @default(uuid())
+  organizationId String
+  userId         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model OrgInquiry {
+  id        String   @id @default(uuid())
+  orgName   String
+  adminName String
+  email     String
+  phone     String
+  message   String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
+
+model UniversityPayment {
+  id             String       @id @default(uuid())
+  organizationId String
+  studentId      String
+  universityId   String
+  amountPaid     Float
+  datePaid       DateTime     @default(now())
+  status         String       @default("paid")
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id])
+  university     University   @relation(fields: [universityId], references: [id])
+}
+
+model Asset {
+  id              String      @id @default(uuid())
+  type            AssetType
+  brand           String?
+  model           String?
+  serialNumber    String?
+  imeiNumber      String?
+  networkProvider String?
+  phoneNumber     String?
+  userId          String
+  status          AssetStatus @default(ASSIGNED)
+  notes           String?
+  assignedDate    DateTime    @default(now())
+  returnedDate    DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User        @relation("UserAssets", fields: [userId], references: [id])
+}
+
+model DocumentLog {
+  id             String    @id @default(uuid())
+  organizationId String
+  studentId      String?
+  type           String    @default("received")
+  documentName   String
+  documentType   String
+  status         String    @default("pending")
+  notes          String?
+  courierName    String?
+  trackingNumber String?
+  dispatchDate   DateTime?
+  deliveryDate   DateTime?
+  loggedBy       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  loggedByUser   User      @relation("DocumentLoggedBy", fields: [loggedBy], references: [id])
+  student        Student?  @relation(fields: [studentId], references: [id])
+
+  @@index([organizationId])
+  @@index([studentId])
+}
+
 enum OrganizationStatus {
   active
   inactive
@@ -1472,12 +1638,12 @@ enum DepartmentType {
   hr
   sales
   ceo
-  general_manager
   org_admin
   study_center
   staff
   custom
   collections
+  general_manager
 }
 
 enum DepartmentSubType {
@@ -1497,7 +1663,6 @@ enum UserRole {
   superadmin
   org_admin
   ceo
-  general_manager
   ops_admin
   ops_sub_admin
   finance_admin
@@ -1511,6 +1676,7 @@ enum UserRole {
   staff
   collections_admin
   collections
+  general_manager
 }
 
 enum TaskPriority {
@@ -1632,133 +1798,6 @@ enum PayrollBatchStatus {
   completed
 }
 
-model ProgramMaterial {
-  id             String       @id @default(uuid())
-  programId      String
-  organizationId String
-  title          String
-  description    String?
-  fileUrl        String
-  uploadedBy     String
-  isActive       Boolean      @default(true)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program        Program      @relation(fields: [programId], references: [id])
-  uploader       User         @relation("MaterialUploadedBy", fields: [uploadedBy], references: [id])
-
-  @@index([programId])
-  @@index([organizationId])
-}
-
-model PaymentSchedule {
-  id             String        @id @default(uuid())
-  organizationId String
-  studentId      String
-  title          String
-  amount         Float
-  dueDate        DateTime
-  status         String        @default("pending") // pending, paid, overdue
-  paidAt         DateTime?
-  remarks        String?
-  isOldFee       Boolean       @default(false)
-  isExtraFee     Boolean       @default(false)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  invoices       Invoice[]
-  paymentLinks   PaymentLink[]
-
-  @@index([organizationId, status])
-  @@index([studentId])
-}
-
-model PaymentLink {
-  id             String           @id @default(uuid())
-  organizationId String
-  studentId      String
-  scheduleId     String?
-  invoiceId      String?
-  token          String           @unique @default(uuid())
-  amount         Float
-  description    String?
-  status         String           @default("active") // active, paid, expired
-  expiresAt      DateTime
-  paidAt         DateTime?
-  createdBy      String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student          @relation(fields: [studentId], references: [id])
-  schedule       PaymentSchedule? @relation(fields: [scheduleId], references: [id])
-  creator        User?            @relation("PaymentLinkCreatedBy", fields: [createdBy], references: [id])
-
-  @@index([organizationId])
-  @@index([studentId])
-  @@index([token])
-}
-
-model CollectionOverseer {
-  id             String       @id @default(uuid())
-  organizationId String
-  userId         String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, userId])
-  @@index([organizationId])
-  @@index([userId])
-}
-
-model OrgInquiry {
-  id        String   @id @default(uuid())
-  orgName   String
-  adminName String
-  email     String
-  phone     String
-  message   String?
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-}
-
-model UniversityPayment {
-  id             String       @id @default(uuid())
-  organizationId String
-  studentId      String
-  universityId   String
-  amountPaid     Float
-  datePaid       DateTime     @default(now())
-  status         String       @default("paid")
-  notes          String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student      @relation(fields: [studentId], references: [id])
-  university     University   @relation(fields: [universityId], references: [id])
-}
-
-model Asset {
-  id              String       @id @default(uuid())
-  type            AssetType
-  brand           String?
-  model           String?
-  serialNumber    String?
-  imeiNumber      String?
-  networkProvider String?
-  phoneNumber     String?
-  userId          String
-  user            User         @relation("UserAssets", fields: [userId], references: [id])
-  status          AssetStatus  @default(ASSIGNED)
-  notes           String?
-  assignedDate    DateTime     @default(now())
-  returnedDate    DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-}
-
 enum AssetType {
   COMPUTER
   PHONE
@@ -1770,34 +1809,4 @@ enum AssetStatus {
   RETURNED
   LOST
   DAMAGED
-}
-
-// ============================================
-// Phase 2: Document Management & Courier Tracking
-// ============================================
-
-model DocumentLog {
-  id              String         @id @default(uuid())
-  organizationId  String
-  studentId       String?
-  student         Student?       @relation(fields: [studentId], references: [id])
-  type            String         @default("received") // "received" | "dispatched"
-  documentName    String
-  documentType    String         // "marksheet", "certificate", "id_card", "other"
-  status          String         @default("pending")  // "pending", "verified", "rejected", "dispatched", "delivered"
-  notes           String?
-  
-  // Dispatch Info
-  courierName     String?
-  trackingNumber  String?
-  dispatchDate    DateTime?
-  deliveryDate    DateTime?
-  
-  loggedBy        String
-  loggedByUser    User           @relation("DocumentLoggedBy", fields: [loggedBy], references: [id])
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-
-  @@index([organizationId])
-  @@index([studentId])
 }

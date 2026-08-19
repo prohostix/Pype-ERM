@@ -410,14 +410,20 @@ export function FinanceEnrollmentsPanel() {
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Personal Details</h4>
                 <div className="grid grid-cols-2 gap-3">
-                  <Field label="Father's Name" value={viewStudent.student?.fatherName} />
-                  <Field label="Mother's Name" value={viewStudent.student?.motherName} />
-                  <Field label="Father's Phone" value={viewStudent.student?.fatherPhone} />
-                  <Field label="Mother's Phone" value={viewStudent.student?.motherPhone} />
-                  <Field label="Religion" value={viewStudent.student?.religion} />
-                  <Field label="Caste" value={viewStudent.student?.caste} />
-                  <Field label="Address" value={viewStudent.student?.address} />
-                  <Field label="Pin Code" value={viewStudent.student?.pinCode} />
+                  <Field label="Gender" value={viewStudent.gender || viewStudent.student?.gender} />
+                  <Field label="Category" value={viewStudent.category || viewStudent.student?.category} />
+                  <Field label="Religion" value={viewStudent.religion || viewStudent.student?.religion} />
+                  <Field label="Marital Status" value={viewStudent.maritalStatus || viewStudent.student?.maritalStatus} />
+                  <Field label="Employment Status" value={viewStudent.employmentStatus || viewStudent.student?.employmentStatus} />
+                  <Field label="Caste" value={viewStudent.caste || viewStudent.student?.caste} />
+                  <Field label="Father's Name" value={viewStudent.fatherName || viewStudent.student?.fatherName} />
+                  <Field label="Mother's Name" value={viewStudent.motherName || viewStudent.student?.motherName} />
+                  <Field label="Father's Phone" value={viewStudent.fatherPhone || viewStudent.student?.fatherPhone} />
+                  <Field label="Mother's Phone" value={viewStudent.motherPhone || viewStudent.student?.motherPhone} />
+                  <Field label="Guardian's Name" value={viewStudent.guardianName || viewStudent.student?.guardianName} />
+                  <Field label="Family Phone" value={viewStudent.familyPhone || viewStudent.student?.familyPhone} />
+                  <Field label="Address" value={viewStudent.studentAddress || viewStudent.student?.address} />
+                  <Field label="Pin Code" value={viewStudent.pinCode || viewStudent.student?.pinCode} />
                 </div>
               </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle, Upload } from 'lucide-react';
+import { RefreshCw, GraduationCap, Search, ChevronDown, ChevronUp, User, CheckCircle, Clock, XCircle, Plus, Phone, Mail, MessageCircle, Upload, UploadCloud, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,7 +32,7 @@ interface Enrollment {
   departmentRemarks?: string;
   financeRemarks?: string;
   statusHistory: StatusHistoryEntry[];
-  program: { name: string; code: string; courseType: string };
+  program: { name: string; code: string; courseType: string; feeStructures?: any[] };
   studyCenter: { name: string; code: string };
   session: { name: string };
   departmentReviewer?: { name: string; email: string };
@@ -424,6 +424,50 @@ export function SalesStudentPipelinePanel() {
                     onChange={e => setVerifyForm({...verifyForm, altPhone: e.target.value})} 
                   />
                 </div>
+                <div className="space-y-1.5">
+                  <Label>Gender</Label>
+                  <Input value={verifyForm.gender || ''} onChange={e => setVerifyForm({...verifyForm, gender: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Category</Label>
+                  <Input value={verifyForm.category || ''} onChange={e => setVerifyForm({...verifyForm, category: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Religion</Label>
+                  <Input value={verifyForm.religion || ''} onChange={e => setVerifyForm({...verifyForm, religion: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Marital Status</Label>
+                  <Input value={verifyForm.maritalStatus || ''} onChange={e => setVerifyForm({...verifyForm, maritalStatus: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Employment Status</Label>
+                  <Input value={verifyForm.employmentStatus || ''} onChange={e => setVerifyForm({...verifyForm, employmentStatus: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Caste</Label>
+                  <Input value={verifyForm.caste || ''} onChange={e => setVerifyForm({...verifyForm, caste: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Mother's Name</Label>
+                  <Input value={verifyForm.motherName || ''} onChange={e => setVerifyForm({...verifyForm, motherName: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Mother's Phone</Label>
+                  <Input value={verifyForm.motherPhone || ''} onChange={e => setVerifyForm({...verifyForm, motherPhone: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Father's Phone</Label>
+                  <Input value={verifyForm.fatherPhone || ''} onChange={e => setVerifyForm({...verifyForm, fatherPhone: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Guardian's Name</Label>
+                  <Input value={verifyForm.guardianName || ''} onChange={e => setVerifyForm({...verifyForm, guardianName: e.target.value})} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Family Phone</Label>
+                  <Input value={verifyForm.familyPhone || ''} onChange={e => setVerifyForm({...verifyForm, familyPhone: e.target.value})} />
+                </div>
                 <div className="space-y-1.5 col-span-2">
                   <Label>Address</Label>
                   <Input 
@@ -441,7 +485,54 @@ export function SalesStudentPipelinePanel() {
               </div>
 
               <div className="border-t pt-4 mt-4 space-y-4">
-                <h4 className="font-medium text-sm">Verify Documents</h4>
+                <h4 className="font-medium text-sm">Verify Documents & Photo</h4>
+                
+                {/* Photo Upload */}
+                <div className="mb-4">
+                  <Label className="text-xs mb-1.5 block">Profile Photo</Label>
+                  <div className="flex items-center gap-4">
+                    {verifyForm.photo ? (
+                      <div className="relative group cursor-pointer inline-block">
+                        <img src={api.getFileUrl(verifyForm.photo)} alt="Student" className="w-16 h-16 rounded-full object-cover border" />
+                        <button
+                          type="button"
+                          onClick={() => setVerifyForm({...verifyForm, photo: ''})}
+                          className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 transition-colors shadow-sm"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center border border-dashed border-slate-300">
+                        <UploadCloud className="w-6 h-6 text-slate-400" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <Input 
+                        type="file" 
+                        accept="image/*"
+                        className="text-xs file:h-7 file:py-0 file:px-2"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const toastId = toast.loading('Uploading photo...');
+                          try {
+                            const data = new FormData();
+                            data.append('file', file);
+                            const res = await api.post('/auth/upload', data, {
+                              headers: { 'Content-Type': 'multipart/form-data' }
+                            });
+                            setVerifyForm({ ...verifyForm, photo: res.data.url });
+                            toast.success('Photo uploaded successfully', { id: toastId });
+                          } catch (err) {
+                            toast.error('Failed to upload photo', { id: toastId });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const existing = (verifyForm.documents || []).find((d: any) => d.type === docType);

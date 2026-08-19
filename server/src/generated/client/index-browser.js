@@ -175,7 +175,6 @@ exports.Prisma.UserScalarFieldEnum = {
   ceoPanelId: 'ceoPanelId',
   studyCenterId: 'studyCenterId',
   universityId: 'universityId',
-  permissions: 'permissions',
   email: 'email',
   password: 'password',
   name: 'name',
@@ -187,7 +186,8 @@ exports.Prisma.UserScalarFieldEnum = {
   status: 'status',
   lastLogin: 'lastLogin',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  permissions: 'permissions'
 };
 
 exports.Prisma.EmployeeScalarFieldEnum = {
@@ -249,11 +249,11 @@ exports.Prisma.UniversityScalarFieldEnum = {
   subDepartmentId: 'subDepartmentId',
   name: 'name',
   code: 'code',
-  logo: 'logo',
   address: 'address',
   contact: 'contact',
   country: 'country',
-  status: 'status'
+  status: 'status',
+  logo: 'logo'
 };
 
 exports.Prisma.ProgramScalarFieldEnum = {
@@ -267,9 +267,9 @@ exports.Prisma.ProgramScalarFieldEnum = {
   duration: 'duration',
   hasSemesters: 'hasSemesters',
   semesters: 'semesters',
+  status: 'status',
   specialisations: 'specialisations',
-  syllabus: 'syllabus',
-  status: 'status'
+  syllabus: 'syllabus'
 };
 
 exports.Prisma.StudyCenterScalarFieldEnum = {
@@ -304,27 +304,13 @@ exports.Prisma.StudyCenterScalarFieldEnum = {
 exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   centerId: 'centerId',
-  branchId: 'branchId',
   organizationId: 'organizationId',
   enrollmentNo: 'enrollmentNo',
-  admissionNo: 'admissionNo',
-  admissionDate: 'admissionDate',
   name: 'name',
   email: 'email',
   phone: 'phone',
   address: 'address',
-  fatherName: 'fatherName',
-  motherName: 'motherName',
-  fatherPhone: 'fatherPhone',
-  motherPhone: 'motherPhone',
-  religion: 'religion',
-  caste: 'caste',
-  dob: 'dob',
-  altPhone: 'altPhone',
-  pinCode: 'pinCode',
-  photo: 'photo',
   programId: 'programId',
-  universityId: 'universityId',
   sessionId: 'sessionId',
   status: 'status',
   joinDate: 'joinDate',
@@ -333,12 +319,32 @@ exports.Prisma.StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referredBy: 'referredBy',
-  enrolledBy: 'enrolledBy',
-  documents: 'documents',
   isPrevious: 'isPrevious',
   credentials: 'credentials',
-  admissionProgress: 'admissionProgress',
+  altPhone: 'altPhone',
+  dob: 'dob',
+  fatherName: 'fatherName',
+  pinCode: 'pinCode',
+  documents: 'documents',
+  admissionDate: 'admissionDate',
+  admissionNo: 'admissionNo',
+  branchId: 'branchId',
+  caste: 'caste',
+  fatherPhone: 'fatherPhone',
+  motherName: 'motherName',
+  motherPhone: 'motherPhone',
+  photo: 'photo',
+  religion: 'religion',
+  gender: 'gender',
+  category: 'category',
+  maritalStatus: 'maritalStatus',
+  employmentStatus: 'employmentStatus',
+  guardianName: 'guardianName',
+  familyPhone: 'familyPhone',
+  universityId: 'universityId',
+  enrolledBy: 'enrolledBy',
   academicProgress: 'academicProgress',
+  admissionProgress: 'admissionProgress',
   discountAmount: 'discountAmount',
   discountReason: 'discountReason'
 };
@@ -356,10 +362,10 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   items: 'items',
   dueDate: 'dueDate',
   paidAt: 'paidAt',
-  scheduleId: 'scheduleId',
-  notes: 'notes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  notes: 'notes',
+  scheduleId: 'scheduleId'
 };
 
 exports.Prisma.LeadScalarFieldEnum = {
@@ -556,8 +562,8 @@ exports.Prisma.DesignationScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  allowedDeptIds: 'allowedDeptIds',
-  allowedBranchIds: 'allowedBranchIds'
+  allowedBranchIds: 'allowedBranchIds',
+  allowedDeptIds: 'allowedDeptIds'
 };
 
 exports.Prisma.MeetingScalarFieldEnum = {
@@ -603,10 +609,10 @@ exports.Prisma.AdmissionSessionScalarFieldEnum = {
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   subDepartmentId: 'subDepartmentId',
-  subDepartmentIds: 'subDepartmentIds',
-  branchIds: 'branchIds',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  branchIds: 'branchIds',
+  subDepartmentIds: 'subDepartmentIds'
 };
 
 exports.Prisma.EnrollmentScalarFieldEnum = {
@@ -621,10 +627,6 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   studentEmail: 'studentEmail',
   studentPhone: 'studentPhone',
   studentAddress: 'studentAddress',
-  fatherName: 'fatherName',
-  dob: 'dob',
-  altPhone: 'altPhone',
-  pinCode: 'pinCode',
   status: 'status',
   departmentRemarks: 'departmentRemarks',
   financeRemarks: 'financeRemarks',
@@ -640,12 +642,29 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   universityReviewedAt: 'universityReviewedAt',
   universityReviewedBy: 'universityReviewedBy',
   salesUserId: 'salesUserId',
-  paymentPlan: 'paymentPlan',
-  initialPaymentAmount: 'initialPaymentAmount',
+  altPhone: 'altPhone',
+  dob: 'dob',
+  fatherName: 'fatherName',
+  pinCode: 'pinCode',
+  gender: 'gender',
+  category: 'category',
+  religion: 'religion',
+  maritalStatus: 'maritalStatus',
+  employmentStatus: 'employmentStatus',
+  caste: 'caste',
+  motherName: 'motherName',
+  motherPhone: 'motherPhone',
+  fatherPhone: 'fatherPhone',
+  guardianName: 'guardianName',
+  familyPhone: 'familyPhone',
+  photo: 'photo',
+  documents: 'documents',
   receiptUrl: 'receiptUrl',
   receiptVerified: 'receiptVerified',
   receiptVerifiedAt: 'receiptVerifiedAt',
-  receiptVerifiedBy: 'receiptVerifiedBy'
+  receiptVerifiedBy: 'receiptVerifiedBy',
+  initialPaymentAmount: 'initialPaymentAmount',
+  paymentPlan: 'paymentPlan'
 };
 
 exports.Prisma.ExpenseClaimScalarFieldEnum = {
@@ -987,27 +1006,27 @@ exports.Prisma.UniversityAuthFeeScalarFieldEnum = {
 exports.Prisma.FeeStructureScalarFieldEnum = {
   id: 'id',
   programId: 'programId',
-  universityId: 'universityId',
-  feeLevel: 'feeLevel',
-  sessionId: 'sessionId',
   organizationId: 'organizationId',
   registrationFee: 'registrationFee',
   tuitionFee: 'tuitionFee',
   examFee: 'examFee',
-  universityFee: 'universityFee',
-  commissionRate: 'commissionRate',
-  yearlyFees: 'yearlyFees',
   otherCharges: 'otherCharges',
   gstPercentage: 'gstPercentage',
-  allowInitialFee: 'allowInitialFee',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sessionId: 'sessionId',
+  additionalFees: 'additionalFees',
   billingCycle: 'billingCycle',
+  createdBy: 'createdBy',
   currency: 'currency',
   effectiveFrom: 'effectiveFrom',
+  feeLevel: 'feeLevel',
+  universityId: 'universityId',
+  commissionRate: 'commissionRate',
+  universityFee: 'universityFee',
+  yearlyFees: 'yearlyFees',
   dueDate: 'dueDate',
-  additionalFees: 'additionalFees',
-  createdBy: 'createdBy',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  allowInitialFee: 'allowInitialFee'
 };
 
 exports.Prisma.UniversityCommissionScalarFieldEnum = {
@@ -1075,10 +1094,10 @@ exports.Prisma.PaymentScheduleScalarFieldEnum = {
   status: 'status',
   paidAt: 'paidAt',
   remarks: 'remarks',
-  isOldFee: 'isOldFee',
-  isExtraFee: 'isExtraFee',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isOldFee: 'isOldFee',
+  isExtraFee: 'isExtraFee'
 };
 
 exports.Prisma.PaymentLinkScalarFieldEnum = {
@@ -1213,12 +1232,12 @@ exports.DepartmentType = exports.$Enums.DepartmentType = {
   hr: 'hr',
   sales: 'sales',
   ceo: 'ceo',
-  general_manager: 'general_manager',
   org_admin: 'org_admin',
   study_center: 'study_center',
   staff: 'staff',
   custom: 'custom',
-  collections: 'collections'
+  collections: 'collections',
+  general_manager: 'general_manager'
 };
 
 exports.DepartmentSubType = exports.$Enums.DepartmentSubType = {
@@ -1232,7 +1251,6 @@ exports.UserRole = exports.$Enums.UserRole = {
   superadmin: 'superadmin',
   org_admin: 'org_admin',
   ceo: 'ceo',
-  general_manager: 'general_manager',
   ops_admin: 'ops_admin',
   ops_sub_admin: 'ops_sub_admin',
   finance_admin: 'finance_admin',
@@ -1245,7 +1263,8 @@ exports.UserRole = exports.$Enums.UserRole = {
   employee: 'employee',
   staff: 'staff',
   collections_admin: 'collections_admin',
-  collections: 'collections'
+  collections: 'collections',
+  general_manager: 'general_manager'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {

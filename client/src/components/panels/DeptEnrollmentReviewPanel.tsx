@@ -263,12 +263,18 @@ export function DeptEnrollmentReviewPanel() {
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Personal Details</h4>
                 <div className="grid grid-cols-2 gap-3">
+                  <InfoField label="Gender" value={val(viewStudent, 'gender', 'gender')} />
+                  <InfoField label="Category" value={val(viewStudent, 'category', 'category')} />
+                  <InfoField label="Religion" value={val(viewStudent, 'religion', 'religion')} />
+                  <InfoField label="Marital Status" value={val(viewStudent, 'maritalStatus', 'maritalStatus')} />
+                  <InfoField label="Employment Status" value={val(viewStudent, 'employmentStatus', 'employmentStatus')} />
+                  <InfoField label="Caste" value={val(viewStudent, 'caste', 'caste')} />
                   <InfoField label="Father's Name" value={val(viewStudent, 'fatherName', 'fatherName')} />
-                  <InfoField label="Mother's Name" value={viewStudent.student?.motherName} />
-                  <InfoField label="Father's Phone" value={viewStudent.student?.fatherPhone} />
-                  <InfoField label="Mother's Phone" value={viewStudent.student?.motherPhone} />
-                  <InfoField label="Religion" value={viewStudent.student?.religion} />
-                  <InfoField label="Caste" value={viewStudent.student?.caste} />
+                  <InfoField label="Mother's Name" value={val(viewStudent, 'motherName', 'motherName')} />
+                  <InfoField label="Father's Phone" value={val(viewStudent, 'fatherPhone', 'fatherPhone')} />
+                  <InfoField label="Mother's Phone" value={val(viewStudent, 'motherPhone', 'motherPhone')} />
+                  <InfoField label="Guardian's Name" value={val(viewStudent, 'guardianName', 'guardianName')} />
+                  <InfoField label="Family Phone" value={val(viewStudent, 'familyPhone', 'familyPhone')} />
                   <InfoField label="Address" value={val(viewStudent, 'studentAddress', 'address')} />
                   <InfoField label="Pin Code" value={val(viewStudent, 'pinCode', 'pinCode')} />
                 </div>
