@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Shield, ShieldAlert, ShieldCheck, Search, Users, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { useAuth } from '@/hooks/useAuth';
 
 import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
@@ -16,7 +15,6 @@ import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
 
 export default function TeamPermissionsPanel() {
-  const { user } = useAuth();
   const [subordinates, setSubordinates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
