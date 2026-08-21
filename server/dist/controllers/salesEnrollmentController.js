@@ -33,7 +33,7 @@ export const validateStudentInviteToken = asyncHandler(async (req, res) => {
             ...(invite.universityIds.length > 0 ? { universityId: { in: invite.universityIds } } : {}),
         },
         include: {
-            university: { select: { id: true, name: true, code: true } },
+            university: { select: { id: true, name: true, code: true, logo: true } },
             feeStructures: { select: { allowInitialFee: true } },
         },
     });
@@ -50,7 +50,7 @@ export const validateStudentInviteToken = asyncHandler(async (req, res) => {
 // ─── Public: Student submits their data via invite link ───────────────────────
 export const submitStudentApplication = asyncHandler(async (req, res) => {
     const { token } = req.params;
-    const { studentName, studentEmail, studentPhone, studentAddress, programId, sessionId, documents, fatherName, dob, altPhone, pinCode } = req.body;
+    const { studentName, studentEmail, studentPhone, studentAddress, programId, sessionId, documents, fatherName, dob, altPhone, pinCode, gender, category, religion, maritalStatus, employmentStatus, caste, motherName, motherPhone, fatherPhone, guardianName, familyPhone, photo } = req.body;
     // Validate required fields
     const missing = [];
     if (!studentName)
@@ -59,16 +59,8 @@ export const submitStudentApplication = asyncHandler(async (req, res) => {
         missing.push('studentEmail');
     if (!studentPhone)
         missing.push('studentPhone');
-    if (!studentAddress)
-        missing.push('studentAddress');
     if (!programId)
         missing.push('programId');
-    if (!fatherName)
-        missing.push('fatherName');
-    if (!dob)
-        missing.push('dob');
-    if (!pinCode)
-        missing.push('pinCode');
     if (missing.length > 0) {
         res.status(400).json({ success: false, message: `Missing required fields: ${missing.join(', ')}` });
         return;
@@ -127,11 +119,24 @@ export const submitStudentApplication = asyncHandler(async (req, res) => {
             studentName,
             studentEmail,
             studentPhone,
-            studentAddress,
+            studentAddress: studentAddress || '',
             fatherName,
             dob: dob ? new Date(dob) : null,
             altPhone,
             pinCode,
+            gender,
+            category,
+            religion,
+            maritalStatus,
+            employmentStatus,
+            caste,
+            motherName,
+            motherPhone,
+            fatherPhone,
+            guardianName,
+            familyPhone,
+            photo,
+            documents: documents || [],
             programId,
             studyCenterId: studyCenter?.id || null,
             sessionId: session.id,
@@ -167,6 +172,14 @@ export const submitStudentApplication = asyncHandler(async (req, res) => {
                 priority: 'medium',
                 link: 'student-applications',
             },
+        });
+    }
+    catch (_) { /* non-critical */ }
+    // Update invite link to 'used'
+    try {
+        await prisma.studyCenterInvite.update({
+            where: { id: invite.id },
+            data: { status: 'used', usedAt: new Date() },
         });
     }
     catch (_) { /* non-critical */ }
@@ -328,6 +341,19 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                     dob: enrollment.dob,
                     altPhone: enrollment.altPhone,
                     pinCode: enrollment.pinCode,
+                    gender: enrollment.gender,
+                    category: enrollment.category,
+                    religion: enrollment.religion,
+                    maritalStatus: enrollment.maritalStatus,
+                    employmentStatus: enrollment.employmentStatus,
+                    caste: enrollment.caste,
+                    motherName: enrollment.motherName,
+                    motherPhone: enrollment.motherPhone,
+                    fatherPhone: enrollment.fatherPhone,
+                    guardianName: enrollment.guardianName,
+                    familyPhone: enrollment.familyPhone,
+                    photo: enrollment.photo,
+                    documents: enrollment.documents ? enrollment.documents : undefined,
                     programId: enrollment.programId,
                     sessionId: enrollment.sessionId,
                     status: 'active',
@@ -588,7 +614,7 @@ export const verifySalesEnrollment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const orgId = req.user.organizationId;
     const salesUserId = req.user.id;
-    const { studentName, studentEmail, studentPhone, studentAddress, fatherName, dob, altPhone, pinCode, paymentPlan, initialPaymentAmount } = req.body;
+    const { studentName, studentEmail, studentPhone, studentAddress, fatherName, dob, altPhone, pinCode, paymentPlan, initialPaymentAmount, gender, category, religion, maritalStatus, employmentStatus, caste, motherName, motherPhone, fatherPhone, guardianName, familyPhone, documents, photo, receiptUrl } = req.body;
     const enrollment = await prisma.enrollment.findUnique({
         where: { id },
         include: { program: true }
@@ -618,6 +644,20 @@ export const verifySalesEnrollment = asyncHandler(async (req, res) => {
             dob: dob ? new Date(dob) : enrollment.dob,
             altPhone: altPhone !== undefined ? altPhone : enrollment.altPhone,
             pinCode: pinCode !== undefined ? pinCode : enrollment.pinCode,
+            gender: gender !== undefined ? gender : enrollment.gender,
+            category: category !== undefined ? category : enrollment.category,
+            religion: religion !== undefined ? religion : enrollment.religion,
+            maritalStatus: maritalStatus !== undefined ? maritalStatus : enrollment.maritalStatus,
+            employmentStatus: employmentStatus !== undefined ? employmentStatus : enrollment.employmentStatus,
+            caste: caste !== undefined ? caste : enrollment.caste,
+            motherName: motherName !== undefined ? motherName : enrollment.motherName,
+            motherPhone: motherPhone !== undefined ? motherPhone : enrollment.motherPhone,
+            fatherPhone: fatherPhone !== undefined ? fatherPhone : enrollment.fatherPhone,
+            guardianName: guardianName !== undefined ? guardianName : enrollment.guardianName,
+            familyPhone: familyPhone !== undefined ? familyPhone : enrollment.familyPhone,
+            documents: documents !== undefined ? documents : enrollment.documents,
+            photo: photo !== undefined ? photo : enrollment.photo,
+            receiptUrl: receiptUrl !== undefined ? receiptUrl : enrollment.receiptUrl,
             paymentPlan: paymentPlan || enrollment.paymentPlan,
             initialPaymentAmount: initialPaymentAmount !== undefined ? Number(initialPaymentAmount) : enrollment.initialPaymentAmount,
             status: 'document_review',

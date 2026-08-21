@@ -52,6 +52,7 @@ import collectionsPanelRoutes from './routes/collectionsPanelRoutes.js';
 import assetRoutes from './routes/assetRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
 import meetingRoutes from './routes/meetingRoutes.js';
+import iclockRoutes from './routes/iclockRoutes.js';
 const app = express();
 // Trust reverse proxy (Nginx) headers for rate limiting
 app.set('trust proxy', 1);
@@ -83,6 +84,8 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api', limiter);
+// iClock ADMS Routes (Mount these directly since biometric machines hardcode /iclock paths)
+app.use('/iclock', iclockRoutes);
 // API version
 const API_VERSION = process.env.API_VERSION || 'v1';
 // Mount routes

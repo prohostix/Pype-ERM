@@ -54,7 +54,7 @@ export const getStudent = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, data: student });
 });
 export const createStudent = asyncHandler(async (req, res) => {
-    const { email, name, phone, centerId, branchId, universityId, programId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan } = req.body;
+    const { email, name, phone, centerId, branchId, universityId, programId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan, gender, category, maritalStatus, employmentStatus, guardianName, familyPhone } = req.body;
     if (!programId || programId.trim() === '') {
         res.status(400).json({ success: false, message: 'Program is required' });
         return;
@@ -139,6 +139,12 @@ export const createStudent = asyncHandler(async (req, res) => {
             photo: photo || null,
             documents: documents || [],
             isPrevious: Boolean(isPrevious),
+            gender: gender || null,
+            category: category || null,
+            maritalStatus: maritalStatus || null,
+            employmentStatus: employmentStatus || null,
+            guardianName: guardianName || null,
+            familyPhone: familyPhone || null,
             status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
             programId,
             universityId: universityId || null,
@@ -174,6 +180,19 @@ export const createStudent = asyncHandler(async (req, res) => {
                 status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
                 receiptUrl: req.body.receiptUrl || null,
                 salesUserId: req.user.id,
+                gender: student.gender,
+                category: student.category,
+                religion: student.religion,
+                maritalStatus: student.maritalStatus,
+                employmentStatus: student.employmentStatus,
+                caste: student.caste,
+                motherName: student.motherName,
+                motherPhone: student.motherPhone,
+                fatherPhone: student.fatherPhone,
+                guardianName: student.guardianName,
+                familyPhone: student.familyPhone,
+                photo: student.photo,
+                documents: student.documents ? student.documents : undefined,
                 statusHistory: [
                     {
                         status: 'submitted',
