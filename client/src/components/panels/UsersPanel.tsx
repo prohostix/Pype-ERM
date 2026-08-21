@@ -341,7 +341,7 @@ export function UsersPanel() {
                 </Label>
                 <Input
                   id="password"
-                  type="password"
+                  type="password" autoComplete="new-password"
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })

@@ -495,7 +495,7 @@ export function HRUsersPanel() {
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
-                    type="password"
+                    type="password" autoComplete="new-password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
@@ -839,7 +839,7 @@ export function HRUsersPanel() {
               <Label htmlFor="newPassword">New Password</Label>
               <Input
                 id="newPassword"
-                type="password"
+                type="password" autoComplete="new-password"
                 value={passwordData.newPassword}
                 onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                 required
@@ -851,7 +851,7 @@ export function HRUsersPanel() {
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
-                type="password"
+                type="password" autoComplete="new-password"
                 value={passwordData.confirmPassword}
                 onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                 required
