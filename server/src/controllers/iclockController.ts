@@ -71,7 +71,10 @@ export const iclockPushData = async (req: Request, res: Response) => {
       const biometricId = parts[0].trim(); // the userId on the machine
       const timestampStr = parts[1].trim(); // YYYY-MM-DD HH:MM:SS
       
-      const punchTime = new Date(timestampStr);
+      // Biometric device sends time in local IST (+05:30) but without timezone info.
+      // Append the IST offset so the server stores it as the correct UTC time.
+      const isoString = timestampStr.replace(' ', 'T') + '+05:30';
+      const punchTime = new Date(isoString);
       if (isNaN(punchTime.getTime())) continue;
 
       // 1. Map PIN to User via biometricId
