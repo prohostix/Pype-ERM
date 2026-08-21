@@ -38,6 +38,7 @@ interface User {
   status?: string;
   branchId?: string;
   branch?: { id: string; name: string };
+  biometricId?: string;
 }
 
 interface Department {
@@ -87,6 +88,7 @@ export function HRUsersPanel() {
     subDepartmentId: '',
     reportingTo: '',
     branchId: 'none',
+    biometricId: ''
   });
 
   const [transferData, setTransferData] = useState({
@@ -208,6 +210,7 @@ export function HRUsersPanel() {
           subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
           branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : null,
+          biometricId: formData.biometricId || undefined,
         });
       } else {
         await api.post('/users', {
@@ -217,6 +220,7 @@ export function HRUsersPanel() {
           subDepartmentId: (formData.subDepartmentId && formData.subDepartmentId !== 'none') ? formData.subDepartmentId : undefined,
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
           branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : undefined,
+          biometricId: formData.biometricId || undefined,
         });
       }
       setDialogOpen(false);
@@ -357,6 +361,7 @@ export function HRUsersPanel() {
       subDepartmentId: subDeptId?.toString() || '',
       reportingTo: reportingToId?.toString() || '',
       branchId: user.branchId?.toString() || 'none',
+      biometricId: user.biometricId || ''
     });
     setDialogOpen(true);
   };
@@ -400,6 +405,7 @@ export function HRUsersPanel() {
       subDepartmentId: '',
       reportingTo: '',
       branchId: 'none',
+      biometricId: ''
     });
     setEditingUser(null);
   };
@@ -574,6 +580,15 @@ export function HRUsersPanel() {
                 </Select>
               </div>
               <div>
+                <Label htmlFor="biometricId">Biometric Device PIN</Label>
+                <Input
+                  id="biometricId"
+                  placeholder="Optional (e.g. 101)"
+                  value={formData.biometricId}
+                  onChange={(e) => setFormData({ ...formData, biometricId: e.target.value })}
+                />
+              </div>
+              <div>
                 <Label htmlFor="department">Primary Department</Label>
                 <Select
                   value={formData.departmentId}
@@ -740,6 +755,11 @@ export function HRUsersPanel() {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
+                    {user.biometricId && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Biometric ID: {user.biometricId}
+                      </p>
+                    )}
                     {user.designation && (
                       <p className="text-xs text-muted-foreground mt-1">
                         Designation: {user.designation}

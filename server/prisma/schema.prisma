@@ -78,6 +78,7 @@ model Organization {
   users               User[]
   vacancies           Vacancy[]
   walletTopUps        WalletTopUp[]
+  biometricDevices    BiometricDevice[]
 
   @@index([status])
 }
@@ -151,6 +152,7 @@ model User {
   reportingTo                   String?
   status                        UserStatus           @default(active)
   lastLogin                     DateTime?
+  biometricId                   String?              @unique
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
   permissions                   Json?                @default("[]")
@@ -753,6 +755,7 @@ model Branch {
   invites           StudyCenterInvite[]
   users             User[]
   universities      University[]        @relation("UniversityToBranch")
+  biometricDevices  BiometricDevice[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -1811,4 +1814,22 @@ enum AssetStatus {
   RETURNED
   LOST
   DAMAGED
+}
+
+model BiometricDevice {
+  id             String       @id @default(uuid())
+  organizationId String
+  branchId       String?
+  name           String
+  serialNumber   String       @unique
+  ipAddress      String?
+  status         String       @default("active")
+  lastActive     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  branch         Branch?      @relation(fields: [branchId], references: [id])
+
+  @@index([organizationId])
+  @@index([serialNumber])
 }

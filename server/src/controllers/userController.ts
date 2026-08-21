@@ -75,7 +75,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const {
     email, name, phone, role, designation, reportingTo,
     departmentId, subDepartmentId, branchId, studyCenterId,
-    organizationId: bodyOrgId, status, password
+    organizationId: bodyOrgId, status, password, biometricId
   } = req.body;
 
   // Enforce org scoping
@@ -108,6 +108,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       branchId: branchId || undefined,
       studyCenterId: studyCenterId || undefined,
       status: status || 'active',
+      biometricId: biometricId || undefined,
     },
     select: USER_SELECT,
   });
@@ -128,7 +129,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   // Only superadmin can change organizationId or role to a higher level
   const {
     name, phone, designation, reportingTo, status, avatar,
-    departmentId, subDepartmentId, branchId, studyCenterId, role, password
+    departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId
   } = req.body;
 
   // Role restriction on update
@@ -148,6 +149,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (reportingTo !== undefined) updateData.reportingTo = reportingTo;
   if (status !== undefined) updateData.status = status;
   if (avatar !== undefined) updateData.avatar = avatar;
+  if (biometricId !== undefined) updateData.biometricId = biometricId;
   if (departmentId !== undefined) updateData.departmentId = departmentId;
   if (subDepartmentId !== undefined) updateData.subDepartmentId = subDepartmentId;
   if (branchId !== undefined) updateData.branchId = branchId || null;

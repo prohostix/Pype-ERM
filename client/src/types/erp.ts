@@ -88,6 +88,7 @@ export interface User {
   lastLogin?: Date;
   createdAt: Date;
   organization?: Organization;
+  permissions?: string[];
 }
 
 export interface Employee extends User {

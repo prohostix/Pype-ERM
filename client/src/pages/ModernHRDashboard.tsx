@@ -31,6 +31,7 @@ import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import { ManagerAssignmentPanel } from '@/components/panels/ManagerAssignmentPanel';
 import { HRSettingsPanel } from '@/components/attendance/HRSettingsPanel';
+import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
 import { AssetManagementPanel } from '@/components/panels/AssetManagementPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { SalaryConfigPanel } from '@/components/panels/SalaryConfigPanel';
@@ -80,6 +81,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'org-chart': return <OrgHierarchyPanel />;
       case 'managers': return <ManagerAssignmentPanel />;
       case 'att-settings': return <HRSettingsPanel />;
+      case 'biometric-devices': return <BiometricDevicesPanel />;
       case 'activity_report': return <EmployeeActivityReportPanel />;
       case 'my_payslips': return <PayrollPanel />;
       case 'notice-board': return <NoticeBoardPanel />;
@@ -118,6 +120,7 @@ export function getHRNavItems() {
     { id: 'org-chart', label: 'Org Chart' },
     { id: 'managers', label: 'Managers' },
     { id: 'att-settings', label: 'Att. Settings' },
+    { id: 'biometric-devices', label: 'Biometric Devices' },
     { id: 'assets', label: 'Assets' },
     { id: 'activity_report', label: 'Activity Report' },
     { id: 'delete_approvals', label: 'Delete Approvals' },
