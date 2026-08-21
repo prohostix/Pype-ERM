@@ -10,6 +10,7 @@ const USER_SELECT = {
   phone: true, designation: true, status: true, lastLogin: true,
   avatar: true, reportingTo: true, organizationId: true,
   departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
+  biometricId: true, additionalDepartmentIds: true,
   organization: { select: { id: true, name: true } },
   department: { select: { id: true, name: true } },
   branch: { select: { id: true, name: true } },
