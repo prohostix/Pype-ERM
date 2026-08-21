@@ -308,7 +308,10 @@ export function HRUsersPanel() {
     try {
       await api.delete(`/users/${userId}`);
       fetchUsers();
-    } catch (error) {
+    } catch (error: any) {
+      // DELETE_REQUESTED_NOT_COMPLETED means the server accepted the request (202)
+      // and it's pending approval — the toast is already shown, so suppress the alert.
+      if (error?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || error?.isDeleteRequest) return;
       console.error('Failed to delete user:', error);
       alert('Failed to delete user. Please try again.');
     }

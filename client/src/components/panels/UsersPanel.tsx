@@ -161,6 +161,11 @@ export function UsersPanel() {
       setIsDeleteDialogOpen(false);
       fetchData();
     } catch (error: any) {
+      // DELETE_REQUESTED_NOT_COMPLETED = 202 approval flow, toast already shown
+      if (error?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || error?.isDeleteRequest) {
+        setIsDeleteDialogOpen(false);
+        return;
+      }
       toast.error(error.response?.data?.message || 'Failed to delete user');
       console.error(error);
     }
