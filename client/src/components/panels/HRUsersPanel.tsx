@@ -347,7 +347,7 @@ export function HRUsersPanel() {
     const reportingToId = typeof user.reportingTo === 'object' && user.reportingTo !== null
       ? ((user.reportingTo as any).id || (user.reportingTo as any).id)
       : user.reportingTo;
-    const additionalIds = (user.additionalDepartments || []).map((d: any) =>
+    const additionalIds = (user.additionalDepartmentIds || user.additionalDepartments || []).map((d: any) =>
       typeof d === 'object' ? (d.id || d.id) : d
     ).filter(Boolean);
     setFormData({

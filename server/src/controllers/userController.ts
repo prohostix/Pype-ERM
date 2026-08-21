@@ -130,7 +130,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   // Only superadmin can change organizationId or role to a higher level
   const {
     name, phone, designation, reportingTo, status, avatar,
-    departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId
+    departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds
   } = req.body;
 
   // Role restriction on update
@@ -155,6 +155,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (subDepartmentId !== undefined) updateData.subDepartmentId = subDepartmentId;
   if (branchId !== undefined) updateData.branchId = branchId || null;
   if (studyCenterId !== undefined) updateData.studyCenterId = studyCenterId || null;
+  if (additionalDepartmentIds !== undefined) updateData.additionalDepartmentIds = additionalDepartmentIds;
   if (role !== undefined) updateData.role = role;
   if (password) updateData.password = await hashPassword(password);
 
