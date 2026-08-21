@@ -33,6 +33,7 @@ import { DepartmentsPanel } from '@/components/panels/DepartmentsPanel';
 import { LicensesPanel } from '@/components/panels/LicensesPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
 
 const globalActivity = [
   { time: '00:00', requests: 120, latency: 45 },
@@ -98,6 +99,7 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
           <TabsTrigger value="licenses">Licenses</TabsTrigger>
           <TabsTrigger value="enquiries">Enquiries</TabsTrigger>
           <TabsTrigger value="meetings">Meetings</TabsTrigger>
+          <TabsTrigger value="biometric-devices">Biometrics</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -119,8 +121,6 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
           <DepartmentsPanel />
         </TabsContent>
 
-
-
         <TabsContent value="licenses">
           <LicensesPanel />
         </TabsContent>
@@ -128,8 +128,13 @@ export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string 
         <TabsContent value="enquiries">
           <InquiriesPanel />
         </TabsContent>
-              <TabsContent value="meetings">
+
+        <TabsContent value="meetings">
           <MeetingsPanel />
+        </TabsContent>
+
+        <TabsContent value="biometric-devices">
+          <BiometricDevicesPanel />
         </TabsContent>
 </Tabs>
     </div>

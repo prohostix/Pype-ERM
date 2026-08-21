@@ -31,6 +31,7 @@ interface User {
   status: string;
   organizationId?: any;
   departmentId?: any;
+  biometricId?: string;
   createdAt: string;
 }
 
@@ -60,6 +61,7 @@ export function UsersPanel() {
     role: 'employee',
     organizationId: '',
     departmentId: '',
+    biometricId: '',
   });
 
   useEffect(() => {
@@ -94,6 +96,7 @@ export function UsersPanel() {
       role: 'employee',
       organizationId: '',
       departmentId: '',
+      biometricId: '',
     });
     setIsDialogOpen(true);
   };
@@ -107,6 +110,7 @@ export function UsersPanel() {
       role: user.role,
       organizationId: user.organizationId?.id || user.organizationId || '',
       departmentId: user.departmentId?.id || user.departmentId || '',
+      biometricId: user.biometricId || '',
     });
     setIsDialogOpen(true);
   };
@@ -125,6 +129,11 @@ export function UsersPanel() {
       // Remove empty departmentId
       if (!payload.departmentId) {
         delete (payload as any).departmentId;
+      }
+      
+      // Remove empty biometricId
+      if (!payload.biometricId) {
+        delete (payload as any).biometricId;
       }
       
       // Remove password if editing and password is empty
@@ -246,6 +255,12 @@ export function UsersPanel() {
                     <span className="text-xs truncate">
                       {user.departmentId.name || 'Department'}
                     </span>
+                  </div>
+                )}
+                {user.biometricId && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <span className="font-medium">Biometric ID:</span>
+                    <span className="truncate">{user.biometricId}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2">
@@ -415,6 +430,17 @@ export function UsersPanel() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="biometricId">Biometric Device PIN (Optional)</Label>
+                <Input
+                  id="biometricId"
+                  value={formData.biometricId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, biometricId: e.target.value })
+                  }
+                  placeholder="e.g. 1001"
+                />
               </div>
             </div>
             <DialogFooter>

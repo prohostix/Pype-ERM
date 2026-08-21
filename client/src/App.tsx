@@ -109,6 +109,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   escalations: 'escalations',
   audit_logs: 'overview',
   collections: 'collections',
+  biometric_devices: 'biometric-devices',
 };
 
 function App() {
@@ -263,6 +264,7 @@ function App() {
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
         { id: 'inquiries', label: 'Enquiries' },
+        { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'audit_logs', label: 'Audit Logs' },
         { id: 'meetings', label: 'Meetings' },
       ];
@@ -305,6 +307,7 @@ function App() {
         { id: 'sessions', label: 'Sessions' },
         { id: 'enrollment_review', label: 'Enrollment Review' },
         { id: 'collections', label: 'Collections' },
+        { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'settings', label: 'Organisation Settings' },
         { id: 'meetings', label: 'Meetings' },
       ];
