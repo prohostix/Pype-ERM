@@ -61,7 +61,7 @@ export function SalaryConfigPanel() {
         api.get('/users'),
       ]);
       setConfigs(cfgRes.data.data || []);
-      const allUsers: User[] = usersRes.data.data || [];
+      const allUsers: User[] = (usersRes.data.data || []).filter((u: any) => u.status !== 'resigned');
       setUsers(allUsers.filter(u => !['ceo', 'org_admin', 'superadmin'].includes(u.role)));
     } catch {
       toast.error('Failed to load salary data');

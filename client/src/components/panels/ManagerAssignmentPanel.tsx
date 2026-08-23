@@ -102,8 +102,8 @@ export function ManagerAssignmentPanel() {
       }));
 
       setDepartments(deptsWithSubs);
-      // Filter out superadmin/org_admin for manager candidates
-      setUsers(allUsers.filter((u) => !['superadmin', 'org_admin'].includes(u.role)));
+      // Filter out superadmin/org_admin and resigned users for manager candidates
+      setUsers(allUsers.filter((u) => !['superadmin', 'org_admin'].includes(u.role) && u.status !== 'resigned'));
     } catch (err) {
       toast.error('Failed to load hierarchy data');
     } finally {

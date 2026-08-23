@@ -90,7 +90,7 @@ export function AssetManagementPanel() {
         setAssets(assetsRes.data.data);
       }
       if (usersRes.data.success) {
-        setEmployees(usersRes.data.data);
+        setEmployees(usersRes.data.data?.filter((u: any) => u.status !== 'resigned') || []);
       }
     } catch (error) {
       toast.error('Failed to load asset data');

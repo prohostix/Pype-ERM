@@ -402,7 +402,7 @@ export function OrgHierarchyPanel() {
         api.get('/org/branches'),
       ]);
       setNodes(nodesRes.data.data || []);
-      setAllUsers(usersRes.data.data || []);
+      setAllUsers((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
       setAllDepts(deptsRes.data.data || []);
       setAllSubDepts(subDeptsRes.data.data || []);
       setAllBranches(branchRes.data.data || []);

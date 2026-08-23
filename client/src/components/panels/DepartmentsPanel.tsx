@@ -76,7 +76,7 @@ export function DepartmentsPanel() {
       ]);
       setDepartments(deptsRes.data.data || []);
       setOrganizations(orgsRes.data.data || []);
-      setUsers(usersRes.data.data || []);
+      setUsers((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
     } catch (error: any) {
       toast.error('Failed to fetch data');
       console.error(error);

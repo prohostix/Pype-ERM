@@ -200,7 +200,7 @@ export function HROrgChartPanel() {
         api.get('/org/branches'),
       ]);
       setNodes(nodesRes.data.data || []);
-      setAllUsers(usersRes.data.data || []);
+      setAllUsers((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
       setAllBranches(branchRes.data.data || []);
     } catch {
       toast.error('Failed to load org chart');

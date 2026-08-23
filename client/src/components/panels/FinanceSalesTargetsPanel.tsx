@@ -63,9 +63,9 @@ export function FinanceSalesTargetsPanel() {
         api.get('/finance/sales-users'),
         api.get('/finance/targets'),
       ]);
-      setUsers(usersRes.data.data || []);
-      // Filter targets that belong to sales users
-      const salesUserIds = new Set((usersRes.data.data || []).map((u: SalesUser) => u.id));
+      setUsers((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
+      // Filter out resigned when creating set
+      const salesUserIds = new Set((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned').map((u: SalesUser) => u.id));
       const allTargets: SalesTarget[] = (targetsRes.data.data || []).map((t: any) => ({
         ...t,
         employeeId: t.employee || t.employeeId

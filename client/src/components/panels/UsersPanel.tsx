@@ -76,7 +76,7 @@ export function UsersPanel() {
         api.get('/organizations'),
         api.get('/departments'),
       ]);
-      setUsers(usersRes.data.data || []);
+      setUsers((usersRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
       setOrganizations(orgsRes.data.data || []);
       setDepartments(deptsRes.data.data || []);
     } catch (error: any) {

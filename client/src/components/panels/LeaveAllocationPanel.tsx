@@ -60,7 +60,7 @@ export function LeaveAllocationPanel() {
         api.get('/users'),
       ]);
       setAllocations(allocRes.data.data || []);
-      const allUsers: User[] = usersRes.data.data || [];
+      const allUsers: User[] = (usersRes.data.data || []).filter((u: any) => u.status !== 'resigned');
       setUsers(allUsers.filter(u => !['ceo', 'org_admin', 'superadmin'].includes(u.role)));
     } catch {
       toast.error('Failed to load leave allocations');
