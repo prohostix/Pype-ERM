@@ -101,6 +101,7 @@ if [ ! -f ".env" ]; then
     echo "VITE_API_URL=http://13.232.188.79/api/v1" > .env
 fi
 npm install
+export NODE_OPTIONS="--max-old-space-size=2048"
 npm run build
 
 # 11. Configure Nginx Reverse Proxy
