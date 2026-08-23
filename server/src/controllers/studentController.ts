@@ -150,8 +150,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     });
   } else {
     // SECURITY FIX: Do not overwrite passwords of existing admin/staff accounts!
-    // Check if the email belongs to a high-privileged user and block enrollment if so.
-    if (studentUser.role !== 'staff' && studentUser.role !== 'student') {
+    if (studentUser.role !== 'staff') {
       res.status(400).json({ success: false, message: 'Email is already in use by an admin or staff account.' });
       return;
     }
