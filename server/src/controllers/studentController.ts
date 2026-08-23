@@ -69,6 +69,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     branchId,
     universityId,
     programId,
+    sessionId,
     dob,
     admissionDate,
     admissionNo,
@@ -148,17 +149,13 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       },
     });
   } else {
-    // If the user already exists, update their password so it matches the generated credentials
-    const hashedPassword = await hashPassword(defaultPassword);
-    studentUser = await prisma.user.update({
-      where: { email },
-      data: {
-        password: hashedPassword,
-        name,
-        phone,
-        status: 'active'
-      }
-    });
+    // SECURITY FIX: Do not overwrite passwords of existing admin/staff accounts!
+    // Check if the email belongs to a high-privileged user and block enrollment if so.
+    if (studentUser.role !== 'staff' && studentUser.role !== 'student') {
+      res.status(400).json({ success: false, message: 'Email is already in use by an admin or staff account.' });
+      return;
+    }
+    // We do NOT overwrite the password here, we just use the existing account.
   }
 
   const student = await prisma.student.create({
@@ -190,11 +187,12 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       familyPhone: familyPhone || null,
       status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
       programId,
+      sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
       universityId: universityId || null,
       centerId: (centerId && centerId.trim() !== '') ? centerId : null,
       branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
-      credentials: { email, password: defaultPassword },
+      credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
       admissionProgress: { 
         paymentPlan: paymentPlan || 'full',
         initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null
