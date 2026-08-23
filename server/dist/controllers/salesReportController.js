@@ -25,6 +25,7 @@ const buildHierarchyClause = (req) => {
             whereClause.OR.push({ departmentId: req.user.departmentId });
         }
     }
+    whereClause.status = { not: 'resigned' };
     return whereClause;
 };
 // ─── Team Report ─────────────────────────────────────────────────────────────

@@ -194,6 +194,8 @@ export const getTeamPerformance = asyncHandler(async (req, res) => {
             whereClause.OR.push({ departmentId: req.user.departmentId });
         }
     }
+    // Exclude resigned from team performance
+    whereClause.status = { not: 'resigned' };
     const teammates = await prisma.user.findMany({
         where: whereClause,
         select: {

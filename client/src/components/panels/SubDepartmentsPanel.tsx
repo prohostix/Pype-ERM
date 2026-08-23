@@ -68,7 +68,7 @@ export function SubDepartmentsPanel() {
       ]);
       setSubDepartments(sdRes.data.data || []);
       setDepartments(deptRes.data.data || []);
-      setUsers(userRes.data.data || []);
+      setUsers((userRes.data.data || []).filter((u: any) => u.status !== 'resigned'));
       setUniversities(uniRes.data.data || []);
       setPrograms(progRes.data.data || []);
       setCenters(centerRes.data.data || []);

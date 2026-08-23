@@ -25,6 +25,7 @@ const buildHierarchyClause = (req: AuthRequest) => {
     }
   }
 
+  whereClause.status = { not: 'resigned' };
   return whereClause;
 };
 

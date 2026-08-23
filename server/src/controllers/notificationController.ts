@@ -44,7 +44,7 @@ export const createNotification = async (organizationId: string, userId: string,
 
 export const broadcastNotification = async (organizationId: string, type: NotificationType, title: string, message: string, roles?: UserRole[]) => {
   const users = await prisma.user.findMany({
-    where: { organizationId, role: roles ? { in: roles } : undefined }
+    where: { organizationId, role: roles ? { in: roles } : undefined, status: { not: 'resigned' } }
   });
   const notifications = users.map(u => ({ organizationId, userId: u.id, type, title, message, read: false }));
   return await prisma.notification.createMany({ data: notifications });

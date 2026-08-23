@@ -23,7 +23,7 @@ export const getAnalytics = asyncHandler(async (req, res) => {
     res.json({ success: true, data: {} });
 });
 export const getDepartmentManagers = asyncHandler(async (req, res) => {
-    const managers = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, role: { in: ['ops_admin', 'finance_admin', 'hr_admin', 'sales_admin'] } } });
+    const managers = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, role: { in: ['ops_admin', 'finance_admin', 'hr_admin', 'sales_admin'] }, status: { not: 'resigned' } } });
     res.json({ success: true, count: managers.length, data: managers });
 });
 export const assignTask = asyncHandler(async (req, res) => {

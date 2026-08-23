@@ -120,7 +120,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const fetchEmployees = async () => {
     try {
       const response = await api.get('/users');
-      setEmployees(response.data.data || []);
+      setEmployees((response.data.data || []).filter((u: any) => u.status !== 'resigned'));
     } catch (error) {
       console.error('Failed to fetch employees:', error);
     }

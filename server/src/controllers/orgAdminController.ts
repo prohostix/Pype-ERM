@@ -62,7 +62,7 @@ export const getCustomDepartments = asyncHandler(async (req: AuthRequest, res: R
 export const getOrgHierarchy = asyncHandler(async (req: AuthRequest, res: Response) => {
   const [departments, users] = await Promise.all([
     prisma.department.findMany({ where: { organizationId: req.user.organizationId } }),
-    prisma.user.findMany({ where: { organizationId: req.user.organizationId } })
+    prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: { not: 'resigned' } } })
   ]);
   res.json({ success: true, data: { departments, users } });
 });
