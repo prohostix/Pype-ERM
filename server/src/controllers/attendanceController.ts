@@ -196,6 +196,58 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
 
   const { latitude, longitude, address, photo } = req.body;
 
+  // Retrieve HR Settings
+  const settings = await prisma.hRSettings.findFirst({
+    where: { organizationId: req.user.organizationId }
+  });
+
+  // 1. Geofencing location check (if required by settings)
+  if (settings && settings.requireLocation && !req.user.allowAnywherePunchIn) {
+    if (latitude === undefined || longitude === undefined) {
+      res.status(400).json({ success: false, message: 'Location coordinates are required to check out.' });
+      return;
+    }
+
+    let isWithinGeofence = false;
+    let allowedRadiusMsg = '';
+
+    // Check default office location
+    const defaultLoc = settings.location as any;
+    if (defaultLoc && defaultLoc.officeLatitude && defaultLoc.officeLongitude) {
+      const distance = getDistanceInMeters(latitude, longitude, defaultLoc.officeLatitude, defaultLoc.officeLongitude);
+      const radius = defaultLoc.allowedRadius || 100;
+      if (distance <= radius) {
+        isWithinGeofence = true;
+      } else {
+        allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+      }
+    }
+
+    // Check other office locations
+    const locationsList = settings.locations as any[];
+    if (!isWithinGeofence && Array.isArray(locationsList)) {
+      for (const loc of locationsList) {
+        if (loc.latitude && loc.longitude) {
+          const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
+          const radius = loc.allowedRadius || 100;
+          if (distance <= radius) {
+            isWithinGeofence = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!isWithinGeofence) {
+      res.status(400).json({
+        success: false,
+        message: 'You are outside the permitted punch-out area.',
+        distanceInfo: allowedRadiusMsg
+      });
+      return;
+    }
+  }
+
   let checkOutPhoto: string | undefined;
   if (req.user.requireSelfiePunchIn) {
     if (!photo) {
