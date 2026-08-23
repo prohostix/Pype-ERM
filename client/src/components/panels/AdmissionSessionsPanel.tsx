@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { SessionFormDialog } from '../forms/SessionFormDialog';
 
@@ -56,7 +57,7 @@ export function AdmissionSessionsPanel() {
       await api.put(`/operations/sessions/${id}/approve`);
       fetchSessions();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to approve session');
+      toast.error(err.response?.data?.message || 'Failed to approve session');
     }
   };
 

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 export function StudyCentersPanel() {
   const { user } = useAuth();
@@ -49,11 +50,11 @@ export function StudyCentersPanel() {
       await api.put(`/operations/centers/${credTarget.id}`, {
         credentials: updatedCreds
       });
-      alert('Credentials updated successfully');
+      toast.success('Credentials updated successfully');
       setCredDialogOpen(false);
       fetchCenters();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to update credentials');
+      toast.error(err.response?.data?.message || 'Failed to update credentials');
     } finally {
       setSavingCred(false);
     }
@@ -85,7 +86,7 @@ export function StudyCentersPanel() {
       resetForm();
       fetchCenters();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save center');
+      toast.error(err.response?.data?.message || 'Failed to save center');
     }
   };
 

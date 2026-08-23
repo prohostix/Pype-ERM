@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 type CourseType = 'SkillCourse' | 'OnlineDegree' | 'BVocDegree' | 'CreditTransfer';
 
@@ -185,7 +186,7 @@ export function ProgramFormDialog({
       onSuccess();
       onOpenChange(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save program');
+      toast.error(err.response?.data?.message || 'Failed to save program');
     }
   };
 

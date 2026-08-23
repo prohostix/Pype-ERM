@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 export function PaymentsPanel() {
   const [payments, setPayments] = useState<any[]>([]);
@@ -80,7 +81,7 @@ export function PaymentsPanel() {
       fetchPayments();
     } catch (error: any) {
       console.error('Failed to save payment:', error);
-      alert(error.response?.data?.message || 'Failed to save payment');
+      toast.error(error.response?.data?.message || 'Failed to save payment');
     }
   };
 

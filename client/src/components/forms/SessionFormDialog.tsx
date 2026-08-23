@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import api from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 interface SessionFormDialogProps {
   open: boolean;
@@ -125,7 +126,7 @@ export function SessionFormDialog({
       onSuccess();
       onOpenChange(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save session');
+      toast.error(err.response?.data?.message || 'Failed to save session');
     }
   };
 

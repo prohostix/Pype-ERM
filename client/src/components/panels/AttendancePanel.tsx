@@ -160,7 +160,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       fetchAttendance();
     } catch (error: any) {
       console.error('Failed to save attendance:', error);
-      alert(error.response?.data?.message || 'Failed to save attendance');
+      toast.error(error.response?.data?.message || 'Failed to save attendance');
     }
   };
 

@@ -135,7 +135,15 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
 });
 
 export const getLeaveStats = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: {} });
+  const orgId = req.user.organizationId;
+  const [pending, approved, rejected, deptApproved, total] = await Promise.all([
+    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } }),
+    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'approved' } }),
+    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'rejected' } }),
+    prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'dept_approved' } }),
+    prisma.leaveRequest.count({ where: { organizationId: orgId } }),
+  ]);
+  res.json({ success: true, data: { pending, approved, rejected, deptApproved, total } });
 });
 
 export const getMyLeaves = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -213,7 +221,14 @@ export const fillVacancyPosition = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, data: {} });
 });
 export const getVacancyStats = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: {} });
+  const orgId = req.user.organizationId;
+  const [open, closed, filled, total] = await Promise.all([
+    prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } }),
+    prisma.vacancy.count({ where: { organizationId: orgId, status: 'closed' } }),
+    prisma.vacancy.count({ where: { organizationId: orgId, status: 'filled' } }),
+    prisma.vacancy.count({ where: { organizationId: orgId } }),
+  ]);
+  res.json({ success: true, data: { open, closed, filled, total } });
 });
 
 // --- Complaints ---

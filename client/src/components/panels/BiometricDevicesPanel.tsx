@@ -7,6 +7,7 @@ import { AlertCircle, Plus, RefreshCw, Trash2, Edit2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { toast } from 'sonner';
 
 interface Device {
   id: string;
@@ -79,7 +80,7 @@ export function BiometricDevicesPanel() {
       fetchDevices();
     } catch (err: any) {
       console.error(err);
-      alert(err.response?.data?.error || 'Failed to save device.');
+      toast.error(err.response?.data?.error || 'Failed to save device.');
     }
   };
 
@@ -92,7 +93,7 @@ export function BiometricDevicesPanel() {
       fetchDevices();
     } catch (err: any) {
       console.error(err);
-      alert('Failed to delete device.');
+      toast.error('Failed to delete device.');
     }
   };
 

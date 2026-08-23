@@ -87,7 +87,7 @@ export function UniversitiesPanel() {
       resetForm();
       fetchUniversities();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save university');
+      toast.error(err.response?.data?.message || 'Failed to save university');
     }
   };
 

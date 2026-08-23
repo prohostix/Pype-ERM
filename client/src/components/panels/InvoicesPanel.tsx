@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 export function InvoicesPanel() {
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -195,7 +196,7 @@ export function InvoicesPanel() {
       resetForm();
       fetchInvoices();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save invoice');
+      toast.error(err.response?.data?.message || 'Failed to save invoice');
     }
   };
 
