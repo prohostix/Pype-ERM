@@ -386,7 +386,8 @@ export type DepartmentSubType = (typeof DepartmentSubType)[keyof typeof Departme
 export const UserStatus: {
   active: 'active',
   inactive: 'inactive',
-  on_leave: 'on_leave'
+  on_leave: 'on_leave',
+  resigned: 'resigned'
 };
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]

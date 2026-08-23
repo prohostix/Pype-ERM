@@ -1666,6 +1666,7 @@ enum UserStatus {
   active
   inactive
   on_leave
+  resigned
 }
 
 enum UserRole {

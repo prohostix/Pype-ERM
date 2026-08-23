@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Key, Users, ArrowRightLeft, TrendingUp, TrendingDown, Ban, CheckCircle2, UserMinus, UserCheck } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -112,6 +113,8 @@ export function HRUsersPanel() {
     newPassword: '',
     confirmPassword: '',
   });
+
+  const [activeTab, setActiveTab] = useState('active');
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchFilter, setSelectedBranchFilter] = useState<string>('all');
@@ -346,6 +349,22 @@ export function HRUsersPanel() {
     }
   };
 
+  const handleResign = async (user: any) => {
+    try {
+      const userId = user.id || user.id;
+      const newStatus = user.status === 'resigned' ? 'active' : 'resigned';
+      const action = newStatus === 'resigned' ? 'resign' : 're-activate';
+      if (!window.confirm(`Are you sure you want to ${action} this employee?`)) {
+        return;
+      }
+      await api.put(`/users/${userId}`, { status: newStatus });
+      fetchUsers();
+    } catch (error) {
+      console.error(`Failed to ${newStatus === 'resigned' ? 'resign' : 're-activate'} user:`, error);
+      alert(`Failed to process action. Please try again.`);
+    }
+  };
+
   const openEditDialog = (user: User) => {
     setEditingUser(user);
     const deptId = typeof user.departmentId === 'object' && user.departmentId !== null
@@ -440,6 +459,16 @@ export function HRUsersPanel() {
     };
     return map[role] || 'bg-gray-100 text-gray-800';
   };
+
+  const displayedUsers = users.filter((user) => {
+    const isResigned = user.status === 'resigned';
+    if (activeTab === 'active' && isResigned) return false;
+    if (activeTab === 'resigned' && !isResigned) return false;
+    
+    if (selectedBranchFilter === 'all') return true;
+    const empBranchId = typeof user.branchId === 'object' ? (user.branchId as any)?.id : (user.branchId || (user as any).branch?.id);
+    return empBranchId?.toString() === selectedBranchFilter;
+  });
 
   if (loading) {
     return (
@@ -767,20 +796,21 @@ export function HRUsersPanel() {
         </div>
       </CardHeader>
       <CardContent>
-        {users.length === 0 ? (
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <TabsList>
+            <TabsTrigger value="active">Active Staff</TabsTrigger>
+            <TabsTrigger value="resigned">Resigned Staff</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        
+        {displayedUsers.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No users found</p>
-            <p className="text-sm">Create your first user to get started</p>
+            <p>No users found in this category.</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {users
-              .filter((user) => {
-                if (selectedBranchFilter === 'all') return true;
-                const empBranchId = typeof user.branchId === 'object' ? (user.branchId as any)?.id : (user.branchId || (user as any).branch?.id);
-                return empBranchId?.toString() === selectedBranchFilter;
-              })
+            {displayedUsers
               .map((user) => {
               const userId = user.id || user.id || '';
               return (
@@ -795,8 +825,13 @@ export function HRUsersPanel() {
                         {user.role}
                       </Badge>
                       {user.status === 'inactive' && (
-                        <Badge variant="outline" className="bg-red-50 text-red-700">
+                        <Badge variant="outline" className="bg-orange-50 text-orange-700">
                           Inactive
+                        </Badge>
+                      )}
+                      {user.status === 'resigned' && (
+                        <Badge variant="outline" className="bg-red-50 text-red-700">
+                          Resigned
                         </Badge>
                       )}
                     </div>
@@ -877,6 +912,15 @@ export function HRUsersPanel() {
                       className={user.status === 'active' ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'}
                     >
                       {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleResign(user)}
+                      title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
+                      className={user.status === 'resigned' ? 'text-blue-500 hover:text-blue-600' : 'text-red-600 hover:text-red-700'}
+                    >
+                      {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
                     </Button>
                     <Button
                       variant="outline"
