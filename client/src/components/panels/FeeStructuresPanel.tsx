@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Save, Building2, BookOpen, Calculator } from 'lucide-react';
+import { ArrowLeft, Save, Building2, BookOpen, Calculator, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,14 +11,16 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 export function FeeStructuresPanel() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const [selectedUniv, setSelectedUniv] = useState<any>(null);
+  const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedProg, setSelectedProg] = useState<any>(null);
   const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
 
@@ -41,14 +43,16 @@ export function FeeStructuresPanel() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [fRes, pRes, uRes] = await Promise.all([
+      const [fRes, pRes, uRes, sRes] = await Promise.all([
         api.get('/finance/fees'),
         api.get('/operations/programs'),
-        api.get('/operations/universities')
+        api.get('/operations/universities'),
+        api.get('/operations/sessions')
       ]);
       setFees(fRes.data.data || []);
       setPrograms(pRes.data.data || []);
       setUniversities(uRes.data.data || []);
+      setSessions(sRes.data.data || []);
     } catch (err) {
       console.error(err);
       toast.error('Failed to load data');
@@ -58,7 +62,7 @@ export function FeeStructuresPanel() {
   };
 
   useEffect(() => {
-    if (step === 3 && selectedProg) {
+    if (step === 4 && selectedProg) {
       const durationMonths = selectedProg.duration || 12;
       let periodsCount = 0;
       let periodNames: string[] = [];
@@ -101,13 +105,19 @@ export function FeeStructuresPanel() {
     setStep(2);
   };
 
+  const handleSelectSession = (s: any) => {
+    setSelectedSession(s);
+    setStep(3);
+  };
+
   const handleSelectProg = (p: any) => {
     setSelectedProg(p);
     
-    // Load existing fee if any
+    // Load existing fee if any matching BOTH program and session
     const existing = fees.find(f => {
       const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-      return pid === p.id;
+      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+      return pid === p.id && sid === (selectedSession?.id || null);
     });
 
     if (existing) {
@@ -146,7 +156,7 @@ export function FeeStructuresPanel() {
       });
       setYearlyFees([]);
     }
-    setStep(3);
+    setStep(4);
   };
 
   const handleSave = async () => {
@@ -173,6 +183,7 @@ export function FeeStructuresPanel() {
     const payload = {
       programId: selectedProg.id,
       universityId: selectedUniv?.id || null,
+      sessionId: selectedSession?.id || null,
       feeLevel: 'program',
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
@@ -194,7 +205,7 @@ export function FeeStructuresPanel() {
         toast.success('Fee structure created');
       }
       await fetchData();
-      setStep(2);
+      setStep(3);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to save');
     } finally {
@@ -203,6 +214,7 @@ export function FeeStructuresPanel() {
   };
 
   const progsForUniv = programs.filter(p => p.universityId === selectedUniv?.id);
+  const sessionsForUniv = sessions.filter(s => s.universityId === selectedUniv?.id || !s.universityId);
 
   return (
     <div className="space-y-6">
@@ -252,15 +264,70 @@ export function FeeStructuresPanel() {
                 <div className="flex items-center gap-3">
                   <Button variant="ghost" size="icon" onClick={() => setStep(1)}><ArrowLeft className="w-5 h-5" /></Button>
                   <div>
-                    <CardTitle>2. Select Program</CardTitle>
-                    <CardDescription>{selectedUniv?.name} - Choose a program to configure its fees.</CardDescription>
+                    <CardTitle>2. Select Session</CardTitle>
+                    <CardDescription>{selectedUniv?.name} - Choose a session to configure fees for.</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <button
+                    onClick={() => handleSelectSession(null)}
+                    className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full bg-slate-50"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 rounded-full bg-primary/10 text-primary">
+                        <Calendar className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm line-clamp-1">Default (All Sessions)</p>
+                        <p className="text-xs text-muted-foreground">Fallback fee structure</p>
+                      </div>
+                    </div>
+                  </button>
+                  {sessionsForUniv.map(s => {
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => handleSelectSession(s)}
+                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                            <Calendar className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm line-clamp-1">{s.name}</p>
+                            <p className="text-xs text-muted-foreground">Term dates: {new Date(s.startDate).toLocaleDateString()} - {new Date(s.endDate).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {step === 3 && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <div>
+                    <CardTitle>3. Select Program</CardTitle>
+                    <CardDescription>{selectedUniv?.name} ({selectedSession ? selectedSession.name : 'Default'}) - Choose a program.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {progsForUniv.map(p => {
-                    const hasFee = fees.some(f => (typeof f.programId === 'object' ? f.programId?.id : f.programId) === p.id);
+                    const hasFee = fees.some(f => {
+                      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+                      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+                      return pid === p.id && sid === (selectedSession?.id || null);
+                    });
                     return (
                       <button
                         key={p.id}
@@ -290,15 +357,15 @@ export function FeeStructuresPanel() {
             </Card>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <Card className="border-primary/20 shadow-md">
               <CardHeader className="bg-muted/30 border-b border-border pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ArrowLeft className="w-5 h-5" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
                     <div>
-                      <CardTitle>3. Configure Fee Structure</CardTitle>
-                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code})</CardDescription>
+                      <CardTitle>4. Configure Fee Structure</CardTitle>
+                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
                     </div>
                   </div>
                   <Button onClick={handleSave} disabled={saving} className="gap-2">

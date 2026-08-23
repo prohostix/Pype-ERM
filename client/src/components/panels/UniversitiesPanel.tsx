@@ -19,6 +19,7 @@ interface University {
   id: string; name: string; code: string; address?: string;
   contact?: string; status: string; logo?: string;
   allowedBranchIds: Branch[];
+  enrollmentFormConfig?: any;
 }
 
 export function UniversitiesPanel() {
@@ -31,7 +32,11 @@ export function UniversitiesPanel() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: '', code: '', address: '', contact: '', status: 'active', logo: ''
+    name: '', code: '', address: '', contact: '', status: 'active', logo: '',
+    enrollmentFormConfig: {
+      requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'] as string[],
+      requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] as string[]
+    }
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
   const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi'>('all');
@@ -88,7 +93,21 @@ export function UniversitiesPanel() {
 
   const handleEdit = (u: University) => {
     setEditingId(u.id);
-    setFormData({ name: u.name, code: u.code, address: u.address || '', contact: u.contact || '', status: u.status, logo: u.logo || '' });
+    const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
+    const conf = u.enrollmentFormConfig ? (typeof u.enrollmentFormConfig === 'string' ? JSON.parse(u.enrollmentFormConfig) : u.enrollmentFormConfig) : defaultConf;
+    
+    setFormData({ 
+      name: u.name, 
+      code: u.code, 
+      address: u.address || '', 
+      contact: u.contact || '', 
+      status: u.status, 
+      logo: u.logo || '',
+      enrollmentFormConfig: {
+        requiredFields: conf.requiredFields || defaultConf.requiredFields,
+        requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments
+      }
+    });
     const ids = (u.allowedBranchIds || []).map(b => b.id);
     setSelectedBranchIds(ids);
     if (ids.length === 0) setAccessMode('all');
@@ -109,7 +128,13 @@ export function UniversitiesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ name: '', code: '', address: '', contact: '', status: 'active', logo: '' });
+    setFormData({ 
+      name: '', code: '', address: '', contact: '', status: 'active', logo: '',
+      enrollmentFormConfig: {
+        requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'],
+        requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate']
+      }
+    });
     setSelectedBranchIds([]);
     setAccessMode('all');
   };
@@ -204,6 +229,87 @@ export function UniversitiesPanel() {
                   </SelectContent>
                 </Select>
               </div>
+              
+              {/* Enrollment Form Config */}
+              {isOrgAdmin && (
+                <div className="rounded-xl border p-4 space-y-4 bg-slate-50 dark:bg-slate-900">
+                  <div>
+                    <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Form Fields</h3>
+                    <p className="text-xs text-muted-foreground mb-3">Select which fields are strictly required when enrolling students for this university.</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {[
+                        { id: 'email', label: 'Email Address' },
+                        { id: 'dob', label: 'Date of Birth' },
+                        { id: 'address', label: 'Home Address' },
+                        { id: 'pinCode', label: 'Pincode' },
+                        { id: 'altPhone', label: 'Alt. Phone' },
+                        { id: 'religion', label: 'Religion' },
+                        { id: 'caste', label: 'Caste' },
+                        { id: 'fatherName', label: "Father's Name" },
+                        { id: 'fatherPhone', label: "Father's Phone" },
+                        { id: 'motherName', label: "Mother's Name" },
+                        { id: 'motherPhone', label: "Mother's Phone" },
+                        { id: 'photo', label: 'Student Photo' }
+                      ].map(f => (
+                        <div key={f.id} className="flex items-center gap-2">
+                          <input 
+                            type="checkbox" 
+                            id={`field-${f.id}`} 
+                            checked={formData.enrollmentFormConfig.requiredFields.includes(f.id)}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              setFormData(prev => ({
+                                ...prev,
+                                enrollmentFormConfig: {
+                                  ...prev.enrollmentFormConfig,
+                                  requiredFields: checked 
+                                    ? [...prev.enrollmentFormConfig.requiredFields, f.id]
+                                    : prev.enrollmentFormConfig.requiredFields.filter(id => id !== f.id)
+                                }
+                              }));
+                            }}
+                            className="rounded border-gray-300"
+                          />
+                          <label htmlFor={`field-${f.id}`} className="text-sm cursor-pointer">{f.label}</label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2 border-t">
+                    <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Documents</h3>
+                    <p className="text-xs text-muted-foreground mb-3">Select which documents MUST be uploaded during direct enrollment.</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {[
+                        'Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 
+                        'Transfer Certificate', 'Birth Certificate', 'Degree Certificate'
+                      ].map(doc => (
+                        <div key={doc} className="flex items-center gap-2">
+                          <input 
+                            type="checkbox" 
+                            id={`doc-${doc.replace(/\s+/g, '-')}`} 
+                            checked={formData.enrollmentFormConfig.requiredDocuments.includes(doc)}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              setFormData(prev => ({
+                                ...prev,
+                                enrollmentFormConfig: {
+                                  ...prev.enrollmentFormConfig,
+                                  requiredDocuments: checked 
+                                    ? [...prev.enrollmentFormConfig.requiredDocuments, doc]
+                                    : prev.enrollmentFormConfig.requiredDocuments.filter(d => d !== doc)
+                                }
+                              }));
+                            }}
+                            className="rounded border-gray-300"
+                          />
+                          <label htmlFor={`doc-${doc.replace(/\s+/g, '-')}`} className="text-sm cursor-pointer">{doc}</label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* ── Branch Access ── */}
               {isOrgAdmin && branches.length > 0 && (

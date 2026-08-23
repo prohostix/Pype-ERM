@@ -376,18 +376,49 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     ? programs.filter((p: any) => p.universityId === formData.universityId)
     : programs;
 
+  const getEnrollmentConfig = () => {
+    const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
+    const prog = filteredPrograms.find((p: any) => p.id === formData.programId);
+    if (!prog || !prog.university || !prog.university.enrollmentFormConfig) return defaultConf;
+    const conf = typeof prog.university.enrollmentFormConfig === 'string' 
+      ? JSON.parse(prog.university.enrollmentFormConfig) 
+      : prog.university.enrollmentFormConfig;
+    return {
+      requiredFields: conf.requiredFields || defaultConf.requiredFields,
+      requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments
+    };
+  };
+
+  const isFieldReq = (f: string) => {
+    if (['name', 'phone'].includes(f)) return true;
+    return getEnrollmentConfig().requiredFields.includes(f);
+  };
+
+  const isDocReq = (d: string) => {
+    return getEnrollmentConfig().requiredDocuments.includes(d);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // If we're not on the final step, just advance to the next step.
+    // Because the button is type="submit", the browser will natively validate 
+    // all fields in the CURRENT step before this function even fires!
+    if (formStep < 4) {
+      setFormStep(formStep + 1);
+      return;
+    }
+
     if (!formData.programId || formData.programId.trim() === '') {
       toast.error('Please select a Program');
       return;
     }
-    if (!formData.photo || formData.photo.trim() === '') {
+    if (isFieldReq('photo') && (!formData.photo || formData.photo.trim() === '')) {
       toast.error('Please upload a Student Photo');
       setFormStep(1); // Redirect to personal step
       return;
     }
-    const requiredDocs = ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'];
+    const requiredDocs = getEnrollmentConfig().requiredDocuments;
     const missingDocs = requiredDocs.filter(docType => {
       const doc = (formData.documents || []).find((d: any) => d.type === docType);
       return !doc || !doc.url;
@@ -517,9 +548,24 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     });
   };
 
-  const renderFeeDisplay = () => {
+  const getActiveFeeStructure = () => {
     const selectedProgramObj = filteredPrograms.find((p: any) => p.id === formData.programId);
-    const relevantFeeStructure = selectedProgramObj?.feeStructures?.[0];
+    let relevantFeeStructure = null;
+    
+    if (selectedProgramObj?.feeStructures?.length > 0) {
+      relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => f.sessionId === formData.sessionId);
+      if (!relevantFeeStructure) {
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => !f.sessionId);
+      }
+      if (!relevantFeeStructure) {
+        relevantFeeStructure = selectedProgramObj.feeStructures[0];
+      }
+    }
+    return relevantFeeStructure;
+  };
+
+  const renderFeeDisplay = () => {
+    const relevantFeeStructure = getActiveFeeStructure();
 
     if (!relevantFeeStructure) return null;
 
@@ -1191,7 +1237,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
 
                   {/* Payment Plan & Fee */}
-                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.feeStructures?.[0]?.allowInitialFee && (
+                  {getActiveFeeStructure() && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                     <div>
                       <Label className="font-medium">Payment Plan *</Label>
@@ -1282,13 +1328,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Email Address *</Label>
+                      <Label className="font-medium">Email Address {isFieldReq('email') && '*'}</Label>
                       <Input
                         type="email"
                         placeholder="student@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        required
+                        required={isFieldReq('email')}
                       />
                     </div>
                   </div>
@@ -1304,61 +1350,64 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Date of Birth *</Label>
+                      <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
                       <Input
                         type="date"
                         value={formData.dob}
                         onChange={(e) => setFormData({...formData, dob: e.target.value})}
-                        required
+                        required={isFieldReq('dob')}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <Label className="font-medium">Home Address *</Label>
+                    <Label className="font-medium">Home Address {isFieldReq('address') && '*'}</Label>
                     <Textarea
                       placeholder="Permanent address"
                       value={formData.address}
                       onChange={(e) => setFormData({...formData, address: e.target.value})}
-                      required
+                      required={isFieldReq('address')}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-medium">Pincode *</Label>
+                      <Label className="font-medium">Pincode {isFieldReq('pinCode') && '*'}</Label>
                       <Input
                         placeholder="6-digit pincode"
                         value={formData.pinCode}
                         onChange={(e) => setFormData({...formData, pinCode: e.target.value})}
-                        required
+                        required={isFieldReq('pinCode')}
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Alternative Phone</Label>
+                      <Label className="font-medium">Alternative Phone {isFieldReq('altPhone') && '*'}</Label>
                       <Input
                         placeholder="Secondary phone"
                         value={formData.altPhone}
                         onChange={(e) => setFormData({...formData, altPhone: e.target.value})}
+                        required={isFieldReq('altPhone')}
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-medium">Religion</Label>
+                      <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
                       <Input
                         placeholder="e.g. Christian, Hindu, Muslim"
                         value={formData.religion}
                         onChange={(e) => setFormData({...formData, religion: e.target.value})}
+                        required={isFieldReq('religion')}
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Caste / Category</Label>
+                      <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
                       <Input
                         placeholder="e.g. General, OBC, SC, ST"
                         value={formData.caste}
                         onChange={(e) => setFormData({...formData, caste: e.target.value})}
+                        required={isFieldReq('caste')}
                       />
                     </div>
                   </div>
@@ -1366,13 +1415,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   {/* Photo upload */}
                   <div className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo *</Label>
+                      <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo {isFieldReq('photo') && '*'}</Label>
                       {formData.photo ? (
                         <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                           ✓ Photo Uploaded: {formData.photo.split('/').pop()}
                         </p>
                       ) : (
-                        <p className="text-xs text-rose-500 font-medium mt-1">⚠️ Required (direct upload)</p>
+                        <p className={`text-xs ${isFieldReq('photo') ? 'text-rose-500' : 'text-muted-foreground'} font-medium mt-1`}>
+                          {isFieldReq('photo') ? '⚠️ Required (direct upload)' : 'Optional'}
+                        </p>
                       )}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -1425,38 +1476,42 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-medium">Father's Name</Label>
+                      <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
                       <Input
                         placeholder="Father's full name"
                         value={formData.fatherName}
                         onChange={(e) => setFormData({...formData, fatherName: e.target.value})}
+                        required={isFieldReq('fatherName')}
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Father's Phone</Label>
+                      <Label className="font-medium">Father's Phone {isFieldReq('fatherPhone') && '*'}</Label>
                       <Input
                         placeholder="Father's phone"
                         value={formData.fatherPhone}
                         onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})}
+                        required={isFieldReq('fatherPhone')}
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="font-medium">Mother's Name</Label>
+                      <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
                       <Input
                         placeholder="Mother's full name"
                         value={formData.motherName}
                         onChange={(e) => setFormData({...formData, motherName: e.target.value})}
+                        required={isFieldReq('motherName')}
                       />
                     </div>
                     <div>
-                      <Label className="font-medium">Mother's Phone</Label>
+                      <Label className="font-medium">Mother's Phone {isFieldReq('motherPhone') && '*'}</Label>
                       <Input
                         placeholder="Mother's phone"
                         value={formData.motherPhone}
                         onChange={(e) => setFormData({...formData, motherPhone: e.target.value})}
+                        required={isFieldReq('motherPhone')}
                       />
                     </div>
                   </div>
@@ -1468,7 +1523,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                 <div className="space-y-4">
                   <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
                   {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
-                    const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].includes(docType);
+                    const isOptional = !isDocReq(docType);
                     const existing = (formData.documents || []).find((d: any) => d.type === docType);
                     const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
                     return (
@@ -1624,7 +1679,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               </Button>
               <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
               {formStep < 4 ? (
-                <Button type="button" onClick={() => setFormStep(formStep + 1)}>
+                <Button type="submit">
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               ) : (
@@ -1794,7 +1849,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
 
                           {/* Payment Plan & Fee */}
-                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.feeStructures?.[0]?.allowInitialFee && (
+                          {getActiveFeeStructure() && (
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div>
                               <Label className="font-medium">Payment Plan *</Label>
@@ -1882,8 +1937,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">Email *</Label>
-                              <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required placeholder="student@example.com" />
+                              <Label className="font-medium">Email {isFieldReq('email') && '*'}</Label>
+                              <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required={isFieldReq('email')} placeholder="student@example.com" />
                             </div>
                             <div>
                               <Label className="font-medium">Contact Number *</Label>
@@ -1892,37 +1947,37 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">Date of Birth</Label>
-                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} />
+                              <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
+                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} required={isFieldReq('dob')} />
                             </div>
                             <div>
-                              <Label className="font-medium">Alternate Phone</Label>
-                              <Input value={formData.altPhone} onChange={(e) => setFormData({...formData, altPhone: e.target.value})} placeholder="Optional" />
+                              <Label className="font-medium">Alternate Phone {isFieldReq('altPhone') && '*'}</Label>
+                              <Input value={formData.altPhone} onChange={(e) => setFormData({...formData, altPhone: e.target.value})} required={isFieldReq('altPhone')} placeholder="Optional" />
                             </div>
                           </div>
                           <div>
-                            <Label className="font-medium">Address *</Label>
-                            <Textarea value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required placeholder="Full residential address" rows={2} />
+                            <Label className="font-medium">Address {isFieldReq('address') && '*'}</Label>
+                            <Textarea value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required={isFieldReq('address')} placeholder="Full residential address" rows={2} />
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">PIN Code</Label>
-                              <Input value={formData.pinCode} onChange={(e) => setFormData({...formData, pinCode: e.target.value})} placeholder="6-digit PIN" maxLength={6} />
+                              <Label className="font-medium">PIN Code {isFieldReq('pinCode') && '*'}</Label>
+                              <Input value={formData.pinCode} onChange={(e) => setFormData({...formData, pinCode: e.target.value})} required={isFieldReq('pinCode')} placeholder="6-digit PIN" maxLength={6} />
                             </div>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <Label className="font-medium">Religion</Label>
-                              <Input value={formData.religion} onChange={(e) => setFormData({...formData, religion: e.target.value})} placeholder="e.g. Hindu, Muslim, Christian" />
+                              <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
+                              <Input value={formData.religion} onChange={(e) => setFormData({...formData, religion: e.target.value})} required={isFieldReq('religion')} placeholder="e.g. Hindu, Muslim, Christian" />
                             </div>
                             <div>
-                              <Label className="font-medium">Caste / Category</Label>
-                              <Input value={formData.caste} onChange={(e) => setFormData({...formData, caste: e.target.value})} placeholder="e.g. OBC, SC, ST, General" />
+                              <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
+                              <Input value={formData.caste} onChange={(e) => setFormData({...formData, caste: e.target.value})} required={isFieldReq('caste')} placeholder="e.g. OBC, SC, ST, General" />
                             </div>
                           </div>
                           {/* Photo */}
                           <div>
-                            <Label className="font-medium font-semibold text-slate-800 dark:text-slate-200">Student Photo *</Label>
+                            <Label className="font-medium font-semibold text-slate-800 dark:text-slate-200">Student Photo {isFieldReq('photo') && '*'}</Label>
                             <div className="flex items-center gap-4 mt-2 p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/20">
                               {formData.photo ? (
                                 <div className="relative group cursor-pointer inline-block">
@@ -1989,12 +2044,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
-                                <Label className="font-medium">Father's Name</Label>
-                                <Input value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} placeholder="Father's full name" />
+                                <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
+                                <Input value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} required={isFieldReq('fatherName')} placeholder="Father's full name" />
                               </div>
                               <div>
-                                <Label className="font-medium">Father's Mobile</Label>
-                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})} placeholder="10-digit mobile" />
+                                <Label className="font-medium">Father's Mobile {isFieldReq('fatherPhone') && '*'}</Label>
+                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})} required={isFieldReq('fatherPhone')} placeholder="10-digit mobile" />
                               </div>
                             </div>
                           </div>
@@ -2004,12 +2059,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
-                                <Label className="font-medium">Mother's Name</Label>
-                                <Input value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} placeholder="Mother's full name" />
+                                <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
+                                <Input value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} required={isFieldReq('motherName')} placeholder="Mother's full name" />
                               </div>
                               <div>
-                                <Label className="font-medium">Mother's Mobile</Label>
-                                <Input value={formData.motherPhone} onChange={(e) => setFormData({...formData, motherPhone: e.target.value})} placeholder="10-digit mobile" />
+                                <Label className="font-medium">Mother's Mobile {isFieldReq('motherPhone') && '*'}</Label>
+                                <Input value={formData.motherPhone} onChange={(e) => setFormData({...formData, motherPhone: e.target.value})} required={isFieldReq('motherPhone')} placeholder="10-digit mobile" />
                               </div>
                             </div>
                           </div>
@@ -2021,9 +2076,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <div className="space-y-4">
                           <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
                           {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
-                            const isOptional = ['Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].includes(docType);
+                            const isOptional = !isDocReq(docType);
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
-                            const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
+                            const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}-2`;
                             return (
                               <div key={docType} className="space-y-2">
                                 <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
@@ -2177,7 +2232,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       </Button>
                       <div className="text-xs text-muted-foreground">Step {formStep + 1} of 5</div>
                       {formStep < 4 ? (
-                        <Button type="button" onClick={() => setFormStep(formStep + 1)}>
+                        <Button type="submit">
                           Next <ChevronRight className="w-4 h-4 ml-1" />
                         </Button>
                       ) : (

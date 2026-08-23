@@ -330,6 +330,7 @@ model University {
   country            String?
   status             String                 @default("active")
   logo               String?
+  enrollmentFormConfig Json?                @default("{}")
   admissionSessions  AdmissionSession[]
   feeStructures      FeeStructure[]
   programs           Program[]

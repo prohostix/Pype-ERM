@@ -15,6 +15,7 @@ interface University {
 
 interface FeeStructure {
   id: string;
+  sessionId?: string | { id: string } | null;
   registrationFee: number;
   tuitionFee: number;
   examFee: number;
@@ -77,7 +78,26 @@ export function EnrollStudentPanel() {
 
   const getFeeOptions = (p: Program): FeeOption[] => {
     if (!p.feeStructures || p.feeStructures.length === 0) return [];
-    const fs = p.feeStructures[0];
+    
+    let studentSessionId: string | null = null;
+    if (studentMode === 'existing' && selectedStudentId) {
+      const student = students.find((s: any) => s.id === selectedStudentId);
+      if (student) {
+        studentSessionId = typeof student.sessionId === 'object' ? student.sessionId?.id : student.sessionId;
+      }
+    }
+
+    let fs = p.feeStructures.find(f => {
+      const fSid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+      return fSid === studentSessionId;
+    });
+    
+    if (!fs) {
+      fs = p.feeStructures.find(f => !f.sessionId);
+    }
+    if (!fs) {
+      fs = p.feeStructures[0];
+    }
     const options: FeeOption[] = [];
 
     let additionalTotal = 0;
@@ -243,8 +263,13 @@ export function EnrollStudentPanel() {
                           )}
                         </div>
                         {(p.feeStructures?.[0]?.additionalFees?.length ?? 0) > 0 && (
-                          <div className="flex gap-1 mt-2 flex-wrap">
-                            {p.feeStructures![0].additionalFees.map((f, i) => (
+                          <div className="mt-4 pt-4 border-t">
+                            <p className="text-sm font-medium mb-2">Additional Initial Fees (Optional)</p>
+                            {p.feeStructures!.find(f => {
+                              const s = studentMode === 'existing' && selectedStudentId ? students.find((st: any) => st.id === selectedStudentId) : null;
+                              const sid = s ? (typeof s.sessionId === 'object' ? s.sessionId?.id : s.sessionId) : null;
+                              return (typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId) === sid;
+                            })?.additionalFees?.map((f, i) => (
                               <Badge key={i} variant="secondary" className="text-[10px]">{f.label}: ₹{f.amount}</Badge>
                             ))}
                           </div>
