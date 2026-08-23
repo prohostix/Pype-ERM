@@ -126,6 +126,7 @@ app.use(`/api/${API_VERSION}/escalations`, escalationRoutes);
 app.use(`/api/${API_VERSION}/payroll`, payrollRoutes);
 app.use(`/api/${API_VERSION}/attendance`, attendanceRoutes);
 app.use('/api/biometric-devices', biometricDeviceRoutes);
+app.use(`/api/${API_VERSION}/biometric-devices`, biometricDeviceRoutes);
 // New enhancement routes
 app.use(`/api/${API_VERSION}/ceo`, ceoRoutes);
 app.use(`/api/${API_VERSION}/org`, orgAdminRoutes);

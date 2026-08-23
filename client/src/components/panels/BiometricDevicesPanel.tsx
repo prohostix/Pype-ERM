@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
@@ -8,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { toast } from 'sonner';
+import api from '@/lib/api';
 
 interface Device {
   id: string;
@@ -36,10 +36,8 @@ export function BiometricDevicesPanel() {
   const fetchDevices = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/biometric-devices', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      setDevices(res.data);
+      const res = await api.get('/biometric-devices');
+      setDevices(res.data.data || res.data || []);
       setError(null);
     } catch (err: any) {
       console.error(err);
@@ -70,11 +68,11 @@ export function BiometricDevicesPanel() {
 
   const handleSave = async () => {
     try {
-      const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+      const headers = {};
       if (editingDevice) {
-        await axios.put(`/api/biometric-devices/${editingDevice.id}`, formData, { headers });
+        await api.put(`/biometric-devices/${editingDevice.id}`, formData);
       } else {
-        await axios.post('/api/biometric-devices', formData, { headers });
+        await api.post('/biometric-devices', formData);
       }
       setIsDialogOpen(false);
       fetchDevices();
@@ -87,9 +85,7 @@ export function BiometricDevicesPanel() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this device?')) return;
     try {
-      await axios.delete(`/api/biometric-devices/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      await api.delete(`/biometric-devices/${id}`);
       fetchDevices();
     } catch (err: any) {
       console.error(err);
