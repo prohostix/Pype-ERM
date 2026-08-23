@@ -12,20 +12,20 @@ echo "=================================================="
 
 # 1. Update system packages
 echo "📦 Updating system package lists..."
-sudo apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 
 # 2. Install Node.js v20 LTS
 if ! command -v node &> /dev/null; then
     echo "🟢 Node.js not found. Installing Node.js v20 LTS..."
     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs
 else
     echo "✅ Node.js is already installed: $(node -v)"
 fi
 
 # 3. Install Git and Nginx
 echo "🟢 Installing Git, Nginx, and build dependencies..."
-sudo apt-get install -y git nginx build-essential
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq git nginx build-essential
 
 # 4. Install PM2 Process Manager globally
 if ! command -v pm2 &> /dev/null; then
