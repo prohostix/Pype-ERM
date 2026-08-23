@@ -50,7 +50,7 @@ export const punchIn = asyncHandler(async (req, res) => {
         where: { organizationId: req.user.organizationId }
     });
     // 1. Geofencing location check (if required by settings)
-    if (settings && settings.requireLocation) {
+    if (settings && settings.requireLocation && !req.user.allowAnywherePunchIn) {
         if (latitude === undefined || longitude === undefined) {
             res.status(400).json({ success: false, message: 'Location coordinates are required to check in.' });
             return;

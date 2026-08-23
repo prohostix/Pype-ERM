@@ -14727,6 +14727,7 @@ export namespace Prisma {
     biometricId: string | null
     allowSystemPunchIn: boolean | null
     requireSelfiePunchIn: boolean | null
+    allowAnywherePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14754,6 +14755,7 @@ export namespace Prisma {
     biometricId: string | null
     allowSystemPunchIn: boolean | null
     requireSelfiePunchIn: boolean | null
+    allowAnywherePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14782,6 +14784,7 @@ export namespace Prisma {
     biometricId: number
     allowSystemPunchIn: number
     requireSelfiePunchIn: number
+    allowAnywherePunchIn: number
     createdAt: number
     updatedAt: number
     permissions: number
@@ -14812,6 +14815,7 @@ export namespace Prisma {
     biometricId?: true
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
+    allowAnywherePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14839,6 +14843,7 @@ export namespace Prisma {
     biometricId?: true
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
+    allowAnywherePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14867,6 +14872,7 @@ export namespace Prisma {
     biometricId?: true
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
+    allowAnywherePunchIn?: true
     createdAt?: true
     updatedAt?: true
     permissions?: true
@@ -14969,6 +14975,7 @@ export namespace Prisma {
     biometricId: string | null
     allowSystemPunchIn: boolean
     requireSelfiePunchIn: boolean
+    allowAnywherePunchIn: boolean
     createdAt: Date
     updatedAt: Date
     permissions: JsonValue | null
@@ -15015,6 +15022,7 @@ export namespace Prisma {
     biometricId?: boolean
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15130,6 +15138,7 @@ export namespace Prisma {
     biometricId?: boolean
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15166,6 +15175,7 @@ export namespace Prisma {
     biometricId?: boolean
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15202,12 +15212,13 @@ export namespace Prisma {
     biometricId?: boolean
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "allowAnywherePunchIn" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -15428,6 +15439,7 @@ export namespace Prisma {
       biometricId: string | null
       allowSystemPunchIn: boolean
       requireSelfiePunchIn: boolean
+      allowAnywherePunchIn: boolean
       createdAt: Date
       updatedAt: Date
       permissions: Prisma.JsonValue | null
@@ -15962,6 +15974,7 @@ export namespace Prisma {
     readonly biometricId: FieldRef<"User", 'String'>
     readonly allowSystemPunchIn: FieldRef<"User", 'Boolean'>
     readonly requireSelfiePunchIn: FieldRef<"User", 'Boolean'>
+    readonly allowAnywherePunchIn: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly permissions: FieldRef<"User", 'Json'>
@@ -94314,6 +94327,7 @@ export namespace Prisma {
     biometricId: 'biometricId',
     allowSystemPunchIn: 'allowSystemPunchIn',
     requireSelfiePunchIn: 'requireSelfiePunchIn',
+    allowAnywherePunchIn: 'allowAnywherePunchIn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     permissions: 'permissions'
@@ -96506,6 +96520,7 @@ export namespace Prisma {
     biometricId?: StringNullableFilter<"User"> | string | null
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
+    allowAnywherePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -96620,6 +96635,7 @@ export namespace Prisma {
     biometricId?: SortOrderInput | SortOrder
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
+    allowAnywherePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -96737,6 +96753,7 @@ export namespace Prisma {
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
+    allowAnywherePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -96851,6 +96868,7 @@ export namespace Prisma {
     biometricId?: SortOrderInput | SortOrder
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
+    allowAnywherePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -96886,6 +96904,7 @@ export namespace Prisma {
     biometricId?: StringNullableWithAggregatesFilter<"User"> | string | null
     allowSystemPunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
+    allowAnywherePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     permissions?: JsonNullableWithAggregatesFilter<"User">
@@ -104109,6 +104128,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104223,6 +104243,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104323,6 +104344,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104437,6 +104459,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104544,6 +104567,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104566,6 +104590,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104595,6 +104620,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -112958,6 +112984,7 @@ export namespace Prisma {
     biometricId?: SortOrder
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
+    allowAnywherePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrder
@@ -112986,6 +113013,7 @@ export namespace Prisma {
     biometricId?: SortOrder
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
+    allowAnywherePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -113013,6 +113041,7 @@ export namespace Prisma {
     biometricId?: SortOrder
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
+    allowAnywherePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -132056,6 +132085,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -132168,6 +132198,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134405,6 +134436,7 @@ export namespace Prisma {
     biometricId?: StringNullableFilter<"User"> | string | null
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
+    allowAnywherePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -134849,6 +134881,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134962,6 +134995,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135570,6 +135604,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135682,6 +135717,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135824,6 +135860,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135937,6 +135974,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -136178,6 +136216,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -136291,6 +136330,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -140992,6 +141032,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141105,6 +141146,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141209,6 +141251,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141321,6 +141364,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143547,6 +143591,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143660,6 +143705,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144175,6 +144221,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144288,6 +144335,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144558,6 +144606,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144671,6 +144720,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144814,6 +144864,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144927,6 +144978,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145031,6 +145083,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145144,6 +145197,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145305,6 +145359,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145418,6 +145473,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145698,6 +145754,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145811,6 +145868,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145921,6 +145979,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146034,6 +146093,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146207,6 +146267,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146320,6 +146381,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146574,6 +146636,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146687,6 +146750,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146951,6 +147015,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -147064,6 +147129,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -147857,6 +147923,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -147969,6 +148036,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150197,6 +150265,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150310,6 +150379,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150563,6 +150633,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150676,6 +150747,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150780,6 +150852,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150893,6 +150966,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151062,6 +151136,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151174,6 +151249,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151624,6 +151700,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151737,6 +151814,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152002,6 +152080,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152115,6 +152194,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152225,6 +152305,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152338,6 +152419,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153030,6 +153112,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153143,6 +153226,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153247,6 +153331,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153360,6 +153445,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153666,6 +153752,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153779,6 +153866,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154314,6 +154402,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154427,6 +154516,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154537,6 +154627,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154650,6 +154741,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154974,6 +155066,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -155087,6 +155180,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156347,6 +156441,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156460,6 +156555,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156730,6 +156826,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156843,6 +156940,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156942,6 +157040,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157055,6 +157154,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157319,6 +157419,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157432,6 +157533,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157835,6 +157937,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157948,6 +158051,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158218,6 +158322,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158331,6 +158436,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158579,6 +158685,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158692,6 +158799,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158962,6 +159070,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159075,6 +159184,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159380,6 +159490,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159493,6 +159604,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159826,6 +159938,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159939,6 +160052,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160399,6 +160513,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160512,6 +160627,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160616,6 +160732,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160729,6 +160846,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160833,6 +160951,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160946,6 +161065,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161273,6 +161393,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161386,6 +161507,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161496,6 +161618,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161609,6 +161732,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161719,6 +161843,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161832,6 +161957,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162086,6 +162212,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162199,6 +162326,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162303,6 +162431,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162416,6 +162545,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162669,6 +162799,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162782,6 +162913,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162897,6 +163029,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163010,6 +163143,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163120,6 +163254,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163233,6 +163368,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163498,6 +163634,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163611,6 +163748,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163710,6 +163848,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163823,6 +163962,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163927,6 +164067,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164040,6 +164181,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164144,6 +164286,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164257,6 +164400,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164510,6 +164654,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164623,6 +164768,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164727,6 +164873,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164840,6 +164987,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164955,6 +165103,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165068,6 +165217,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165178,6 +165328,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165291,6 +165442,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165401,6 +165553,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165514,6 +165667,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165779,6 +165933,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165892,6 +166047,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166002,6 +166158,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166115,6 +166272,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166214,6 +166372,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166327,6 +166486,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166898,6 +167058,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167010,6 +167171,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167218,6 +167380,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167331,6 +167494,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167909,6 +168073,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168022,6 +168187,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168332,6 +168498,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168444,6 +168611,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168794,6 +168962,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168907,6 +169076,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169671,6 +169841,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169784,6 +169955,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170287,6 +170459,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170400,6 +170573,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170664,6 +170838,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170777,6 +170952,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171455,6 +171631,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171568,6 +171745,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171672,6 +171850,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171785,6 +171964,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172581,6 +172761,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172694,6 +172875,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172804,6 +172986,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172917,6 +173100,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173481,6 +173665,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173594,6 +173779,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173698,6 +173884,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173811,6 +173998,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174117,6 +174305,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174230,6 +174419,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174334,6 +174524,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174447,6 +174638,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174808,6 +175000,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174921,6 +175114,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175061,6 +175255,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175174,6 +175369,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175284,6 +175480,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175397,6 +175594,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175721,6 +175919,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175834,6 +176033,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175944,6 +176144,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176057,6 +176258,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176442,6 +176644,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176555,6 +176758,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176685,6 +176889,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176798,6 +177003,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176902,6 +177108,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177015,6 +177222,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177279,6 +177487,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177392,6 +177601,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177502,6 +177712,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177615,6 +177826,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178647,6 +178859,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178760,6 +178973,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179127,6 +179341,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179240,6 +179455,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179531,6 +179747,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179644,6 +179861,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179963,6 +180181,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180076,6 +180295,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180175,6 +180395,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180288,6 +180509,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180552,6 +180774,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180665,6 +180888,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181068,6 +181292,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181181,6 +181406,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181451,6 +181677,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181564,6 +181791,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182116,6 +182344,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182229,6 +182458,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182499,6 +182729,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182612,6 +182843,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182860,6 +183092,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182973,6 +183206,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183077,6 +183311,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183190,6 +183425,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183460,6 +183696,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183573,6 +183810,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183683,6 +183921,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183796,6 +184035,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184044,6 +184284,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184157,6 +184398,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184261,6 +184503,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184374,6 +184617,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184644,6 +184888,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184757,6 +185002,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184867,6 +185113,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184980,6 +185227,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185079,6 +185327,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185192,6 +185441,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185296,6 +185546,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185409,6 +185660,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185513,6 +185765,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185626,6 +185879,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185879,6 +186133,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185992,6 +186247,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186184,6 +186440,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186297,6 +186554,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186407,6 +186665,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186520,6 +186779,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186630,6 +186890,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186743,6 +187004,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187008,6 +187270,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187121,6 +187384,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187681,6 +187945,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187794,6 +188059,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188264,6 +188530,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188377,6 +188644,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188849,6 +189117,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188962,6 +189231,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189215,6 +189485,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189328,6 +189599,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189443,6 +189715,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189556,6 +189829,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189821,6 +190095,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189934,6 +190209,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190033,6 +190309,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190146,6 +190423,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190399,6 +190677,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190512,6 +190791,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190616,6 +190896,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190729,6 +191010,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190844,6 +191126,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190957,6 +191240,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191222,6 +191506,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191335,6 +191620,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191445,6 +191731,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191558,6 +191845,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191657,6 +191945,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191770,6 +192059,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192034,6 +192324,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192147,6 +192438,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192401,6 +192693,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192514,6 +192807,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192922,6 +193216,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193035,6 +193330,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193594,6 +193890,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193707,6 +194004,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193977,6 +194275,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194090,6 +194389,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194605,6 +194905,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194718,6 +195019,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195062,6 +195364,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195175,6 +195478,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195290,6 +195594,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195403,6 +195708,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195765,6 +196071,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195878,6 +196185,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196175,6 +196483,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196288,6 +196597,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196613,6 +196923,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196726,6 +197037,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196973,6 +197285,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197086,6 +197399,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197510,6 +197824,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197623,6 +197938,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197877,6 +198193,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197990,6 +198307,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198307,6 +198625,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198420,6 +198739,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198733,6 +199053,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198846,6 +199167,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199267,6 +199589,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199380,6 +199703,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200925,6 +201249,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201038,6 +201363,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201142,6 +201468,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201255,6 +201582,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201519,6 +201847,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201632,6 +201961,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201742,6 +202072,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201855,6 +202186,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202311,6 +202643,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202424,6 +202757,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202753,6 +203087,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202866,6 +203201,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203627,6 +203963,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203740,6 +204077,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204158,6 +204496,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204271,6 +204610,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204840,6 +205180,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204953,6 +205294,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205223,6 +205565,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205336,6 +205679,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206087,6 +206431,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206200,6 +206545,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206315,6 +206661,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206428,6 +206775,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206527,6 +206875,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206640,6 +206989,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206870,6 +207220,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206983,6 +207334,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208478,6 +208830,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211279,6 +211632,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211391,6 +211745,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211497,6 +211852,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211923,6 +212279,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212334,6 +212691,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212446,6 +212804,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212552,6 +212911,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212607,6 +212967,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212720,6 +213081,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212826,6 +213188,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -214238,6 +214601,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218621,6 +218985,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218733,6 +219098,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218839,6 +219205,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219238,6 +219605,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219720,6 +220088,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219832,6 +220201,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219938,6 +220308,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221277,6 +221648,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221934,6 +222306,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222046,6 +222419,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222152,6 +222526,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223153,6 +223528,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223438,6 +223814,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223550,6 +223927,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223656,6 +224034,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223818,6 +224197,7 @@ export namespace Prisma {
     biometricId?: string | null
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223958,6 +224338,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224070,6 +224451,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224176,6 +224558,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224507,6 +224890,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224620,6 +225004,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224726,6 +225111,7 @@ export namespace Prisma {
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue

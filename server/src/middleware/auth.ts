@@ -39,7 +39,7 @@ export const protect = async (
           avatar: true, reportingTo: true, createdAt: true, updatedAt: true,
           organizationId: true, departmentId: true, subDepartmentId: true,
           branchId: true, studyCenterId: true, ceoPanelId: true,
-          allowSystemPunchIn: true, requireSelfiePunchIn: true,
+          allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
           organization: true, department: true, branch: true, studyCenter: true,
         }
       });

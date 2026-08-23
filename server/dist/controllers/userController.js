@@ -8,7 +8,7 @@ const USER_SELECT = {
     avatar: true, reportingTo: true, organizationId: true,
     departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
     biometricId: true, additionalDepartmentIds: true,
-    allowSystemPunchIn: true, requireSelfiePunchIn: true,
+    allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
     organization: { select: { id: true, name: true } },
     department: { select: { id: true, name: true } },
     branch: { select: { id: true, name: true } },
@@ -63,7 +63,7 @@ export const getUser = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, data: user });
 });
 export const createUser = asyncHandler(async (req, res) => {
-    const { email, name, phone, role, designation, reportingTo, departmentId, subDepartmentId, branchId, studyCenterId, organizationId: bodyOrgId, status, password, biometricId, allowSystemPunchIn, requireSelfiePunchIn } = req.body;
+    const { email, name, phone, role, designation, reportingTo, departmentId, subDepartmentId, branchId, studyCenterId, organizationId: bodyOrgId, status, password, biometricId, allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn } = req.body;
     // Enforce org scoping
     const targetOrgId = req.user.role === 'superadmin' ? (bodyOrgId || req.user.organizationId) : req.user.organizationId;
     // Role restriction — callers can only create roles they're permitted to
@@ -94,6 +94,7 @@ export const createUser = asyncHandler(async (req, res) => {
             biometricId: biometricId || undefined,
             allowSystemPunchIn: allowSystemPunchIn !== undefined ? allowSystemPunchIn : true,
             requireSelfiePunchIn: requireSelfiePunchIn !== undefined ? requireSelfiePunchIn : false,
+            allowAnywherePunchIn: allowAnywherePunchIn !== undefined ? allowAnywherePunchIn : false,
         },
         select: USER_SELECT,
     });
@@ -109,7 +110,7 @@ export const updateUser = asyncHandler(async (req, res) => {
         return;
     }
     // Only superadmin can change organizationId or role to a higher level
-    const { name, phone, designation, reportingTo, status, avatar, departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds, allowSystemPunchIn, requireSelfiePunchIn } = req.body;
+    const { name, phone, designation, reportingTo, status, avatar, departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds, allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn } = req.body;
     // Role restriction on update
     if (role) {
         const callerRole = req.user.role;
@@ -152,6 +153,8 @@ export const updateUser = asyncHandler(async (req, res) => {
         updateData.allowSystemPunchIn = allowSystemPunchIn;
     if (requireSelfiePunchIn !== undefined)
         updateData.requireSelfiePunchIn = requireSelfiePunchIn;
+    if (allowAnywherePunchIn !== undefined)
+        updateData.allowAnywherePunchIn = allowAnywherePunchIn;
     const user = await prisma.user.update({
         where: { id: req.params.id },
         data: updateData,

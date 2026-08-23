@@ -91,7 +91,8 @@ export function HRUsersPanel() {
     branchId: 'none',
     biometricId: '',
     allowSystemPunchIn: true,
-    requireSelfiePunchIn: false
+    requireSelfiePunchIn: false,
+    allowAnywherePunchIn: false
   });
 
   const [transferData, setTransferData] = useState({
@@ -216,6 +217,7 @@ export function HRUsersPanel() {
           biometricId: formData.biometricId || undefined,
           allowSystemPunchIn: formData.allowSystemPunchIn,
           requireSelfiePunchIn: formData.requireSelfiePunchIn,
+          allowAnywherePunchIn: formData.allowAnywherePunchIn,
         });
       } else {
         await api.post('/users', {
@@ -228,6 +230,7 @@ export function HRUsersPanel() {
           biometricId: formData.biometricId || undefined,
           allowSystemPunchIn: formData.allowSystemPunchIn,
           requireSelfiePunchIn: formData.requireSelfiePunchIn,
+          allowAnywherePunchIn: formData.allowAnywherePunchIn,
         });
       }
       setDialogOpen(false);
@@ -370,7 +373,8 @@ export function HRUsersPanel() {
       branchId: user.branchId?.toString() || 'none',
       biometricId: user.biometricId || '',
       allowSystemPunchIn: user.allowSystemPunchIn ?? true,
-      requireSelfiePunchIn: user.requireSelfiePunchIn ?? false
+      requireSelfiePunchIn: user.requireSelfiePunchIn ?? false,
+      allowAnywherePunchIn: user.allowAnywherePunchIn ?? false
     });
     setDialogOpen(true);
   };
@@ -416,7 +420,8 @@ export function HRUsersPanel() {
       branchId: 'none',
       biometricId: '',
       allowSystemPunchIn: true,
-      requireSelfiePunchIn: false
+      requireSelfiePunchIn: false,
+      allowAnywherePunchIn: false
     });
     setEditingUser(null);
   };
@@ -729,6 +734,16 @@ export function HRUsersPanel() {
                 <Switch
                   checked={formData.requireSelfiePunchIn}
                   onCheckedChange={(checked) => setFormData({ ...formData, requireSelfiePunchIn: checked })}
+                />
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <div className="space-y-0.5">
+                  <Label>Allow Anywhere Punch-In</Label>
+                  <p className="text-sm text-muted-foreground">If enabled, employee bypasses the geofencing (location) restriction.</p>
+                </div>
+                <Switch
+                  checked={formData.allowAnywherePunchIn}
+                  onCheckedChange={(checked) => setFormData({ ...formData, allowAnywherePunchIn: checked })}
                 />
               </div>
               <div className="flex justify-end gap-2 mt-4">

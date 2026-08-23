@@ -188,6 +188,7 @@ exports.Prisma.UserScalarFieldEnum = {
   biometricId: 'biometricId',
   allowSystemPunchIn: 'allowSystemPunchIn',
   requireSelfiePunchIn: 'requireSelfiePunchIn',
+  allowAnywherePunchIn: 'allowAnywherePunchIn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   permissions: 'permissions'
