@@ -1292,7 +1292,8 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.UserStatus = exports.$Enums.UserStatus = {
   active: 'active',
   inactive: 'inactive',
-  on_leave: 'on_leave'
+  on_leave: 'on_leave',
+  resigned: 'resigned'
 };
 
 exports.TaskPriority = exports.$Enums.TaskPriority = {

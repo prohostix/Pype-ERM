@@ -166,6 +166,53 @@ export const punchOut = asyncHandler(async (req, res) => {
         return;
     }
     const { latitude, longitude, address, photo } = req.body;
+    // Retrieve HR Settings
+    const settings = await prisma.hRSettings.findFirst({
+        where: { organizationId: req.user.organizationId }
+    });
+    // 1. Geofencing location check (if required by settings)
+    if (settings && settings.requireLocation && !req.user.allowAnywherePunchIn) {
+        if (latitude === undefined || longitude === undefined) {
+            res.status(400).json({ success: false, message: 'Location coordinates are required to check out.' });
+            return;
+        }
+        let isWithinGeofence = false;
+        let allowedRadiusMsg = '';
+        // Check default office location
+        const defaultLoc = settings.location;
+        if (defaultLoc && defaultLoc.officeLatitude && defaultLoc.officeLongitude) {
+            const distance = getDistanceInMeters(latitude, longitude, defaultLoc.officeLatitude, defaultLoc.officeLongitude);
+            const radius = defaultLoc.allowedRadius || 100;
+            if (distance <= radius) {
+                isWithinGeofence = true;
+            }
+            else {
+                allowedRadiusMsg = `Default location: ${distance.toFixed(0)}m away (max ${radius}m allowed).`;
+            }
+        }
+        // Check other office locations
+        const locationsList = settings.locations;
+        if (!isWithinGeofence && Array.isArray(locationsList)) {
+            for (const loc of locationsList) {
+                if (loc.latitude && loc.longitude) {
+                    const distance = getDistanceInMeters(latitude, longitude, loc.latitude, loc.longitude);
+                    const radius = loc.allowedRadius || 100;
+                    if (distance <= radius) {
+                        isWithinGeofence = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!isWithinGeofence) {
+            res.status(400).json({
+                success: false,
+                message: 'You are outside the permitted punch-out area.',
+                distanceInfo: allowedRadiusMsg
+            });
+            return;
+        }
+    }
     let checkOutPhoto;
     if (req.user.requireSelfiePunchIn) {
         if (!photo) {
@@ -303,7 +350,7 @@ export const getAttendances = asyncHandler(async (req, res) => {
     const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
     let finalAttendances = [...attendances];
     if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
-        const orgQuery = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } } };
+        const orgQuery = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } };
         if (where.user?.branchId)
             orgQuery.branchId = where.user.branchId;
         const allEmployees = await prisma.user.findMany({ where: orgQuery });
@@ -455,7 +502,8 @@ export const getActivityReport = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
     const userFilters = {
         role: { not: 'staff' },
-        organizationId: req.user.organizationId
+        organizationId: req.user.organizationId,
+        status: { not: 'resigned' }
     };
     if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
         // See all users

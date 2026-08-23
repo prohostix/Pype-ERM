@@ -126,6 +126,9 @@ export const login = asyncHandler(async (req, res) => {
                 studyCenterId: user.studyCenterId,
                 designation: user.designation,
                 status: user.status,
+                allowSystemPunchIn: user.allowSystemPunchIn,
+                requireSelfiePunchIn: user.requireSelfiePunchIn,
+                allowAnywherePunchIn: user.allowAnywherePunchIn,
                 ...(centerStatus !== null && { centerStatus }),
             },
             token,
@@ -144,6 +147,7 @@ export const getMe = asyncHandler(async (req, res) => {
             phone: true, designation: true, status: true, lastLogin: true,
             avatar: true, reportingTo: true, organizationId: true,
             departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
+            allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
             organization: true, department: true, subDepartment: true,
         }
     });

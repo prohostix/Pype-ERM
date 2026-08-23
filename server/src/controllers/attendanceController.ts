@@ -395,7 +395,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   let finalAttendances: any[] = [...attendances];
 
   if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
-    const orgQuery: any = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } } };
+    const orgQuery: any = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } };
     if (where.user?.branchId) orgQuery.branchId = where.user.branchId;
     
     const allEmployees = await prisma.user.findMany({ where: orgQuery });
@@ -554,7 +554,8 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
   
   const userFilters: any = { 
     role: { not: 'staff' },
-    organizationId: req.user.organizationId
+    organizationId: req.user.organizationId,
+    status: { not: 'resigned' }
   };
 
   if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {

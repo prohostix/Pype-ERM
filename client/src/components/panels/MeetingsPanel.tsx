@@ -69,7 +69,7 @@ export function MeetingsPanel() {
   const fetchUsers = async () => {
     try {
       const res = await api.get('/users');
-      setAllUsers(res.data.data || res.data || []);
+      setAllUsers((res.data.data || res.data || []).filter((u: any) => u.status !== 'resigned'));
     } catch (error) {
       console.error('Failed to fetch users', error);
     }

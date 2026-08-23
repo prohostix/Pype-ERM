@@ -52,9 +52,10 @@ export function EmployeesPanel() {
       // Filter out admin roles - HR should only see regular employees
       const allUsers = response.data.data || [];
       // Only exclude ceo and org_admin — all other roles (including *_admin) are employees
+      // Also exclude resigned employees
       const employeesOnly = allUsers.filter((user: any) => {
         const role = user.role?.toLowerCase() || '';
-        return role !== 'ceo' && role !== 'org_admin';
+        return role !== 'ceo' && role !== 'org_admin' && user.status !== 'resigned';
       });
       setEmployees(employeesOnly);
     } catch (error) {

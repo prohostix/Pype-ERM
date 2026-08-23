@@ -212,6 +212,9 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     where.organizationId = req.user.organizationId;
   }
 
+  // Exclude resigned employees from task assignees
+  where.status = { not: 'resigned' };
+
   // Filter to only show direct subordinates for department-level admins
   if (!['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
     const currentUser = await prisma.user.findUnique({

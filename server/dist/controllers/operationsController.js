@@ -38,17 +38,23 @@ export const createUniversity = asyncHandler(async (req, res) => {
     res.status(201).json({ success: true, data: university });
 });
 export const updateUniversity = asyncHandler(async (req, res) => {
-    const { allowedBranchIds, ...rest } = req.body;
-    const university = await prisma.university.update({
-        where: { id: req.params.id },
-        data: {
-            ...rest,
-            allowedBranches: allowedBranchIds
-                ? { set: allowedBranchIds.map((id) => ({ id })) }
-                : undefined
-        }
-    });
-    res.json({ success: true, data: university });
+    try {
+        const { allowedBranchIds, id, organizationId, createdAt, updatedAt, ...rest } = req.body;
+        const university = await prisma.university.update({
+            where: { id: req.params.id },
+            data: {
+                ...rest,
+                allowedBranches: allowedBranchIds
+                    ? { set: allowedBranchIds.map((bid) => ({ id: bid })) }
+                    : undefined
+            }
+        });
+        res.json({ success: true, data: university });
+    }
+    catch (error) {
+        console.error("Error updating university:", error);
+        res.status(400).json({ success: false, message: error.message || 'Failed to update university' });
+    }
 });
 export const deleteUniversity = asyncHandler(async (req, res) => {
     await prisma.university.delete({ where: { id: req.params.id } });
@@ -284,7 +290,7 @@ export const getAdmissionSession = asyncHandler(async (req, res) => {
     res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req, res) => {
-    const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
+    const { examDate, universityId, ...rest } = req.body;
     const data = { ...rest, organizationId: req.user.organizationId, createdBy: req.user.id };
     if (universityId)
         data.universityId = universityId;
@@ -295,11 +301,16 @@ export const createAdmissionSession = asyncHandler(async (req, res) => {
         data.startDate = new Date(data.startDate);
     if (data.endDate)
         data.endDate = new Date(data.endDate);
+    if (data.programId && !data.universityId) {
+        const program = await prisma.program.findUnique({ where: { id: data.programId } });
+        if (program)
+            data.universityId = program.universityId;
+    }
     const session = await prisma.admissionSession.create({ data });
     res.status(201).json({ success: true, data: session });
 });
 export const updateAdmissionSession = asyncHandler(async (req, res) => {
-    const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
+    const { examDate, universityId, ...rest } = req.body;
     const data = { ...rest };
     if (universityId !== undefined)
         data.universityId = universityId;
@@ -310,6 +321,11 @@ export const updateAdmissionSession = asyncHandler(async (req, res) => {
         data.startDate = new Date(data.startDate);
     if (data.endDate)
         data.endDate = new Date(data.endDate);
+    if (data.programId && !data.universityId) {
+        const program = await prisma.program.findUnique({ where: { id: data.programId } });
+        if (program)
+            data.universityId = program.universityId;
+    }
     const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
     res.json({ success: true, data: session });
 });

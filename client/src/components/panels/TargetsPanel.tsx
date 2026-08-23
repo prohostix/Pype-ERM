@@ -57,7 +57,7 @@ export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsP
   const fetchEmployees = async () => {
     try {
       const res = await api.get('/users');
-      setEmployees(res.data.data || []);
+      setEmployees((res.data.data || []).filter((u: any) => u.status !== 'resigned'));
     } catch (err) {
       console.error('Failed to fetch employees:', err);
     }
