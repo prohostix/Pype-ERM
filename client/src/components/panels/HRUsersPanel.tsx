@@ -737,7 +737,7 @@ export function HRUsersPanel() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No Manager</SelectItem>
-                    {users.filter(u => (u.id || u.id) !== (editingUser?.id || editingUser?.id)).map((user) => (
+                    {users.filter(u => u.status !== 'resigned' && (u.id || u.id) !== (editingUser?.id || editingUser?.id)).map((user) => (
                       <SelectItem key={user.id || user.id} value={(user.id || user.id)!}>
                         {user.name} {user.designation ? `(${user.designation})` : ''}
                       </SelectItem>

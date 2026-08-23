@@ -790,7 +790,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (sessionStr) {
         let univSessions = sessions;
         if (matchedUniv) {
-          univSessions = sessions.filter(sess => sess.universityId === matchedUniv.id);
+          univSessions = sessions.filter(sess => 
+            sess.universityId === matchedUniv.id || 
+            (sess.programId && programs.find((p: any) => p.id === sess.programId)?.universityId === matchedUniv.id)
+          );
         }
         matchedSession = univSessions.find(sess => sess.name.toLowerCase() === sessionStr);
         if (!matchedSession) {
