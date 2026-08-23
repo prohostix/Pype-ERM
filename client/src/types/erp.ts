@@ -77,6 +77,7 @@ export interface User {
   organizationId: string;
   departmentId?: string;
   subDepartmentId?: string;
+  studyCenterId?: string;
   email: string;
   name: string;
   role: UserRole;
@@ -85,6 +86,9 @@ export interface User {
   designation?: string;
   reportingTo?: string;
   status: 'active' | 'inactive' | 'on_leave';
+  allowSystemPunchIn?: boolean;
+  requireSelfiePunchIn?: boolean;
+  allowAnywherePunchIn?: boolean;
   lastLogin?: Date;
   createdAt: Date;
   organization?: Organization;
