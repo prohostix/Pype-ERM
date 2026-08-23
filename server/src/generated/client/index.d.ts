@@ -14725,6 +14725,8 @@ export namespace Prisma {
     status: $Enums.UserStatus | null
     lastLogin: Date | null
     biometricId: string | null
+    allowSystemPunchIn: boolean | null
+    requireSelfiePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14750,6 +14752,8 @@ export namespace Prisma {
     status: $Enums.UserStatus | null
     lastLogin: Date | null
     biometricId: string | null
+    allowSystemPunchIn: boolean | null
+    requireSelfiePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14776,6 +14780,8 @@ export namespace Prisma {
     status: number
     lastLogin: number
     biometricId: number
+    allowSystemPunchIn: number
+    requireSelfiePunchIn: number
     createdAt: number
     updatedAt: number
     permissions: number
@@ -14804,6 +14810,8 @@ export namespace Prisma {
     status?: true
     lastLogin?: true
     biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14829,6 +14837,8 @@ export namespace Prisma {
     status?: true
     lastLogin?: true
     biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14855,6 +14865,8 @@ export namespace Prisma {
     status?: true
     lastLogin?: true
     biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
     permissions?: true
@@ -14955,6 +14967,8 @@ export namespace Prisma {
     status: $Enums.UserStatus
     lastLogin: Date | null
     biometricId: string | null
+    allowSystemPunchIn: boolean
+    requireSelfiePunchIn: boolean
     createdAt: Date
     updatedAt: Date
     permissions: JsonValue | null
@@ -14999,6 +15013,8 @@ export namespace Prisma {
     status?: boolean
     lastLogin?: boolean
     biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15112,6 +15128,8 @@ export namespace Prisma {
     status?: boolean
     lastLogin?: boolean
     biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15146,6 +15164,8 @@ export namespace Prisma {
     status?: boolean
     lastLogin?: boolean
     biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15180,12 +15200,14 @@ export namespace Prisma {
     status?: boolean
     lastLogin?: boolean
     biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -15404,6 +15426,8 @@ export namespace Prisma {
       status: $Enums.UserStatus
       lastLogin: Date | null
       biometricId: string | null
+      allowSystemPunchIn: boolean
+      requireSelfiePunchIn: boolean
       createdAt: Date
       updatedAt: Date
       permissions: Prisma.JsonValue | null
@@ -15936,6 +15960,8 @@ export namespace Prisma {
     readonly status: FieldRef<"User", 'UserStatus'>
     readonly lastLogin: FieldRef<"User", 'DateTime'>
     readonly biometricId: FieldRef<"User", 'String'>
+    readonly allowSystemPunchIn: FieldRef<"User", 'Boolean'>
+    readonly requireSelfiePunchIn: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly permissions: FieldRef<"User", 'Json'>
@@ -20869,6 +20895,8 @@ export namespace Prisma {
     status: $Enums.AttendanceStatus | null
     checkIn: Date | null
     checkOut: Date | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
     workingHours: number | null
@@ -20885,6 +20913,8 @@ export namespace Prisma {
     status: $Enums.AttendanceStatus | null
     checkIn: Date | null
     checkOut: Date | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
     workingHours: number | null
@@ -20903,6 +20933,8 @@ export namespace Prisma {
     checkOut: number
     checkInLocation: number
     checkOutLocation: number
+    checkInPhoto: number
+    checkOutPhoto: number
     isLate: number
     lateMinutes: number
     workingHours: number
@@ -20931,6 +20963,8 @@ export namespace Prisma {
     status?: true
     checkIn?: true
     checkOut?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -20947,6 +20981,8 @@ export namespace Prisma {
     status?: true
     checkIn?: true
     checkOut?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -20965,6 +21001,8 @@ export namespace Prisma {
     checkOut?: true
     checkInLocation?: true
     checkOutLocation?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -21070,6 +21108,8 @@ export namespace Prisma {
     checkOut: Date | null
     checkInLocation: JsonValue | null
     checkOutLocation: JsonValue | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean
     lateMinutes: number
     workingHours: number
@@ -21107,6 +21147,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21127,6 +21169,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21147,6 +21191,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21167,6 +21213,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21175,7 +21223,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "isLate" | "lateMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "checkInPhoto" | "checkOutPhoto" | "isLate" | "lateMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -21205,6 +21253,8 @@ export namespace Prisma {
       checkOut: Date | null
       checkInLocation: Prisma.JsonValue | null
       checkOutLocation: Prisma.JsonValue | null
+      checkInPhoto: string | null
+      checkOutPhoto: string | null
       isLate: boolean
       lateMinutes: number
       workingHours: number
@@ -21645,6 +21695,8 @@ export namespace Prisma {
     readonly checkOut: FieldRef<"Attendance", 'DateTime'>
     readonly checkInLocation: FieldRef<"Attendance", 'Json'>
     readonly checkOutLocation: FieldRef<"Attendance", 'Json'>
+    readonly checkInPhoto: FieldRef<"Attendance", 'String'>
+    readonly checkOutPhoto: FieldRef<"Attendance", 'String'>
     readonly isLate: FieldRef<"Attendance", 'Boolean'>
     readonly lateMinutes: FieldRef<"Attendance", 'Int'>
     readonly workingHours: FieldRef<"Attendance", 'Float'>
@@ -22117,6 +22169,7 @@ export namespace Prisma {
     country: number
     status: number
     logo: number
+    enrollmentFormConfig: number
     _all: number
   }
 
@@ -22158,6 +22211,7 @@ export namespace Prisma {
     country?: true
     status?: true
     logo?: true
+    enrollmentFormConfig?: true
     _all?: true
   }
 
@@ -22244,6 +22298,7 @@ export namespace Prisma {
     country: string | null
     status: string
     logo: string | null
+    enrollmentFormConfig: JsonValue | null
     _count: UniversityCountAggregateOutputType | null
     _min: UniversityMinAggregateOutputType | null
     _max: UniversityMaxAggregateOutputType | null
@@ -22274,6 +22329,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
     programs?: boolean | University$programsArgs<ExtArgs>
@@ -22300,6 +22356,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -22314,6 +22371,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -22328,9 +22386,10 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
   }
 
-  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo", ExtArgs["result"]["university"]>
+  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo" | "enrollmentFormConfig", ExtArgs["result"]["university"]>
   export type UniversityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
@@ -22380,6 +22439,7 @@ export namespace Prisma {
       country: string | null
       status: string
       logo: string | null
+      enrollmentFormConfig: Prisma.JsonValue | null
     }, ExtArgs["result"]["university"]>
     composites: {}
   }
@@ -22825,6 +22885,7 @@ export namespace Prisma {
     readonly country: FieldRef<"University", 'String'>
     readonly status: FieldRef<"University", 'String'>
     readonly logo: FieldRef<"University", 'String'>
+    readonly enrollmentFormConfig: FieldRef<"University", 'Json'>
   }
     
 
@@ -94251,6 +94312,8 @@ export namespace Prisma {
     status: 'status',
     lastLogin: 'lastLogin',
     biometricId: 'biometricId',
+    allowSystemPunchIn: 'allowSystemPunchIn',
+    requireSelfiePunchIn: 'requireSelfiePunchIn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     permissions: 'permissions'
@@ -94310,6 +94373,8 @@ export namespace Prisma {
     checkOut: 'checkOut',
     checkInLocation: 'checkInLocation',
     checkOutLocation: 'checkOutLocation',
+    checkInPhoto: 'checkInPhoto',
+    checkOutPhoto: 'checkOutPhoto',
     isLate: 'isLate',
     lateMinutes: 'lateMinutes',
     workingHours: 'workingHours',
@@ -94331,7 +94396,8 @@ export namespace Prisma {
     contact: 'contact',
     country: 'country',
     status: 'status',
-    logo: 'logo'
+    logo: 'logo',
+    enrollmentFormConfig: 'enrollmentFormConfig'
   };
 
   export type UniversityScalarFieldEnum = (typeof UniversityScalarFieldEnum)[keyof typeof UniversityScalarFieldEnum]
@@ -95655,6 +95721,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'TaskPriority'
    */
   export type EnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority'>
@@ -95707,13 +95780,6 @@ export namespace Prisma {
    * Reference to a field of type 'AttendanceStatus[]'
    */
   export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -96438,6 +96504,8 @@ export namespace Prisma {
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     biometricId?: StringNullableFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -96550,6 +96618,8 @@ export namespace Prisma {
     status?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     biometricId?: SortOrderInput | SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -96665,6 +96735,8 @@ export namespace Prisma {
     reportingTo?: StringNullableFilter<"User"> | string | null
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -96777,6 +96849,8 @@ export namespace Prisma {
     status?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     biometricId?: SortOrderInput | SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -96810,6 +96884,8 @@ export namespace Prisma {
     status?: EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     biometricId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolWithAggregatesFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     permissions?: JsonNullableWithAggregatesFilter<"User">
@@ -97053,6 +97129,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -97073,6 +97151,8 @@ export namespace Prisma {
     checkOut?: SortOrderInput | SortOrder
     checkInLocation?: SortOrderInput | SortOrder
     checkOutLocation?: SortOrderInput | SortOrder
+    checkInPhoto?: SortOrderInput | SortOrder
+    checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -97097,6 +97177,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -97117,6 +97199,8 @@ export namespace Prisma {
     checkOut?: SortOrderInput | SortOrder
     checkInLocation?: SortOrderInput | SortOrder
     checkOutLocation?: SortOrderInput | SortOrder
+    checkInPhoto?: SortOrderInput | SortOrder
+    checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -97143,6 +97227,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableWithAggregatesFilter<"Attendance">
     checkOutLocation?: JsonNullableWithAggregatesFilter<"Attendance">
+    checkInPhoto?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     isLate?: BoolWithAggregatesFilter<"Attendance"> | boolean
     lateMinutes?: IntWithAggregatesFilter<"Attendance"> | number
     workingHours?: FloatWithAggregatesFilter<"Attendance"> | number
@@ -97165,6 +97251,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -97190,6 +97277,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
+    enrollmentFormConfig?: SortOrderInput | SortOrder
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     feeStructures?: FeeStructureOrderByRelationAggregateInput
     programs?: ProgramOrderByRelationAggregateInput
@@ -97219,6 +97307,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -97244,6 +97333,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
+    enrollmentFormConfig?: SortOrderInput | SortOrder
     _count?: UniversityCountOrderByAggregateInput
     _max?: UniversityMaxOrderByAggregateInput
     _min?: UniversityMinOrderByAggregateInput
@@ -97263,6 +97353,7 @@ export namespace Prisma {
     country?: StringNullableWithAggregatesFilter<"University"> | string | null
     status?: StringWithAggregatesFilter<"University"> | string
     logo?: StringNullableWithAggregatesFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableWithAggregatesFilter<"University">
   }
 
   export type ProgramWhereInput = {
@@ -104016,6 +104107,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104128,6 +104221,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104226,6 +104321,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104338,6 +104435,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104443,6 +104542,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104463,6 +104564,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104490,6 +104593,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -104745,6 +104850,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -104765,6 +104872,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -104781,6 +104890,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -104801,6 +104912,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -104819,6 +104932,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -104835,6 +104950,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -104853,6 +104970,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -104871,6 +104990,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -104896,6 +105016,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -104919,6 +105040,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -104944,6 +105066,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -104968,6 +105091,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityUpdateManyMutationInput = {
@@ -104980,6 +105104,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityUncheckedUpdateManyInput = {
@@ -104993,6 +105118,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProgramCreateInput = {
@@ -112733,6 +112859,11 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type AssetListRelationFilter = {
     every?: AssetWhereInput
     some?: AssetWhereInput
@@ -112825,6 +112956,8 @@ export namespace Prisma {
     status?: SortOrder
     lastLogin?: SortOrder
     biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrder
@@ -112851,6 +112984,8 @@ export namespace Prisma {
     status?: SortOrder
     lastLogin?: SortOrder
     biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -112876,6 +113011,8 @@ export namespace Prisma {
     status?: SortOrder
     lastLogin?: SortOrder
     biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -112898,6 +113035,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -113101,11 +113246,6 @@ export namespace Prisma {
     not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type AttendanceEmployeeIdDateCompoundUniqueInput = {
     employeeId: string
     date: Date | string
@@ -113121,6 +113261,8 @@ export namespace Prisma {
     checkOut?: SortOrder
     checkInLocation?: SortOrder
     checkOutLocation?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -113142,6 +113284,8 @@ export namespace Prisma {
     status?: SortOrder
     checkIn?: SortOrder
     checkOut?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -113158,6 +113302,8 @@ export namespace Prisma {
     status?: SortOrder
     checkIn?: SortOrder
     checkOut?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -113181,14 +113327,6 @@ export namespace Prisma {
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type UniversityOrganizationIdCodeCompoundUniqueInput = {
     organizationId: string
     code: string
@@ -113205,6 +113343,7 @@ export namespace Prisma {
     country?: SortOrder
     status?: SortOrder
     logo?: SortOrder
+    enrollmentFormConfig?: SortOrder
   }
 
   export type UniversityMaxOrderByAggregateInput = {
@@ -120824,6 +120963,10 @@ export namespace Prisma {
     set?: $Enums.UserStatus
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type AdmissionSessionUpdateManyWithoutApproverNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -123196,10 +123339,6 @@ export namespace Prisma {
 
   export type EnumAttendanceStatusFieldUpdateOperationsInput = {
     set?: $Enums.AttendanceStatus
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutAttendancesNestedInput = {
@@ -129029,6 +129168,11 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
@@ -129047,6 +129191,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -129134,11 +129286,6 @@ export namespace Prisma {
     not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
     in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
@@ -129147,14 +129294,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumCourseTypeFilter<$PrismaModel = never> = {
@@ -129530,6 +129669,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -129548,6 +129689,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -131752,6 +131895,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -131775,6 +131919,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -131909,6 +132054,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -132019,6 +132166,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -132321,6 +132470,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -134115,6 +134266,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -134251,6 +134403,8 @@ export namespace Prisma {
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
     biometricId?: StringNullableFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -134693,6 +134847,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134804,6 +134960,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135410,6 +135568,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135520,6 +135680,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135660,6 +135822,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -135771,6 +135935,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -136010,6 +136176,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -136121,6 +136289,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -136767,6 +136937,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -136785,6 +136957,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -140816,6 +140990,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -140927,6 +141103,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141029,6 +141207,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141139,6 +141319,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141374,6 +141556,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -141398,6 +141581,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -143361,6 +143545,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143472,6 +143658,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143735,6 +143923,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -143759,6 +143948,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -143983,6 +144173,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144094,6 +144286,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144362,6 +144556,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144473,6 +144669,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144614,6 +144812,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144725,6 +144925,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144827,6 +145029,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144938,6 +145142,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145097,6 +145303,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145208,6 +145416,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145486,6 +145696,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145597,6 +145809,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145705,6 +145919,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145816,6 +146032,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145987,6 +146205,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146098,6 +146318,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146350,6 +146572,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146461,6 +146685,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146723,6 +146949,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146834,6 +147062,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -147625,6 +147855,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -147735,6 +147967,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148729,6 +148963,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -148753,6 +148988,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -149340,6 +149576,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -149364,6 +149601,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -149957,6 +150195,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150068,6 +150308,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150319,6 +150561,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150430,6 +150674,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150532,6 +150778,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150643,6 +150891,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150810,6 +151060,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150920,6 +151172,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151157,6 +151411,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -151181,6 +151436,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -151366,6 +151622,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151477,6 +151735,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151740,6 +152000,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151851,6 +152113,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151959,6 +152223,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152070,6 +152336,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152760,6 +153028,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152871,6 +153141,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152973,6 +153245,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153084,6 +153358,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153388,6 +153664,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153499,6 +153777,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153647,6 +153927,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -153671,6 +153952,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -154030,6 +154312,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154141,6 +154425,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154249,6 +154535,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154360,6 +154648,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154682,6 +154972,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154793,6 +155085,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154953,6 +155247,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -154977,6 +155272,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -156049,6 +156345,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156160,6 +156458,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156428,6 +156728,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156539,6 +156841,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156636,6 +156940,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156747,6 +157053,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157009,6 +157317,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157120,6 +157430,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157521,6 +157833,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157632,6 +157946,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157900,6 +158216,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158011,6 +158329,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158257,6 +158577,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158368,6 +158690,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158636,6 +158960,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158747,6 +159073,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159050,6 +159378,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159161,6 +159491,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159492,6 +159824,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159603,6 +159937,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160061,6 +160397,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160172,6 +160510,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160274,6 +160614,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160385,6 +160727,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160487,6 +160831,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160598,6 +160944,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160923,6 +161271,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161034,6 +161384,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161142,6 +161494,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161253,6 +161607,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161361,6 +161717,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161472,6 +161830,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161724,6 +162084,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161835,6 +162197,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161937,6 +162301,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162048,6 +162414,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162299,6 +162667,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162410,6 +162780,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162523,6 +162895,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162634,6 +163008,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162742,6 +163118,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162853,6 +163231,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163116,6 +163496,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163227,6 +163609,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163324,6 +163708,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163435,6 +163821,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163537,6 +163925,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163648,6 +164038,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163750,6 +164142,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163861,6 +164255,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164112,6 +164508,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164223,6 +164621,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164325,6 +164725,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164436,6 +164838,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164549,6 +164953,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164660,6 +165066,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164768,6 +165176,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164879,6 +165289,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164987,6 +165399,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165098,6 +165512,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165361,6 +165777,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165472,6 +165890,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165580,6 +166000,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165691,6 +166113,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165788,6 +166212,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165899,6 +166325,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166468,6 +166896,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166578,6 +167008,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166681,6 +167113,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -166705,6 +167138,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -166782,6 +167216,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166893,6 +167329,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167469,6 +167907,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167580,6 +168020,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167888,6 +168330,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167998,6 +168442,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168245,6 +168691,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -168269,6 +168716,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -168344,6 +168792,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168455,6 +168905,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169217,6 +169669,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169328,6 +169782,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169829,6 +170285,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169940,6 +170398,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170202,6 +170662,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170313,6 +170775,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170989,6 +171453,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171100,6 +171566,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171202,6 +171670,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171313,6 +171783,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171744,6 +172216,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -171768,6 +172241,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -172105,6 +172579,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172216,6 +172692,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172324,6 +172802,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172435,6 +172915,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172896,6 +173378,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -172920,6 +173403,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -172995,6 +173479,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173106,6 +173592,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173208,6 +173696,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173319,6 +173809,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173623,6 +174115,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173734,6 +174228,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173836,6 +174332,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173947,6 +174445,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174306,6 +174806,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174417,6 +174919,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174555,6 +175059,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174666,6 +175172,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174774,6 +175282,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174885,6 +175395,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175207,6 +175719,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175318,6 +175832,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175426,6 +175942,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175537,6 +176055,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175920,6 +176440,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176031,6 +176553,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176159,6 +176683,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176270,6 +176796,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176372,6 +176900,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176483,6 +177013,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176745,6 +177277,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176856,6 +177390,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176964,6 +177500,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177075,6 +177613,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178105,6 +178645,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178216,6 +178758,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178581,6 +179125,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178692,6 +179238,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178981,6 +179529,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179092,6 +179642,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179409,6 +179961,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179520,6 +180074,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179617,6 +180173,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179728,6 +180286,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179990,6 +180550,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180101,6 +180663,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180502,6 +181066,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180613,6 +181179,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180881,6 +181449,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180992,6 +181562,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181542,6 +182114,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181653,6 +182227,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181921,6 +182497,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182032,6 +182610,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182278,6 +182858,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182389,6 +182971,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182491,6 +183075,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182602,6 +183188,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182870,6 +183458,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182981,6 +183571,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183089,6 +183681,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183200,6 +183794,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183446,6 +184042,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183557,6 +184155,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183659,6 +184259,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183770,6 +184372,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184038,6 +184642,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184149,6 +184755,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184257,6 +184865,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184368,6 +184978,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184465,6 +185077,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184576,6 +185190,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184678,6 +185294,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184789,6 +185407,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184891,6 +185511,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185002,6 +185624,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185253,6 +185877,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185364,6 +185990,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185554,6 +186182,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185665,6 +186295,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185773,6 +186405,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185884,6 +186518,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185992,6 +186628,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186103,6 +186741,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186366,6 +187006,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186477,6 +187119,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187035,6 +187679,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187146,6 +187792,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187614,6 +188262,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187725,6 +188375,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188195,6 +188847,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188306,6 +188960,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188557,6 +189213,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188668,6 +189326,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188781,6 +189441,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188892,6 +189554,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189155,6 +189819,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189266,6 +189932,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189363,6 +190031,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189474,6 +190144,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189725,6 +190397,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189836,6 +190510,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189938,6 +190614,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190049,6 +190727,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190162,6 +190842,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190273,6 +190955,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190536,6 +191220,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190647,6 +191333,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190755,6 +191443,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190866,6 +191556,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190963,6 +191655,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191074,6 +191768,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191336,6 +192032,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191447,6 +192145,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191699,6 +192399,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191810,6 +192512,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192216,6 +192920,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192327,6 +193033,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192884,6 +193592,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192995,6 +193705,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193263,6 +193975,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193374,6 +194088,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193887,6 +194603,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193998,6 +194716,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194340,6 +195060,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194451,6 +195173,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194564,6 +195288,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194675,6 +195401,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195035,6 +195763,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195146,6 +195876,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195441,6 +196173,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195552,6 +196286,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195875,6 +196611,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195986,6 +196724,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196231,6 +196971,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196342,6 +197084,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196764,6 +197508,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196875,6 +197621,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197127,6 +197875,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197238,6 +197988,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197484,6 +198236,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -197508,6 +198261,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -197551,6 +198305,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197662,6 +198418,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197920,6 +198678,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -197944,6 +198703,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -197971,6 +198731,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198082,6 +198844,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198432,6 +199196,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -198456,6 +199221,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -198499,6 +199265,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198610,6 +199378,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198984,6 +199754,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -199008,6 +199779,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -199294,6 +200066,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -199318,6 +200091,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -199632,6 +200406,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -199656,6 +200431,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -200147,6 +200923,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200258,6 +201036,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200360,6 +201140,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200471,6 +201253,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200733,6 +201517,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200844,6 +201630,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200952,6 +201740,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201063,6 +201853,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201517,6 +202309,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201628,6 +202422,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201955,6 +202751,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202066,6 +202864,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202825,6 +203625,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202936,6 +203738,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203352,6 +204156,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203463,6 +204269,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204030,6 +204838,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204141,6 +204951,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204409,6 +205221,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204520,6 +205334,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204876,6 +205692,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -204900,6 +205717,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -205214,6 +206032,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -205238,6 +206057,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -205265,6 +206085,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205376,6 +206198,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205489,6 +206313,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205600,6 +206426,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205697,6 +206525,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205808,6 +206638,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206036,6 +206868,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206147,6 +206981,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206801,6 +207637,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -207581,6 +208419,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityAuthFeeCreateManyOrganizationInput = {
@@ -207637,6 +208476,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207796,6 +208637,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -207814,6 +208657,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -207831,6 +208676,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -210265,6 +211112,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -210288,6 +211136,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -210311,6 +211160,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityAuthFeeUpdateWithoutOrganizationInput = {
@@ -210427,6 +211277,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210537,6 +211389,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210641,6 +211495,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211065,6 +211921,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211474,6 +212332,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211584,6 +212444,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211688,6 +212550,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211741,6 +212605,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211852,6 +212718,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211956,6 +212824,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212041,6 +212911,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -213364,6 +214236,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213617,6 +214491,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -213635,6 +214511,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -213652,6 +214530,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -217739,6 +218619,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217849,6 +218731,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217953,6 +218837,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218350,6 +219236,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218830,6 +219718,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218940,6 +219830,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219044,6 +219936,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220381,6 +221275,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221036,6 +221932,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221146,6 +222044,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221250,6 +222150,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221423,6 +222325,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -221447,6 +222350,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -221470,6 +222374,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DocumentLogCreateManyStudentInput = {
@@ -222246,6 +223151,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222529,6 +223436,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222639,6 +223548,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222743,6 +223654,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222758,6 +223671,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -222782,6 +223696,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -222805,6 +223720,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type BiometricDeviceUpdateWithoutBranchInput = {
@@ -222900,6 +223816,8 @@ export namespace Prisma {
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
     biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223038,6 +223956,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223148,6 +224068,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223252,6 +224174,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223446,6 +224370,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -223470,6 +224395,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -223493,6 +224419,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationCreateManyParentDesignationInput = {
@@ -223578,6 +224505,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223689,6 +224618,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223793,6 +224724,8 @@ export namespace Prisma {
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue

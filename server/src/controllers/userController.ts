@@ -11,6 +11,7 @@ const USER_SELECT = {
   avatar: true, reportingTo: true, organizationId: true,
   departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
   biometricId: true, additionalDepartmentIds: true,
+  allowSystemPunchIn: true, requireSelfiePunchIn: true,
   organization: { select: { id: true, name: true } },
   department: { select: { id: true, name: true } },
   branch: { select: { id: true, name: true } },
@@ -76,7 +77,8 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const {
     email, name, phone, role, designation, reportingTo,
     departmentId, subDepartmentId, branchId, studyCenterId,
-    organizationId: bodyOrgId, status, password, biometricId
+    organizationId: bodyOrgId, status, password, biometricId,
+    allowSystemPunchIn, requireSelfiePunchIn
   } = req.body;
 
   // Enforce org scoping
@@ -110,6 +112,8 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       studyCenterId: studyCenterId || undefined,
       status: status || 'active',
       biometricId: biometricId || undefined,
+      allowSystemPunchIn: allowSystemPunchIn !== undefined ? allowSystemPunchIn : true,
+      requireSelfiePunchIn: requireSelfiePunchIn !== undefined ? requireSelfiePunchIn : false,
     },
     select: USER_SELECT,
   });
@@ -130,7 +134,8 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   // Only superadmin can change organizationId or role to a higher level
   const {
     name, phone, designation, reportingTo, status, avatar,
-    departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds
+    departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds,
+    allowSystemPunchIn, requireSelfiePunchIn
   } = req.body;
 
   // Role restriction on update
@@ -158,6 +163,8 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (additionalDepartmentIds !== undefined) updateData.additionalDepartmentIds = additionalDepartmentIds;
   if (role !== undefined) updateData.role = role;
   if (password) updateData.password = await hashPassword(password);
+  if (allowSystemPunchIn !== undefined) updateData.allowSystemPunchIn = allowSystemPunchIn;
+  if (requireSelfiePunchIn !== undefined) updateData.requireSelfiePunchIn = requireSelfiePunchIn;
 
   const user = await prisma.user.update({
     where: { id: req.params.id },

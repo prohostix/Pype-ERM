@@ -153,6 +153,8 @@ model User {
   status                        UserStatus           @default(active)
   lastLogin                     DateTime?
   biometricId                   String?              @unique
+  allowSystemPunchIn            Boolean              @default(true)
+  requireSelfiePunchIn          Boolean              @default(false)
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
   permissions                   Json?                @default("[]")
@@ -305,6 +307,8 @@ model Attendance {
   checkOut         DateTime?
   checkInLocation  Json?
   checkOutLocation Json?
+  checkInPhoto     String?
+  checkOutPhoto    String?
   isLate           Boolean          @default(false)
   lateMinutes      Int              @default(0)
   workingHours     Float            @default(0)

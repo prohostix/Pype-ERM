@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
 
@@ -88,7 +89,9 @@ export function HRUsersPanel() {
     subDepartmentId: '',
     reportingTo: '',
     branchId: 'none',
-    biometricId: ''
+    biometricId: '',
+    allowSystemPunchIn: true,
+    requireSelfiePunchIn: false
   });
 
   const [transferData, setTransferData] = useState({
@@ -211,6 +214,8 @@ export function HRUsersPanel() {
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
           branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : null,
           biometricId: formData.biometricId || undefined,
+          allowSystemPunchIn: formData.allowSystemPunchIn,
+          requireSelfiePunchIn: formData.requireSelfiePunchIn,
         });
       } else {
         await api.post('/users', {
@@ -221,6 +226,8 @@ export function HRUsersPanel() {
           reportingTo: (formData.reportingTo && formData.reportingTo !== 'none') ? formData.reportingTo : undefined,
           branchId: (formData.branchId && formData.branchId !== 'none') ? formData.branchId : undefined,
           biometricId: formData.biometricId || undefined,
+          allowSystemPunchIn: formData.allowSystemPunchIn,
+          requireSelfiePunchIn: formData.requireSelfiePunchIn,
         });
       }
       setDialogOpen(false);
@@ -361,7 +368,9 @@ export function HRUsersPanel() {
       subDepartmentId: subDeptId?.toString() || '',
       reportingTo: reportingToId?.toString() || '',
       branchId: user.branchId?.toString() || 'none',
-      biometricId: user.biometricId || ''
+      biometricId: user.biometricId || '',
+      allowSystemPunchIn: user.allowSystemPunchIn ?? true,
+      requireSelfiePunchIn: user.requireSelfiePunchIn ?? false
     });
     setDialogOpen(true);
   };
@@ -405,7 +414,9 @@ export function HRUsersPanel() {
       subDepartmentId: '',
       reportingTo: '',
       branchId: 'none',
-      biometricId: ''
+      biometricId: '',
+      allowSystemPunchIn: true,
+      requireSelfiePunchIn: false
     });
     setEditingUser(null);
   };
@@ -700,7 +711,27 @@ export function HRUsersPanel() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex justify-end gap-2">
+              <div className="flex items-center justify-between mt-4">
+                <div className="space-y-0.5">
+                  <Label>Allow System Punch-In (Web/App)</Label>
+                  <p className="text-sm text-muted-foreground">If disabled, employee must use physical biometric device.</p>
+                </div>
+                <Switch
+                  checked={formData.allowSystemPunchIn}
+                  onCheckedChange={(checked) => setFormData({ ...formData, allowSystemPunchIn: checked })}
+                />
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <div className="space-y-0.5">
+                  <Label>Require Selfie for Punch-In</Label>
+                  <p className="text-sm text-muted-foreground">If enabled, employee must take a photo via webcam to punch in.</p>
+                </div>
+                <Switch
+                  checked={formData.requireSelfiePunchIn}
+                  onCheckedChange={(checked) => setFormData({ ...formData, requireSelfiePunchIn: checked })}
+                />
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
                 <Button
                   type="button"
                   variant="outline"

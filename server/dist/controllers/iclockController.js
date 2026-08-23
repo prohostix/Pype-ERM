@@ -3,9 +3,26 @@ function differenceInMinutes(date1, date2) {
     return Math.abs(Math.floor((date1.getTime() - date2.getTime()) / 1000 / 60));
 }
 // GET /iclock/cdata - Initialization & Handshake
-export const iclockHandshake = (req, res) => {
+export const iclockHandshake = async (req, res) => {
     const { SN } = req.query;
     console.log(`[iClock] Handshake request from device: ${SN}`);
+    if (typeof SN === 'string') {
+        try {
+            // Update device lastActive if it exists in the database
+            const device = await prisma.biometricDevice.findUnique({
+                where: { serialNumber: SN }
+            });
+            if (device) {
+                await prisma.biometricDevice.update({
+                    where: { id: device.id },
+                    data: { lastActive: new Date() }
+                });
+            }
+        }
+        catch (err) {
+            console.error('[iClock] Error updating device lastActive:', err);
+        }
+    }
     // Basic settings to tell the device to operate in real-time push mode
     const responseText = `GET OPTION FROM: ${SN}\nStamp=9999\nOpStamp=9999\nErrorDelay=60\nDelay=10\nTransTimes=00:00;23:59\nTransInterval=1\nTransFlag=1111000000\nRealtime=1\nEncrypt=0`;
     res.type('text/plain').send(responseText);
@@ -22,6 +39,13 @@ export const iclockPushData = async (req, res) => {
     if (!data || typeof data !== 'string') {
         return res.type('text/plain').send('OK');
     }
+    if (typeof SN === 'string') {
+        // Update lastActive timestamp
+        await prisma.biometricDevice.updateMany({
+            where: { serialNumber: SN },
+            data: { lastActive: new Date() }
+        });
+    }
     // Handle Attendance Logs (ATTLOG)
     if (table === 'ATTLOG') {
         const lines = data.split('\n').filter(line => line.trim() !== '');
@@ -33,13 +57,23 @@ export const iclockPushData = async (req, res) => {
                 continue;
             const biometricId = parts[0].trim(); // the userId on the machine
             const timestampStr = parts[1].trim(); // YYYY-MM-DD HH:MM:SS
-            const punchTime = new Date(timestampStr);
+            // Biometric device sends time in local IST (+05:30) but without timezone info.
+            // Append the IST offset so the server stores it as the correct UTC time.
+            const isoString = timestampStr.replace(' ', 'T') + '+05:30';
+            const punchTime = new Date(isoString);
             if (isNaN(punchTime.getTime()))
                 continue;
-            // Find user in ERP by userId (assuming biometric PIN matches userId in User table)
-            const user = await prisma.user.findFirst({
-                where: { userId: biometricId }
+            // 1. Map PIN to User via biometricId
+            // ZKTeco sends the user's PIN in the PIN field. We map this to User.biometricId.
+            let user = await prisma.user.findFirst({
+                where: { biometricId }
             });
+            // Fallback to userId if biometricId isn't found (for backwards compatibility)
+            if (!user) {
+                user = await prisma.user.findFirst({
+                    where: { userId: biometricId }
+                });
+            }
             if (!user || !user.organizationId) {
                 console.warn(`[iClock] Punch received for unknown biometric PIN: ${biometricId}`);
                 continue;

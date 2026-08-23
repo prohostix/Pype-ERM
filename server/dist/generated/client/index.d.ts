@@ -328,6 +328,11 @@ export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
  * 
  */
 export type DocumentLog = $Result.DefaultSelection<Prisma.$DocumentLogPayload>
+/**
+ * Model BiometricDevice
+ * 
+ */
+export type BiometricDevice = $Result.DefaultSelection<Prisma.$BiometricDevicePayload>
 
 /**
  * Enums
@@ -404,7 +409,9 @@ export const UserRole: {
   staff: 'staff',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager'
+  general_manager: 'general_manager',
+  bde: 'bde',
+  sales_agent: 'sales_agent'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -1450,6 +1457,16 @@ export class PrismaClient<
     * ```
     */
   get documentLog(): Prisma.DocumentLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.biometricDevice`: Exposes CRUD operations for the **BiometricDevice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BiometricDevices
+    * const biometricDevices = await prisma.biometricDevice.findMany()
+    * ```
+    */
+  get biometricDevice(): Prisma.BiometricDeviceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1946,7 +1963,8 @@ export namespace Prisma {
     OrgInquiry: 'OrgInquiry',
     UniversityPayment: 'UniversityPayment',
     Asset: 'Asset',
-    DocumentLog: 'DocumentLog'
+    DocumentLog: 'DocumentLog',
+    BiometricDevice: 'BiometricDevice'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1962,7 +1980,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6628,6 +6646,80 @@ export namespace Prisma {
           }
         }
       }
+      BiometricDevice: {
+        payload: Prisma.$BiometricDevicePayload<ExtArgs>
+        fields: Prisma.BiometricDeviceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BiometricDeviceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BiometricDeviceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          findFirst: {
+            args: Prisma.BiometricDeviceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BiometricDeviceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          findMany: {
+            args: Prisma.BiometricDeviceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>[]
+          }
+          create: {
+            args: Prisma.BiometricDeviceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          createMany: {
+            args: Prisma.BiometricDeviceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BiometricDeviceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>[]
+          }
+          delete: {
+            args: Prisma.BiometricDeviceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          update: {
+            args: Prisma.BiometricDeviceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          deleteMany: {
+            args: Prisma.BiometricDeviceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BiometricDeviceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BiometricDeviceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>[]
+          }
+          upsert: {
+            args: Prisma.BiometricDeviceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BiometricDevicePayload>
+          }
+          aggregate: {
+            args: Prisma.BiometricDeviceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBiometricDevice>
+          }
+          groupBy: {
+            args: Prisma.BiometricDeviceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BiometricDeviceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BiometricDeviceCountArgs<ExtArgs>
+            result: $Utils.Optional<BiometricDeviceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6799,6 +6891,7 @@ export namespace Prisma {
     universityPayment?: UniversityPaymentOmit
     asset?: AssetOmit
     documentLog?: DocumentLogOmit
+    biometricDevice?: BiometricDeviceOmit
   }
 
   /* Types for Logging */
@@ -6935,6 +7028,7 @@ export namespace Prisma {
     users: number
     vacancies: number
     walletTopUps: number
+    biometricDevices: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6994,6 +7088,7 @@ export namespace Prisma {
     users?: boolean | OrganizationCountOutputTypeCountUsersArgs
     vacancies?: boolean | OrganizationCountOutputTypeCountVacanciesArgs
     walletTopUps?: boolean | OrganizationCountOutputTypeCountWalletTopUpsArgs
+    biometricDevices?: boolean | OrganizationCountOutputTypeCountBiometricDevicesArgs
   }
 
   // Custom InputTypes
@@ -7397,6 +7492,13 @@ export namespace Prisma {
    */
   export type OrganizationCountOutputTypeCountWalletTopUpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WalletTopUpWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountBiometricDevicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BiometricDeviceWhereInput
   }
 
 
@@ -8742,6 +8844,7 @@ export namespace Prisma {
     invites: number
     users: number
     universities: number
+    biometricDevices: number
   }
 
   export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8750,6 +8853,7 @@ export namespace Prisma {
     invites?: boolean | BranchCountOutputTypeCountInvitesArgs
     users?: boolean | BranchCountOutputTypeCountUsersArgs
     universities?: boolean | BranchCountOutputTypeCountUniversitiesArgs
+    biometricDevices?: boolean | BranchCountOutputTypeCountBiometricDevicesArgs
   }
 
   // Custom InputTypes
@@ -8796,6 +8900,13 @@ export namespace Prisma {
    */
   export type BranchCountOutputTypeCountUniversitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UniversityWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountBiometricDevicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BiometricDeviceWhereInput
   }
 
 
@@ -9344,6 +9455,7 @@ export namespace Prisma {
     users?: boolean | Organization$usersArgs<ExtArgs>
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
+    biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -9454,6 +9566,7 @@ export namespace Prisma {
     users?: boolean | Organization$usersArgs<ExtArgs>
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
+    biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9524,6 +9637,7 @@ export namespace Prisma {
       users: Prisma.$UserPayload<ExtArgs>[]
       vacancies: Prisma.$VacancyPayload<ExtArgs>[]
       walletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
+      biometricDevices: Prisma.$BiometricDevicePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9990,6 +10104,7 @@ export namespace Prisma {
     users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     vacancies<T extends Organization$vacanciesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     walletTopUps<T extends Organization$walletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$walletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    biometricDevices<T extends Organization$biometricDevicesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$biometricDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11811,6 +11926,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WalletTopUpScalarFieldEnum | WalletTopUpScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.biometricDevices
+   */
+  export type Organization$biometricDevicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    where?: BiometricDeviceWhereInput
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    cursor?: BiometricDeviceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
   }
 
   /**
@@ -14585,6 +14724,9 @@ export namespace Prisma {
     reportingTo: string | null
     status: $Enums.UserStatus | null
     lastLogin: Date | null
+    biometricId: string | null
+    allowSystemPunchIn: boolean | null
+    requireSelfiePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14609,6 +14751,9 @@ export namespace Prisma {
     reportingTo: string | null
     status: $Enums.UserStatus | null
     lastLogin: Date | null
+    biometricId: string | null
+    allowSystemPunchIn: boolean | null
+    requireSelfiePunchIn: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14634,6 +14779,9 @@ export namespace Prisma {
     reportingTo: number
     status: number
     lastLogin: number
+    biometricId: number
+    allowSystemPunchIn: number
+    requireSelfiePunchIn: number
     createdAt: number
     updatedAt: number
     permissions: number
@@ -14661,6 +14809,9 @@ export namespace Prisma {
     reportingTo?: true
     status?: true
     lastLogin?: true
+    biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14685,6 +14836,9 @@ export namespace Prisma {
     reportingTo?: true
     status?: true
     lastLogin?: true
+    biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14710,6 +14864,9 @@ export namespace Prisma {
     reportingTo?: true
     status?: true
     lastLogin?: true
+    biometricId?: true
+    allowSystemPunchIn?: true
+    requireSelfiePunchIn?: true
     createdAt?: true
     updatedAt?: true
     permissions?: true
@@ -14809,6 +14966,9 @@ export namespace Prisma {
     reportingTo: string | null
     status: $Enums.UserStatus
     lastLogin: Date | null
+    biometricId: string | null
+    allowSystemPunchIn: boolean
+    requireSelfiePunchIn: boolean
     createdAt: Date
     updatedAt: Date
     permissions: JsonValue | null
@@ -14852,6 +15012,9 @@ export namespace Prisma {
     reportingTo?: boolean
     status?: boolean
     lastLogin?: boolean
+    biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -14964,6 +15127,9 @@ export namespace Prisma {
     reportingTo?: boolean
     status?: boolean
     lastLogin?: boolean
+    biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -14997,6 +15163,9 @@ export namespace Prisma {
     reportingTo?: boolean
     status?: boolean
     lastLogin?: boolean
+    biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -15030,12 +15199,15 @@ export namespace Prisma {
     reportingTo?: boolean
     status?: boolean
     lastLogin?: boolean
+    biometricId?: boolean
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "createdAt" | "updatedAt" | "permissions", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -15253,6 +15425,9 @@ export namespace Prisma {
       reportingTo: string | null
       status: $Enums.UserStatus
       lastLogin: Date | null
+      biometricId: string | null
+      allowSystemPunchIn: boolean
+      requireSelfiePunchIn: boolean
       createdAt: Date
       updatedAt: Date
       permissions: Prisma.JsonValue | null
@@ -15784,6 +15959,9 @@ export namespace Prisma {
     readonly reportingTo: FieldRef<"User", 'String'>
     readonly status: FieldRef<"User", 'UserStatus'>
     readonly lastLogin: FieldRef<"User", 'DateTime'>
+    readonly biometricId: FieldRef<"User", 'String'>
+    readonly allowSystemPunchIn: FieldRef<"User", 'Boolean'>
+    readonly requireSelfiePunchIn: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly permissions: FieldRef<"User", 'Json'>
@@ -20717,6 +20895,8 @@ export namespace Prisma {
     status: $Enums.AttendanceStatus | null
     checkIn: Date | null
     checkOut: Date | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
     workingHours: number | null
@@ -20733,6 +20913,8 @@ export namespace Prisma {
     status: $Enums.AttendanceStatus | null
     checkIn: Date | null
     checkOut: Date | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean | null
     lateMinutes: number | null
     workingHours: number | null
@@ -20751,6 +20933,8 @@ export namespace Prisma {
     checkOut: number
     checkInLocation: number
     checkOutLocation: number
+    checkInPhoto: number
+    checkOutPhoto: number
     isLate: number
     lateMinutes: number
     workingHours: number
@@ -20779,6 +20963,8 @@ export namespace Prisma {
     status?: true
     checkIn?: true
     checkOut?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -20795,6 +20981,8 @@ export namespace Prisma {
     status?: true
     checkIn?: true
     checkOut?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -20813,6 +21001,8 @@ export namespace Prisma {
     checkOut?: true
     checkInLocation?: true
     checkOutLocation?: true
+    checkInPhoto?: true
+    checkOutPhoto?: true
     isLate?: true
     lateMinutes?: true
     workingHours?: true
@@ -20918,6 +21108,8 @@ export namespace Prisma {
     checkOut: Date | null
     checkInLocation: JsonValue | null
     checkOutLocation: JsonValue | null
+    checkInPhoto: string | null
+    checkOutPhoto: string | null
     isLate: boolean
     lateMinutes: number
     workingHours: number
@@ -20955,6 +21147,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -20975,6 +21169,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -20995,6 +21191,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21015,6 +21213,8 @@ export namespace Prisma {
     checkOut?: boolean
     checkInLocation?: boolean
     checkOutLocation?: boolean
+    checkInPhoto?: boolean
+    checkOutPhoto?: boolean
     isLate?: boolean
     lateMinutes?: boolean
     workingHours?: boolean
@@ -21023,7 +21223,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "isLate" | "lateMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "date" | "status" | "checkIn" | "checkOut" | "checkInLocation" | "checkOutLocation" | "checkInPhoto" | "checkOutPhoto" | "isLate" | "lateMinutes" | "workingHours" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -21053,6 +21253,8 @@ export namespace Prisma {
       checkOut: Date | null
       checkInLocation: Prisma.JsonValue | null
       checkOutLocation: Prisma.JsonValue | null
+      checkInPhoto: string | null
+      checkOutPhoto: string | null
       isLate: boolean
       lateMinutes: number
       workingHours: number
@@ -21493,6 +21695,8 @@ export namespace Prisma {
     readonly checkOut: FieldRef<"Attendance", 'DateTime'>
     readonly checkInLocation: FieldRef<"Attendance", 'Json'>
     readonly checkOutLocation: FieldRef<"Attendance", 'Json'>
+    readonly checkInPhoto: FieldRef<"Attendance", 'String'>
+    readonly checkOutPhoto: FieldRef<"Attendance", 'String'>
     readonly isLate: FieldRef<"Attendance", 'Boolean'>
     readonly lateMinutes: FieldRef<"Attendance", 'Int'>
     readonly workingHours: FieldRef<"Attendance", 'Float'>
@@ -21965,6 +22169,7 @@ export namespace Prisma {
     country: number
     status: number
     logo: number
+    enrollmentFormConfig: number
     _all: number
   }
 
@@ -22006,6 +22211,7 @@ export namespace Prisma {
     country?: true
     status?: true
     logo?: true
+    enrollmentFormConfig?: true
     _all?: true
   }
 
@@ -22092,6 +22298,7 @@ export namespace Prisma {
     country: string | null
     status: string
     logo: string | null
+    enrollmentFormConfig: JsonValue | null
     _count: UniversityCountAggregateOutputType | null
     _min: UniversityMinAggregateOutputType | null
     _max: UniversityMaxAggregateOutputType | null
@@ -22122,6 +22329,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
     programs?: boolean | University$programsArgs<ExtArgs>
@@ -22148,6 +22356,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -22162,6 +22371,7 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -22176,9 +22386,10 @@ export namespace Prisma {
     country?: boolean
     status?: boolean
     logo?: boolean
+    enrollmentFormConfig?: boolean
   }
 
-  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo", ExtArgs["result"]["university"]>
+  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo" | "enrollmentFormConfig", ExtArgs["result"]["university"]>
   export type UniversityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
@@ -22228,6 +22439,7 @@ export namespace Prisma {
       country: string | null
       status: string
       logo: string | null
+      enrollmentFormConfig: Prisma.JsonValue | null
     }, ExtArgs["result"]["university"]>
     composites: {}
   }
@@ -22673,6 +22885,7 @@ export namespace Prisma {
     readonly country: FieldRef<"University", 'String'>
     readonly status: FieldRef<"University", 'String'>
     readonly logo: FieldRef<"University", 'String'>
+    readonly enrollmentFormConfig: FieldRef<"University", 'Json'>
   }
     
 
@@ -41210,6 +41423,7 @@ export namespace Prisma {
     invites?: boolean | Branch$invitesArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     universities?: boolean | Branch$universitiesArgs<ExtArgs>
+    biometricDevices?: boolean | Branch$biometricDevicesArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["branch"]>
 
@@ -41283,6 +41497,7 @@ export namespace Prisma {
     invites?: boolean | Branch$invitesArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     universities?: boolean | Branch$universitiesArgs<ExtArgs>
+    biometricDevices?: boolean | Branch$biometricDevicesArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BranchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -41310,6 +41525,7 @@ export namespace Prisma {
       invites: Prisma.$StudyCenterInvitePayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
       universities: Prisma.$UniversityPayload<ExtArgs>[]
+      biometricDevices: Prisma.$BiometricDevicePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -41729,6 +41945,7 @@ export namespace Prisma {
     invites<T extends Branch$invitesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudyCenterInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Branch$usersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     universities<T extends Branch$universitiesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$universitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    biometricDevices<T extends Branch$biometricDevicesArgs<ExtArgs> = {}>(args?: Subset<T, Branch$biometricDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -42347,6 +42564,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UniversityScalarFieldEnum | UniversityScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.biometricDevices
+   */
+  export type Branch$biometricDevicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    where?: BiometricDeviceWhereInput
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    cursor?: BiometricDeviceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
   }
 
   /**
@@ -92828,6 +93069,1161 @@ export namespace Prisma {
 
 
   /**
+   * Model BiometricDevice
+   */
+
+  export type AggregateBiometricDevice = {
+    _count: BiometricDeviceCountAggregateOutputType | null
+    _min: BiometricDeviceMinAggregateOutputType | null
+    _max: BiometricDeviceMaxAggregateOutputType | null
+  }
+
+  export type BiometricDeviceMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    branchId: string | null
+    name: string | null
+    serialNumber: string | null
+    ipAddress: string | null
+    status: string | null
+    lastActive: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BiometricDeviceMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    branchId: string | null
+    name: string | null
+    serialNumber: string | null
+    ipAddress: string | null
+    status: string | null
+    lastActive: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BiometricDeviceCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    branchId: number
+    name: number
+    serialNumber: number
+    ipAddress: number
+    status: number
+    lastActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BiometricDeviceMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    branchId?: true
+    name?: true
+    serialNumber?: true
+    ipAddress?: true
+    status?: true
+    lastActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BiometricDeviceMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    branchId?: true
+    name?: true
+    serialNumber?: true
+    ipAddress?: true
+    status?: true
+    lastActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BiometricDeviceCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    branchId?: true
+    name?: true
+    serialNumber?: true
+    ipAddress?: true
+    status?: true
+    lastActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BiometricDeviceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BiometricDevice to aggregate.
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BiometricDevices to fetch.
+     */
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BiometricDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BiometricDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BiometricDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BiometricDevices
+    **/
+    _count?: true | BiometricDeviceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BiometricDeviceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BiometricDeviceMaxAggregateInputType
+  }
+
+  export type GetBiometricDeviceAggregateType<T extends BiometricDeviceAggregateArgs> = {
+        [P in keyof T & keyof AggregateBiometricDevice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBiometricDevice[P]>
+      : GetScalarType<T[P], AggregateBiometricDevice[P]>
+  }
+
+
+
+
+  export type BiometricDeviceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BiometricDeviceWhereInput
+    orderBy?: BiometricDeviceOrderByWithAggregationInput | BiometricDeviceOrderByWithAggregationInput[]
+    by: BiometricDeviceScalarFieldEnum[] | BiometricDeviceScalarFieldEnum
+    having?: BiometricDeviceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BiometricDeviceCountAggregateInputType | true
+    _min?: BiometricDeviceMinAggregateInputType
+    _max?: BiometricDeviceMaxAggregateInputType
+  }
+
+  export type BiometricDeviceGroupByOutputType = {
+    id: string
+    organizationId: string
+    branchId: string | null
+    name: string
+    serialNumber: string
+    ipAddress: string | null
+    status: string
+    lastActive: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BiometricDeviceCountAggregateOutputType | null
+    _min: BiometricDeviceMinAggregateOutputType | null
+    _max: BiometricDeviceMaxAggregateOutputType | null
+  }
+
+  type GetBiometricDeviceGroupByPayload<T extends BiometricDeviceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BiometricDeviceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BiometricDeviceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BiometricDeviceGroupByOutputType[P]>
+            : GetScalarType<T[P], BiometricDeviceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BiometricDeviceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    branchId?: boolean
+    name?: boolean
+    serialNumber?: boolean
+    ipAddress?: boolean
+    status?: boolean
+    lastActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }, ExtArgs["result"]["biometricDevice"]>
+
+  export type BiometricDeviceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    branchId?: boolean
+    name?: boolean
+    serialNumber?: boolean
+    ipAddress?: boolean
+    status?: boolean
+    lastActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }, ExtArgs["result"]["biometricDevice"]>
+
+  export type BiometricDeviceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    branchId?: boolean
+    name?: boolean
+    serialNumber?: boolean
+    ipAddress?: boolean
+    status?: boolean
+    lastActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }, ExtArgs["result"]["biometricDevice"]>
+
+  export type BiometricDeviceSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    branchId?: boolean
+    name?: boolean
+    serialNumber?: boolean
+    ipAddress?: boolean
+    status?: boolean
+    lastActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BiometricDeviceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "branchId" | "name" | "serialNumber" | "ipAddress" | "status" | "lastActive" | "createdAt" | "updatedAt", ExtArgs["result"]["biometricDevice"]>
+  export type BiometricDeviceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }
+  export type BiometricDeviceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }
+  export type BiometricDeviceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    branch?: boolean | BiometricDevice$branchArgs<ExtArgs>
+  }
+
+  export type $BiometricDevicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BiometricDevice"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      branch: Prisma.$BranchPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      branchId: string | null
+      name: string
+      serialNumber: string
+      ipAddress: string | null
+      status: string
+      lastActive: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["biometricDevice"]>
+    composites: {}
+  }
+
+  type BiometricDeviceGetPayload<S extends boolean | null | undefined | BiometricDeviceDefaultArgs> = $Result.GetResult<Prisma.$BiometricDevicePayload, S>
+
+  type BiometricDeviceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BiometricDeviceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BiometricDeviceCountAggregateInputType | true
+    }
+
+  export interface BiometricDeviceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BiometricDevice'], meta: { name: 'BiometricDevice' } }
+    /**
+     * Find zero or one BiometricDevice that matches the filter.
+     * @param {BiometricDeviceFindUniqueArgs} args - Arguments to find a BiometricDevice
+     * @example
+     * // Get one BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BiometricDeviceFindUniqueArgs>(args: SelectSubset<T, BiometricDeviceFindUniqueArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BiometricDevice that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BiometricDeviceFindUniqueOrThrowArgs} args - Arguments to find a BiometricDevice
+     * @example
+     * // Get one BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BiometricDeviceFindUniqueOrThrowArgs>(args: SelectSubset<T, BiometricDeviceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BiometricDevice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceFindFirstArgs} args - Arguments to find a BiometricDevice
+     * @example
+     * // Get one BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BiometricDeviceFindFirstArgs>(args?: SelectSubset<T, BiometricDeviceFindFirstArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BiometricDevice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceFindFirstOrThrowArgs} args - Arguments to find a BiometricDevice
+     * @example
+     * // Get one BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BiometricDeviceFindFirstOrThrowArgs>(args?: SelectSubset<T, BiometricDeviceFindFirstOrThrowArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BiometricDevices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BiometricDevices
+     * const biometricDevices = await prisma.biometricDevice.findMany()
+     * 
+     * // Get first 10 BiometricDevices
+     * const biometricDevices = await prisma.biometricDevice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const biometricDeviceWithIdOnly = await prisma.biometricDevice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BiometricDeviceFindManyArgs>(args?: SelectSubset<T, BiometricDeviceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BiometricDevice.
+     * @param {BiometricDeviceCreateArgs} args - Arguments to create a BiometricDevice.
+     * @example
+     * // Create one BiometricDevice
+     * const BiometricDevice = await prisma.biometricDevice.create({
+     *   data: {
+     *     // ... data to create a BiometricDevice
+     *   }
+     * })
+     * 
+     */
+    create<T extends BiometricDeviceCreateArgs>(args: SelectSubset<T, BiometricDeviceCreateArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BiometricDevices.
+     * @param {BiometricDeviceCreateManyArgs} args - Arguments to create many BiometricDevices.
+     * @example
+     * // Create many BiometricDevices
+     * const biometricDevice = await prisma.biometricDevice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BiometricDeviceCreateManyArgs>(args?: SelectSubset<T, BiometricDeviceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BiometricDevices and returns the data saved in the database.
+     * @param {BiometricDeviceCreateManyAndReturnArgs} args - Arguments to create many BiometricDevices.
+     * @example
+     * // Create many BiometricDevices
+     * const biometricDevice = await prisma.biometricDevice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BiometricDevices and only return the `id`
+     * const biometricDeviceWithIdOnly = await prisma.biometricDevice.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BiometricDeviceCreateManyAndReturnArgs>(args?: SelectSubset<T, BiometricDeviceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BiometricDevice.
+     * @param {BiometricDeviceDeleteArgs} args - Arguments to delete one BiometricDevice.
+     * @example
+     * // Delete one BiometricDevice
+     * const BiometricDevice = await prisma.biometricDevice.delete({
+     *   where: {
+     *     // ... filter to delete one BiometricDevice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BiometricDeviceDeleteArgs>(args: SelectSubset<T, BiometricDeviceDeleteArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BiometricDevice.
+     * @param {BiometricDeviceUpdateArgs} args - Arguments to update one BiometricDevice.
+     * @example
+     * // Update one BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BiometricDeviceUpdateArgs>(args: SelectSubset<T, BiometricDeviceUpdateArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BiometricDevices.
+     * @param {BiometricDeviceDeleteManyArgs} args - Arguments to filter BiometricDevices to delete.
+     * @example
+     * // Delete a few BiometricDevices
+     * const { count } = await prisma.biometricDevice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BiometricDeviceDeleteManyArgs>(args?: SelectSubset<T, BiometricDeviceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BiometricDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BiometricDevices
+     * const biometricDevice = await prisma.biometricDevice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BiometricDeviceUpdateManyArgs>(args: SelectSubset<T, BiometricDeviceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BiometricDevices and returns the data updated in the database.
+     * @param {BiometricDeviceUpdateManyAndReturnArgs} args - Arguments to update many BiometricDevices.
+     * @example
+     * // Update many BiometricDevices
+     * const biometricDevice = await prisma.biometricDevice.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BiometricDevices and only return the `id`
+     * const biometricDeviceWithIdOnly = await prisma.biometricDevice.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BiometricDeviceUpdateManyAndReturnArgs>(args: SelectSubset<T, BiometricDeviceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BiometricDevice.
+     * @param {BiometricDeviceUpsertArgs} args - Arguments to update or create a BiometricDevice.
+     * @example
+     * // Update or create a BiometricDevice
+     * const biometricDevice = await prisma.biometricDevice.upsert({
+     *   create: {
+     *     // ... data to create a BiometricDevice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BiometricDevice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BiometricDeviceUpsertArgs>(args: SelectSubset<T, BiometricDeviceUpsertArgs<ExtArgs>>): Prisma__BiometricDeviceClient<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BiometricDevices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceCountArgs} args - Arguments to filter BiometricDevices to count.
+     * @example
+     * // Count the number of BiometricDevices
+     * const count = await prisma.biometricDevice.count({
+     *   where: {
+     *     // ... the filter for the BiometricDevices we want to count
+     *   }
+     * })
+    **/
+    count<T extends BiometricDeviceCountArgs>(
+      args?: Subset<T, BiometricDeviceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BiometricDeviceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BiometricDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BiometricDeviceAggregateArgs>(args: Subset<T, BiometricDeviceAggregateArgs>): Prisma.PrismaPromise<GetBiometricDeviceAggregateType<T>>
+
+    /**
+     * Group by BiometricDevice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BiometricDeviceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BiometricDeviceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BiometricDeviceGroupByArgs['orderBy'] }
+        : { orderBy?: BiometricDeviceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BiometricDeviceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBiometricDeviceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BiometricDevice model
+   */
+  readonly fields: BiometricDeviceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BiometricDevice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BiometricDeviceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    branch<T extends BiometricDevice$branchArgs<ExtArgs> = {}>(args?: Subset<T, BiometricDevice$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BiometricDevice model
+   */
+  interface BiometricDeviceFieldRefs {
+    readonly id: FieldRef<"BiometricDevice", 'String'>
+    readonly organizationId: FieldRef<"BiometricDevice", 'String'>
+    readonly branchId: FieldRef<"BiometricDevice", 'String'>
+    readonly name: FieldRef<"BiometricDevice", 'String'>
+    readonly serialNumber: FieldRef<"BiometricDevice", 'String'>
+    readonly ipAddress: FieldRef<"BiometricDevice", 'String'>
+    readonly status: FieldRef<"BiometricDevice", 'String'>
+    readonly lastActive: FieldRef<"BiometricDevice", 'DateTime'>
+    readonly createdAt: FieldRef<"BiometricDevice", 'DateTime'>
+    readonly updatedAt: FieldRef<"BiometricDevice", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BiometricDevice findUnique
+   */
+  export type BiometricDeviceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which BiometricDevice to fetch.
+     */
+    where: BiometricDeviceWhereUniqueInput
+  }
+
+  /**
+   * BiometricDevice findUniqueOrThrow
+   */
+  export type BiometricDeviceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which BiometricDevice to fetch.
+     */
+    where: BiometricDeviceWhereUniqueInput
+  }
+
+  /**
+   * BiometricDevice findFirst
+   */
+  export type BiometricDeviceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which BiometricDevice to fetch.
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BiometricDevices to fetch.
+     */
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BiometricDevices.
+     */
+    cursor?: BiometricDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BiometricDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BiometricDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BiometricDevices.
+     */
+    distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * BiometricDevice findFirstOrThrow
+   */
+  export type BiometricDeviceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which BiometricDevice to fetch.
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BiometricDevices to fetch.
+     */
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BiometricDevices.
+     */
+    cursor?: BiometricDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BiometricDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BiometricDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BiometricDevices.
+     */
+    distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * BiometricDevice findMany
+   */
+  export type BiometricDeviceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter, which BiometricDevices to fetch.
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BiometricDevices to fetch.
+     */
+    orderBy?: BiometricDeviceOrderByWithRelationInput | BiometricDeviceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BiometricDevices.
+     */
+    cursor?: BiometricDeviceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BiometricDevices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BiometricDevices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BiometricDevices.
+     */
+    distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * BiometricDevice create
+   */
+  export type BiometricDeviceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BiometricDevice.
+     */
+    data: XOR<BiometricDeviceCreateInput, BiometricDeviceUncheckedCreateInput>
+  }
+
+  /**
+   * BiometricDevice createMany
+   */
+  export type BiometricDeviceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BiometricDevices.
+     */
+    data: BiometricDeviceCreateManyInput | BiometricDeviceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BiometricDevice createManyAndReturn
+   */
+  export type BiometricDeviceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to create many BiometricDevices.
+     */
+    data: BiometricDeviceCreateManyInput | BiometricDeviceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BiometricDevice update
+   */
+  export type BiometricDeviceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BiometricDevice.
+     */
+    data: XOR<BiometricDeviceUpdateInput, BiometricDeviceUncheckedUpdateInput>
+    /**
+     * Choose, which BiometricDevice to update.
+     */
+    where: BiometricDeviceWhereUniqueInput
+  }
+
+  /**
+   * BiometricDevice updateMany
+   */
+  export type BiometricDeviceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BiometricDevices.
+     */
+    data: XOR<BiometricDeviceUpdateManyMutationInput, BiometricDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which BiometricDevices to update
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * Limit how many BiometricDevices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BiometricDevice updateManyAndReturn
+   */
+  export type BiometricDeviceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * The data used to update BiometricDevices.
+     */
+    data: XOR<BiometricDeviceUpdateManyMutationInput, BiometricDeviceUncheckedUpdateManyInput>
+    /**
+     * Filter which BiometricDevices to update
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * Limit how many BiometricDevices to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BiometricDevice upsert
+   */
+  export type BiometricDeviceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BiometricDevice to update in case it exists.
+     */
+    where: BiometricDeviceWhereUniqueInput
+    /**
+     * In case the BiometricDevice found by the `where` argument doesn't exist, create a new BiometricDevice with this data.
+     */
+    create: XOR<BiometricDeviceCreateInput, BiometricDeviceUncheckedCreateInput>
+    /**
+     * In case the BiometricDevice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BiometricDeviceUpdateInput, BiometricDeviceUncheckedUpdateInput>
+  }
+
+  /**
+   * BiometricDevice delete
+   */
+  export type BiometricDeviceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+    /**
+     * Filter which BiometricDevice to delete.
+     */
+    where: BiometricDeviceWhereUniqueInput
+  }
+
+  /**
+   * BiometricDevice deleteMany
+   */
+  export type BiometricDeviceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BiometricDevices to delete
+     */
+    where?: BiometricDeviceWhereInput
+    /**
+     * Limit how many BiometricDevices to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BiometricDevice.branch
+   */
+  export type BiometricDevice$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
+  }
+
+  /**
+   * BiometricDevice without action
+   */
+  export type BiometricDeviceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BiometricDevice
+     */
+    select?: BiometricDeviceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BiometricDevice
+     */
+    omit?: BiometricDeviceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BiometricDeviceInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -92915,6 +94311,9 @@ export namespace Prisma {
     reportingTo: 'reportingTo',
     status: 'status',
     lastLogin: 'lastLogin',
+    biometricId: 'biometricId',
+    allowSystemPunchIn: 'allowSystemPunchIn',
+    requireSelfiePunchIn: 'requireSelfiePunchIn',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     permissions: 'permissions'
@@ -92974,6 +94373,8 @@ export namespace Prisma {
     checkOut: 'checkOut',
     checkInLocation: 'checkInLocation',
     checkOutLocation: 'checkOutLocation',
+    checkInPhoto: 'checkInPhoto',
+    checkOutPhoto: 'checkOutPhoto',
     isLate: 'isLate',
     lateMinutes: 'lateMinutes',
     workingHours: 'workingHours',
@@ -92995,7 +94396,8 @@ export namespace Prisma {
     contact: 'contact',
     country: 'country',
     status: 'status',
-    logo: 'logo'
+    logo: 'logo',
+    enrollmentFormConfig: 'enrollmentFormConfig'
   };
 
   export type UniversityScalarFieldEnum = (typeof UniversityScalarFieldEnum)[keyof typeof UniversityScalarFieldEnum]
@@ -94095,6 +95497,22 @@ export namespace Prisma {
   export type DocumentLogScalarFieldEnum = (typeof DocumentLogScalarFieldEnum)[keyof typeof DocumentLogScalarFieldEnum]
 
 
+  export const BiometricDeviceScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    branchId: 'branchId',
+    name: 'name',
+    serialNumber: 'serialNumber',
+    ipAddress: 'ipAddress',
+    status: 'status',
+    lastActive: 'lastActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BiometricDeviceScalarFieldEnum = (typeof BiometricDeviceScalarFieldEnum)[keyof typeof BiometricDeviceScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -94303,6 +95721,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'TaskPriority'
    */
   export type EnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority'>
@@ -94355,13 +95780,6 @@ export namespace Prisma {
    * Reference to a field of type 'AttendanceStatus[]'
    */
   export type ListEnumAttendanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AttendanceStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -94652,6 +96070,7 @@ export namespace Prisma {
     users?: UserListRelationFilter
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
+    biometricDevices?: BiometricDeviceListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -94725,6 +96144,7 @@ export namespace Prisma {
     users?: UserOrderByRelationAggregateInput
     vacancies?: VacancyOrderByRelationAggregateInput
     walletTopUps?: WalletTopUpOrderByRelationAggregateInput
+    biometricDevices?: BiometricDeviceOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -94801,6 +96221,7 @@ export namespace Prisma {
     users?: UserListRelationFilter
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
+    biometricDevices?: BiometricDeviceListRelationFilter
   }, "id" | "email">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -95082,6 +96503,9 @@ export namespace Prisma {
     reportingTo?: StringNullableFilter<"User"> | string | null
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    biometricId?: StringNullableFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -95193,6 +96617,9 @@ export namespace Prisma {
     reportingTo?: SortOrderInput | SortOrder
     status?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
+    biometricId?: SortOrderInput | SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -95287,6 +96714,7 @@ export namespace Prisma {
     id?: string
     userId?: string
     email?: string
+    biometricId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -95307,6 +96735,8 @@ export namespace Prisma {
     reportingTo?: StringNullableFilter<"User"> | string | null
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -95395,7 +96825,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpListRelationFilter
     assistantManagedDepartments?: DepartmentListRelationFilter
     designations?: DesignationListRelationFilter
-  }, "id" | "userId" | "email">
+  }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -95418,6 +96848,9 @@ export namespace Prisma {
     reportingTo?: SortOrderInput | SortOrder
     status?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
+    biometricId?: SortOrderInput | SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -95450,6 +96883,9 @@ export namespace Prisma {
     reportingTo?: StringNullableWithAggregatesFilter<"User"> | string | null
     status?: EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    biometricId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolWithAggregatesFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     permissions?: JsonNullableWithAggregatesFilter<"User">
@@ -95693,6 +97129,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -95713,6 +97151,8 @@ export namespace Prisma {
     checkOut?: SortOrderInput | SortOrder
     checkInLocation?: SortOrderInput | SortOrder
     checkOutLocation?: SortOrderInput | SortOrder
+    checkInPhoto?: SortOrderInput | SortOrder
+    checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -95737,6 +97177,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -95757,6 +97199,8 @@ export namespace Prisma {
     checkOut?: SortOrderInput | SortOrder
     checkInLocation?: SortOrderInput | SortOrder
     checkOutLocation?: SortOrderInput | SortOrder
+    checkInPhoto?: SortOrderInput | SortOrder
+    checkOutPhoto?: SortOrderInput | SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -95783,6 +97227,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableWithAggregatesFilter<"Attendance">
     checkOutLocation?: JsonNullableWithAggregatesFilter<"Attendance">
+    checkInPhoto?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     isLate?: BoolWithAggregatesFilter<"Attendance"> | boolean
     lateMinutes?: IntWithAggregatesFilter<"Attendance"> | number
     workingHours?: FloatWithAggregatesFilter<"Attendance"> | number
@@ -95805,6 +97251,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -95830,6 +97277,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
+    enrollmentFormConfig?: SortOrderInput | SortOrder
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     feeStructures?: FeeStructureOrderByRelationAggregateInput
     programs?: ProgramOrderByRelationAggregateInput
@@ -95859,6 +97307,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -95884,6 +97333,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
+    enrollmentFormConfig?: SortOrderInput | SortOrder
     _count?: UniversityCountOrderByAggregateInput
     _max?: UniversityMaxOrderByAggregateInput
     _min?: UniversityMinOrderByAggregateInput
@@ -95903,6 +97353,7 @@ export namespace Prisma {
     country?: StringNullableWithAggregatesFilter<"University"> | string | null
     status?: StringWithAggregatesFilter<"University"> | string
     logo?: StringNullableWithAggregatesFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableWithAggregatesFilter<"University">
   }
 
   export type ProgramWhereInput = {
@@ -97652,6 +99103,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteListRelationFilter
     users?: UserListRelationFilter
     universities?: UniversityListRelationFilter
+    biometricDevices?: BiometricDeviceListRelationFilter
   }
 
   export type BranchOrderByWithRelationInput = {
@@ -97678,6 +99130,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
     universities?: UniversityOrderByRelationAggregateInput
+    biometricDevices?: BiometricDeviceOrderByRelationAggregateInput
   }
 
   export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -97708,6 +99161,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteListRelationFilter
     users?: UserListRelationFilter
     universities?: UniversityListRelationFilter
+    biometricDevices?: BiometricDeviceListRelationFilter
   }, "id" | "code" | "branchManagerId" | "salesDeptId" | "operationsDeptId" | "organizationId_code">
 
   export type BranchOrderByWithAggregationInput = {
@@ -101967,6 +103421,89 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"DocumentLog"> | Date | string
   }
 
+  export type BiometricDeviceWhereInput = {
+    AND?: BiometricDeviceWhereInput | BiometricDeviceWhereInput[]
+    OR?: BiometricDeviceWhereInput[]
+    NOT?: BiometricDeviceWhereInput | BiometricDeviceWhereInput[]
+    id?: StringFilter<"BiometricDevice"> | string
+    organizationId?: StringFilter<"BiometricDevice"> | string
+    branchId?: StringNullableFilter<"BiometricDevice"> | string | null
+    name?: StringFilter<"BiometricDevice"> | string
+    serialNumber?: StringFilter<"BiometricDevice"> | string
+    ipAddress?: StringNullableFilter<"BiometricDevice"> | string | null
+    status?: StringFilter<"BiometricDevice"> | string
+    lastActive?: DateTimeNullableFilter<"BiometricDevice"> | Date | string | null
+    createdAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+    updatedAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
+  }
+
+  export type BiometricDeviceOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    branchId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    serialNumber?: SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    status?: SortOrder
+    lastActive?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    branch?: BranchOrderByWithRelationInput
+  }
+
+  export type BiometricDeviceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    serialNumber?: string
+    AND?: BiometricDeviceWhereInput | BiometricDeviceWhereInput[]
+    OR?: BiometricDeviceWhereInput[]
+    NOT?: BiometricDeviceWhereInput | BiometricDeviceWhereInput[]
+    organizationId?: StringFilter<"BiometricDevice"> | string
+    branchId?: StringNullableFilter<"BiometricDevice"> | string | null
+    name?: StringFilter<"BiometricDevice"> | string
+    ipAddress?: StringNullableFilter<"BiometricDevice"> | string | null
+    status?: StringFilter<"BiometricDevice"> | string
+    lastActive?: DateTimeNullableFilter<"BiometricDevice"> | Date | string | null
+    createdAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+    updatedAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
+  }, "id" | "serialNumber">
+
+  export type BiometricDeviceOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    branchId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    serialNumber?: SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    status?: SortOrder
+    lastActive?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BiometricDeviceCountOrderByAggregateInput
+    _max?: BiometricDeviceMaxOrderByAggregateInput
+    _min?: BiometricDeviceMinOrderByAggregateInput
+  }
+
+  export type BiometricDeviceScalarWhereWithAggregatesInput = {
+    AND?: BiometricDeviceScalarWhereWithAggregatesInput | BiometricDeviceScalarWhereWithAggregatesInput[]
+    OR?: BiometricDeviceScalarWhereWithAggregatesInput[]
+    NOT?: BiometricDeviceScalarWhereWithAggregatesInput | BiometricDeviceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BiometricDevice"> | string
+    organizationId?: StringWithAggregatesFilter<"BiometricDevice"> | string
+    branchId?: StringNullableWithAggregatesFilter<"BiometricDevice"> | string | null
+    name?: StringWithAggregatesFilter<"BiometricDevice"> | string
+    serialNumber?: StringWithAggregatesFilter<"BiometricDevice"> | string
+    ipAddress?: StringNullableWithAggregatesFilter<"BiometricDevice"> | string | null
+    status?: StringWithAggregatesFilter<"BiometricDevice"> | string
+    lastActive?: DateTimeNullableWithAggregatesFilter<"BiometricDevice"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BiometricDevice"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BiometricDevice"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -102037,6 +103574,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -102109,6 +103647,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -102181,6 +103720,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -102253,6 +103793,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -102565,6 +104106,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -102676,6 +104220,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -102773,6 +104320,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -102884,6 +104434,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -102988,6 +104541,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -103007,6 +104563,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -103033,6 +104592,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -103288,6 +104850,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -103308,6 +104872,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -103324,6 +104890,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -103344,6 +104912,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -103362,6 +104932,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -103378,6 +104950,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -103396,6 +104970,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -103414,6 +104990,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -103439,6 +105016,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -103462,6 +105040,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -103487,6 +105066,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -103511,6 +105091,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityUpdateManyMutationInput = {
@@ -103523,6 +105104,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityUncheckedUpdateManyInput = {
@@ -103536,6 +105118,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProgramCreateInput = {
@@ -105485,6 +107068,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateInput = {
@@ -105507,6 +107091,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUpdateInput = {
@@ -105529,6 +107114,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateInput = {
@@ -105551,6 +107137,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchCreateManyInput = {
@@ -110080,6 +111667,95 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BiometricDeviceCreateInput = {
+    id?: string
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutBiometricDevicesInput
+    branch?: BranchCreateNestedOneWithoutBiometricDevicesInput
+  }
+
+  export type BiometricDeviceUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    branchId?: string | null
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BiometricDeviceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutBiometricDevicesNestedInput
+    branch?: BranchUpdateOneWithoutBiometricDevicesNestedInput
+  }
+
+  export type BiometricDeviceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BiometricDeviceCreateManyInput = {
+    id?: string
+    organizationId: string
+    branchId?: string | null
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BiometricDeviceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BiometricDeviceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -110508,6 +112184,12 @@ export namespace Prisma {
     none?: WalletTopUpWhereInput
   }
 
+  export type BiometricDeviceListRelationFilter = {
+    every?: BiometricDeviceWhereInput
+    some?: BiometricDeviceWhereInput
+    none?: BiometricDeviceWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -110734,6 +112416,10 @@ export namespace Prisma {
   }
 
   export type WalletTopUpOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BiometricDeviceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -111173,6 +112859,11 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type AssetListRelationFilter = {
     every?: AssetWhereInput
     some?: AssetWhereInput
@@ -111264,6 +112955,9 @@ export namespace Prisma {
     reportingTo?: SortOrder
     status?: SortOrder
     lastLogin?: SortOrder
+    biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrder
@@ -111289,6 +112983,9 @@ export namespace Prisma {
     reportingTo?: SortOrder
     status?: SortOrder
     lastLogin?: SortOrder
+    biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -111313,6 +113010,9 @@ export namespace Prisma {
     reportingTo?: SortOrder
     status?: SortOrder
     lastLogin?: SortOrder
+    biometricId?: SortOrder
+    allowSystemPunchIn?: SortOrder
+    requireSelfiePunchIn?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -111335,6 +113035,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -111538,11 +113246,6 @@ export namespace Prisma {
     not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type AttendanceEmployeeIdDateCompoundUniqueInput = {
     employeeId: string
     date: Date | string
@@ -111558,6 +113261,8 @@ export namespace Prisma {
     checkOut?: SortOrder
     checkInLocation?: SortOrder
     checkOutLocation?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -111579,6 +113284,8 @@ export namespace Prisma {
     status?: SortOrder
     checkIn?: SortOrder
     checkOut?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -111595,6 +113302,8 @@ export namespace Prisma {
     status?: SortOrder
     checkIn?: SortOrder
     checkOut?: SortOrder
+    checkInPhoto?: SortOrder
+    checkOutPhoto?: SortOrder
     isLate?: SortOrder
     lateMinutes?: SortOrder
     workingHours?: SortOrder
@@ -111618,14 +113327,6 @@ export namespace Prisma {
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type UniversityOrganizationIdCodeCompoundUniqueInput = {
     organizationId: string
     code: string
@@ -111642,6 +113343,7 @@ export namespace Prisma {
     country?: SortOrder
     status?: SortOrder
     logo?: SortOrder
+    enrollmentFormConfig?: SortOrder
   }
 
   export type UniversityMaxOrderByAggregateInput = {
@@ -115040,6 +116742,45 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type BiometricDeviceCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    branchId?: SortOrder
+    name?: SortOrder
+    serialNumber?: SortOrder
+    ipAddress?: SortOrder
+    status?: SortOrder
+    lastActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BiometricDeviceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    branchId?: SortOrder
+    name?: SortOrder
+    serialNumber?: SortOrder
+    ipAddress?: SortOrder
+    status?: SortOrder
+    lastActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BiometricDeviceMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    branchId?: SortOrder
+    name?: SortOrder
+    serialNumber?: SortOrder
+    ipAddress?: SortOrder
+    status?: SortOrder
+    lastActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AdmissionSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -115444,6 +117185,13 @@ export namespace Prisma {
     connect?: WalletTopUpWhereUniqueInput | WalletTopUpWhereUniqueInput[]
   }
 
+  export type BiometricDeviceCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput> | BiometricDeviceCreateWithoutOrganizationInput[] | BiometricDeviceUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutOrganizationInput | BiometricDeviceCreateOrConnectWithoutOrganizationInput[]
+    createMany?: BiometricDeviceCreateManyOrganizationInputEnvelope
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -115840,6 +117588,13 @@ export namespace Prisma {
     connectOrCreate?: WalletTopUpCreateOrConnectWithoutOrganizationInput | WalletTopUpCreateOrConnectWithoutOrganizationInput[]
     createMany?: WalletTopUpCreateManyOrganizationInputEnvelope
     connect?: WalletTopUpWhereUniqueInput | WalletTopUpWhereUniqueInput[]
+  }
+
+  export type BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput> | BiometricDeviceCreateWithoutOrganizationInput[] | BiometricDeviceUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutOrganizationInput | BiometricDeviceCreateOrConnectWithoutOrganizationInput[]
+    createMany?: BiometricDeviceCreateManyOrganizationInputEnvelope
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -116666,6 +118421,20 @@ export namespace Prisma {
     deleteMany?: WalletTopUpScalarWhereInput | WalletTopUpScalarWhereInput[]
   }
 
+  export type BiometricDeviceUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput> | BiometricDeviceCreateWithoutOrganizationInput[] | BiometricDeviceUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutOrganizationInput | BiometricDeviceCreateOrConnectWithoutOrganizationInput[]
+    upsert?: BiometricDeviceUpsertWithWhereUniqueWithoutOrganizationInput | BiometricDeviceUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: BiometricDeviceCreateManyOrganizationInputEnvelope
+    set?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    disconnect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    delete?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    update?: BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput | BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput | BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -117458,6 +119227,20 @@ export namespace Prisma {
     update?: WalletTopUpUpdateWithWhereUniqueWithoutOrganizationInput | WalletTopUpUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: WalletTopUpUpdateManyWithWhereWithoutOrganizationInput | WalletTopUpUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: WalletTopUpScalarWhereInput | WalletTopUpScalarWhereInput[]
+  }
+
+  export type BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput> | BiometricDeviceCreateWithoutOrganizationInput[] | BiometricDeviceUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutOrganizationInput | BiometricDeviceCreateOrConnectWithoutOrganizationInput[]
+    upsert?: BiometricDeviceUpsertWithWhereUniqueWithoutOrganizationInput | BiometricDeviceUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: BiometricDeviceCreateManyOrganizationInputEnvelope
+    set?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    disconnect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    delete?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    update?: BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput | BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput | BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -119178,6 +120961,10 @@ export namespace Prisma {
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
     set?: $Enums.UserStatus
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type AdmissionSessionUpdateManyWithoutApproverNestedInput = {
@@ -121552,10 +123339,6 @@ export namespace Prisma {
 
   export type EnumAttendanceStatusFieldUpdateOperationsInput = {
     set?: $Enums.AttendanceStatus
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutAttendancesNestedInput = {
@@ -124207,6 +125990,13 @@ export namespace Prisma {
     connect?: UniversityWhereUniqueInput | UniversityWhereUniqueInput[]
   }
 
+  export type BiometricDeviceCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput> | BiometricDeviceCreateWithoutBranchInput[] | BiometricDeviceUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutBranchInput | BiometricDeviceCreateOrConnectWithoutBranchInput[]
+    createMany?: BiometricDeviceCreateManyBranchInputEnvelope
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+  }
+
   export type DesignationUncheckedCreateNestedManyWithoutBranchInput = {
     create?: XOR<DesignationCreateWithoutBranchInput, DesignationUncheckedCreateWithoutBranchInput> | DesignationCreateWithoutBranchInput[] | DesignationUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: DesignationCreateOrConnectWithoutBranchInput | DesignationCreateOrConnectWithoutBranchInput[]
@@ -124239,6 +126029,13 @@ export namespace Prisma {
     create?: XOR<UniversityCreateWithoutAllowedBranchesInput, UniversityUncheckedCreateWithoutAllowedBranchesInput> | UniversityCreateWithoutAllowedBranchesInput[] | UniversityUncheckedCreateWithoutAllowedBranchesInput[]
     connectOrCreate?: UniversityCreateOrConnectWithoutAllowedBranchesInput | UniversityCreateOrConnectWithoutAllowedBranchesInput[]
     connect?: UniversityWhereUniqueInput | UniversityWhereUniqueInput[]
+  }
+
+  export type BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput> | BiometricDeviceCreateWithoutBranchInput[] | BiometricDeviceUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutBranchInput | BiometricDeviceCreateOrConnectWithoutBranchInput[]
+    createMany?: BiometricDeviceCreateManyBranchInputEnvelope
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
   }
 
   export type UserUpdateOneWithoutManagedBranchNestedInput = {
@@ -124348,6 +126145,20 @@ export namespace Prisma {
     deleteMany?: UniversityScalarWhereInput | UniversityScalarWhereInput[]
   }
 
+  export type BiometricDeviceUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput> | BiometricDeviceCreateWithoutBranchInput[] | BiometricDeviceUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutBranchInput | BiometricDeviceCreateOrConnectWithoutBranchInput[]
+    upsert?: BiometricDeviceUpsertWithWhereUniqueWithoutBranchInput | BiometricDeviceUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BiometricDeviceCreateManyBranchInputEnvelope
+    set?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    disconnect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    delete?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    update?: BiometricDeviceUpdateWithWhereUniqueWithoutBranchInput | BiometricDeviceUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BiometricDeviceUpdateManyWithWhereWithoutBranchInput | BiometricDeviceUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
+  }
+
   export type DesignationUncheckedUpdateManyWithoutBranchNestedInput = {
     create?: XOR<DesignationCreateWithoutBranchInput, DesignationUncheckedCreateWithoutBranchInput> | DesignationCreateWithoutBranchInput[] | DesignationUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: DesignationCreateOrConnectWithoutBranchInput | DesignationCreateOrConnectWithoutBranchInput[]
@@ -124415,6 +126226,20 @@ export namespace Prisma {
     update?: UniversityUpdateWithWhereUniqueWithoutAllowedBranchesInput | UniversityUpdateWithWhereUniqueWithoutAllowedBranchesInput[]
     updateMany?: UniversityUpdateManyWithWhereWithoutAllowedBranchesInput | UniversityUpdateManyWithWhereWithoutAllowedBranchesInput[]
     deleteMany?: UniversityScalarWhereInput | UniversityScalarWhereInput[]
+  }
+
+  export type BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput> | BiometricDeviceCreateWithoutBranchInput[] | BiometricDeviceUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BiometricDeviceCreateOrConnectWithoutBranchInput | BiometricDeviceCreateOrConnectWithoutBranchInput[]
+    upsert?: BiometricDeviceUpsertWithWhereUniqueWithoutBranchInput | BiometricDeviceUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BiometricDeviceCreateManyBranchInputEnvelope
+    set?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    disconnect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    delete?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+    update?: BiometricDeviceUpdateWithWhereUniqueWithoutBranchInput | BiometricDeviceUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BiometricDeviceUpdateManyWithWhereWithoutBranchInput | BiometricDeviceUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
   }
 
   export type AdmissionSessionCreateNestedManyWithoutSubDepartmentInput = {
@@ -127008,6 +128833,36 @@ export namespace Prisma {
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutDocumentLogsInput, StudentUpdateWithoutDocumentLogsInput>, StudentUncheckedUpdateWithoutDocumentLogsInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutBiometricDevicesInput = {
+    create?: XOR<OrganizationCreateWithoutBiometricDevicesInput, OrganizationUncheckedCreateWithoutBiometricDevicesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutBiometricDevicesInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type BranchCreateNestedOneWithoutBiometricDevicesInput = {
+    create?: XOR<BranchCreateWithoutBiometricDevicesInput, BranchUncheckedCreateWithoutBiometricDevicesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutBiometricDevicesInput
+    connect?: BranchWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutBiometricDevicesNestedInput = {
+    create?: XOR<OrganizationCreateWithoutBiometricDevicesInput, OrganizationUncheckedCreateWithoutBiometricDevicesInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutBiometricDevicesInput
+    upsert?: OrganizationUpsertWithoutBiometricDevicesInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutBiometricDevicesInput, OrganizationUpdateWithoutBiometricDevicesInput>, OrganizationUncheckedUpdateWithoutBiometricDevicesInput>
+  }
+
+  export type BranchUpdateOneWithoutBiometricDevicesNestedInput = {
+    create?: XOR<BranchCreateWithoutBiometricDevicesInput, BranchUncheckedCreateWithoutBiometricDevicesInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutBiometricDevicesInput
+    upsert?: BranchUpsertWithoutBiometricDevicesInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutBiometricDevicesInput, BranchUpdateWithoutBiometricDevicesInput>, BranchUncheckedUpdateWithoutBiometricDevicesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -127313,6 +129168,11 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
@@ -127331,6 +129191,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -127418,11 +129286,6 @@ export namespace Prisma {
     not?: NestedEnumAttendanceStatusFilter<$PrismaModel> | $Enums.AttendanceStatus
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.AttendanceStatus | EnumAttendanceStatusFieldRefInput<$PrismaModel>
     in?: $Enums.AttendanceStatus[] | ListEnumAttendanceStatusFieldRefInput<$PrismaModel>
@@ -127431,14 +129294,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAttendanceStatusFilter<$PrismaModel>
     _max?: NestedEnumAttendanceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumCourseTypeFilter<$PrismaModel = never> = {
@@ -127814,6 +129669,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -127832,6 +129689,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -127903,6 +129762,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutOrganizationInput = {
@@ -127924,6 +129784,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutOrganizationInput = {
@@ -130034,6 +131895,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -130057,6 +131919,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -130190,6 +132053,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -130299,6 +132165,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -130464,6 +132333,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BiometricDeviceCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    branch?: BranchCreateNestedOneWithoutBiometricDevicesInput
+  }
+
+  export type BiometricDeviceUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    branchId?: string | null
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BiometricDeviceCreateOrConnectWithoutOrganizationInput = {
+    where: BiometricDeviceWhereUniqueInput
+    create: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type BiometricDeviceCreateManyOrganizationInputEnvelope = {
+    data: BiometricDeviceCreateManyOrganizationInput | BiometricDeviceCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AdmissionSessionUpsertWithWhereUniqueWithoutOrganizationInput = {
     where: AdmissionSessionWhereUniqueInput
     update: XOR<AdmissionSessionUpdateWithoutOrganizationInput, AdmissionSessionUncheckedUpdateWithoutOrganizationInput>
@@ -130567,6 +132470,8 @@ export namespace Prisma {
     checkOut?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkInLocation?: JsonNullableFilter<"Attendance">
     checkOutLocation?: JsonNullableFilter<"Attendance">
+    checkInPhoto?: StringNullableFilter<"Attendance"> | string | null
+    checkOutPhoto?: StringNullableFilter<"Attendance"> | string | null
     isLate?: BoolFilter<"Attendance"> | boolean
     lateMinutes?: IntFilter<"Attendance"> | number
     workingHours?: FloatFilter<"Attendance"> | number
@@ -132361,6 +134266,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"University"> | string | null
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
+    enrollmentFormConfig?: JsonNullableFilter<"University">
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -132496,6 +134402,9 @@ export namespace Prisma {
     reportingTo?: StringNullableFilter<"User"> | string | null
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     lastLogin?: DateTimeNullableFilter<"User"> | Date | string | null
+    biometricId?: StringNullableFilter<"User"> | string | null
+    allowSystemPunchIn?: BoolFilter<"User"> | boolean
+    requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -132567,6 +134476,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"WalletTopUp"> | Date | string
   }
 
+  export type BiometricDeviceUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: BiometricDeviceWhereUniqueInput
+    update: XOR<BiometricDeviceUpdateWithoutOrganizationInput, BiometricDeviceUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<BiometricDeviceCreateWithoutOrganizationInput, BiometricDeviceUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: BiometricDeviceWhereUniqueInput
+    data: XOR<BiometricDeviceUpdateWithoutOrganizationInput, BiometricDeviceUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput = {
+    where: BiometricDeviceScalarWhereInput
+    data: XOR<BiometricDeviceUpdateManyMutationInput, BiometricDeviceUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type BiometricDeviceScalarWhereInput = {
+    AND?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
+    OR?: BiometricDeviceScalarWhereInput[]
+    NOT?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
+    id?: StringFilter<"BiometricDevice"> | string
+    organizationId?: StringFilter<"BiometricDevice"> | string
+    branchId?: StringNullableFilter<"BiometricDevice"> | string | null
+    name?: StringFilter<"BiometricDevice"> | string
+    serialNumber?: StringFilter<"BiometricDevice"> | string
+    ipAddress?: StringNullableFilter<"BiometricDevice"> | string | null
+    status?: StringFilter<"BiometricDevice"> | string
+    lastActive?: DateTimeNullableFilter<"BiometricDevice"> | Date | string | null
+    createdAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+    updatedAt?: DateTimeFilter<"BiometricDevice"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -132636,6 +134577,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -132707,6 +134649,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -132810,6 +134753,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutOperationsDeptInput = {
@@ -132831,6 +134775,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutOperationsDeptInput = {
@@ -132857,6 +134802,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutSalesDeptInput = {
@@ -132878,6 +134824,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutSalesDeptInput = {
@@ -132899,6 +134846,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -133009,6 +134959,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -133165,6 +135118,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -133236,6 +135190,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -133612,6 +135567,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -133721,6 +135679,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -133860,6 +135821,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -133970,6 +135934,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134103,6 +136070,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutOperationsDeptInput = {
@@ -134124,6 +136092,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUpsertWithoutSalesDeptInput = {
@@ -134156,6 +136125,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutSalesDeptInput = {
@@ -134177,6 +136147,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type UserUpsertWithoutManagedDepartmentsInput = {
@@ -134204,6 +136175,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134314,6 +136288,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -134476,6 +136453,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -134547,6 +136525,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -134958,6 +136937,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -134976,6 +136957,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -135047,6 +137030,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutBranchManagerInput = {
@@ -135068,6 +137052,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutBranchManagerInput = {
@@ -138754,6 +140739,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutUsersInput = {
@@ -138775,6 +140761,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutUsersInput = {
@@ -138908,6 +140895,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -138979,6 +140967,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -139000,6 +140989,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -139110,6 +141102,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -139211,6 +141206,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -139320,6 +141318,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -139555,6 +141556,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -139579,6 +141581,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -139881,6 +141884,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutBranchManagerInput = {
@@ -139902,6 +141906,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type CeoPanelUpsertWithoutUserInput = {
@@ -141271,6 +143276,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutUsersInput = {
@@ -141292,6 +143298,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type DepartmentUpsertWithoutUsersInput = {
@@ -141437,6 +143444,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -141508,6 +143516,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -141535,6 +143544,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141645,6 +143657,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -141908,6 +143923,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -141932,6 +143948,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -142061,6 +144078,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -142132,6 +144150,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -142153,6 +144172,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142263,6 +144285,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142430,6 +144455,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -142501,6 +144527,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -142528,6 +144555,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142638,6 +144668,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142778,6 +144811,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142888,6 +144924,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -142989,6 +145028,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143099,6 +145141,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143257,6 +145302,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143367,6 +145415,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143523,6 +145574,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -143594,6 +145646,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -143642,6 +145695,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143752,6 +145808,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143859,6 +145918,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -143969,6 +146031,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144139,6 +146204,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144249,6 +146317,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144411,6 +146482,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -144482,6 +146554,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -144498,6 +146571,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144608,6 +146684,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144764,6 +146843,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -144835,6 +146915,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -144867,6 +146948,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -144977,6 +147061,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145139,6 +147226,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -145210,6 +147298,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AdmissionSessionCreateWithoutUniversityInput = {
@@ -145575,6 +147664,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -145646,6 +147736,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -145763,6 +147854,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -145872,6 +147966,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -146025,6 +148122,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutUniversitiesInput = {
@@ -146046,6 +148144,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutBranchInput
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutUniversitiesInput = {
@@ -146288,6 +148387,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -146359,6 +148459,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -146772,6 +148873,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -146843,6 +148945,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -146860,6 +148963,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -146884,6 +148988,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -147375,6 +149480,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -147446,6 +149552,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -147469,6 +149576,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -147493,6 +149601,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -148085,6 +150194,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148195,6 +150307,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148351,6 +150466,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -148422,6 +150538,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -148443,6 +150560,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148553,6 +150673,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148654,6 +150777,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148764,6 +150890,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -148930,6 +151059,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -149039,6 +151171,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -149276,6 +151411,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -149300,6 +151436,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -149484,6 +151621,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -149594,6 +151734,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -149756,6 +151899,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -149827,6 +151971,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -149854,6 +151999,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -149964,6 +152112,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150071,6 +152222,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150181,6 +152335,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150735,6 +152892,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutStudentsInput = {
@@ -150756,6 +152914,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutStudentsInput = {
@@ -150868,6 +153027,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -150978,6 +153140,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151079,6 +153244,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151189,6 +153357,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151345,6 +153516,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -151416,6 +153588,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -151490,6 +153663,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151600,6 +153776,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -151748,6 +153927,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -151772,6 +153952,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -151983,6 +154164,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutStudentsInput = {
@@ -152004,6 +154186,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type StudyCenterUpsertWithoutStudentsInput = {
@@ -152128,6 +154311,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152238,6 +154424,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152345,6 +154534,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152455,6 +154647,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152617,6 +154812,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -152688,6 +154884,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -152774,6 +154971,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -152884,6 +155084,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -153044,6 +155247,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -153068,6 +155272,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -153272,6 +155477,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -153343,6 +155549,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -153717,6 +155924,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -153788,6 +155996,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutInvoicesInput = {
@@ -154041,6 +156250,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -154112,6 +156322,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -154133,6 +156344,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154243,6 +156457,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154410,6 +156627,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -154481,6 +156699,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -154508,6 +156727,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154618,6 +156840,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154714,6 +156939,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154824,6 +157052,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -154980,6 +157211,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -155051,6 +157283,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -155083,6 +157316,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -155193,6 +157429,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -155355,6 +157594,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -155426,6 +157666,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -155497,6 +157738,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -155568,6 +157810,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -155589,6 +157832,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -155699,6 +157945,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -155866,6 +158115,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -155937,6 +158187,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -155964,6 +158215,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156074,6 +158328,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156225,6 +158482,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -156296,6 +158554,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -156317,6 +158576,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156427,6 +158689,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156594,6 +158859,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -156665,6 +158931,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -156692,6 +158959,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156802,6 +159072,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157010,6 +159283,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -157081,6 +159355,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -157102,6 +159377,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157212,6 +159490,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157442,6 +159723,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -157513,6 +159795,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -157540,6 +159823,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157650,6 +159936,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157801,6 +160090,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -157872,6 +160162,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -157959,6 +160250,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -158030,6 +160322,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -158103,6 +160396,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158213,6 +160509,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158314,6 +160613,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158424,6 +160726,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158525,6 +160830,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158635,6 +160943,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -158791,6 +161102,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -158862,6 +161174,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -158957,6 +161270,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159067,6 +161383,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159174,6 +161493,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159284,6 +161606,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159391,6 +161716,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159501,6 +161829,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159663,6 +161994,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -159734,6 +162066,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -159750,6 +162083,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159860,6 +162196,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159961,6 +162300,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160071,6 +162413,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160227,6 +162572,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -160298,6 +162644,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -160319,6 +162666,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160429,6 +162779,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160541,6 +162894,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160651,6 +163007,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160758,6 +163117,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160868,6 +163230,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161030,6 +163395,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -161101,6 +163467,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -161128,6 +163495,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161238,6 +163608,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161334,6 +163707,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161444,6 +163820,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161545,6 +163924,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161655,6 +164037,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161756,6 +164141,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161866,6 +164254,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162022,6 +164413,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -162093,6 +164485,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -162114,6 +164507,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162224,6 +164620,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162325,6 +164724,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162435,6 +164837,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162547,6 +164952,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162657,6 +165065,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162764,6 +165175,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162874,6 +165288,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162981,6 +165398,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163091,6 +165511,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163253,6 +165676,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -163324,6 +165748,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -163351,6 +165776,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163461,6 +165889,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163568,6 +165999,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163678,6 +166112,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163774,6 +166211,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -163884,6 +166324,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164097,6 +166540,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -164168,6 +166612,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -164450,6 +166895,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164559,6 +167007,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164662,6 +167113,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -164686,6 +167138,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -164701,6 +167154,40 @@ export namespace Prisma {
   export type UniversityCreateOrConnectWithoutAllowedBranchesInput = {
     where: UniversityWhereUniqueInput
     create: XOR<UniversityCreateWithoutAllowedBranchesInput, UniversityUncheckedCreateWithoutAllowedBranchesInput>
+  }
+
+  export type BiometricDeviceCreateWithoutBranchInput = {
+    id?: string
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutBiometricDevicesInput
+  }
+
+  export type BiometricDeviceUncheckedCreateWithoutBranchInput = {
+    id?: string
+    organizationId: string
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BiometricDeviceCreateOrConnectWithoutBranchInput = {
+    where: BiometricDeviceWhereUniqueInput
+    create: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BiometricDeviceCreateManyBranchInputEnvelope = {
+    data: BiometricDeviceCreateManyBranchInput | BiometricDeviceCreateManyBranchInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutManagedBranchInput = {
@@ -164728,6 +167215,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -164838,6 +167328,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165063,6 +167556,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -165134,6 +167628,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -165279,6 +167774,22 @@ export namespace Prisma {
     data: XOR<UniversityUpdateManyMutationInput, UniversityUncheckedUpdateManyWithoutAllowedBranchesInput>
   }
 
+  export type BiometricDeviceUpsertWithWhereUniqueWithoutBranchInput = {
+    where: BiometricDeviceWhereUniqueInput
+    update: XOR<BiometricDeviceUpdateWithoutBranchInput, BiometricDeviceUncheckedUpdateWithoutBranchInput>
+    create: XOR<BiometricDeviceCreateWithoutBranchInput, BiometricDeviceUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BiometricDeviceUpdateWithWhereUniqueWithoutBranchInput = {
+    where: BiometricDeviceWhereUniqueInput
+    data: XOR<BiometricDeviceUpdateWithoutBranchInput, BiometricDeviceUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type BiometricDeviceUpdateManyWithWhereWithoutBranchInput = {
+    where: BiometricDeviceScalarWhereInput
+    data: XOR<BiometricDeviceUpdateManyMutationInput, BiometricDeviceUncheckedUpdateManyWithoutBranchInput>
+  }
+
   export type AdmissionSessionCreateWithoutSubDepartmentInput = {
     id?: string
     name: string
@@ -165395,6 +167906,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165505,6 +168019,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165661,6 +168178,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -165732,6 +168250,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -165810,6 +168329,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165919,6 +168441,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166166,6 +168691,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -166190,6 +168716,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -166264,6 +168791,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166374,6 +168904,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166536,6 +169069,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -166607,6 +169141,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -166755,6 +169290,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutDesignationsInput = {
@@ -166776,6 +169312,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutDesignationsInput = {
@@ -166909,6 +169446,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -166980,6 +169518,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -167129,6 +169668,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167239,6 +169781,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167356,6 +169901,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutDesignationsInput = {
@@ -167377,6 +169923,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type DepartmentUpsertWithoutDesignationsInput = {
@@ -167522,6 +170069,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -167593,6 +170141,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -167735,6 +170284,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -167845,6 +170397,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168001,6 +170556,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutMeetingsInput = {
@@ -168072,6 +170628,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutMeetingsInput = {
@@ -168104,6 +170661,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168214,6 +170774,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168376,6 +170939,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutMeetingsInput = {
@@ -168447,6 +171011,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutVacanciesInput = {
@@ -168575,6 +171140,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -168646,6 +171212,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -168796,6 +171363,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -168867,6 +171435,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutApprovedSessionsInput = {
@@ -168883,6 +171452,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168993,6 +171565,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169094,6 +171669,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169204,6 +171782,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169360,6 +171941,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -169431,6 +172013,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -169633,6 +172216,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -169657,6 +172241,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -169993,6 +172578,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170103,6 +172691,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170210,6 +172801,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170320,6 +172914,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170482,6 +173079,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -170553,6 +173151,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -170779,6 +173378,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -170803,6 +173403,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -170877,6 +173478,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170987,6 +173591,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171088,6 +173695,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171198,6 +173808,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171354,6 +173967,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -171425,6 +174039,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -171499,6 +174114,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171609,6 +174227,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171710,6 +174331,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171820,6 +174444,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172178,6 +174805,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172288,6 +174918,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172425,6 +175058,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172535,6 +175171,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172642,6 +175281,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172752,6 +175394,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172914,6 +175559,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -172985,6 +175631,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -173071,6 +175718,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173181,6 +175831,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173288,6 +175941,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173398,6 +176054,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173780,6 +176439,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173890,6 +176552,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174017,6 +176682,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174127,6 +176795,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174228,6 +176899,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174338,6 +177012,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174494,6 +177171,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -174565,6 +177243,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -174597,6 +177276,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174707,6 +177389,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174814,6 +177499,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -174924,6 +177612,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175086,6 +177777,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -175157,6 +177849,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -175258,6 +177951,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -175329,6 +178023,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -175523,6 +178218,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -175594,6 +178290,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -175762,6 +178459,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -175833,6 +178531,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -175945,6 +178644,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176055,6 +178757,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176222,6 +178927,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -176293,6 +178999,7 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -176417,6 +179124,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176527,6 +179237,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176721,6 +179434,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -176792,6 +179506,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -176813,6 +179528,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176923,6 +179641,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177139,6 +179860,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -177210,6 +179932,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -177237,6 +179960,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177347,6 +180073,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177443,6 +180172,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177553,6 +180285,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177709,6 +180444,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -177780,6 +180516,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -177812,6 +180549,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177922,6 +180662,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178084,6 +180827,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -178155,6 +180899,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -178226,6 +180971,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -178297,6 +181043,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -178318,6 +181065,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178428,6 +181178,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178595,6 +181348,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -178666,6 +181420,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -178693,6 +181448,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178803,6 +181561,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178954,6 +181715,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -179025,6 +181787,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -179112,6 +181875,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -179183,6 +181947,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -179254,6 +182019,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -179325,6 +182091,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -179346,6 +182113,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179456,6 +182226,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179623,6 +182396,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -179694,6 +182468,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -179721,6 +182496,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179831,6 +182609,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179982,6 +182763,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -180053,6 +182835,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -180074,6 +182857,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180184,6 +182970,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180285,6 +183074,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180395,6 +183187,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180562,6 +183357,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -180633,6 +183429,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -180660,6 +183457,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180770,6 +183570,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180877,6 +183680,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180987,6 +183793,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181138,6 +183947,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -181209,6 +184019,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -181230,6 +184041,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181340,6 +184154,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181441,6 +184258,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181551,6 +184371,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181718,6 +184541,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -181789,6 +184613,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -181816,6 +184641,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -181926,6 +184754,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182033,6 +184864,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182143,6 +184977,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182239,6 +185076,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182349,6 +185189,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182450,6 +185293,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182560,6 +185406,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182661,6 +185510,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182771,6 +185623,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182927,6 +185782,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -182998,6 +185854,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -183019,6 +185876,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183129,6 +185989,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183318,6 +186181,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183428,6 +186294,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183535,6 +186404,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183645,6 +186517,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183752,6 +186627,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183862,6 +186740,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184024,6 +186905,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -184095,6 +186977,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -184122,6 +187005,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184232,6 +187118,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184495,6 +187384,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -184566,6 +187456,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -184698,6 +187589,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -184769,6 +187661,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -184785,6 +187678,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184895,6 +187791,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185051,6 +187950,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -185122,6 +188022,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -185360,6 +188261,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185470,6 +188374,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185632,6 +188539,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -185703,6 +188611,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -185937,6 +188846,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186047,6 +188959,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186203,6 +189118,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -186274,6 +189190,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -186295,6 +189212,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186405,6 +189325,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186517,6 +189440,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186627,6 +189553,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186789,6 +189718,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -186860,6 +189790,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -186887,6 +189818,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186997,6 +189931,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187093,6 +190030,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187203,6 +190143,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187359,6 +190302,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -187430,6 +190374,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -187451,6 +190396,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187561,6 +190509,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187662,6 +190613,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187772,6 +190726,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187884,6 +190841,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187994,6 +190954,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188156,6 +191119,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -188227,6 +191191,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -188254,6 +191219,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188364,6 +191332,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188471,6 +191442,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188581,6 +191555,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188677,6 +191654,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188787,6 +191767,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188943,6 +191926,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -189014,6 +191998,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -189046,6 +192031,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189156,6 +192144,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189318,6 +192309,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -189389,6 +192381,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -189405,6 +192398,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189515,6 +192511,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189762,6 +192761,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -189833,6 +192833,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -189918,6 +192919,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190028,6 +193032,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190287,6 +193294,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -190358,6 +193366,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -190488,6 +193497,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -190559,6 +193569,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -190580,6 +193591,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190690,6 +193704,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190857,6 +193874,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -190928,6 +193946,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -190955,6 +193974,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191065,6 +194087,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191216,6 +194241,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -191287,6 +194313,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -191427,6 +194454,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -191498,6 +194526,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -191573,6 +194602,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191683,6 +194715,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191930,6 +194965,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -192001,6 +195037,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -192022,6 +195059,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192132,6 +195172,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192244,6 +195287,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192354,6 +195400,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192613,6 +195662,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -192684,6 +195734,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -192711,6 +195762,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192821,6 +195875,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192922,6 +195979,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
     universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutInvitesInput = {
@@ -192943,6 +196001,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
     universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchCreateOrConnectWithoutInvitesInput = {
@@ -193019,6 +196078,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -193090,6 +196150,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -193111,6 +196172,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193221,6 +196285,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193338,6 +196405,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutInvitesInput = {
@@ -193359,6 +196427,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCenterInvitesInput = {
@@ -193441,6 +196510,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -193512,6 +196582,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -193539,6 +196610,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193649,6 +196723,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193893,6 +196970,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194003,6 +197083,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194159,6 +197242,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -194230,6 +197314,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -194422,6 +197507,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194532,6 +197620,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194694,6 +197785,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -194765,6 +197857,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -194781,6 +197874,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194891,6 +197987,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195047,6 +198146,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -195118,6 +198218,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -195135,6 +198236,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -195159,6 +198261,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -195201,6 +198304,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195311,6 +198417,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195473,6 +198582,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -195544,6 +198654,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -195567,6 +198678,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -195591,6 +198703,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -195617,6 +198730,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195727,6 +198843,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195883,6 +199002,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -195954,6 +199074,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -196075,6 +199196,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -196099,6 +199221,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -196141,6 +199264,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196251,6 +199377,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196413,6 +199542,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -196484,6 +199614,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructuresInput = {
@@ -196623,6 +199754,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -196647,6 +199779,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -196728,6 +199861,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommissionsInput = {
@@ -196799,6 +199933,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommissionsInput = {
@@ -196931,6 +200066,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -196955,6 +200091,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -197052,6 +200189,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommissionsInput = {
@@ -197123,6 +200261,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutCommissionsInput = {
@@ -197267,6 +200406,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -197291,6 +200431,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -197781,6 +200922,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197891,6 +201035,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197992,6 +201139,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198102,6 +201252,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198258,6 +201411,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -198329,6 +201483,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -198361,6 +201516,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198471,6 +201629,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198578,6 +201739,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198688,6 +201852,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198850,6 +202017,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -198921,6 +202089,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutProgramMaterialsInput = {
@@ -198992,6 +202161,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -199063,6 +202233,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -199137,6 +202308,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199247,6 +202421,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199414,6 +202591,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -199485,6 +202663,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -199571,6 +202750,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199681,6 +202863,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199922,6 +203107,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -199993,6 +203179,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -200227,6 +203414,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -200298,6 +203486,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentSchedulesInput = {
@@ -200435,6 +203624,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200545,6 +203737,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200701,6 +203896,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentLinksInput = {
@@ -200772,6 +203968,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentLinksInput = {
@@ -200958,6 +204155,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201068,6 +204268,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201230,6 +204433,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentLinksInput = {
@@ -201301,6 +204505,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutPaymentLinksInput = {
@@ -201538,6 +204743,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCollectionOverseersInput = {
@@ -201609,6 +204815,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCollectionOverseersInput = {
@@ -201630,6 +204837,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201740,6 +204950,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201907,6 +205120,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -201978,6 +205192,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCollectionOverseersInput = {
@@ -202005,6 +205220,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202115,6 +205333,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202266,6 +205487,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -202337,6 +205559,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -202469,6 +205692,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -202493,6 +205717,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -202590,6 +205815,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -202661,6 +205887,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutUniversityPaymentsInput = {
@@ -202805,6 +206032,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -202829,6 +206057,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -202855,6 +206084,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202965,6 +206197,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203077,6 +206312,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203187,6 +206425,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203283,6 +206524,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203393,6 +206637,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203620,6 +206867,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203730,6 +206980,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203933,6 +207186,414 @@ export namespace Prisma {
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
+  export type OrganizationCreateWithoutBiometricDevicesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutBiometricDevicesInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutBiometricDevicesInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutBiometricDevicesInput, OrganizationUncheckedCreateWithoutBiometricDevicesInput>
+  }
+
+  export type BranchCreateWithoutBiometricDevicesInput = {
+    id?: string
+    name: string
+    code: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    branchManager?: UserCreateNestedOneWithoutManagedBranchInput
+    operationsDept?: DepartmentCreateNestedOneWithoutOpsBranchInput
+    organization: OrganizationCreateNestedOneWithoutBranchesInput
+    salesDept?: DepartmentCreateNestedOneWithoutSalesBranchInput
+    designations?: DesignationCreateNestedManyWithoutBranchInput
+    students?: StudentCreateNestedManyWithoutBranchInput
+    invites?: StudyCenterInviteCreateNestedManyWithoutBranchInput
+    users?: UserCreateNestedManyWithoutBranchInput
+    universities?: UniversityCreateNestedManyWithoutAllowedBranchesInput
+  }
+
+  export type BranchUncheckedCreateWithoutBiometricDevicesInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    city?: string | null
+    address?: string | null
+    contact?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    branchManagerId?: string | null
+    salesDeptId?: string | null
+    operationsDeptId?: string | null
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    designations?: DesignationUncheckedCreateNestedManyWithoutBranchInput
+    students?: StudentUncheckedCreateNestedManyWithoutBranchInput
+    invites?: StudyCenterInviteUncheckedCreateNestedManyWithoutBranchInput
+    users?: UserUncheckedCreateNestedManyWithoutBranchInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutAllowedBranchesInput
+  }
+
+  export type BranchCreateOrConnectWithoutBiometricDevicesInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutBiometricDevicesInput, BranchUncheckedCreateWithoutBiometricDevicesInput>
+  }
+
+  export type OrganizationUpsertWithoutBiometricDevicesInput = {
+    update: XOR<OrganizationUpdateWithoutBiometricDevicesInput, OrganizationUncheckedUpdateWithoutBiometricDevicesInput>
+    create: XOR<OrganizationCreateWithoutBiometricDevicesInput, OrganizationUncheckedCreateWithoutBiometricDevicesInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutBiometricDevicesInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutBiometricDevicesInput, OrganizationUncheckedUpdateWithoutBiometricDevicesInput>
+  }
+
+  export type OrganizationUpdateWithoutBiometricDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutBiometricDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type BranchUpsertWithoutBiometricDevicesInput = {
+    update: XOR<BranchUpdateWithoutBiometricDevicesInput, BranchUncheckedUpdateWithoutBiometricDevicesInput>
+    create: XOR<BranchCreateWithoutBiometricDevicesInput, BranchUncheckedCreateWithoutBiometricDevicesInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutBiometricDevicesInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutBiometricDevicesInput, BranchUncheckedUpdateWithoutBiometricDevicesInput>
+  }
+
+  export type BranchUpdateWithoutBiometricDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    branchManager?: UserUpdateOneWithoutManagedBranchNestedInput
+    operationsDept?: DepartmentUpdateOneWithoutOpsBranchNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutBranchesNestedInput
+    salesDept?: DepartmentUpdateOneWithoutSalesBranchNestedInput
+    designations?: DesignationUpdateManyWithoutBranchNestedInput
+    students?: StudentUpdateManyWithoutBranchNestedInput
+    invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
+    users?: UserUpdateManyWithoutBranchNestedInput
+    universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutBiometricDevicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    contact?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branchManagerId?: NullableStringFieldUpdateOperationsInput | string | null
+    salesDeptId?: NullableStringFieldUpdateOperationsInput | string | null
+    operationsDeptId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDeptIds?: NullableJsonNullValueInput | InputJsonValue
+    designations?: DesignationUncheckedUpdateManyWithoutBranchNestedInput
+    students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
+    invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
+    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+  }
+
   export type AdmissionSessionCreateManyOrganizationInput = {
     id?: string
     name: string
@@ -203976,6 +207637,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -204756,6 +208419,7 @@ export namespace Prisma {
     country?: string | null
     status?: string
     logo?: string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityAuthFeeCreateManyOrganizationInput = {
@@ -204811,6 +208475,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -204838,6 +208505,18 @@ export namespace Prisma {
     remarks?: string | null
     verifiedBy?: string | null
     verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BiometricDeviceCreateManyOrganizationInput = {
+    id?: string
+    branchId?: string | null
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -204958,6 +208637,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -204976,6 +208657,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -204993,6 +208676,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -205056,6 +208741,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
     universities?: UniversityUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutOrganizationInput = {
@@ -205077,6 +208763,7 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateManyWithoutOrganizationInput = {
@@ -207425,6 +211112,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -207448,6 +211136,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -207471,6 +211160,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UniversityAuthFeeUpdateWithoutOrganizationInput = {
@@ -207586,6 +211276,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207695,6 +211388,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207798,6 +211494,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207877,6 +211576,42 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BiometricDeviceUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branch?: BranchUpdateOneWithoutBiometricDevicesNestedInput
+  }
+
+  export type BiometricDeviceUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BiometricDeviceUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -207964,6 +211699,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -208035,6 +211771,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -208183,6 +211920,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208591,6 +212331,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208700,6 +212443,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208803,6 +212549,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208855,6 +212604,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208965,6 +212717,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209068,6 +212823,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209153,6 +212911,8 @@ export namespace Prisma {
     checkOut?: Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: string | null
+    checkOutPhoto?: string | null
     isLate?: boolean
     lateMinutes?: number
     workingHours?: number
@@ -210475,6 +214235,9 @@ export namespace Prisma {
     designation?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210728,6 +214491,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -210746,6 +214511,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -210763,6 +214530,8 @@ export namespace Prisma {
     checkOut?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkInLocation?: NullableJsonNullValueInput | InputJsonValue
     checkOutLocation?: NullableJsonNullValueInput | InputJsonValue
+    checkInPhoto?: NullableStringFieldUpdateOperationsInput | string | null
+    checkOutPhoto?: NullableStringFieldUpdateOperationsInput | string | null
     isLate?: BoolFieldUpdateOperationsInput | boolean
     lateMinutes?: IntFieldUpdateOperationsInput | number
     workingHours?: FloatFieldUpdateOperationsInput | number
@@ -214849,6 +218618,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -214958,6 +218730,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215061,6 +218836,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215457,6 +219235,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215936,6 +219717,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216045,6 +219829,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216148,6 +219935,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216221,6 +220011,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutUniversitiesInput = {
@@ -216242,6 +220033,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutBranchNestedInput
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateManyWithoutUniversitiesInput = {
@@ -217482,6 +221274,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218136,6 +221931,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218245,6 +222043,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218348,6 +222149,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218521,6 +222325,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -218545,6 +222350,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -218568,6 +222374,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DocumentLogCreateManyStudentInput = {
@@ -219343,9 +223150,24 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BiometricDeviceCreateManyBranchInput = {
+    id?: string
+    organizationId: string
+    name: string
+    serialNumber: string
+    ipAddress?: string | null
+    status?: string
+    lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DesignationUpdateWithoutBranchInput = {
@@ -219613,6 +223435,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219722,6 +223547,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219825,6 +223653,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219840,6 +223671,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -219864,6 +223696,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -219887,6 +223720,43 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type BiometricDeviceUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutBiometricDevicesNestedInput
+  }
+
+  export type BiometricDeviceUncheckedUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BiometricDeviceUncheckedUpdateManyWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    serialNumber?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    lastActive?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdmissionSessionCreateManySubDepartmentInput = {
@@ -219945,6 +223815,9 @@ export namespace Prisma {
     reportingTo?: string | null
     status?: $Enums.UserStatus
     lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220082,6 +223955,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220191,6 +224067,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220294,6 +224173,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220488,6 +224370,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -220512,6 +224395,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -220535,6 +224419,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type DesignationCreateManyParentDesignationInput = {
@@ -220619,6 +224504,9 @@ export namespace Prisma {
     designation?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220729,6 +224617,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220832,6 +224723,9 @@ export namespace Prisma {
     reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue

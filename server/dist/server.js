@@ -53,6 +53,7 @@ import assetRoutes from './routes/assetRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
 import meetingRoutes from './routes/meetingRoutes.js';
 import iclockRoutes from './routes/iclockRoutes.js';
+import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
 const app = express();
 // Trust reverse proxy (Nginx) headers for rate limiting
 app.set('trust proxy', 1);
@@ -104,6 +105,7 @@ app.use(`/api/${API_VERSION}/dashboard`, dashboardRoutes);
 app.use(`/api/${API_VERSION}/escalations`, escalationRoutes);
 app.use(`/api/${API_VERSION}/payroll`, payrollRoutes);
 app.use(`/api/${API_VERSION}/attendance`, attendanceRoutes);
+app.use('/api/biometric-devices', biometricDeviceRoutes);
 // New enhancement routes
 app.use(`/api/${API_VERSION}/ceo`, ceoRoutes);
 app.use(`/api/${API_VERSION}/org`, orgAdminRoutes);

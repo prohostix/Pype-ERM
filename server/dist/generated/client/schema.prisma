@@ -78,6 +78,7 @@ model Organization {
   users               User[]
   vacancies           Vacancy[]
   walletTopUps        WalletTopUp[]
+  biometricDevices    BiometricDevice[]
 
   @@index([status])
 }
@@ -151,6 +152,9 @@ model User {
   reportingTo                   String?
   status                        UserStatus           @default(active)
   lastLogin                     DateTime?
+  biometricId                   String?              @unique
+  allowSystemPunchIn            Boolean              @default(true)
+  requireSelfiePunchIn          Boolean              @default(false)
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
   permissions                   Json?                @default("[]")
@@ -303,6 +307,8 @@ model Attendance {
   checkOut         DateTime?
   checkInLocation  Json?
   checkOutLocation Json?
+  checkInPhoto     String?
+  checkOutPhoto    String?
   isLate           Boolean          @default(false)
   lateMinutes      Int              @default(0)
   workingHours     Float            @default(0)
@@ -318,28 +324,29 @@ model Attendance {
 }
 
 model University {
-  id                 String                 @id @default(uuid())
-  organizationId     String
-  subDepartmentId    String?
-  name               String
-  code               String
-  address            String?
-  contact            String?
-  country            String?
-  status             String                 @default("active")
-  logo               String?
-  admissionSessions  AdmissionSession[]
-  feeStructures      FeeStructure[]
-  programs           Program[]
-  students           Student[]
-  organization       Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  authFees           UniversityAuthFee[]
-  commissions        UniversityCommission[]
-  universityPayments UniversityPayment[]
-  admins             User[]                 @relation("UniversityAdmin")
-  assignedSubDepts   SubDepartment[]        @relation("SubDeptToUniversity")
-  allowedBranches    Branch[]               @relation("UniversityToBranch")
-  studyCenters       StudyCenter[]          @relation("UniversityToStudyCenter")
+  id                   String                 @id @default(uuid())
+  organizationId       String
+  subDepartmentId      String?
+  name                 String
+  code                 String
+  address              String?
+  contact              String?
+  country              String?
+  status               String                 @default("active")
+  logo                 String?
+  enrollmentFormConfig Json?                  @default("{}")
+  admissionSessions    AdmissionSession[]
+  feeStructures        FeeStructure[]
+  programs             Program[]
+  students             Student[]
+  organization         Organization           @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  authFees             UniversityAuthFee[]
+  commissions          UniversityCommission[]
+  universityPayments   UniversityPayment[]
+  admins               User[]                 @relation("UniversityAdmin")
+  assignedSubDepts     SubDepartment[]        @relation("SubDeptToUniversity")
+  allowedBranches      Branch[]               @relation("UniversityToBranch")
+  studyCenters         StudyCenter[]          @relation("UniversityToStudyCenter")
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -753,6 +760,7 @@ model Branch {
   invites           StudyCenterInvite[]
   users             User[]
   universities      University[]        @relation("UniversityToBranch")
+  biometricDevices  BiometricDevice[]
 
   @@unique([organizationId, code])
   @@index([organizationId])
@@ -1677,6 +1685,8 @@ enum UserRole {
   collections_admin
   collections
   general_manager
+  bde
+  sales_agent
 }
 
 enum TaskPriority {
@@ -1809,4 +1819,22 @@ enum AssetStatus {
   RETURNED
   LOST
   DAMAGED
+}
+
+model BiometricDevice {
+  id             String       @id @default(uuid())
+  organizationId String
+  branchId       String?
+  name           String
+  serialNumber   String       @unique
+  ipAddress      String?
+  status         String       @default("active")
+  lastActive     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  branch         Branch?      @relation(fields: [branchId], references: [id])
+
+  @@index([organizationId])
+  @@index([serialNumber])
 }

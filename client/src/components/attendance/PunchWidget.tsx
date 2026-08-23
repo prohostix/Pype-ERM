@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import api from '@/lib/api';
+import { useAuth } from '@/hooks/useAuth';
+import Webcam from 'react-webcam';
 import 'leaflet/dist/leaflet.css';
 
 // Fix leaflet default marker icons (Vite/webpack issue)
@@ -38,11 +40,15 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
   const [loading, setLoading] = useState(true);
   const [punching, setPunching] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [webcamOpen, setWebcamOpen] = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [punchType, setPunchType] = useState<'in' | 'out'>('in');
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [locating, setLocating] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [lastFetchDate, setLastFetchDate] = useState(new Date().getDate());
+  const { user } = useAuth();
+  const webcamRef = useRef<Webcam>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
@@ -117,6 +123,15 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
     }
   };
 
+  const handleCapturePhoto = () => {
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      if (imageSrc) {
+        setCapturedPhoto(imageSrc);
+      }
+    }
+  };
+
   // Init Leaflet map when dialog opens and location is ready
   useEffect(() => {
     if (!mapOpen || !location || !mapRef.current) return;
@@ -177,6 +192,12 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   const handlePunch = async () => {
     if (!location) return;
+    
+    if (user?.requireSelfiePunchIn && !capturedPhoto) {
+      setWebcamOpen(true);
+      return;
+    }
+
     setPunching(true);
     try {
       const endpoint = punchType === 'in' ? '/attendance/punch-in' : '/attendance/punch-out';
@@ -184,9 +205,12 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
         latitude: location.lat === 0 ? undefined : location.lat,
         longitude: location.lng === 0 ? undefined : location.lng,
         address: location.address,
+        photo: capturedPhoto
       });
       toast.success(res.data.message || (punchType === 'in' ? 'Punched in!' : 'Punched out!'));
       setMapOpen(false);
+      setWebcamOpen(false);
+      setCapturedPhoto(null);
       fetchToday();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Punch failed');
@@ -230,7 +254,15 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   return (
     <>
-      {compact ? (
+      {user?.allowSystemPunchIn === false ? (
+        <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            <LogOut className="w-8 h-8 mb-4 text-muted-foreground opacity-50" />
+            <p className="text-sm text-muted-foreground font-medium">System punch is disabled.</p>
+            <p className="text-xs text-muted-foreground">Please use the biometric device.</p>
+          </CardContent>
+        </Card>
+      ) : compact ? (
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end">
              <span className="text-sm font-bold tabular-nums">
@@ -426,6 +458,48 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
               <Button variant="outline" onClick={() => setMapOpen(false)}>Close</Button>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Webcam Dialog */}
+      <Dialog open={webcamOpen} onOpenChange={setWebcamOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Take a Selfie to Punch {punchType === 'in' ? 'In' : 'Out'}</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center space-y-4">
+            {!capturedPhoto ? (
+              <>
+                <div className="w-full aspect-video rounded-lg overflow-hidden bg-black relative">
+                  <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={{ facingMode: "user" }}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <Button className="w-full" onClick={handleCapturePhoto}>
+                  Capture Photo
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="w-full aspect-video rounded-lg overflow-hidden border">
+                  <img src={capturedPhoto} alt="Selfie" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex gap-2 w-full">
+                  <Button variant="outline" className="flex-1" onClick={() => setCapturedPhoto(null)}>
+                    Retake
+                  </Button>
+                  <Button className="flex-1" onClick={handlePunch} disabled={punching}>
+                    {punching ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                    Confirm Punch
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </>

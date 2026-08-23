@@ -186,6 +186,8 @@ exports.Prisma.UserScalarFieldEnum = {
   status: 'status',
   lastLogin: 'lastLogin',
   biometricId: 'biometricId',
+  allowSystemPunchIn: 'allowSystemPunchIn',
+  requireSelfiePunchIn: 'requireSelfiePunchIn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   permissions: 'permissions'
@@ -236,6 +238,8 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   checkOut: 'checkOut',
   checkInLocation: 'checkInLocation',
   checkOutLocation: 'checkOutLocation',
+  checkInPhoto: 'checkInPhoto',
+  checkOutPhoto: 'checkOutPhoto',
   isLate: 'isLate',
   lateMinutes: 'lateMinutes',
   workingHours: 'workingHours',
@@ -254,7 +258,8 @@ exports.Prisma.UniversityScalarFieldEnum = {
   contact: 'contact',
   country: 'country',
   status: 'status',
-  logo: 'logo'
+  logo: 'logo',
+  enrollmentFormConfig: 'enrollmentFormConfig'
 };
 
 exports.Prisma.ProgramScalarFieldEnum = {

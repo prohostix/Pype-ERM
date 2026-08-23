@@ -185,6 +185,9 @@ exports.Prisma.UserScalarFieldEnum = {
   reportingTo: 'reportingTo',
   status: 'status',
   lastLogin: 'lastLogin',
+  biometricId: 'biometricId',
+  allowSystemPunchIn: 'allowSystemPunchIn',
+  requireSelfiePunchIn: 'requireSelfiePunchIn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   permissions: 'permissions'
@@ -235,6 +238,8 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   checkOut: 'checkOut',
   checkInLocation: 'checkInLocation',
   checkOutLocation: 'checkOutLocation',
+  checkInPhoto: 'checkInPhoto',
+  checkOutPhoto: 'checkOutPhoto',
   isLate: 'isLate',
   lateMinutes: 'lateMinutes',
   workingHours: 'workingHours',
@@ -253,7 +258,8 @@ exports.Prisma.UniversityScalarFieldEnum = {
   contact: 'contact',
   country: 'country',
   status: 'status',
-  logo: 'logo'
+  logo: 'logo',
+  enrollmentFormConfig: 'enrollmentFormConfig'
 };
 
 exports.Prisma.ProgramScalarFieldEnum = {
@@ -1185,6 +1191,19 @@ exports.Prisma.DocumentLogScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BiometricDeviceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  branchId: 'branchId',
+  name: 'name',
+  serialNumber: 'serialNumber',
+  ipAddress: 'ipAddress',
+  status: 'status',
+  lastActive: 'lastActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1264,7 +1283,9 @@ exports.UserRole = exports.$Enums.UserRole = {
   staff: 'staff',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager'
+  general_manager: 'general_manager',
+  bde: 'bde',
+  sales_agent: 'sales_agent'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {
@@ -1468,7 +1489,8 @@ exports.Prisma.ModelName = {
   OrgInquiry: 'OrgInquiry',
   UniversityPayment: 'UniversityPayment',
   Asset: 'Asset',
-  DocumentLog: 'DocumentLog'
+  DocumentLog: 'DocumentLog',
+  BiometricDevice: 'BiometricDevice'
 };
 
 /**

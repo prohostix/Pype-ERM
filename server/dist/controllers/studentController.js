@@ -54,7 +54,7 @@ export const getStudent = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, data: student });
 });
 export const createStudent = asyncHandler(async (req, res) => {
-    const { email, name, phone, centerId, branchId, universityId, programId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan, gender, category, maritalStatus, employmentStatus, guardianName, familyPhone } = req.body;
+    const { email, name, phone, centerId, branchId, universityId, programId, sessionId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan, gender, category, maritalStatus, employmentStatus, guardianName, familyPhone } = req.body;
     if (!programId || programId.trim() === '') {
         res.status(400).json({ success: false, message: 'Program is required' });
         return;
@@ -106,17 +106,12 @@ export const createStudent = asyncHandler(async (req, res) => {
         });
     }
     else {
-        // If the user already exists, update their password so it matches the generated credentials
-        const hashedPassword = await hashPassword(defaultPassword);
-        studentUser = await prisma.user.update({
-            where: { email },
-            data: {
-                password: hashedPassword,
-                name,
-                phone,
-                status: 'active'
-            }
-        });
+        // SECURITY FIX: Do not overwrite passwords of existing admin/staff accounts!
+        if (studentUser.role !== 'staff') {
+            res.status(400).json({ success: false, message: 'Email is already in use by an admin or staff account.' });
+            return;
+        }
+        // We do NOT overwrite the password here, we just use the existing account.
     }
     const student = await prisma.student.create({
         data: {
@@ -147,11 +142,12 @@ export const createStudent = asyncHandler(async (req, res) => {
             familyPhone: familyPhone || null,
             status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
             programId,
+            sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
             universityId: universityId || null,
             centerId: (centerId && centerId.trim() !== '') ? centerId : null,
             branchId: (branchId && branchId.trim() !== '') ? branchId : null,
             organizationId: req.user.organizationId,
-            credentials: { email, password: defaultPassword },
+            credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
             admissionProgress: {
                 paymentPlan: paymentPlan || 'full',
                 initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null

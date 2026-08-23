@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Users, Download } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users, Download, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -24,6 +24,8 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [photoViewerOpen, setPhotoViewerOpen] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   
   // HR admins default to list view (with date filter), others to calendar
@@ -395,8 +397,22 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                     <div key={recId} className="flex items-center justify-between p-4 border border-border/60 rounded-xl hover:bg-muted/30 transition-colors">
                       <div className="flex-1">
                         <div className="font-bold text-sm text-foreground">{empName}</div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {new Date(record.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} • {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'} - {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
+                        <div className="text-xs text-muted-foreground mt-1 flex items-center flex-wrap gap-2">
+                          <span>{new Date(record.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} •</span>
+                          
+                          <span className="flex items-center gap-1">
+                            {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
+                            {record.checkInPhoto && (
+                              <Camera className="w-3.5 h-3.5 text-blue-500 cursor-pointer hover:text-blue-700" onClick={() => { setSelectedPhoto(record.checkInPhoto); setPhotoViewerOpen(true); }} />
+                            )}
+                          </span>
+                          <span>-</span>
+                          <span className="flex items-center gap-1">
+                            {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
+                            {record.checkOutPhoto && (
+                              <Camera className="w-3.5 h-3.5 text-blue-500 cursor-pointer hover:text-blue-700" onClick={() => { setSelectedPhoto(record.checkOutPhoto); setPhotoViewerOpen(true); }} />
+                            )}
+                          </span>
                         </div>
                         {record.notes && <div className="text-xs text-slate-500 mt-1 italic">"{record.notes}"</div>}
                       </div>
@@ -423,6 +439,14 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
           </CardContent>
         </Card>
       )}
+
+      <Dialog open={photoViewerOpen} onOpenChange={setPhotoViewerOpen}>
+        <DialogContent className="sm:max-w-md p-1">
+          {selectedPhoto && (
+            <img src={selectedPhoto.startsWith('http') ? selectedPhoto : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedPhoto}`} alt="Punch Photo" className="w-full rounded-lg" />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

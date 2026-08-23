@@ -1,5 +1,7 @@
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import fs from 'fs';
+import path from 'path';
 function getDistanceInMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000; // metres
     const phi1 = lat1 * Math.PI / 180;
@@ -17,7 +19,32 @@ export const punchIn = asyncHandler(async (req, res) => {
         res.status(400).json({ success: false, message: 'Punch-in is only available for tenant organization employees.' });
         return;
     }
-    const { latitude, longitude, address } = req.body;
+    if (req.user.allowSystemPunchIn === false) {
+        res.status(403).json({ success: false, message: 'System punch-in is disabled. Please use the biometric device.' });
+        return;
+    }
+    const { latitude, longitude, address, photo } = req.body;
+    let checkInPhoto;
+    if (req.user.requireSelfiePunchIn) {
+        if (!photo) {
+            res.status(400).json({ success: false, message: 'Selfie photo is required for punch-in.' });
+            return;
+        }
+        try {
+            const base64Data = photo.replace(/^data:image\/\w+;base64,/, "");
+            const fileName = `selfie-in-${req.user.id}-${Date.now()}.jpg`;
+            const uploadPath = process.env.UPLOAD_PATH || './uploads';
+            if (!fs.existsSync(uploadPath))
+                fs.mkdirSync(uploadPath, { recursive: true });
+            fs.writeFileSync(path.join(uploadPath, fileName), base64Data, 'base64');
+            checkInPhoto = `/api/v1/uploads/${fileName}`;
+        }
+        catch (err) {
+            console.error('Failed to save selfie:', err);
+            res.status(500).json({ success: false, message: 'Failed to process selfie photo.' });
+            return;
+        }
+    }
     // Retrieve HR Settings
     const settings = await prisma.hRSettings.findFirst({
         where: { organizationId: req.user.organizationId }
@@ -117,6 +144,7 @@ export const punchIn = asyncHandler(async (req, res) => {
             date: today,
             checkIn: now,
             checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+            checkInPhoto,
             status,
             isLate,
             lateMinutes
@@ -133,7 +161,32 @@ export const punchOut = asyncHandler(async (req, res) => {
         res.status(400).json({ success: false, message: 'Punch-out is only available for tenant organization employees.' });
         return;
     }
-    const { latitude, longitude, address } = req.body;
+    if (req.user.allowSystemPunchIn === false) {
+        res.status(403).json({ success: false, message: 'System punch-in is disabled. Please use the biometric device.' });
+        return;
+    }
+    const { latitude, longitude, address, photo } = req.body;
+    let checkOutPhoto;
+    if (req.user.requireSelfiePunchIn) {
+        if (!photo) {
+            res.status(400).json({ success: false, message: 'Selfie photo is required for punch-out.' });
+            return;
+        }
+        try {
+            const base64Data = photo.replace(/^data:image\/\w+;base64,/, "");
+            const fileName = `selfie-out-${req.user.id}-${Date.now()}.jpg`;
+            const uploadPath = process.env.UPLOAD_PATH || './uploads';
+            if (!fs.existsSync(uploadPath))
+                fs.mkdirSync(uploadPath, { recursive: true });
+            fs.writeFileSync(path.join(uploadPath, fileName), base64Data, 'base64');
+            checkOutPhoto = `/api/v1/uploads/${fileName}`;
+        }
+        catch (err) {
+            console.error('Failed to save selfie:', err);
+            res.status(500).json({ success: false, message: 'Failed to process selfie photo.' });
+            return;
+        }
+    }
     const now = new Date();
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -165,6 +218,7 @@ export const punchOut = asyncHandler(async (req, res) => {
         data: {
             checkOut: now,
             checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
+            checkOutPhoto,
             workingHours
         }
     });
