@@ -298,7 +298,6 @@ export function PaymentsPanel() {
             <div className="space-y-2">
               {(() => {
                 const validPayments = payments.filter(p => p?.id);
-                const totalPages = Math.max(1, Math.ceil(validPayments.length / itemsPerPage));
                 const paginatedPayments = validPayments.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                 return (
                   <>
