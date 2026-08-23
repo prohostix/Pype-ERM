@@ -46,10 +46,12 @@ if [ -d "./client" ] && [ -d "./server" ] && [ "$PWD" != "/var/www/pype-erm" ]; 
     echo "📂 Local repository files found. Copying files to /var/www/pype-erm..."
     cp -R ./* /var/www/pype-erm/
 else
-    echo "📂 Cloning repository from GitHub..."
+    echo "📂 Pulling latest code from GitHub..."
     if [ -d "/var/www/pype-erm/.git" ]; then
         cd /var/www/pype-erm
-        git pull origin main
+        git fetch origin main
+        git reset --hard origin/main
+        git clean -fd
     else
         git clone https://github.com/prohostix/Pype-ERM.git /var/www/pype-erm
     fi
