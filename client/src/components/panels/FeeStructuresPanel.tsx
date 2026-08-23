@@ -214,7 +214,10 @@ export function FeeStructuresPanel() {
   };
 
   const progsForUniv = programs.filter(p => p.universityId === selectedUniv?.id);
-  const sessionsForUniv = sessions.filter(s => s.universityId === selectedUniv?.id);
+  const sessionsForUniv = sessions.filter(s => 
+    s.universityId === selectedUniv?.id || 
+    (s.programId && programs.find(p => p.id === s.programId)?.universityId === selectedUniv?.id)
+  );
 
   return (
     <div className="space-y-6">

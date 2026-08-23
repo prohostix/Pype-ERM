@@ -41,17 +41,22 @@ export const createUniversity = asyncHandler(async (req: AuthRequest, res: Respo
   res.status(201).json({ success: true, data: university });
 });
 export const updateUniversity = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { allowedBranchIds, ...rest } = req.body;
-  const university = await prisma.university.update({
-    where: { id: req.params.id },
-    data: {
-      ...rest,
-      allowedBranches: allowedBranchIds
-        ? { set: allowedBranchIds.map((id: string) => ({ id })) }
-        : undefined
-    }
-  });
-  res.json({ success: true, data: university });
+  try {
+    const { allowedBranchIds, id, organizationId, createdAt, updatedAt, ...rest } = req.body;
+    const university = await prisma.university.update({
+      where: { id: req.params.id },
+      data: {
+        ...rest,
+        allowedBranches: allowedBranchIds
+          ? { set: allowedBranchIds.map((bid: string) => ({ id: bid })) }
+          : undefined
+      }
+    });
+    res.json({ success: true, data: university });
+  } catch (error: any) {
+    console.error("Error updating university:", error);
+    res.status(400).json({ success: false, message: error.message || 'Failed to update university' });
+  }
 });
 export const deleteUniversity = asyncHandler(async (req: AuthRequest, res: Response) => {
   await prisma.university.delete({ where: { id: req.params.id } });
@@ -286,26 +291,41 @@ export const getAdmissionSession = asyncHandler(async (req: AuthRequest, res: Re
   res.json({ success: true, data: session });
 });
 export const createAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
+  const { examDate, universityId, ...rest } = req.body;
   const data: any = { ...rest, organizationId: req.user.organizationId, createdBy: req.user.id };
+  
   if (universityId) data.universityId = universityId;
   if (req.user.role === 'ops_admin') {
     data.status = 'pending';
   }
   if (data.startDate) data.startDate = new Date(data.startDate);
   if (data.endDate) data.endDate = new Date(data.endDate);
+
+  if (data.programId && !data.universityId) {
+    const program = await prisma.program.findUnique({ where: { id: data.programId } });
+    if (program) data.universityId = program.universityId;
+  }
+  
   const session = await prisma.admissionSession.create({ data });
   res.status(201).json({ success: true, data: session });
 });
+
 export const updateAdmissionSession = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { examDate, universityId, ...rest } = req.body; // examDate not in schema — strip it
+  const { examDate, universityId, ...rest } = req.body;
   const data: any = { ...rest };
+  
   if (universityId !== undefined) data.universityId = universityId;
   if (req.user.role === 'ops_admin') {
     delete data.status;
   }
   if (data.startDate) data.startDate = new Date(data.startDate);
   if (data.endDate) data.endDate = new Date(data.endDate);
+  
+  if (data.programId && !data.universityId) {
+    const program = await prisma.program.findUnique({ where: { id: data.programId } });
+    if (program) data.universityId = program.universityId;
+  }
+  
   const session = await prisma.admissionSession.update({ where: { id: req.params.id }, data });
   res.json({ success: true, data: session });
 });

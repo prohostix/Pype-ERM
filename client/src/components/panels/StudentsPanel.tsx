@@ -419,7 +419,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       return;
     }
     const requiredDocs = getEnrollmentConfig().requiredDocuments;
-    const missingDocs = requiredDocs.filter(docType => {
+    const missingDocs = requiredDocs.filter((docType: string) => {
       const doc = (formData.documents || []).find((d: any) => d.type === docType);
       return !doc || !doc.url;
     });
@@ -1228,7 +1228,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="__none__">— No Session —</SelectItem>
-                          {sessions.filter((s: any) => s && s.id && s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId).map((s: any) => (
+                          {sessions.filter((s: any) => s && s.id && (s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId || s.programId === formData.programId)).map((s: any) => (
                             <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                           ))}
                         </SelectContent>
@@ -1840,7 +1840,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="__none__">— No Session —</SelectItem>
-                                  {sessions.filter((s: any) => s && s.id && s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId).map((s: any) => (
+                                  {sessions.filter((s: any) => s && s.id && (s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId || s.programId === formData.programId)).map((s: any) => (
                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                                   ))}
                                 </SelectContent>

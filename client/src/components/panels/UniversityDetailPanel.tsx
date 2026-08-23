@@ -40,7 +40,7 @@ export function UniversityDetailPanel({ university, onBack }: UniversityDetailPa
 
       // Filter sessions that belong to this university
       const uniSessions = allSessions.filter((s: any) => {
-        return s.universityId === university.id;
+        return s.universityId === university.id || (s.programId && programsRes.data.data?.find((p: any) => p.id === s.programId)?.universityId === university.id);
       });
 
       setPrograms(uniPrograms);

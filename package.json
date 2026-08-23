@@ -9,5 +9,8 @@
   },
   "scripts": {
     "prisma:generate": "prisma generate --schema=server/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "tesseract.js": "^7.0.0"
   }
 }
