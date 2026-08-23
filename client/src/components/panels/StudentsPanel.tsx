@@ -790,7 +790,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (sessionStr) {
         let univSessions = sessions;
         if (matchedUniv) {
-          univSessions = sessions.filter(sess => !sess.universityId || sess.universityId === matchedUniv.id);
+          univSessions = sessions.filter(sess => sess.universityId === matchedUniv.id);
         }
         matchedSession = univSessions.find(sess => sess.name.toLowerCase() === sessionStr);
         if (!matchedSession) {
@@ -1228,7 +1228,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="__none__">— No Session —</SelectItem>
-                          {sessions.filter((s: any) => s && s.id && s.programId === formData.programId).map((s: any) => (
+                          {sessions.filter((s: any) => s && s.id && s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId).map((s: any) => (
                             <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                           ))}
                         </SelectContent>
@@ -1840,7 +1840,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="__none__">— No Session —</SelectItem>
-                                  {sessions.filter((s: any) => s && s.id && s.programId === formData.programId).map((s: any) => (
+                                  {sessions.filter((s: any) => s && s.id && s.universityId === programs.find((p: any) => p.id === formData.programId)?.universityId).map((s: any) => (
                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                                   ))}
                                 </SelectContent>
@@ -2581,7 +2581,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Auto-detect from CSV</SelectItem>
-                    {sessions.filter((s: any) => s && s.id && (!s.universityId || s.universityId === bulkUniversityId)).map((s: any) => (
+                    {sessions.filter((s: any) => s && s.id && s.universityId === bulkUniversityId).map((s: any) => (
                       <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                     ))}
                   </SelectContent>
