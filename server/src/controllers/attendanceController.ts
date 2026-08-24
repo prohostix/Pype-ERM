@@ -338,7 +338,31 @@ export const getTodayAttendance = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const getMonthlyLateSummary = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: {} });
+  const month = parseInt(req.query.month as string) || new Date().getMonth() + 1;
+  const year = parseInt(req.query.year as string) || new Date().getFullYear();
+  const orgId = req.user.organizationId;
+
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0, 23, 59, 59);
+
+  const lateRecords = await prisma.attendance.findMany({
+    where: { organizationId: orgId, status: 'late', date: { gte: startDate, lte: endDate } },
+    include: { user: { select: { id: true, name: true, email: true } } },
+    orderBy: { date: 'asc' }
+  });
+
+  // Group by employee
+  const grouped: Record<string, { employee: any; lateCount: number; records: any[] }> = {};
+  for (const rec of lateRecords) {
+    const empId = rec.employeeId;
+    if (!grouped[empId]) {
+      grouped[empId] = { employee: (rec as any).user, lateCount: 0, records: [] };
+    }
+    grouped[empId].lateCount++;
+    grouped[empId].records.push(rec);
+  }
+
+  res.json({ success: true, data: Object.values(grouped), month, year });
 });
 
 export const getAttendances = asyncHandler(async (req: AuthRequest, res: Response) => {

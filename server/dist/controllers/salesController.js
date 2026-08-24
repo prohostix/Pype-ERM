@@ -254,7 +254,19 @@ export const getMyCenters = asyncHandler(async (req, res) => {
     res.json({ success: true, data: centers });
 });
 export const getMyCenterAdmissions = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: [] });
+    const centers = await prisma.studyCenter.findMany({
+        where: { organizationId: req.user.organizationId },
+        select: { id: true }
+    });
+    const centerIds = centers.map((c) => c.id);
+    const students = await prisma.student.findMany({
+        where: { centerId: { in: centerIds } },
+        orderBy: { createdAt: 'desc' },
+        include: {
+            program: { select: { id: true, name: true } }
+        }
+    });
+    res.json({ success: true, count: students.length, data: students });
 });
 export const getMyCenterDetail = asyncHandler(async (req, res) => {
     const center = await prisma.studyCenter.findUnique({ where: { id: req.params.centerId } });

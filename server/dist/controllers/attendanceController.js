@@ -296,7 +296,27 @@ export const getTodayAttendance = asyncHandler(async (req, res) => {
     res.json({ success: true, data: attendance });
 });
 export const getMonthlyLateSummary = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: {} });
+    const month = parseInt(req.query.month) || new Date().getMonth() + 1;
+    const year = parseInt(req.query.year) || new Date().getFullYear();
+    const orgId = req.user.organizationId;
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0, 23, 59, 59);
+    const lateRecords = await prisma.attendance.findMany({
+        where: { organizationId: orgId, status: 'late', date: { gte: startDate, lte: endDate } },
+        include: { user: { select: { id: true, name: true, email: true } } },
+        orderBy: { date: 'asc' }
+    });
+    // Group by employee
+    const grouped = {};
+    for (const rec of lateRecords) {
+        const empId = rec.employeeId;
+        if (!grouped[empId]) {
+            grouped[empId] = { employee: rec.user, lateCount: 0, records: [] };
+        }
+        grouped[empId].lateCount++;
+        grouped[empId].records.push(rec);
+    }
+    res.json({ success: true, data: Object.values(grouped), month, year });
 });
 export const getAttendances = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
@@ -630,5 +650,40 @@ export const getMyAttendance = asyncHandler(async (req, res) => {
 });
 export const getMyAttendanceSummary = asyncHandler(async (req, res) => {
     res.json({ success: true, data: {} });
+});
+export const getAttendanceByUserId = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    // Authorization check
+    const isSelf = req.user.id === userId;
+    const isPrivileged = ['hr_admin', 'superadmin', 'org_admin', 'ceo'].includes(req.user.role);
+    if (!isSelf && !isPrivileged) {
+        res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
+        return;
+    }
+    const { startDate, endDate } = req.query;
+    const where = {
+        employeeId: userId,
+    };
+    if (req.user.organizationId) {
+        where.organizationId = req.user.organizationId;
+    }
+    if (startDate || endDate) {
+        where.date = {};
+        if (startDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            where.date.gte = start;
+        }
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            where.date.lte = end;
+        }
+    }
+    const attendances = await prisma.attendance.findMany({
+        where,
+        orderBy: { date: 'desc' }
+    });
+    res.status(200).json({ success: true, count: attendances.length, data: attendances });
 });
 //# sourceMappingURL=attendanceController.js.map

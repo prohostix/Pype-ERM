@@ -521,13 +521,42 @@ export const deleteFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
 
 // Auth Fees
 export const getAuthFees = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: [] });
+  const fees = await prisma.universityAuthFee.findMany({
+    where: { organizationId: req.user.organizationId },
+    include: { university: { select: { id: true, name: true, code: true } } },
+    orderBy: { updatedAt: 'desc' }
+  });
+  // Flatten feeDetails JSON into top-level fields for UI compatibility
+  const mapped = fees.map(f => ({
+    ...f,
+    universityId: f.university,
+    amount: (f.feeDetails as any)?.amount ?? 0,
+    currency: (f.feeDetails as any)?.currency ?? 'INR',
+  }));
+  res.json({ success: true, data: mapped });
 });
 export const createAuthFee = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: {} });
+  const { universityId, amount, currency } = req.body;
+  if (!universityId || !amount) return res.status(400).json({ success: false, message: 'universityId and amount are required' }) as any;
+  const fee = await prisma.universityAuthFee.upsert({
+    where: { organizationId_universityId: { organizationId: req.user.organizationId, universityId } },
+    create: { organizationId: req.user.organizationId, universityId, feeDetails: { amount: Number(amount), currency: currency || 'INR' }, configuredBy: req.user.id },
+    update: { feeDetails: { amount: Number(amount), currency: currency || 'INR' }, configuredBy: req.user.id },
+    include: { university: { select: { id: true, name: true, code: true } } }
+  });
+  res.status(201).json({ success: true, data: { ...fee, universityId: fee.university, amount: Number(amount), currency: currency || 'INR' } });
 });
 export const updateAuthFee = asyncHandler(async (req: AuthRequest, res: Response) => {
-  res.json({ success: true, data: {} });
+  const { amount, currency } = req.body;
+  const existing = await prisma.universityAuthFee.findFirst({ where: { id: req.params.id, organizationId: req.user.organizationId } });
+  if (!existing) return res.status(404).json({ success: false, message: 'Auth fee not found' }) as any;
+  const prevDetails = existing.feeDetails as any;
+  const fee = await prisma.universityAuthFee.update({
+    where: { id: req.params.id },
+    data: { feeDetails: { amount: Number(amount ?? prevDetails.amount), currency: currency || prevDetails.currency || 'INR' }, configuredBy: req.user.id },
+    include: { university: { select: { id: true, name: true, code: true } } }
+  });
+  res.json({ success: true, data: { ...fee, universityId: fee.university, amount: Number(amount ?? prevDetails.amount), currency: currency || prevDetails.currency } });
 });
 
 // Centers
