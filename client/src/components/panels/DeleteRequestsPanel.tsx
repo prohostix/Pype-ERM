@@ -88,18 +88,26 @@ export function DeleteRequestsPanel() {
               </div>
             </div>
             
-            {/* Show actions based on role and request status */}
-            {((['superadmin', 'org_admin', 'ceo'].includes(user?.role as string)) || 
-              (req.status === 'pending_manager')) && (req.status === 'pending_manager' || req.status === 'pending_ceo') && (
-              <div className="flex gap-2">
-                <Button variant="outline" className="text-destructive hover:bg-destructive/10" onClick={() => handleRespond(req.id, 'rejected')}>
-                  <XCircle className="w-4 h-4 mr-2" /> Reject
-                </Button>
-                <Button variant="default" className="bg-success hover:bg-success/90" onClick={() => handleRespond(req.id, 'approved')}>
-                  <CheckCircle2 className="w-4 h-4 mr-2" /> Approve
-                </Button>
-              </div>
-            )}
+            {/* Show action buttons only when this user can act on the current stage */}
+            {(() => {
+              const role = user?.role as string;
+              const canAct =
+                (req.status === 'pending_manager' && ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin'].includes(role)) ||
+                (req.status === 'pending_ceo' && ['superadmin', 'org_admin', 'ceo'].includes(role));
+              if (!canAct) return null;
+              const isFinalApprover = ['superadmin', 'org_admin'].includes(role) || req.status === 'pending_ceo';
+              return (
+                <div className="flex gap-2">
+                  <Button variant="outline" className="text-destructive hover:bg-destructive/10" onClick={() => handleRespond(req.id, 'rejected')}>
+                    <XCircle className="w-4 h-4 mr-2" /> Reject
+                  </Button>
+                  <Button variant="default" className="bg-success hover:bg-success/90" onClick={() => handleRespond(req.id, 'approved')}>
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    {isFinalApprover ? 'Approve & Delete' : 'Approve → CEO'}
+                  </Button>
+                </div>
+              );
+            })()}
           </div>
         ))}
       </div>
