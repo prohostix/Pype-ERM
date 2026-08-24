@@ -22,6 +22,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const canViewAll = !isMyPortal && ['hr_admin', 'org_admin', 'ceo'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
+  const [holidays, setHolidays] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -138,8 +139,12 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
 
   const fetchCalendarAttendance = async (userId: string) => {
     try {
-      const response = await api.get(`/attendance/user/${userId}`);
-      setCalendarAttendance(response.data.data || []);
+      const [attendanceRes, holidaysRes] = await Promise.all([
+        api.get(`/attendance/user/${userId}`),
+        api.get('/hr/holidays')
+      ]);
+      setCalendarAttendance(attendanceRes.data.data || []);
+      setHolidays(holidaysRes.data.data || []);
     } catch (error) {
       console.error('Failed to fetch calendar attendance:', error);
     }
@@ -334,6 +339,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
           employeeId={activeEmployeeId}
           employeeName={activeEmployeeName}
           records={calendarAttendance}
+          holidays={holidays}
           onRefresh={() => fetchCalendarAttendance(activeEmployeeId)}
           onToggleView={() => setViewMode('list')}
           isHR={isHR}

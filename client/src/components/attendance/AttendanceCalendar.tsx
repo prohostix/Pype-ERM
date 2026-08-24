@@ -14,6 +14,7 @@ interface AttendanceCalendarProps {
   employeeId: string;
   employeeName: string;
   records: any[];
+  holidays: any[];
   onRefresh: () => void;
   onToggleView: () => void;
   isHR: boolean;
@@ -50,6 +51,7 @@ export function AttendanceCalendar({
   employeeId,
   employeeName,
   records,
+  holidays,
   onRefresh,
   onToggleView,
   isHR
@@ -97,22 +99,51 @@ export function AttendanceCalendar({
     calendarDays.push({ day, date: currentDate, record });
   }
 
-  // Statistics
-  let presentCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0;
+  // Build a set of holiday dates for O(1) lookups: 'YYYY-MM-DD'
+  const holidayDateSet = new Set(
+    (holidays || []).map((h: any) => {
+      const d = new Date(h.date);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    })
+  );
+
+  const isHolidayDate = (date: Date): boolean => {
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return holidayDateSet.has(key);
+  };
+
+  const isWeekOff = (date: Date): boolean => {
+    // Sunday = 0, Saturday = 6
+    return date.getDay() === 0 || date.getDay() === 6;
+  };
+
+  const isPast = (date: Date): boolean => {
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+    return date < todayMidnight;
+  };
+
+  // Statistics — count absent for days with no record, past, not weekend, not holiday
+  let presentCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0, holidayCount = 0;
   for (let day = 1; day <= totalDays; day++) {
     const date = new Date(selectedYear, selectedMonth, day);
-    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
     const record = records.find(r => {
       const recDate = new Date(r.date);
       return recDate.getFullYear() === selectedYear && recDate.getMonth() === selectedMonth && recDate.getDate() === day;
     });
+
     if (record) {
       if (record.status === 'present' || record.status === 'late') presentCount++;
       else if (record.status === 'absent') absentCount++;
       else if (record.status === 'half_day') halfDayCount++;
       else if (record.status === 'leave') leaveCount++;
-    } else if (isWeekend) {
+    } else if (isHolidayDate(date)) {
+      holidayCount++;
+    } else if (isWeekOff(date)) {
       weekOffCount++;
+    } else if (isPast(date)) {
+      // Workday in the past with no record → absent
+      absentCount++;
     }
   }
 
@@ -140,12 +171,13 @@ export function AttendanceCalendar({
       });
       setEditDialogOpen(true);
     } else {
-      // Employee → open read-only detail modal
-      if (!record) {
-        const dayOfWeek = date.getDay();
-        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-        if (isWeekend) return; // no info to show for weekends
-      }
+      // Employee → open read-only detail modal for:
+      // - Days with a record
+      // - Auto-absent days (past workday, no record)
+      // - Holidays
+      // Skip only future days and weekends with no record
+      const skipClick = !record && !isHolidayDate(date) && (!isPast(date) || isWeekOff(date));
+      if (skipClick) return;
       setDetailRecord({ day, date, record });
       setDetailOpen(true);
     }
@@ -219,7 +251,7 @@ export function AttendanceCalendar({
   const getDayColor = (dayObj: any) => {
     if (!dayObj) return 'bg-transparent border-transparent';
     const { date, record } = dayObj;
-    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
     if (record) {
       switch (record.status) {
         case 'present':
@@ -230,8 +262,12 @@ export function AttendanceCalendar({
         default:       return 'bg-slate-500 text-white';
       }
     }
-    if (isWeekend) return 'bg-slate-400 dark:bg-slate-600 text-white hover:opacity-90';
-    return 'bg-slate-100 dark:bg-slate-800/40 text-muted-foreground border border-border hover:bg-muted';
+
+    // No record — determine by date type
+    if (isHolidayDate(date)) return 'bg-orange-400 text-white hover:bg-orange-500';   // Holiday
+    if (isWeekOff(date)) return 'bg-slate-400 dark:bg-slate-600 text-white hover:opacity-90'; // Weekend
+    if (isPast(date)) return 'bg-rose-500 text-white hover:bg-rose-600'; // Auto-absent: workday, no record
+    return 'bg-slate-100 dark:bg-slate-800/40 text-muted-foreground border border-border hover:bg-muted'; // Future
   };
 
   const getApiBase = () => {
@@ -304,15 +340,16 @@ export function AttendanceCalendar({
 
       <CardContent className="pt-6 space-y-8">
         {/* Summary */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           {[
             { label: 'Present', count: presentCount, color: 'emerald' },
             { label: 'Absent', count: absentCount, color: 'rose' },
             { label: 'Half Day', count: halfDayCount, color: 'amber' },
             { label: 'Paid Leave', count: leaveCount, color: 'purple' },
-            { label: 'Week Off', count: weekOffCount, color: 'slate', span: true },
-          ].map(({ label, count, color, span }) => (
-            <div key={label} className={`flex items-center gap-3 p-3.5 rounded-xl border border-${color}-500/10 bg-${color}-500/5 ${span ? 'col-span-2 md:col-span-1' : ''}`}>
+            { label: 'Holiday', count: holidayCount, color: 'orange' },
+            { label: 'Week Off', count: weekOffCount, color: 'slate' },
+          ].map(({ label, count, color }) => (
+            <div key={label} className={`flex items-center gap-3 p-3.5 rounded-xl border border-${color}-500/10 bg-${color}-500/5`}>
               <div className={`w-2.5 h-10 bg-${color}-${color === 'slate' ? '400' : '500'} dark:bg-${color}-${color === 'slate' ? '600' : '500'} rounded-full shrink-0`} />
               <div>
                 <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">{label}</span>
@@ -361,6 +398,7 @@ export function AttendanceCalendar({
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-rose-500 inline-block" />Absent</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-500 inline-block" />Half Day</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500 inline-block" />Leave</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-orange-400 inline-block" />Holiday</span>
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-slate-400 inline-block" />Week Off</span>
           <span className="flex items-center gap-1.5"><Camera className="w-3 h-3" />Selfie attached</span>
         </div>
@@ -490,8 +528,35 @@ export function AttendanceCalendar({
               )}
             </div>
           ) : (
-            <div className="text-center py-8 text-muted-foreground text-sm">
-              No attendance record found for this day.
+            <div className="text-center py-8 text-sm">
+              {detailRecord && isHolidayDate(detailRecord.date) ? (
+                <div className="space-y-1">
+                  <p className="text-2xl">🎉</p>
+                  <p className="font-semibold text-orange-600">
+                    {holidays.find((h: any) => {
+                      const hd = new Date(h.date);
+                      return hd.getDate() === detailRecord.day &&
+                             hd.getMonth() === detailRecord.date.getMonth() &&
+                             hd.getFullYear() === detailRecord.date.getFullYear();
+                    })?.name || 'Public Holiday'}
+                  </p>
+                  <p className="text-muted-foreground text-xs">This day is a designated holiday</p>
+                </div>
+              ) : detailRecord && isWeekOff(detailRecord.date) ? (
+                <div className="space-y-1">
+                  <p className="text-2xl">😴</p>
+                  <p className="font-semibold text-slate-500">Week Off</p>
+                  <p className="text-muted-foreground text-xs">No attendance required on weekends</p>
+                </div>
+              ) : detailRecord && isPast(detailRecord.date) ? (
+                <div className="space-y-1">
+                  <p className="text-2xl">❌</p>
+                  <p className="font-semibold text-rose-600">Absent</p>
+                  <p className="text-muted-foreground text-xs">No punch-in recorded for this working day</p>
+                </div>
+              ) : (
+                <p className="text-muted-foreground">No attendance record for this day.</p>
+              )}
             </div>
           )}
         </DialogContent>
