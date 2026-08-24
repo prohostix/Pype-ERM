@@ -21,6 +21,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const isHR = !isMyPortal && user?.role === 'hr_admin';
   const canViewAll = !isMyPortal && ['hr_admin', 'org_admin', 'ceo'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
+  const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -128,6 +129,21 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
 
   const activeEmployeeId = selectedEmployeeId || user?.id?.toString() || '';
   const activeEmployeeName = employees.find(e => e.id.toString() === activeEmployeeId)?.name || user?.name || 'Employee';
+
+  useEffect(() => {
+    if (viewMode === 'calendar' && activeEmployeeId) {
+      fetchCalendarAttendance(activeEmployeeId);
+    }
+  }, [viewMode, activeEmployeeId]);
+
+  const fetchCalendarAttendance = async (userId: string) => {
+    try {
+      const response = await api.get(`/attendance/user/${userId}`);
+      setCalendarAttendance(response.data.data || []);
+    } catch (error) {
+      console.error('Failed to fetch calendar attendance:', error);
+    }
+  };
 
   const activeEmployeeRecords = attendance.filter(rec => {
     const empId = rec.employeeId?.id || rec.employeeId || rec.user?.id || '';
@@ -317,8 +333,8 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
         <AttendanceCalendar
           employeeId={activeEmployeeId}
           employeeName={activeEmployeeName}
-          records={activeEmployeeRecords}
-          onRefresh={fetchAttendance}
+          records={calendarAttendance}
+          onRefresh={() => fetchCalendarAttendance(activeEmployeeId)}
           onToggleView={() => setViewMode('list')}
           isHR={isHR}
         />

@@ -685,3 +685,46 @@ export const getMyAttendance = asyncHandler(async (req: AuthRequest, res: Respon
 export const getMyAttendanceSummary = asyncHandler(async (req: AuthRequest, res: Response) => {
   res.json({ success: true, data: {} });
 });
+
+export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { userId } = req.params;
+  
+  // Authorization check
+  const isSelf = req.user.id === userId;
+  const isPrivileged = ['hr_admin', 'superadmin', 'org_admin', 'ceo'].includes(req.user.role);
+  
+  if (!isSelf && !isPrivileged) {
+    res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
+    return;
+  }
+
+  const { startDate, endDate } = req.query;
+  const where: any = {
+    employeeId: userId,
+  };
+
+  if (req.user.organizationId) {
+    where.organizationId = req.user.organizationId;
+  }
+
+  if (startDate || endDate) {
+    where.date = {};
+    if (startDate) {
+      const start = new Date(startDate as string);
+      start.setHours(0, 0, 0, 0);
+      where.date.gte = start;
+    }
+    if (endDate) {
+      const end = new Date(endDate as string);
+      end.setHours(23, 59, 59, 999);
+      where.date.lte = end;
+    }
+  }
+
+  const attendances = await prisma.attendance.findMany({
+    where,
+    orderBy: { date: 'desc' }
+  });
+
+  res.status(200).json({ success: true, count: attendances.length, data: attendances });
+});

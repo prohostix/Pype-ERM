@@ -12,6 +12,7 @@ import {
   getHRSettings,
   createOrUpdateHRSettings,
   biometricSync,
+  getAttendanceByUserId,
 } from '../controllers/attendanceController.js';
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.post('/punch-in', protect, punchIn);
 router.post('/punch-out', protect, punchOut);
 router.get('/today', protect, getTodayAttendance);
 router.get('/late-summary', protect, getMonthlyLateSummary);
+router.get('/user/:userId', protect, getAttendanceByUserId);
 
 // HR routes - view all attendances
 router.get('/', protect, authorize('hr_admin', 'superadmin'), getAttendances);
