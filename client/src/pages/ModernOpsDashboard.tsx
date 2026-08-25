@@ -235,35 +235,35 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
           value={metrics.pendingApplications || 0} 
           icon={<PlusCircle className="w-5 h-5 text-success" />}
           bgColor="bg-success/10"
-          onClick={() => onNavigate('students')}
+          onClick={() => onNavigate('admission_review')}
         />
         <OpsMetricCard 
           title="Uni Submission Pending" 
           value={metrics.uniSubmissionsPending || 0} 
           icon={<Building2 className="w-5 h-5 text-warning" />}
           bgColor="bg-warning/10"
-          onClick={() => onNavigate('students')}
+          onClick={() => onNavigate('university_submission')}
         />
         <OpsMetricCard 
           title="Enrollment No Pending" 
           value={metrics.enrollmentNumbersPending || 0} 
           icon={<Hash className="w-5 h-5 text-indigo-500" />}
           bgColor="bg-indigo-500/10"
-          onClick={() => onNavigate('students')}
+          onClick={() => onNavigate('enrollment_number_update')}
         />
         <OpsMetricCard 
           title="Documents Pending" 
           value={metrics.documentsPending || 0} 
           icon={<FileText className="w-5 h-5 text-rose-500" />}
           bgColor="bg-rose-500/10"
-          onClick={() => onNavigate('students')}
+          onClick={() => onNavigate('document_received')}
         />
         <OpsMetricCard 
           title="Re-registration Pending" 
           value={metrics.reRegistrationPending || 0} 
           icon={<RefreshCw className="w-5 h-5 text-amber-600" />}
           bgColor="bg-amber-600/10"
-          onClick={() => onNavigate('students')}
+          onClick={() => onNavigate('re_registration')}
         />
         <OpsMetricCard 
           title="Admission Closing Alerts" 
