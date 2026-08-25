@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MessageCircle, Send, Users, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import api from '@/lib/api';
 
 export function BulkWhatsAppPanel() {
   const [loading, setLoading] = useState(false);
@@ -20,8 +21,7 @@ export function BulkWhatsAppPanel() {
     
     setLoading(true);
     try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await api.post('/communications/whatsapp', { message, recipientCount });
       toast.success('Bulk WhatsApp campaign started successfully!');
       setMessage('');
     } catch (e) {

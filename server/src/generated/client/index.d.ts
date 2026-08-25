@@ -333,6 +333,16 @@ export type DocumentLog = $Result.DefaultSelection<Prisma.$DocumentLogPayload>
  * 
  */
 export type BiometricDevice = $Result.DefaultSelection<Prisma.$BiometricDevicePayload>
+/**
+ * Model ExamRegistration
+ * 
+ */
+export type ExamRegistration = $Result.DefaultSelection<Prisma.$ExamRegistrationPayload>
+/**
+ * Model CommunicationLog
+ * 
+ */
+export type CommunicationLog = $Result.DefaultSelection<Prisma.$CommunicationLogPayload>
 
 /**
  * Enums
@@ -1468,6 +1478,26 @@ export class PrismaClient<
     * ```
     */
   get biometricDevice(): Prisma.BiometricDeviceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.examRegistration`: Exposes CRUD operations for the **ExamRegistration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExamRegistrations
+    * const examRegistrations = await prisma.examRegistration.findMany()
+    * ```
+    */
+  get examRegistration(): Prisma.ExamRegistrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.communicationLog`: Exposes CRUD operations for the **CommunicationLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CommunicationLogs
+    * const communicationLogs = await prisma.communicationLog.findMany()
+    * ```
+    */
+  get communicationLog(): Prisma.CommunicationLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1965,7 +1995,9 @@ export namespace Prisma {
     UniversityPayment: 'UniversityPayment',
     Asset: 'Asset',
     DocumentLog: 'DocumentLog',
-    BiometricDevice: 'BiometricDevice'
+    BiometricDevice: 'BiometricDevice',
+    ExamRegistration: 'ExamRegistration',
+    CommunicationLog: 'CommunicationLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1981,7 +2013,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6721,6 +6753,154 @@ export namespace Prisma {
           }
         }
       }
+      ExamRegistration: {
+        payload: Prisma.$ExamRegistrationPayload<ExtArgs>
+        fields: Prisma.ExamRegistrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExamRegistrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExamRegistrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          findFirst: {
+            args: Prisma.ExamRegistrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExamRegistrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          findMany: {
+            args: Prisma.ExamRegistrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>[]
+          }
+          create: {
+            args: Prisma.ExamRegistrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          createMany: {
+            args: Prisma.ExamRegistrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ExamRegistrationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>[]
+          }
+          delete: {
+            args: Prisma.ExamRegistrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          update: {
+            args: Prisma.ExamRegistrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExamRegistrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExamRegistrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ExamRegistrationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ExamRegistrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExamRegistrationPayload>
+          }
+          aggregate: {
+            args: Prisma.ExamRegistrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExamRegistration>
+          }
+          groupBy: {
+            args: Prisma.ExamRegistrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExamRegistrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ExamRegistrationCountArgs<ExtArgs>
+            result: $Utils.Optional<ExamRegistrationCountAggregateOutputType> | number
+          }
+        }
+      }
+      CommunicationLog: {
+        payload: Prisma.$CommunicationLogPayload<ExtArgs>
+        fields: Prisma.CommunicationLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CommunicationLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CommunicationLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          findFirst: {
+            args: Prisma.CommunicationLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CommunicationLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          findMany: {
+            args: Prisma.CommunicationLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>[]
+          }
+          create: {
+            args: Prisma.CommunicationLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          createMany: {
+            args: Prisma.CommunicationLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CommunicationLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>[]
+          }
+          delete: {
+            args: Prisma.CommunicationLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          update: {
+            args: Prisma.CommunicationLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.CommunicationLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CommunicationLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CommunicationLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.CommunicationLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommunicationLogPayload>
+          }
+          aggregate: {
+            args: Prisma.CommunicationLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCommunicationLog>
+          }
+          groupBy: {
+            args: Prisma.CommunicationLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CommunicationLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CommunicationLogCountArgs<ExtArgs>
+            result: $Utils.Optional<CommunicationLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6893,6 +7073,8 @@ export namespace Prisma {
     asset?: AssetOmit
     documentLog?: DocumentLogOmit
     biometricDevice?: BiometricDeviceOmit
+    examRegistration?: ExamRegistrationOmit
+    communicationLog?: CommunicationLogOmit
   }
 
   /* Types for Logging */
@@ -7030,6 +7212,8 @@ export namespace Prisma {
     vacancies: number
     walletTopUps: number
     biometricDevices: number
+    examRegistrations: number
+    communicationLogs: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7090,6 +7274,8 @@ export namespace Prisma {
     vacancies?: boolean | OrganizationCountOutputTypeCountVacanciesArgs
     walletTopUps?: boolean | OrganizationCountOutputTypeCountWalletTopUpsArgs
     biometricDevices?: boolean | OrganizationCountOutputTypeCountBiometricDevicesArgs
+    examRegistrations?: boolean | OrganizationCountOutputTypeCountExamRegistrationsArgs
+    communicationLogs?: boolean | OrganizationCountOutputTypeCountCommunicationLogsArgs
   }
 
   // Custom InputTypes
@@ -7502,6 +7688,20 @@ export namespace Prisma {
     where?: BiometricDeviceWhereInput
   }
 
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountExamRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExamRegistrationWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountCommunicationLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunicationLogWhereInput
+  }
+
 
   /**
    * Count Type LicenseCountOutputType
@@ -7722,6 +7922,7 @@ export namespace Prisma {
     verifiedWalletTopUps: number
     assistantManagedDepartments: number
     designations: number
+    communicationLogs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7796,6 +7997,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: boolean | UserCountOutputTypeCountVerifiedWalletTopUpsArgs
     assistantManagedDepartments?: boolean | UserCountOutputTypeCountAssistantManagedDepartmentsArgs
     designations?: boolean | UserCountOutputTypeCountDesignationsArgs
+    communicationLogs?: boolean | UserCountOutputTypeCountCommunicationLogsArgs
   }
 
   // Custom InputTypes
@@ -8306,6 +8508,13 @@ export namespace Prisma {
     where?: DesignationWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCommunicationLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunicationLogWhereInput
+  }
+
 
   /**
    * Count Type TaskCountOutputType
@@ -8723,6 +8932,7 @@ export namespace Prisma {
     paymentSchedules: number
     commissions: number
     universityPayments: number
+    examRegistrations: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8734,6 +8944,7 @@ export namespace Prisma {
     paymentSchedules?: boolean | StudentCountOutputTypeCountPaymentSchedulesArgs
     commissions?: boolean | StudentCountOutputTypeCountCommissionsArgs
     universityPayments?: boolean | StudentCountOutputTypeCountUniversityPaymentsArgs
+    examRegistrations?: boolean | StudentCountOutputTypeCountExamRegistrationsArgs
   }
 
   // Custom InputTypes
@@ -8801,6 +9012,13 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountUniversityPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UniversityPaymentWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountExamRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExamRegistrationWhereInput
   }
 
 
@@ -9457,6 +9675,8 @@ export namespace Prisma {
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
+    examRegistrations?: boolean | Organization$examRegistrationsArgs<ExtArgs>
+    communicationLogs?: boolean | Organization$communicationLogsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -9568,6 +9788,8 @@ export namespace Prisma {
     vacancies?: boolean | Organization$vacanciesArgs<ExtArgs>
     walletTopUps?: boolean | Organization$walletTopUpsArgs<ExtArgs>
     biometricDevices?: boolean | Organization$biometricDevicesArgs<ExtArgs>
+    examRegistrations?: boolean | Organization$examRegistrationsArgs<ExtArgs>
+    communicationLogs?: boolean | Organization$communicationLogsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9639,6 +9861,8 @@ export namespace Prisma {
       vacancies: Prisma.$VacancyPayload<ExtArgs>[]
       walletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
       biometricDevices: Prisma.$BiometricDevicePayload<ExtArgs>[]
+      examRegistrations: Prisma.$ExamRegistrationPayload<ExtArgs>[]
+      communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10106,6 +10330,8 @@ export namespace Prisma {
     vacancies<T extends Organization$vacanciesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$vacanciesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VacancyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     walletTopUps<T extends Organization$walletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$walletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     biometricDevices<T extends Organization$biometricDevicesArgs<ExtArgs> = {}>(args?: Subset<T, Organization$biometricDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BiometricDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    examRegistrations<T extends Organization$examRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$examRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    communicationLogs<T extends Organization$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11951,6 +12177,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BiometricDeviceScalarFieldEnum | BiometricDeviceScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.examRegistrations
+   */
+  export type Organization$examRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    where?: ExamRegistrationWhereInput
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    cursor?: ExamRegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExamRegistrationScalarFieldEnum | ExamRegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.communicationLogs
+   */
+  export type Organization$communicationLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    where?: CommunicationLogWhereInput
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    cursor?: CommunicationLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
   }
 
   /**
@@ -15112,6 +15386,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: boolean | User$verifiedWalletTopUpsArgs<ExtArgs>
     assistantManagedDepartments?: boolean | User$assistantManagedDepartmentsArgs<ExtArgs>
     designations?: boolean | User$designationsArgs<ExtArgs>
+    communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -15306,6 +15581,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: boolean | User$verifiedWalletTopUpsArgs<ExtArgs>
     assistantManagedDepartments?: boolean | User$assistantManagedDepartmentsArgs<ExtArgs>
     designations?: boolean | User$designationsArgs<ExtArgs>
+    communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15415,6 +15691,7 @@ export namespace Prisma {
       verifiedWalletTopUps: Prisma.$WalletTopUpPayload<ExtArgs>[]
       assistantManagedDepartments: Prisma.$DepartmentPayload<ExtArgs>[]
       designations: Prisma.$DesignationPayload<ExtArgs>[]
+      communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15923,6 +16200,7 @@ export namespace Prisma {
     verifiedWalletTopUps<T extends User$verifiedWalletTopUpsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedWalletTopUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTopUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assistantManagedDepartments<T extends User$assistantManagedDepartmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assistantManagedDepartmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     designations<T extends User$designationsArgs<ExtArgs> = {}>(args?: Subset<T, User$designationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DesignationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    communicationLogs<T extends User$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18347,6 +18625,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DesignationScalarFieldEnum | DesignationScalarFieldEnum[]
+  }
+
+  /**
+   * User.communicationLogs
+   */
+  export type User$communicationLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    where?: CommunicationLogWhereInput
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    cursor?: CommunicationLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
   }
 
   /**
@@ -27363,6 +27665,7 @@ export namespace Prisma {
     university?: boolean | Student$universityArgs<ExtArgs>
     commissions?: boolean | Student$commissionsArgs<ExtArgs>
     universityPayments?: boolean | Student$universityPaymentsArgs<ExtArgs>
+    examRegistrations?: boolean | Student$examRegistrationsArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -27547,6 +27850,7 @@ export namespace Prisma {
     university?: boolean | Student$universityArgs<ExtArgs>
     commissions?: boolean | Student$commissionsArgs<ExtArgs>
     universityPayments?: boolean | Student$universityPaymentsArgs<ExtArgs>
+    examRegistrations?: boolean | Student$examRegistrationsArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27592,6 +27896,7 @@ export namespace Prisma {
       university: Prisma.$UniversityPayload<ExtArgs> | null
       commissions: Prisma.$UniversityCommissionPayload<ExtArgs>[]
       universityPayments: Prisma.$UniversityPaymentPayload<ExtArgs>[]
+      examRegistrations: Prisma.$ExamRegistrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -28050,6 +28355,7 @@ export namespace Prisma {
     university<T extends Student$universityArgs<ExtArgs> = {}>(args?: Subset<T, Student$universityArgs<ExtArgs>>): Prisma__UniversityClient<$Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     commissions<T extends Student$commissionsArgs<ExtArgs> = {}>(args?: Subset<T, Student$commissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityCommissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     universityPayments<T extends Student$universityPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, Student$universityPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UniversityPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    examRegistrations<T extends Student$examRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$examRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28828,6 +29134,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UniversityPaymentScalarFieldEnum | UniversityPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Student.examRegistrations
+   */
+  export type Student$examRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    where?: ExamRegistrationWhereInput
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    cursor?: ExamRegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExamRegistrationScalarFieldEnum | ExamRegistrationScalarFieldEnum[]
   }
 
   /**
@@ -94238,6 +94568,2299 @@ export namespace Prisma {
 
 
   /**
+   * Model ExamRegistration
+   */
+
+  export type AggregateExamRegistration = {
+    _count: ExamRegistrationCountAggregateOutputType | null
+    _min: ExamRegistrationMinAggregateOutputType | null
+    _max: ExamRegistrationMaxAggregateOutputType | null
+  }
+
+  export type ExamRegistrationMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    semester: string | null
+    subjectCodes: string | null
+    examCenter: string | null
+    status: string | null
+    registrationDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ExamRegistrationMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    studentId: string | null
+    semester: string | null
+    subjectCodes: string | null
+    examCenter: string | null
+    status: string | null
+    registrationDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ExamRegistrationCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    studentId: number
+    semester: number
+    subjectCodes: number
+    examCenter: number
+    status: number
+    registrationDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ExamRegistrationMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    semester?: true
+    subjectCodes?: true
+    examCenter?: true
+    status?: true
+    registrationDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ExamRegistrationMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    semester?: true
+    subjectCodes?: true
+    examCenter?: true
+    status?: true
+    registrationDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ExamRegistrationCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    studentId?: true
+    semester?: true
+    subjectCodes?: true
+    examCenter?: true
+    status?: true
+    registrationDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ExamRegistrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExamRegistration to aggregate.
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExamRegistrations to fetch.
+     */
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExamRegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExamRegistrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExamRegistrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExamRegistrations
+    **/
+    _count?: true | ExamRegistrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExamRegistrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExamRegistrationMaxAggregateInputType
+  }
+
+  export type GetExamRegistrationAggregateType<T extends ExamRegistrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateExamRegistration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExamRegistration[P]>
+      : GetScalarType<T[P], AggregateExamRegistration[P]>
+  }
+
+
+
+
+  export type ExamRegistrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExamRegistrationWhereInput
+    orderBy?: ExamRegistrationOrderByWithAggregationInput | ExamRegistrationOrderByWithAggregationInput[]
+    by: ExamRegistrationScalarFieldEnum[] | ExamRegistrationScalarFieldEnum
+    having?: ExamRegistrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExamRegistrationCountAggregateInputType | true
+    _min?: ExamRegistrationMinAggregateInputType
+    _max?: ExamRegistrationMaxAggregateInputType
+  }
+
+  export type ExamRegistrationGroupByOutputType = {
+    id: string
+    organizationId: string
+    studentId: string
+    semester: string
+    subjectCodes: string
+    examCenter: string | null
+    status: string
+    registrationDate: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: ExamRegistrationCountAggregateOutputType | null
+    _min: ExamRegistrationMinAggregateOutputType | null
+    _max: ExamRegistrationMaxAggregateOutputType | null
+  }
+
+  type GetExamRegistrationGroupByPayload<T extends ExamRegistrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExamRegistrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExamRegistrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExamRegistrationGroupByOutputType[P]>
+            : GetScalarType<T[P], ExamRegistrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExamRegistrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    semester?: boolean
+    subjectCodes?: boolean
+    examCenter?: boolean
+    status?: boolean
+    registrationDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["examRegistration"]>
+
+  export type ExamRegistrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    semester?: boolean
+    subjectCodes?: boolean
+    examCenter?: boolean
+    status?: boolean
+    registrationDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["examRegistration"]>
+
+  export type ExamRegistrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    semester?: boolean
+    subjectCodes?: boolean
+    examCenter?: boolean
+    status?: boolean
+    registrationDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["examRegistration"]>
+
+  export type ExamRegistrationSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    studentId?: boolean
+    semester?: boolean
+    subjectCodes?: boolean
+    examCenter?: boolean
+    status?: boolean
+    registrationDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ExamRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "semester" | "subjectCodes" | "examCenter" | "status" | "registrationDate" | "createdAt" | "updatedAt", ExtArgs["result"]["examRegistration"]>
+  export type ExamRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type ExamRegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type ExamRegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+
+  export type $ExamRegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExamRegistration"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      student: Prisma.$StudentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      studentId: string
+      semester: string
+      subjectCodes: string
+      examCenter: string | null
+      status: string
+      registrationDate: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["examRegistration"]>
+    composites: {}
+  }
+
+  type ExamRegistrationGetPayload<S extends boolean | null | undefined | ExamRegistrationDefaultArgs> = $Result.GetResult<Prisma.$ExamRegistrationPayload, S>
+
+  type ExamRegistrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExamRegistrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExamRegistrationCountAggregateInputType | true
+    }
+
+  export interface ExamRegistrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExamRegistration'], meta: { name: 'ExamRegistration' } }
+    /**
+     * Find zero or one ExamRegistration that matches the filter.
+     * @param {ExamRegistrationFindUniqueArgs} args - Arguments to find a ExamRegistration
+     * @example
+     * // Get one ExamRegistration
+     * const examRegistration = await prisma.examRegistration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExamRegistrationFindUniqueArgs>(args: SelectSubset<T, ExamRegistrationFindUniqueArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExamRegistration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExamRegistrationFindUniqueOrThrowArgs} args - Arguments to find a ExamRegistration
+     * @example
+     * // Get one ExamRegistration
+     * const examRegistration = await prisma.examRegistration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExamRegistrationFindUniqueOrThrowArgs>(args: SelectSubset<T, ExamRegistrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExamRegistration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationFindFirstArgs} args - Arguments to find a ExamRegistration
+     * @example
+     * // Get one ExamRegistration
+     * const examRegistration = await prisma.examRegistration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExamRegistrationFindFirstArgs>(args?: SelectSubset<T, ExamRegistrationFindFirstArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExamRegistration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationFindFirstOrThrowArgs} args - Arguments to find a ExamRegistration
+     * @example
+     * // Get one ExamRegistration
+     * const examRegistration = await prisma.examRegistration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExamRegistrationFindFirstOrThrowArgs>(args?: SelectSubset<T, ExamRegistrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExamRegistrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExamRegistrations
+     * const examRegistrations = await prisma.examRegistration.findMany()
+     * 
+     * // Get first 10 ExamRegistrations
+     * const examRegistrations = await prisma.examRegistration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const examRegistrationWithIdOnly = await prisma.examRegistration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ExamRegistrationFindManyArgs>(args?: SelectSubset<T, ExamRegistrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExamRegistration.
+     * @param {ExamRegistrationCreateArgs} args - Arguments to create a ExamRegistration.
+     * @example
+     * // Create one ExamRegistration
+     * const ExamRegistration = await prisma.examRegistration.create({
+     *   data: {
+     *     // ... data to create a ExamRegistration
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExamRegistrationCreateArgs>(args: SelectSubset<T, ExamRegistrationCreateArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExamRegistrations.
+     * @param {ExamRegistrationCreateManyArgs} args - Arguments to create many ExamRegistrations.
+     * @example
+     * // Create many ExamRegistrations
+     * const examRegistration = await prisma.examRegistration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExamRegistrationCreateManyArgs>(args?: SelectSubset<T, ExamRegistrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ExamRegistrations and returns the data saved in the database.
+     * @param {ExamRegistrationCreateManyAndReturnArgs} args - Arguments to create many ExamRegistrations.
+     * @example
+     * // Create many ExamRegistrations
+     * const examRegistration = await prisma.examRegistration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ExamRegistrations and only return the `id`
+     * const examRegistrationWithIdOnly = await prisma.examRegistration.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ExamRegistrationCreateManyAndReturnArgs>(args?: SelectSubset<T, ExamRegistrationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ExamRegistration.
+     * @param {ExamRegistrationDeleteArgs} args - Arguments to delete one ExamRegistration.
+     * @example
+     * // Delete one ExamRegistration
+     * const ExamRegistration = await prisma.examRegistration.delete({
+     *   where: {
+     *     // ... filter to delete one ExamRegistration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExamRegistrationDeleteArgs>(args: SelectSubset<T, ExamRegistrationDeleteArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExamRegistration.
+     * @param {ExamRegistrationUpdateArgs} args - Arguments to update one ExamRegistration.
+     * @example
+     * // Update one ExamRegistration
+     * const examRegistration = await prisma.examRegistration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExamRegistrationUpdateArgs>(args: SelectSubset<T, ExamRegistrationUpdateArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExamRegistrations.
+     * @param {ExamRegistrationDeleteManyArgs} args - Arguments to filter ExamRegistrations to delete.
+     * @example
+     * // Delete a few ExamRegistrations
+     * const { count } = await prisma.examRegistration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExamRegistrationDeleteManyArgs>(args?: SelectSubset<T, ExamRegistrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExamRegistrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExamRegistrations
+     * const examRegistration = await prisma.examRegistration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExamRegistrationUpdateManyArgs>(args: SelectSubset<T, ExamRegistrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExamRegistrations and returns the data updated in the database.
+     * @param {ExamRegistrationUpdateManyAndReturnArgs} args - Arguments to update many ExamRegistrations.
+     * @example
+     * // Update many ExamRegistrations
+     * const examRegistration = await prisma.examRegistration.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ExamRegistrations and only return the `id`
+     * const examRegistrationWithIdOnly = await prisma.examRegistration.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ExamRegistrationUpdateManyAndReturnArgs>(args: SelectSubset<T, ExamRegistrationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ExamRegistration.
+     * @param {ExamRegistrationUpsertArgs} args - Arguments to update or create a ExamRegistration.
+     * @example
+     * // Update or create a ExamRegistration
+     * const examRegistration = await prisma.examRegistration.upsert({
+     *   create: {
+     *     // ... data to create a ExamRegistration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExamRegistration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExamRegistrationUpsertArgs>(args: SelectSubset<T, ExamRegistrationUpsertArgs<ExtArgs>>): Prisma__ExamRegistrationClient<$Result.GetResult<Prisma.$ExamRegistrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ExamRegistrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationCountArgs} args - Arguments to filter ExamRegistrations to count.
+     * @example
+     * // Count the number of ExamRegistrations
+     * const count = await prisma.examRegistration.count({
+     *   where: {
+     *     // ... the filter for the ExamRegistrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExamRegistrationCountArgs>(
+      args?: Subset<T, ExamRegistrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExamRegistrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExamRegistration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExamRegistrationAggregateArgs>(args: Subset<T, ExamRegistrationAggregateArgs>): Prisma.PrismaPromise<GetExamRegistrationAggregateType<T>>
+
+    /**
+     * Group by ExamRegistration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExamRegistrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExamRegistrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExamRegistrationGroupByArgs['orderBy'] }
+        : { orderBy?: ExamRegistrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExamRegistrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExamRegistrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExamRegistration model
+   */
+  readonly fields: ExamRegistrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExamRegistration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExamRegistrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExamRegistration model
+   */
+  interface ExamRegistrationFieldRefs {
+    readonly id: FieldRef<"ExamRegistration", 'String'>
+    readonly organizationId: FieldRef<"ExamRegistration", 'String'>
+    readonly studentId: FieldRef<"ExamRegistration", 'String'>
+    readonly semester: FieldRef<"ExamRegistration", 'String'>
+    readonly subjectCodes: FieldRef<"ExamRegistration", 'String'>
+    readonly examCenter: FieldRef<"ExamRegistration", 'String'>
+    readonly status: FieldRef<"ExamRegistration", 'String'>
+    readonly registrationDate: FieldRef<"ExamRegistration", 'DateTime'>
+    readonly createdAt: FieldRef<"ExamRegistration", 'DateTime'>
+    readonly updatedAt: FieldRef<"ExamRegistration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExamRegistration findUnique
+   */
+  export type ExamRegistrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExamRegistration to fetch.
+     */
+    where: ExamRegistrationWhereUniqueInput
+  }
+
+  /**
+   * ExamRegistration findUniqueOrThrow
+   */
+  export type ExamRegistrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExamRegistration to fetch.
+     */
+    where: ExamRegistrationWhereUniqueInput
+  }
+
+  /**
+   * ExamRegistration findFirst
+   */
+  export type ExamRegistrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExamRegistration to fetch.
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExamRegistrations to fetch.
+     */
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExamRegistrations.
+     */
+    cursor?: ExamRegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExamRegistrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExamRegistrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExamRegistrations.
+     */
+    distinct?: ExamRegistrationScalarFieldEnum | ExamRegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * ExamRegistration findFirstOrThrow
+   */
+  export type ExamRegistrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExamRegistration to fetch.
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExamRegistrations to fetch.
+     */
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExamRegistrations.
+     */
+    cursor?: ExamRegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExamRegistrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExamRegistrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExamRegistrations.
+     */
+    distinct?: ExamRegistrationScalarFieldEnum | ExamRegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * ExamRegistration findMany
+   */
+  export type ExamRegistrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ExamRegistrations to fetch.
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExamRegistrations to fetch.
+     */
+    orderBy?: ExamRegistrationOrderByWithRelationInput | ExamRegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExamRegistrations.
+     */
+    cursor?: ExamRegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExamRegistrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExamRegistrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExamRegistrations.
+     */
+    distinct?: ExamRegistrationScalarFieldEnum | ExamRegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * ExamRegistration create
+   */
+  export type ExamRegistrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExamRegistration.
+     */
+    data: XOR<ExamRegistrationCreateInput, ExamRegistrationUncheckedCreateInput>
+  }
+
+  /**
+   * ExamRegistration createMany
+   */
+  export type ExamRegistrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExamRegistrations.
+     */
+    data: ExamRegistrationCreateManyInput | ExamRegistrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ExamRegistration createManyAndReturn
+   */
+  export type ExamRegistrationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ExamRegistrations.
+     */
+    data: ExamRegistrationCreateManyInput | ExamRegistrationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExamRegistration update
+   */
+  export type ExamRegistrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExamRegistration.
+     */
+    data: XOR<ExamRegistrationUpdateInput, ExamRegistrationUncheckedUpdateInput>
+    /**
+     * Choose, which ExamRegistration to update.
+     */
+    where: ExamRegistrationWhereUniqueInput
+  }
+
+  /**
+   * ExamRegistration updateMany
+   */
+  export type ExamRegistrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExamRegistrations.
+     */
+    data: XOR<ExamRegistrationUpdateManyMutationInput, ExamRegistrationUncheckedUpdateManyInput>
+    /**
+     * Filter which ExamRegistrations to update
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * Limit how many ExamRegistrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExamRegistration updateManyAndReturn
+   */
+  export type ExamRegistrationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * The data used to update ExamRegistrations.
+     */
+    data: XOR<ExamRegistrationUpdateManyMutationInput, ExamRegistrationUncheckedUpdateManyInput>
+    /**
+     * Filter which ExamRegistrations to update
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * Limit how many ExamRegistrations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ExamRegistration upsert
+   */
+  export type ExamRegistrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExamRegistration to update in case it exists.
+     */
+    where: ExamRegistrationWhereUniqueInput
+    /**
+     * In case the ExamRegistration found by the `where` argument doesn't exist, create a new ExamRegistration with this data.
+     */
+    create: XOR<ExamRegistrationCreateInput, ExamRegistrationUncheckedCreateInput>
+    /**
+     * In case the ExamRegistration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExamRegistrationUpdateInput, ExamRegistrationUncheckedUpdateInput>
+  }
+
+  /**
+   * ExamRegistration delete
+   */
+  export type ExamRegistrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+    /**
+     * Filter which ExamRegistration to delete.
+     */
+    where: ExamRegistrationWhereUniqueInput
+  }
+
+  /**
+   * ExamRegistration deleteMany
+   */
+  export type ExamRegistrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExamRegistrations to delete
+     */
+    where?: ExamRegistrationWhereInput
+    /**
+     * Limit how many ExamRegistrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExamRegistration without action
+   */
+  export type ExamRegistrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExamRegistration
+     */
+    select?: ExamRegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExamRegistration
+     */
+    omit?: ExamRegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamRegistrationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CommunicationLog
+   */
+
+  export type AggregateCommunicationLog = {
+    _count: CommunicationLogCountAggregateOutputType | null
+    _avg: CommunicationLogAvgAggregateOutputType | null
+    _sum: CommunicationLogSumAggregateOutputType | null
+    _min: CommunicationLogMinAggregateOutputType | null
+    _max: CommunicationLogMaxAggregateOutputType | null
+  }
+
+  export type CommunicationLogAvgAggregateOutputType = {
+    recipientCount: number | null
+  }
+
+  export type CommunicationLogSumAggregateOutputType = {
+    recipientCount: number | null
+  }
+
+  export type CommunicationLogMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    type: string | null
+    recipientCount: number | null
+    content: string | null
+    status: string | null
+    sentBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CommunicationLogMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    type: string | null
+    recipientCount: number | null
+    content: string | null
+    status: string | null
+    sentBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CommunicationLogCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    type: number
+    recipientCount: number
+    content: number
+    status: number
+    sentBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CommunicationLogAvgAggregateInputType = {
+    recipientCount?: true
+  }
+
+  export type CommunicationLogSumAggregateInputType = {
+    recipientCount?: true
+  }
+
+  export type CommunicationLogMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    recipientCount?: true
+    content?: true
+    status?: true
+    sentBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CommunicationLogMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    recipientCount?: true
+    content?: true
+    status?: true
+    sentBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CommunicationLogCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    recipientCount?: true
+    content?: true
+    status?: true
+    sentBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CommunicationLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommunicationLog to aggregate.
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunicationLogs to fetch.
+     */
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CommunicationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunicationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunicationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CommunicationLogs
+    **/
+    _count?: true | CommunicationLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CommunicationLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CommunicationLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CommunicationLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CommunicationLogMaxAggregateInputType
+  }
+
+  export type GetCommunicationLogAggregateType<T extends CommunicationLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateCommunicationLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCommunicationLog[P]>
+      : GetScalarType<T[P], AggregateCommunicationLog[P]>
+  }
+
+
+
+
+  export type CommunicationLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommunicationLogWhereInput
+    orderBy?: CommunicationLogOrderByWithAggregationInput | CommunicationLogOrderByWithAggregationInput[]
+    by: CommunicationLogScalarFieldEnum[] | CommunicationLogScalarFieldEnum
+    having?: CommunicationLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CommunicationLogCountAggregateInputType | true
+    _avg?: CommunicationLogAvgAggregateInputType
+    _sum?: CommunicationLogSumAggregateInputType
+    _min?: CommunicationLogMinAggregateInputType
+    _max?: CommunicationLogMaxAggregateInputType
+  }
+
+  export type CommunicationLogGroupByOutputType = {
+    id: string
+    organizationId: string
+    type: string
+    recipientCount: number
+    content: string | null
+    status: string
+    sentBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: CommunicationLogCountAggregateOutputType | null
+    _avg: CommunicationLogAvgAggregateOutputType | null
+    _sum: CommunicationLogSumAggregateOutputType | null
+    _min: CommunicationLogMinAggregateOutputType | null
+    _max: CommunicationLogMaxAggregateOutputType | null
+  }
+
+  type GetCommunicationLogGroupByPayload<T extends CommunicationLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CommunicationLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CommunicationLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CommunicationLogGroupByOutputType[P]>
+            : GetScalarType<T[P], CommunicationLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CommunicationLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    recipientCount?: boolean
+    content?: boolean
+    status?: boolean
+    sentBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communicationLog"]>
+
+  export type CommunicationLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    recipientCount?: boolean
+    content?: boolean
+    status?: boolean
+    sentBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communicationLog"]>
+
+  export type CommunicationLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    recipientCount?: boolean
+    content?: boolean
+    status?: boolean
+    sentBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["communicationLog"]>
+
+  export type CommunicationLogSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    recipientCount?: boolean
+    content?: boolean
+    status?: boolean
+    sentBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CommunicationLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "type" | "recipientCount" | "content" | "status" | "sentBy" | "createdAt" | "updatedAt", ExtArgs["result"]["communicationLog"]>
+  export type CommunicationLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CommunicationLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CommunicationLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CommunicationLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CommunicationLog"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      sender: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      type: string
+      recipientCount: number
+      content: string | null
+      status: string
+      sentBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["communicationLog"]>
+    composites: {}
+  }
+
+  type CommunicationLogGetPayload<S extends boolean | null | undefined | CommunicationLogDefaultArgs> = $Result.GetResult<Prisma.$CommunicationLogPayload, S>
+
+  type CommunicationLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CommunicationLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CommunicationLogCountAggregateInputType | true
+    }
+
+  export interface CommunicationLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CommunicationLog'], meta: { name: 'CommunicationLog' } }
+    /**
+     * Find zero or one CommunicationLog that matches the filter.
+     * @param {CommunicationLogFindUniqueArgs} args - Arguments to find a CommunicationLog
+     * @example
+     * // Get one CommunicationLog
+     * const communicationLog = await prisma.communicationLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CommunicationLogFindUniqueArgs>(args: SelectSubset<T, CommunicationLogFindUniqueArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CommunicationLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CommunicationLogFindUniqueOrThrowArgs} args - Arguments to find a CommunicationLog
+     * @example
+     * // Get one CommunicationLog
+     * const communicationLog = await prisma.communicationLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CommunicationLogFindUniqueOrThrowArgs>(args: SelectSubset<T, CommunicationLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommunicationLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogFindFirstArgs} args - Arguments to find a CommunicationLog
+     * @example
+     * // Get one CommunicationLog
+     * const communicationLog = await prisma.communicationLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CommunicationLogFindFirstArgs>(args?: SelectSubset<T, CommunicationLogFindFirstArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CommunicationLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogFindFirstOrThrowArgs} args - Arguments to find a CommunicationLog
+     * @example
+     * // Get one CommunicationLog
+     * const communicationLog = await prisma.communicationLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CommunicationLogFindFirstOrThrowArgs>(args?: SelectSubset<T, CommunicationLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CommunicationLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CommunicationLogs
+     * const communicationLogs = await prisma.communicationLog.findMany()
+     * 
+     * // Get first 10 CommunicationLogs
+     * const communicationLogs = await prisma.communicationLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const communicationLogWithIdOnly = await prisma.communicationLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CommunicationLogFindManyArgs>(args?: SelectSubset<T, CommunicationLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CommunicationLog.
+     * @param {CommunicationLogCreateArgs} args - Arguments to create a CommunicationLog.
+     * @example
+     * // Create one CommunicationLog
+     * const CommunicationLog = await prisma.communicationLog.create({
+     *   data: {
+     *     // ... data to create a CommunicationLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends CommunicationLogCreateArgs>(args: SelectSubset<T, CommunicationLogCreateArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CommunicationLogs.
+     * @param {CommunicationLogCreateManyArgs} args - Arguments to create many CommunicationLogs.
+     * @example
+     * // Create many CommunicationLogs
+     * const communicationLog = await prisma.communicationLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CommunicationLogCreateManyArgs>(args?: SelectSubset<T, CommunicationLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CommunicationLogs and returns the data saved in the database.
+     * @param {CommunicationLogCreateManyAndReturnArgs} args - Arguments to create many CommunicationLogs.
+     * @example
+     * // Create many CommunicationLogs
+     * const communicationLog = await prisma.communicationLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CommunicationLogs and only return the `id`
+     * const communicationLogWithIdOnly = await prisma.communicationLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CommunicationLogCreateManyAndReturnArgs>(args?: SelectSubset<T, CommunicationLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CommunicationLog.
+     * @param {CommunicationLogDeleteArgs} args - Arguments to delete one CommunicationLog.
+     * @example
+     * // Delete one CommunicationLog
+     * const CommunicationLog = await prisma.communicationLog.delete({
+     *   where: {
+     *     // ... filter to delete one CommunicationLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CommunicationLogDeleteArgs>(args: SelectSubset<T, CommunicationLogDeleteArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CommunicationLog.
+     * @param {CommunicationLogUpdateArgs} args - Arguments to update one CommunicationLog.
+     * @example
+     * // Update one CommunicationLog
+     * const communicationLog = await prisma.communicationLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CommunicationLogUpdateArgs>(args: SelectSubset<T, CommunicationLogUpdateArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CommunicationLogs.
+     * @param {CommunicationLogDeleteManyArgs} args - Arguments to filter CommunicationLogs to delete.
+     * @example
+     * // Delete a few CommunicationLogs
+     * const { count } = await prisma.communicationLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CommunicationLogDeleteManyArgs>(args?: SelectSubset<T, CommunicationLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommunicationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CommunicationLogs
+     * const communicationLog = await prisma.communicationLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CommunicationLogUpdateManyArgs>(args: SelectSubset<T, CommunicationLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CommunicationLogs and returns the data updated in the database.
+     * @param {CommunicationLogUpdateManyAndReturnArgs} args - Arguments to update many CommunicationLogs.
+     * @example
+     * // Update many CommunicationLogs
+     * const communicationLog = await prisma.communicationLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CommunicationLogs and only return the `id`
+     * const communicationLogWithIdOnly = await prisma.communicationLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CommunicationLogUpdateManyAndReturnArgs>(args: SelectSubset<T, CommunicationLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CommunicationLog.
+     * @param {CommunicationLogUpsertArgs} args - Arguments to update or create a CommunicationLog.
+     * @example
+     * // Update or create a CommunicationLog
+     * const communicationLog = await prisma.communicationLog.upsert({
+     *   create: {
+     *     // ... data to create a CommunicationLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CommunicationLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CommunicationLogUpsertArgs>(args: SelectSubset<T, CommunicationLogUpsertArgs<ExtArgs>>): Prisma__CommunicationLogClient<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CommunicationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogCountArgs} args - Arguments to filter CommunicationLogs to count.
+     * @example
+     * // Count the number of CommunicationLogs
+     * const count = await prisma.communicationLog.count({
+     *   where: {
+     *     // ... the filter for the CommunicationLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends CommunicationLogCountArgs>(
+      args?: Subset<T, CommunicationLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CommunicationLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CommunicationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CommunicationLogAggregateArgs>(args: Subset<T, CommunicationLogAggregateArgs>): Prisma.PrismaPromise<GetCommunicationLogAggregateType<T>>
+
+    /**
+     * Group by CommunicationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CommunicationLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CommunicationLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CommunicationLogGroupByArgs['orderBy'] }
+        : { orderBy?: CommunicationLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CommunicationLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCommunicationLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CommunicationLog model
+   */
+  readonly fields: CommunicationLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CommunicationLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CommunicationLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CommunicationLog model
+   */
+  interface CommunicationLogFieldRefs {
+    readonly id: FieldRef<"CommunicationLog", 'String'>
+    readonly organizationId: FieldRef<"CommunicationLog", 'String'>
+    readonly type: FieldRef<"CommunicationLog", 'String'>
+    readonly recipientCount: FieldRef<"CommunicationLog", 'Int'>
+    readonly content: FieldRef<"CommunicationLog", 'String'>
+    readonly status: FieldRef<"CommunicationLog", 'String'>
+    readonly sentBy: FieldRef<"CommunicationLog", 'String'>
+    readonly createdAt: FieldRef<"CommunicationLog", 'DateTime'>
+    readonly updatedAt: FieldRef<"CommunicationLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CommunicationLog findUnique
+   */
+  export type CommunicationLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunicationLog to fetch.
+     */
+    where: CommunicationLogWhereUniqueInput
+  }
+
+  /**
+   * CommunicationLog findUniqueOrThrow
+   */
+  export type CommunicationLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunicationLog to fetch.
+     */
+    where: CommunicationLogWhereUniqueInput
+  }
+
+  /**
+   * CommunicationLog findFirst
+   */
+  export type CommunicationLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunicationLog to fetch.
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunicationLogs to fetch.
+     */
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommunicationLogs.
+     */
+    cursor?: CommunicationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunicationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunicationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommunicationLogs.
+     */
+    distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
+  }
+
+  /**
+   * CommunicationLog findFirstOrThrow
+   */
+  export type CommunicationLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunicationLog to fetch.
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunicationLogs to fetch.
+     */
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CommunicationLogs.
+     */
+    cursor?: CommunicationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunicationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunicationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommunicationLogs.
+     */
+    distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
+  }
+
+  /**
+   * CommunicationLog findMany
+   */
+  export type CommunicationLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter, which CommunicationLogs to fetch.
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CommunicationLogs to fetch.
+     */
+    orderBy?: CommunicationLogOrderByWithRelationInput | CommunicationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CommunicationLogs.
+     */
+    cursor?: CommunicationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CommunicationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CommunicationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CommunicationLogs.
+     */
+    distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
+  }
+
+  /**
+   * CommunicationLog create
+   */
+  export type CommunicationLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CommunicationLog.
+     */
+    data: XOR<CommunicationLogCreateInput, CommunicationLogUncheckedCreateInput>
+  }
+
+  /**
+   * CommunicationLog createMany
+   */
+  export type CommunicationLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CommunicationLogs.
+     */
+    data: CommunicationLogCreateManyInput | CommunicationLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CommunicationLog createManyAndReturn
+   */
+  export type CommunicationLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many CommunicationLogs.
+     */
+    data: CommunicationLogCreateManyInput | CommunicationLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CommunicationLog update
+   */
+  export type CommunicationLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CommunicationLog.
+     */
+    data: XOR<CommunicationLogUpdateInput, CommunicationLogUncheckedUpdateInput>
+    /**
+     * Choose, which CommunicationLog to update.
+     */
+    where: CommunicationLogWhereUniqueInput
+  }
+
+  /**
+   * CommunicationLog updateMany
+   */
+  export type CommunicationLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CommunicationLogs.
+     */
+    data: XOR<CommunicationLogUpdateManyMutationInput, CommunicationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which CommunicationLogs to update
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * Limit how many CommunicationLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommunicationLog updateManyAndReturn
+   */
+  export type CommunicationLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * The data used to update CommunicationLogs.
+     */
+    data: XOR<CommunicationLogUpdateManyMutationInput, CommunicationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which CommunicationLogs to update
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * Limit how many CommunicationLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CommunicationLog upsert
+   */
+  export type CommunicationLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CommunicationLog to update in case it exists.
+     */
+    where: CommunicationLogWhereUniqueInput
+    /**
+     * In case the CommunicationLog found by the `where` argument doesn't exist, create a new CommunicationLog with this data.
+     */
+    create: XOR<CommunicationLogCreateInput, CommunicationLogUncheckedCreateInput>
+    /**
+     * In case the CommunicationLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CommunicationLogUpdateInput, CommunicationLogUncheckedUpdateInput>
+  }
+
+  /**
+   * CommunicationLog delete
+   */
+  export type CommunicationLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+    /**
+     * Filter which CommunicationLog to delete.
+     */
+    where: CommunicationLogWhereUniqueInput
+  }
+
+  /**
+   * CommunicationLog deleteMany
+   */
+  export type CommunicationLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CommunicationLogs to delete
+     */
+    where?: CommunicationLogWhereInput
+    /**
+     * Limit how many CommunicationLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CommunicationLog without action
+   */
+  export type CommunicationLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CommunicationLog
+     */
+    select?: CommunicationLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CommunicationLog
+     */
+    omit?: CommunicationLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CommunicationLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -95528,6 +98151,37 @@ export namespace Prisma {
   export type BiometricDeviceScalarFieldEnum = (typeof BiometricDeviceScalarFieldEnum)[keyof typeof BiometricDeviceScalarFieldEnum]
 
 
+  export const ExamRegistrationScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    studentId: 'studentId',
+    semester: 'semester',
+    subjectCodes: 'subjectCodes',
+    examCenter: 'examCenter',
+    status: 'status',
+    registrationDate: 'registrationDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ExamRegistrationScalarFieldEnum = (typeof ExamRegistrationScalarFieldEnum)[keyof typeof ExamRegistrationScalarFieldEnum]
+
+
+  export const CommunicationLogScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    type: 'type',
+    recipientCount: 'recipientCount',
+    content: 'content',
+    status: 'status',
+    sentBy: 'sentBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CommunicationLogScalarFieldEnum = (typeof CommunicationLogScalarFieldEnum)[keyof typeof CommunicationLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -96086,6 +98740,8 @@ export namespace Prisma {
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     biometricDevices?: BiometricDeviceListRelationFilter
+    examRegistrations?: ExamRegistrationListRelationFilter
+    communicationLogs?: CommunicationLogListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -96160,6 +98816,8 @@ export namespace Prisma {
     vacancies?: VacancyOrderByRelationAggregateInput
     walletTopUps?: WalletTopUpOrderByRelationAggregateInput
     biometricDevices?: BiometricDeviceOrderByRelationAggregateInput
+    examRegistrations?: ExamRegistrationOrderByRelationAggregateInput
+    communicationLogs?: CommunicationLogOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -96237,6 +98895,8 @@ export namespace Prisma {
     vacancies?: VacancyListRelationFilter
     walletTopUps?: WalletTopUpListRelationFilter
     biometricDevices?: BiometricDeviceListRelationFilter
+    examRegistrations?: ExamRegistrationListRelationFilter
+    communicationLogs?: CommunicationLogListRelationFilter
   }, "id" | "email">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -96610,6 +99270,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpListRelationFilter
     assistantManagedDepartments?: DepartmentListRelationFilter
     designations?: DesignationListRelationFilter
+    communicationLogs?: CommunicationLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -96725,6 +99386,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpOrderByRelationAggregateInput
     assistantManagedDepartments?: DepartmentOrderByRelationAggregateInput
     designations?: DesignationOrderByRelationAggregateInput
+    communicationLogs?: CommunicationLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -96843,6 +99505,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpListRelationFilter
     assistantManagedDepartments?: DepartmentListRelationFilter
     designations?: DesignationListRelationFilter
+    communicationLogs?: CommunicationLogListRelationFilter
   }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
@@ -97784,6 +100447,7 @@ export namespace Prisma {
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     commissions?: UniversityCommissionListRelationFilter
     universityPayments?: UniversityPaymentListRelationFilter
+    examRegistrations?: ExamRegistrationListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -97849,6 +100513,7 @@ export namespace Prisma {
     university?: UniversityOrderByWithRelationInput
     commissions?: UniversityCommissionOrderByRelationAggregateInput
     universityPayments?: UniversityPaymentOrderByRelationAggregateInput
+    examRegistrations?: ExamRegistrationOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -97917,6 +100582,7 @@ export namespace Prisma {
     university?: XOR<UniversityNullableScalarRelationFilter, UniversityWhereInput> | null
     commissions?: UniversityCommissionListRelationFilter
     universityPayments?: UniversityPaymentListRelationFilter
+    examRegistrations?: ExamRegistrationListRelationFilter
   }, "id" | "enrollmentNo" | "email">
 
   export type StudentOrderByWithAggregationInput = {
@@ -103524,6 +106190,169 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"BiometricDevice"> | Date | string
   }
 
+  export type ExamRegistrationWhereInput = {
+    AND?: ExamRegistrationWhereInput | ExamRegistrationWhereInput[]
+    OR?: ExamRegistrationWhereInput[]
+    NOT?: ExamRegistrationWhereInput | ExamRegistrationWhereInput[]
+    id?: StringFilter<"ExamRegistration"> | string
+    organizationId?: StringFilter<"ExamRegistration"> | string
+    studentId?: StringFilter<"ExamRegistration"> | string
+    semester?: StringFilter<"ExamRegistration"> | string
+    subjectCodes?: StringFilter<"ExamRegistration"> | string
+    examCenter?: StringNullableFilter<"ExamRegistration"> | string | null
+    status?: StringFilter<"ExamRegistration"> | string
+    registrationDate?: DateTimeFilter<"ExamRegistration"> | Date | string
+    createdAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+    updatedAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }
+
+  export type ExamRegistrationOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    semester?: SortOrder
+    subjectCodes?: SortOrder
+    examCenter?: SortOrderInput | SortOrder
+    status?: SortOrder
+    registrationDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    student?: StudentOrderByWithRelationInput
+  }
+
+  export type ExamRegistrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ExamRegistrationWhereInput | ExamRegistrationWhereInput[]
+    OR?: ExamRegistrationWhereInput[]
+    NOT?: ExamRegistrationWhereInput | ExamRegistrationWhereInput[]
+    organizationId?: StringFilter<"ExamRegistration"> | string
+    studentId?: StringFilter<"ExamRegistration"> | string
+    semester?: StringFilter<"ExamRegistration"> | string
+    subjectCodes?: StringFilter<"ExamRegistration"> | string
+    examCenter?: StringNullableFilter<"ExamRegistration"> | string | null
+    status?: StringFilter<"ExamRegistration"> | string
+    registrationDate?: DateTimeFilter<"ExamRegistration"> | Date | string
+    createdAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+    updatedAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }, "id">
+
+  export type ExamRegistrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    semester?: SortOrder
+    subjectCodes?: SortOrder
+    examCenter?: SortOrderInput | SortOrder
+    status?: SortOrder
+    registrationDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ExamRegistrationCountOrderByAggregateInput
+    _max?: ExamRegistrationMaxOrderByAggregateInput
+    _min?: ExamRegistrationMinOrderByAggregateInput
+  }
+
+  export type ExamRegistrationScalarWhereWithAggregatesInput = {
+    AND?: ExamRegistrationScalarWhereWithAggregatesInput | ExamRegistrationScalarWhereWithAggregatesInput[]
+    OR?: ExamRegistrationScalarWhereWithAggregatesInput[]
+    NOT?: ExamRegistrationScalarWhereWithAggregatesInput | ExamRegistrationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    organizationId?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    studentId?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    semester?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    subjectCodes?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    examCenter?: StringNullableWithAggregatesFilter<"ExamRegistration"> | string | null
+    status?: StringWithAggregatesFilter<"ExamRegistration"> | string
+    registrationDate?: DateTimeWithAggregatesFilter<"ExamRegistration"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ExamRegistration"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ExamRegistration"> | Date | string
+  }
+
+  export type CommunicationLogWhereInput = {
+    AND?: CommunicationLogWhereInput | CommunicationLogWhereInput[]
+    OR?: CommunicationLogWhereInput[]
+    NOT?: CommunicationLogWhereInput | CommunicationLogWhereInput[]
+    id?: StringFilter<"CommunicationLog"> | string
+    organizationId?: StringFilter<"CommunicationLog"> | string
+    type?: StringFilter<"CommunicationLog"> | string
+    recipientCount?: IntFilter<"CommunicationLog"> | number
+    content?: StringNullableFilter<"CommunicationLog"> | string | null
+    status?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringFilter<"CommunicationLog"> | string
+    createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CommunicationLogOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    recipientCount?: SortOrder
+    content?: SortOrderInput | SortOrder
+    status?: SortOrder
+    sentBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    sender?: UserOrderByWithRelationInput
+  }
+
+  export type CommunicationLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CommunicationLogWhereInput | CommunicationLogWhereInput[]
+    OR?: CommunicationLogWhereInput[]
+    NOT?: CommunicationLogWhereInput | CommunicationLogWhereInput[]
+    organizationId?: StringFilter<"CommunicationLog"> | string
+    type?: StringFilter<"CommunicationLog"> | string
+    recipientCount?: IntFilter<"CommunicationLog"> | number
+    content?: StringNullableFilter<"CommunicationLog"> | string | null
+    status?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringFilter<"CommunicationLog"> | string
+    createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type CommunicationLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    recipientCount?: SortOrder
+    content?: SortOrderInput | SortOrder
+    status?: SortOrder
+    sentBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CommunicationLogCountOrderByAggregateInput
+    _avg?: CommunicationLogAvgOrderByAggregateInput
+    _max?: CommunicationLogMaxOrderByAggregateInput
+    _min?: CommunicationLogMinOrderByAggregateInput
+    _sum?: CommunicationLogSumOrderByAggregateInput
+  }
+
+  export type CommunicationLogScalarWhereWithAggregatesInput = {
+    AND?: CommunicationLogScalarWhereWithAggregatesInput | CommunicationLogScalarWhereWithAggregatesInput[]
+    OR?: CommunicationLogScalarWhereWithAggregatesInput[]
+    NOT?: CommunicationLogScalarWhereWithAggregatesInput | CommunicationLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    organizationId?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    type?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    recipientCount?: IntWithAggregatesFilter<"CommunicationLog"> | number
+    content?: StringNullableWithAggregatesFilter<"CommunicationLog"> | string | null
+    status?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    sentBy?: StringWithAggregatesFilter<"CommunicationLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -103595,6 +106424,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -103668,6 +106499,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -103741,6 +106574,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -103814,6 +106649,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -104218,6 +107055,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -104326,6 +107164,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserUpdateInput = {
@@ -104434,6 +107273,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -104542,6 +107382,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -105607,6 +108448,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -105663,6 +108505,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -105719,6 +108562,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -105775,6 +108619,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -111783,6 +114628,177 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ExamRegistrationCreateInput = {
+    id?: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutExamRegistrationsInput
+    student: StudentCreateNestedOneWithoutExamRegistrationsInput
+  }
+
+  export type ExamRegistrationUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutExamRegistrationsNestedInput
+    student?: StudentUpdateOneRequiredWithoutExamRegistrationsNestedInput
+  }
+
+  export type ExamRegistrationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExamRegistrationCreateManyInput = {
+    id?: string
+    organizationId: string
+    studentId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExamRegistrationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogCreateInput = {
+    id?: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutCommunicationLogsInput
+    sender: UserCreateNestedOneWithoutCommunicationLogsInput
+  }
+
+  export type CommunicationLogUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    sentBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput
+    sender?: UserUpdateOneRequiredWithoutCommunicationLogsNestedInput
+  }
+
+  export type CommunicationLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    sentBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogCreateManyInput = {
+    id?: string
+    organizationId: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    sentBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    sentBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -112217,6 +115233,18 @@ export namespace Prisma {
     none?: BiometricDeviceWhereInput
   }
 
+  export type ExamRegistrationListRelationFilter = {
+    every?: ExamRegistrationWhereInput
+    some?: ExamRegistrationWhereInput
+    none?: ExamRegistrationWhereInput
+  }
+
+  export type CommunicationLogListRelationFilter = {
+    every?: CommunicationLogWhereInput
+    some?: CommunicationLogWhereInput
+    none?: CommunicationLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -112447,6 +115475,14 @@ export namespace Prisma {
   }
 
   export type BiometricDeviceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ExamRegistrationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CommunicationLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -116811,6 +119847,89 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ExamRegistrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    semester?: SortOrder
+    subjectCodes?: SortOrder
+    examCenter?: SortOrder
+    status?: SortOrder
+    registrationDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ExamRegistrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    semester?: SortOrder
+    subjectCodes?: SortOrder
+    examCenter?: SortOrder
+    status?: SortOrder
+    registrationDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ExamRegistrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    studentId?: SortOrder
+    semester?: SortOrder
+    subjectCodes?: SortOrder
+    examCenter?: SortOrder
+    status?: SortOrder
+    registrationDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommunicationLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    recipientCount?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    sentBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommunicationLogAvgOrderByAggregateInput = {
+    recipientCount?: SortOrder
+  }
+
+  export type CommunicationLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    recipientCount?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    sentBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommunicationLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    recipientCount?: SortOrder
+    content?: SortOrder
+    status?: SortOrder
+    sentBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CommunicationLogSumOrderByAggregateInput = {
+    recipientCount?: SortOrder
+  }
+
   export type AdmissionSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -117222,6 +120341,20 @@ export namespace Prisma {
     connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
   }
 
+  export type ExamRegistrationCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput> | ExamRegistrationCreateWithoutOrganizationInput[] | ExamRegistrationUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutOrganizationInput | ExamRegistrationCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ExamRegistrationCreateManyOrganizationInputEnvelope
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+  }
+
+  export type CommunicationLogCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput> | CommunicationLogCreateWithoutOrganizationInput[] | CommunicationLogUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutOrganizationInput | CommunicationLogCreateOrConnectWithoutOrganizationInput[]
+    createMany?: CommunicationLogCreateManyOrganizationInputEnvelope
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -117625,6 +120758,20 @@ export namespace Prisma {
     connectOrCreate?: BiometricDeviceCreateOrConnectWithoutOrganizationInput | BiometricDeviceCreateOrConnectWithoutOrganizationInput[]
     createMany?: BiometricDeviceCreateManyOrganizationInputEnvelope
     connect?: BiometricDeviceWhereUniqueInput | BiometricDeviceWhereUniqueInput[]
+  }
+
+  export type ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput> | ExamRegistrationCreateWithoutOrganizationInput[] | ExamRegistrationUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutOrganizationInput | ExamRegistrationCreateOrConnectWithoutOrganizationInput[]
+    createMany?: ExamRegistrationCreateManyOrganizationInputEnvelope
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+  }
+
+  export type CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput> | CommunicationLogCreateWithoutOrganizationInput[] | CommunicationLogUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutOrganizationInput | CommunicationLogCreateOrConnectWithoutOrganizationInput[]
+    createMany?: CommunicationLogCreateManyOrganizationInputEnvelope
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -118465,6 +121612,34 @@ export namespace Prisma {
     deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
   }
 
+  export type ExamRegistrationUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput> | ExamRegistrationCreateWithoutOrganizationInput[] | ExamRegistrationUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutOrganizationInput | ExamRegistrationCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ExamRegistrationUpsertWithWhereUniqueWithoutOrganizationInput | ExamRegistrationUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ExamRegistrationCreateManyOrganizationInputEnvelope
+    set?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    disconnect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    delete?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    update?: ExamRegistrationUpdateWithWhereUniqueWithoutOrganizationInput | ExamRegistrationUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ExamRegistrationUpdateManyWithWhereWithoutOrganizationInput | ExamRegistrationUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
+  }
+
+  export type CommunicationLogUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput> | CommunicationLogCreateWithoutOrganizationInput[] | CommunicationLogUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutOrganizationInput | CommunicationLogCreateOrConnectWithoutOrganizationInput[]
+    upsert?: CommunicationLogUpsertWithWhereUniqueWithoutOrganizationInput | CommunicationLogUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: CommunicationLogCreateManyOrganizationInputEnvelope
+    set?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    disconnect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    delete?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    update?: CommunicationLogUpdateWithWhereUniqueWithoutOrganizationInput | CommunicationLogUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: CommunicationLogUpdateManyWithWhereWithoutOrganizationInput | CommunicationLogUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -119271,6 +122446,34 @@ export namespace Prisma {
     update?: BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput | BiometricDeviceUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput | BiometricDeviceUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: BiometricDeviceScalarWhereInput | BiometricDeviceScalarWhereInput[]
+  }
+
+  export type ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput> | ExamRegistrationCreateWithoutOrganizationInput[] | ExamRegistrationUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutOrganizationInput | ExamRegistrationCreateOrConnectWithoutOrganizationInput[]
+    upsert?: ExamRegistrationUpsertWithWhereUniqueWithoutOrganizationInput | ExamRegistrationUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: ExamRegistrationCreateManyOrganizationInputEnvelope
+    set?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    disconnect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    delete?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    update?: ExamRegistrationUpdateWithWhereUniqueWithoutOrganizationInput | ExamRegistrationUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: ExamRegistrationUpdateManyWithWhereWithoutOrganizationInput | ExamRegistrationUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
+  }
+
+  export type CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput> | CommunicationLogCreateWithoutOrganizationInput[] | CommunicationLogUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutOrganizationInput | CommunicationLogCreateOrConnectWithoutOrganizationInput[]
+    upsert?: CommunicationLogUpsertWithWhereUniqueWithoutOrganizationInput | CommunicationLogUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: CommunicationLogCreateManyOrganizationInputEnvelope
+    set?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    disconnect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    delete?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    update?: CommunicationLogUpdateWithWhereUniqueWithoutOrganizationInput | CommunicationLogUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: CommunicationLogUpdateManyWithWhereWithoutOrganizationInput | CommunicationLogUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedManyWithoutLicenseInput = {
@@ -120448,6 +123651,13 @@ export namespace Prisma {
     connect?: DesignationWhereUniqueInput | DesignationWhereUniqueInput[]
   }
 
+  export type CommunicationLogCreateNestedManyWithoutSenderInput = {
+    create?: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput> | CommunicationLogCreateWithoutSenderInput[] | CommunicationLogUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutSenderInput | CommunicationLogCreateOrConnectWithoutSenderInput[]
+    createMany?: CommunicationLogCreateManySenderInputEnvelope
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -120983,6 +124193,13 @@ export namespace Prisma {
     create?: XOR<DesignationCreateWithoutFilledByInput, DesignationUncheckedCreateWithoutFilledByInput> | DesignationCreateWithoutFilledByInput[] | DesignationUncheckedCreateWithoutFilledByInput[]
     connectOrCreate?: DesignationCreateOrConnectWithoutFilledByInput | DesignationCreateOrConnectWithoutFilledByInput[]
     connect?: DesignationWhereUniqueInput | DesignationWhereUniqueInput[]
+  }
+
+  export type CommunicationLogUncheckedCreateNestedManyWithoutSenderInput = {
+    create?: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput> | CommunicationLogCreateWithoutSenderInput[] | CommunicationLogUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutSenderInput | CommunicationLogCreateOrConnectWithoutSenderInput[]
+    createMany?: CommunicationLogCreateManySenderInputEnvelope
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -122129,6 +125346,20 @@ export namespace Prisma {
     deleteMany?: DesignationScalarWhereInput | DesignationScalarWhereInput[]
   }
 
+  export type CommunicationLogUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput> | CommunicationLogCreateWithoutSenderInput[] | CommunicationLogUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutSenderInput | CommunicationLogCreateOrConnectWithoutSenderInput[]
+    upsert?: CommunicationLogUpsertWithWhereUniqueWithoutSenderInput | CommunicationLogUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: CommunicationLogCreateManySenderInputEnvelope
+    set?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    disconnect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    delete?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    update?: CommunicationLogUpdateWithWhereUniqueWithoutSenderInput | CommunicationLogUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: CommunicationLogUpdateManyWithWhereWithoutSenderInput | CommunicationLogUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -123189,6 +126420,20 @@ export namespace Prisma {
     update?: DesignationUpdateWithWhereUniqueWithoutFilledByInput | DesignationUpdateWithWhereUniqueWithoutFilledByInput[]
     updateMany?: DesignationUpdateManyWithWhereWithoutFilledByInput | DesignationUpdateManyWithWhereWithoutFilledByInput[]
     deleteMany?: DesignationScalarWhereInput | DesignationScalarWhereInput[]
+  }
+
+  export type CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput> | CommunicationLogCreateWithoutSenderInput[] | CommunicationLogUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: CommunicationLogCreateOrConnectWithoutSenderInput | CommunicationLogCreateOrConnectWithoutSenderInput[]
+    upsert?: CommunicationLogUpsertWithWhereUniqueWithoutSenderInput | CommunicationLogUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: CommunicationLogCreateManySenderInputEnvelope
+    set?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    disconnect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    delete?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+    update?: CommunicationLogUpdateWithWhereUniqueWithoutSenderInput | CommunicationLogUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: CommunicationLogUpdateManyWithWhereWithoutSenderInput | CommunicationLogUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -125060,6 +128305,13 @@ export namespace Prisma {
     connect?: UniversityPaymentWhereUniqueInput | UniversityPaymentWhereUniqueInput[]
   }
 
+  export type ExamRegistrationCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput> | ExamRegistrationCreateWithoutStudentInput[] | ExamRegistrationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutStudentInput | ExamRegistrationCreateOrConnectWithoutStudentInput[]
+    createMany?: ExamRegistrationCreateManyStudentInputEnvelope
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+  }
+
   export type DocumentLogUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<DocumentLogCreateWithoutStudentInput, DocumentLogUncheckedCreateWithoutStudentInput> | DocumentLogCreateWithoutStudentInput[] | DocumentLogUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: DocumentLogCreateOrConnectWithoutStudentInput | DocumentLogCreateOrConnectWithoutStudentInput[]
@@ -125114,6 +128366,13 @@ export namespace Prisma {
     connectOrCreate?: UniversityPaymentCreateOrConnectWithoutStudentInput | UniversityPaymentCreateOrConnectWithoutStudentInput[]
     createMany?: UniversityPaymentCreateManyStudentInputEnvelope
     connect?: UniversityPaymentWhereUniqueInput | UniversityPaymentWhereUniqueInput[]
+  }
+
+  export type ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput> | ExamRegistrationCreateWithoutStudentInput[] | ExamRegistrationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutStudentInput | ExamRegistrationCreateOrConnectWithoutStudentInput[]
+    createMany?: ExamRegistrationCreateManyStudentInputEnvelope
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
   }
 
   export type DocumentLogUpdateManyWithoutStudentNestedInput = {
@@ -125312,6 +128571,20 @@ export namespace Prisma {
     deleteMany?: UniversityPaymentScalarWhereInput | UniversityPaymentScalarWhereInput[]
   }
 
+  export type ExamRegistrationUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput> | ExamRegistrationCreateWithoutStudentInput[] | ExamRegistrationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutStudentInput | ExamRegistrationCreateOrConnectWithoutStudentInput[]
+    upsert?: ExamRegistrationUpsertWithWhereUniqueWithoutStudentInput | ExamRegistrationUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ExamRegistrationCreateManyStudentInputEnvelope
+    set?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    disconnect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    delete?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    update?: ExamRegistrationUpdateWithWhereUniqueWithoutStudentInput | ExamRegistrationUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ExamRegistrationUpdateManyWithWhereWithoutStudentInput | ExamRegistrationUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
+  }
+
   export type DocumentLogUncheckedUpdateManyWithoutStudentNestedInput = {
     create?: XOR<DocumentLogCreateWithoutStudentInput, DocumentLogUncheckedCreateWithoutStudentInput> | DocumentLogCreateWithoutStudentInput[] | DocumentLogUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: DocumentLogCreateOrConnectWithoutStudentInput | DocumentLogCreateOrConnectWithoutStudentInput[]
@@ -125422,6 +128695,20 @@ export namespace Prisma {
     update?: UniversityPaymentUpdateWithWhereUniqueWithoutStudentInput | UniversityPaymentUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: UniversityPaymentUpdateManyWithWhereWithoutStudentInput | UniversityPaymentUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: UniversityPaymentScalarWhereInput | UniversityPaymentScalarWhereInput[]
+  }
+
+  export type ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput> | ExamRegistrationCreateWithoutStudentInput[] | ExamRegistrationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ExamRegistrationCreateOrConnectWithoutStudentInput | ExamRegistrationCreateOrConnectWithoutStudentInput[]
+    upsert?: ExamRegistrationUpsertWithWhereUniqueWithoutStudentInput | ExamRegistrationUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ExamRegistrationCreateManyStudentInputEnvelope
+    set?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    disconnect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    delete?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    connect?: ExamRegistrationWhereUniqueInput | ExamRegistrationWhereUniqueInput[]
+    update?: ExamRegistrationUpdateWithWhereUniqueWithoutStudentInput | ExamRegistrationUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ExamRegistrationUpdateManyWithWhereWithoutStudentInput | ExamRegistrationUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
   }
 
   export type StudyCenterCreateNestedOneWithoutInvoicesInput = {
@@ -128893,6 +132180,62 @@ export namespace Prisma {
     update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutBiometricDevicesInput, BranchUpdateWithoutBiometricDevicesInput>, BranchUncheckedUpdateWithoutBiometricDevicesInput>
   }
 
+  export type OrganizationCreateNestedOneWithoutExamRegistrationsInput = {
+    create?: XOR<OrganizationCreateWithoutExamRegistrationsInput, OrganizationUncheckedCreateWithoutExamRegistrationsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutExamRegistrationsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type StudentCreateNestedOneWithoutExamRegistrationsInput = {
+    create?: XOR<StudentCreateWithoutExamRegistrationsInput, StudentUncheckedCreateWithoutExamRegistrationsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutExamRegistrationsInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutExamRegistrationsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutExamRegistrationsInput, OrganizationUncheckedCreateWithoutExamRegistrationsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutExamRegistrationsInput
+    upsert?: OrganizationUpsertWithoutExamRegistrationsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutExamRegistrationsInput, OrganizationUpdateWithoutExamRegistrationsInput>, OrganizationUncheckedUpdateWithoutExamRegistrationsInput>
+  }
+
+  export type StudentUpdateOneRequiredWithoutExamRegistrationsNestedInput = {
+    create?: XOR<StudentCreateWithoutExamRegistrationsInput, StudentUncheckedCreateWithoutExamRegistrationsInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutExamRegistrationsInput
+    upsert?: StudentUpsertWithoutExamRegistrationsInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutExamRegistrationsInput, StudentUpdateWithoutExamRegistrationsInput>, StudentUncheckedUpdateWithoutExamRegistrationsInput>
+  }
+
+  export type OrganizationCreateNestedOneWithoutCommunicationLogsInput = {
+    create?: XOR<OrganizationCreateWithoutCommunicationLogsInput, OrganizationUncheckedCreateWithoutCommunicationLogsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCommunicationLogsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCommunicationLogsInput = {
+    create?: XOR<UserCreateWithoutCommunicationLogsInput, UserUncheckedCreateWithoutCommunicationLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommunicationLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutCommunicationLogsInput, OrganizationUncheckedCreateWithoutCommunicationLogsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutCommunicationLogsInput
+    upsert?: OrganizationUpsertWithoutCommunicationLogsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutCommunicationLogsInput, OrganizationUpdateWithoutCommunicationLogsInput>, OrganizationUncheckedUpdateWithoutCommunicationLogsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCommunicationLogsNestedInput = {
+    create?: XOR<UserCreateWithoutCommunicationLogsInput, UserUncheckedCreateWithoutCommunicationLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCommunicationLogsInput
+    upsert?: UserUpsertWithoutCommunicationLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommunicationLogsInput, UserUpdateWithoutCommunicationLogsInput>, UserUncheckedUpdateWithoutCommunicationLogsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -131542,6 +134885,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutOrganizationInput = {
@@ -131597,6 +134941,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutOrganizationInput = {
@@ -132174,6 +135519,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -132281,6 +135627,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -132396,6 +135743,72 @@ export namespace Prisma {
 
   export type BiometricDeviceCreateManyOrganizationInputEnvelope = {
     data: BiometricDeviceCreateManyOrganizationInput | BiometricDeviceCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExamRegistrationCreateWithoutOrganizationInput = {
+    id?: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutExamRegistrationsInput
+  }
+
+  export type ExamRegistrationUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    studentId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationCreateOrConnectWithoutOrganizationInput = {
+    where: ExamRegistrationWhereUniqueInput
+    create: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ExamRegistrationCreateManyOrganizationInputEnvelope = {
+    data: ExamRegistrationCreateManyOrganizationInput | ExamRegistrationCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CommunicationLogCreateWithoutOrganizationInput = {
+    id?: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender: UserCreateNestedOneWithoutCommunicationLogsInput
+  }
+
+  export type CommunicationLogUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    sentBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogCreateOrConnectWithoutOrganizationInput = {
+    where: CommunicationLogWhereUniqueInput
+    create: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type CommunicationLogCreateManyOrganizationInputEnvelope = {
+    data: CommunicationLogCreateManyOrganizationInput | CommunicationLogCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -134541,6 +137954,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BiometricDevice"> | Date | string
   }
 
+  export type ExamRegistrationUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: ExamRegistrationWhereUniqueInput
+    update: XOR<ExamRegistrationUpdateWithoutOrganizationInput, ExamRegistrationUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<ExamRegistrationCreateWithoutOrganizationInput, ExamRegistrationUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type ExamRegistrationUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: ExamRegistrationWhereUniqueInput
+    data: XOR<ExamRegistrationUpdateWithoutOrganizationInput, ExamRegistrationUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type ExamRegistrationUpdateManyWithWhereWithoutOrganizationInput = {
+    where: ExamRegistrationScalarWhereInput
+    data: XOR<ExamRegistrationUpdateManyMutationInput, ExamRegistrationUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type ExamRegistrationScalarWhereInput = {
+    AND?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
+    OR?: ExamRegistrationScalarWhereInput[]
+    NOT?: ExamRegistrationScalarWhereInput | ExamRegistrationScalarWhereInput[]
+    id?: StringFilter<"ExamRegistration"> | string
+    organizationId?: StringFilter<"ExamRegistration"> | string
+    studentId?: StringFilter<"ExamRegistration"> | string
+    semester?: StringFilter<"ExamRegistration"> | string
+    subjectCodes?: StringFilter<"ExamRegistration"> | string
+    examCenter?: StringNullableFilter<"ExamRegistration"> | string | null
+    status?: StringFilter<"ExamRegistration"> | string
+    registrationDate?: DateTimeFilter<"ExamRegistration"> | Date | string
+    createdAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+    updatedAt?: DateTimeFilter<"ExamRegistration"> | Date | string
+  }
+
+  export type CommunicationLogUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: CommunicationLogWhereUniqueInput
+    update: XOR<CommunicationLogUpdateWithoutOrganizationInput, CommunicationLogUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<CommunicationLogCreateWithoutOrganizationInput, CommunicationLogUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type CommunicationLogUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: CommunicationLogWhereUniqueInput
+    data: XOR<CommunicationLogUpdateWithoutOrganizationInput, CommunicationLogUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type CommunicationLogUpdateManyWithWhereWithoutOrganizationInput = {
+    where: CommunicationLogScalarWhereInput
+    data: XOR<CommunicationLogUpdateManyMutationInput, CommunicationLogUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type CommunicationLogScalarWhereInput = {
+    AND?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
+    OR?: CommunicationLogScalarWhereInput[]
+    NOT?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
+    id?: StringFilter<"CommunicationLog"> | string
+    organizationId?: StringFilter<"CommunicationLog"> | string
+    type?: StringFilter<"CommunicationLog"> | string
+    recipientCount?: IntFilter<"CommunicationLog"> | number
+    content?: StringNullableFilter<"CommunicationLog"> | string | null
+    status?: StringFilter<"CommunicationLog"> | string
+    sentBy?: StringFilter<"CommunicationLog"> | string
+    createdAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+    updatedAt?: DateTimeFilter<"CommunicationLog"> | Date | string
+  }
+
   export type OrganizationCreateWithoutLicenseInput = {
     id?: string
     name: string
@@ -134611,6 +138087,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLicenseInput = {
@@ -134683,6 +138161,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLicenseInput = {
@@ -134970,6 +138450,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -135077,6 +138558,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -135154,6 +138636,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDepartmentsInput = {
@@ -135226,6 +138710,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDepartmentsInput = {
@@ -135693,6 +139179,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -135800,6 +139287,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -135949,6 +139437,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -136056,6 +139545,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -136305,6 +139795,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -136412,6 +139903,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -136495,6 +139987,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDepartmentsInput = {
@@ -136567,6 +140061,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutChildDepartmentsInput = {
@@ -139849,6 +143345,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -139904,6 +143401,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUserInput = {
@@ -139964,6 +143462,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutEnrolledByUserInput = {
@@ -140019,6 +143518,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutEnrolledByUserInput = {
@@ -140084,6 +143584,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutReferrerInput = {
@@ -140139,6 +143640,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutReferrerInput = {
@@ -140937,6 +144439,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -141009,6 +144513,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -141121,6 +144627,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -141228,6 +144735,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -141340,6 +144848,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -141447,6 +144956,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -141780,6 +145290,38 @@ export namespace Prisma {
   export type DesignationCreateOrConnectWithoutFilledByInput = {
     where: DesignationWhereUniqueInput
     create: XOR<DesignationCreateWithoutFilledByInput, DesignationUncheckedCreateWithoutFilledByInput>
+  }
+
+  export type CommunicationLogCreateWithoutSenderInput = {
+    id?: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutCommunicationLogsInput
+  }
+
+  export type CommunicationLogUncheckedCreateWithoutSenderInput = {
+    id?: string
+    organizationId: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogCreateOrConnectWithoutSenderInput = {
+    where: CommunicationLogWhereUniqueInput
+    create: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput>
+  }
+
+  export type CommunicationLogCreateManySenderInputEnvelope = {
+    data: CommunicationLogCreateManySenderInput | CommunicationLogCreateManySenderInput[]
+    skipDuplicates?: boolean
   }
 
   export type AdmissionSessionUpsertWithWhereUniqueWithoutApproverInput = {
@@ -143042,6 +146584,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -143097,6 +146640,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUpsertWithWhereUniqueWithoutEnrolledByUserInput = {
@@ -143490,6 +147034,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -143562,6 +147108,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSubordinatesInput = {
@@ -143680,6 +147228,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -143787,6 +147336,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -144056,6 +147606,22 @@ export namespace Prisma {
     data: XOR<DesignationUpdateManyMutationInput, DesignationUncheckedUpdateManyWithoutFilledByInput>
   }
 
+  export type CommunicationLogUpsertWithWhereUniqueWithoutSenderInput = {
+    where: CommunicationLogWhereUniqueInput
+    update: XOR<CommunicationLogUpdateWithoutSenderInput, CommunicationLogUncheckedUpdateWithoutSenderInput>
+    create: XOR<CommunicationLogCreateWithoutSenderInput, CommunicationLogUncheckedCreateWithoutSenderInput>
+  }
+
+  export type CommunicationLogUpdateWithWhereUniqueWithoutSenderInput = {
+    where: CommunicationLogWhereUniqueInput
+    data: XOR<CommunicationLogUpdateWithoutSenderInput, CommunicationLogUncheckedUpdateWithoutSenderInput>
+  }
+
+  export type CommunicationLogUpdateManyWithWhereWithoutSenderInput = {
+    where: CommunicationLogScalarWhereInput
+    data: XOR<CommunicationLogUpdateManyMutationInput, CommunicationLogUncheckedUpdateManyWithoutSenderInput>
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -144126,6 +147692,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeesInput = {
@@ -144198,6 +147766,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeesInput = {
@@ -144310,6 +147880,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -144417,6 +147988,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -144505,6 +148077,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeesInput = {
@@ -144577,6 +148151,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileInput = {
@@ -144695,6 +148271,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -144802,6 +148379,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -144953,6 +148531,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -145060,6 +148639,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -145172,6 +148752,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -145279,6 +148860,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -145448,6 +149030,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -145555,6 +149138,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -145632,6 +149216,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTasksInput = {
@@ -145704,6 +149290,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTasksInput = {
@@ -145843,6 +149431,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -145950,6 +149539,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -146068,6 +149658,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -146175,6 +149766,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -146356,6 +149948,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -146463,6 +150056,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -146546,6 +150140,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTasksInput = {
@@ -146618,6 +150214,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutAttendancesInput = {
@@ -146725,6 +150323,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -146832,6 +150431,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -146909,6 +150509,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAttendancesInput = {
@@ -146981,6 +150583,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAttendancesInput = {
@@ -147104,6 +150708,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -147211,6 +150816,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -147294,6 +150900,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAttendancesInput = {
@@ -147366,6 +150974,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AdmissionSessionCreateWithoutUniversityInput = {
@@ -147595,6 +151205,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUniversityInput = {
@@ -147650,6 +151261,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUniversityInput = {
@@ -147732,6 +151344,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversitiesInput = {
@@ -147804,6 +151418,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversitiesInput = {
@@ -148012,6 +151628,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -148119,6 +151736,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -148457,6 +152075,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversitiesInput = {
@@ -148529,6 +152149,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutUniversityInput = {
@@ -148943,6 +152565,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramsInput = {
@@ -149015,6 +152639,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramsInput = {
@@ -149222,6 +152848,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutProgramInput = {
@@ -149277,6 +152904,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutProgramInput = {
@@ -149550,6 +153178,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramsInput = {
@@ -149622,6 +153252,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutProgramsInput = {
@@ -150182,6 +153814,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCenterInput = {
@@ -150237,6 +153870,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCenterInput = {
@@ -150354,6 +153988,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -150461,6 +154096,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -150538,6 +154174,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCentersInput = {
@@ -150610,6 +154248,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCentersInput = {
@@ -150722,6 +154362,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -150829,6 +154470,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -150941,6 +154583,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -151048,6 +154691,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -151225,6 +154869,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -151332,6 +154977,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -151789,6 +155435,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -151896,6 +155543,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -151979,6 +155627,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCentersInput = {
@@ -152051,6 +155701,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredStudyCentersInput = {
@@ -152169,6 +155821,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -152276,6 +155929,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -152394,6 +156048,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -152501,6 +156156,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -153201,6 +156857,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -153308,6 +156965,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -153420,6 +157078,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -153527,6 +157186,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -153604,6 +157264,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudentsInput = {
@@ -153676,6 +157338,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudentsInput = {
@@ -153841,6 +157505,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -153948,6 +157613,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -154124,6 +157790,40 @@ export namespace Prisma {
 
   export type UniversityPaymentCreateManyStudentInputEnvelope = {
     data: UniversityPaymentCreateManyStudentInput | UniversityPaymentCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ExamRegistrationCreateWithoutStudentInput = {
+    id?: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutExamRegistrationsInput
+  }
+
+  export type ExamRegistrationUncheckedCreateWithoutStudentInput = {
+    id?: string
+    organizationId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationCreateOrConnectWithoutStudentInput = {
+    where: ExamRegistrationWhereUniqueInput
+    create: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ExamRegistrationCreateManyStudentInputEnvelope = {
+    data: ExamRegistrationCreateManyStudentInput | ExamRegistrationCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -154491,6 +158191,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -154598,6 +158299,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -154716,6 +158418,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -154823,6 +158526,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -154906,6 +158610,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudentsInput = {
@@ -154978,6 +158684,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutStudentsInput = {
@@ -155155,6 +158863,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -155262,6 +158971,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutStudentsInput = {
@@ -155410,6 +159120,22 @@ export namespace Prisma {
   export type UniversityPaymentUpdateManyWithWhereWithoutStudentInput = {
     where: UniversityPaymentScalarWhereInput
     data: XOR<UniversityPaymentUpdateManyMutationInput, UniversityPaymentUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type ExamRegistrationUpsertWithWhereUniqueWithoutStudentInput = {
+    where: ExamRegistrationWhereUniqueInput
+    update: XOR<ExamRegistrationUpdateWithoutStudentInput, ExamRegistrationUncheckedUpdateWithoutStudentInput>
+    create: XOR<ExamRegistrationCreateWithoutStudentInput, ExamRegistrationUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ExamRegistrationUpdateWithWhereUniqueWithoutStudentInput = {
+    where: ExamRegistrationWhereUniqueInput
+    data: XOR<ExamRegistrationUpdateWithoutStudentInput, ExamRegistrationUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type ExamRegistrationUpdateManyWithWhereWithoutStudentInput = {
+    where: ExamRegistrationScalarWhereInput
+    data: XOR<ExamRegistrationUpdateManyMutationInput, ExamRegistrationUncheckedUpdateManyWithoutStudentInput>
   }
 
   export type StudyCenterCreateWithoutInvoicesInput = {
@@ -155573,6 +159299,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInvoicesInput = {
@@ -155645,6 +159373,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInvoicesInput = {
@@ -155744,6 +159474,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInvoicesInput = {
@@ -155799,6 +159530,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInvoicesInput = {
@@ -156020,6 +159752,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInvoicesInput = {
@@ -156092,6 +159826,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutInvoicesInput = {
@@ -156203,6 +159939,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInvoicesInput = {
@@ -156258,6 +159995,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PaymentEntryUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -156346,6 +160084,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeadsInput = {
@@ -156418,6 +160158,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeadsInput = {
@@ -156530,6 +160272,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -156637,6 +160380,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -156725,6 +160469,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeadsInput = {
@@ -156797,6 +160543,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferredLeadsInput = {
@@ -156915,6 +160663,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -157022,6 +160771,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -157129,6 +160879,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -157236,6 +160987,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -157313,6 +161065,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutComplaintsInput = {
@@ -157385,6 +161139,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutComplaintsInput = {
@@ -157508,6 +161264,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -157615,6 +161372,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -157698,6 +161456,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutComplaintsInput = {
@@ -157770,6 +161530,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutNotificationsInput = {
@@ -157842,6 +161604,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutNotificationsInput = {
@@ -157914,6 +161678,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutNotificationsInput = {
@@ -158026,6 +161792,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -158133,6 +161900,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -158221,6 +161989,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutNotificationsInput = {
@@ -158293,6 +162063,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutNotificationsInput = {
@@ -158411,6 +162183,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -158518,6 +162291,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -158590,6 +162364,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuditLogsInput = {
@@ -158662,6 +162438,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuditLogsInput = {
@@ -158774,6 +162552,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -158881,6 +162660,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -158969,6 +162749,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuditLogsInput = {
@@ -159041,6 +162823,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -159159,6 +162943,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -159266,6 +163051,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -159395,6 +163181,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAnnouncementsInput = {
@@ -159467,6 +163255,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAnnouncementsInput = {
@@ -159579,6 +163369,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -159686,6 +163477,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -159837,6 +163629,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAnnouncementsInput = {
@@ -159909,6 +163703,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutPostedAnnouncementsInput = {
@@ -160027,6 +163823,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -160134,6 +163931,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -160206,6 +164004,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHolidaysInput = {
@@ -160278,6 +164078,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHolidaysInput = {
@@ -160366,6 +164168,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHolidaysInput = {
@@ -160438,6 +164242,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutLeaveRequestsInput = {
@@ -160602,6 +164408,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -160709,6 +164516,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -160821,6 +164629,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -160928,6 +164737,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -161040,6 +164850,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -161147,6 +164958,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -161224,6 +165036,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveRequestsInput = {
@@ -161296,6 +165110,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveRequestsInput = {
@@ -161482,6 +165298,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -161589,6 +165406,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -161707,6 +165525,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -161814,6 +165633,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -161932,6 +165752,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -162039,6 +165860,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -162122,6 +165944,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -162194,6 +166018,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutSalaryApprovedInput = {
@@ -162301,6 +166127,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -162408,6 +166235,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -162520,6 +166348,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -162627,6 +166456,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -162704,6 +166534,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSalaryConfigsInput = {
@@ -162776,6 +166608,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSalaryConfigsInput = {
@@ -162888,6 +166722,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -162995,6 +166830,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -163118,6 +166954,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -163225,6 +167062,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -163343,6 +167181,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -163450,6 +167289,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -163533,6 +167373,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSalaryConfigsInput = {
@@ -163605,6 +167447,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSalaryConfigInput = {
@@ -163723,6 +167567,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -163830,6 +167675,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -163937,6 +167783,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -164044,6 +167891,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -164156,6 +168004,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -164263,6 +168112,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -164375,6 +168225,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -164482,6 +168333,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -164559,6 +168411,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollsInput = {
@@ -164631,6 +168485,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollsInput = {
@@ -164743,6 +168599,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -164850,6 +168707,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -164962,6 +168820,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -165069,6 +168928,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -165192,6 +169052,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -165299,6 +169160,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -165417,6 +169279,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -165524,6 +169387,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -165642,6 +169506,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -165749,6 +169614,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -165832,6 +169698,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollsInput = {
@@ -165904,6 +169772,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutProcessedPayrollsInput = {
@@ -166022,6 +169892,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -166129,6 +170000,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -166247,6 +170119,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -166354,6 +170227,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -166461,6 +170335,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -166568,6 +170443,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -166702,6 +170578,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBranchesInput = {
@@ -166774,6 +170652,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBranchesInput = {
@@ -166937,6 +170817,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutBranchInput = {
@@ -166992,6 +170873,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutBranchInput = {
@@ -167147,6 +171029,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -167254,6 +171137,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -167469,6 +171353,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -167576,6 +171461,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -167722,6 +171608,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBranchesInput = {
@@ -167794,6 +171682,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSalesBranchInput = {
@@ -168162,6 +172052,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -168269,6 +172160,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -168346,6 +172238,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSubDepartmentsInput = {
@@ -168418,6 +172312,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSubDepartmentsInput = {
@@ -168587,6 +172483,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -168694,6 +172591,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -169051,6 +172949,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -169158,6 +173057,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -169241,6 +173141,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSubDepartmentsInput = {
@@ -169313,6 +173215,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentUpsertWithoutSubDepartmentsInput = {
@@ -169618,6 +173522,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutDesignationsInput = {
@@ -169690,6 +173596,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutDesignationsInput = {
@@ -169930,6 +173838,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutAdminsInput
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -170037,6 +173946,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -170243,6 +174153,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutDesignationsInput = {
@@ -170315,6 +174227,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DesignationUpsertWithoutChildDesignationsInput = {
@@ -170548,6 +174462,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutHostedMeetingsInput = {
@@ -170655,6 +174570,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutHostedMeetingsInput = {
@@ -170732,6 +174648,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutMeetingsInput = {
@@ -170804,6 +174722,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutMeetingsInput = {
@@ -170927,6 +174847,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
@@ -171034,6 +174955,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutMeetingsInput = {
@@ -171117,6 +175039,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutMeetingsInput = {
@@ -171189,6 +175113,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type DepartmentCreateWithoutVacanciesInput = {
@@ -171318,6 +175244,8 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutVacanciesInput = {
@@ -171390,6 +175318,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutVacanciesInput = {
@@ -171541,6 +175471,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutVacanciesInput = {
@@ -171613,6 +175545,8 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutApprovedSessionsInput = {
@@ -171720,6 +175654,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -171827,6 +175762,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -171939,6 +175875,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -172046,6 +175983,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -172123,6 +176061,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionsInput = {
@@ -172195,6 +176135,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionsInput = {
@@ -172667,6 +176609,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutSessionInput = {
@@ -172722,6 +176665,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutSessionInput = {
@@ -172850,6 +176794,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -172957,6 +176902,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -173075,6 +177021,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -173182,6 +177129,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -173265,6 +177213,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionsInput = {
@@ -173337,6 +177287,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutAdmissionSessionsInput = {
@@ -173754,6 +177706,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -173861,6 +177814,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -173973,6 +177927,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -174080,6 +178035,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -174157,6 +178113,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEnrollmentsInput = {
@@ -174229,6 +178187,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEnrollmentsInput = {
@@ -174394,6 +178354,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
@@ -174501,6 +178462,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
@@ -174613,6 +178575,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -174720,6 +178683,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -174831,6 +178795,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutEnrollmentsInput = {
@@ -174886,6 +178851,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutEnrollmentsInput = {
@@ -175089,6 +179055,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -175196,6 +179163,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -175344,6 +179312,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -175451,6 +179420,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -175569,6 +179539,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -175676,6 +179647,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -175759,6 +179731,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEnrollmentsInput = {
@@ -175831,6 +179805,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutEnrollmentsInput = {
@@ -176008,6 +179984,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
@@ -176115,6 +180092,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutSalesLedEnrollmentsInput = {
@@ -176233,6 +180211,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -176340,6 +180319,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutEnrollmentsInput = {
@@ -176463,6 +180443,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
@@ -176518,6 +180499,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutEnrollmentsInput = {
@@ -176733,6 +180715,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -176840,6 +180823,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -176978,6 +180962,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -177085,6 +181070,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -177197,6 +181183,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -177304,6 +181291,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -177381,6 +181369,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutExpenseClaimsInput = {
@@ -177453,6 +181443,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutExpenseClaimsInput = {
@@ -177576,6 +181568,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -177683,6 +181676,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -177801,6 +181795,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -177908,6 +181903,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -177991,6 +181987,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -178063,6 +182061,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type EnrollmentPaymentCreateWithoutWalletInput = {
@@ -178165,6 +182165,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCenterWalletsInput = {
@@ -178237,6 +182239,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCenterWalletsInput = {
@@ -178432,6 +182436,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCenterWalletsInput = {
@@ -178504,6 +182510,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletInput = {
@@ -178673,6 +182681,8 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutWalletTopUpsInput = {
@@ -178745,6 +182755,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutWalletTopUpsInput = {
@@ -178948,6 +182960,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutAdminsInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -179055,6 +183068,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -179143,6 +183157,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutWalletTopUpsInput = {
@@ -179215,6 +183231,8 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudyCenterUpsertWithoutWalletTopUpsInput = {
@@ -179430,6 +183448,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -179537,6 +183556,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -179652,6 +183672,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentsInput = {
@@ -179724,6 +183746,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentsInput = {
@@ -179836,6 +183860,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -179943,6 +183968,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -180080,6 +184106,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentsInput = {
@@ -180152,6 +184180,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReceivedPaymentsInput = {
@@ -180270,6 +184300,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -180377,6 +184408,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -180484,6 +184516,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -180591,6 +184624,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -180668,6 +184702,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutGstSettingsInput = {
@@ -180740,6 +184776,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutGstSettingsInput = {
@@ -180863,6 +184901,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -180970,6 +185009,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -181053,6 +185093,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutGstSettingsInput = {
@@ -181125,6 +185167,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutEmployeeProfilesInput = {
@@ -181197,6 +185241,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEmployeeProfilesInput = {
@@ -181269,6 +185315,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEmployeeProfilesInput = {
@@ -181381,6 +185429,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -181488,6 +185537,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -181576,6 +185626,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEmployeeProfilesInput = {
@@ -181648,6 +185700,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEmployeeProfileDetailInput = {
@@ -181766,6 +185820,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -181873,6 +185928,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -181945,6 +186001,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutHrSettingsInput = {
@@ -182017,6 +186075,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutHrSettingsInput = {
@@ -182105,6 +186165,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutHrSettingsInput = {
@@ -182177,6 +186239,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutCeoPanelsInput = {
@@ -182249,6 +186313,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCeoPanelsInput = {
@@ -182321,6 +186387,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCeoPanelsInput = {
@@ -182433,6 +186501,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -182540,6 +186609,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -182628,6 +186698,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCeoPanelsInput = {
@@ -182700,6 +186772,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCeoPanelInput = {
@@ -182818,6 +186892,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -182925,6 +187000,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -182997,6 +187073,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCredentialRequestsInput = {
@@ -183069,6 +187147,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCredentialRequestsInput = {
@@ -183181,6 +187261,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -183288,6 +187369,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -183400,6 +187482,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -183507,6 +187590,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -183595,6 +187679,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCredentialRequestsInput = {
@@ -183667,6 +187753,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCredentialResponderInput = {
@@ -183785,6 +187873,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -183892,6 +187981,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -184010,6 +188100,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -184117,6 +188208,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -184189,6 +188281,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEditDeleteRequestsInput = {
@@ -184261,6 +188355,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEditDeleteRequestsInput = {
@@ -184373,6 +188469,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -184480,6 +188577,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -184592,6 +188690,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -184699,6 +188798,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -184787,6 +188887,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEditDeleteRequestsInput = {
@@ -184859,6 +188961,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteResponderInput = {
@@ -184977,6 +189081,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -185084,6 +189189,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -185202,6 +189308,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -185309,6 +189416,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutDeptAdminEscalationsInput = {
@@ -185416,6 +189524,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -185523,6 +189632,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -185635,6 +189745,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -185742,6 +189853,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -185854,6 +189966,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -185961,6 +190074,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -186038,6 +190152,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationsInput = {
@@ -186110,6 +190226,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationsInput = {
@@ -186222,6 +190340,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -186329,6 +190448,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -186529,6 +190649,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -186636,6 +190757,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -186754,6 +190876,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -186861,6 +190984,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -186979,6 +191103,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -187086,6 +191211,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -187169,6 +191295,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationsInput = {
@@ -187241,6 +191369,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutResolvedEscalationsInput = {
@@ -187359,6 +191489,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -187466,6 +191597,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -187650,6 +191782,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutEscalationLogsInput = {
@@ -187722,6 +191856,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutEscalationLogsInput = {
@@ -187855,6 +191991,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutEscalationLogsInput = {
@@ -187927,6 +192065,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutEnteredMarksInput = {
@@ -188034,6 +192174,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -188141,6 +192282,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -188218,6 +192360,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutInternalMarksInput = {
@@ -188290,6 +192434,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutInternalMarksInput = {
@@ -188350,6 +192496,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutInternalMarksInput = {
@@ -188405,6 +192552,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutInternalMarksInput = {
@@ -188619,6 +192767,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -188726,6 +192875,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -188809,6 +192959,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutInternalMarksInput = {
@@ -188881,6 +193033,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutInternalMarksInput = {
@@ -188947,6 +193101,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutInternalMarksInput = {
@@ -189002,6 +193157,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudyCenterUpsertWithoutInternalMarksInput = {
@@ -189206,6 +193362,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -189313,6 +193470,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -189390,6 +193548,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -189462,6 +193622,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -189574,6 +193736,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -189681,6 +193844,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -189804,6 +193968,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -189911,6 +194076,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -189994,6 +194160,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -190066,6 +194234,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutLeaveAllocationsInput = {
@@ -190184,6 +194354,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -190291,6 +194462,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -190398,6 +194570,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -190505,6 +194678,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -190582,6 +194756,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPayrollBatchesInput = {
@@ -190654,6 +194830,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPayrollBatchesInput = {
@@ -190766,6 +194944,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -190873,6 +195052,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -190985,6 +195165,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -191092,6 +195273,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -191215,6 +195397,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -191322,6 +195505,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -191405,6 +195589,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPayrollBatchesInput = {
@@ -191477,6 +195663,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutBatchRejectedInput = {
@@ -191595,6 +195783,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -191702,6 +195891,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -191820,6 +196010,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -191927,6 +196118,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -192034,6 +196226,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -192141,6 +196334,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -192218,6 +196412,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPollsInput = {
@@ -192290,6 +196486,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPollsInput = {
@@ -192413,6 +196611,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -192520,6 +196719,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -192603,6 +196803,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPollsInput = {
@@ -192675,6 +196877,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutProgramAllocationsInput = {
@@ -192782,6 +196986,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -192889,6 +197094,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -193057,6 +197263,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramAllocationsInput = {
@@ -193129,6 +197337,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramAllocationsInput = {
@@ -193305,6 +197515,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -193412,6 +197623,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -193592,6 +197804,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -193664,6 +197878,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutProgramAllocationsInput = {
@@ -193795,6 +198011,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReferralLinksInput = {
@@ -193867,6 +198085,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReferralLinksInput = {
@@ -193979,6 +198199,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -194086,6 +198307,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -194174,6 +198396,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReferralLinksInput = {
@@ -194246,6 +198470,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutReferralLinkInput = {
@@ -194364,6 +198590,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -194471,6 +198698,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -194543,6 +198771,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutReregRulesInput = {
@@ -194615,6 +198845,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutReregRulesInput = {
@@ -194756,6 +198988,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutReregRulesInput = {
@@ -194828,6 +199062,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutReregRulesInput = {
@@ -194994,6 +199230,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -195101,6 +199338,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -195269,6 +199507,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutSessionReqsInput = {
@@ -195341,6 +199581,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutSessionReqsInput = {
@@ -195453,6 +199695,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -195560,6 +199803,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -195683,6 +199927,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -195790,6 +200035,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -195970,6 +200216,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutSessionReqsInput = {
@@ -196042,6 +200290,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutSessionRequestsInput = {
@@ -196160,6 +200410,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -196267,6 +200518,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -196388,6 +200640,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -196460,6 +200714,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -196572,6 +200828,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -196679,6 +200936,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -196822,6 +201080,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -196894,6 +201154,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutStudyCenterInvitesInput = {
@@ -197012,6 +201274,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -197119,6 +201382,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -197374,6 +201638,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -197481,6 +201746,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -197558,6 +201824,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutTargetsInput = {
@@ -197630,6 +201898,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutTargetsInput = {
@@ -197913,6 +202183,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -198020,6 +202291,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -198103,6 +202375,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutTargetsInput = {
@@ -198175,6 +202449,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserCreateWithoutConfiguredAuthFeesInput = {
@@ -198282,6 +202558,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -198389,6 +202666,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -198466,6 +202744,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutAuthFeesInput = {
@@ -198538,6 +202818,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutAuthFeesInput = {
@@ -198714,6 +202996,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -198821,6 +203104,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -198904,6 +203188,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutAuthFeesInput = {
@@ -198976,6 +203262,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UniversityUpsertWithoutAuthFeesInput = {
@@ -199142,6 +203430,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -199249,6 +203538,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -199326,6 +203616,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutFeeStructuresInput = {
@@ -199398,6 +203690,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutFeeStructuresInput = {
@@ -199678,6 +203972,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -199785,6 +204080,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -199868,6 +204164,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutFeeStructuresInput = {
@@ -199940,6 +204238,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutFeeStructuresInput = {
@@ -200187,6 +204487,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCommissionsInput = {
@@ -200259,6 +204561,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCommissionsInput = {
@@ -200319,6 +204623,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     university?: UniversityCreateNestedOneWithoutStudentsInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCommissionsInput = {
@@ -200374,6 +204679,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCommissionsInput = {
@@ -200515,6 +204821,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCommissionsInput = {
@@ -200587,6 +204895,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutCommissionsInput = {
@@ -200653,6 +204963,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCommissionsInput = {
@@ -200708,6 +205019,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UniversityUpsertWithoutCommissionsInput = {
@@ -201338,6 +205650,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -201445,6 +205758,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -201557,6 +205871,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -201664,6 +205979,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -201741,6 +206057,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutIncentiveStructuresInput = {
@@ -201813,6 +206131,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutIncentiveStructuresInput = {
@@ -201936,6 +206256,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -202043,6 +206364,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -202161,6 +206483,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -202268,6 +206591,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -202351,6 +206675,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutIncentiveStructuresInput = {
@@ -202423,6 +206749,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateWithoutProgramMaterialsInput = {
@@ -202495,6 +206823,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProgramMaterialsInput = {
@@ -202567,6 +206897,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProgramMaterialsInput = {
@@ -202732,6 +207064,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -202839,6 +207172,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -202927,6 +207261,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProgramMaterialsInput = {
@@ -202999,6 +207335,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type ProgramUpsertWithoutMaterialsInput = {
@@ -203176,6 +207514,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -203283,6 +207622,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type InvoiceCreateWithoutScheduleInput = {
@@ -203445,6 +207785,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -203517,6 +207859,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -203577,6 +207921,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPaymentSchedulesInput = {
@@ -203632,6 +207977,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPaymentSchedulesInput = {
@@ -203752,6 +208098,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -203824,6 +208172,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutPaymentSchedulesInput = {
@@ -203890,6 +208240,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPaymentSchedulesInput = {
@@ -203945,6 +208296,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutCreatedPaymentLinksInput = {
@@ -204052,6 +208404,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -204159,6 +208512,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -204236,6 +208590,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutPaymentLinksInput = {
@@ -204308,6 +208664,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutPaymentLinksInput = {
@@ -204407,6 +208765,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPaymentLinksInput = {
@@ -204462,6 +208821,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPaymentLinksInput = {
@@ -204585,6 +208945,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -204692,6 +209053,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationUpsertWithoutPaymentLinksInput = {
@@ -204775,6 +209137,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutPaymentLinksInput = {
@@ -204847,6 +209211,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type PaymentScheduleUpsertWithoutPaymentLinksInput = {
@@ -204958,6 +209324,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPaymentLinksInput = {
@@ -205013,6 +209380,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationCreateWithoutCollectionOverseersInput = {
@@ -205085,6 +209453,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutCollectionOverseersInput = {
@@ -205157,6 +209527,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutCollectionOverseersInput = {
@@ -205269,6 +209641,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -205376,6 +209749,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -205464,6 +209838,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -205536,6 +209912,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type UserUpsertWithoutCollectionOverseersInput = {
@@ -205654,6 +210032,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -205761,6 +210140,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -205833,6 +210213,8 @@ export namespace Prisma {
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -205905,6 +210287,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
     biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -205965,6 +210349,7 @@ export namespace Prisma {
     session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUniversityPaymentsInput = {
@@ -206020,6 +210405,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUniversityPaymentsInput = {
@@ -206161,6 +210547,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -206233,6 +210621,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type StudentUpsertWithoutUniversityPaymentsInput = {
@@ -206299,6 +210689,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUniversityPaymentsInput = {
@@ -206354,6 +210745,7 @@ export namespace Prisma {
     paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UniversityUpsertWithoutUniversityPaymentsInput = {
@@ -206520,6 +210912,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -206627,6 +211020,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -206750,6 +211144,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -206857,6 +211252,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutDocumentLogsInput = {
@@ -206964,6 +211360,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -207071,6 +211468,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -207131,6 +211529,7 @@ export namespace Prisma {
     university?: UniversityCreateNestedOneWithoutStudentsInput
     commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutDocumentLogsInput = {
@@ -207186,6 +211585,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
     commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
     universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutDocumentLogsInput = {
@@ -207309,6 +211709,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -207416,6 +211817,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type StudentUpsertWithoutDocumentLogsInput = {
@@ -207482,6 +211884,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutDocumentLogsInput = {
@@ -207537,6 +211940,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type OrganizationCreateWithoutBiometricDevicesInput = {
@@ -207609,6 +212013,8 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutBiometricDevicesInput = {
@@ -207681,6 +212087,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
     walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutBiometricDevicesInput = {
@@ -207818,6 +212226,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutBiometricDevicesInput = {
@@ -207890,6 +212300,8 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type BranchUpsertWithoutBiometricDevicesInput = {
@@ -207945,6 +212357,1318 @@ export namespace Prisma {
     invites?: StudyCenterInviteUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     universities?: UniversityUncheckedUpdateManyWithoutAllowedBranchesNestedInput
+  }
+
+  export type OrganizationCreateWithoutExamRegistrationsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutExamRegistrationsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutExamRegistrationsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutExamRegistrationsInput, OrganizationUncheckedCreateWithoutExamRegistrationsInput>
+  }
+
+  export type StudentCreateWithoutExamRegistrationsInput = {
+    id?: string
+    enrollmentNo?: string | null
+    name: string
+    phone: string
+    address: string
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    documentLogs?: DocumentLogCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutStudentInput
+    branch?: BranchCreateNestedOneWithoutStudentsInput
+    center?: StudyCenterCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutStudentProfileInput
+    enrolledByUser?: UserCreateNestedOneWithoutEnrolledStudentsInput
+    organization: OrganizationCreateNestedOneWithoutStudentsInput
+    program: ProgramCreateNestedOneWithoutStudentsInput
+    referrer?: UserCreateNestedOneWithoutReferredStudentsInput
+    session?: AdmissionSessionCreateNestedOneWithoutStudentsInput
+    university?: UniversityCreateNestedOneWithoutStudentsInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutExamRegistrationsInput = {
+    id?: string
+    centerId?: string | null
+    organizationId: string
+    enrollmentNo?: string | null
+    name: string
+    email: string
+    phone: string
+    address: string
+    programId: string
+    sessionId?: string | null
+    status?: string
+    joinDate?: Date | string
+    enrolledAt?: Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredBy?: string | null
+    isPrevious?: boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: string | null
+    dob?: Date | string | null
+    fatherName?: string | null
+    pinCode?: string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: Date | string | null
+    admissionNo?: string | null
+    branchId?: string | null
+    caste?: string | null
+    fatherPhone?: string | null
+    motherName?: string | null
+    motherPhone?: string | null
+    photo?: string | null
+    religion?: string | null
+    gender?: string | null
+    category?: string | null
+    maritalStatus?: string | null
+    employmentStatus?: string | null
+    guardianName?: string | null
+    familyPhone?: string | null
+    universityId?: string | null
+    enrolledBy?: string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: number
+    discountReason?: string | null
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutStudentInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutStudentInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutStudentInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutStudentInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutStudentInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutStudentInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutExamRegistrationsInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutExamRegistrationsInput, StudentUncheckedCreateWithoutExamRegistrationsInput>
+  }
+
+  export type OrganizationUpsertWithoutExamRegistrationsInput = {
+    update: XOR<OrganizationUpdateWithoutExamRegistrationsInput, OrganizationUncheckedUpdateWithoutExamRegistrationsInput>
+    create: XOR<OrganizationCreateWithoutExamRegistrationsInput, OrganizationUncheckedCreateWithoutExamRegistrationsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutExamRegistrationsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutExamRegistrationsInput, OrganizationUncheckedUpdateWithoutExamRegistrationsInput>
+  }
+
+  export type OrganizationUpdateWithoutExamRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutExamRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type StudentUpsertWithoutExamRegistrationsInput = {
+    update: XOR<StudentUpdateWithoutExamRegistrationsInput, StudentUncheckedUpdateWithoutExamRegistrationsInput>
+    create: XOR<StudentCreateWithoutExamRegistrationsInput, StudentUncheckedCreateWithoutExamRegistrationsInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutExamRegistrationsInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutExamRegistrationsInput, StudentUncheckedUpdateWithoutExamRegistrationsInput>
+  }
+
+  export type StudentUpdateWithoutExamRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    documentLogs?: DocumentLogUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutStudentNestedInput
+    branch?: BranchUpdateOneWithoutStudentsNestedInput
+    center?: StudyCenterUpdateOneWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutStudentProfileNestedInput
+    enrolledByUser?: UserUpdateOneWithoutEnrolledStudentsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutStudentsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutStudentsNestedInput
+    referrer?: UserUpdateOneWithoutReferredStudentsNestedInput
+    session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
+    university?: UniversityUpdateOneWithoutStudentsNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutExamRegistrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centerId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    enrollmentNo?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrolledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reregStatus?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrevious?: BoolFieldUpdateOperationsInput | boolean
+    credentials?: NullableJsonNullValueInput | InputJsonValue
+    altPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: NullableJsonNullValueInput | InputJsonValue
+    admissionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    admissionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    employmentStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianName?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolledBy?: NullableStringFieldUpdateOperationsInput | string | null
+    academicProgress?: NullableJsonNullValueInput | InputJsonValue
+    admissionProgress?: NullableJsonNullValueInput | InputJsonValue
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    discountReason?: NullableStringFieldUpdateOperationsInput | string | null
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutStudentNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutStudentNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutStudentNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutStudentNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type OrganizationCreateWithoutCommunicationLogsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+    branches?: BranchCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceCreateNestedManyWithoutOrganizationInput
+    leads?: LeadCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganizationInput
+    license?: LicenseCreateNestedOneWithoutOrganizationsInput
+    payments?: PaymentEntryCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchCreateNestedManyWithoutOrganizationInput
+    polls?: PollCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestCreateNestedManyWithoutOrganizationInput
+    students?: StudentCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentCreateNestedManyWithoutOrganizationInput
+    targets?: TargetCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentCreateNestedManyWithoutOrganizationInput
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutCommunicationLogsInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    address: string
+    logo?: string | null
+    status?: $Enums.OrganizationStatus
+    licenseId?: string | null
+    licenseExpiry?: Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: AdmissionSessionUncheckedCreateNestedManyWithoutOrganizationInput
+    announcements?: AnnouncementUncheckedCreateNestedManyWithoutOrganizationInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+    branches?: BranchUncheckedCreateNestedManyWithoutOrganizationInput
+    ceoPanels?: CeoPanelUncheckedCreateNestedManyWithoutOrganizationInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutOrganizationInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutOrganizationInput
+    credentialRequests?: CredentialRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    departments?: DepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutOrganizationInput
+    editDeleteRequests?: EditDeleteRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutOrganizationInput
+    employeeProfiles?: EmployeeProfileUncheckedCreateNestedManyWithoutOrganizationInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutOrganizationInput
+    escalations?: EscalationUncheckedCreateNestedManyWithoutOrganizationInput
+    escalationLogs?: EscalationLogUncheckedCreateNestedManyWithoutOrganizationInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutOrganizationInput
+    feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    gstSettings?: GSTSettingUncheckedCreateNestedManyWithoutOrganizationInput
+    hrSettings?: HRSettingsUncheckedCreateNestedOneWithoutOrganizationInput
+    holidays?: HolidayUncheckedCreateNestedManyWithoutOrganizationInput
+    incentiveStructures?: IncentiveStructureUncheckedCreateNestedManyWithoutOrganizationInput
+    internalMarks?: InternalMarkUncheckedCreateNestedManyWithoutOrganizationInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+    leads?: LeadUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganizationInput
+    payments?: PaymentEntryUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    paymentSchedules?: PaymentScheduleUncheckedCreateNestedManyWithoutOrganizationInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutOrganizationInput
+    payrollBatches?: PayrollBatchUncheckedCreateNestedManyWithoutOrganizationInput
+    polls?: PollUncheckedCreateNestedManyWithoutOrganizationInput
+    programs?: ProgramUncheckedCreateNestedManyWithoutOrganizationInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOrganizationInput
+    programMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutOrganizationInput
+    referralLinks?: ReferralLinkUncheckedCreateNestedManyWithoutOrganizationInput
+    reregRules?: ReregRuleUncheckedCreateNestedManyWithoutOrganizationInput
+    salaryConfigs?: SalaryConfigUncheckedCreateNestedManyWithoutOrganizationInput
+    sessionReqs?: SessionRequestUncheckedCreateNestedManyWithoutOrganizationInput
+    students?: StudentUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenters?: StudyCenterUncheckedCreateNestedManyWithoutOrganizationInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutOrganizationInput
+    centerWallets?: StudyCenterWalletUncheckedCreateNestedManyWithoutOrganizationInput
+    subDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutOrganizationInput
+    targets?: TargetUncheckedCreateNestedManyWithoutOrganizationInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutOrganizationInput
+    universities?: UniversityUncheckedCreateNestedManyWithoutOrganizationInput
+    authFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutOrganizationInput
+    commissions?: UniversityCommissionUncheckedCreateNestedManyWithoutOrganizationInput
+    universityPayments?: UniversityPaymentUncheckedCreateNestedManyWithoutOrganizationInput
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    vacancies?: VacancyUncheckedCreateNestedManyWithoutOrganizationInput
+    walletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutOrganizationInput
+    biometricDevices?: BiometricDeviceUncheckedCreateNestedManyWithoutOrganizationInput
+    examRegistrations?: ExamRegistrationUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutCommunicationLogsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutCommunicationLogsInput, OrganizationUncheckedCreateWithoutCommunicationLogsInput>
+  }
+
+  export type UserCreateWithoutCommunicationLogsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+  }
+
+  export type UserUncheckedCreateWithoutCommunicationLogsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+  }
+
+  export type UserCreateOrConnectWithoutCommunicationLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCommunicationLogsInput, UserUncheckedCreateWithoutCommunicationLogsInput>
+  }
+
+  export type OrganizationUpsertWithoutCommunicationLogsInput = {
+    update: XOR<OrganizationUpdateWithoutCommunicationLogsInput, OrganizationUncheckedUpdateWithoutCommunicationLogsInput>
+    create: XOR<OrganizationCreateWithoutCommunicationLogsInput, OrganizationUncheckedCreateWithoutCommunicationLogsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutCommunicationLogsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutCommunicationLogsInput, OrganizationUncheckedUpdateWithoutCommunicationLogsInput>
+  }
+
+  export type OrganizationUpdateWithoutCommunicationLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganizationNestedInput
+    license?: LicenseUpdateOneWithoutOrganizationsNestedInput
+    payments?: PaymentEntryUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUpdateManyWithoutOrganizationNestedInput
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutCommunicationLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    logo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
+    licenseId?: NullableStringFieldUpdateOperationsInput | string | null
+    licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: AdmissionSessionUncheckedUpdateManyWithoutOrganizationNestedInput
+    announcements?: AnnouncementUncheckedUpdateManyWithoutOrganizationNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutOrganizationNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    branches?: BranchUncheckedUpdateManyWithoutOrganizationNestedInput
+    ceoPanels?: CeoPanelUncheckedUpdateManyWithoutOrganizationNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutOrganizationNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutOrganizationNestedInput
+    credentialRequests?: CredentialRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    departments?: DepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutOrganizationNestedInput
+    editDeleteRequests?: EditDeleteRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    employeeProfiles?: EmployeeProfileUncheckedUpdateManyWithoutOrganizationNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalations?: EscalationUncheckedUpdateManyWithoutOrganizationNestedInput
+    escalationLogs?: EscalationLogUncheckedUpdateManyWithoutOrganizationNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutOrganizationNestedInput
+    feeStructures?: FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    gstSettings?: GSTSettingUncheckedUpdateManyWithoutOrganizationNestedInput
+    hrSettings?: HRSettingsUncheckedUpdateOneWithoutOrganizationNestedInput
+    holidays?: HolidayUncheckedUpdateManyWithoutOrganizationNestedInput
+    incentiveStructures?: IncentiveStructureUncheckedUpdateManyWithoutOrganizationNestedInput
+    internalMarks?: InternalMarkUncheckedUpdateManyWithoutOrganizationNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+    leads?: LeadUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganizationNestedInput
+    payments?: PaymentEntryUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentLinks?: PaymentLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutOrganizationNestedInput
+    payrollBatches?: PayrollBatchUncheckedUpdateManyWithoutOrganizationNestedInput
+    polls?: PollUncheckedUpdateManyWithoutOrganizationNestedInput
+    programs?: ProgramUncheckedUpdateManyWithoutOrganizationNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOrganizationNestedInput
+    programMaterials?: ProgramMaterialUncheckedUpdateManyWithoutOrganizationNestedInput
+    referralLinks?: ReferralLinkUncheckedUpdateManyWithoutOrganizationNestedInput
+    reregRules?: ReregRuleUncheckedUpdateManyWithoutOrganizationNestedInput
+    salaryConfigs?: SalaryConfigUncheckedUpdateManyWithoutOrganizationNestedInput
+    sessionReqs?: SessionRequestUncheckedUpdateManyWithoutOrganizationNestedInput
+    students?: StudentUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenters?: StudyCenterUncheckedUpdateManyWithoutOrganizationNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutOrganizationNestedInput
+    centerWallets?: StudyCenterWalletUncheckedUpdateManyWithoutOrganizationNestedInput
+    subDepartments?: SubDepartmentUncheckedUpdateManyWithoutOrganizationNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutOrganizationNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutOrganizationNestedInput
+    universities?: UniversityUncheckedUpdateManyWithoutOrganizationNestedInput
+    authFees?: UniversityAuthFeeUncheckedUpdateManyWithoutOrganizationNestedInput
+    commissions?: UniversityCommissionUncheckedUpdateManyWithoutOrganizationNestedInput
+    universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutOrganizationNestedInput
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
+    walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
+    biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type UserUpsertWithoutCommunicationLogsInput = {
+    update: XOR<UserUpdateWithoutCommunicationLogsInput, UserUncheckedUpdateWithoutCommunicationLogsInput>
+    create: XOR<UserCreateWithoutCommunicationLogsInput, UserUncheckedCreateWithoutCommunicationLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCommunicationLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCommunicationLogsInput, UserUncheckedUpdateWithoutCommunicationLogsInput>
+  }
+
+  export type UserUpdateWithoutCommunicationLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCommunicationLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
   }
 
   export type AdmissionSessionCreateManyOrganizationInput = {
@@ -208871,6 +214595,29 @@ export namespace Prisma {
     ipAddress?: string | null
     status?: string
     lastActive?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationCreateManyOrganizationInput = {
+    id?: string
+    studentId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogCreateManyOrganizationInput = {
+    id?: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
+    sentBy: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -211006,6 +216753,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutOrganizationInput = {
@@ -211061,6 +216809,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutOrganizationInput = {
@@ -211721,6 +217470,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -211828,6 +217578,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -211973,6 +217724,75 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ExamRegistrationUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutExamRegistrationsNestedInput
+  }
+
+  export type ExamRegistrationUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExamRegistrationUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutCommunicationLogsNestedInput
+  }
+
+  export type CommunicationLogUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    sentBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    sentBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganizationCreateManyLicenseInput = {
     id?: string
     name: string
@@ -212057,6 +217877,8 @@ export namespace Prisma {
     vacancies?: VacancyUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutLicenseInput = {
@@ -212129,6 +217951,8 @@ export namespace Prisma {
     vacancies?: VacancyUncheckedUpdateManyWithoutOrganizationNestedInput
     walletTopUps?: WalletTopUpUncheckedUpdateManyWithoutOrganizationNestedInput
     biometricDevices?: BiometricDeviceUncheckedUpdateManyWithoutOrganizationNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutOrganizationNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateManyWithoutLicenseInput = {
@@ -212780,6 +218604,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -212887,6 +218712,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -213056,6 +218882,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -213163,6 +218990,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -214619,6 +220447,17 @@ export namespace Prisma {
     status?: $Enums.TopUpStatus
     remarks?: string | null
     verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CommunicationLogCreateManySenderInput = {
+    id?: string
+    organizationId: string
+    type: string
+    recipientCount?: number
+    content?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -217997,6 +223836,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutEnrolledByUserInput = {
@@ -218052,6 +223892,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutEnrolledByUserInput = {
@@ -218154,6 +223995,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutReferrerInput = {
@@ -218209,6 +224051,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutReferrerInput = {
@@ -219074,6 +224917,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -219181,6 +225025,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -219375,6 +225220,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allowedBranchIds?: NullableJsonNullValueInput | InputJsonValue
     allowedDeptIds?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type CommunicationLogUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutCommunicationLogsNestedInput
+  }
+
+  export type CommunicationLogUncheckedUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommunicationLogUncheckedUpdateManyWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    recipientCount?: IntFieldUpdateOperationsInput | number
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EscalationCreateManyTaskInput = {
@@ -219869,6 +225747,7 @@ export namespace Prisma {
     session?: AdmissionSessionUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUniversityInput = {
@@ -219924,6 +225803,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutUniversityInput = {
@@ -220177,6 +226057,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -220284,6 +226165,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -221160,6 +227042,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutProgramInput = {
@@ -221215,6 +227098,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutProgramInput = {
@@ -222138,6 +228022,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCenterInput = {
@@ -222193,6 +228078,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutCenterInput = {
@@ -222395,6 +228281,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -222502,6 +228389,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -222903,6 +228791,18 @@ export namespace Prisma {
     datePaid?: Date | string
     status?: string
     notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ExamRegistrationCreateManyStudentInput = {
+    id?: string
+    organizationId: string
+    semester: string
+    subjectCodes: string
+    examCenter?: string | null
+    status?: string
+    registrationDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -223377,6 +229277,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ExamRegistrationUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutExamRegistrationsNestedInput
+  }
+
+  export type ExamRegistrationUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExamRegistrationUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    semester?: StringFieldUpdateOperationsInput | string
+    subjectCodes?: StringFieldUpdateOperationsInput | string
+    examCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    registrationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PaymentEntryCreateManyInvoiceInput = {
     id?: string
     organizationId: string
@@ -223652,6 +229588,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutBranchInput = {
@@ -223707,6 +229644,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutBranchInput = {
@@ -223903,6 +229841,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -224010,6 +229949,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -224427,6 +230367,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -224534,6 +230475,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -224979,6 +230921,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutAdminsNestedInput
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -225086,6 +231029,7 @@ export namespace Prisma {
     subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {
@@ -225524,6 +231468,7 @@ export namespace Prisma {
     university?: UniversityUpdateOneWithoutStudentsNestedInput
     commissions?: UniversityCommissionUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutSessionInput = {
@@ -225579,6 +231524,7 @@ export namespace Prisma {
     paymentSchedules?: PaymentScheduleUncheckedUpdateManyWithoutStudentNestedInput
     commissions?: UniversityCommissionUncheckedUpdateManyWithoutStudentNestedInput
     universityPayments?: UniversityPaymentUncheckedUpdateManyWithoutStudentNestedInput
+    examRegistrations?: ExamRegistrationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutSessionInput = {

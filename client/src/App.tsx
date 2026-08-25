@@ -544,7 +544,7 @@ function App() {
           response = await api.get('/operations/announcements');
           break;
         case 'audit_logs':
-          response = await api.get('/users'); // Placeholder
+          response = await api.get('/ceo/activity-logs');
           break;
         case 'payroll':
           response = await api.get('/payroll');

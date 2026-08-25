@@ -79,6 +79,8 @@ model Organization {
   vacancies           Vacancy[]
   walletTopUps        WalletTopUp[]
   biometricDevices    BiometricDevice[]
+  examRegistrations   ExamRegistration[]
+  communicationLogs   CommunicationLog[]
 
   @@index([status])
 }
@@ -244,6 +246,7 @@ model User {
   verifiedWalletTopUps          WalletTopUp[]        @relation("TopUpVerifiedBy")
   assistantManagedDepartments   Department[]         @relation("AssistantManagers")
   designations                  Designation[]        @relation("DesignationFilledBy")
+  communicationLogs             CommunicationLog[]
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -497,6 +500,7 @@ model Student {
   university         University?            @relation(fields: [universityId], references: [id])
   commissions        UniversityCommission[]
   universityPayments UniversityPayment[]
+  examRegistrations  ExamRegistration[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -1839,4 +1843,40 @@ model BiometricDevice {
 
   @@index([organizationId])
   @@index([serialNumber])
+}
+
+model ExamRegistration {
+  id               String   @id @default(uuid())
+  organizationId   String
+  studentId        String
+  semester         String
+  subjectCodes     String // comma separated
+  examCenter       String?
+  status           String   @default("pending") // pending, approved, rejected
+  registrationDate DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([studentId])
+}
+
+model CommunicationLog {
+  id             String   @id @default(uuid())
+  organizationId String
+  type           String // sms, email, whatsapp
+  recipientCount Int      @default(0)
+  content        String?
+  status         String   @default("sent") // sent, failed
+  sentBy         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [sentBy], references: [id])
+
+  @@index([organizationId])
 }

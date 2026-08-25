@@ -434,13 +434,31 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
 
     const absentEmployees = allEmployees.filter(emp => !presentEmployeeIds.has(emp.id));
     
+    const isSunday = targetDate.getDay() === 0;
+    
+    const startOfDay = new Date(targetDate);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(targetDate);
+    endOfDay.setHours(23, 59, 59, 999);
+    
+    // Check if it's a holiday in the organization
+    const holiday = await prisma.holiday.findFirst({
+      where: {
+        organizationId: req.user.organizationId,
+        date: { gte: startOfDay, lte: endOfDay }
+      }
+    });
+
+    const isHolidayOrSunday = isSunday || !!holiday;
+    const computedStatus = isHolidayOrSunday ? 'holiday' : 'absent';
+
     const mockAbsentRecords: any[] = absentEmployees.map(emp => ({
-      id: `absent-${emp.id}-${targetDate.getTime()}`,
+      id: `${computedStatus}-${emp.id}-${targetDate.getTime()}`,
       employeeId: emp.id,
       organizationId: emp.organizationId,
       branchId: emp.branchId,
       date: targetDate,
-      status: 'absent',
+      status: computedStatus,
       checkIn: null,
       checkOut: null,
       checkInLocation: null,
@@ -448,7 +466,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       isLate: false,
       lateMinutes: 0,
       workingHours: 0,
-      notes: null,
+      notes: holiday ? holiday.name : (isSunday ? 'Sunday' : null),
       createdAt: new Date(),
       updatedAt: new Date(),
       user: emp

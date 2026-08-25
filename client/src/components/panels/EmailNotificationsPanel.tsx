@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Send, Users, Paperclip } from 'lucide-react';
 import { toast } from 'sonner';
+import api from '@/lib/api';
 
 export function EmailNotificationsPanel() {
   const [loading, setLoading] = useState(false);
@@ -21,8 +22,7 @@ export function EmailNotificationsPanel() {
     
     setLoading(true);
     try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await api.post('/communications/email', { subject, message, recipientCount });
       toast.success('Email campaign started successfully!');
       setSubject('');
       setMessage('');

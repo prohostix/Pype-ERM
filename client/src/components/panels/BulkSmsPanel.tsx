@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { MessageSquare, Send, Users } from 'lucide-react';
 import { toast } from 'sonner';
+import api from '@/lib/api';
 
 export function BulkSmsPanel() {
   const [loading, setLoading] = useState(false);
@@ -19,8 +20,7 @@ export function BulkSmsPanel() {
     
     setLoading(true);
     try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await api.post('/communications/sms', { message, recipientCount });
       toast.success('Bulk SMS campaign started successfully!');
       setMessage('');
     } catch (e) {

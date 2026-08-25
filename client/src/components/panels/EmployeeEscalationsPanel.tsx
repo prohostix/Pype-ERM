@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 interface Escalation {
   id: string;
   type: string;
-  description: string;
+  reason: string;
   impact: string;
   status: string;
   currentLevel: number;
@@ -82,10 +82,8 @@ export function EmployeeEscalationsPanel() {
     try {
       await api.post('/escalations', {
         type: form.type,
-        description: form.description,
+        reason: form.description,
         impact: form.impact,
-        entityType: 'General',
-        entityId: '000000000000000000000000', // placeholder — no specific entity
         currentLevel: 1,
         maxLevel: 3,
       });
@@ -243,7 +241,7 @@ export function EmployeeEscalationsPanel() {
                       </Badge>
                       <span className="text-[10px] text-muted-foreground">{timeAgo(esc.raisedAt)}</span>
                     </div>
-                    <p className="text-sm text-foreground line-clamp-2">{esc.description}</p>
+                    <p className="text-sm text-foreground line-clamp-2">{esc.reason}</p>
 
                     {/* Level indicator */}
                     <div className="flex items-center gap-1 mt-3">
