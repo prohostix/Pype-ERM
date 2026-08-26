@@ -73,27 +73,32 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
       return;
     }
 
-    // Login Successful, begin extraction
-    let programsMigrated = 0;
-    let studentsMigrated = 0;
-    let paymentsMigrated = 0;
-    let leadsMigrated = 0;
-    let errors: string[] = [];
+    // Login Successful, respond immediately to prevent timeouts
+    res.status(202).json({ success: true, message: 'Authentication successful. Migration started in background.' });
 
-    const broadcastProgress = (status: string) => {
-      emitToOrganization(organizationId, 'dsms_migration_progress', {
-        status,
-        programsMigrated,
-        studentsMigrated,
-        paymentsMigrated,
-        leadsMigrated,
-        errors: errors.slice(-5)
-      });
-    };
+    // Execute migration in background
+    (async () => {
+      let programsMigrated = 0;
+      let studentsMigrated = 0;
+      let paymentsMigrated = 0;
+      let leadsMigrated = 0;
+      let errors: string[] = [];
 
-    broadcastProgress('Authenticating with DSMS...');
+      const broadcastProgress = (status: string) => {
+        emitToOrganization(organizationId, 'dsms_migration_progress', {
+          status,
+          programsMigrated,
+          studentsMigrated,
+          paymentsMigrated,
+          leadsMigrated,
+          errors: errors.slice(-5)
+        });
+      };
 
-    // --- A. Scrape Programs ---
+      try {
+        broadcastProgress('Authenticating with DSMS...');
+
+        // --- A. Scrape Programs ---
     // Programs require a University. Create or find a generic DSMS University.
     let defaultUniversity = await prisma.university.findFirst({
       where: { name: 'DSMS Legacy University', organizationId }
@@ -513,23 +518,31 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
         }
       await sleep(200);
       leadPage++;
-    } // End of while loop
-    } catch (e: any) {
-      errors.push(`Failed to fetch enquiries: ${e.message}`);
-    }
+        } // End of while loop
+      } catch (e: any) {
+        errors.push(`Failed to fetch enquiries: ${e.message}`);
+      }
 
-    res.json({
-      success: true,
-      data: {
+      emitToOrganization(organizationId, 'dsms_migration_completed', {
         programsMigrated,
         studentsMigrated,
         paymentsMigrated,
         leadsMigrated,
         errors
-      }
-    });
+      });
+
+    } catch (bgError: any) {
+      console.error('Background migration error:', bgError);
+      emitToOrganization(organizationId, 'dsms_migration_error', {
+        message: bgError.message || 'An unexpected error occurred during migration.'
+      });
+    }
+    })(); // Execute background async function
 
   } catch (error: any) {
-    res.status(500).json({ success: false, message: error.message });
+    // If the initial connection or login fails before background process starts
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, message: error.message });
+    }
   }
 });

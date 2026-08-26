@@ -51,6 +51,18 @@ const DsmsMigrationPanel: React.FC = () => {
       setProgress(data);
     });
 
+    socket.on('dsms_migration_completed', (data: any) => {
+      setResult(data);
+      setIsMigrating(false);
+      setProgress(null);
+    });
+
+    socket.on('dsms_migration_error', (data: any) => {
+      setError(data.message || 'An error occurred during background migration.');
+      setIsMigrating(false);
+      setProgress(null);
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -71,13 +83,20 @@ const DsmsMigrationPanel: React.FC = () => {
       });
 
       if (response.data.success) {
-        setResult(response.data.data);
+        // If it's a 202 Accepted, do NOT set isMigrating to false yet.
+        // Wait for the socket event to trigger completion.
+        if (response.status !== 202) {
+           setResult(response.data.data);
+           setIsMigrating(false);
+        } else {
+           // We just wait, the progress bar is showing
+        }
       } else {
         setError(response.data.message || 'Migration failed.');
+        setIsMigrating(false);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'An error occurred during migration.');
-    } finally {
       setIsMigrating(false);
     }
   };
