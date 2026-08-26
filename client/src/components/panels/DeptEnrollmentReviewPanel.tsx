@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
