@@ -246,6 +246,10 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
     where: {
       organizationId: orgId,
       salesUserId,
+      NOT: {
+        status: 'enrolled',
+        studentId: null
+      }
     },
     include: {
       program: { select: { id: true, name: true, code: true, courseType: true, feeStructures: { select: { allowInitialFee: true } } } },
