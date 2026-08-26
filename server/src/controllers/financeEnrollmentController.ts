@@ -160,6 +160,38 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
     }
   });
 
+  // Generate an invoice and payment entry for the initial payment so it shows in Student Payments Log
+  if (amountPaid > 0) {
+    const invNo = `INV-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+    await prisma.invoice.create({
+      data: {
+        organizationId: enrollment.organizationId,
+        studentId: enrollment.studentId || undefined,
+        centerId: enrollment.studyCenterId || undefined,
+        invoiceNo: invNo,
+        amount: amountPaid,
+        tax: 0,
+        total: amountPaid,
+        status: 'paid',
+        dueDate: new Date(),
+        paidAt: new Date(),
+        notes: 'Initial Admission Payment',
+        items: [{ description: 'Admission/Initial Fee', amount: amountPaid }],
+        payments: {
+          create: {
+            organizationId: enrollment.organizationId,
+            amount: amountPaid,
+            method: 'online', 
+            referenceNo: 'Admission',
+            receivedBy: req.user.id,
+            receivedAt: new Date(),
+            notes: 'Auto-generated during receipt verification'
+          }
+        }
+      }
+    });
+  }
+
   // Update enrollment
   const historyEntry = {
     status: 'document_review',
