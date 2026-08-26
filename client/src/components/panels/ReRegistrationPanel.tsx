@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RefreshCw, CheckCircle } from 'lucide-react';
+import { RefreshCw, CheckCircle, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
@@ -15,6 +16,7 @@ export function ReRegistrationPanel() {
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('pending');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +24,7 @@ export function ReRegistrationPanel() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab]);
+  }, [activeTab, searchQuery]);
 
   useEffect(() => {
     fetchStudents();
@@ -61,22 +63,49 @@ export function ReRegistrationPanel() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="pending">Pending ({students.length})</TabsTrigger>
-            <TabsTrigger value="completed">Completed ({completedStudents.length})</TabsTrigger>
-          </TabsList>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+            <TabsList>
+              <TabsTrigger value="pending">Pending ({students.length})</TabsTrigger>
+              <TabsTrigger value="completed">Completed ({completedStudents.length})</TabsTrigger>
+            </TabsList>
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search students..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
 
           {(() => {
-            const totalPendingPages = Math.max(1, Math.ceil(students.length / itemsPerPage));
-            const paginatedPending = students.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+            const filteredPending = students.filter(s => {
+              const q = searchQuery.toLowerCase();
+              return s.name?.toLowerCase().includes(q) || 
+                     s.email?.toLowerCase().includes(q) || 
+                     s.enrollmentNo?.toLowerCase().includes(q) ||
+                     s.program?.name?.toLowerCase().includes(q);
+            });
+            const filteredCompleted = completedStudents.filter(s => {
+              const q = searchQuery.toLowerCase();
+              return s.name?.toLowerCase().includes(q) || 
+                     s.email?.toLowerCase().includes(q) || 
+                     s.enrollmentNo?.toLowerCase().includes(q) ||
+                     s.program?.name?.toLowerCase().includes(q);
+            });
+
+            const totalPendingPages = Math.max(1, Math.ceil(filteredPending.length / itemsPerPage));
+            const paginatedPending = filteredPending.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
             return (
           <TabsContent value="pending" className="m-0">
             {loading ? (
               <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : students.length === 0 ? (
+            ) : filteredPending.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
                 <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-                <p className="text-muted-foreground">No pending re-registrations!</p>
+                <p className="text-muted-foreground">{searchQuery ? 'No pending re-registrations found matching your search.' : 'No pending re-registrations!'}</p>
               </div>
             ) : (
               <div className="rounded-md border">
@@ -118,7 +147,7 @@ export function ReRegistrationPanel() {
                 {totalPendingPages > 1 && (
                   <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
                     <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, students.length)} of {students.length} students
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredPending.length)} of {filteredPending.length} students
                     </div>
                     <div className="flex items-center gap-2">
                       <Button 
@@ -150,15 +179,31 @@ export function ReRegistrationPanel() {
           })()}
 
           {(() => {
-            const totalCompletedPages = Math.max(1, Math.ceil(completedStudents.length / itemsPerPage));
-            const paginatedCompleted = completedStudents.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+            const filteredPending = students.filter(s => {
+              const q = searchQuery.toLowerCase();
+              return s.name?.toLowerCase().includes(q) || 
+                     s.email?.toLowerCase().includes(q) || 
+                     s.enrollmentNo?.toLowerCase().includes(q) ||
+                     s.program?.name?.toLowerCase().includes(q);
+            });
+            const filteredCompleted = completedStudents.filter(s => {
+              const q = searchQuery.toLowerCase();
+              return s.name?.toLowerCase().includes(q) || 
+                     s.email?.toLowerCase().includes(q) || 
+                     s.enrollmentNo?.toLowerCase().includes(q) ||
+                     s.program?.name?.toLowerCase().includes(q);
+            });
+            const totalCompletedPages = Math.max(1, Math.ceil(filteredCompleted.length / itemsPerPage));
+            const paginatedCompleted = filteredCompleted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
             return (
           <TabsContent value="completed" className="m-0">
             {loading ? (
               <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-            ) : completedStudents.length === 0 ? (
+            ) : filteredCompleted.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
-                <p className="text-muted-foreground">No completed re-registrations yet.</p>
+                <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
+                <p className="text-muted-foreground">{searchQuery ? 'No completed re-registrations found matching your search.' : 'No completed re-registrations yet.'}</p>
               </div>
             ) : (
               <div className="rounded-md border">
@@ -200,7 +245,7 @@ export function ReRegistrationPanel() {
                 {totalCompletedPages > 1 && (
                   <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
                     <div className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, completedStudents.length)} of {completedStudents.length} students
+                      Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredCompleted.length)} of {filteredCompleted.length} students
                     </div>
                     <div className="flex items-center gap-2">
                       <Button 

@@ -7,17 +7,22 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RefreshCw, FileBox, Plus } from 'lucide-react';
+import { RefreshCw, FileBox, Plus, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
 export function DocumentReceivedPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
+  
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
   const [showReceivedModal, setShowReceivedModal] = useState(false);
   const [students, setStudents] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,11 +61,21 @@ export function DocumentReceivedPanel() {
             <CardDescription>Log and track inbound physical documents</CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={fetchLogs} disabled={loading}>
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search students..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Button variant="outline" onClick={fetchLogs} disabled={loading}>
               <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            <Button size="sm" onClick={() => setShowReceivedModal(true)}>
+            <Button onClick={() => setShowReceivedModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Log Received
             </Button>
@@ -68,12 +83,24 @@ export function DocumentReceivedPanel() {
         </div>
       </CardHeader>
       <CardContent>
+        {(() => {
+          const filteredLogs = logs.filter(log => {
+            const q = searchQuery.toLowerCase();
+            return log.student?.name?.toLowerCase().includes(q) || 
+                   log.student?.enrollmentNo?.toLowerCase().includes(q) ||
+                   log.documentName?.toLowerCase().includes(q) ||
+                   log.documentType?.toLowerCase().includes(q);
+          });
+          const totalPages = Math.max(1, Math.ceil(filteredLogs.length / itemsPerPage));
+          
+          return (
+            <>
         {loading ? (
           <div className="flex justify-center p-8"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
-        ) : logs.length === 0 ? (
+        ) : filteredLogs.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
             <FileBox className="w-8 h-8 text-muted-foreground mb-2" />
-            <p className="text-muted-foreground">No documents received yet</p>
+            <p className="text-muted-foreground">{searchQuery ? 'No documents found matching your search.' : 'No documents received yet'}</p>
           </div>
         ) : (
           <div className="rounded-md border">
@@ -89,8 +116,7 @@ export function DocumentReceivedPanel() {
               </TableHeader>
               <TableBody>
                 {(() => {
-
-                  const paginatedLogs = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+                  const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
                   return (
                     <>
                       {paginatedLogs.map((log) => (
@@ -117,12 +143,11 @@ export function DocumentReceivedPanel() {
             
             {/* Pagination Controls */}
             {(() => {
-              const totalPages = Math.max(1, Math.ceil(logs.length / itemsPerPage));
               if (totalPages <= 1) return null;
               return (
                 <div className="flex items-center justify-between p-4 border-t bg-slate-50 dark:bg-slate-900/20">
                   <div className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, logs.length)} of {logs.length} logs
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredLogs.length)} of {filteredLogs.length} logs
                   </div>
                   <div className="flex items-center gap-2">
                     <Button 
@@ -150,6 +175,9 @@ export function DocumentReceivedPanel() {
             })()}
           </div>
         )}
+        </>
+        );
+        })()}
       </CardContent>
 
       <Dialog open={showReceivedModal} onOpenChange={setShowReceivedModal}>
