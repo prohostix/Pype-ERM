@@ -14,11 +14,17 @@ import { toast } from 'sonner';
 const getDocUrl = (url: string) => {
   if (!url) return '#';
   if (url.startsWith('http')) return url;
-  if (url.startsWith('/uploads')) {
-    const baseUrl = import.meta.env.VITE_API_URL || '/api/v1';
-    return `${baseUrl}${url}`;
+  
+  let normalizedUrl = url;
+  if (!normalizedUrl.startsWith('/')) {
+    normalizedUrl = normalizedUrl.startsWith('uploads/') ? `/${normalizedUrl}` : `/uploads/${normalizedUrl}`;
   }
-  return url;
+
+  if (normalizedUrl.startsWith('/uploads')) {
+    const baseUrl = import.meta.env.VITE_API_URL || '/api/v1';
+    return `${baseUrl}${normalizedUrl}`;
+  }
+  return normalizedUrl;
 };
 
 interface Enrollment {
@@ -253,29 +259,42 @@ export function DeptEnrollmentReviewPanel() {
           {filteredEnrollments.map(e => (
             <Card key={e.id} className="hover:border-primary/30 transition-colors">
               <CardContent className="p-5 flex items-center justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <StatusBadge status={e.status} />
-                    {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  {/* Student Photo Thumbnail */}
+                  <div className="shrink-0">
+                    {e.student?.photo ? (
+                      <img src={getDocUrl(e.student.photo)} alt="Student" className="w-12 h-12 rounded-full object-cover border" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border">
+                        <User className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                    )}
                   </div>
-                  <h4 className="font-semibold">{e.studentName}</h4>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
-                    <span>{e.studentEmail}</span>
-                    {e.program && <span>{e.program.name} ({e.program.code})</span>}
-                    {e.studyCenter && <span>{e.studyCenter.name}</span>}
-                    <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <StatusBadge status={e.status} />
+                      {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
+                    </div>
+                    <h4 className="font-semibold">{e.studentName}</h4>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
+                      <span>{e.studentEmail}</span>
+                      {e.program && <span>{e.program.name} ({e.program.code})</span>}
+                      {e.studyCenter && <span>{e.studyCenter.name}</span>}
+                      <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
+                    </div>
+                    {/* Show dept remarks on completed tab */}
+                    {tab === 'completed' && e.departmentRemarks && (
+                      <p className="text-xs mt-1.5 text-red-600 bg-red-50 px-2 py-1 rounded inline-block">
+                        Rejected: {e.departmentRemarks}
+                      </p>
+                    )}
+                    {tab === 'completed' && e.departmentReviewedAt && !e.departmentRemarks && (
+                      <p className="text-xs mt-1.5 text-green-600">
+                        ✓ Approved on {new Date(e.departmentReviewedAt).toLocaleDateString('en-IN')}
+                      </p>
+                    )}
                   </div>
-                  {/* Show dept remarks on completed tab */}
-                  {tab === 'completed' && e.departmentRemarks && (
-                    <p className="text-xs mt-1.5 text-red-600 bg-red-50 px-2 py-1 rounded inline-block">
-                      Rejected: {e.departmentRemarks}
-                    </p>
-                  )}
-                  {tab === 'completed' && e.departmentReviewedAt && !e.departmentRemarks && (
-                    <p className="text-xs mt-1.5 text-green-600">
-                      ✓ Approved on {new Date(e.departmentReviewedAt).toLocaleDateString('en-IN')}
-                    </p>
-                  )}
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
