@@ -170,6 +170,10 @@ if (process.env.NODE_ENV !== 'test') {
 }
 const PORT = process.env.PORT || 5000;
 const server = httpServer.listen(PORT, () => {
+    // Increase server timeouts for long-running migration requests
+    server.setTimeout(600000); // 10 minutes
+    server.keepAliveTimeout = 600000;
+    server.headersTimeout = 601000;
     console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║

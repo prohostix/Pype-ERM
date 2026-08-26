@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -6,8 +6,11 @@ import { Label } from '../ui/label';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Database, LogIn, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import api from '../../lib/api';
+import { io, Socket } from 'socket.io-client';
+import { useAuth } from '@/hooks/useAuth';
 
 const DsmsMigrationPanel: React.FC = () => {
+  const { user } = useAuth();
   const [dsmsUrl, setDsmsUrl] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,12 +24,44 @@ const DsmsMigrationPanel: React.FC = () => {
     errors: string[];
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<{
+    status: string;
+    programsMigrated: number;
+    studentsMigrated: number;
+    paymentsMigrated: number;
+    leadsMigrated: number;
+  } | null>(null);
+
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (!user?.organizationId) return;
+    const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+    const socket = io(rawUrl, {
+      transports: ['websocket', 'polling'],
+      withCredentials: true,
+    });
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      socket.emit('join-org', user.organizationId);
+    });
+
+    socket.on('dsms_migration_progress', (data: any) => {
+      setProgress(data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
 
   const handleMigration = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsMigrating(true);
     setResult(null);
     setError(null);
+    setProgress(null);
 
     try {
       const response = await api.post('/organizations/migrate-dsms', {
@@ -121,6 +156,33 @@ const DsmsMigrationPanel: React.FC = () => {
                 )}
               </Button>
             </div>
+            
+            {isMigrating && progress && (
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mt-4 transition-all duration-300">
+                <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                  {progress.status}
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                  <div className="bg-white p-2 rounded text-center shadow-sm border border-blue-100">
+                    <div className="text-2xl font-bold text-blue-600">{progress.programsMigrated}</div>
+                    <div className="text-xs text-gray-500 font-medium">Programs</div>
+                  </div>
+                  <div className="bg-white p-2 rounded text-center shadow-sm border border-blue-100">
+                    <div className="text-2xl font-bold text-blue-600">{progress.studentsMigrated}</div>
+                    <div className="text-xs text-gray-500 font-medium">Students</div>
+                  </div>
+                  <div className="bg-white p-2 rounded text-center shadow-sm border border-blue-100">
+                    <div className="text-2xl font-bold text-blue-600">{progress.paymentsMigrated}</div>
+                    <div className="text-xs text-gray-500 font-medium">Payments</div>
+                  </div>
+                  <div className="bg-white p-2 rounded text-center shadow-sm border border-blue-100">
+                    <div className="text-2xl font-bold text-blue-600">{progress.leadsMigrated}</div>
+                    <div className="text-xs text-gray-500 font-medium">Enquiries</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </form>
         </CardContent>
       </Card>

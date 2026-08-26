@@ -7,6 +7,7 @@ import * as cheerio from 'cheerio';
 import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
+import { emitToOrganization } from '../config/socket.js';
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -79,6 +80,19 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
     let leadsMigrated = 0;
     let errors: string[] = [];
 
+    const broadcastProgress = (status: string) => {
+      emitToOrganization(organizationId, 'dsms_migration_progress', {
+        status,
+        programsMigrated,
+        studentsMigrated,
+        paymentsMigrated,
+        leadsMigrated,
+        errors: errors.slice(-5)
+      });
+    };
+
+    broadcastProgress('Authenticating with DSMS...');
+
     // --- A. Scrape Programs ---
     // Programs require a University. Create or find a generic DSMS University.
     let defaultUniversity = await prisma.university.findFirst({
@@ -136,7 +150,7 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
       }
     });
     await Promise.all(progPromises);
-
+    broadcastProgress('Finished scraping programs. Starting students...');
 
     // --- B. Scrape Students ---
     const stuRes = await client.get(studentsUrl);
@@ -158,6 +172,8 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
         
         const pRes = await client.get(pageUrl);
         const $p = cheerio.load(pRes.data);
+        
+        broadcastProgress(`Scraping Students (Page ${page})...`);
         
         const rows = $p('table.table tbody tr');
         if (rows.length === 0 || rows.text().includes('No results found.')) {
@@ -442,6 +458,8 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
       let leadPage = 1;
       let hasMoreLeads = true;
 
+      broadcastProgress('Finished students. Starting enquiries...');
+
       while (hasMoreLeads) {
         let pageUrl = enquiryBaseUrl;
         if (leadPage > 1) {
@@ -450,6 +468,8 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
 
         const eRes = await client.get(pageUrl);
         const $e = cheerio.load(eRes.data);
+        
+        broadcastProgress(`Scraping Enquiries (Page ${leadPage})...`);
         
         const rows = $e('table.table tbody tr');
         if (rows.length === 0 || rows.text().includes('No results found.')) {
