@@ -719,6 +719,34 @@ export const updateDocumentStatus = asyncHandler(async (req: AuthRequest, res: R
   res.status(200).json({ success: true, data: updatedStudent });
 });
 
+export const updatePhotoStatus = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const { status, remarks } = req.body;
+  
+  const student = await prisma.student.findUnique({
+    where: { id },
+  });
+
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  const admissionProgress = student.admissionProgress ? (student.admissionProgress as any) : {};
+  
+  admissionProgress.photoStatus = status;
+  admissionProgress.photoRemarks = remarks;
+  admissionProgress.photoReviewedBy = req.user.name || req.user.email;
+  admissionProgress.photoReviewedAt = new Date().toISOString();
+
+  const updatedStudent = await prisma.student.update({
+    where: { id },
+    data: { admissionProgress },
+  });
+
+  res.status(200).json({ success: true, data: updatedStudent });
+});
+
 export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { updates } = req.body;
   if (!Array.isArray(updates)) {

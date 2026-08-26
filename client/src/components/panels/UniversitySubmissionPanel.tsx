@@ -15,6 +15,8 @@ export function UniversitySubmissionPanel() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
   const [searchQuery, setSearchQuery] = useState('');
+  const [centerFilter, setCenterFilter] = useState('all');
+  const [programFilter, setProgramFilter] = useState('all');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +24,7 @@ export function UniversitySubmissionPanel() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab, searchQuery]);
+  }, [activeTab, searchQuery, centerFilter, programFilter]);
 
   useEffect(() => {
     fetchStudents();
@@ -57,24 +59,30 @@ export function UniversitySubmissionPanel() {
     }
   };
 
-  const pendingStudents = students.filter(s => {
-    const isPending = !s.admissionProgress?.universitySubmitted;
-    if (!isPending) return false;
+  const centers = Array.from(new Set(students.map(s => s.center?.name).filter(Boolean))).sort();
+  const programs = Array.from(new Set(students.map(s => s.program?.name).filter(Boolean))).sort();
+
+  const applyFilters = (s: any) => {
     const q = searchQuery.toLowerCase();
-    return s.name?.toLowerCase().includes(q) || 
-           s.email?.toLowerCase().includes(q) || 
-           s.university?.name?.toLowerCase().includes(q) ||
-           s.program?.name?.toLowerCase().includes(q);
+    const matchesSearch = s.name?.toLowerCase().includes(q) || 
+                          s.email?.toLowerCase().includes(q) || 
+                          s.university?.name?.toLowerCase().includes(q) ||
+                          s.program?.name?.toLowerCase().includes(q);
+    const matchesCenter = centerFilter === 'all' || s.center?.name === centerFilter;
+    const matchesProgram = programFilter === 'all' || s.program?.name === programFilter;
+    return matchesSearch && matchesCenter && matchesProgram;
+  };
+
+  const pendingStudents = students.filter(s => {
+    const isPending = !s.admissionProgress?.universitySubmitted && !s.admissionProgress?.uni_sub?.completed;
+    if (!isPending) return false;
+    return applyFilters(s);
   });
   
   const submittedStudents = students.filter(s => {
-    const isSubmitted = s.admissionProgress?.universitySubmitted;
+    const isSubmitted = s.admissionProgress?.universitySubmitted || s.admissionProgress?.uni_sub?.completed;
     if (!isSubmitted) return false;
-    const q = searchQuery.toLowerCase();
-    return s.name?.toLowerCase().includes(q) || 
-           s.email?.toLowerCase().includes(q) || 
-           s.university?.name?.toLowerCase().includes(q) ||
-           s.program?.name?.toLowerCase().includes(q);
+    return applyFilters(s);
   });
 
   return (
@@ -98,15 +106,37 @@ export function UniversitySubmissionPanel() {
               <TabsTrigger value="pending">Pending Submission ({pendingStudents.length})</TabsTrigger>
               <TabsTrigger value="submitted">Submitted ({submittedStudents.length})</TabsTrigger>
             </TabsList>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search students..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search students..."
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={centerFilter}
+                onChange={e => setCenterFilter(e.target.value)}
+              >
+                <option value="all">All Centers</option>
+                {centers.map(c => (
+                  <option key={c as string} value={c as string}>{c as React.ReactNode}</option>
+                ))}
+              </select>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={programFilter}
+                onChange={e => setProgramFilter(e.target.value)}
+              >
+                <option value="all">All Programs</option>
+                {programs.map(p => (
+                  <option key={p as string} value={p as string}>{p as React.ReactNode}</option>
+                ))}
+              </select>
             </div>
           </div>
           

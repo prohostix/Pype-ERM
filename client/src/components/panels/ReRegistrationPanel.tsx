@@ -17,6 +17,8 @@ export function ReRegistrationPanel() {
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('pending');
   const [searchQuery, setSearchQuery] = useState('');
+  const [centerFilter, setCenterFilter] = useState('all');
+  const [programFilter, setProgramFilter] = useState('all');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,7 @@ export function ReRegistrationPanel() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab, searchQuery]);
+  }, [activeTab, searchQuery, centerFilter, programFilter]);
 
   useEffect(() => {
     fetchStudents();
@@ -68,33 +70,59 @@ export function ReRegistrationPanel() {
               <TabsTrigger value="pending">Pending ({students.length})</TabsTrigger>
               <TabsTrigger value="completed">Completed ({completedStudents.length})</TabsTrigger>
             </TabsList>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search students..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search students..."
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={centerFilter}
+                onChange={e => setCenterFilter(e.target.value)}
+              >
+                <option value="all">All Centers</option>
+                {Array.from(new Set([...students, ...completedStudents].map(s => s.center?.name).filter(Boolean))).sort().map(c => (
+                  <option key={c as string} value={c as string}>{c as React.ReactNode}</option>
+                ))}
+              </select>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={programFilter}
+                onChange={e => setProgramFilter(e.target.value)}
+              >
+                <option value="all">All Programs</option>
+                {Array.from(new Set([...students, ...completedStudents].map(s => s.program?.name).filter(Boolean))).sort().map(p => (
+                  <option key={p as string} value={p as string}>{p as React.ReactNode}</option>
+                ))}
+              </select>
             </div>
           </div>
 
           {(() => {
-            const filteredPending = students.filter(s => {
+            const allStudents = [...students, ...completedStudents];
+            const centers = Array.from(new Set(allStudents.map(s => s.center?.name).filter(Boolean))).sort();
+            const programs = Array.from(new Set(allStudents.map(s => s.program?.name).filter(Boolean))).sort();
+            
+            const applyFilters = (s: any) => {
               const q = searchQuery.toLowerCase();
-              return s.name?.toLowerCase().includes(q) || 
-                     s.email?.toLowerCase().includes(q) || 
-                     s.enrollmentNo?.toLowerCase().includes(q) ||
-                     s.program?.name?.toLowerCase().includes(q);
-            });
-            const filteredCompleted = completedStudents.filter(s => {
-              const q = searchQuery.toLowerCase();
-              return s.name?.toLowerCase().includes(q) || 
-                     s.email?.toLowerCase().includes(q) || 
-                     s.enrollmentNo?.toLowerCase().includes(q) ||
-                     s.program?.name?.toLowerCase().includes(q);
-            });
+              const matchesSearch = s.name?.toLowerCase().includes(q) || 
+                                    s.email?.toLowerCase().includes(q) || 
+                                    s.enrollmentNo?.toLowerCase().includes(q) ||
+                                    s.program?.name?.toLowerCase().includes(q);
+              const matchesCenter = centerFilter === 'all' || s.center?.name === centerFilter;
+              const matchesProgram = programFilter === 'all' || s.program?.name === programFilter;
+              
+              return matchesSearch && matchesCenter && matchesProgram;
+            };
+
+            const filteredPending = students.filter(applyFilters);
+            const filteredCompleted = completedStudents.filter(applyFilters);
 
             const totalPendingPages = Math.max(1, Math.ceil(filteredPending.length / itemsPerPage));
             const paginatedPending = filteredPending.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);

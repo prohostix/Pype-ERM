@@ -15,6 +15,8 @@ export function DocumentReceivedPanel() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [centerFilter, setCenterFilter] = useState('all');
+  const [programFilter, setProgramFilter] = useState('all');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +24,7 @@ export function DocumentReceivedPanel() {
   
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery]);
+  }, [searchQuery, centerFilter, programFilter]);
   const [showReceivedModal, setShowReceivedModal] = useState(false);
   const [students, setStudents] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,15 +63,37 @@ export function DocumentReceivedPanel() {
             <CardDescription>Log and track inbound physical documents</CardDescription>
           </div>
           <div className="flex gap-2">
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search students..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search students..."
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={centerFilter}
+                onChange={e => setCenterFilter(e.target.value)}
+              >
+                <option value="all">All Centers</option>
+                {Array.from(new Set(logs.map(log => log.student?.center?.name).filter(Boolean))).sort().map(c => (
+                  <option key={c as string} value={c as string}>{c as React.ReactNode}</option>
+                ))}
+              </select>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={programFilter}
+                onChange={e => setProgramFilter(e.target.value)}
+              >
+                <option value="all">All Programs</option>
+                {Array.from(new Set(logs.map(log => log.student?.program?.name).filter(Boolean))).sort().map(p => (
+                  <option key={p as string} value={p as string}>{p as React.ReactNode}</option>
+                ))}
+              </select>
             </div>
             <Button variant="outline" onClick={fetchLogs} disabled={loading}>
               <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
@@ -84,12 +108,19 @@ export function DocumentReceivedPanel() {
       </CardHeader>
       <CardContent>
         {(() => {
+          const centers = Array.from(new Set(logs.map(log => log.student?.center?.name).filter(Boolean))).sort();
+          const programs = Array.from(new Set(logs.map(log => log.student?.program?.name).filter(Boolean))).sort();
+          
           const filteredLogs = logs.filter(log => {
             const q = searchQuery.toLowerCase();
-            return log.student?.name?.toLowerCase().includes(q) || 
-                   log.student?.enrollmentNo?.toLowerCase().includes(q) ||
-                   log.documentName?.toLowerCase().includes(q) ||
-                   log.documentType?.toLowerCase().includes(q);
+            const matchesSearch = log.student?.name?.toLowerCase().includes(q) || 
+                                  log.student?.enrollmentNo?.toLowerCase().includes(q) ||
+                                  log.documentName?.toLowerCase().includes(q) ||
+                                  log.documentType?.toLowerCase().includes(q);
+            const matchesCenter = centerFilter === 'all' || log.student?.center?.name === centerFilter;
+            const matchesProgram = programFilter === 'all' || log.student?.program?.name === programFilter;
+            
+            return matchesSearch && matchesCenter && matchesProgram;
           });
           const totalPages = Math.max(1, Math.ceil(filteredLogs.length / itemsPerPage));
           

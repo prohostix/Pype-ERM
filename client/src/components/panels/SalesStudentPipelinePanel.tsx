@@ -86,7 +86,9 @@ export function SalesStudentPipelinePanel() {
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
-    setVerifyForm({ ...enrollment, initialPaymentAmount: enrollment.initialPaymentAmount || '' });
+    const docs = enrollment.student?.documents || enrollment.documents || [];
+    const photo = enrollment.student?.photo || enrollment.photo || '';
+    setVerifyForm({ ...enrollment, documents: docs, photo, initialPaymentAmount: enrollment.initialPaymentAmount || '' });
     setVerifyDialogOpen(true);
   };
 
@@ -230,6 +232,29 @@ export function SalesStudentPipelinePanel() {
                         <span>{e.program?.name || 'N/A'} {e.program?.code ? `(${e.program.code})` : ''}</span>
                         <span>{new Date(e.createdAt).toLocaleDateString()}</span>
                       </div>
+                      
+                      {/* Rejected Items Notice */}
+                      {(() => {
+                        const docs = e.student?.documents || e.documents || [];
+                        const photoStatus = e.student?.admissionProgress?.photoStatus;
+                        const rejectedDocs = docs.filter((d: any) => d && d.status === 'rejected');
+                        const hasRejectedPhoto = photoStatus === 'rejected';
+                        
+                        if (rejectedDocs.length > 0 || hasRejectedPhoto) {
+                          return (
+                            <div className="mt-2 bg-red-50 border border-red-200 text-red-700 p-2 rounded text-xs">
+                              <strong>Action Required:</strong>
+                              <ul className="list-disc pl-4 mt-1">
+                                {hasRejectedPhoto && <li>Student Photo was rejected.</li>}
+                                {rejectedDocs.map((d: any, idx: number) => (
+                                  <li key={idx}>{d.type} was rejected.</li>
+                                ))}
+                              </ul>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
 
                       {/* Communication Options */}
                       <div className="flex flex-wrap items-center gap-2 mt-3">
@@ -280,16 +305,25 @@ export function SalesStudentPipelinePanel() {
                       </div>
 
                       {/* Verification Action */}
-                      {e.status === 'sales_verification_pending' && (
-                        <div className="mt-4">
-                          <Button variant="default" size="sm" className="bg-purple-600 hover:bg-purple-700" onClick={(evt) => {
-                            evt.stopPropagation();
-                            openVerifyDialog(e);
-                          }}>
-                            Verify & Submit to Ops
-                          </Button>
-                        </div>
-                      )}
+                      {(() => {
+                        const docs = e.student?.documents || e.documents || [];
+                        const photoStatus = e.student?.admissionProgress?.photoStatus;
+                        const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || photoStatus === 'rejected';
+                        
+                        if (e.status === 'sales_verification_pending' || ((e.status === 'document_review' || e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected)) {
+                          return (
+                            <div className="mt-4">
+                              <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
+                                evt.stopPropagation();
+                                openVerifyDialog(e);
+                              }}>
+                                {hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
+                              </Button>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
 
                       {/* Current handler */}
                       {e.status === 'document_review' && (
@@ -503,11 +537,14 @@ export function SalesStudentPipelinePanel() {
                         </button>
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center border border-dashed border-slate-300">
-                        <UploadCloud className="w-6 h-6 text-slate-400" />
+                      <div className={cn("w-16 h-16 rounded-full flex items-center justify-center border border-dashed", verifyingStudent?.student?.admissionProgress?.photoStatus === 'rejected' ? 'bg-red-50 border-red-300' : 'bg-slate-100 border-slate-300')}>
+                        <UploadCloud className={cn("w-6 h-6", verifyingStudent?.student?.admissionProgress?.photoStatus === 'rejected' ? 'text-red-400' : 'text-slate-400')} />
                       </div>
                     )}
                     <div className="flex-1">
+                      {verifyingStudent?.student?.admissionProgress?.photoStatus === 'rejected' && (
+                        <p className="text-xs text-red-600 mb-1 font-medium">Photo Rejected. Please re-upload.</p>
+                      )}
                       <Input 
                         type="file" 
                         accept="image/*"
@@ -546,12 +583,15 @@ export function SalesStudentPipelinePanel() {
                               href={api.getFileUrl(existing.url)} 
                               target="_blank" 
                               rel="noreferrer"
-                              className="text-xs text-primary hover:underline"
+                              className={cn("text-xs hover:underline", existing.status === 'rejected' ? "text-red-600" : "text-primary")}
                             >
                               View
                             </a>
                           )}
                         </div>
+                        {existing?.status === 'rejected' && (
+                          <p className="text-xs text-red-600 mb-2 font-medium bg-red-50 p-1 rounded">Rejected. Please re-upload.</p>
+                        )}
                         <div>
                           <input
                             type="file"
@@ -571,7 +611,8 @@ export function SalesStudentPipelinePanel() {
                                 newDocs.push({
                                   type: docType,
                                   url: res.data.url,
-                                  label: docType === 'Other' ? 'Other Document' : docType
+                                  label: docType === 'Other' ? 'Other Document' : docType,
+                                  status: 'pending'
                                 });
                                 setVerifyForm({ ...verifyForm, documents: newDocs });
                                 toast.success(`${docType} uploaded successfully`, { id: toastId });

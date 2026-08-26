@@ -43,12 +43,14 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     
     metrics.uniSubmissionsPending = studentsStatus.filter(s => {
       const prog = s.admissionProgress as any;
-      return !prog || !prog.universitySubmitted;
+      return !prog || (!prog.universitySubmitted && !prog.uni_sub?.completed);
     }).length;
     
     metrics.documentsPending = studentsStatus.filter(s => {
-      const prog = s.admissionProgress as any;
-      return !prog || !prog.documentsVerified;
+      const docs = Array.isArray(s.documents) ? s.documents : [];
+      const hasUnapprovedDocs = docs.length === 0 || docs.some((d: any) => d && d.status !== 'approved');
+      const photoStatus = (s.admissionProgress as any)?.photoStatus;
+      return hasUnapprovedDocs || photoStatus !== 'approved';
     }).length;
     
     metrics.reRegistrationPending = studentsStatus.filter(s => {

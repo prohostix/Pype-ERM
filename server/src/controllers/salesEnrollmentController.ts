@@ -253,6 +253,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
       session: { select: { id: true, name: true } },
       departmentReviewer: { select: { id: true, name: true, email: true } },
       financeReviewer: { select: { id: true, name: true, email: true } },
+      student: true,
     } as any,
     orderBy: { createdAt: 'desc' },
   });
@@ -746,8 +747,9 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     return;
   }
 
-  if (enrollment.status !== 'sales_verification_pending') {
-    res.status(400).json({ success: false, message: 'Enrollment is not pending sales verification' });
+  const allowedStatuses = ['sales_verification_pending', 'document_review', 'rejected', 'ops_rejected'];
+  if (!allowedStatuses.includes(enrollment.status)) {
+    res.status(400).json({ success: false, message: 'Enrollment cannot be resubmitted from its current status.' });
     return;
   }
 
@@ -788,11 +790,27 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
           actorId: salesUserId,
           actorName: req.user.name,
           timestamp: now.toISOString(),
-          note: 'Sales user verified application and forwarded to Operations for document verification.',
+          note: 'Sales user verified/resubmitted application and forwarded to Operations for document verification.',
         }
       }
     }
   });
+
+  if (updatedEnrollment.studentId) {
+    // Reset photoStatus to pending if photo is being updated (or even if it's the same, it means a resubmit)
+    const existingStudent = await prisma.student.findUnique({ where: { id: updatedEnrollment.studentId } });
+    const progress = (existingStudent?.admissionProgress as any) || {};
+    const newProgress = { ...progress, photoStatus: 'pending' };
+
+    await prisma.student.update({
+      where: { id: updatedEnrollment.studentId },
+      data: {
+        documents: documents !== undefined ? documents : updatedEnrollment.documents,
+        photo: photo !== undefined ? photo : updatedEnrollment.photo,
+        admissionProgress: newProgress,
+      }
+    });
+  }
 
   // Notify ops admins
   try {

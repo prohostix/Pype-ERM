@@ -1,40 +1,27 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from './dist/lib/prisma.js';
 
-async function run() {
-  try {
-    const student = await prisma.student.findFirst();
-    if (!student) {
-      console.log('No student found');
-      return;
+async function main() {
+  const uniSubmissionsPending = await prisma.default.student.count({
+    where: {
+      OR: [
+        { admissionProgress: { equals: 'Prisma.AnyNull' } }, // Can't easily use Prisma enum in JS without import, let's just use raw or see
+        { NOT: { admissionProgress: { path: ['universitySubmitted'], equals: true } } }
+      ]
     }
-    console.log('Testing with student:', student.id);
-    
-    // Simulate what the controller does
-    let admissionProgress = {};
-    if (student.admissionProgress && typeof student.admissionProgress === 'object') {
-      admissionProgress = student.admissionProgress;
+  });
+
+  const docsPending = await prisma.default.student.count({
+    where: {
+      NOT: { admissionProgress: { path: ['documentsVerified'], equals: true } }
     }
-    
-    const updatedProgress = {
-      ...admissionProgress,
-      ['verification']: {
-        completed: true,
-        proofUrl: '/uploads/test.png',
-        updatedBy: 'system',
-        updatedAt: new Date().toISOString()
-      }
-    };
-    
-    const updatedStudent = await prisma.student.update({
-      where: { id: student.id },
-      data: { admissionProgress: updatedProgress }
-    });
-    console.log('Success!', updatedStudent.admissionProgress);
-  } catch (err) {
-    console.error('Error:', err);
-  } finally {
-    await prisma.$disconnect();
-  }
+  });
+
+  const reregPending = await prisma.default.student.count({
+    where: {
+      NOT: { reregStatus: { path: ['completed'], equals: true } }
+    }
+  });
+
+  console.log({ uniSubmissionsPending, docsPending, reregPending });
 }
-run();
+main().finally(() => prisma.default.$disconnect());

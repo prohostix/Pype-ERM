@@ -17,6 +17,8 @@ export function EnrollmentNumberUpdatePanel() {
   const [updates, setUpdates] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('pending');
   const [searchQuery, setSearchQuery] = useState('');
+  const [centerFilter, setCenterFilter] = useState('all');
+  const [programFilter, setProgramFilter] = useState('all');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,7 @@ export function EnrollmentNumberUpdatePanel() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab, searchQuery]);
+  }, [activeTab, searchQuery, centerFilter, programFilter]);
 
   useEffect(() => {
     fetchStudents();
@@ -72,18 +74,24 @@ export function EnrollmentNumberUpdatePanel() {
     }
   };
 
-  const filteredPending = students.filter(s => 
-    s.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    s.email?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    s.center?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const allStudents = [...students, ...updatedStudents];
+  const centers = Array.from(new Set(allStudents.map(s => s.center?.name).filter(Boolean))).sort();
+  const programs = Array.from(new Set(allStudents.map(s => s.program?.name).filter(Boolean))).sort();
 
-  const filteredUpdated = updatedStudents.filter(s => 
-    s.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    s.email?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    s.center?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.enrollmentNo?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const applyFilters = (s: any) => {
+    const matchesSearch = s.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          s.email?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          s.center?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          s.enrollmentNo?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCenter = centerFilter === 'all' || s.center?.name === centerFilter;
+    const matchesProgram = programFilter === 'all' || s.program?.name === programFilter;
+    
+    return matchesSearch && matchesCenter && matchesProgram;
+  };
+
+  const filteredPending = students.filter(applyFilters);
+  const filteredUpdated = updatedStudents.filter(applyFilters);
 
   return (
     <Card className="border-none shadow-none">
@@ -114,15 +122,37 @@ export function EnrollmentNumberUpdatePanel() {
               <TabsTrigger value="pending">Pending Update ({filteredPending.length})</TabsTrigger>
               <TabsTrigger value="updated">Updated ({filteredUpdated.length})</TabsTrigger>
             </TabsList>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search students..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search students..."
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={centerFilter}
+                onChange={e => setCenterFilter(e.target.value)}
+              >
+                <option value="all">All Centers</option>
+                {centers.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+              <select 
+                className="flex h-10 w-full sm:w-40 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={programFilter}
+                onChange={e => setProgramFilter(e.target.value)}
+              >
+                <option value="all">All Programs</option>
+                {programs.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
             </div>
           </div>
 
