@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle2, Circle, FileText, Eye, UploadCloud, Save } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,23 +37,44 @@ const ADMISSION_STEPS_CONFIG = [
 export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProps) {
   const { user } = useAuth();
   
-  // Safely parse admission progress
   const admissionProgressRaw = student?.admissionProgress;
   const admissionProgressObj = typeof admissionProgressRaw === 'string' 
     ? JSON.parse(admissionProgressRaw) 
     : (admissionProgressRaw || {});
 
-  const [admissionSteps, setAdmissionSteps] = useState(
-    ADMISSION_STEPS_CONFIG.map(config => {
-      const dbData = admissionProgressObj[config.id] || {};
-      return {
-        id: config.id,
-        label: config.label,
-        completed: Boolean(dbData.completed),
-        proofUrl: dbData.proofUrl || null
-      };
-    })
-  );
+  // Compute automatic progress based on system reality
+  const isVerified = student?.status === 'active' || student?.status === 'payment_pending' || student?.status === 'verified';
+  const hasVerifiedDocs = Array.isArray(student?.documents) && student?.documents.length > 0 && student.documents.every((d: any) => d.status === 'verified');
+  const isUniversitySubmitted = admissionProgressObj.universitySubmitted === true || admissionProgressObj.uni_sub?.completed;
+  const hasEnrollmentNo = !!student?.enrollmentNo;
+  const isPortalActivated = !!student?.credentials;
+  const isBatchAllocated = !!student?.sessionId;
+
+  const autoConditions: Record<string, boolean> = {
+    verification: isVerified,
+    docs: hasVerifiedDocs,
+    uni_sub: isUniversitySubmitted,
+    enroll_no: hasEnrollmentNo,
+    portal: isPortalActivated,
+    batch: isBatchAllocated
+  };
+
+  const getSteps = () => ADMISSION_STEPS_CONFIG.map(config => {
+    const dbData = admissionProgressObj[config.id] || {};
+    return {
+      id: config.id,
+      label: config.label,
+      completed: Boolean(dbData.completed) || Boolean(autoConditions[config.id]),
+      proofUrl: dbData.proofUrl || null
+    };
+  });
+
+  const [admissionSteps, setAdmissionSteps] = useState(getSteps());
+
+  // Sync state when student prop changes
+  useEffect(() => {
+    setAdmissionSteps(getSteps());
+  }, [student]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStep, setSelectedStep] = useState<any>(null);
