@@ -171,18 +171,17 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
         const tds = $p(el).find('td');
         if (tds.length >= 6) {
           const rawAdmissionNo = $p(tds[1]).text().trim();
-          const safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random()*1000)}`;
+          let safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random()*1000)}`;
           const name = $p(tds[2]).text().trim();
-          const email = $p(tds[3]).text().trim() || `${safeAdmissionNo}@dsms-import.com`;
+          let email = $p(tds[3]).text().trim() || `${safeAdmissionNo}@dsms-import.com`;
           const phone = $p(tds[4]).text().trim();
           const courseName = $p(tds[5]).text().trim();
           const viewHref = $p(el).find('a[title="View"]').attr('href') || $p(el).find('a').first().attr('href');
           
           if (name && name !== 'No results found.') {
             try {
-              const existingStu = await prisma.student.findFirst({
-                    where: { OR: [{ email }, { enrollmentNo: safeAdmissionNo }], organizationId }
-                  });
+              // We will check uniqueness after we extract all metadata
+              let existingStu = null;
 
                   if (!existingStu) {
                     const programId = programsMap.get(courseName);
@@ -207,11 +206,28 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                     }
 
                     const enrichedName = meta['Student Name'] ? meta['Student Name'].replace(/^(Mr|Ms|Mrs)\s+/i, '').trim() : name;
-                    const enrichedEmail = meta['Email'] || email;
+                    let enrichedEmail = meta['Email'] || email;
                     const enrichedPhone = meta['Mobile'] || meta['Phone'] || phone;
                     const address = meta['Present Address'] || meta['Permanent Address'] || 'Imported from DSMS';
                     
-                    let centerId: string | undefined = undefined;
+                    // Prevent global unique constraint crashes for email and enrollmentNo
+                    const existingEmail = await prisma.student.findFirst({ where: { email: enrichedEmail } });
+                    const existingEnrollment = await prisma.student.findFirst({ where: { enrollmentNo: safeAdmissionNo } });
+                    
+                    if (existingEmail && existingEmail.organizationId !== organizationId) {
+                      enrichedEmail = `dsms-${Date.now()}-${Math.floor(Math.random()*10000)}@imported.com`;
+                    }
+                    if (existingEnrollment && existingEnrollment.organizationId !== organizationId) {
+                      safeAdmissionNo = `TMP-${Date.now()}-${Math.floor(Math.random()*10000)}`;
+                    }
+
+                    // Re-check existence within the current organization
+                    existingStu = await prisma.student.findFirst({
+                      where: { OR: [{ email: enrichedEmail }, { enrollmentNo: safeAdmissionNo }], organizationId }
+                    });
+
+                    if (!existingStu) {
+                      let centerId: string | undefined = undefined;
                     const centerName = meta['Place Or Subcenter'];
                     if (centerName) {
                       let center = await prisma.studyCenter.findFirst({
@@ -259,18 +275,7 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                       }
                     }
 
-                    const user = await prisma.user.create({
-                      data: {
-                        organizationId,
-                        userId: `${defaultUserIdPrefix}${Date.now()}${Math.floor(Math.random()*1000)}`,
-                        email: enrichedEmail,
-                        password: defaultPassword,
-                        name: enrichedName,
-                        role: 'staff', // Student role
-                        phone: enrichedPhone,
-                        status: 'active'
-                      }
-                    });
+                    // Do not create a User record. Students use Student.credentials for authentication.
 
                     const student = await prisma.student.create({
                       data: {
@@ -389,6 +394,7 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                       }
                     }
 
+                    }
                   }
             } catch (e: any) {
               errors.push(`Student ${name} error: ${e.message}`);
