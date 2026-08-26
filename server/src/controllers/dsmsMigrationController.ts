@@ -6,7 +6,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
-
+import { hashPassword, generateUserId } from '../utils/authUtils.js';
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -275,7 +275,28 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                       }
                     }
 
-                    // Do not create a User record. Students use Student.credentials for authentication.
+                    // Create User record for student portal login (role: 'staff' acts as student)
+                    let user = await prisma.user.findFirst({
+                      where: { email: enrichedEmail, organizationId }
+                    });
+                    
+                    if (!user) {
+                      const generatedUid = await generateUserId();
+                      const hashedPassword = await hashPassword('Student@123');
+                      
+                      user = await prisma.user.create({
+                        data: {
+                          organizationId,
+                          userId: generatedUid,
+                          email: enrichedEmail,
+                          password: hashedPassword,
+                          name: enrichedName,
+                          role: 'staff',
+                          phone: enrichedPhone,
+                          status: 'active'
+                        }
+                      });
+                    }
 
                     const student = await prisma.student.create({
                       data: {
@@ -340,7 +361,13 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                         if (pTds.length >= 8) {
                           const recNo = $v(pTds[4]).text().trim();
                           const dateStr = $v(pTds[5]).text().trim(); // DD-MM-YYYY
-                          const amount = parseFloat($v(pTds[8]).text().trim().replace(/,/g, '')) || 0;
+                          // Total Amount is at index 15 in DSMS Payment table, Base Amount is at 8
+                          let amount = 0;
+                          if (pTds.length >= 16) {
+                            amount = parseFloat($v(pTds[15]).text().trim().replace(/,/g, '')) || 0;
+                          } else {
+                            amount = parseFloat($v(pTds[8]).text().trim().replace(/,/g, '')) || 0;
+                          }
                           
                           if (recNo && amount > 0) {
                             payments.push({ recNo, dateStr, amount });
