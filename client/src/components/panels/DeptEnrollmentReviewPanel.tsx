@@ -84,6 +84,19 @@ export function DeptEnrollmentReviewPanel() {
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
   const [remarks, setRemarks] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredEnrollments = enrollments.filter(e => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      e.studentName.toLowerCase().includes(q) ||
+      e.studentEmail.toLowerCase().includes(q) ||
+      (e.enrollmentNumber && e.enrollmentNumber.toLowerCase().includes(q)) ||
+      (e.program?.name && e.program.name.toLowerCase().includes(q)) ||
+      (e.program?.code && e.program.code.toLowerCase().includes(q))
+    );
+  });
 
   const fetchData = async (t = tab) => {
     setLoading(true);
@@ -164,18 +177,30 @@ export function DeptEnrollmentReviewPanel() {
         </Button>
       </div>
 
-      {/* Tabs */}
-      <Tabs value={tab} onValueChange={v => setTab(v as 'pending' | 'completed')}>
-        <TabsList className="grid w-full max-w-xs grid-cols-2">
-          <TabsTrigger value="pending">Pending</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      {/* Search and Tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <Tabs value={tab} onValueChange={v => setTab(v as 'pending' | 'completed')}>
+          <TabsList className="grid w-full sm:w-[300px] grid-cols-2">
+            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <div className="relative w-full sm:w-80">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search student, email, program..." 
+            className="pl-9"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
 
       {/* List */}
       {loading ? (
         <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
-      ) : enrollments.length === 0 ? (
+      ) : filteredEnrollments.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
             {tab === 'pending' ? 'No enrollments pending review.' : 'No completed reviews yet.'}
@@ -183,7 +208,7 @@ export function DeptEnrollmentReviewPanel() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {enrollments.map(e => (
+          {filteredEnrollments.map(e => (
             <Card key={e.id} className="hover:border-primary/30 transition-colors">
               <CardContent className="p-5 flex items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -260,7 +285,7 @@ export function DeptEnrollmentReviewPanel() {
               <div className="flex gap-5 items-start">
                 <div className="shrink-0">
                   {viewStudent.student?.photo ? (
-                    <img src={viewStudent.student.photo} alt="Student" className="w-24 h-24 rounded-xl object-cover border" />
+                    <img src={getDocUrl(viewStudent.student.photo)} alt="Student" className="w-24 h-24 rounded-xl object-cover border" />
                   ) : (
                     <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center border">
                       <User className="w-10 h-10 text-muted-foreground" />
