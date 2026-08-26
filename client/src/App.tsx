@@ -51,6 +51,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   hierarchy: 'hierarchy',
   branches: 'branches',
   settings: 'settings',
+  dsms_migration: 'dsms_migration',
   // Shared
   users: 'users',
   departments: 'departments',
@@ -310,6 +311,7 @@ function App() {
         { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'settings', label: 'Organisation Settings' },
         { id: 'meetings', label: 'Meetings' },
+        { id: 'dsms_migration', label: 'DSMS Migration' },
       ];
     }
 

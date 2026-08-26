@@ -26,15 +26,27 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         metrics.pendingApplications = await prisma.enrollment.count({
             where: { ...orgQuery, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
         });
-        // Uni submissions pending
-        metrics.uniSubmissionsPending = await prisma.enrollment.count({
-            where: { ...orgQuery, status: 'university_review' }
+        const studentsStatus = await prisma.student.findMany({
+            where: orgQuery,
+            select: { admissionProgress: true, reregStatus: true, documents: true }
         });
+        metrics.uniSubmissionsPending = studentsStatus.filter(s => {
+            const prog = s.admissionProgress;
+            return !prog || (!prog.universitySubmitted && !prog.uni_sub?.completed);
+        }).length;
+        metrics.documentsPending = studentsStatus.filter(s => {
+            const docs = Array.isArray(s.documents) ? s.documents : [];
+            const hasUnapprovedDocs = docs.length === 0 || docs.some((d) => d && d.status !== 'approved');
+            const photoStatus = s.admissionProgress?.photoStatus;
+            return hasUnapprovedDocs || photoStatus !== 'approved';
+        }).length;
+        metrics.reRegistrationPending = studentsStatus.filter(s => {
+            const rereg = s.reregStatus;
+            return !rereg || !rereg.completed;
+        }).length;
         metrics.enrollmentNumbersPending = await prisma.student.count({
             where: { ...orgQuery, enrollmentNo: null }
         });
-        metrics.documentsPending = 0; // Requires JSON query or separate document tracking
-        metrics.reRegistrationPending = 0; // Requires re-registration model
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         metrics.admissionAlerts = await prisma.student.count({

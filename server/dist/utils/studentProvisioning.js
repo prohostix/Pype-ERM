@@ -42,7 +42,6 @@ export async function provisionStudentAfterApproval(enrollmentId) {
                 data: {
                     centerId: enrollment.studyCenterId,
                     organizationId: enrollment.organizationId,
-                    enrollmentNo: generatedUid,
                     name: enrollment.studentName,
                     email: enrollment.studentEmail,
                     phone: enrollment.studentPhone,
@@ -65,7 +64,6 @@ export async function provisionStudentAfterApproval(enrollmentId) {
                 where: { id: studentRecord.id },
                 data: {
                     status: 'active',
-                    enrollmentNo: studentRecord.enrollmentNo || generatedUid,
                     centerId: studentRecord.centerId || enrollment.studyCenterId,
                     programId: studentRecord.programId || enrollment.programId,
                     sessionId: studentRecord.sessionId || enrollment.sessionId,
@@ -76,8 +74,7 @@ export async function provisionStudentAfterApproval(enrollmentId) {
         await prisma.enrollment.update({
             where: { id: enrollmentId },
             data: {
-                studentId: studentRecord.id,
-                enrollmentNumber: studentRecord.enrollmentNo || generatedUid,
+                studentId: studentRecord.id
             }
         });
         // Send credentials email if generated

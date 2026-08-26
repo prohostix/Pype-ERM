@@ -204,6 +204,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req, res) => {
             session: { select: { id: true, name: true } },
             departmentReviewer: { select: { id: true, name: true, email: true } },
             financeReviewer: { select: { id: true, name: true, email: true } },
+            student: true,
         },
         orderBy: { createdAt: 'desc' },
     });
@@ -332,7 +333,6 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                 data: {
                     centerId: enrollment.studyCenterId,
                     organizationId: enrollment.organizationId,
-                    enrollmentNo: generatedUid,
                     name: enrollment.studentName,
                     email: enrollment.studentEmail,
                     phone: enrollment.studentPhone,
@@ -369,7 +369,6 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                 where: { id: studentRecord.id },
                 data: {
                     status: 'active',
-                    enrollmentNo: studentRecord.enrollmentNo || generatedUid,
                     admissionNo: studentRecord.admissionNo || `ADM${Date.now().toString().slice(-6)}`
                 }
             });
@@ -403,8 +402,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
             financeReviewedAt: now,
             enrolledAt: now,
             statusHistory: history,
-            studentId: studentRecordId,
-            enrollmentNumber: generatedUid,
+            studentId: studentRecordId
         },
     });
     // Notify sales user
@@ -627,8 +625,9 @@ export const verifySalesEnrollment = asyncHandler(async (req, res) => {
         res.status(403).json({ success: false, message: 'Not authorized to verify this enrollment' });
         return;
     }
-    if (enrollment.status !== 'sales_verification_pending') {
-        res.status(400).json({ success: false, message: 'Enrollment is not pending sales verification' });
+    const allowedStatuses = ['sales_verification_pending', 'document_review', 'rejected', 'ops_rejected'];
+    if (!allowedStatuses.includes(enrollment.status)) {
+        res.status(400).json({ success: false, message: 'Enrollment cannot be resubmitted from its current status.' });
         return;
     }
     const now = new Date();
@@ -667,11 +666,25 @@ export const verifySalesEnrollment = asyncHandler(async (req, res) => {
                     actorId: salesUserId,
                     actorName: req.user.name,
                     timestamp: now.toISOString(),
-                    note: 'Sales user verified application and forwarded to Operations for document verification.',
+                    note: 'Sales user verified/resubmitted application and forwarded to Operations for document verification.',
                 }
             }
         }
     });
+    if (updatedEnrollment.studentId) {
+        // Reset photoStatus to pending if photo is being updated (or even if it's the same, it means a resubmit)
+        const existingStudent = await prisma.student.findUnique({ where: { id: updatedEnrollment.studentId } });
+        const progress = existingStudent?.admissionProgress || {};
+        const newProgress = { ...progress, photoStatus: 'pending' };
+        await prisma.student.update({
+            where: { id: updatedEnrollment.studentId },
+            data: {
+                documents: documents !== undefined ? documents : updatedEnrollment.documents,
+                photo: photo !== undefined ? photo : updatedEnrollment.photo,
+                admissionProgress: newProgress,
+            }
+        });
+    }
     // Notify ops admins
     try {
         const opsAdmins = await prisma.user.findMany({

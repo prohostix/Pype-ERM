@@ -11,6 +11,7 @@ import {
 } from '../controllers/organizationController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
+import { migrateFromDsms } from '../controllers/dsmsMigrationController.js';
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.use(protect);
 
 router.get('/inquiries', authorize('superadmin'), getOrgInquiries);
 router.patch('/inquiries/:id', authorize('superadmin'), updateOrgInquiryStatus);
+
+router.post('/migrate-dsms', authorize('org_admin'), migrateFromDsms);
 
 router
   .route('/')

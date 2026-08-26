@@ -1,1 +1,1 @@
-{"version":3,"file":"dashboardController.d.ts","sourceRoot":"","sources":["../../src/controllers/dashboardController.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAKnC,eAAO,MAAM,mBAAmB,+FAyH9B,CAAC;AAEH,eAAO,MAAM,yBAAyB,+FA0OpC,CAAC"}
+{"version":3,"file":"dashboardController.d.ts","sourceRoot":"","sources":["../../src/controllers/dashboardController.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAKnC,eAAO,MAAM,mBAAmB,+FAuI9B,CAAC;AAEH,eAAO,MAAM,yBAAyB,+FA0OpC,CAAC"}

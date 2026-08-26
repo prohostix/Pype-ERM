@@ -14,6 +14,7 @@ export declare const updateInternalMark: (req: import("express").Request, res: R
 export declare const deleteInternalMark: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const uploadStudentDocument: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const updateDocumentStatus: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const updatePhotoStatus: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const bulkEnrollmentUpdate: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const updateAdmissionProgress: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getStudentEnrollments: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;

@@ -417,8 +417,15 @@ export const getStudentPaymentsLog = asyncHandler(async (req, res) => {
                     }
                     const yearOffset = yf.year ? Number(yf.year) - 1 : breakdown.length;
                     const calculatedDueDate = student.joinDate ? new Date(new Date(student.joinDate).setFullYear(new Date(student.joinDate).getFullYear() + yearOffset)) : null;
+                    let cyclePrefix = 'Year';
+                    if (feeSt.billingCycle === 'per_semester')
+                        cyclePrefix = 'Sem';
+                    else if (feeSt.billingCycle === 'per_month')
+                        cyclePrefix = 'Month';
+                    else if (feeSt.billingCycle === 'one_time')
+                        cyclePrefix = 'Installment';
                     breakdown.push({
-                        year: yf.year ? `Year ${yf.year}` : `Year ${breakdown.length + 1}`,
+                        year: yf.year ? `${cyclePrefix} ${yf.year}` : `${cyclePrefix} ${breakdown.length + 1}`,
                         totalFee: yfTotal,
                         paid: yfPaid,
                         balance: yfTotal - yfPaid,

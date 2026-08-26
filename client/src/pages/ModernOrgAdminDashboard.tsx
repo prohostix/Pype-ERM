@@ -23,6 +23,7 @@ import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentRev
 import { OrganizationSettingsPanel } from '@/components/panels/OrganizationSettingsPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
+import DsmsMigrationPanel from '@/components/panels/DsmsMigrationPanel';
 
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -92,6 +93,9 @@ export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string })
         </TabsContent>
         <TabsContent value="activity-logs">
           <ActivityLogPanel />
+        </TabsContent>
+        <TabsContent value="dsms_migration">
+          <DsmsMigrationPanel />
         </TabsContent>
       </Tabs>
     </div>
