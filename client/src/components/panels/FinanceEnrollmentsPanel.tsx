@@ -9,6 +9,16 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+const getDocUrl = (url: string) => {
+  if (!url) return '#';
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/uploads')) {
+    const baseUrl = import.meta.env.VITE_API_URL || '/api/v1';
+    return `${baseUrl}${url}`;
+  }
+  return url;
+};
+
 interface Enrollment {
   id: string;
   enrollmentNumber?: string;
@@ -453,13 +463,17 @@ export function FinanceEnrollmentsPanel() {
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
                     {viewStudent.student.documents.filter(Boolean).map((doc: any, i: number) => (
-                      <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer"
+                      <a key={i} href={getDocUrl(doc.url)} target="_blank" rel="noopener noreferrer"
                         className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors group">
                         <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20">
                           <FileText className="w-4 h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium truncate">{doc.type || 'Document'}</p>
+                          <p className="text-sm font-medium truncate flex items-center gap-2">
+                            {doc.type || 'Document'}
+                            {doc.status === 'approved' && <CheckCircle className="w-3 h-3 text-success" />}
+                            {doc.status === 'rejected' && <XCircle className="w-3 h-3 text-destructive" />}
+                          </p>
                           <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
                         </div>
                       </a>
