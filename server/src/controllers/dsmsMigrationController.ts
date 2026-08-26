@@ -172,10 +172,10 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
         if (tds.length >= 6) {
           const rawAdmissionNo = $p(tds[1]).text().trim();
           let safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random()*1000)}`;
-          const name = $p(tds[2]).text().trim();
-          let email = $p(tds[3]).text().trim() || `${safeAdmissionNo}@dsms-import.com`;
-          const phone = $p(tds[4]).text().trim();
-          const courseName = $p(tds[5]).text().trim();
+          const name = $p(tds[3]).text().trim();
+          let email = `${safeAdmissionNo}@dsms-import.com`;
+          const phone = '0000000000';
+          const courseName = $p(tds[6]).text().trim();
           const viewHref = $p(el).find('a[title="View"]').attr('href') || $p(el).find('a').first().attr('href');
           
           if (name && name !== 'No results found.') {
@@ -437,7 +437,7 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
           const centerName = $e(tds[1]).text().trim();
           const contactName = $e(tds[6]).text().trim() || 'Unknown';
           const phone = $e(tds[7]).text().trim() || '0000000000';
-          
+          const courseName = $e(tds[4]).text().trim();
           if (contactName !== 'No results found.') {
             try {
               const existingLead = await prisma.lead.findFirst({
