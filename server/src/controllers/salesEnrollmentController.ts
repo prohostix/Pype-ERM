@@ -398,7 +398,6 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         data: {
           centerId: enrollment.studyCenterId,
           organizationId: enrollment.organizationId,
-          enrollmentNo: generatedUid,
           name: enrollment.studentName,
           email: enrollment.studentEmail,
           phone: enrollment.studentPhone,
@@ -434,7 +433,6 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
         where: { id: studentRecord.id },
         data: {
           status: 'active',
-          enrollmentNo: studentRecord.enrollmentNo || generatedUid,
           admissionNo: studentRecord.admissionNo || `ADM${Date.now().toString().slice(-6)}`
         }
       });
@@ -476,8 +474,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
       financeReviewedAt: now,
       enrolledAt: now,
       statusHistory: history,
-      studentId: studentRecordId,
-      enrollmentNumber: generatedUid,
+      studentId: studentRecordId
     } as any,
   });
 
