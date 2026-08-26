@@ -682,6 +682,43 @@ export const uploadStudentDocument = asyncHandler(async (req: AuthRequest, res: 
   res.status(200).json({ success: true, data: updatedStudent });
 });
 
+export const updateDocumentStatus = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id, docIndex } = req.params;
+  const { status, remarks } = req.body;
+  
+  const student = await prisma.student.findUnique({
+    where: { id },
+  });
+
+  if (!student) {
+    res.status(404).json({ success: false, message: 'Student not found' });
+    return;
+  }
+
+  const currentDocs = Array.isArray(student.documents) ? (student.documents as any[]) : [];
+  const index = parseInt(docIndex, 10);
+  
+  if (isNaN(index) || index < 0 || index >= currentDocs.length) {
+    res.status(400).json({ success: false, message: 'Invalid document index' });
+    return;
+  }
+
+  currentDocs[index] = {
+    ...currentDocs[index],
+    status,
+    remarks,
+    reviewedBy: req.user.name || req.user.email,
+    reviewedAt: new Date().toISOString()
+  };
+
+  const updatedStudent = await prisma.student.update({
+    where: { id },
+    data: { documents: currentDocs },
+  });
+
+  res.status(200).json({ success: true, data: updatedStudent });
+});
+
 export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { updates } = req.body;
   if (!Array.isArray(updates)) {

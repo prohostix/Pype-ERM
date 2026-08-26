@@ -13,7 +13,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req, res) => {
     }
     else {
         // Default: pending dept review
-        statusFilter = { in: ['dept_review', 'document_review'] };
+        statusFilter = { in: ['payment_pending', 'receipt_submitted', 'submitted', 'document_review', 'dept_review'] };
     }
     const enrollments = await prisma.enrollment.findMany({
         where: {

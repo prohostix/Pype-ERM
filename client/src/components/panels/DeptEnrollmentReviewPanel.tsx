@@ -11,6 +11,16 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
+const getDocUrl = (url: string) => {
+  if (!url) return '#';
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/uploads')) {
+    const baseUrl = import.meta.env.VITE_API_URL || '/api/v1';
+    return `${baseUrl}${url}`;
+  }
+  return url;
+};
+
 interface Enrollment {
   id: string;
   enrollmentNumber?: string;
@@ -94,8 +104,27 @@ export function DeptEnrollmentReviewPanel() {
       await api.put(`/enrollment/review/${id}/approve`);
       toast.success('Approved — forwarded to Finance');
       fetchData();
+      setViewStudent(null);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed');
+    }
+  };
+
+  const handleDocAction = async (studentId: string, docIndex: number, status: string) => {
+    try {
+      await api.put(`/students/${studentId}/documents/${docIndex}/status`, { status });
+      toast.success(`Document marked as ${status}`);
+      // Refresh the viewStudent data
+      if (viewStudent && viewStudent.student) {
+        const updatedDocs = [...viewStudent.student.documents];
+        updatedDocs[docIndex] = { ...updatedDocs[docIndex], status };
+        setViewStudent({
+          ...viewStudent,
+          student: { ...viewStudent.student, documents: updatedDocs }
+        });
+      }
+    } catch (e: any) {
+      toast.error('Failed to update document status');
     }
   };
 
@@ -356,16 +385,38 @@ export function DeptEnrollmentReviewPanel() {
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {docs.map((doc: any, i: number) => (
-                        <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors group">
-                          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
-                            <FileText className="w-4 h-4" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-medium truncate">{doc.type || 'Document'}</p>
-                            <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
-                          </div>
-                        </a>
+                        <div key={i} className="flex flex-col border rounded-lg overflow-hidden group">
+                          <a href={getDocUrl(doc.url)} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors flex-1">
+                            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
+                              <FileText className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium truncate flex items-center gap-2">
+                                {doc.type || 'Document'}
+                                {doc.status === 'approved' && <CheckCircle className="w-3 h-3 text-success" />}
+                                {doc.status === 'rejected' && <XCircle className="w-3 h-3 text-destructive" />}
+                              </p>
+                              <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
+                            </div>
+                          </a>
+                          {tab === 'pending' && (!doc.status || doc.status === 'pending') && (
+                            <div className="flex border-t divide-x bg-muted/20">
+                              <button
+                                onClick={() => handleDocAction(viewStudent.student.id, i, 'approved')}
+                                className="flex-1 py-1.5 text-[10px] font-medium text-success hover:bg-success/10 transition-colors flex items-center justify-center gap-1"
+                              >
+                                <CheckCircle className="w-3 h-3" /> Approve
+                              </button>
+                              <button
+                                onClick={() => handleDocAction(viewStudent.student.id, i, 'rejected')}
+                                className="flex-1 py-1.5 text-[10px] font-medium text-destructive hover:bg-destructive/10 transition-colors flex items-center justify-center gap-1"
+                              >
+                                <XCircle className="w-3 h-3" /> Reject
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   );

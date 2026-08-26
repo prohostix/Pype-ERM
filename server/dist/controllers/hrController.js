@@ -219,10 +219,25 @@ export const closeVacancy = asyncHandler(async (req, res) => {
     res.json({ success: true, data: vacancy });
 });
 export const validateVacancyForHiring = asyncHandler(async (req, res) => {
-    res.json({ success: true, valid: true });
+    const { departmentId, designation } = req.body;
+    const vacancy = await prisma.vacancy.findFirst({
+        where: { organizationId: req.user.organizationId, departmentId, designation, status: 'open' }
+    });
+    res.json({ success: true, valid: !!vacancy, data: vacancy });
 });
 export const fillVacancyPosition = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: {} });
+    const vacancy = await prisma.vacancy.findFirst({
+        where: { id: req.params.id, organizationId: req.user.organizationId }
+    });
+    if (!vacancy || vacancy.status !== 'open') {
+        res.status(400);
+        throw new Error('Invalid or already filled vacancy');
+    }
+    const updated = await prisma.vacancy.update({
+        where: { id: vacancy.id },
+        data: { status: 'filled' }
+    });
+    res.json({ success: true, data: updated });
 });
 export const getVacancyStats = asyncHandler(async (req, res) => {
     const orgId = req.user.organizationId;

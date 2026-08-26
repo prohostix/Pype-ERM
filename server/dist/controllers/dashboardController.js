@@ -23,12 +23,12 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         if (metrics.totalStudents === undefined) {
             metrics.totalStudents = await prisma.student.count({ where: orgQuery });
         }
-        metrics.pendingApplications = await prisma.student.count({
-            where: { ...orgQuery, status: 'pending' }
+        metrics.pendingApplications = await prisma.enrollment.count({
+            where: { ...orgQuery, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
         });
-        // Placeholder for uni submissions pending
-        metrics.uniSubmissionsPending = await prisma.student.count({
-            where: { ...orgQuery, status: 'pending' }
+        // Uni submissions pending
+        metrics.uniSubmissionsPending = await prisma.enrollment.count({
+            where: { ...orgQuery, status: 'university_review' }
         });
         metrics.enrollmentNumbersPending = await prisma.student.count({
             where: { ...orgQuery, enrollmentNo: null }
@@ -58,7 +58,22 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         }
         metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId, date: today, status: 'present' } });
         metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId, date: today, status: 'leave' } });
-        metrics.absentToday = Math.max(0, metrics.totalEmployees - metrics.presentToday - metrics.onLeave);
+        const isSunday = today.getDay() === 0;
+        const holiday = await prisma.holiday.findFirst({
+            where: {
+                organizationId: orgId,
+                date: {
+                    gte: new Date(today.setHours(0, 0, 0, 0)),
+                    lte: new Date(today.setHours(23, 59, 59, 999))
+                }
+            }
+        });
+        if (isSunday || holiday) {
+            metrics.absentToday = 0;
+        }
+        else {
+            metrics.absentToday = Math.max(0, metrics.totalEmployees - metrics.presentToday - metrics.onLeave);
+        }
         metrics.pendingLeaves = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
         metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
     }

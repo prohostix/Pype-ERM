@@ -1205,6 +1205,31 @@ exports.Prisma.BiometricDeviceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ExamRegistrationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  studentId: 'studentId',
+  semester: 'semester',
+  subjectCodes: 'subjectCodes',
+  examCenter: 'examCenter',
+  status: 'status',
+  registrationDate: 'registrationDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CommunicationLogScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  type: 'type',
+  recipientCount: 'recipientCount',
+  content: 'content',
+  status: 'status',
+  sentBy: 'sentBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1492,7 +1517,9 @@ exports.Prisma.ModelName = {
   UniversityPayment: 'UniversityPayment',
   Asset: 'Asset',
   DocumentLog: 'DocumentLog',
-  BiometricDevice: 'BiometricDevice'
+  BiometricDevice: 'BiometricDevice',
+  ExamRegistration: 'ExamRegistration',
+  CommunicationLog: 'CommunicationLog'
 };
 
 /**

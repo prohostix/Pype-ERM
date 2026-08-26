@@ -20,7 +20,13 @@ export const handleEscalation = asyncHandler(async (req, res) => {
     res.json({ success: true, data: escalation });
 });
 export const getAnalytics = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: {} });
+    const orgId = req.user.organizationId;
+    const [totalStudents, totalCenters, activePrograms] = await Promise.all([
+        prisma.student.count({ where: { organizationId: orgId } }),
+        prisma.studyCenter.count({ where: { organizationId: orgId } }),
+        prisma.program.count({ where: { organizationId: orgId, status: 'active' } })
+    ]);
+    res.json({ success: true, data: { totalStudents, totalCenters, activePrograms } });
 });
 export const getDepartmentManagers = asyncHandler(async (req, res) => {
     const managers = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, role: { in: ['ops_admin', 'finance_admin', 'hr_admin', 'sales_admin'] }, status: { not: 'resigned' } } });
@@ -40,7 +46,13 @@ export const assignTask = asyncHandler(async (req, res) => {
     res.status(201).json({ success: true, data: task });
 });
 export const getKPIKRAReport = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: [] });
+    const profiles = await prisma.employeeProfile.findMany({
+        where: { organizationId: req.user.organizationId },
+        include: {
+            user: { select: { name: true, email: true, department: true } }
+        }
+    });
+    res.json({ success: true, data: profiles });
 });
 export const getCenterOnboardingOverview = asyncHandler(async (req, res) => {
     const centers = await prisma.studyCenter.findMany({ where: { organizationId: req.user.organizationId } });

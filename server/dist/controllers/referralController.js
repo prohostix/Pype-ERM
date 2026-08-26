@@ -31,16 +31,43 @@ export const getReferredCenters = asyncHandler(async (req, res) => {
     res.json({ success: true, count: centers.length, data: centers });
 });
 export const getReferredStudents = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: [] });
+    const students = await prisma.student.findMany({
+        where: { organizationId: req.user.organizationId, referredBy: req.user.id }
+    });
+    res.json({ success: true, count: students.length, data: students });
 });
 export const getReferralMetrics = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: {} });
+    const [totalLinks, totalReferredCenters, totalReferredStudents] = await Promise.all([
+        prisma.referralLink.count({ where: { userId: req.user.id } }),
+        prisma.studyCenter.count({ where: { organizationId: req.user.organizationId, referredBy: req.user.id } }),
+        prisma.student.count({ where: { organizationId: req.user.organizationId, referredBy: req.user.id } })
+    ]);
+    res.json({ success: true, data: { totalLinks, totalReferredCenters, totalReferredStudents } });
 });
 export const validateReferralSlug = asyncHandler(async (req, res) => {
     const link = await prisma.referralLink.findUnique({ where: { code: req.params.slug } });
     res.json({ success: true, data: link ? { ...link, slug: link.code, fullUrl: `${process.env.FRONTEND_URL}/referral/${link.code}`, status: 'active' } : null });
 });
 export const getReferralLeaderboard = asyncHandler(async (req, res) => {
-    res.json({ success: true, data: [] });
+    const users = await prisma.user.findMany({
+        where: { organizationId: req.user.organizationId },
+        select: { id: true, name: true, role: true }
+    });
+    const studentCounts = await prisma.student.groupBy({
+        by: ['referredBy'],
+        where: { organizationId: req.user.organizationId, referredBy: { not: null } },
+        _count: { id: true }
+    });
+    const centerCounts = await prisma.studyCenter.groupBy({
+        by: ['referredBy'],
+        where: { organizationId: req.user.organizationId, referredBy: { not: null } },
+        _count: { id: true }
+    });
+    const leaderboard = users.map(u => {
+        const students = studentCounts.find(s => s.referredBy === u.id)?._count.id || 0;
+        const centers = centerCounts.find(c => c.referredBy === u.id)?._count.id || 0;
+        return { ...u, totalReferrals: students + centers, students, centers };
+    }).filter(u => u.totalReferrals > 0).sort((a, b) => b.totalReferrals - a.totalReferrals).slice(0, 10);
+    res.json({ success: true, data: leaderboard });
 });
 //# sourceMappingURL=referralController.js.map

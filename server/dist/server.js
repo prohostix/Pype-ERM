@@ -53,6 +53,8 @@ import assetRoutes from './routes/assetRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
 import meetingRoutes from './routes/meetingRoutes.js';
 import iclockRoutes from './routes/iclockRoutes.js';
+import examRoutes from './routes/examRoutes.js';
+import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
 const app = express();
 // Trust reverse proxy (Nginx) headers for rate limiting
@@ -127,6 +129,8 @@ app.use(`/api/${API_VERSION}/collections`, collectionsPanelRoutes);
 app.use(`/api/${API_VERSION}/assets`, assetRoutes);
 app.use(`/api/${API_VERSION}/documents`, documentRoutes);
 app.use(`/api/${API_VERSION}/meetings`, meetingRoutes);
+app.use(`/api/${API_VERSION}/exams`, examRoutes);
+app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
 // Health check
 app.get('/health', async (req, res) => {
     try {
