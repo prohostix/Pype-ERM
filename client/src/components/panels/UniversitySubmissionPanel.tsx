@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { RefreshCw, CheckCircle, Send, Building2 } from 'lucide-react';
+import { RefreshCw, CheckCircle, Send, Building2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
@@ -13,6 +14,7 @@ export function UniversitySubmissionPanel() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +22,7 @@ export function UniversitySubmissionPanel() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab]);
+  }, [activeTab, searchQuery]);
 
   useEffect(() => {
     fetchStudents();
@@ -55,8 +57,25 @@ export function UniversitySubmissionPanel() {
     }
   };
 
-  const pendingStudents = students.filter(s => !s.admissionProgress?.universitySubmitted);
-  const submittedStudents = students.filter(s => s.admissionProgress?.universitySubmitted);
+  const pendingStudents = students.filter(s => {
+    const isPending = !s.admissionProgress?.universitySubmitted;
+    if (!isPending) return false;
+    const q = searchQuery.toLowerCase();
+    return s.name?.toLowerCase().includes(q) || 
+           s.email?.toLowerCase().includes(q) || 
+           s.university?.name?.toLowerCase().includes(q) ||
+           s.program?.name?.toLowerCase().includes(q);
+  });
+  
+  const submittedStudents = students.filter(s => {
+    const isSubmitted = s.admissionProgress?.universitySubmitted;
+    if (!isSubmitted) return false;
+    const q = searchQuery.toLowerCase();
+    return s.name?.toLowerCase().includes(q) || 
+           s.email?.toLowerCase().includes(q) || 
+           s.university?.name?.toLowerCase().includes(q) ||
+           s.program?.name?.toLowerCase().includes(q);
+  });
 
   return (
     <Card className="border-none shadow-none">
@@ -74,10 +93,22 @@ export function UniversitySubmissionPanel() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="pending">Pending Submission ({pendingStudents.length})</TabsTrigger>
-            <TabsTrigger value="submitted">Submitted ({submittedStudents.length})</TabsTrigger>
-          </TabsList>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+            <TabsList>
+              <TabsTrigger value="pending">Pending Submission ({pendingStudents.length})</TabsTrigger>
+              <TabsTrigger value="submitted">Submitted ({submittedStudents.length})</TabsTrigger>
+            </TabsList>
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search students..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
           
           {(() => {
             const totalPendingPages = Math.max(1, Math.ceil(pendingStudents.length / itemsPerPage));
@@ -89,7 +120,7 @@ export function UniversitySubmissionPanel() {
             ) : pendingStudents.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg border-dashed">
                 <CheckCircle className="w-8 h-8 text-green-500 mb-2" />
-                <p className="text-muted-foreground">All files are submitted to universities!</p>
+                <p className="text-muted-foreground">{searchQuery ? 'No students found matching your search.' : 'All files are submitted to universities!'}</p>
               </div>
             ) : (
               <div className="rounded-md border">
