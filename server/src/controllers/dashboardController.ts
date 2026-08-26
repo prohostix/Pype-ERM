@@ -38,7 +38,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     
     const studentsStatus = await prisma.student.findMany({
       where: orgQuery,
-      select: { admissionProgress: true, reregStatus: true }
+      select: { admissionProgress: true, reregStatus: true, documents: true }
     });
     
     metrics.uniSubmissionsPending = studentsStatus.filter(s => {
@@ -47,7 +47,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     }).length;
     
     metrics.documentsPending = studentsStatus.filter(s => {
-      const docs = Array.isArray(s.documents) ? s.documents : [];
+      const docs = Array.isArray((s as any).documents) ? (s as any).documents : [];
       const hasUnapprovedDocs = docs.length === 0 || docs.some((d: any) => d && d.status !== 'approved');
       const photoStatus = (s.admissionProgress as any)?.photoStatus;
       return hasUnapprovedDocs || photoStatus !== 'approved';
