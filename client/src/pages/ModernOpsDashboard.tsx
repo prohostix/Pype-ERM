@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { 
   Building2, 
   Users, 
-  Search,
   FileText,
   PlusCircle,
   Hash,
@@ -13,7 +12,6 @@ import {
   CheckSquare
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
@@ -74,19 +72,12 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'overview': return <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"><div className="lg:col-span-3"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div></div>;
       
       case 'students': return <StudentsPanel />;
-      case 'student_verification': return <PlaceholderPanel title="Student Verification" description="Verify student documents and credentials." />;
       case 'student_portal_management': return <StudentPortalManagementPanel />;
-      case 'student_documents': return <PlaceholderPanel title="Student Documents" description="Manage and verify all student documents." />;
-      case 'student_timeline': return <PlaceholderPanel title="Student Timeline" description="View complete timeline of student activities." />;
       
-      case 'new_admissions': return <PlaceholderPanel title="New Admissions" description="Process new student admissions." />;
       case 'admission_review': return <DeptEnrollmentReviewPanel />;
-      case 'pending_admissions': return <PlaceholderPanel title="Pending Admissions" description="Review admissions waiting for approval." />;
-      case 'admission_verification': return <PlaceholderPanel title="Admission Verification" description="Verify admission details and documents." />;
 
       case 'universities': return <UniversitiesPanel />;
       case 'university_submission': return <UniversitySubmissionPanel />;
-      case 'enrollment_management': return <PlaceholderPanel title="Enrollment Management" description="Manage university enrollments." />;
       case 'enrollment_number_update': return <EnrollmentNumberUpdatePanel />;
       case 're_registration': return <ReRegistrationPanel />;
       case 'exam_registration': return <ExamRegistrationPanel />;
@@ -107,9 +98,6 @@ export function ModernOpsDashboard({ initialTab }: { initialTab?: string }) {
       case 'email_notifications': return <EmailNotificationsPanel />;
 
       case 'tasks': return <TasksPanel />;
-      case 'pending_tasks': return <PlaceholderPanel title="Pending Tasks" description="View your pending tasks." />;
-      case 'completed_tasks': return <PlaceholderPanel title="Completed Tasks" description="View your completed tasks." />;
-      case 'follow_up_reminders': return <PlaceholderPanel title="Follow-up Reminders" description="Manage your follow-ups." />;
 
       case 'student_report': return <StudentReportPanel />;
       case 'admission_report': return <AdmissionReportPanel />;

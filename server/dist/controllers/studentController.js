@@ -36,7 +36,7 @@ export const getStudents = asyncHandler(async (req, res) => {
     }
     const students = await prisma.student.findMany({
         where,
-        include: { enrollments: true, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: true },
+        include: { enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } },
         orderBy: { createdAt: 'desc' }
     });
     res.status(200).json({ success: true, count: students.length, data: students });
@@ -44,7 +44,7 @@ export const getStudents = asyncHandler(async (req, res) => {
 export const getStudent = asyncHandler(async (req, res) => {
     const student = await prisma.student.findUnique({
         where: { id: req.params.id },
-        include: { enrollments: true, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: true }
+        include: { enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } }
     });
     if (!student) {
         res.status(404).json({ success: false, message: 'Student not found' });

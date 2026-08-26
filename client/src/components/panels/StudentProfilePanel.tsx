@@ -216,54 +216,76 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 {/* Fees Tab */}
                 <TabsContent value="fees" className="mt-0">
                   <div className="space-y-4">
-                    {student.paymentSchedules && student.paymentSchedules.length > 0 ? (
-                      <div className="border rounded-md">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Title</TableHead>
-                              <TableHead>Due Date</TableHead>
-                              <TableHead>Amount</TableHead>
-                              <TableHead>Status</TableHead>
-                              <TableHead>Paid At</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {student.paymentSchedules.map((schedule: any) => (
-                              <TableRow key={schedule.id}>
-                                <TableCell className="font-medium">
-                                  {schedule.title}
-                                  {schedule.isOldFee && <Badge variant="outline" className="ml-2 text-[10px]">OLD FEE</Badge>}
-                                </TableCell>
-                                <TableCell>
-                                  {schedule.dueDate ? format(new Date(schedule.dueDate), 'dd MMM yyyy') : 'N/A'}
-                                </TableCell>
-                                <TableCell>
-                                  {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(schedule.amount)}
-                                </TableCell>
-                                <TableCell>
-                                  <Badge 
-                                    variant={schedule.status === 'paid' ? 'default' : schedule.status === 'overdue' ? 'destructive' : 'secondary'}
-                                    className={schedule.status === 'paid' ? "bg-green-500 hover:bg-green-600 uppercase" : "uppercase"}
-                                  >
-                                    {schedule.status}
-                                  </Badge>
-                                </TableCell>
-                                <TableCell>
-                                  {schedule.paidAt ? format(new Date(schedule.paidAt), 'dd MMM yyyy') : '-'}
-                                </TableCell>
+                    {(() => {
+                      const allFees = [
+                        ...(student.paymentSchedules || []),
+                        ...(student.enrollments?.flatMap((e: any) => e.payment ? [e.payment] : []).map((ep: any) => ({
+                          id: ep.id,
+                          title: 'Initial Admission Fee',
+                          amount: ep.amount,
+                          dueDate: ep.createdAt,
+                          status: 'paid',
+                          paidAt: ep.debitedAt || ep.createdAt,
+                          isEnrollmentPayment: true
+                        })) || [])
+                      ];
+                      
+                      allFees.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+
+                      if (allFees.length === 0) {
+                        return (
+                          <div className="text-center py-10 space-y-3">
+                            <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
+                            <h4 className="text-base font-semibold">No Fee Records Found</h4>
+                            <p className="text-sm text-muted-foreground">This student does not have any fee records yet.</p>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div className="border rounded-md">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Title</TableHead>
+                                <TableHead>Due Date</TableHead>
+                                <TableHead>Amount</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Paid At</TableHead>
                               </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    ) : (
-                      <div className="text-center py-10 space-y-3">
-                        <CreditCard className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
-                        <h4 className="text-base font-semibold">No Fee Records Found</h4>
-                        <p className="text-sm text-muted-foreground">This student does not have any payment schedules yet.</p>
-                      </div>
-                    )}
+                            </TableHeader>
+                            <TableBody>
+                              {allFees.map((schedule: any) => (
+                                <TableRow key={schedule.id}>
+                                  <TableCell className="font-medium">
+                                    {schedule.title}
+                                    {schedule.isOldFee && <Badge variant="outline" className="ml-2 text-[10px]">OLD FEE</Badge>}
+                                    {schedule.isEnrollmentPayment && <Badge variant="secondary" className="ml-2 text-[10px] bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">ADMISSION</Badge>}
+                                  </TableCell>
+                                  <TableCell>
+                                    {schedule.dueDate ? format(new Date(schedule.dueDate), 'dd MMM yyyy') : 'N/A'}
+                                  </TableCell>
+                                  <TableCell>
+                                    {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(schedule.amount)}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Badge 
+                                      variant={schedule.status === 'paid' ? 'default' : schedule.status === 'overdue' ? 'destructive' : 'secondary'}
+                                      className={schedule.status === 'paid' ? "bg-green-500 hover:bg-green-600 uppercase" : "uppercase"}
+                                    >
+                                      {schedule.status}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell>
+                                    {schedule.paidAt ? format(new Date(schedule.paidAt), 'dd MMM yyyy') : '-'}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </TabsContent>
 
@@ -373,16 +395,6 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                 {/* Student Progress Tab */}
                 <TabsContent value="progress" className="mt-0">
                   <StudentProgressTab student={student} />
-                </TabsContent>
-
-                {/* Communication History Tab */}
-                <TabsContent value="communication" className="mt-0">
-                  <PlaceholderPanel title="Communication History" description="View all SMS, Email, and WhatsApp communications with this student." />
-                </TabsContent>
-
-                {/* Remarks Tab */}
-                <TabsContent value="remarks" className="mt-0">
-                  <PlaceholderPanel title="Remarks" description="Internal remarks and notes regarding this student." />
                 </TabsContent>
 
               </CardContent>

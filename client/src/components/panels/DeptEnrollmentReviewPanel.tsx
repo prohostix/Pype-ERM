@@ -94,6 +94,7 @@ export function DeptEnrollmentReviewPanel() {
   const [filterBranch, setFilterBranch] = useState('');
   const [filterUniversity, setFilterUniversity] = useState('');
   const [filterBatch, setFilterBatch] = useState('');
+  const [previewDoc, setPreviewDoc] = useState<{ url: string; index: number; type?: string; name?: string; status?: string } | null>(null);
 
   // unique lists from enrollments
   const branches = Array.from(new Set(enrollments.map(e => e?.studyCenter?.name).filter(Boolean))) as string[];
@@ -472,8 +473,9 @@ export function DeptEnrollmentReviewPanel() {
                     <div className="grid grid-cols-2 gap-3">
                       {docs.map((doc: any, i: number) => (
                         <div key={i} className="flex flex-col border rounded-lg overflow-hidden group">
-                          <a href={getDocUrl(doc.url)} target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors flex-1">
+                          <button 
+                            onClick={() => setPreviewDoc({ ...doc, index: i })}
+                            className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors flex-1 text-left">
                             <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
                               <FileText className="w-4 h-4" />
                             </div>
@@ -483,9 +485,9 @@ export function DeptEnrollmentReviewPanel() {
                                 {doc.status === 'approved' && <CheckCircle className="w-3 h-3 text-success" />}
                                 {doc.status === 'rejected' && <XCircle className="w-3 h-3 text-destructive" />}
                               </p>
-                              <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to open'}</p>
+                              <p className="text-xs text-muted-foreground truncate">{doc.name || 'Click to preview'}</p>
                             </div>
-                          </a>
+                          </button>
                           {tab === 'pending' && (!doc.status || doc.status === 'pending') && (
                             <div className="flex border-t divide-x bg-muted/20">
                               <button
@@ -511,6 +513,63 @@ export function DeptEnrollmentReviewPanel() {
 
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Document Preview Modal */}
+      <Dialog open={!!previewDoc} onOpenChange={(open) => !open && setPreviewDoc(null)}>
+        <DialogContent className="max-w-4xl h-[85vh] flex flex-col overflow-hidden">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>{previewDoc?.type || 'Document Preview'}</span>
+              <div className="flex items-center gap-2 mr-6">
+                {viewStudent && tab === 'pending' && (!previewDoc?.status || previewDoc?.status === 'pending') && (
+                  <>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-success border-success hover:bg-success/10"
+                      onClick={() => {
+                        if (previewDoc && viewStudent?.student) {
+                          handleDocAction(viewStudent.student.id, previewDoc.index, 'approved');
+                          setPreviewDoc({ ...previewDoc, status: 'approved' });
+                        }
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" /> Approve
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-destructive border-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        if (previewDoc && viewStudent?.student) {
+                          handleDocAction(viewStudent.student.id, previewDoc.index, 'rejected');
+                          setPreviewDoc({ ...previewDoc, status: 'rejected' });
+                        }
+                      }}
+                    >
+                      <XCircle className="w-4 h-4 mr-2" /> Reject
+                    </Button>
+                  </>
+                )}
+                <Button size="sm" variant="outline" asChild>
+                  <a href={previewDoc ? getDocUrl(previewDoc.url) : '#'} target="_blank" rel="noopener noreferrer">
+                    Open Original
+                  </a>
+                </Button>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 bg-muted/30 rounded-md overflow-hidden relative flex items-center justify-center">
+            {previewDoc && (
+              previewDoc.url.toLowerCase().match(/\.(jpeg|jpg|gif|png|webp)$/) ? (
+                <img src={getDocUrl(previewDoc.url)} alt="Preview" className="max-w-full max-h-full object-contain" />
+              ) : (
+                <iframe src={getDocUrl(previewDoc.url)} className="w-full h-full border-0" title="Document Preview" />
+              )
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
