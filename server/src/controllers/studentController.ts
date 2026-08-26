@@ -299,10 +299,29 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
   // If credentials.password is updated, hash it and update corresponding User record
   if (req.body.credentials && req.body.credentials.password) {
     const hashedPassword = await hashPassword(req.body.credentials.password);
-    await prisma.user.update({
-      where: { email: studentExists.email },
-      data: { password: hashedPassword }
-    });
+    
+    // Check if user exists first, because some legacy migrations might have skipped user creation
+    const existingUser = await prisma.user.findFirst({ where: { email: studentExists.email } });
+    if (existingUser) {
+      await prisma.user.update({
+        where: { id: existingUser.id },
+        data: { password: hashedPassword }
+      });
+    } else {
+      const generatedUid = await generateUserId();
+      await prisma.user.create({
+        data: {
+          organizationId: studentExists.organizationId,
+          userId: generatedUid,
+          email: studentExists.email,
+          password: hashedPassword,
+          name: studentExists.name,
+          role: 'staff',
+          phone: studentExists.phone,
+          status: 'active'
+        }
+      });
+    }
   }
 
   const dataToUpdate: any = { ...req.body };
