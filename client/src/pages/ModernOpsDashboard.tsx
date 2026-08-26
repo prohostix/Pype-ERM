@@ -202,24 +202,7 @@ function OverviewContent({ metrics, onNavigate }: { metrics: any; onNavigate: (t
         </div>
       </div>
 
-      {/* Top Filters */}
-      <div className="flex flex-wrap items-center gap-3 bg-card p-4 rounded-xl border border-border shadow-sm">
-        <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>Branch</option>
-          <option>Main Campus</option>
-        </select>
-        <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>University</option>
-        </select>
-        <select className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm">
-          <option>Batch</option>
-          <option>2026</option>
-        </select>
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search Student..." className="h-9 pl-9 w-full bg-background" />
-        </div>
-      </div>
+
 
       {/* Operations Quick Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">

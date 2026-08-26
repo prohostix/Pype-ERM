@@ -85,17 +85,32 @@ export function DeptEnrollmentReviewPanel() {
   const [viewStudent, setViewStudent] = useState<Enrollment | null>(null);
   const [remarks, setRemarks] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterBranch, setFilterBranch] = useState('');
+  const [filterUniversity, setFilterUniversity] = useState('');
+  const [filterBatch, setFilterBatch] = useState('');
+
+  // unique lists from enrollments
+  const branches = Array.from(new Set(enrollments.map(e => e?.studyCenter?.name).filter(Boolean))) as string[];
+  const universities = Array.from(new Set(enrollments.map(e => e?.program?.university?.name).filter(Boolean))) as string[];
+  const batches = Array.from(new Set(enrollments.map(e => e?.session?.name).filter(Boolean))) as string[];
 
   const filteredEnrollments = enrollments.filter(e => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      e.studentName.toLowerCase().includes(q) ||
-      e.studentEmail.toLowerCase().includes(q) ||
-      (e.enrollmentNumber && e.enrollmentNumber.toLowerCase().includes(q)) ||
-      (e.program?.name && e.program.name.toLowerCase().includes(q)) ||
-      (e.program?.code && e.program.code.toLowerCase().includes(q))
-    );
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch =
+        e.studentName.toLowerCase().includes(q) ||
+        e.studentEmail.toLowerCase().includes(q) ||
+        (e.enrollmentNumber && e.enrollmentNumber.toLowerCase().includes(q)) ||
+        (e.program?.name && e.program.name.toLowerCase().includes(q)) ||
+        (e.program?.code && e.program.code.toLowerCase().includes(q));
+      if (!matchesSearch) return false;
+    }
+
+    if (filterBranch && e.studyCenter?.name !== filterBranch) return false;
+    if (filterUniversity && e.program?.university?.name !== filterUniversity) return false;
+    if (filterBatch && e.session?.name !== filterBatch) return false;
+
+    return true;
   });
 
   const fetchData = async (t = tab) => {
@@ -178,23 +193,50 @@ export function DeptEnrollmentReviewPanel() {
       </div>
 
       {/* Search and Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-4">
+        {/* Top Filters */}
+        <div className="flex flex-wrap items-center gap-3 bg-card p-4 rounded-xl border border-border shadow-sm">
+          <select 
+            value={filterBranch} 
+            onChange={(e) => setFilterBranch(e.target.value)}
+            className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
+          >
+            <option value="">Branch</option>
+            {branches.map(b => <option key={b} value={b}>{b}</option>)}
+          </select>
+          <select 
+            value={filterUniversity} 
+            onChange={(e) => setFilterUniversity(e.target.value)}
+            className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
+          >
+            <option value="">University</option>
+            {universities.map(u => <option key={u} value={u}>{u}</option>)}
+          </select>
+          <select 
+            value={filterBatch} 
+            onChange={(e) => setFilterBatch(e.target.value)}
+            className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
+          >
+            <option value="">Batch</option>
+            {batches.map(b => <option key={b} value={b}>{b}</option>)}
+          </select>
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search Student..." 
+              className="h-9 pl-9 w-full bg-background"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
         <Tabs value={tab} onValueChange={v => setTab(v as 'pending' | 'completed')}>
           <TabsList className="grid w-full sm:w-[300px] grid-cols-2">
             <TabsTrigger value="pending">Pending</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
           </TabsList>
         </Tabs>
-
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search student, email, program..." 
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
       </div>
 
       {/* List */}
