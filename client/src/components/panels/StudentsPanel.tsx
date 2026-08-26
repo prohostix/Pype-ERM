@@ -509,7 +509,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       await api.delete(`/students/${id}`);
       toast.success('Student deleted successfully');
       fetchStudents();
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || error?.isDeleteRequest) return;
       console.error('Failed to delete student:', error);
       toast.error('Failed to delete student');
     }
