@@ -36,17 +36,29 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       where: { ...orgQuery, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
     });
     
-    // Uni submissions pending
-    metrics.uniSubmissionsPending = await prisma.enrollment.count({
-      where: { ...orgQuery, status: 'university_review' }
+    const studentsStatus = await prisma.student.findMany({
+      where: orgQuery,
+      select: { admissionProgress: true, reregStatus: true }
     });
+    
+    metrics.uniSubmissionsPending = studentsStatus.filter(s => {
+      const prog = s.admissionProgress as any;
+      return !prog || !prog.universitySubmitted;
+    }).length;
+    
+    metrics.documentsPending = studentsStatus.filter(s => {
+      const prog = s.admissionProgress as any;
+      return !prog || !prog.documentsVerified;
+    }).length;
+    
+    metrics.reRegistrationPending = studentsStatus.filter(s => {
+      const rereg = s.reregStatus as any;
+      return !rereg || !rereg.completed;
+    }).length;
     
     metrics.enrollmentNumbersPending = await prisma.student.count({
       where: { ...orgQuery, enrollmentNo: null }
     });
-    
-    metrics.documentsPending = 0; // Requires JSON query or separate document tracking
-    metrics.reRegistrationPending = 0; // Requires re-registration model
     
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
