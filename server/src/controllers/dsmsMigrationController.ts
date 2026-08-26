@@ -188,9 +188,11 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
 
         // Process students sequentially to prevent race conditions on StudyCenter creation
         const rowsArray = rows.toArray();
-        for (const el of rowsArray) {
-        const tds = $p(el).find('td');
-        if (tds.length >= 6) {
+        // 1. Fetch all student detail pages for this page concurrently
+        const studentFetchTasks = rowsArray.map(async (el) => {
+          const tds = $p(el).find('td');
+          if (tds.length < 6) return null;
+
           const rawAdmissionNo = $p(tds[1]).text().trim();
           let safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random()*1000)}`;
           const name = $p(tds[3]).text().trim();
@@ -199,37 +201,53 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
           const courseName = $p(tds[6]).text().trim();
           const viewHref = $p(el).find('a[title="View"]').attr('href') || $p(el).find('a').first().attr('href');
           
-          if (name && name !== 'No results found.') {
+          if (!name || name === 'No results found.') return null;
+          
+          const programId = programsMap.get(courseName);
+          if (!programId) {
+            return { error: `Program not mapped: ${courseName}`, name };
+          }
+
+          let meta: Record<string, string> = {};
+          let $v: any = null;
+
+          if (viewHref) {
+            const vUrl = baseUrl + (viewHref.startsWith('/') ? viewHref : '/' + viewHref);
             try {
-              // We will check uniqueness after we extract all metadata
-              let existingStu = null;
+              const vRes = await client.get(vUrl);
+              $v = cheerio.load(vRes.data);
+              $v('table').eq(1).find('tr').each((i: number, el: any) => {
+                const key = $v(el).find('th').text().trim();
+                const val = $v(el).find('td').text().trim();
+                if (key && val) meta[key] = val;
+              });
+            } catch (err: any) {
+              return { error: `Student detail fetch error: ${err.message}`, name };
+            }
+          }
 
-                  if (!existingStu) {
-                    const programId = programsMap.get(courseName);
-                    if (!programId) throw new Error(`Program not mapped: ${courseName}`);
+          return { rawAdmissionNo, safeAdmissionNo, name, email, phone, courseName, programId, meta, $v };
+        });
 
-                    let meta: Record<string, string> = {};
-                    let vUrl = '';
-                    let $v: any = null;
+        const studentsData = await Promise.all(studentFetchTasks);
 
-                    if (viewHref) {
-                      vUrl = baseUrl + (viewHref.startsWith('/') ? viewHref : '/' + viewHref);
-                      const vRes = await client.get(vUrl);
-                      $v = cheerio.load(vRes.data);
-                      
-                      $v('table').eq(1).find('tr').each((i: number, el: any) => {
-                        const key = $v(el).find('th').text().trim();
-                        const val = $v(el).find('td').text().trim();
-                        if (key && val) {
-                          meta[key] = val;
-                        }
-                      });
-                    }
-
-                    const enrichedName = meta['Student Name'] ? meta['Student Name'].replace(/^(Mr|Ms|Mrs)\s+/i, '').trim() : name;
-                    let enrichedEmail = meta['Email'] || email;
-                    const enrichedPhone = meta['Mobile'] || meta['Phone'] || phone;
-                    const address = meta['Present Address'] || meta['Permanent Address'] || 'Imported from DSMS';
+        // 2. Process DB sequentially to avoid race conditions on Center/University creation
+        for (const stuData of studentsData) {
+          if (!stuData) continue;
+          if ('error' in stuData) {
+            errors.push(`Student ${stuData.name} error: ${stuData.error}`);
+            continue;
+          }
+          
+          let { rawAdmissionNo, safeAdmissionNo, name, email, phone, courseName, programId, meta, $v } = stuData;
+          
+          try {
+            let existingStu = null;
+            if (!existingStu) {
+              const enrichedName = meta['Student Name'] ? meta['Student Name'].replace(/^(Mr|Ms|Mrs)\s+/i, '').trim() : name;
+              let enrichedEmail = meta['Email'] || email;
+              const enrichedPhone = meta['Mobile'] || meta['Phone'] || phone;
+              const address = meta['Present Address'] || meta['Permanent Address'] || 'Imported from DSMS';
                     
                     // Prevent global unique constraint crashes for email and enrollmentNo
                     const existingEmail = await prisma.student.findFirst({ where: { email: enrichedEmail } });
@@ -445,11 +463,9 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                     }
                   }
             } catch (e: any) {
-              errors.push(`Student ${name} error: ${e.message}`);
+              errors.push(`Student ${stuData.name} error: ${e.message}`);
             }
-          }
-        }
-        }
+        } // End of studentsData loop
       await sleep(200); // polite delay
       page++;
     }

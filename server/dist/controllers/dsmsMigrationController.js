@@ -160,246 +160,262 @@ export const migrateFromDsms = asyncHandler(async (req, res) => {
                         }
                         // Process students sequentially to prevent race conditions on StudyCenter creation
                         const rowsArray = rows.toArray();
-                        for (const el of rowsArray) {
+                        // 1. Fetch all student detail pages for this page concurrently
+                        const studentFetchTasks = rowsArray.map(async (el) => {
                             const tds = $p(el).find('td');
-                            if (tds.length >= 6) {
-                                const rawAdmissionNo = $p(tds[1]).text().trim();
-                                let safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-                                const name = $p(tds[3]).text().trim();
-                                let email = `${safeAdmissionNo}@dsms-import.com`;
-                                const phone = '0000000000';
-                                const courseName = $p(tds[6]).text().trim();
-                                const viewHref = $p(el).find('a[title="View"]').attr('href') || $p(el).find('a').first().attr('href');
-                                if (name && name !== 'No results found.') {
-                                    try {
-                                        // We will check uniqueness after we extract all metadata
-                                        let existingStu = null;
-                                        if (!existingStu) {
-                                            const programId = programsMap.get(courseName);
-                                            if (!programId)
-                                                throw new Error(`Program not mapped: ${courseName}`);
-                                            let meta = {};
-                                            let vUrl = '';
-                                            let $v = null;
-                                            if (viewHref) {
-                                                vUrl = baseUrl + (viewHref.startsWith('/') ? viewHref : '/' + viewHref);
-                                                const vRes = await client.get(vUrl);
-                                                $v = cheerio.load(vRes.data);
-                                                $v('table').eq(1).find('tr').each((i, el) => {
-                                                    const key = $v(el).find('th').text().trim();
-                                                    const val = $v(el).find('td').text().trim();
-                                                    if (key && val) {
-                                                        meta[key] = val;
-                                                    }
-                                                });
-                                            }
-                                            const enrichedName = meta['Student Name'] ? meta['Student Name'].replace(/^(Mr|Ms|Mrs)\s+/i, '').trim() : name;
-                                            let enrichedEmail = meta['Email'] || email;
-                                            const enrichedPhone = meta['Mobile'] || meta['Phone'] || phone;
-                                            const address = meta['Present Address'] || meta['Permanent Address'] || 'Imported from DSMS';
-                                            // Prevent global unique constraint crashes for email and enrollmentNo
-                                            const existingEmail = await prisma.student.findFirst({ where: { email: enrichedEmail } });
-                                            const existingEnrollment = await prisma.student.findFirst({ where: { enrollmentNo: safeAdmissionNo } });
-                                            if (existingEmail && existingEmail.organizationId !== organizationId) {
-                                                enrichedEmail = `dsms-${Date.now()}-${Math.floor(Math.random() * 10000)}@imported.com`;
-                                            }
-                                            if (existingEnrollment && existingEnrollment.organizationId !== organizationId) {
-                                                safeAdmissionNo = `TMP-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-                                            }
-                                            // Re-check existence within the current organization
-                                            existingStu = await prisma.student.findFirst({
-                                                where: { OR: [{ email: enrichedEmail }, { enrollmentNo: safeAdmissionNo }], organizationId }
+                            if (tds.length < 6)
+                                return null;
+                            const rawAdmissionNo = $p(tds[1]).text().trim();
+                            let safeAdmissionNo = rawAdmissionNo || `TMP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                            const name = $p(tds[3]).text().trim();
+                            let email = `${safeAdmissionNo}@dsms-import.com`;
+                            const phone = '0000000000';
+                            const courseName = $p(tds[6]).text().trim();
+                            const viewHref = $p(el).find('a[title="View"]').attr('href') || $p(el).find('a').first().attr('href');
+                            if (!name || name === 'No results found.')
+                                return null;
+                            const programId = programsMap.get(courseName);
+                            if (!programId) {
+                                return { error: `Program not mapped: ${courseName}`, name };
+                            }
+                            let meta = {};
+                            let $v = null;
+                            if (viewHref) {
+                                const vUrl = baseUrl + (viewHref.startsWith('/') ? viewHref : '/' + viewHref);
+                                try {
+                                    const vRes = await client.get(vUrl);
+                                    $v = cheerio.load(vRes.data);
+                                    $v('table').eq(1).find('tr').each((i, el) => {
+                                        const key = $v(el).find('th').text().trim();
+                                        const val = $v(el).find('td').text().trim();
+                                        if (key && val)
+                                            meta[key] = val;
+                                    });
+                                }
+                                catch (err) {
+                                    return { error: `Student detail fetch error: ${err.message}`, name };
+                                }
+                            }
+                            return { rawAdmissionNo, safeAdmissionNo, name, email, phone, courseName, programId, meta, $v };
+                        });
+                        const studentsData = await Promise.all(studentFetchTasks);
+                        // 2. Process DB sequentially to avoid race conditions on Center/University creation
+                        for (const stuData of studentsData) {
+                            if (!stuData)
+                                continue;
+                            if ('error' in stuData) {
+                                errors.push(`Student ${stuData.name} error: ${stuData.error}`);
+                                continue;
+                            }
+                            let { rawAdmissionNo, safeAdmissionNo, name, email, phone, courseName, programId, meta, $v } = stuData;
+                            try {
+                                let existingStu = null;
+                                if (!existingStu) {
+                                    const enrichedName = meta['Student Name'] ? meta['Student Name'].replace(/^(Mr|Ms|Mrs)\s+/i, '').trim() : name;
+                                    let enrichedEmail = meta['Email'] || email;
+                                    const enrichedPhone = meta['Mobile'] || meta['Phone'] || phone;
+                                    const address = meta['Present Address'] || meta['Permanent Address'] || 'Imported from DSMS';
+                                    // Prevent global unique constraint crashes for email and enrollmentNo
+                                    const existingEmail = await prisma.student.findFirst({ where: { email: enrichedEmail } });
+                                    const existingEnrollment = await prisma.student.findFirst({ where: { enrollmentNo: safeAdmissionNo } });
+                                    if (existingEmail && existingEmail.organizationId !== organizationId) {
+                                        enrichedEmail = `dsms-${Date.now()}-${Math.floor(Math.random() * 10000)}@imported.com`;
+                                    }
+                                    if (existingEnrollment && existingEnrollment.organizationId !== organizationId) {
+                                        safeAdmissionNo = `TMP-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+                                    }
+                                    // Re-check existence within the current organization
+                                    existingStu = await prisma.student.findFirst({
+                                        where: { OR: [{ email: enrichedEmail }, { enrollmentNo: safeAdmissionNo }], organizationId }
+                                    });
+                                    if (!existingStu) {
+                                        let centerId = undefined;
+                                        const centerName = meta['Place Or Subcenter'];
+                                        if (centerName) {
+                                            let center = await prisma.studyCenter.findFirst({
+                                                where: { name: centerName, organizationId }
                                             });
-                                            if (!existingStu) {
-                                                let centerId = undefined;
-                                                const centerName = meta['Place Or Subcenter'];
-                                                if (centerName) {
-                                                    let center = await prisma.studyCenter.findFirst({
-                                                        where: { name: centerName, organizationId }
-                                                    });
-                                                    if (!center) {
-                                                        center = await prisma.studyCenter.create({
-                                                            data: {
-                                                                organizationId,
-                                                                name: centerName,
-                                                                code: `${centerName.substring(0, 5).toUpperCase().replace(/\s/g, '')}_${Math.floor(Math.random() * 10000)}`,
-                                                                status: 'active'
-                                                            }
-                                                        });
+                                            if (!center) {
+                                                center = await prisma.studyCenter.create({
+                                                    data: {
+                                                        organizationId,
+                                                        name: centerName,
+                                                        code: `${centerName.substring(0, 5).toUpperCase().replace(/\s/g, '')}_${Math.floor(Math.random() * 10000)}`,
+                                                        status: 'active'
                                                     }
-                                                    centerId = center.id;
-                                                }
-                                                let studentUniversityId = undefined;
-                                                const uniName = meta['University/Board'];
-                                                if (uniName) {
-                                                    let uni = await prisma.university.findFirst({
-                                                        where: { name: uniName, organizationId }
-                                                    });
-                                                    if (!uni) {
-                                                        uni = await prisma.university.create({
-                                                            data: {
-                                                                organizationId,
-                                                                name: uniName,
-                                                                code: `${uniName.substring(0, 5).toUpperCase().replace(/\s/g, '')}_${Math.floor(Math.random() * 10000)}`,
-                                                                status: 'active'
-                                                            }
-                                                        });
-                                                    }
-                                                    studentUniversityId = uni.id;
-                                                }
-                                                // Parse Date Of Birth
-                                                let parsedDob = undefined;
-                                                if (meta['Date Of Birth']) {
-                                                    const parts = meta['Date Of Birth'].split('-');
-                                                    if (parts.length === 3) {
-                                                        // Assuming DD-MM-YYYY
-                                                        parsedDob = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-                                                    }
-                                                }
-                                                // Create User record for student portal login (role: 'staff' acts as student)
-                                                let user = await prisma.user.findFirst({
-                                                    where: { email: enrichedEmail, organizationId }
                                                 });
-                                                if (!user) {
-                                                    const generatedUid = await generateUserId();
-                                                    const hashedPassword = await hashPassword('Student@123');
-                                                    user = await prisma.user.create({
+                                            }
+                                            centerId = center.id;
+                                        }
+                                        let studentUniversityId = undefined;
+                                        const uniName = meta['University/Board'];
+                                        if (uniName) {
+                                            let uni = await prisma.university.findFirst({
+                                                where: { name: uniName, organizationId }
+                                            });
+                                            if (!uni) {
+                                                uni = await prisma.university.create({
+                                                    data: {
+                                                        organizationId,
+                                                        name: uniName,
+                                                        code: `${uniName.substring(0, 5).toUpperCase().replace(/\s/g, '')}_${Math.floor(Math.random() * 10000)}`,
+                                                        status: 'active'
+                                                    }
+                                                });
+                                            }
+                                            studentUniversityId = uni.id;
+                                        }
+                                        // Parse Date Of Birth
+                                        let parsedDob = undefined;
+                                        if (meta['Date Of Birth']) {
+                                            const parts = meta['Date Of Birth'].split('-');
+                                            if (parts.length === 3) {
+                                                // Assuming DD-MM-YYYY
+                                                parsedDob = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                                            }
+                                        }
+                                        // Create User record for student portal login (role: 'staff' acts as student)
+                                        let user = await prisma.user.findFirst({
+                                            where: { email: enrichedEmail, organizationId }
+                                        });
+                                        if (!user) {
+                                            const generatedUid = await generateUserId();
+                                            const hashedPassword = await hashPassword('Student@123');
+                                            user = await prisma.user.create({
+                                                data: {
+                                                    organizationId,
+                                                    userId: generatedUid,
+                                                    email: enrichedEmail,
+                                                    password: hashedPassword,
+                                                    name: enrichedName,
+                                                    role: 'staff',
+                                                    phone: enrichedPhone,
+                                                    status: 'active'
+                                                }
+                                            });
+                                        }
+                                        const student = await prisma.student.create({
+                                            data: {
+                                                organizationId,
+                                                name: enrichedName,
+                                                email: enrichedEmail,
+                                                phone: enrichedPhone,
+                                                admissionNo: rawAdmissionNo || null,
+                                                enrollmentNo: safeAdmissionNo,
+                                                programId,
+                                                centerId,
+                                                universityId: studentUniversityId,
+                                                status: 'active',
+                                                address,
+                                                dob: parsedDob,
+                                                gender: meta['Sex'],
+                                                religion: meta['Religion'],
+                                                caste: meta['Cast'],
+                                                category: meta['Category'],
+                                                fatherName: meta['Parent Name'] ? meta['Parent Name'].replace(/^(S\/o\.|D\/o\.)\s*/i, '').trim() : undefined,
+                                                motherName: meta['Mother Name'],
+                                                enrolledBy: req.user.id,
+                                                credentials: { email: enrichedEmail, password: 'Student@123' },
+                                                admissionProgress: {
+                                                    documents: 'approved',
+                                                    studentPhoto: 'approved',
+                                                    applicationForm: 'approved'
+                                                }
+                                            }
+                                        });
+                                        await prisma.enrollment.create({
+                                            data: {
+                                                organizationId,
+                                                studentId: student.id,
+                                                studentName: student.name,
+                                                studentEmail: student.email,
+                                                studentPhone: student.phone,
+                                                studentAddress: student.address || '',
+                                                programId,
+                                                studyCenterId: centerId,
+                                                status: 'active',
+                                                gender: student.gender,
+                                                religion: student.religion,
+                                                caste: student.caste,
+                                                category: student.category,
+                                                fatherName: student.fatherName,
+                                                motherName: student.motherName,
+                                                dob: student.dob
+                                            }
+                                        });
+                                        studentsMigrated++;
+                                        // --- Parse Payments from Student Detail Page ---
+                                        if ($v) {
+                                            // Payment history is typically in the 5th table (index 4)
+                                            const payments = [];
+                                            $v('table').eq(4).find('tbody tr').each((pi, pel) => {
+                                                const pTds = $v(pel).find('td');
+                                                if (pTds.length >= 8) {
+                                                    const recNo = $v(pTds[4]).text().trim();
+                                                    const dateStr = $v(pTds[5]).text().trim(); // DD-MM-YYYY
+                                                    // Total Amount is at index 15 in DSMS Payment table, Base Amount is at 8
+                                                    let amount = 0;
+                                                    if (pTds.length >= 16) {
+                                                        amount = parseFloat($v(pTds[15]).text().trim().replace(/,/g, '')) || 0;
+                                                    }
+                                                    else {
+                                                        amount = parseFloat($v(pTds[8]).text().trim().replace(/,/g, '')) || 0;
+                                                    }
+                                                    if (recNo && amount > 0) {
+                                                        payments.push({ recNo, dateStr, amount });
+                                                    }
+                                                }
+                                            });
+                                            for (const p of payments) {
+                                                try {
+                                                    // Convert DD-MM-YYYY to valid ISO date
+                                                    let parsedDate = new Date();
+                                                    if (p.dateStr) {
+                                                        const parts = p.dateStr.split('-');
+                                                        if (parts.length === 3) {
+                                                            parsedDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                                                        }
+                                                    }
+                                                    // Create placeholder invoice to attach payment
+                                                    const safeInvoiceNo = `INV-DSMS-${p.recNo}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                                                    const invoice = await prisma.invoice.create({
                                                         data: {
                                                             organizationId,
-                                                            userId: generatedUid,
-                                                            email: enrichedEmail,
-                                                            password: hashedPassword,
-                                                            name: enrichedName,
-                                                            role: 'staff',
-                                                            phone: enrichedPhone,
-                                                            status: 'active'
+                                                            studentId: student.id,
+                                                            invoiceNo: safeInvoiceNo,
+                                                            amount: p.amount,
+                                                            total: p.amount,
+                                                            status: 'paid',
+                                                            paidAt: parsedDate,
+                                                            createdAt: parsedDate
                                                         }
                                                     });
+                                                    await prisma.paymentEntry.create({
+                                                        data: {
+                                                            organizationId,
+                                                            invoiceId: invoice.id,
+                                                            amount: p.amount,
+                                                            method: 'import',
+                                                            referenceNo: p.recNo,
+                                                            receivedBy: req.user.id,
+                                                            receivedAt: parsedDate,
+                                                            createdAt: parsedDate
+                                                        }
+                                                    });
+                                                    paymentsMigrated++;
                                                 }
-                                                const student = await prisma.student.create({
-                                                    data: {
-                                                        organizationId,
-                                                        name: enrichedName,
-                                                        email: enrichedEmail,
-                                                        phone: enrichedPhone,
-                                                        admissionNo: rawAdmissionNo || null,
-                                                        enrollmentNo: safeAdmissionNo,
-                                                        programId,
-                                                        centerId,
-                                                        universityId: studentUniversityId,
-                                                        status: 'active',
-                                                        address,
-                                                        dob: parsedDob,
-                                                        gender: meta['Sex'],
-                                                        religion: meta['Religion'],
-                                                        caste: meta['Cast'],
-                                                        category: meta['Category'],
-                                                        fatherName: meta['Parent Name'] ? meta['Parent Name'].replace(/^(S\/o\.|D\/o\.)\s*/i, '').trim() : undefined,
-                                                        motherName: meta['Mother Name'],
-                                                        enrolledBy: req.user.id,
-                                                        credentials: { email: enrichedEmail, password: 'Student@123' },
-                                                        admissionProgress: {
-                                                            documents: 'approved',
-                                                            studentPhoto: 'approved',
-                                                            applicationForm: 'approved'
-                                                        }
-                                                    }
-                                                });
-                                                await prisma.enrollment.create({
-                                                    data: {
-                                                        organizationId,
-                                                        studentId: student.id,
-                                                        studentName: student.name,
-                                                        studentEmail: student.email,
-                                                        studentPhone: student.phone,
-                                                        studentAddress: student.address || '',
-                                                        programId,
-                                                        studyCenterId: centerId,
-                                                        status: 'active',
-                                                        gender: student.gender,
-                                                        religion: student.religion,
-                                                        caste: student.caste,
-                                                        category: student.category,
-                                                        fatherName: student.fatherName,
-                                                        motherName: student.motherName,
-                                                        dob: student.dob
-                                                    }
-                                                });
-                                                studentsMigrated++;
-                                                // --- Parse Payments from Student Detail Page ---
-                                                if ($v) {
-                                                    // Payment history is typically in the 5th table (index 4)
-                                                    const payments = [];
-                                                    $v('table').eq(4).find('tbody tr').each((pi, pel) => {
-                                                        const pTds = $v(pel).find('td');
-                                                        if (pTds.length >= 8) {
-                                                            const recNo = $v(pTds[4]).text().trim();
-                                                            const dateStr = $v(pTds[5]).text().trim(); // DD-MM-YYYY
-                                                            // Total Amount is at index 15 in DSMS Payment table, Base Amount is at 8
-                                                            let amount = 0;
-                                                            if (pTds.length >= 16) {
-                                                                amount = parseFloat($v(pTds[15]).text().trim().replace(/,/g, '')) || 0;
-                                                            }
-                                                            else {
-                                                                amount = parseFloat($v(pTds[8]).text().trim().replace(/,/g, '')) || 0;
-                                                            }
-                                                            if (recNo && amount > 0) {
-                                                                payments.push({ recNo, dateStr, amount });
-                                                            }
-                                                        }
-                                                    });
-                                                    for (const p of payments) {
-                                                        try {
-                                                            // Convert DD-MM-YYYY to valid ISO date
-                                                            let parsedDate = new Date();
-                                                            if (p.dateStr) {
-                                                                const parts = p.dateStr.split('-');
-                                                                if (parts.length === 3) {
-                                                                    parsedDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-                                                                }
-                                                            }
-                                                            // Create placeholder invoice to attach payment
-                                                            const safeInvoiceNo = `INV-DSMS-${p.recNo}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-                                                            const invoice = await prisma.invoice.create({
-                                                                data: {
-                                                                    organizationId,
-                                                                    studentId: student.id,
-                                                                    invoiceNo: safeInvoiceNo,
-                                                                    amount: p.amount,
-                                                                    total: p.amount,
-                                                                    status: 'paid',
-                                                                    paidAt: parsedDate,
-                                                                    createdAt: parsedDate
-                                                                }
-                                                            });
-                                                            await prisma.paymentEntry.create({
-                                                                data: {
-                                                                    organizationId,
-                                                                    invoiceId: invoice.id,
-                                                                    amount: p.amount,
-                                                                    method: 'import',
-                                                                    referenceNo: p.recNo,
-                                                                    receivedBy: req.user.id,
-                                                                    receivedAt: parsedDate,
-                                                                    createdAt: parsedDate
-                                                                }
-                                                            });
-                                                            paymentsMigrated++;
-                                                        }
-                                                        catch (pe) {
-                                                            // Skip if invoice already exists or error
-                                                        }
-                                                    }
+                                                catch (pe) {
+                                                    // Skip if invoice already exists or error
                                                 }
                                             }
                                         }
                                     }
-                                    catch (e) {
-                                        errors.push(`Student ${name} error: ${e.message}`);
-                                    }
                                 }
                             }
-                        }
+                            catch (e) {
+                                errors.push(`Student ${stuData.name} error: ${e.message}`);
+                            }
+                        } // End of studentsData loop
                         await sleep(200); // polite delay
                         page++;
                     }
