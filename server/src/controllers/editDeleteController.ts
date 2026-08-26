@@ -23,8 +23,8 @@ export const getEditDeleteRequests = asyncHandler(async (req: AuthRequest, res: 
     // Superadmin/org_admin see everything
     statusFilter = ['pending_manager', 'pending_ceo', 'approved', 'rejected'];
   } else if (role === 'ceo' || role === 'general_manager') {
-    // CEO sees pending_ceo and all history
-    statusFilter = ['pending_ceo', 'approved', 'rejected'];
+    // CEO sees both pending_manager and pending_ceo
+    statusFilter = ['pending_manager', 'pending_ceo', 'approved', 'rejected'];
   } else {
     // Managers / finance see pending_manager
     statusFilter = ['pending_manager', 'approved', 'rejected'];
@@ -158,8 +158,8 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
       // CEO/Org Admin final approval
       newStatus = 'approved';
     }
-    // If superadmin/org_admin directly approves at any stage — fully approve
-    if (role === 'superadmin' || role === 'org_admin') {
+    // If superadmin/org_admin/ceo/general_manager directly approves at any stage — fully approve
+    if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role)) {
       newStatus = 'approved';
     }
   }
