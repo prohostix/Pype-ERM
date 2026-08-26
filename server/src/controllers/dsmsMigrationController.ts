@@ -230,6 +230,35 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                       centerId = center.id;
                     }
 
+                    let studentUniversityId: string | undefined = undefined;
+                    const uniName = meta['University/Board'];
+                    if (uniName) {
+                      let uni = await prisma.university.findFirst({
+                        where: { name: uniName, organizationId }
+                      });
+                      if (!uni) {
+                        uni = await prisma.university.create({
+                          data: {
+                            organizationId,
+                            name: uniName,
+                            code: `${uniName.substring(0, 5).toUpperCase().replace(/\s/g, '')}_${Math.floor(Math.random()*10000)}`,
+                            status: 'active'
+                          }
+                        });
+                      }
+                      studentUniversityId = uni.id;
+                    }
+
+                    // Parse Date Of Birth
+                    let parsedDob: Date | undefined = undefined;
+                    if (meta['Date Of Birth']) {
+                      const parts = meta['Date Of Birth'].split('-');
+                      if (parts.length === 3) {
+                        // Assuming DD-MM-YYYY
+                        parsedDob = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                      }
+                    }
+
                     const user = await prisma.user.create({
                       data: {
                         organizationId,
@@ -253,8 +282,16 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                         enrollmentNo: safeAdmissionNo,
                         programId,
                         centerId,
+                        universityId: studentUniversityId,
                         status: 'active',
                         address,
+                        dob: parsedDob,
+                        gender: meta['Sex'],
+                        religion: meta['Religion'],
+                        caste: meta['Cast'],
+                        category: meta['Category'],
+                        fatherName: meta['Parent Name'] ? meta['Parent Name'].replace(/^(S\/o\.|D\/o\.)\s*/i, '').trim() : undefined,
+                        motherName: meta['Mother Name'],
                         enrolledBy: req.user.id,
                         credentials: { email: enrichedEmail, password: 'Student@123' },
                         admissionProgress: {
@@ -274,7 +311,15 @@ export const migrateFromDsms = asyncHandler(async (req: AuthRequest, res: Respon
                         studentPhone: student.phone,
                         studentAddress: student.address || '',
                         programId,
-                        status: 'active'
+                        studyCenterId: centerId,
+                        status: 'active',
+                        gender: student.gender,
+                        religion: student.religion,
+                        caste: student.caste,
+                        category: student.category,
+                        fatherName: student.fatherName,
+                        motherName: student.motherName,
+                        dob: student.dob
                       }
                     });
                     
