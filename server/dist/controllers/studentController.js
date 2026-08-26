@@ -317,6 +317,7 @@ export const deleteStudent = asyncHandler(async (req, res) => {
         res.status(404).json({ success: false, message: 'Student not found' });
         return;
     }
+    await prisma.enrollment.deleteMany({ where: { studentId: req.params.id } });
     await prisma.student.delete({ where: { id: req.params.id } });
     res.status(200).json({ success: true, data: {} });
 });
