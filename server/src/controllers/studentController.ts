@@ -733,10 +733,25 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
         where: { id: update.id, organizationId: req.user.organizationId }
       });
       if (student) {
+        // Update Student
         await prisma.student.update({
           where: { id: update.id },
           data: { enrollmentNo: update.enrollmentNo }
         });
+        
+        // Update Active Enrollment if exists
+        const activeEnrollment = await prisma.enrollment.findFirst({
+          where: { studentId: update.id },
+          orderBy: { createdAt: 'desc' }
+        });
+        
+        if (activeEnrollment) {
+          await prisma.enrollment.update({
+            where: { id: activeEnrollment.id },
+            data: { enrollmentNumber: update.enrollmentNo }
+          });
+        }
+
         updatedCount++;
       }
     }
