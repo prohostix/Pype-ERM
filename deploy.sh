@@ -107,11 +107,25 @@ export NODE_OPTIONS="--max-old-space-size=2048"
 npm run build
 
 # 11. Configure Nginx Reverse Proxy
-echo "🌐 Configuring Nginx Reverse Proxy..."
+echo "🌐 Configuring Nginx Reverse Proxy with SSL..."
 sudo tee /etc/nginx/sites-available/pype-erm > /dev/null <<'EOT'
 server {
     listen 80;
     server_name pypeerm.com www.pypeerm.com 13.232.188.79;
+    # Redirect HTTP to HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name pypeerm.com www.pypeerm.com 13.232.188.79;
+
+    # Point to the custom PEM file (assuming it contains both certificate and private key and is placed in project root)
+    ssl_certificate /var/www/pype-erm/pypeerm.pem;
+    ssl_certificate_key /var/www/pype-erm/pypeerm.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
 
     location / {
         root /var/www/pype-erm/client/dist;
@@ -151,12 +165,7 @@ sudo chmod -R 755 /var/www/pype-erm
 sudo nginx -t
 sudo systemctl restart nginx
 
-# Automatically re-apply Certbot SSL configuration if certificate exists
-if sudo test -d "/etc/letsencrypt/live/pypeerm.com"; then
-    echo "🔒 SSL Certificates found. Re-applying Certbot SSL configuration..."
-    sudo certbot --nginx -d pypeerm.com -d www.pypeerm.com --non-interactive --agree-tos -m dilshadbvoc@gmail.com --redirect
-    sudo systemctl restart nginx
-fi
+# SSL configuration is now handled natively via Nginx block using pypeerm.pem
 
 # 12. Setup PM2 Startup script
 echo "🔄 Configuring PM2 to launch on system boot..."
