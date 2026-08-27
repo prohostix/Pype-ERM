@@ -424,7 +424,8 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     effectiveFrom,
     dueDate,
     additionalFees,
-    allowInitialFee
+    allowInitialFee,
+    specialisation
   } = req.body;
 
   const data: any = {
@@ -432,6 +433,7 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     createdBy: req.user.id,
     feeLevel: feeLevel || 'program',
     programId: feeLevel === 'program' ? programId : null,
+    specialisation: specialisation || null,
     universityId: universityId || null,
     sessionId: sessionId === '' || !sessionId ? null : sessionId,
     registrationFee: registrationFee ? parseFloat(registrationFee) : 0,
@@ -479,12 +481,14 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     effectiveFrom,
     dueDate,
     additionalFees,
-    allowInitialFee
+    allowInitialFee,
+    specialisation
   } = req.body;
 
   const data: any = {
     feeLevel: feeLevel || 'program',
     programId: feeLevel === 'program' ? programId : null,
+    specialisation: specialisation || null,
     universityId: universityId || null,
     sessionId: sessionId === '' || !sessionId ? null : sessionId,
     registrationFee: registrationFee ? parseFloat(registrationFee) : 0,

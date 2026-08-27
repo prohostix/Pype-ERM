@@ -447,6 +447,7 @@ model Student {
   phone              String
   address            String
   programId          String
+  specialisation     String?
   sessionId          String?
   status             String                 @default("pending")
   joinDate           DateTime               @default(now())
@@ -898,6 +899,7 @@ model Enrollment {
   organizationId       String
   studentId            String?
   programId            String
+  specialisation       String?
   studyCenterId        String?
   sessionId            String?
   enrollmentNumber     String?            @unique
@@ -1402,6 +1404,7 @@ model UniversityAuthFee {
 model FeeStructure {
   id              String            @id @default(uuid())
   programId       String?
+  specialisation  String?
   organizationId  String
   registrationFee Float             @default(0)
   tuitionFee      Float             @default(0)

@@ -53,7 +53,7 @@ export const getStudent = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, data: student });
 });
 export const createStudent = asyncHandler(async (req, res) => {
-    const { email, name, phone, centerId, branchId, universityId, programId, sessionId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan, gender, category, maritalStatus, employmentStatus, guardianName, familyPhone } = req.body;
+    const { email, name, phone, centerId, branchId, universityId, programId, sessionId, dob, admissionDate, admissionNo, isPrevious, fatherName, fatherPhone, motherName, motherPhone, religion, caste, address, pinCode, altPhone, photo, documents, status, paymentPlan, gender, category, maritalStatus, employmentStatus, guardianName, familyPhone, specialisation } = req.body;
     if (!programId || programId.trim() === '') {
         res.status(400).json({ success: false, message: 'Program is required' });
         return;
@@ -139,6 +139,7 @@ export const createStudent = asyncHandler(async (req, res) => {
             employmentStatus: employmentStatus || null,
             guardianName: guardianName || null,
             familyPhone: familyPhone || null,
+            specialisation: specialisation || null,
             status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
             programId,
             sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
@@ -149,7 +150,8 @@ export const createStudent = asyncHandler(async (req, res) => {
             credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
             admissionProgress: {
                 paymentPlan: paymentPlan || 'full',
-                initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null
+                initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
+                initialPaymentDate: req.body.initialPaymentDate || null
             },
             // Track who enrolled this student (sales user)
             enrolledBy: req.user.id
@@ -168,6 +170,7 @@ export const createStudent = asyncHandler(async (req, res) => {
                 fatherName: student.fatherName,
                 dob: student.dob,
                 programId: student.programId,
+                specialisation: student.specialisation,
                 studyCenterId: student.centerId,
                 sessionId: student.sessionId,
                 paymentPlan: req.body.paymentPlan || null,
@@ -292,7 +295,7 @@ export const updateStudent = asyncHandler(async (req, res) => {
     if ('universityId' in dataToUpdate) {
         dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
     }
-    if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined) {
+    if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined || dataToUpdate.initialPaymentDate !== undefined) {
         dataToUpdate.admissionProgress = {
             ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
         };
@@ -302,8 +305,12 @@ export const updateStudent = asyncHandler(async (req, res) => {
         if (dataToUpdate.initialPaymentAmount !== undefined) {
             dataToUpdate.admissionProgress.initialPaymentAmount = dataToUpdate.initialPaymentAmount ? Number(dataToUpdate.initialPaymentAmount) : null;
         }
+        if (dataToUpdate.initialPaymentDate !== undefined) {
+            dataToUpdate.admissionProgress.initialPaymentDate = dataToUpdate.initialPaymentDate || null;
+        }
         delete dataToUpdate.paymentPlan;
         delete dataToUpdate.initialPaymentAmount;
+        delete dataToUpdate.initialPaymentDate;
     }
     const student = await prisma.student.update({
         where: { id: req.params.id },

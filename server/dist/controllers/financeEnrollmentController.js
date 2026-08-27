@@ -63,6 +63,65 @@ export const getFinanceEnrollments = asyncHandler(async (req, res) => {
     res.json({ success: true, count: enrollments.length, data: enrollments });
 });
 export const approveFinanceEnrollment = asyncHandler(async (req, res) => {
+    // First, find the enrollment to check if we need to generate an invoice
+    const existingEnrollment = await prisma.enrollment.findUnique({
+        where: { id: req.params.id },
+        include: {
+            program: { include: { feeStructures: true } }
+        }
+    });
+    if (!existingEnrollment) {
+        res.status(404);
+        throw new Error('Enrollment not found');
+    }
+    // If receipt hasn't been verified yet, but there is an initial payment amount, generate the invoice
+    if (!existingEnrollment.receiptVerified && existingEnrollment.initialPaymentAmount && existingEnrollment.initialPaymentAmount > 0) {
+        const amountPaid = existingEnrollment.initialPaymentAmount;
+        // Create payment record
+        await prisma.enrollmentPayment.create({
+            data: {
+                enrollmentId: existingEnrollment.id,
+                amount: amountPaid,
+                ...(existingEnrollment.studyCenterId ? { studyCenterId: existingEnrollment.studyCenterId } : {}),
+                debitedAt: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date()
+            }
+        });
+        // Generate an invoice and payment entry for the initial payment
+        const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+        const invNo = `INV-AUTO-${Date.now().toString().slice(-4)}-${random}`;
+        await prisma.invoice.create({
+            data: {
+                organizationId: existingEnrollment.organizationId,
+                studentId: existingEnrollment.studentId || undefined,
+                centerId: existingEnrollment.studyCenterId || undefined,
+                invoiceNo: invNo,
+                amount: amountPaid,
+                tax: 0,
+                total: amountPaid,
+                status: 'paid',
+                dueDate: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date(),
+                paidAt: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date(),
+                notes: 'Initial Admission Payment',
+                items: [{ description: 'Admission/Initial Fee', amount: amountPaid }],
+                payments: {
+                    create: {
+                        organizationId: existingEnrollment.organizationId,
+                        amount: amountPaid,
+                        method: 'online',
+                        referenceNo: 'Admission',
+                        receivedBy: req.user.id,
+                        receivedAt: existingEnrollment.initialPaymentDate ? new Date(existingEnrollment.initialPaymentDate) : new Date(),
+                        notes: 'Auto-generated during finance approval'
+                    }
+                }
+            }
+        });
+        // Mark receipt as verified since we processed the payment
+        await prisma.enrollment.update({
+            where: { id: existingEnrollment.id },
+            data: { receiptVerified: true, receiptVerifiedAt: new Date(), receiptVerifiedBy: req.user.id }
+        });
+    }
     const enrollment = await prisma.enrollment.update({
         where: { id: req.params.id },
         data: { status: 'enrolled', financeReviewedBy: req.user.id, financeReviewedAt: new Date() }
@@ -143,7 +202,8 @@ export const verifyReceipt = asyncHandler(async (req, res) => {
             enrollmentId: enrollment.id,
             amount: amountPaid,
             // studyCenterId and walletId are now optional
-            ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {})
+            ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {}),
+            debitedAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date()
         }
     });
     // Generate an invoice and payment entry for the initial payment so it shows in Student Payments Log
@@ -159,8 +219,8 @@ export const verifyReceipt = asyncHandler(async (req, res) => {
                 tax: 0,
                 total: amountPaid,
                 status: 'paid',
-                dueDate: new Date(),
-                paidAt: new Date(),
+                dueDate: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
+                paidAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
                 notes: 'Initial Admission Payment',
                 items: [{ description: 'Admission/Initial Fee', amount: amountPaid }],
                 payments: {
@@ -170,7 +230,7 @@ export const verifyReceipt = asyncHandler(async (req, res) => {
                         method: 'online',
                         referenceNo: 'Admission',
                         receivedBy: req.user.id,
-                        receivedAt: new Date(),
+                        receivedAt: enrollment.initialPaymentDate ? new Date(enrollment.initialPaymentDate) : new Date(),
                         notes: 'Auto-generated during receipt verification'
                     }
                 }

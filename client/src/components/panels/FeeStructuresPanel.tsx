@@ -11,7 +11,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 export function FeeStructuresPanel() {
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<number>(1);
   const [fees, setFees] = useState<any[]>([]);
   const [programs, setPrograms] = useState<any[]>([]);
   const [universities, setUniversities] = useState<any[]>([]);
@@ -22,6 +22,7 @@ export function FeeStructuresPanel() {
   const [selectedUniv, setSelectedUniv] = useState<any>(null);
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedProg, setSelectedProg] = useState<any>(null);
+  const [selectedSpecialisation, setSelectedSpecialisation] = useState<string | null>(null);
   const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -111,14 +112,11 @@ export function FeeStructuresPanel() {
     setStep(3);
   };
 
-  const handleSelectProg = (p: any) => {
-    setSelectedProg(p);
-    
-    // Load existing fee if any matching BOTH program and session
+  const loadFeeForProgramAndSpecialisation = (p: any, spec: string | null) => {
     const existing = fees.find(f => {
       const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
       const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
-      return pid === p.id && sid === (selectedSession?.id || null);
+      return pid === p.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
     });
 
     if (existing) {
@@ -159,6 +157,23 @@ export function FeeStructuresPanel() {
       setYearlyFees([]);
       setInstallments([]);
     }
+  };
+
+  const handleSelectProg = (p: any) => {
+    setSelectedProg(p);
+    setSelectedSpecialisation(null);
+    
+    if (p.specialisations && p.specialisations.length > 0) {
+      setStep(3.5);
+    } else {
+      loadFeeForProgramAndSpecialisation(p, null);
+      setStep(4);
+    }
+  };
+
+  const handleSelectSpecialisation = (spec: string) => {
+    setSelectedSpecialisation(spec);
+    loadFeeForProgramAndSpecialisation(selectedProg, spec);
     setStep(4);
   };
 
@@ -187,6 +202,7 @@ export function FeeStructuresPanel() {
       programId: selectedProg.id,
       universityId: selectedUniv?.id || null,
       sessionId: selectedSession?.id || null,
+      specialisation: selectedSpecialisation || null,
       feeLevel: 'program',
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
@@ -364,15 +380,68 @@ export function FeeStructuresPanel() {
             </Card>
           )}
 
+          {step === 3.5 && selectedProg && (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
+                  <div>
+                    <CardTitle>3.5 Select Specialisation</CardTitle>
+                    <CardDescription>{selectedProg.name} has multiple specialisations. Choose one to configure its fee structure.</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {selectedProg.specialisations?.map((spec: string) => {
+                    const hasFee = fees.some(f => {
+                      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+                      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+                      return pid === selectedProg.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
+                    });
+                    return (
+                      <button
+                        key={spec}
+                        onClick={() => handleSelectSpecialisation(spec)}
+                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                            <BookOpen className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm line-clamp-1">{spec}</p>
+                          </div>
+                        </div>
+                        <div className="mt-auto pt-4 flex justify-between items-center">
+                           <Badge variant={hasFee ? 'default' : 'secondary'} className="text-[10px]">
+                             {hasFee ? 'Configured' : 'Not Configured'}
+                           </Badge>
+                        </div>
+                      </button>
+                    );
+                  })}
+                  {(!selectedProg.specialisations || selectedProg.specialisations.length === 0) && <p className="text-muted-foreground">No specialisations found.</p>}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {step === 4 && (
             <Card className="border-primary/20 shadow-md">
               <CardHeader className="bg-muted/30 border-b border-border pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ArrowLeft className="w-5 h-5" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => {
+                      if (selectedProg?.specialisations?.length > 0) {
+                        setStep(3.5);
+                      } else {
+                        setStep(3);
+                      }
+                    }}><ArrowLeft className="w-5 h-5" /></Button>
                     <div>
                       <CardTitle>4. Configure Fee Structure</CardTitle>
-                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
+                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisation ? `- ${selectedSpecialisation}` : ''} - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
                     </div>
                   </div>
                   <Button onClick={handleSave} disabled={saving} className="gap-2">

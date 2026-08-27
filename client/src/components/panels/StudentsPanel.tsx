@@ -249,6 +249,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     branchId: '',
     universityId: '',
     programId: '',
+    specialisation: '',
     sessionId: '',
     enrollmentNo: '',
     admissionNo: '',
@@ -492,6 +493,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       branchId: branchId?.toString() || '',
       universityId: universityId?.toString() || '',
       programId: programId?.toString() || '',
+      specialisation: student.specialisation || '',
       sessionId: sessionId?.toString() || '',
       enrollmentNo: student.enrollmentNo || '',
       admissionNo: student.admissionNo || '',
@@ -546,6 +548,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       branchId: '',
       universityId: '',
       programId: '',
+      specialisation: '',
       enrollmentNo: '',
       admissionNo: '',
       admissionDate: '',
@@ -575,10 +578,35 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     let relevantFeeStructure = null;
     
     if (selectedProgramObj?.feeStructures?.length > 0) {
-      relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => f.sessionId === formData.sessionId);
+      // First try to match both session and specialisation
+      relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
+        f.sessionId === formData.sessionId && 
+        (f.specialisation || null) === (formData.specialisation || null)
+      );
+      
+      // Fallback: match only specialisation (null session)
       if (!relevantFeeStructure) {
-        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => !f.sessionId);
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
+          !f.sessionId && 
+          (f.specialisation || null) === (formData.specialisation || null)
+        );
       }
+
+      // Fallback: match only session (null specialisation)
+      if (!relevantFeeStructure) {
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
+          f.sessionId === formData.sessionId && 
+          !f.specialisation
+        );
+      }
+
+      // Fallback: match null session and null specialisation
+      if (!relevantFeeStructure) {
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
+          !f.sessionId && !f.specialisation
+        );
+      }
+
       if (!relevantFeeStructure) {
         relevantFeeStructure = selectedProgramObj.feeStructures[0];
       }
@@ -1233,7 +1261,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Program *</Label>
-                      <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                      <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v, specialisation: ''})} disabled={!formData.universityId}>
                         <SelectTrigger>
                           <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
                         </SelectTrigger>
@@ -1260,6 +1288,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       </Select>
                     </div>
                   </div>
+
+                  {/* Specialisation (if applicable) */}
+                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
+                    <div className="mt-4">
+                      <Label className="font-medium">Specialisation *</Label>
+                      <Select value={formData.specialisation} onValueChange={(v) => setFormData({...formData, specialisation: v})}>
+                        <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
+                        <SelectContent>
+                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
+                            <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
                   {/* Payment Plan & Fee */}
                   {getActiveFeeStructure() && (
@@ -1859,7 +1902,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Program *</Label>
-                              <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v})} disabled={!formData.universityId}>
+                              <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v, specialisation: ''})} disabled={!formData.universityId}>
                                 <SelectTrigger>
                                   <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
                                 </SelectTrigger>
@@ -1886,6 +1929,21 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               </Select>
                             </div>
                           </div>
+
+                          {/* Specialisation (if applicable) */}
+                          {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
+                            <div className="mt-4">
+                              <Label className="font-medium">Specialisation *</Label>
+                              <Select value={formData.specialisation} onValueChange={(v) => setFormData({...formData, specialisation: v})}>
+                                <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
+                                <SelectContent>
+                                  {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
+                                    <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
 
                           {/* Payment Plan & Fee */}
                           {getActiveFeeStructure() && (

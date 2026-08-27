@@ -318,6 +318,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   phone: 'phone',
   address: 'address',
   programId: 'programId',
+  specialisation: 'specialisation',
   sessionId: 'sessionId',
   status: 'status',
   joinDate: 'joinDate',
@@ -627,6 +628,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   organizationId: 'organizationId',
   studentId: 'studentId',
   programId: 'programId',
+  specialisation: 'specialisation',
   studyCenterId: 'studyCenterId',
   sessionId: 'sessionId',
   enrollmentNumber: 'enrollmentNumber',
@@ -1018,6 +1020,7 @@ exports.Prisma.UniversityAuthFeeScalarFieldEnum = {
 exports.Prisma.FeeStructureScalarFieldEnum = {
   id: 'id',
   programId: 'programId',
+  specialisation: 'specialisation',
   organizationId: 'organizationId',
   registrationFee: 'registrationFee',
   tuitionFee: 'tuitionFee',

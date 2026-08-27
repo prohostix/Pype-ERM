@@ -91,7 +91,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     maritalStatus,
     employmentStatus,
     guardianName,
-    familyPhone
+    familyPhone,
+    specialisation
   } = req.body;
   
   if (!programId || programId.trim() === '') {
@@ -183,6 +184,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       employmentStatus: employmentStatus || null,
       guardianName: guardianName || null,
       familyPhone: familyPhone || null,
+      specialisation: specialisation || null,
       status: req.body.isPipelineApplication ? 'document_review' : (status || 'pending'),
       programId,
       sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
@@ -214,6 +216,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         fatherName: student.fatherName,
         dob: student.dob,
         programId: student.programId,
+        specialisation: student.specialisation,
         studyCenterId: student.centerId,
         sessionId: student.sessionId,
         paymentPlan: req.body.paymentPlan || null,
