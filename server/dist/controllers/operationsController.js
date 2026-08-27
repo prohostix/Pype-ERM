@@ -78,7 +78,7 @@ export const getProgram = asyncHandler(async (req, res) => {
     res.json({ success: true, data: program });
 });
 export const createProgram = asyncHandler(async (req, res) => {
-    const { registrationFee, tuitionFee, syllabus, ...programData } = req.body;
+    const { registrationFee, tuitionFee, syllabus, billingCycle, installments, ...programData } = req.body;
     const program = await prisma.program.create({
         data: {
             ...programData,
@@ -86,14 +86,16 @@ export const createProgram = asyncHandler(async (req, res) => {
             organizationId: req.user.organizationId
         }
     });
-    if (registrationFee !== undefined || tuitionFee !== undefined) {
+    if (registrationFee !== undefined || tuitionFee !== undefined || installments !== undefined) {
         await prisma.feeStructure.create({
             data: {
                 programId: program.id,
                 organizationId: req.user.organizationId,
                 feeLevel: 'program',
                 registrationFee: Number(registrationFee) || 0,
-                tuitionFee: Number(tuitionFee) || 0
+                tuitionFee: Number(tuitionFee) || 0,
+                billingCycle: billingCycle || 'per_year',
+                installments: installments || []
             }
         });
     }
@@ -105,7 +107,7 @@ export const updateProgram = asyncHandler(async (req, res) => {
         res.status(404).json({ success: false, message: 'Program not found' });
         return;
     }
-    const { name, code, duration, description, status, universityId, sessionId, syllabus, courseType, hasSemesters, semesters, specialisations, subDepartmentId, registrationFee, tuitionFee } = req.body;
+    const { name, code, duration, description, status, universityId, sessionId, syllabus, courseType, hasSemesters, semesters, specialisations, subDepartmentId, registrationFee, tuitionFee, billingCycle, installments } = req.body;
     const updateData = {};
     if (name !== undefined)
         updateData.name = name;
@@ -134,15 +136,21 @@ export const updateProgram = asyncHandler(async (req, res) => {
     if (subDepartmentId !== undefined)
         updateData.subDepartmentId = subDepartmentId;
     const program = await prisma.program.update({ where: { id: req.params.id }, data: updateData });
-    if (registrationFee !== undefined || tuitionFee !== undefined) {
+    if (registrationFee !== undefined || tuitionFee !== undefined || installments !== undefined) {
         const existingFee = await prisma.feeStructure.findFirst({ where: { programId: program.id, feeLevel: 'program' } });
         if (existingFee) {
+            const feeData = {};
+            if (registrationFee !== undefined)
+                feeData.registrationFee = Number(registrationFee);
+            if (tuitionFee !== undefined)
+                feeData.tuitionFee = Number(tuitionFee);
+            if (billingCycle !== undefined)
+                feeData.billingCycle = billingCycle;
+            if (installments !== undefined)
+                feeData.installments = installments;
             await prisma.feeStructure.update({
                 where: { id: existingFee.id },
-                data: {
-                    registrationFee: registrationFee !== undefined ? Number(registrationFee) : existingFee.registrationFee,
-                    tuitionFee: tuitionFee !== undefined ? Number(tuitionFee) : existingFee.tuitionFee
-                }
+                data: feeData
             });
         }
         else {
@@ -152,7 +160,9 @@ export const updateProgram = asyncHandler(async (req, res) => {
                     organizationId: req.user.organizationId,
                     feeLevel: 'program',
                     registrationFee: Number(registrationFee) || 0,
-                    tuitionFee: Number(tuitionFee) || 0
+                    tuitionFee: Number(tuitionFee) || 0,
+                    billingCycle: billingCycle || 'per_year',
+                    installments: installments || []
                 }
             });
         }

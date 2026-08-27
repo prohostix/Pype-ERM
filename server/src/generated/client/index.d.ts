@@ -63539,8 +63539,20 @@ export namespace Prisma {
 
   export type AggregateEscalation = {
     _count: EscalationCountAggregateOutputType | null
+    _avg: EscalationAvgAggregateOutputType | null
+    _sum: EscalationSumAggregateOutputType | null
     _min: EscalationMinAggregateOutputType | null
     _max: EscalationMaxAggregateOutputType | null
+  }
+
+  export type EscalationAvgAggregateOutputType = {
+    currentLevel: number | null
+    maxLevel: number | null
+  }
+
+  export type EscalationSumAggregateOutputType = {
+    currentLevel: number | null
+    maxLevel: number | null
   }
 
   export type EscalationMinAggregateOutputType = {
@@ -63551,6 +63563,10 @@ export namespace Prisma {
     deptAdminId: string | null
     escalatedAt: Date | null
     reason: string | null
+    type: string | null
+    impact: string | null
+    currentLevel: number | null
+    maxLevel: number | null
     status: string | null
     resolution: string | null
     resolvedAt: Date | null
@@ -63567,6 +63583,10 @@ export namespace Prisma {
     deptAdminId: string | null
     escalatedAt: Date | null
     reason: string | null
+    type: string | null
+    impact: string | null
+    currentLevel: number | null
+    maxLevel: number | null
     status: string | null
     resolution: string | null
     resolvedAt: Date | null
@@ -63583,6 +63603,10 @@ export namespace Prisma {
     deptAdminId: number
     escalatedAt: number
     reason: number
+    type: number
+    impact: number
+    currentLevel: number
+    maxLevel: number
     status: number
     resolution: number
     resolvedAt: number
@@ -63594,6 +63618,16 @@ export namespace Prisma {
   }
 
 
+  export type EscalationAvgAggregateInputType = {
+    currentLevel?: true
+    maxLevel?: true
+  }
+
+  export type EscalationSumAggregateInputType = {
+    currentLevel?: true
+    maxLevel?: true
+  }
+
   export type EscalationMinAggregateInputType = {
     id?: true
     organizationId?: true
@@ -63602,6 +63636,10 @@ export namespace Prisma {
     deptAdminId?: true
     escalatedAt?: true
     reason?: true
+    type?: true
+    impact?: true
+    currentLevel?: true
+    maxLevel?: true
     status?: true
     resolution?: true
     resolvedAt?: true
@@ -63618,6 +63656,10 @@ export namespace Prisma {
     deptAdminId?: true
     escalatedAt?: true
     reason?: true
+    type?: true
+    impact?: true
+    currentLevel?: true
+    maxLevel?: true
     status?: true
     resolution?: true
     resolvedAt?: true
@@ -63634,6 +63676,10 @@ export namespace Prisma {
     deptAdminId?: true
     escalatedAt?: true
     reason?: true
+    type?: true
+    impact?: true
+    currentLevel?: true
+    maxLevel?: true
     status?: true
     resolution?: true
     resolvedAt?: true
@@ -63682,6 +63728,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: EscalationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EscalationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: EscalationMinAggregateInputType
@@ -63712,6 +63770,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: EscalationCountAggregateInputType | true
+    _avg?: EscalationAvgAggregateInputType
+    _sum?: EscalationSumAggregateInputType
     _min?: EscalationMinAggregateInputType
     _max?: EscalationMaxAggregateInputType
   }
@@ -63719,11 +63779,15 @@ export namespace Prisma {
   export type EscalationGroupByOutputType = {
     id: string
     organizationId: string
-    taskId: string
+    taskId: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId: string | null
     escalatedAt: Date
     reason: string
+    type: string
+    impact: string
+    currentLevel: number
+    maxLevel: number
     status: string
     resolution: string | null
     resolvedAt: Date | null
@@ -63732,6 +63796,8 @@ export namespace Prisma {
     chain: JsonValue
     updatedAt: Date
     _count: EscalationCountAggregateOutputType | null
+    _avg: EscalationAvgAggregateOutputType | null
+    _sum: EscalationSumAggregateOutputType | null
     _min: EscalationMinAggregateOutputType | null
     _max: EscalationMaxAggregateOutputType | null
   }
@@ -63758,6 +63824,10 @@ export namespace Prisma {
     deptAdminId?: boolean
     escalatedAt?: boolean
     reason?: boolean
+    type?: boolean
+    impact?: boolean
+    currentLevel?: boolean
+    maxLevel?: boolean
     status?: boolean
     resolution?: boolean
     resolvedAt?: boolean
@@ -63765,12 +63835,12 @@ export namespace Prisma {
     handledBy?: boolean
     chain?: boolean
     updatedAt?: boolean
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
     logs?: boolean | Escalation$logsArgs<ExtArgs>
     _count?: boolean | EscalationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["escalation"]>
@@ -63783,6 +63853,10 @@ export namespace Prisma {
     deptAdminId?: boolean
     escalatedAt?: boolean
     reason?: boolean
+    type?: boolean
+    impact?: boolean
+    currentLevel?: boolean
+    maxLevel?: boolean
     status?: boolean
     resolution?: boolean
     resolvedAt?: boolean
@@ -63790,12 +63864,12 @@ export namespace Prisma {
     handledBy?: boolean
     chain?: boolean
     updatedAt?: boolean
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
   }, ExtArgs["result"]["escalation"]>
 
   export type EscalationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -63806,6 +63880,10 @@ export namespace Prisma {
     deptAdminId?: boolean
     escalatedAt?: boolean
     reason?: boolean
+    type?: boolean
+    impact?: boolean
+    currentLevel?: boolean
+    maxLevel?: boolean
     status?: boolean
     resolution?: boolean
     resolvedAt?: boolean
@@ -63813,12 +63891,12 @@ export namespace Prisma {
     handledBy?: boolean
     chain?: boolean
     updatedAt?: boolean
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
   }, ExtArgs["result"]["escalation"]>
 
   export type EscalationSelectScalar = {
@@ -63829,6 +63907,10 @@ export namespace Prisma {
     deptAdminId?: boolean
     escalatedAt?: boolean
     reason?: boolean
+    type?: boolean
+    impact?: boolean
+    currentLevel?: boolean
+    maxLevel?: boolean
     status?: boolean
     resolution?: boolean
     resolvedAt?: boolean
@@ -63838,53 +63920,57 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EscalationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "taskId" | "employeeId" | "deptAdminId" | "escalatedAt" | "reason" | "status" | "resolution" | "resolvedAt" | "resolvedBy" | "handledBy" | "chain" | "updatedAt", ExtArgs["result"]["escalation"]>
+  export type EscalationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "taskId" | "employeeId" | "deptAdminId" | "escalatedAt" | "reason" | "type" | "impact" | "currentLevel" | "maxLevel" | "status" | "resolution" | "resolvedAt" | "resolvedBy" | "handledBy" | "chain" | "updatedAt", ExtArgs["result"]["escalation"]>
   export type EscalationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
     logs?: boolean | Escalation$logsArgs<ExtArgs>
     _count?: boolean | EscalationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EscalationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
   }
   export type EscalationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    deptAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    deptAdmin?: boolean | Escalation$deptAdminArgs<ExtArgs>
     employee?: boolean | UserDefaultArgs<ExtArgs>
     handler?: boolean | Escalation$handlerArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     resolver?: boolean | Escalation$resolverArgs<ExtArgs>
-    task?: boolean | TaskDefaultArgs<ExtArgs>
+    task?: boolean | Escalation$taskArgs<ExtArgs>
   }
 
   export type $EscalationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Escalation"
     objects: {
-      deptAdmin: Prisma.$UserPayload<ExtArgs>
+      deptAdmin: Prisma.$UserPayload<ExtArgs> | null
       employee: Prisma.$UserPayload<ExtArgs>
       handler: Prisma.$UserPayload<ExtArgs> | null
       organization: Prisma.$OrganizationPayload<ExtArgs>
       resolver: Prisma.$UserPayload<ExtArgs> | null
-      task: Prisma.$TaskPayload<ExtArgs>
+      task: Prisma.$TaskPayload<ExtArgs> | null
       logs: Prisma.$EscalationLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       organizationId: string
-      taskId: string
+      taskId: string | null
       employeeId: string
-      deptAdminId: string
+      deptAdminId: string | null
       escalatedAt: Date
       reason: string
+      type: string
+      impact: string
+      currentLevel: number
+      maxLevel: number
       status: string
       resolution: string | null
       resolvedAt: Date | null
@@ -64286,12 +64372,12 @@ export namespace Prisma {
    */
   export interface Prisma__EscalationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    deptAdmin<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    deptAdmin<T extends Escalation$deptAdminArgs<ExtArgs> = {}>(args?: Subset<T, Escalation$deptAdminArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     employee<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     handler<T extends Escalation$handlerArgs<ExtArgs> = {}>(args?: Subset<T, Escalation$handlerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     resolver<T extends Escalation$resolverArgs<ExtArgs> = {}>(args?: Subset<T, Escalation$resolverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    task<T extends Escalation$taskArgs<ExtArgs> = {}>(args?: Subset<T, Escalation$taskArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     logs<T extends Escalation$logsArgs<ExtArgs> = {}>(args?: Subset<T, Escalation$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EscalationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -64329,6 +64415,10 @@ export namespace Prisma {
     readonly deptAdminId: FieldRef<"Escalation", 'String'>
     readonly escalatedAt: FieldRef<"Escalation", 'DateTime'>
     readonly reason: FieldRef<"Escalation", 'String'>
+    readonly type: FieldRef<"Escalation", 'String'>
+    readonly impact: FieldRef<"Escalation", 'String'>
+    readonly currentLevel: FieldRef<"Escalation", 'Int'>
+    readonly maxLevel: FieldRef<"Escalation", 'Int'>
     readonly status: FieldRef<"Escalation", 'String'>
     readonly resolution: FieldRef<"Escalation", 'String'>
     readonly resolvedAt: FieldRef<"Escalation", 'DateTime'>
@@ -64737,6 +64827,25 @@ export namespace Prisma {
   }
 
   /**
+   * Escalation.deptAdmin
+   */
+  export type Escalation$deptAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * Escalation.handler
    */
   export type Escalation$handlerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -64772,6 +64881,25 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * Escalation.task
+   */
+  export type Escalation$taskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Task
+     */
+    omit?: TaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
   }
 
   /**
@@ -79074,6 +79202,7 @@ export namespace Prisma {
     updatedAt: number
     sessionId: number
     additionalFees: number
+    installments: number
     billingCycle: number
     createdBy: number
     currency: number
@@ -79166,6 +79295,7 @@ export namespace Prisma {
     updatedAt?: true
     sessionId?: true
     additionalFees?: true
+    installments?: true
     billingCycle?: true
     createdBy?: true
     currency?: true
@@ -79279,6 +79409,7 @@ export namespace Prisma {
     updatedAt: Date
     sessionId: string | null
     additionalFees: JsonValue
+    installments: JsonValue
     billingCycle: string
     createdBy: string | null
     currency: string
@@ -79324,6 +79455,7 @@ export namespace Prisma {
     updatedAt?: boolean
     sessionId?: boolean
     additionalFees?: boolean
+    installments?: boolean
     billingCycle?: boolean
     createdBy?: boolean
     currency?: boolean
@@ -79355,6 +79487,7 @@ export namespace Prisma {
     updatedAt?: boolean
     sessionId?: boolean
     additionalFees?: boolean
+    installments?: boolean
     billingCycle?: boolean
     createdBy?: boolean
     currency?: boolean
@@ -79386,6 +79519,7 @@ export namespace Prisma {
     updatedAt?: boolean
     sessionId?: boolean
     additionalFees?: boolean
+    installments?: boolean
     billingCycle?: boolean
     createdBy?: boolean
     currency?: boolean
@@ -79417,6 +79551,7 @@ export namespace Prisma {
     updatedAt?: boolean
     sessionId?: boolean
     additionalFees?: boolean
+    installments?: boolean
     billingCycle?: boolean
     createdBy?: boolean
     currency?: boolean
@@ -79430,7 +79565,7 @@ export namespace Prisma {
     allowInitialFee?: boolean
   }
 
-  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "otherCharges" | "gstPercentage" | "createdAt" | "updatedAt" | "sessionId" | "additionalFees" | "billingCycle" | "createdBy" | "currency" | "effectiveFrom" | "feeLevel" | "universityId" | "commissionRate" | "universityFee" | "yearlyFees" | "dueDate" | "allowInitialFee", ExtArgs["result"]["feeStructure"]>
+  export type FeeStructureOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programId" | "organizationId" | "registrationFee" | "tuitionFee" | "examFee" | "otherCharges" | "gstPercentage" | "createdAt" | "updatedAt" | "sessionId" | "additionalFees" | "installments" | "billingCycle" | "createdBy" | "currency" | "effectiveFrom" | "feeLevel" | "universityId" | "commissionRate" | "universityFee" | "yearlyFees" | "dueDate" | "allowInitialFee", ExtArgs["result"]["feeStructure"]>
   export type FeeStructureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | FeeStructure$creatorArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -79475,6 +79610,7 @@ export namespace Prisma {
       updatedAt: Date
       sessionId: string | null
       additionalFees: Prisma.JsonValue
+      installments: Prisma.JsonValue
       billingCycle: string
       createdBy: string | null
       currency: string
@@ -79926,6 +80062,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"FeeStructure", 'DateTime'>
     readonly sessionId: FieldRef<"FeeStructure", 'String'>
     readonly additionalFees: FieldRef<"FeeStructure", 'Json'>
+    readonly installments: FieldRef<"FeeStructure", 'Json'>
     readonly billingCycle: FieldRef<"FeeStructure", 'String'>
     readonly createdBy: FieldRef<"FeeStructure", 'String'>
     readonly currency: FieldRef<"FeeStructure", 'String'>
@@ -97713,6 +97850,10 @@ export namespace Prisma {
     deptAdminId: 'deptAdminId',
     escalatedAt: 'escalatedAt',
     reason: 'reason',
+    type: 'type',
+    impact: 'impact',
+    currentLevel: 'currentLevel',
+    maxLevel: 'maxLevel',
     status: 'status',
     resolution: 'resolution',
     resolvedAt: 'resolvedAt',
@@ -97930,6 +98071,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     sessionId: 'sessionId',
     additionalFees: 'additionalFees',
+    installments: 'installments',
     billingCycle: 'billingCycle',
     createdBy: 'createdBy',
     currency: 'currency',
@@ -103779,11 +103921,15 @@ export namespace Prisma {
     NOT?: EscalationWhereInput | EscalationWhereInput[]
     id?: StringFilter<"Escalation"> | string
     organizationId?: StringFilter<"Escalation"> | string
-    taskId?: StringFilter<"Escalation"> | string
+    taskId?: StringNullableFilter<"Escalation"> | string | null
     employeeId?: StringFilter<"Escalation"> | string
-    deptAdminId?: StringFilter<"Escalation"> | string
+    deptAdminId?: StringNullableFilter<"Escalation"> | string | null
     escalatedAt?: DateTimeFilter<"Escalation"> | Date | string
     reason?: StringFilter<"Escalation"> | string
+    type?: StringFilter<"Escalation"> | string
+    impact?: StringFilter<"Escalation"> | string
+    currentLevel?: IntFilter<"Escalation"> | number
+    maxLevel?: IntFilter<"Escalation"> | number
     status?: StringFilter<"Escalation"> | string
     resolution?: StringNullableFilter<"Escalation"> | string | null
     resolvedAt?: DateTimeNullableFilter<"Escalation"> | Date | string | null
@@ -103791,23 +103937,27 @@ export namespace Prisma {
     handledBy?: StringNullableFilter<"Escalation"> | string | null
     chain?: JsonFilter<"Escalation">
     updatedAt?: DateTimeFilter<"Escalation"> | Date | string
-    deptAdmin?: XOR<UserScalarRelationFilter, UserWhereInput>
+    deptAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     handler?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     resolver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
+    task?: XOR<TaskNullableScalarRelationFilter, TaskWhereInput> | null
     logs?: EscalationLogListRelationFilter
   }
 
   export type EscalationOrderByWithRelationInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    taskId?: SortOrder
+    taskId?: SortOrderInput | SortOrder
     employeeId?: SortOrder
-    deptAdminId?: SortOrder
+    deptAdminId?: SortOrderInput | SortOrder
     escalatedAt?: SortOrder
     reason?: SortOrder
+    type?: SortOrder
+    impact?: SortOrder
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
     status?: SortOrder
     resolution?: SortOrderInput | SortOrder
     resolvedAt?: SortOrderInput | SortOrder
@@ -103830,11 +103980,15 @@ export namespace Prisma {
     OR?: EscalationWhereInput[]
     NOT?: EscalationWhereInput | EscalationWhereInput[]
     organizationId?: StringFilter<"Escalation"> | string
-    taskId?: StringFilter<"Escalation"> | string
+    taskId?: StringNullableFilter<"Escalation"> | string | null
     employeeId?: StringFilter<"Escalation"> | string
-    deptAdminId?: StringFilter<"Escalation"> | string
+    deptAdminId?: StringNullableFilter<"Escalation"> | string | null
     escalatedAt?: DateTimeFilter<"Escalation"> | Date | string
     reason?: StringFilter<"Escalation"> | string
+    type?: StringFilter<"Escalation"> | string
+    impact?: StringFilter<"Escalation"> | string
+    currentLevel?: IntFilter<"Escalation"> | number
+    maxLevel?: IntFilter<"Escalation"> | number
     status?: StringFilter<"Escalation"> | string
     resolution?: StringNullableFilter<"Escalation"> | string | null
     resolvedAt?: DateTimeNullableFilter<"Escalation"> | Date | string | null
@@ -103842,23 +103996,27 @@ export namespace Prisma {
     handledBy?: StringNullableFilter<"Escalation"> | string | null
     chain?: JsonFilter<"Escalation">
     updatedAt?: DateTimeFilter<"Escalation"> | Date | string
-    deptAdmin?: XOR<UserScalarRelationFilter, UserWhereInput>
+    deptAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     handler?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     resolver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
+    task?: XOR<TaskNullableScalarRelationFilter, TaskWhereInput> | null
     logs?: EscalationLogListRelationFilter
   }, "id">
 
   export type EscalationOrderByWithAggregationInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    taskId?: SortOrder
+    taskId?: SortOrderInput | SortOrder
     employeeId?: SortOrder
-    deptAdminId?: SortOrder
+    deptAdminId?: SortOrderInput | SortOrder
     escalatedAt?: SortOrder
     reason?: SortOrder
+    type?: SortOrder
+    impact?: SortOrder
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
     status?: SortOrder
     resolution?: SortOrderInput | SortOrder
     resolvedAt?: SortOrderInput | SortOrder
@@ -103867,8 +104025,10 @@ export namespace Prisma {
     chain?: SortOrder
     updatedAt?: SortOrder
     _count?: EscalationCountOrderByAggregateInput
+    _avg?: EscalationAvgOrderByAggregateInput
     _max?: EscalationMaxOrderByAggregateInput
     _min?: EscalationMinOrderByAggregateInput
+    _sum?: EscalationSumOrderByAggregateInput
   }
 
   export type EscalationScalarWhereWithAggregatesInput = {
@@ -103877,11 +104037,15 @@ export namespace Prisma {
     NOT?: EscalationScalarWhereWithAggregatesInput | EscalationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Escalation"> | string
     organizationId?: StringWithAggregatesFilter<"Escalation"> | string
-    taskId?: StringWithAggregatesFilter<"Escalation"> | string
+    taskId?: StringNullableWithAggregatesFilter<"Escalation"> | string | null
     employeeId?: StringWithAggregatesFilter<"Escalation"> | string
-    deptAdminId?: StringWithAggregatesFilter<"Escalation"> | string
+    deptAdminId?: StringNullableWithAggregatesFilter<"Escalation"> | string | null
     escalatedAt?: DateTimeWithAggregatesFilter<"Escalation"> | Date | string
     reason?: StringWithAggregatesFilter<"Escalation"> | string
+    type?: StringWithAggregatesFilter<"Escalation"> | string
+    impact?: StringWithAggregatesFilter<"Escalation"> | string
+    currentLevel?: IntWithAggregatesFilter<"Escalation"> | number
+    maxLevel?: IntWithAggregatesFilter<"Escalation"> | number
     status?: StringWithAggregatesFilter<"Escalation"> | string
     resolution?: StringNullableWithAggregatesFilter<"Escalation"> | string | null
     resolvedAt?: DateTimeNullableWithAggregatesFilter<"Escalation"> | Date | string | null
@@ -104957,6 +105121,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FeeStructure"> | Date | string
     sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     additionalFees?: JsonFilter<"FeeStructure">
+    installments?: JsonFilter<"FeeStructure">
     billingCycle?: StringFilter<"FeeStructure"> | string
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     currency?: StringFilter<"FeeStructure"> | string
@@ -104988,6 +105153,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     sessionId?: SortOrderInput | SortOrder
     additionalFees?: SortOrder
+    installments?: SortOrder
     billingCycle?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     currency?: SortOrder
@@ -105022,6 +105188,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FeeStructure"> | Date | string
     sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     additionalFees?: JsonFilter<"FeeStructure">
+    installments?: JsonFilter<"FeeStructure">
     billingCycle?: StringFilter<"FeeStructure"> | string
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     currency?: StringFilter<"FeeStructure"> | string
@@ -105053,6 +105220,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     sessionId?: SortOrderInput | SortOrder
     additionalFees?: SortOrder
+    installments?: SortOrder
     billingCycle?: SortOrder
     createdBy?: SortOrderInput | SortOrder
     currency?: SortOrder
@@ -105087,6 +105255,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"FeeStructure"> | Date | string
     sessionId?: StringNullableWithAggregatesFilter<"FeeStructure"> | string | null
     additionalFees?: JsonWithAggregatesFilter<"FeeStructure">
+    installments?: JsonWithAggregatesFilter<"FeeStructure">
     billingCycle?: StringWithAggregatesFilter<"FeeStructure"> | string
     createdBy?: StringNullableWithAggregatesFilter<"FeeStructure"> | string | null
     currency?: StringWithAggregatesFilter<"FeeStructure"> | string
@@ -112120,28 +112289,36 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -112156,28 +112333,36 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112191,11 +112376,15 @@ export namespace Prisma {
   export type EscalationCreateManyInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -112209,6 +112398,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112219,11 +112412,15 @@ export namespace Prisma {
   export type EscalationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113298,6 +113495,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -113327,6 +113525,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -113350,6 +113549,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113379,6 +113579,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -113405,6 +113606,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -113428,6 +113630,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113452,6 +113655,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -118555,9 +118759,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type TaskScalarRelationFilter = {
-    is?: TaskWhereInput
-    isNot?: TaskWhereInput
+  export type TaskNullableScalarRelationFilter = {
+    is?: TaskWhereInput | null
+    isNot?: TaskWhereInput | null
   }
 
   export type EscalationCountOrderByAggregateInput = {
@@ -118568,6 +118772,10 @@ export namespace Prisma {
     deptAdminId?: SortOrder
     escalatedAt?: SortOrder
     reason?: SortOrder
+    type?: SortOrder
+    impact?: SortOrder
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
     status?: SortOrder
     resolution?: SortOrder
     resolvedAt?: SortOrder
@@ -118575,6 +118783,11 @@ export namespace Prisma {
     handledBy?: SortOrder
     chain?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EscalationAvgOrderByAggregateInput = {
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
   }
 
   export type EscalationMaxOrderByAggregateInput = {
@@ -118585,6 +118798,10 @@ export namespace Prisma {
     deptAdminId?: SortOrder
     escalatedAt?: SortOrder
     reason?: SortOrder
+    type?: SortOrder
+    impact?: SortOrder
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
     status?: SortOrder
     resolution?: SortOrder
     resolvedAt?: SortOrder
@@ -118601,12 +118818,21 @@ export namespace Prisma {
     deptAdminId?: SortOrder
     escalatedAt?: SortOrder
     reason?: SortOrder
+    type?: SortOrder
+    impact?: SortOrder
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
     status?: SortOrder
     resolution?: SortOrder
     resolvedAt?: SortOrder
     resolvedBy?: SortOrder
     handledBy?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EscalationSumOrderByAggregateInput = {
+    currentLevel?: SortOrder
+    maxLevel?: SortOrder
   }
 
   export type EscalationScalarRelationFilter = {
@@ -119181,6 +119407,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     sessionId?: SortOrder
     additionalFees?: SortOrder
+    installments?: SortOrder
     billingCycle?: SortOrder
     createdBy?: SortOrder
     currency?: SortOrder
@@ -130951,10 +131178,12 @@ export namespace Prisma {
     connect?: EscalationLogWhereUniqueInput | EscalationLogWhereUniqueInput[]
   }
 
-  export type UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput = {
+  export type UserUpdateOneWithoutDeptAdminEscalationsNestedInput = {
     create?: XOR<UserCreateWithoutDeptAdminEscalationsInput, UserUncheckedCreateWithoutDeptAdminEscalationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDeptAdminEscalationsInput
     upsert?: UserUpsertWithoutDeptAdminEscalationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDeptAdminEscalationsInput, UserUpdateWithoutDeptAdminEscalationsInput>, UserUncheckedUpdateWithoutDeptAdminEscalationsInput>
   }
@@ -130995,10 +131224,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutResolvedEscalationsInput, UserUpdateWithoutResolvedEscalationsInput>, UserUncheckedUpdateWithoutResolvedEscalationsInput>
   }
 
-  export type TaskUpdateOneRequiredWithoutEscalationsNestedInput = {
+  export type TaskUpdateOneWithoutEscalationsNestedInput = {
     create?: XOR<TaskCreateWithoutEscalationsInput, TaskUncheckedCreateWithoutEscalationsInput>
     connectOrCreate?: TaskCreateOrConnectWithoutEscalationsInput
     upsert?: TaskUpsertWithoutEscalationsInput
+    disconnect?: TaskWhereInput | boolean
+    delete?: TaskWhereInput | boolean
     connect?: TaskWhereUniqueInput
     update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutEscalationsInput, TaskUpdateWithoutEscalationsInput>, TaskUncheckedUpdateWithoutEscalationsInput>
   }
@@ -133680,26 +133911,34 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateWithoutOrganizationInput = {
     id?: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -133798,6 +134037,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -133825,6 +134065,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -136403,11 +136644,15 @@ export namespace Prisma {
     NOT?: EscalationScalarWhereInput | EscalationScalarWhereInput[]
     id?: StringFilter<"Escalation"> | string
     organizationId?: StringFilter<"Escalation"> | string
-    taskId?: StringFilter<"Escalation"> | string
+    taskId?: StringNullableFilter<"Escalation"> | string | null
     employeeId?: StringFilter<"Escalation"> | string
-    deptAdminId?: StringFilter<"Escalation"> | string
+    deptAdminId?: StringNullableFilter<"Escalation"> | string | null
     escalatedAt?: DateTimeFilter<"Escalation"> | Date | string
     reason?: StringFilter<"Escalation"> | string
+    type?: StringFilter<"Escalation"> | string
+    impact?: StringFilter<"Escalation"> | string
+    currentLevel?: IntFilter<"Escalation"> | number
+    maxLevel?: IntFilter<"Escalation"> | number
     status?: StringFilter<"Escalation"> | string
     resolution?: StringNullableFilter<"Escalation"> | string | null
     resolvedAt?: DateTimeNullableFilter<"Escalation"> | Date | string | null
@@ -136513,6 +136758,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FeeStructure"> | Date | string
     sessionId?: StringNullableFilter<"FeeStructure"> | string | null
     additionalFees?: JsonFilter<"FeeStructure">
+    installments?: JsonFilter<"FeeStructure">
     billingCycle?: StringFilter<"FeeStructure"> | string
     createdBy?: StringNullableFilter<"FeeStructure"> | string | null
     currency?: StringFilter<"FeeStructure"> | string
@@ -141622,6 +141868,10 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -141631,17 +141881,21 @@ export namespace Prisma {
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateWithoutDeptAdminInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -141666,26 +141920,34 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateWithoutEmployeeInput = {
     id?: string
     organizationId: string
-    taskId: string
-    deptAdminId: string
+    taskId?: string | null
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -141710,27 +141972,35 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateWithoutHandlerInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -141754,27 +142024,35 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
     logs?: EscalationLogCreateNestedManyWithoutEscalationInput
   }
 
   export type EscalationUncheckedCreateWithoutResolverInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -141888,6 +142166,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -141916,6 +142195,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -148386,12 +148666,16 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
@@ -148403,9 +148687,13 @@ export namespace Prisma {
     id?: string
     organizationId: string
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -151044,6 +151332,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -151072,6 +151361,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -152445,6 +152735,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -152472,6 +152763,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -176506,6 +176798,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -176533,6 +176826,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -191677,27 +191971,35 @@ export namespace Prisma {
     id?: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
-    deptAdmin: UserCreateNestedOneWithoutDeptAdminEscalationsInput
+    deptAdmin?: UserCreateNestedOneWithoutDeptAdminEscalationsInput
     employee: UserCreateNestedOneWithoutEmployeeEscalationsInput
     handler?: UserCreateNestedOneWithoutHandledEscalationsInput
     organization: OrganizationCreateNestedOneWithoutEscalationsInput
     resolver?: UserCreateNestedOneWithoutResolvedEscalationsInput
-    task: TaskCreateNestedOneWithoutEscalationsInput
+    task?: TaskCreateNestedOneWithoutEscalationsInput
   }
 
   export type EscalationUncheckedCreateWithoutLogsInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -191880,27 +192182,35 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -213942,11 +214252,15 @@ export namespace Prisma {
 
   export type EscalationCreateManyOrganizationInput = {
     id?: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -213992,6 +214306,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -215481,26 +215796,34 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215513,11 +215836,15 @@ export namespace Prisma {
 
   export type EscalationUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215609,6 +215936,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -215636,6 +215964,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -215661,6 +215990,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -219492,10 +219822,14 @@ export namespace Prisma {
   export type EscalationCreateManyDeptAdminInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -219508,10 +219842,14 @@ export namespace Prisma {
   export type EscalationCreateManyEmployeeInput = {
     id?: string
     organizationId: string
-    taskId: string
-    deptAdminId: string
+    taskId?: string | null
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -219524,11 +219862,15 @@ export namespace Prisma {
   export type EscalationCreateManyHandlerInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -219540,11 +219882,15 @@ export namespace Prisma {
   export type EscalationCreateManyResolverInput = {
     id?: string
     organizationId: string
-    taskId: string
+    taskId?: string | null
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -219598,6 +219944,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     currency?: string
     effectiveFrom?: Date | string | null
@@ -221910,6 +222257,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221919,17 +222270,21 @@ export namespace Prisma {
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutDeptAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221943,10 +222298,14 @@ export namespace Prisma {
   export type EscalationUncheckedUpdateManyWithoutDeptAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221960,26 +222319,34 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221993,10 +222360,14 @@ export namespace Prisma {
   export type EscalationUncheckedUpdateManyWithoutEmployeeInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222010,27 +222381,35 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
     resolver?: UserUpdateOneWithoutResolvedEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutHandlerInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222043,11 +222422,15 @@ export namespace Prisma {
   export type EscalationUncheckedUpdateManyWithoutHandlerInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222060,27 +222443,35 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
-    task?: TaskUpdateOneRequiredWithoutEscalationsNestedInput
+    task?: TaskUpdateOneWithoutEscalationsNestedInput
     logs?: EscalationLogUpdateManyWithoutEscalationNestedInput
   }
 
   export type EscalationUncheckedUpdateWithoutResolverInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222093,11 +222484,15 @@ export namespace Prisma {
   export type EscalationUncheckedUpdateManyWithoutResolverInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
-    taskId?: StringFieldUpdateOperationsInput | string
+    taskId?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222212,6 +222607,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222240,6 +222636,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222265,6 +222662,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -225259,9 +225657,13 @@ export namespace Prisma {
     id?: string
     organizationId: string
     employeeId: string
-    deptAdminId: string
+    deptAdminId?: string | null
     escalatedAt?: Date | string
     reason: string
+    type?: string
+    impact?: string
+    currentLevel?: number
+    maxLevel?: number
     status?: string
     resolution?: string | null
     resolvedAt?: Date | string | null
@@ -225275,12 +225677,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chain?: JsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    deptAdmin?: UserUpdateOneRequiredWithoutDeptAdminEscalationsNestedInput
+    deptAdmin?: UserUpdateOneWithoutDeptAdminEscalationsNestedInput
     employee?: UserUpdateOneRequiredWithoutEmployeeEscalationsNestedInput
     handler?: UserUpdateOneWithoutHandledEscalationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEscalationsNestedInput
@@ -225292,9 +225698,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -225309,9 +225719,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     employeeId?: StringFieldUpdateOperationsInput | string
-    deptAdminId?: StringFieldUpdateOperationsInput | string
+    deptAdminId?: NullableStringFieldUpdateOperationsInput | string | null
     escalatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    impact?: StringFieldUpdateOperationsInput | string
+    currentLevel?: IntFieldUpdateOperationsInput | number
+    maxLevel?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     resolution?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -225354,6 +225768,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -225566,6 +225981,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -225594,6 +226010,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -225619,6 +226036,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -226505,6 +226923,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessionId?: string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -226828,6 +227247,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -226855,6 +227275,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -226880,6 +227301,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -231125,6 +231547,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: string
     createdBy?: string | null
     currency?: string
@@ -231350,6 +231773,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     currency?: StringFieldUpdateOperationsInput | string
     effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -231377,6 +231801,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string
@@ -231402,6 +231827,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     additionalFees?: JsonNullValueInput | InputJsonValue
+    installments?: JsonNullValueInput | InputJsonValue
     billingCycle?: StringFieldUpdateOperationsInput | string
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     currency?: StringFieldUpdateOperationsInput | string

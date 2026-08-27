@@ -1164,11 +1164,15 @@ model EditDeleteRequest {
 model Escalation {
   id             String          @id @default(uuid())
   organizationId String
-  taskId         String
+  taskId         String?
   employeeId     String
-  deptAdminId    String
+  deptAdminId    String?
   escalatedAt    DateTime        @default(now())
   reason         String
+  type           String          @default("general")
+  impact         String          @default("medium")
+  currentLevel   Int             @default(1)
+  maxLevel       Int             @default(3)
   status         String          @default("pending")
   resolution     String?
   resolvedAt     DateTime?
@@ -1176,12 +1180,12 @@ model Escalation {
   handledBy      String?
   chain          Json            @default("[]")
   updatedAt      DateTime        @updatedAt
-  deptAdmin      User            @relation("EscalationDeptAdmin", fields: [deptAdminId], references: [id])
+  deptAdmin      User?           @relation("EscalationDeptAdmin", fields: [deptAdminId], references: [id])
   employee       User            @relation("EscalationEmployee", fields: [employeeId], references: [id])
   handler        User?           @relation("EscalationHandledBy", fields: [handledBy], references: [id])
   organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   resolver       User?           @relation("EscalatedResolvedBy", fields: [resolvedBy], references: [id])
-  task           Task            @relation(fields: [taskId], references: [id])
+  task           Task?           @relation(fields: [taskId], references: [id])
   logs           EscalationLog[]
 
   @@index([organizationId, status])
@@ -1407,6 +1411,7 @@ model FeeStructure {
   updatedAt       DateTime          @updatedAt
   sessionId       String?
   additionalFees  Json              @default("[]")
+  installments    Json              @default("[]")
   billingCycle    String            @default("per_year")
   createdBy       String?
   currency        String            @default("INR")
