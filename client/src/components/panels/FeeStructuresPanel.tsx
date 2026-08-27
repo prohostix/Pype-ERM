@@ -35,6 +35,7 @@ export function FeeStructuresPanel() {
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
+  const [installments, setInstallments] = useState<{name: string; amount: number; dueDate: string}[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -142,6 +143,7 @@ export function FeeStructuresPanel() {
         commissionRate: y.commissionRate?.toString() || '0',
         dueDate: y.dueDate || ''
       })));
+      setInstallments(Array.isArray(existing.installments) ? existing.installments : []);
     } else {
       setEditingFeeId(null);
       setFormData({
@@ -155,6 +157,7 @@ export function FeeStructuresPanel() {
         additionalFees: ''
       });
       setYearlyFees([]);
+      setInstallments([]);
     }
     setStep(4);
   };
@@ -193,6 +196,7 @@ export function FeeStructuresPanel() {
       billingCycle: formData.billingCycle,
       allowInitialFee: formData.allowInitialFee,
       yearlyFees: formattedYearlyFees,
+      installments: formData.billingCycle === 'installment' ? installments : [],
       additionalFees
     };
 
@@ -432,6 +436,9 @@ export function FeeStructuresPanel() {
                       <SelectContent>
                         <SelectItem value="per_year">Year-wise</SelectItem>
                         <SelectItem value="per_semester">Semester-wise</SelectItem>
+                        {selectedProg?.courseType === 'CreditTransfer' && (
+                          <SelectItem value="installment">Custom Installments</SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
@@ -452,8 +459,30 @@ export function FeeStructuresPanel() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    {yearlyFees.map((yf, idx) => (
+                  {formData.billingCycle === 'installment' ? (
+                    <div className="space-y-3 rounded-xl border border-slate-200 p-4 bg-card shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-slate-700">Custom Installments</Label>
+                        <Button type="button" variant="outline" size="sm" onClick={() => setInstallments([...installments, { name: `Installment ${installments.length + 1}`, amount: 0, dueDate: '' }])} className="h-8 gap-1"><Plus className="h-3.5 w-3.5" /> Add Installment</Button>
+                      </div>
+                      {installments.length === 0 ? (
+                        <p className="text-xs text-muted-foreground">No installments added yet.</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {installments.map((inst, idx) => (
+                            <div key={idx} className="flex items-center gap-2">
+                              <Input value={inst.name} onChange={e => { const next = [...installments]; next[idx].name = e.target.value; setInstallments(next); }} placeholder="Installment Name" className="flex-1" />
+                              <Input type="number" value={inst.amount} onChange={e => { const next = [...installments]; next[idx].amount = parseFloat(e.target.value) || 0; setInstallments(next); }} placeholder="Amount" className="w-24 sm:w-32" />
+                              <Input type="date" value={inst.dueDate} onChange={e => { const next = [...installments]; next[idx].dueDate = e.target.value; setInstallments(next); }} className="w-32 sm:w-40" />
+                              <Button type="button" variant="ghost" size="icon" onClick={() => { const next = [...installments]; next.splice(idx, 1); setInstallments(next); }} className="h-9 w-9 text-rose-500 hover:text-rose-600 hover:bg-rose-50 shrink-0"><Trash2 className="h-4 w-4" /></Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {yearlyFees.map((yf, idx) => (
                       <div key={idx} className="p-4 border rounded-xl bg-card shadow-sm flex flex-col gap-4">
                         <div className="font-semibold text-primary">{yf.periodName}</div>
                         <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -512,6 +541,7 @@ export function FeeStructuresPanel() {
                       <p className="text-sm text-muted-foreground">Select an installment cycle to view periods.</p>
                     )}
                   </div>
+                  )}
                 </div>
 
               </CardContent>
