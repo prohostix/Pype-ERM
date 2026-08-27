@@ -244,7 +244,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
     { id: '__dashboard', label: 'Dashboard', isSection: true },
     { id: 'overview', label: 'Overview' },
     { id: 'enrolled_students', label: 'Enrolled Students' },
-    { id: 'my_total_admissions', label: 'My Total Admissions' },
     { id: 'payment_status', label: 'Payment Status' },
     { id: 'course_details_dash', label: 'Course Details' },
 
@@ -257,8 +256,6 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
     { id: '__performance', label: 'My Performance', isSection: true },
     { id: 'targets', label: 'Target' },
-    { id: 'achievement', label: 'Achievement' },
-    { id: 'admission_count', label: 'Admission Count' },
     { id: 'incentive_status', label: 'Incentive Status' },
 
     { id: '__reports', label: 'Reports', isSection: true },
