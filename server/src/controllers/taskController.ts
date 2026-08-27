@@ -7,6 +7,12 @@ export const getTasks = asyncHandler(async (req: AuthRequest, res: Response) => 
   const where: any = {};
   if (req.user.role !== 'superadmin') {
     where.organizationId = req.user.organizationId;
+    if (req.user.role !== 'org_admin' && req.user.role !== 'ceo') {
+      where.OR = [
+        { assignedTo: req.user.id },
+        { createdBy: req.user.id }
+      ];
+    }
   }
   if (req.query.assignedTo) where.assignedTo = req.query.assignedTo as string;
   if (req.query.status) where.status = req.query.status as string;

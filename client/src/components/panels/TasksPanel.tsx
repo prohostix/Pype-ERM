@@ -178,8 +178,8 @@ export function TasksPanel() {
 
   const filteredTasks = (() => {
     switch (activeTab) {
-      case 'assigned': return tasks.filter(t => (t.assignedBy?.id || t.assignedBy?.id || t.assignedBy) === currentUserId);
-      case 'my': return tasks.filter(t => (t.assignedTo?.id || t.assignedTo?.id || t.assignedTo) === currentUserId);
+      case 'assigned': return tasks.filter(t => t.createdBy === currentUserId);
+      case 'my': return tasks.filter(t => t.assignedTo === currentUserId);
       case 'pending': return tasks.filter(t => t.status === 'pending' || t.status === 'in_progress');
       case 'completed': return tasks.filter(t => t.status === 'completed');
       default: return tasks;
@@ -310,8 +310,8 @@ export function TasksPanel() {
                         </div>
                         <p className="text-sm text-muted-foreground mb-2">{task.description}</p>
                         <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                          <span>To: {task.assignedTo?.name || 'Unknown'}</span>
-                          <span>By: {task.assignedBy?.name || 'Unknown'}</span>
+                          <span>To: {task.assignee?.name || 'Unknown'}</span>
+                          <span>By: {task.assigner?.name || 'Unknown'}</span>
                           <span>Due: {new Date(task.deadline).toLocaleDateString()}</span>
                         </div>
                         {task.remarks && <p className="text-xs text-muted-foreground mt-1 italic">{task.remarks}</p>}
