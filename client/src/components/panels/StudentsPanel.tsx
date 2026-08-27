@@ -1889,39 +1889,41 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
                           {/* Payment Plan & Fee */}
                           {getActiveFeeStructure() && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                            <div>
-                              <Label className="font-medium">Payment Plan *</Label>
-                              <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
-                                <SelectTrigger><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="full">Full (One Time)</SelectItem>
-                                  <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
-                                </SelectContent>
-                              </Select>
+                          <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                              <div>
+                                <Label className="font-medium">Payment Plan *</Label>
+                                <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
+                                  <SelectTrigger><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="full">Full (One Time)</SelectItem>
+                                    <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label className="font-medium">Initial Fee Amount *</Label>
+                                <Input 
+                                  type="number"
+                                  placeholder="e.g. 5000"
+                                  value={formData.initialPaymentAmount || ''} 
+                                  onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
+                                  required
+                                />
+                              </div>
                             </div>
-                            <div>
-                              <Label className="font-medium">Initial Fee Amount *</Label>
-                              <Input 
-                                type="number"
-                                placeholder="e.g. 5000"
-                                value={formData.initialPaymentAmount || ''} 
-                                onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
-                                required
-                              />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                              <div>
+                                <Label className="font-medium">Payment Date *</Label>
+                                <Input 
+                                  type="date"
+                                  value={formData.initialPaymentDate || ''} 
+                                  onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
+                                  required
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                            <div>
-                              <Label className="font-medium">Payment Date *</Label>
-                              <Input 
-                                type="date"
-                                value={formData.initialPaymentDate || ''} 
-                                onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
-                                required
-                              />
-                            </div>
-                          </div>
+                          </>
                           )}
 
                           {renderFeeDisplay()}
