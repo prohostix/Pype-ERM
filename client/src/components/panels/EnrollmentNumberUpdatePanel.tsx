@@ -187,7 +187,7 @@ export function EnrollmentNumberUpdatePanel() {
                           <div className="text-xs text-muted-foreground">{student.email}</div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}</Badge>
+                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}{student.specialisation ? ` - ${student.specialisation}` : ''}</Badge>
                           <div className="text-xs text-muted-foreground">{student.session?.name}</div>
                         </TableCell>
                         <TableCell>
@@ -270,7 +270,7 @@ export function EnrollmentNumberUpdatePanel() {
                           <div className="text-xs text-muted-foreground">{student.email}</div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}</Badge>
+                          <Badge variant="outline" className="mb-1">{student.program?.name || 'N/A'}{student.specialisation ? ` - ${student.specialisation}` : ''}</Badge>
                           <div className="text-xs text-muted-foreground">{student.session?.name}</div>
                         </TableCell>
                         <TableCell>

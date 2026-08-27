@@ -188,7 +188,7 @@ export function StudentProfilePanel({ student: initialStudent, onBack }: { stude
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Program</p>
-                      <p className="font-medium mt-1">{programName}</p>
+                      <p className="font-medium mt-1">{programName} {student.specialisation ? `- ${student.specialisation}` : ''}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Branch</p>

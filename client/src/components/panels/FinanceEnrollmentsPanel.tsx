@@ -148,10 +148,12 @@ export function FinanceEnrollmentsPanel() {
     }
   };
 
-  const getProgramName = (e: Enrollment) =>
-    (e.programId && typeof e.programId === 'object')
+  const getProgramName = (e: Enrollment) => {
+    const name = (e.programId && typeof e.programId === 'object')
       ? `${e.programId.name || 'Unknown'} (${e.programId.code || ''})`
       : (e.programId as string) || 'N/A';
+    return name + (e.specialisation ? ` - ${e.specialisation}` : '');
+  };
 
   const getCenterName = (e: Enrollment) =>
     (e.studyCenterId && typeof e.studyCenterId === 'object')

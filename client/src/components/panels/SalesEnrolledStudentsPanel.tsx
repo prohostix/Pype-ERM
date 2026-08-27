@@ -228,7 +228,7 @@ export function SalesEnrolledStudentsPanel() {
                     <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1.5 text-xs text-muted-foreground font-medium">
                       <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{student.email}</span>
                       <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" />{student.phone}</span>
-                      {student.program && <span>📚 {student.program.name}</span>}
+                      {student.program && <span>📚 {student.program.name}{student.specialisation ? ` - ${student.specialisation}` : ''}</span>}
                     </div>
                   </div>
                 </div>

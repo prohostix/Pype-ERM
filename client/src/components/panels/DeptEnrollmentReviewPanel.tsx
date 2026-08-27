@@ -449,7 +449,7 @@ export function DeptEnrollmentReviewPanel() {
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 border-b pb-1">Program &amp; Institution</h4>
                 <div className="grid grid-cols-2 gap-3">
-                  <InfoField label="Program" value={viewStudent.program ? `${viewStudent.program.name} (${viewStudent.program.code})` : null} />
+                  <InfoField label="Program" value={viewStudent.program ? `${viewStudent.program.name} (${viewStudent.program.code})${viewStudent.specialisation ? ` - ${viewStudent.specialisation}` : ''}` : null} />
                   <InfoField label="University" value={viewStudent.program?.university?.name} />
                   <InfoField label="Study Center" value={viewStudent.studyCenter?.name} />
                   <InfoField label="Session" value={viewStudent.session?.name} />
