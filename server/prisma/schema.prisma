@@ -1411,6 +1411,7 @@ model FeeStructure {
   updatedAt       DateTime          @updatedAt
   sessionId       String?
   additionalFees  Json              @default("[]")
+  installments    Json              @default("[]")
   billingCycle    String            @default("per_year")
   createdBy       String?
   currency        String            @default("INR")

@@ -62,8 +62,10 @@ export function ProgramFormDialog({
     syllabus: '',
     registrationFee: 0,
     tuitionFee: 0,
+    billingCycle: 'one_time' as 'one_time' | 'installment',
   });
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [installments, setInstallments] = useState<{name: string; amount: number; dueDate: string}[]>([]);
   const [specInput, setSpecInput] = useState('');
 
   useEffect(() => {
@@ -87,8 +89,10 @@ export function ProgramFormDialog({
           syllabus: p.syllabus || '',
           registrationFee: programFee?.registrationFee || 0,
           tuitionFee: programFee?.tuitionFee || 0,
+          billingCycle: programFee?.billingCycle === 'installment' ? 'installment' : 'one_time',
         });
         setSemesters(p.semesters || []);
+        setInstallments(Array.isArray(programFee?.installments) ? programFee.installments : []);
         setSpecInput('');
       } else {
         resetForm();
@@ -115,9 +119,11 @@ export function ProgramFormDialog({
       name: '', code: '', universityId: defaultUniversityId || '', subDepartmentId: '',
       courseType: 'OnlineDegree', duration: 12, status: 'active',
       hasSemesters: false, specialisations: [],
-      syllabus: '', registrationFee: 0, tuitionFee: 0
+      syllabus: '', registrationFee: 0, tuitionFee: 0,
+      billingCycle: 'one_time'
     });
     setSemesters([]);
+    setInstallments([]);
     setSpecInput('');
   };
 
@@ -159,6 +165,18 @@ export function ProgramFormDialog({
     setSemesters(prev => prev.filter((_, i) => i !== idx).map((s, i) => ({ ...s, number: i + 1, name: `Semester ${i + 1}` })));
   };
 
+  const addInstallment = () => {
+    setInstallments(prev => [...prev, { name: `Installment ${prev.length + 1}`, amount: 0, dueDate: '' }]);
+  };
+
+  const removeInstallment = (idx: number) => {
+    setInstallments(prev => prev.filter((_, i) => i !== idx).map((s, i) => ({ ...s, name: `Installment ${i + 1}` })));
+  };
+
+  const updateInstallment = (idx: number, field: 'name' | 'amount' | 'dueDate', value: any) => {
+    setInstallments(prev => prev.map((s, i) => i === idx ? { ...s, [field]: value } : s));
+  };
+
   const addSpecialisation = (val: string) => {
     const trimmed = val.trim();
     if (!trimmed) {
@@ -184,6 +202,7 @@ export function ProgramFormDialog({
         ...form,
         subDepartmentId: form.subDepartmentId || null,
         semesters: form.hasSemesters ? semesters : [],
+        installments: form.billingCycle === 'installment' ? installments : [],
       };
       if (editingProgram) {
         await api.put(`/operations/programs/${editingProgram.id}`, payload);
@@ -317,6 +336,43 @@ export function ProgramFormDialog({
               ))}
             </div>
           </div>
+
+          {/* Credit Transfer Installments */}
+          {form.courseType === 'CreditTransfer' && (
+            <div className="space-y-4 border-t pt-4">
+              <div className="space-y-2">
+                <Label>Fee Structure Type</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button type="button" onClick={() => setForm(f => ({ ...f, billingCycle: 'one_time' }))} className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all ${form.billingCycle === 'one_time' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}>One-Time Payment</button>
+                  <button type="button" onClick={() => setForm(f => ({ ...f, billingCycle: 'installment' }))} className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all ${form.billingCycle === 'installment' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}>Installments</button>
+                </div>
+              </div>
+              
+              {form.billingCycle === 'installment' && (
+                <div className="space-y-3 rounded-xl border border-slate-200 p-4 bg-slate-50">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-slate-700">Installments Configuration</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addInstallment} className="h-8 gap-1"><Plus className="h-3.5 w-3.5" /> Add Installment</Button>
+                  </div>
+                  
+                  {installments.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">No installments added yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {installments.map((inst, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <Input value={inst.name} onChange={e => updateInstallment(idx, 'name', e.target.value)} placeholder="Installment Name" className="flex-1" />
+                          <Input type="number" value={inst.amount} onChange={e => updateInstallment(idx, 'amount', parseFloat(e.target.value) || 0)} placeholder="Amount" className="w-24 sm:w-32" />
+                          <Input type="date" value={inst.dueDate} onChange={e => updateInstallment(idx, 'dueDate', e.target.value)} className="w-32 sm:w-40" />
+                          <Button type="button" variant="ghost" size="icon" onClick={() => removeInstallment(idx)} className="h-9 w-9 text-rose-500 hover:text-rose-600 hover:bg-rose-50 shrink-0"><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Duration */}
           <div className="space-y-1">
