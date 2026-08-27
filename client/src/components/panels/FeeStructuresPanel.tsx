@@ -31,7 +31,7 @@ export function FeeStructuresPanel() {
     universityFee: '0',
     commissionRate: '0',
     billingCycle: 'per_year',
-    allowInitialFee: false,
+    allowInitialFee: true,
     additionalFees: ''
   });
   const [yearlyFees, setYearlyFees] = useState<any[]>([]);
@@ -153,7 +153,7 @@ export function FeeStructuresPanel() {
         universityFee: '0',
         commissionRate: '0',
         billingCycle: 'per_year',
-        allowInitialFee: false,
+        allowInitialFee: true,
         additionalFees: ''
       });
       setYearlyFees([]);
