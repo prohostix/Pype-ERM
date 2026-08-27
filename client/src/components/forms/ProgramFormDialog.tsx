@@ -161,7 +161,14 @@ export function ProgramFormDialog({
 
   const addSpecialisation = (val: string) => {
     const trimmed = val.trim();
-    if (!trimmed || form.specialisations.includes(trimmed)) return;
+    if (!trimmed) {
+      setSpecInput('');
+      return;
+    }
+    if (form.specialisations.some(s => s.toLowerCase() === trimmed.toLowerCase())) {
+      toast.error('Specialisation already added');
+      return;
+    }
     setForm(f => ({ ...f, specialisations: [...f.specialisations, trimmed] }));
     setSpecInput('');
   };
