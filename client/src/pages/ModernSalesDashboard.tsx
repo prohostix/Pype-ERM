@@ -593,6 +593,16 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
     return empId?.toString() === user?.id?.toString();
   });
 
+  const actualCollection = myStudents.reduce((sum: number, s: any) => {
+    let studentSum = 0;
+    if (s.enrollments && s.enrollments.length > 0) {
+      studentSum = s.enrollments.reduce((eSum: number, e: any) => eSum + Number(e.payment?.amount || e.initialPaymentAmount || 0), 0);
+    } else if (s.admissionProgress?.initialPaymentAmount) {
+      studentSum = Number(s.admissionProgress.initialPaymentAmount);
+    }
+    return sum + studentSum;
+  }, 0);
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -625,7 +635,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
         <Card><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Collection</p>
           <p className="text-2xl font-bold mt-1 text-success">
-            {loading ? '...' : `₹${myTargets.reduce((s: number, t: any) => s + (t.type === 'revenue' ? t.achieved : 0), 0).toLocaleString('en-IN')}`}
+            {loading ? '...' : `₹${actualCollection.toLocaleString('en-IN')}`}
           </p>
         </CardContent></Card>
         <Card><CardContent className="p-4 text-center">
