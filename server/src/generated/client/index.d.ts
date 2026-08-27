@@ -49597,6 +49597,7 @@ export namespace Prisma {
     receiptVerifiedAt: Date | null
     receiptVerifiedBy: string | null
     initialPaymentAmount: number | null
+    initialPaymentDate: Date | null
     paymentPlan: string | null
   }
 
@@ -49647,6 +49648,7 @@ export namespace Prisma {
     receiptVerifiedAt: Date | null
     receiptVerifiedBy: string | null
     initialPaymentAmount: number | null
+    initialPaymentDate: Date | null
     paymentPlan: string | null
   }
 
@@ -49699,6 +49701,7 @@ export namespace Prisma {
     receiptVerifiedAt: number
     receiptVerifiedBy: number
     initialPaymentAmount: number
+    initialPaymentDate: number
     paymentPlan: number
     _all: number
   }
@@ -49759,6 +49762,7 @@ export namespace Prisma {
     receiptVerifiedAt?: true
     receiptVerifiedBy?: true
     initialPaymentAmount?: true
+    initialPaymentDate?: true
     paymentPlan?: true
   }
 
@@ -49809,6 +49813,7 @@ export namespace Prisma {
     receiptVerifiedAt?: true
     receiptVerifiedBy?: true
     initialPaymentAmount?: true
+    initialPaymentDate?: true
     paymentPlan?: true
   }
 
@@ -49861,6 +49866,7 @@ export namespace Prisma {
     receiptVerifiedAt?: true
     receiptVerifiedBy?: true
     initialPaymentAmount?: true
+    initialPaymentDate?: true
     paymentPlan?: true
     _all?: true
   }
@@ -50000,6 +50006,7 @@ export namespace Prisma {
     receiptVerifiedAt: Date | null
     receiptVerifiedBy: string | null
     initialPaymentAmount: number | null
+    initialPaymentDate: Date | null
     paymentPlan: string | null
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
@@ -50071,6 +50078,7 @@ export namespace Prisma {
     receiptVerifiedAt?: boolean
     receiptVerifiedBy?: boolean
     initialPaymentAmount?: boolean
+    initialPaymentDate?: boolean
     paymentPlan?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -50134,6 +50142,7 @@ export namespace Prisma {
     receiptVerifiedAt?: boolean
     receiptVerifiedBy?: boolean
     initialPaymentAmount?: boolean
+    initialPaymentDate?: boolean
     paymentPlan?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -50196,6 +50205,7 @@ export namespace Prisma {
     receiptVerifiedAt?: boolean
     receiptVerifiedBy?: boolean
     initialPaymentAmount?: boolean
+    initialPaymentDate?: boolean
     paymentPlan?: boolean
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -50258,10 +50268,11 @@ export namespace Prisma {
     receiptVerifiedAt?: boolean
     receiptVerifiedBy?: boolean
     initialPaymentAmount?: boolean
+    initialPaymentDate?: boolean
     paymentPlan?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "paymentPlan", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -50364,6 +50375,7 @@ export namespace Prisma {
       receiptVerifiedAt: Date | null
       receiptVerifiedBy: string | null
       initialPaymentAmount: number | null
+      initialPaymentDate: Date | null
       paymentPlan: string | null
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
@@ -50847,6 +50859,7 @@ export namespace Prisma {
     readonly receiptVerifiedAt: FieldRef<"Enrollment", 'DateTime'>
     readonly receiptVerifiedBy: FieldRef<"Enrollment", 'String'>
     readonly initialPaymentAmount: FieldRef<"Enrollment", 'Float'>
+    readonly initialPaymentDate: FieldRef<"Enrollment", 'DateTime'>
     readonly paymentPlan: FieldRef<"Enrollment", 'String'>
   }
     
@@ -97643,6 +97656,7 @@ export namespace Prisma {
     receiptVerifiedAt: 'receiptVerifiedAt',
     receiptVerifiedBy: 'receiptVerifiedBy',
     initialPaymentAmount: 'initialPaymentAmount',
+    initialPaymentDate: 'initialPaymentDate',
     paymentPlan: 'paymentPlan'
   };
 
@@ -102637,6 +102651,7 @@ export namespace Prisma {
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
+    initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -102700,6 +102715,7 @@ export namespace Prisma {
     receiptVerifiedAt?: SortOrderInput | SortOrder
     receiptVerifiedBy?: SortOrderInput | SortOrder
     initialPaymentAmount?: SortOrderInput | SortOrder
+    initialPaymentDate?: SortOrderInput | SortOrder
     paymentPlan?: SortOrderInput | SortOrder
     departmentReviewer?: UserOrderByWithRelationInput
     financeReviewer?: UserOrderByWithRelationInput
@@ -102767,6 +102783,7 @@ export namespace Prisma {
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
+    initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
     departmentReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     financeReviewer?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
@@ -102830,6 +102847,7 @@ export namespace Prisma {
     receiptVerifiedAt?: SortOrderInput | SortOrder
     receiptVerifiedBy?: SortOrderInput | SortOrder
     initialPaymentAmount?: SortOrderInput | SortOrder
+    initialPaymentDate?: SortOrderInput | SortOrder
     paymentPlan?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
@@ -102890,6 +102908,7 @@ export namespace Prisma {
     receiptVerifiedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     receiptVerifiedBy?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     initialPaymentAmount?: FloatNullableWithAggregatesFilter<"Enrollment"> | number | null
+    initialPaymentDate?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
   }
 
@@ -110845,6 +110864,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -110908,6 +110928,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -110951,6 +110972,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -111014,6 +111036,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -111067,6 +111090,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -111109,6 +111133,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -111161,6 +111186,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -118085,6 +118111,7 @@ export namespace Prisma {
     receiptVerifiedAt?: SortOrder
     receiptVerifiedBy?: SortOrder
     initialPaymentAmount?: SortOrder
+    initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
   }
 
@@ -118139,6 +118166,7 @@ export namespace Prisma {
     receiptVerifiedAt?: SortOrder
     receiptVerifiedBy?: SortOrder
     initialPaymentAmount?: SortOrder
+    initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
   }
 
@@ -118189,6 +118217,7 @@ export namespace Prisma {
     receiptVerifiedAt?: SortOrder
     receiptVerifiedBy?: SortOrder
     initialPaymentAmount?: SortOrder
+    initialPaymentDate?: SortOrder
     paymentPlan?: SortOrder
   }
 
@@ -133832,6 +133861,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -133893,6 +133923,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -136619,6 +136650,7 @@ export namespace Prisma {
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     receiptVerifiedBy?: StringNullableFilter<"Enrollment"> | string | null
     initialPaymentAmount?: FloatNullableFilter<"Enrollment"> | number | null
+    initialPaymentDate?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     paymentPlan?: StringNullableFilter<"Enrollment"> | string | null
   }
 
@@ -141333,6 +141365,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -141394,6 +141427,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -141447,6 +141481,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     organization: OrganizationCreateNestedOneWithoutEnrollmentsInput
@@ -141508,6 +141543,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -141561,6 +141597,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -141622,6 +141659,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -141675,6 +141713,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -141736,6 +141775,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -141789,6 +141829,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -141850,6 +141891,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -152650,6 +152692,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -152711,6 +152754,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -153798,6 +153842,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -153859,6 +153904,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -156659,6 +156705,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -156720,6 +156767,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -176713,6 +176761,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -176774,6 +176823,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     payment?: EnrollmentPaymentUncheckedCreateNestedOneWithoutEnrollmentInput
   }
@@ -205430,6 +205480,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
     departmentReviewer?: UserCreateNestedOneWithoutDeptReviewedEnrollmentsInput
     financeReviewer?: UserCreateNestedOneWithoutFinanceReviewedEnrollmentsInput
@@ -205492,6 +205543,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -205664,6 +205716,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -205726,6 +205779,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -214247,6 +214301,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -215676,6 +215731,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -215737,6 +215793,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -215789,6 +215846,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -219612,6 +219670,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -219663,6 +219722,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -219714,6 +219774,7 @@ export namespace Prisma {
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -219765,6 +219826,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -219816,6 +219878,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -221517,6 +221580,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -221578,6 +221642,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -221630,6 +221695,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -221672,6 +221738,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutEnrollmentsNestedInput
@@ -221733,6 +221800,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -221785,6 +221853,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -221827,6 +221896,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -221888,6 +221958,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -221940,6 +222011,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -221982,6 +222054,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -222043,6 +222116,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -222095,6 +222169,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -222137,6 +222212,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -222198,6 +222274,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -222250,6 +222327,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -226908,6 +226986,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -227121,6 +227200,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -227182,6 +227262,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -227234,6 +227315,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -227802,6 +227884,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -228081,6 +228164,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -228142,6 +228226,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -228194,6 +228279,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -229128,6 +229214,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -229319,6 +229406,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -229380,6 +229468,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -229432,6 +229521,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -231532,6 +231622,7 @@ export namespace Prisma {
     receiptVerifiedAt?: Date | string | null
     receiptVerifiedBy?: string | null
     initialPaymentAmount?: number | null
+    initialPaymentDate?: Date | string | null
     paymentPlan?: string | null
   }
 
@@ -231647,6 +231738,7 @@ export namespace Prisma {
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     departmentReviewer?: UserUpdateOneWithoutDeptReviewedEnrollmentsNestedInput
     financeReviewer?: UserUpdateOneWithoutFinanceReviewedEnrollmentsNestedInput
@@ -231708,6 +231800,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
     payment?: EnrollmentPaymentUncheckedUpdateOneWithoutEnrollmentNestedInput
   }
@@ -231760,6 +231853,7 @@ export namespace Prisma {
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     receiptVerifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
     initialPaymentAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    initialPaymentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentPlan?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

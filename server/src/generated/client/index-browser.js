@@ -671,6 +671,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   receiptVerifiedAt: 'receiptVerifiedAt',
   receiptVerifiedBy: 'receiptVerifiedBy',
   initialPaymentAmount: 'initialPaymentAmount',
+  initialPaymentDate: 'initialPaymentDate',
   paymentPlan: 'paymentPlan'
 };
 

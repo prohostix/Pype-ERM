@@ -275,7 +275,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     receiptUrl: '',
     centerId: '',
     paymentPlan: 'full', // 'full' or 'per_year_sem'
-    initialPaymentAmount: ''
+    initialPaymentAmount: '',
+    initialPaymentDate: '',
   });
 
 
@@ -428,7 +429,26 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       setFormStep(3); // Redirect to documents step
       return;
     }
-    // Receipt is optional but we should ensure they reach step 5
+    // Receipt is mandatory
+    if (!formData.receiptUrl || formData.receiptUrl.trim() === '') {
+      toast.error('Please upload the Fee Payment Receipt');
+      setFormStep(4);
+      return;
+    }
+    if (getActiveFeeStructure()) {
+      if (!formData.initialPaymentAmount || Number(formData.initialPaymentAmount) <= 0) {
+        toast.error('Please enter the Initial Fee Amount');
+        setFormStep(0);
+        return;
+      }
+
+      if (!formData.initialPaymentDate || formData.initialPaymentDate.trim() === '') {
+        toast.error('Please enter the Payment Date for the initial fee');
+        setFormStep(0);
+        return;
+      }
+    }
+
     if (formStep < 4) {
       setFormStep(4);
       return;
@@ -495,7 +515,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       receiptUrl: student.receiptUrl || '',
       centerId: centerId?.toString() || '',
       paymentPlan: (student.admissionProgress as any)?.paymentPlan || 'full',
-      initialPaymentAmount: (student.admissionProgress as any)?.initialPaymentAmount || ''
+      initialPaymentAmount: (student.admissionProgress as any)?.initialPaymentAmount || '',
+      initialPaymentDate: (student.admissionProgress as any)?.initialPaymentDate || '',
     });
     const otherDoc = (student.documents || []).find((d: any) => d.type === 'Other');
     setCustomOtherName(otherDoc?.label || '');
@@ -1254,12 +1275,24 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       </Select>
                     </div>
                     <div>
-                      <Label className="font-medium">Initial Fee Amount (Optional)</Label>
+                      <Label className="font-medium">Initial Fee Amount *</Label>
                       <Input 
                         type="number"
                         placeholder="e.g. 5000"
                         value={formData.initialPaymentAmount || ''} 
                         onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <Label className="font-medium">Payment Date *</Label>
+                      <Input 
+                        type="date"
+                        value={formData.initialPaymentDate || ''} 
+                        onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
+                        required
                       />
                     </div>
                   </div>
@@ -1631,8 +1664,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
                   </p>
                   
-                  <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-900/10 space-y-3">
-                    <h4 className="font-semibold text-sm">Upload Receipt (Optional at submission)</h4>
+                  <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
+                    <Label className="font-semibold text-sm">Upload Receipt *</Label>
                     
                     <div className="flex items-center gap-4">
                       {formData.receiptUrl && (
@@ -1866,12 +1899,24 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               </Select>
                             </div>
                             <div>
-                              <Label className="font-medium">Initial Fee Amount (Optional)</Label>
+                              <Label className="font-medium">Initial Fee Amount *</Label>
                               <Input 
                                 type="number"
                                 placeholder="e.g. 5000"
                                 value={formData.initialPaymentAmount || ''} 
                                 onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label className="font-medium">Payment Date *</Label>
+                              <Input 
+                                type="date"
+                                value={formData.initialPaymentDate || ''} 
+                                onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
+                                required
                               />
                             </div>
                           </div>
@@ -2184,8 +2229,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
                           </p>
                           
-                          <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-900/10 space-y-3">
-                            <h4 className="font-semibold text-sm">Upload Receipt (Optional at submission)</h4>
+                          <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
+                            <Label className="font-semibold text-sm">Upload Receipt *</Label>
                             
                             <div className="flex items-center gap-4">
                               {formData.receiptUrl && (

@@ -193,7 +193,8 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
       admissionProgress: { 
         paymentPlan: paymentPlan || 'full',
-        initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null
+        initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
+        initialPaymentDate: req.body.initialPaymentDate || null
       },
       // Track who enrolled this student (sales user)
       enrolledBy: req.user.id
@@ -347,7 +348,7 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     dataToUpdate.universityId = (dataToUpdate.universityId && dataToUpdate.universityId.trim() !== '') ? dataToUpdate.universityId : null;
   }
   
-  if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined) {
+  if (dataToUpdate.paymentPlan || dataToUpdate.initialPaymentAmount !== undefined || dataToUpdate.initialPaymentDate !== undefined) {
     dataToUpdate.admissionProgress = {
       ...(typeof studentExists.admissionProgress === 'object' && studentExists.admissionProgress !== null ? studentExists.admissionProgress : {}),
     };
@@ -357,8 +358,12 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
     if (dataToUpdate.initialPaymentAmount !== undefined) {
       dataToUpdate.admissionProgress.initialPaymentAmount = dataToUpdate.initialPaymentAmount ? Number(dataToUpdate.initialPaymentAmount) : null;
     }
+    if (dataToUpdate.initialPaymentDate !== undefined) {
+      dataToUpdate.admissionProgress.initialPaymentDate = dataToUpdate.initialPaymentDate || null;
+    }
     delete dataToUpdate.paymentPlan;
     delete dataToUpdate.initialPaymentAmount;
+    delete dataToUpdate.initialPaymentDate;
   }
 
   const student = await prisma.student.update({

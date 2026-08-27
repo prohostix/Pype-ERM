@@ -942,6 +942,7 @@ model Enrollment {
   receiptVerifiedAt    DateTime?
   receiptVerifiedBy    String?
   initialPaymentAmount Float?
+  initialPaymentDate   DateTime?
   paymentPlan          String?
   departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
