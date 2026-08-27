@@ -188,7 +188,9 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
 
   // Calculate amount paid based on billing cycle
   let amountPaid = 0;
-  const feeStructure = enrollment.program?.feeStructures?.[0]; // Assuming one fee structure for simplicity or we should match by session
+  let feeStructure = enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && fs.specialisation === enrollment.specialisation);
+  if (!feeStructure) feeStructure = enrollment.program?.feeStructures?.find((fs: any) => fs.sessionId === enrollment.sessionId && !fs.specialisation);
+  if (!feeStructure) feeStructure = enrollment.program?.feeStructures?.[0];
 
   if (enrollment.initialPaymentAmount !== null && enrollment.initialPaymentAmount !== undefined) {
     amountPaid = enrollment.initialPaymentAmount;

@@ -78,7 +78,8 @@ export const getStudentFees = asyncHandler(async (req: AuthRequest, res: Respons
     where: {
       organizationId: req.user.organizationId,
       OR: [
-        { programId: student.programId },
+        { programId: student.programId, specialisation: student.specialisation || null },
+        { programId: student.programId, specialisation: null },
         { programId: null },
       ],
     },

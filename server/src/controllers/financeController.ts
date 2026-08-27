@@ -139,9 +139,19 @@ export const createPayment = asyncHandler(async (req: AuthRequest, res: Response
         targetScheduleId = schedule.id;
       }
     } else if (student.programId) {
-      const feeStructure = await prisma.feeStructure.findFirst({
-        where: { programId: student.programId }
+      let feeStructure = await prisma.feeStructure.findFirst({
+        where: { programId: student.programId, sessionId: student.sessionId || undefined, specialisation: student.specialisation || null }
       });
+      if (!feeStructure && student.specialisation) {
+        feeStructure = await prisma.feeStructure.findFirst({
+          where: { programId: student.programId, sessionId: student.sessionId || undefined, specialisation: null }
+        });
+      }
+      if (!feeStructure) {
+        feeStructure = await prisma.feeStructure.findFirst({
+          where: { programId: student.programId }
+        });
+      }
       if (feeStructure) {
         const base = (feeStructure.registrationFee || 0) + (feeStructure.tuitionFee || 0) + (feeStructure.examFee || 0);
         const gst = feeStructure.gstPercentage || 0;

@@ -433,12 +433,14 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
     let feeSt: any = undefined;
     
     if (student.program?.feeStructures?.length) {
-       feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId);
+       feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
+       if (!feeSt) feeSt = student.program.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && !fs.specialisation);
        if (!feeSt) feeSt = student.program.feeStructures[0];
     }
     
     if (!feeSt && student.university?.feeStructures?.length) {
-       feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId);
+       feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
+       if (!feeSt) feeSt = student.university.feeStructures.find((fs: any) => fs.sessionId === student.sessionId && !fs.specialisation);
        if (!feeSt) feeSt = student.university.feeStructures[0];
     }
     
