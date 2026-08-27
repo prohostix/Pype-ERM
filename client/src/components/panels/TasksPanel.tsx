@@ -298,8 +298,8 @@ export function TasksPanel() {
               <div className="space-y-3">
                 {filteredTasks.map(task => {
                   const taskId = task.id || task.id || '';
-                  const isAssignedByMe = (task.assignedBy?.id || task.assignedBy?.id || task.assignedBy) === currentUserId;
-                  const isAssignedToMe = (task.assignedTo?.id || task.assignedTo?.id || task.assignedTo) === currentUserId;
+                  const isAssignedByMe = task.createdBy === currentUserId;
+                  const isAssignedToMe = task.assignedTo === currentUserId;
                   return (
                     <div key={taskId} className="flex items-start justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                       <div className="flex-1">
