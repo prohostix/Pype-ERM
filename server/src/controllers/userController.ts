@@ -48,12 +48,8 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
   if (req.query.status) where.status = req.query.status as string;
 
-  // Exclude students from the general users list by checking their emails
-  const studentQuery = where.organizationId ? { organizationId: where.organizationId } : {};
-  const students = await prisma.student.findMany({ where: studentQuery, select: { email: true } });
-  const studentEmails = students.map((s: any) => s.email);
-  if (studentEmails.length > 0) {
-    where.email = { notIn: studentEmails };
+  if (!req.query.role) {
+    where.role = { not: 'student' };
   }
 
   const users = await prisma.user.findMany({ where, select: USER_SELECT });
