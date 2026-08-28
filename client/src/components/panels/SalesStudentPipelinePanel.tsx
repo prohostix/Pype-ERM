@@ -652,7 +652,7 @@ export function SalesStudentPipelinePanel() {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Initial Fee Amount Paid</Label>
+                    <Label>Initial Fee Amount Paid <span className="text-rose-500">*</span></Label>
                     <Input 
                       type="number"
                       placeholder="e.g. 5000"
@@ -717,6 +717,11 @@ export function SalesStudentPipelinePanel() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setVerifyDialogOpen(false)}>Cancel</Button>
             <Button disabled={isVerifying} onClick={async () => {
+              if (!verifyForm.initialPaymentAmount || verifyForm.initialPaymentAmount === '') {
+                toast.error('Please enter the Initial Fee Amount Paid');
+                return;
+              }
+
               setIsVerifying(true);
               try {
                 await api.put(`/sales/student-applications/${verifyingStudent?.id}/verify`, verifyForm);

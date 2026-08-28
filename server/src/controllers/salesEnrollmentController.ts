@@ -760,6 +760,11 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     return;
   }
 
+  if (!initialPaymentAmount || parseFloat(initialPaymentAmount) <= 0) {
+    res.status(400).json({ success: false, message: 'Initial fee amount paid is required and must be greater than zero.' });
+    return;
+  }
+
   const now = new Date();
 
   // Update enrollment with new details and move to document_review
