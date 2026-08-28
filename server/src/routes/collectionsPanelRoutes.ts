@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Middleware to check if user is admin OR designated overseer
 const checkCollectionOversightAccess = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const isAdmin = ['ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'sales_agent', 'bde', 'collections_admin', 'collections'].includes(req.user?.role || '');
+  const isAdmin = ['ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'].includes(req.user?.role || '');
   if (isAdmin) {
     return next();
   }

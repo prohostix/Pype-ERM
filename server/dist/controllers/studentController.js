@@ -3,7 +3,7 @@ import { Prisma } from '../generated/client/index.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
-const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'sales_agent', 'bde', 'employee', 'student'];
+const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'employee', 'student'];
 export const getStudents = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
     if (req.query.status)

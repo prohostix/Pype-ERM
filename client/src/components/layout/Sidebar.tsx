@@ -65,7 +65,7 @@ const navItems: NavItem[] = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    roles: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'bde', 'employee'],
+    roles: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'employee'],
   },
   {
     id: 'organizations',
@@ -245,13 +245,13 @@ const navItems: NavItem[] = [
     id: 'sales',
     label: 'Sales & CRM',
     icon: TrendingUp,
-    roles: ['sales_admin', 'sales_sub_admin', 'bde', 'ceo', 'general_manager', 'employee'],
+    roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'],
     department: 'sales',
     children: [
-      { id: 'leads', label: 'Leads', icon: Users, roles: ['sales_admin', 'sales_sub_admin', 'bde', 'ceo', 'general_manager', 'employee'] },
-      { id: 'deals', label: 'Deals', icon: CheckSquare, roles: ['sales_admin', 'sales_sub_admin', 'bde', 'ceo', 'general_manager', 'employee'] },
-      { id: 'referrals', label: 'Referrals', icon: UserPlus, roles: ['sales_admin', 'sales_sub_admin', 'bde', 'ceo', 'general_manager', 'employee'] },
-      { id: 'quotations', label: 'Quotations', icon: FileText, roles: ['sales_admin', 'sales_sub_admin', 'bde', 'ceo', 'general_manager', 'employee'] },
+      { id: 'leads', label: 'Leads', icon: Users, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
+      { id: 'deals', label: 'Deals', icon: CheckSquare, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
+      { id: 'referrals', label: 'Referrals', icon: UserPlus, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
+      { id: 'quotations', label: 'Quotations', icon: FileText, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
     ],
   },
   {
@@ -281,10 +281,10 @@ const navItems: NavItem[] = [
     id: 'staff',
     label: 'Staff Portal',
     icon: Users,
-    roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'bde'],
+    roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin'],
     children: [
-      { id: 'holidays', label: 'Holidays', icon: Calendar, roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'bde'] },
-      { id: 'announcements', label: 'Announcements', icon: Bell, roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'bde'] },
+      { id: 'holidays', label: 'Holidays', icon: Calendar, roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin'] },
+      { id: 'announcements', label: 'Announcements', icon: Bell, roles: ['employee', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin'] },
     ],
   },
   {

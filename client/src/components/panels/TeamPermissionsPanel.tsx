@@ -54,7 +54,7 @@ export default function TeamPermissionsPanel() {
       setLoadingSales(true);
       try {
         const res = await api.get('/users');
-        const salesRoles = ['sales_admin', 'sales_sub_admin', 'sales', 'sales_agent', 'bde', 'employee'];
+        const salesRoles = ['sales_admin', 'sales_sub_admin', 'sales', 'employee'];
         const filtered = (res.data.data || []).filter((user: any) => salesRoles.includes(user.role));
         setAllSalesUsers(filtered);
       } catch (e: any) {
@@ -100,7 +100,7 @@ export default function TeamPermissionsPanel() {
       items = getHRNavItems();
     } else if (['collections_admin', 'collections'].includes(role)) {
       items = getCollectionsNavItems();
-    } else if (['sales_admin', 'sales_sub_admin', 'sales', 'bde', 'sales_agent'].includes(role)) {
+    } else if (['sales_admin', 'sales_sub_admin', 'sales'].includes(role)) {
       items = getSalesNavItems();
     } else if (role === 'student') {
       items = [

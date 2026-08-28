@@ -10,7 +10,7 @@ router.patch('/inquiries/:id', authorize('superadmin'), updateOrgInquiryStatus);
 router.post('/migrate-dsms', authorize('org_admin'), migrateFromDsms);
 router
     .route('/')
-    .get(authorize('superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'bde', 'employee'), getOrganizations)
+    .get(authorize('superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'employee'), getOrganizations)
     .post(authorize('superadmin'), auditLog('create', 'Organization'), createOrganization);
 router
     .route('/:id')

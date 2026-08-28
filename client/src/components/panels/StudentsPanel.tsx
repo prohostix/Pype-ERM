@@ -296,7 +296,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const response = await api.get('/users');
       const allUsers = response.data.data || [];
       const salesOnly = allUsers.filter((u: any) =>
-        ['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(u.role)
+        ['sales_admin', 'sales_sub_admin'].includes(u.role)
       );
       setSalesUsers(salesOnly);
     } catch (err) {
@@ -1198,7 +1198,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               {formStep === 0 && (
                 <div className="space-y-4">
                   {/* Previous student toggle - only show for non-sales admins */}
-                  {!isSalesMode && !['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user?.role || '') && (
+                  {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
                     <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
                       <input
                         type="checkbox"
@@ -1216,7 +1216,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
                   {/* Branch & University */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {!isSalesMode && !['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
+                    {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') ? (
                       <>
                         <div>
                           <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
@@ -1839,7 +1839,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       {formStep === 0 && (
                         <div className="space-y-4">
                           {/* Previous student toggle - only show for non-sales admins */}
-                          {!isSalesMode && !['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user?.role || '') && (
+                          {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
                             <div className="flex items-center gap-3 p-3 rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900">
                               <input
                                 type="checkbox"
@@ -1857,7 +1857,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
                           {/* Branch & University */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {!isSalesMode && !['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user?.role || '') ? (
+                            {!isSalesMode && !['sales_admin', 'sales_sub_admin'].includes(user?.role || '') ? (
                               <>
                                 <div>
                                   <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>

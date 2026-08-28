@@ -20,16 +20,16 @@ const USER_SELECT = {
 
 // Roles each creator level is allowed to create
 const CREATABLE_ROLES: Record<string, string[]> = {
-  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'student', 'employee'],
-  org_admin: ['ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'student', 'employee'],
-  ceo: ['general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'student', 'employee'],
-  general_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'student', 'employee'],
+  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
+  org_admin: ['ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
+  ceo: ['general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
+  general_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'sales', 'ops_sub_admin', 'student', 'employee'],
   finance_admin: ['student', 'employee'],
   finance_sub_admin: ['student', 'employee'],
-  hr_admin: ['hr_admin', 'general_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'sales_agent', 'bde', 'student', 'employee'],
+  hr_admin: ['hr_admin', 'general_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'student', 'employee'],
   ops_admin: ['ops_sub_admin', 'student', 'employee'],
-  sales_admin: ['sales_sub_admin', 'sales', 'sales_agent', 'bde', 'student', 'employee'],
-  sales_sub_admin: ['sales', 'sales_agent', 'bde', 'student', 'employee'],
+  sales_admin: ['sales_sub_admin', 'sales', 'student', 'employee'],
+  sales_sub_admin: ['sales', 'student', 'employee'],
   collections_admin: ['student', 'employee'],
 };
 
@@ -320,9 +320,9 @@ export const updateUserPermissions = asyncHandler(async (req: AuthRequest, res: 
   } else if (adminRole === 'ops_admin') {
     allowedRoles = ['ops_sub_admin', 'center_admin', 'student'];
   } else if (['sales_admin', 'sales_sub_admin'].includes(adminRole)) {
-    allowedRoles = ['sales', 'sales_agent', 'bde', 'student', 'employee'];
+    allowedRoles = ['sales', 'student', 'employee'];
   } else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
-    allowedRoles = ['employee', 'student', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'sales_agent', 'bde', 'collections_admin'];
+    allowedRoles = ['employee', 'student', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin'];
   }
 
   if (!allowedRoles.includes(targetUser.role)) {

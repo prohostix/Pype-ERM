@@ -1706,8 +1706,6 @@ enum UserRole {
   collections_admin
   collections
   general_manager
-  bde
-  sales_agent
 }
 
 enum TaskPriority {

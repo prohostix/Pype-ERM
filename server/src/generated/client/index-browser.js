@@ -1323,9 +1323,7 @@ exports.UserRole = exports.$Enums.UserRole = {
   student: 'student',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager',
-  bde: 'bde',
-  sales_agent: 'sales_agent'
+  general_manager: 'general_manager'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {

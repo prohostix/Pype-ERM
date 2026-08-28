@@ -82,7 +82,7 @@ export const getTeamReport = asyncHandler(async (req, res) => {
 export const getCounselorReport = asyncHandler(async (req, res) => {
     const userWhere = buildHierarchyClause(req);
     // Also only include roles that are typically counselors
-    userWhere.role = { in: ['sales', 'sales_agent', 'bde'] };
+    userWhere.role = { in: ['sales'] };
     const counselors = await prisma.user.findMany({
         where: userWhere,
         select: { id: true, name: true, status: true }

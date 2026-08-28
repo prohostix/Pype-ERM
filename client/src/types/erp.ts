@@ -11,8 +11,8 @@ export type UserRole =
   | 'hr_admin' 
   | 'sales_admin'
   | 'sales_sub_admin' 
-  | 'sales_agent'
-  | 'bde' 
+  | 
+  |  
   | 'center_admin' 
   | 'university_admin'
   | 'finance'

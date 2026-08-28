@@ -461,7 +461,7 @@ export function HRUsersPanel() {
       sales_admin: 'bg-pink-100 text-pink-800',
       sales_sub_admin: 'bg-pink-100 text-pink-800',
       center_admin: 'bg-cyan-100 text-cyan-800',
-      bde: 'bg-yellow-100 text-yellow-800',
+      
     };
     return map[role] || 'bg-gray-100 text-gray-800';
   };

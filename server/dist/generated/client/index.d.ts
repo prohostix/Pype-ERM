@@ -422,9 +422,7 @@ export const UserRole: {
   student: 'student',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager',
-  bde: 'bde',
-  sales_agent: 'sales_agent'
+  general_manager: 'general_manager'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]

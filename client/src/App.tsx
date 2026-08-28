@@ -153,7 +153,7 @@ function App() {
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
-    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user.role)) {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin'].includes(user.role)) {
       api.get('/collections/metrics')
         .then(res => {
           if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
@@ -442,7 +442,7 @@ function App() {
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
     const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'];
-    const isEmployeeSubDeptManager = ['employee', 'student', 'bde', 'sales_agent'].includes(user?.role || '') && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
+    const isEmployeeSubDeptManager = ['employee', 'student'].includes(user?.role || '') && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'student';
     const isStudentRole = user?.role === 'student';
