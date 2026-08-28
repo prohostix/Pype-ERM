@@ -161,7 +161,7 @@ export function FeeStructuresPanel() {
 
   const handleSelectProg = (p: any) => {
     setSelectedProg(p);
-    setSelectedSpecialisation(null);
+    setSelectedSpecialisations([]);
     
     if (p.specialisations && p.specialisations.length > 0) {
       setStep(3.5);
@@ -457,7 +457,7 @@ export function FeeStructuresPanel() {
                     }}><ArrowLeft className="w-5 h-5" /></Button>
                     <div>
                       <CardTitle>4. Configure Fee Structure</CardTitle>
-                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisation ? `- ${selectedSpecialisation}` : ''} - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
+                      <CardDescription className="text-primary font-medium mt-1">{selectedProg?.name} ({selectedProg?.code}) {selectedSpecialisations.length > 0 ? `- ${selectedSpecialisations.join(', ')}` : ''} - {selectedSession ? selectedSession.name : 'Default'}</CardDescription>
                     </div>
                   </div>
                   <Button onClick={handleSave} disabled={saving} className="gap-2">
