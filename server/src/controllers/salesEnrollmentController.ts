@@ -427,6 +427,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
           photo: enrollment.photo,
           documents: enrollment.documents ? enrollment.documents : undefined,
           programId: enrollment.programId,
+          specialisation: (enrollment as any).specialisation || null,
           sessionId: enrollment.sessionId,
           status: 'active',
           referredBy: enrollment.salesUserId,

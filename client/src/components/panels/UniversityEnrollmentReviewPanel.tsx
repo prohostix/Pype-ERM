@@ -117,7 +117,7 @@ export function UniversityEnrollmentReviewPanel() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-0.5 mt-2 text-sm text-muted-foreground">
                       <span>{e.studentEmail}</span>
                       <span>{e.studentPhone}</span>
-                      <span className="font-medium text-foreground">{e.program?.name} ({e.program?.code})</span>
+                      <span className="font-medium text-foreground">{e.program?.name} ({e.program?.code}){e.specialisation ? ` - ${e.specialisation}` : ''}</span>
                       <span>Partner: {e.studyCenter?.name || 'N/A'}</span>
                       <span>Session: {e.session?.name || 'N/A'}</span>
                       <span>Submitted: {new Date(e.createdAt).toLocaleDateString()}</span>
