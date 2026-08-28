@@ -187,6 +187,7 @@ export function UsersPanel() {
       ceo: 'bg-indigo-500',
       hr_admin: 'bg-orange-500',
       finance_admin: 'bg-green-500',
+      finance_sub_admin: 'bg-green-400',
       ops_admin: 'bg-cyan-500',
       sales_admin: 'bg-pink-500',
       employee: 'bg-gray-500',
@@ -403,6 +404,7 @@ export function UsersPanel() {
                     <SelectItem value="ceo">CEO</SelectItem>
                     <SelectItem value="hr_admin">HR Admin</SelectItem>
                     <SelectItem value="finance_admin">Finance Admin</SelectItem>
+                    <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
                     <SelectItem value="sales_admin">Sales Admin</SelectItem>
                     <SelectItem value="center_admin">Center Admin</SelectItem>

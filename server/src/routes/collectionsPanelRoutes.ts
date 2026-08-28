@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Middleware to check if user is admin OR designated overseer
 const checkCollectionOversightAccess = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const isAdmin = ['ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'hr_admin', 'sales_admin', 'sales_agent', 'bde', 'collections_admin', 'collections'].includes(req.user?.role || '');
+  const isAdmin = ['ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_agent', 'bde', 'collections_admin', 'collections'].includes(req.user?.role || '');
   if (isAdmin) {
     return next();
   }
@@ -43,9 +43,9 @@ router.get('/metrics', checkCollectionOversightAccess, getCollectionMetrics);
 
 // Overseer management endpoints (Restricted to organization admins)
 router.route('/overseers')
-  .get(authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin'), getCollectionOverseers)
-  .post(authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin'), addCollectionOverseer);
+  .get(authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'), getCollectionOverseers)
+  .post(authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'), addCollectionOverseer);
 
-router.delete('/overseers/:userId', authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin'), removeCollectionOverseer);
+router.delete('/overseers/:userId', authorize('ceo', 'general_manager', 'superadmin', 'org_admin', 'finance_admin', 'finance_sub_admin'), removeCollectionOverseer);
 
 export default router;

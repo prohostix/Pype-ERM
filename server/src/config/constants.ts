@@ -5,6 +5,7 @@ export const USER_ROLES = {
   OPS_ADMIN: 'ops_admin',
   OPS_SUB_ADMIN: 'ops_sub_admin',
   FINANCE_ADMIN: 'finance_admin',
+  FINANCE_SUB_ADMIN: 'finance_sub_admin',
   HR_ADMIN: 'hr_admin',
   SALES_ADMIN: 'sales_admin',
   CENTER_ADMIN: 'center_admin',

@@ -33,10 +33,25 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 
   // Sales users only see students they personally enrolled or referred
   if (SALES_ROLES.includes(req.user.role)) {
-    where.OR = [
-      { enrolledBy: req.user.id },
-      { referredBy: req.user.id }
-    ];
+    if (!where.AND) where.AND = [];
+    where.AND.push({
+      OR: [
+        { enrolledBy: req.user.id },
+        { referredBy: req.user.id }
+      ]
+    });
+  } else if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers as string[] : [];
+    
+    const opsSubAdminFilter: any = { OR: [{ enrolledBy: null, referredBy: null }] };
+    if (assignedIds.length > 0) {
+      opsSubAdminFilter.OR.push({ enrolledBy: { in: assignedIds } });
+      opsSubAdminFilter.OR.push({ referredBy: { in: assignedIds } });
+    }
+    
+    if (!where.AND) where.AND = [];
+    where.AND.push(opsSubAdminFilter);
   }
 
   const students = await prisma.student.findMany({
@@ -48,8 +63,19 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
 });
 
 export const getStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const student = await prisma.student.findUnique({
-    where: { id: req.params.id },
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+
+  const student = await prisma.student.findFirst({
+    where: whereClause,
     include: { enrollments: { include: { payment: true } }, program: true, center: true, university: true, session: true, branch: true, paymentSchedules: { orderBy: { dueDate: 'asc' } } }
   });
   if (!student) {
@@ -294,7 +320,18 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const studentExists = await prisma.student.findUnique({ where: { id: req.params.id } });
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+
+  const studentExists = await prisma.student.findFirst({ where: whereClause });
   if (!studentExists) {
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
@@ -377,7 +414,17 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const deleteStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const studentExists = await prisma.student.findUnique({ where: { id: req.params.id } });
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const studentExists = await prisma.student.findFirst({ where: whereClause });
   if (!studentExists) {
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
@@ -388,7 +435,17 @@ export const deleteStudent = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const approveStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const studentExists = await prisma.student.findUnique({ where: { id: req.params.id } });
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const studentExists = await prisma.student.findFirst({ where: whereClause });
   if (!studentExists) {
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
@@ -594,7 +651,17 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const notifyStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const student = await prisma.student.findUnique({ where: { id: req.params.id } });
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const student = await prisma.student.findFirst({ where: whereClause });
   if (!student) {
     res.status(404).json({ success: false, message: 'Student not found' });
     return;
@@ -673,8 +740,18 @@ export const deleteInternalMark = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const uploadStudentDocument = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const student = await prisma.student.findUnique({
-    where: { id: req.params.id },
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const student = await prisma.student.findFirst({
+    where: whereClause,
   });
 
   if (!student) {
@@ -715,8 +792,18 @@ export const updateDocumentStatus = asyncHandler(async (req: AuthRequest, res: R
   const { id, docIndex } = req.params;
   const { status, remarks } = req.body;
   
-  const student = await prisma.student.findUnique({
-    where: { id },
+  let whereClause: any = { id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const student = await prisma.student.findFirst({
+    where: whereClause,
   });
 
   if (!student) {
@@ -752,8 +839,18 @@ export const updatePhotoStatus = asyncHandler(async (req: AuthRequest, res: Resp
   const { id } = req.params;
   const { status, remarks } = req.body;
   
-  const student = await prisma.student.findUnique({
-    where: { id },
+  let whereClause: any = { id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+  const student = await prisma.student.findFirst({
+    where: whereClause,
   });
 
   if (!student) {
@@ -786,8 +883,18 @@ export const bulkEnrollmentUpdate = asyncHandler(async (req: AuthRequest, res: R
   let updatedCount = 0;
   for (const update of updates) {
     if (update.id && update.enrollmentNo) {
+      let whereClause: any = { id: update.id, organizationId: req.user.organizationId };
+      if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        whereClause.OR = [
+          { enrolledBy: null, referredBy: null },
+          { enrolledBy: { in: assignedIds } },
+          { referredBy: { in: assignedIds } }
+        ];
+      }
       const student = await prisma.student.findFirst({
-        where: { id: update.id, organizationId: req.user.organizationId }
+        where: whereClause
       });
       if (student) {
         // Update Student
@@ -821,8 +928,19 @@ export const updateAdmissionProgress = asyncHandler(async (req: AuthRequest, res
   const { id, stepId } = req.params;
   const { status } = req.body; // 'completed' or 'pending'
   
+  let whereClause: any = { id, organizationId: req.user.organizationId };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { enrolledBy: null, referredBy: null },
+      { enrolledBy: { in: assignedIds } },
+      { referredBy: { in: assignedIds } }
+    ];
+  }
+
   const student = await prisma.student.findFirst({
-    where: { id, organizationId: req.user.organizationId }
+    where: whereClause
   });
   
   if (!student) {

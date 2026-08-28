@@ -12,11 +12,11 @@ const router = express.Router();
 router.use(protect);
 
 router.route('/')
-  .get(authorize('superadmin', 'org_admin', 'ops_admin', 'center_admin', 'employee'), getDocumentLogs)
-  .post(authorize('superadmin', 'org_admin', 'ops_admin', 'employee'), createDocumentLog);
+  .get(authorize('superadmin', 'org_admin', 'ops_admin', 'center_admin', 'employee', 'ops_sub_admin'), getDocumentLogs)
+  .post(authorize('superadmin', 'org_admin', 'ops_admin', 'employee', 'ops_sub_admin'), createDocumentLog);
 
 router.route('/:id')
-  .get(authorize('superadmin', 'org_admin', 'ops_admin', 'center_admin', 'employee'), getDocumentLog)
-  .put(authorize('superadmin', 'org_admin', 'ops_admin', 'employee'), updateDocumentLog);
+  .get(authorize('superadmin', 'org_admin', 'ops_admin', 'center_admin', 'employee', 'ops_sub_admin'), getDocumentLog)
+  .put(authorize('superadmin', 'org_admin', 'ops_admin', 'employee', 'ops_sub_admin'), updateDocumentLog);
 
 export default router;

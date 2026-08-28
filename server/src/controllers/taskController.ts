@@ -8,6 +8,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
   general_manager: 1,
   ops_admin: 2,
   finance_admin: 2,
+  finance_sub_admin: 2,
   hr_admin: 2,
   sales_admin: 2,
   center_admin: 2,

@@ -69,8 +69,8 @@ router.get('/student-applications', getSalesEnrollmentPipeline);
 router.post('/direct-enroll', createDirectEnrollment);
 router.put('/student-applications/:id/verify', verifySalesEnrollment);
 router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin'), approveSalesEnrollmentOps);
-router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'superadmin'), approveSalesEnrollmentFinance);
-router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'superadmin'), rejectSalesEnrollment);
+router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin'), approveSalesEnrollmentFinance);
+router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin'), rejectSalesEnrollment);
 
 // Sales Reports
 router.get('/reports/team', getTeamReport);

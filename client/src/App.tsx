@@ -124,6 +124,7 @@ function App() {
       case 'ceo': return 'dashboard';
       case 'ops_admin':
       case 'ops_sub_admin':
+      case 'finance_sub_admin':
       case 'finance_admin':
       case 'hr_admin':
       case 'sales_admin': return 'overview';
@@ -151,7 +152,7 @@ function App() {
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
-    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user.role)) {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user.role)) {
       api.get('/collections/metrics')
         .then(res => {
           if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
@@ -324,7 +325,7 @@ function App() {
       return getOpsNavItems();
     }
 
-    if (user.role === 'finance_admin' || user.role === 'finance') {
+    if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user.role)) {
       return getFinanceNavItems();
     }
 
@@ -387,7 +388,7 @@ function App() {
     }
 
     let finalResult = result;
-    const adminRolesForTeams = ['finance_admin', 'hr_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
+    const adminRolesForTeams = ['finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
     if (!adminRolesForTeams.includes(user.role)) {
       finalResult = finalResult.filter(item => item.id !== 'team_permissions');
     }
@@ -435,7 +436,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';

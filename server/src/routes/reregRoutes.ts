@@ -18,17 +18,17 @@ router.use(protect);
 // REREG rules management
 router
   .route('/rules')
-  .post(authorize('finance_admin'), createOrUpdateReregRules)
-  .get(authorize('finance_admin', 'ops_admin'), getReregRules);
+  .post(authorize('finance_admin', 'finance_sub_admin'), createOrUpdateReregRules)
+  .get(authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), getReregRules);
 
 // REREG processing
 router
   .route('/pending')
-  .get(authorize('finance_admin', 'ops_admin'), getPendingReregs);
+  .get(authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), getPendingReregs);
 
 router
   .route('/completed')
-  .get(authorize('finance_admin', 'ops_admin'), getCompletedReregs);
+  .get(authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), getCompletedReregs);
 
 router
   .route('/process/:studentId')
@@ -41,6 +41,6 @@ router
 
 router
   .route('/stats')
-  .get(authorize('finance_admin'), getReregStats);
+  .get(authorize('finance_admin', 'finance_sub_admin'), getReregStats);
 
 export default router;

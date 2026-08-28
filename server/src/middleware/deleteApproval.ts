@@ -33,7 +33,7 @@ export const processDeleteRequest = async (req: Request, res: Response, next: Ne
     let status = 'pending_manager';
     // If they are a department manager (e.g., hr_admin, operations_admin, finance_admin, etc.)
     // or if they are superadmin, skip manager step.
-    const managerRoles = ['hr_admin', 'operations_admin', 'finance_admin', 'sales_manager', 'superadmin'];
+    const managerRoles = ['hr_admin', 'operations_admin', 'finance_admin', 'finance_sub_admin', 'sales_manager', 'superadmin'];
     if (managerRoles.includes(role)) {
       status = 'pending_ceo';
     }

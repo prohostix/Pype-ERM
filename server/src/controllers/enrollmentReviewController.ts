@@ -20,11 +20,25 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     statusFilter = { in: ['payment_pending', 'receipt_submitted', 'submitted', 'document_review', 'dept_review'] };
   }
 
+  const baseWhere: any = {
+    organizationId: req.user.organizationId,
+    status: statusFilter,
+  };
+
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+
+    baseWhere.OR = [
+      { salesUserId: null }, // Unassigned records all operations can see
+    ];
+    if (assignedIds.length > 0) {
+      baseWhere.OR.push({ salesUserId: { in: assignedIds } });
+    }
+  }
+
   const enrollments = await prisma.enrollment.findMany({
-    where: {
-      organizationId: req.user.organizationId,
-      status: statusFilter,
-    },
+    where: baseWhere,
     include: {
       program: { include: { university: true } },
       studyCenter: true,
@@ -39,6 +53,21 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
 });
 
 export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { salesUserId: null },
+      { salesUserId: { in: assignedIds } }
+    ];
+  }
+  const existing = await prisma.enrollment.findFirst({ where: whereClause });
+  if (!existing) {
+    res.status(404).json({ success: false, message: 'Enrollment not found or unauthorized' });
+    return;
+  }
+
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
     data: {
@@ -54,6 +83,21 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
 });
 
 export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  let whereClause: any = { id: req.params.id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { salesUserId: null },
+      { salesUserId: { in: assignedIds } }
+    ];
+  }
+  const existing = await prisma.enrollment.findFirst({ where: whereClause });
+  if (!existing) {
+    res.status(404).json({ success: false, message: 'Enrollment not found or unauthorized' });
+    return;
+  }
+
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
     data: {

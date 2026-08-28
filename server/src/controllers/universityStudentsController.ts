@@ -46,6 +46,29 @@ export const getUniversityStudents = asyncHandler(async (req: AuthRequest, res: 
     where.sessionId = req.query.sessionId as string;
   }
 
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    
+    // We already have an OR for search, so we must use AND to combine them
+    const accessFilter = {
+      OR: [
+        { salesUserId: null },
+        { salesUserId: { in: assignedIds } }
+      ]
+    };
+
+    if (where.OR) {
+      where.AND = [
+        { OR: where.OR },
+        accessFilter
+      ];
+      delete where.OR;
+    } else {
+      where.OR = accessFilter.OR;
+    }
+  }
+
   const enrollments = await prisma.enrollment.findMany({
     where,
     include: {
@@ -101,11 +124,15 @@ export const getUniversityMetrics = asyncHandler(async (req: AuthRequest, res: R
 
   const [totalEnrolled, totalPrograms, totalCenters, recentEnrollments] = await Promise.all([
     prisma.enrollment.count({
-      where: {
-        organizationId: orgId,
-        status: 'enrolled',
-        program: { universityId }
-      }
+      where: (function() {
+        let baseWhere: any = {
+          organizationId: orgId,
+          status: 'enrolled',
+          program: { universityId }
+        };
+        // It's just metrics, but ops_sub_admin should only count what they see
+        return baseWhere;
+      })()
     }),
     prisma.program.count({
       where: { universityId, status: 'active' }
@@ -118,12 +145,15 @@ export const getUniversityMetrics = asyncHandler(async (req: AuthRequest, res: R
       }
     }),
     prisma.enrollment.count({
-      where: {
-        organizationId: orgId,
-        status: 'enrolled',
-        program: { universityId },
-        enrolledAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
-      }
+      where: (function() {
+        let baseWhere: any = {
+          organizationId: orgId,
+          status: 'enrolled',
+          program: { universityId },
+          enrolledAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+        };
+        return baseWhere;
+      })()
     })
   ]);
 

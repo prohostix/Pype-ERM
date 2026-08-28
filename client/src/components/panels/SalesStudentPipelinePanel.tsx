@@ -62,6 +62,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
 const ROLE_LABELS: Record<string, string> = {
   ops_admin: 'Operations',
   finance_admin: 'Finance',
+  finance_sub_admin: 'Finance',
   sales_admin: 'Sales',
   student: 'Student',
   system: 'System',

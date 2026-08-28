@@ -13,10 +13,10 @@ router.use(protect);
 
 router.route('/')
   .get(getPaymentSchedules)
-  .post(authorize('org_admin', 'superadmin', 'finance_admin', 'ops_admin'), createPaymentSchedule);
+  .post(authorize('org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin', 'ops_admin'), createPaymentSchedule);
 
 router.route('/:id')
-  .put(authorize('org_admin', 'superadmin', 'finance_admin', 'ops_admin', 'employee'), updatePaymentSchedule)
-  .delete(authorize('org_admin', 'superadmin', 'finance_admin'), deletePaymentSchedule);
+  .put(authorize('org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'employee'), updatePaymentSchedule)
+  .delete(authorize('org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin'), deletePaymentSchedule);
 
 export default router;

@@ -11,7 +11,7 @@ import { SessionFormDialog } from '../forms/SessionFormDialog';
 export function AdmissionSessionsPanel() {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin', 'ops_admin', 'ceo'].includes(user?.role || '');
-  const isFinance = user?.role === 'finance_admin';
+  const isFinance = ['finance_admin', 'finance_sub_admin'].includes(user?.role || '');
   const [sessions, setSessions] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);

@@ -20,15 +20,15 @@ router
 
 router
   .route('/requests')
-  .get(authorize('ops_admin', 'finance_admin'), getCredentialRequests);
+  .get(authorize('ops_admin', 'finance_admin', 'finance_sub_admin'), getCredentialRequests);
 
 router
   .route('/requests/:id')
-  .get(authorize('ops_admin', 'finance_admin'), getCredentialRequest)
-  .patch(authorize('finance_admin'), respondToCredentialRequest);
+  .get(authorize('ops_admin', 'finance_admin', 'finance_sub_admin'), getCredentialRequest)
+  .patch(authorize('finance_admin', 'finance_sub_admin'), respondToCredentialRequest);
 
 router
   .route('/stats')
-  .get(authorize('finance_admin'), getCredentialStats);
+  .get(authorize('finance_admin', 'finance_sub_admin'), getCredentialStats);
 
 export default router;

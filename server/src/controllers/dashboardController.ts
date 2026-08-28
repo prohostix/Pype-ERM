@@ -28,16 +28,36 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
   }
 
   if (['ops_admin', 'ops_sub_admin', 'ceo', 'org_admin'].includes(role)) {
-    if (metrics.totalStudents === undefined) {
-      metrics.totalStudents = await prisma.student.count({ where: orgQuery });
+    let studentWhere: any = { ...orgQuery };
+    let enrollmentWhere: any = { ...orgQuery };
+
+    if (role === 'ops_sub_admin') {
+      const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+      const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+      
+      studentWhere.OR = [
+        { enrolledBy: null },
+        { referredBy: null },
+        { enrolledBy: { in: assignedIds } },
+        { referredBy: { in: assignedIds } }
+      ];
+
+      enrollmentWhere.OR = [
+        { salesUserId: null },
+        { salesUserId: { in: assignedIds } }
+      ];
+    }
+
+    if (metrics.totalStudents === undefined || role === 'ops_sub_admin') {
+      metrics.totalStudents = await prisma.student.count({ where: studentWhere });
     }
     
     metrics.pendingApplications = await prisma.enrollment.count({
-      where: { ...orgQuery, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
+      where: { ...enrollmentWhere, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
     });
     
     const studentsStatus = await prisma.student.findMany({
-      where: orgQuery,
+      where: studentWhere,
       select: { admissionProgress: true, reregStatus: true, documents: true }
     });
     
@@ -126,7 +146,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
   }
 
-  if (['finance_admin', 'ceo', 'org_admin'].includes(role)) {
+  if (['finance_admin', 'finance_sub_admin', 'ceo', 'org_admin'].includes(role)) {
     const invoices = await prisma.invoice.findMany({ where: { organizationId: orgId, status: 'paid' }, select: { total: true } });
     metrics.totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
     metrics.pendingInvoices = await prisma.invoice.count({ where: { organizationId: orgId, status: { in: ['draft', 'sent'] } } });

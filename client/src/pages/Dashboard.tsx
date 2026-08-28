@@ -159,7 +159,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernOrgAdminDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'finance_admin' || user?.role === 'finance') {
+  if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user?.role || '')) {
     return <ModernFinanceDashboard initialTab={initialTab} />;
   }
 

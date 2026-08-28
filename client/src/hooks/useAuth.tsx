@@ -78,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ops_admin: ['operations', 'universities', 'courses', 'centers', 'students', 'marks'],
       ops_sub_admin: ['operations', 'students', 'marks'],
       finance_admin: ['finance', 'invoices', 'payments', 'expenses', 'targets', 'approvals'],
+      finance_sub_admin: ['finance', 'invoices', 'payments', 'expenses', 'targets', 'approvals'],
       finance: ['finance', 'invoices', 'payments', 'expenses'],
       collections_admin: ['finance', 'payments', 'collections'],
       collections: ['finance', 'collections'],

@@ -11,6 +11,7 @@ const USER_SELECT = {
   avatar: true, reportingTo: true, organizationId: true,
   departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
   biometricId: true, additionalDepartmentIds: true,
+  assignedSalesUsers: true,
   allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
   organization: { select: { id: true, name: true } },
   department: { select: { id: true, name: true } },
@@ -19,12 +20,13 @@ const USER_SELECT = {
 
 // Roles each creator level is allowed to create
 const CREATABLE_ROLES: Record<string, string[]> = {
-  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
-  org_admin: ['ceo', 'general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
-  ceo: ['general_manager', 'finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
-  general_manager: ['finance_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  superadmin: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  org_admin: ['ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  ceo: ['general_manager', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
+  general_manager: ['finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'sales', 'sales_agent', 'bde', 'ops_sub_admin', 'staff', 'employee'],
   finance_admin: ['staff', 'employee'],
-  hr_admin: ['hr_admin', 'general_manager', 'finance_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'sales_agent', 'bde', 'staff', 'employee'],
+  finance_sub_admin: ['staff', 'employee'],
+  hr_admin: ['hr_admin', 'general_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'sales_admin', 'collections_admin', 'center_admin', 'ops_sub_admin', 'sales', 'sales_agent', 'bde', 'staff', 'employee'],
   ops_admin: ['ops_sub_admin', 'staff', 'employee'],
   sales_admin: ['sales', 'sales_agent', 'bde', 'staff', 'employee'],
   collections_admin: ['staff', 'employee'],
@@ -49,7 +51,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   if (req.query.status) where.status = req.query.status as string;
 
   if (!req.query.role) {
-    where.role = { not: 'student' };
+    where.email = { not: { endsWith: '@student.pypeerm.com' } };
   }
 
   const users = await prisma.user.findMany({ where, select: USER_SELECT });
@@ -91,6 +93,14 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const userId = await generateUserId();
   const hashedPassword = password ? await hashPassword(password) : await hashPassword(`User@${Math.floor(100000 + Math.random() * 900000)}`);
 
+  let finalRole = role || 'staff';
+  if (reportingTo) {
+    const manager = await prisma.user.findUnique({ where: { id: reportingTo }, select: { role: true } });
+    if (manager?.role === 'finance_admin' || manager?.role === 'finance_sub_admin') {
+      finalRole = 'finance_sub_admin';
+    }
+  }
+
   const user = await prisma.user.create({
     data: {
       userId,
@@ -98,7 +108,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       email,
       password: hashedPassword,
       name,
-      role: role || 'staff',
+      role: finalRole,
       phone,
       designation,
       reportingTo,
@@ -146,9 +156,25 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   }
 
   const updateData: any = {};
+  
+  let finalRole = role !== undefined ? role : userExists.role;
+  let finalReportingTo = reportingTo !== undefined ? reportingTo : userExists.reportingTo;
+  
+  if (finalReportingTo) {
+    const manager = await prisma.user.findUnique({ where: { id: finalReportingTo }, select: { role: true } });
+    if (manager?.role === 'finance_admin' || manager?.role === 'finance_sub_admin') {
+      finalRole = 'finance_sub_admin';
+    }
+  }
+  
+  if (finalRole !== userExists.role) updateData.role = finalRole;
+  // If role was explicitly sent and equals finalRole, we update it too (handled by logic above)
+  if (role !== undefined && finalRole === role) updateData.role = role;
+
   if (name !== undefined) updateData.name = name;
   if (phone !== undefined) updateData.phone = phone;
   if (designation !== undefined) updateData.designation = designation;
+  if (reportingTo !== undefined) updateData.reportingTo = reportingTo;
   if (reportingTo !== undefined) updateData.reportingTo = reportingTo;
   if (status !== undefined) updateData.status = status;
   if (avatar !== undefined) updateData.avatar = avatar;
@@ -190,14 +216,14 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
   const adminRole = req.user.role;
   let targetRoles: string[] = [];
 
-  if (adminRole === 'finance_admin') {
+  if (['finance_admin', 'finance_sub_admin'].includes(adminRole)) {
     targetRoles = ['finance', 'collections', 'collections_admin'];
   } else if (adminRole === 'hr_admin') {
     targetRoles = ['employee', 'staff'];
-  } else if (adminRole === 'ops_admin') {
-    targetRoles = ['ops_sub_admin', 'center_admin', 'staff'];
+  } else if (adminRole === 'ops_admin' || adminRole === 'ops_sub_admin') {
+    targetRoles = ['ops_sub_admin', 'center_admin', 'staff', 'employee'];
   } else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
-    targetRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
+    targetRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin'];
   }
 
   const where: any = {
@@ -227,17 +253,17 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
           parentDesignationId: { in: designationIds }
         }
       };
+      // Modern Org Chart defines the true hierarchy, so we bypass legacy role restrictions
+      delete where.role;
     } else {
       // Fallback to legacy reportingTo field
       where.reportingTo = req.user.id;
     }
   }
 
-  // Exclude students by ensuring role is not 'student' (already handled by targetRoles, but kept for safety if targetRoles is modified later)
-  if (where.role && where.role.in) {
-    where.role.in = where.role.in.filter((r: string) => r !== 'student');
-  } else {
-    where.role = { not: 'student' };
+  // Exclude students by ensuring email does not end with @student.pypeerm.com
+  if (!where.email) {
+    where.email = { not: { endsWith: '@student.pypeerm.com' } };
   }
 
   const users = await prisma.user.findMany({
@@ -282,14 +308,14 @@ export const updateUserPermissions = asyncHandler(async (req: AuthRequest, res: 
   const adminRole = req.user.role;
   let allowedRoles: string[] = [];
 
-  if (adminRole === 'finance_admin') {
+  if (['finance_admin', 'finance_sub_admin'].includes(adminRole)) {
     allowedRoles = ['finance', 'collections', 'collections_admin'];
   } else if (adminRole === 'hr_admin') {
     allowedRoles = ['employee', 'staff'];
   } else if (adminRole === 'ops_admin') {
     allowedRoles = ['ops_sub_admin', 'center_admin', 'staff'];
   } else if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(adminRole)) {
-    allowedRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'hr_admin', 'ops_admin'];
+    allowedRoles = ['employee', 'staff', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin'];
   }
 
   if (!allowedRoles.includes(targetUser.role)) {
@@ -309,4 +335,20 @@ export const updateUserPermissions = asyncHandler(async (req: AuthRequest, res: 
   });
 
   res.json({ success: true, data: updatedUser, message: 'Permissions updated successfully' });
+});
+
+export const updateSalesAssignment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { assignedSalesUsers } = req.body;
+  if (!Array.isArray(assignedSalesUsers)) {
+    res.status(400).json({ success: false, message: 'Assigned users must be an array' });
+    return;
+  }
+  
+  const user = await prisma.user.update({
+    where: { id: req.params.id },
+    data: { assignedSalesUsers },
+    select: { id: true, assignedSalesUsers: true }
+  });
+
+  res.status(200).json({ success: true, data: user, message: 'Sales assignment updated successfully' });
 });

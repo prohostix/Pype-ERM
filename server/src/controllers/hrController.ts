@@ -10,7 +10,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   // Enforce visibility scoping
   const where: any = { organizationId };
 
-  const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'];
+  const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'];
   const isHR = role === 'hr_admin';
   const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo'].includes(role);
 

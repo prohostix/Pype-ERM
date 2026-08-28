@@ -331,7 +331,7 @@ export const approveSalesEnrollmentOps = asyncHandler(async (req: AuthRequest, r
     }
     // Notify finance admins
     const financeAdmins = await prisma.user.findMany({
-      where: { organizationId: req.user.organizationId, role: 'finance_admin', status: 'active' },
+      where: { organizationId: req.user.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
       select: { id: true },
     });
     for (const admin of financeAdmins) {
@@ -469,7 +469,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req: AuthReques
     status: 'enrolled',
     actorId: req.user.id,
     actorName: req.user.name,
-    actorRole: 'finance_admin',
+    actorRole: req.user.role === 'finance_sub_admin' ? 'finance_sub_admin' : 'finance_admin',
     timestamp: now.toISOString(),
     note: `Payment verified by Finance. ${credentialNote}.`,
   });

@@ -270,7 +270,7 @@ export const getCollectionMetrics = asyncHandler(async (req: AuthRequest, res: R
       },
       orgUsers: users,
       currentUserOversight: {
-        isAdmin: ['ceo', 'org_admin', 'superadmin', 'finance_admin'].includes(req.user.role),
+        isAdmin: ['ceo', 'org_admin', 'superadmin', 'finance_admin', 'finance_sub_admin'].includes(req.user.role),
         isOverseer: Boolean(isOverseer)
       }
     }

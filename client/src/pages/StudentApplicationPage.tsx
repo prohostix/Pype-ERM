@@ -214,7 +214,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Program <span className="text-red-500">*</span></Label>
                       <Select value={form.programId} onValueChange={v => setForm(f => ({ ...f, programId: v }))}>
-                        <SelectTrigger className="h-11 bg-white">
+                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
                           <SelectValue placeholder="Select a program" />
                         </SelectTrigger>
                         <SelectContent>
@@ -231,7 +231,7 @@ export default function StudentApplicationPage() {
                       <div className="space-y-2">
                         <Label className="text-slate-600 font-medium">Specialisation <span className="text-red-500">*</span></Label>
                         <Select value={form.specialisation} onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}>
-                          <SelectTrigger className="h-11 bg-white">
+                          <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
                             <SelectValue placeholder="Select specialisation" />
                           </SelectTrigger>
                           <SelectContent>
@@ -253,7 +253,7 @@ export default function StudentApplicationPage() {
                       <div className="space-y-2">
                         <Label className="text-slate-600 font-medium">Payment Plan <span className="text-slate-400 font-normal text-xs ml-1">(Optional)</span></Label>
                         <Select value={form.paymentPlan} onValueChange={v => setForm(f => ({ ...f, paymentPlan: v }))}>
-                          <SelectTrigger className="h-11 bg-white">
+                          <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
                             <SelectValue placeholder="Select a plan" />
                           </SelectTrigger>
                           <SelectContent>
@@ -280,28 +280,28 @@ export default function StudentApplicationPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Full Name <span className="text-red-500">*</span></Label>
-                      <Input className="h-11 bg-white" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Your full name" required />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Your full name" required />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Email Address <span className="text-red-500">*</span></Label>
-                      <Input className="h-11 bg-white" type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="your@email.com" required />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="your@email.com" required />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Phone Number <span className="text-red-500">*</span></Label>
-                      <Input className="h-11 bg-white" value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" required />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" required />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Alternative Phone</Label>
-                      <Input className="h-11 bg-white" value={form.altPhone} onChange={e => setForm(f => ({ ...f, altPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.altPhone} onChange={e => setForm(f => ({ ...f, altPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Date of Birth</Label>
-                      <Input className="h-11 bg-white" type="date" value={form.dob} onChange={e => setForm(f => ({ ...f, dob: e.target.value }))} />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" type="date" value={form.dob} onChange={e => setForm(f => ({ ...f, dob: e.target.value }))} />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Gender</Label>
                       <Select value={form.gender} onValueChange={v => setForm(f => ({ ...f, gender: v }))}>
-                        <SelectTrigger className="h-11 bg-white"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Male">Male</SelectItem>
                           <SelectItem value="Female">Female</SelectItem>
@@ -312,7 +312,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Category</Label>
                       <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
-                        <SelectTrigger className="h-11 bg-white"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="General">General</SelectItem>
                           <SelectItem value="OBC">OBC</SelectItem>
@@ -324,12 +324,12 @@ export default function StudentApplicationPage() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Religion</Label>
-                      <Input className="h-11 bg-white" value={form.religion} onChange={e => setForm(f => ({ ...f, religion: e.target.value }))} placeholder="e.g. Hindu, Muslim, Christian, etc." />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.religion} onChange={e => setForm(f => ({ ...f, religion: e.target.value }))} placeholder="e.g. Hindu, Muslim, Christian, etc." />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Marital Status</Label>
                       <Select value={form.maritalStatus} onValueChange={v => setForm(f => ({ ...f, maritalStatus: v }))}>
-                        <SelectTrigger className="h-11 bg-white"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Single">Single</SelectItem>
                           <SelectItem value="Married">Married</SelectItem>
@@ -339,7 +339,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Employment Status</Label>
                       <Select value={form.employmentStatus} onValueChange={v => setForm(f => ({ ...f, employmentStatus: v }))}>
-                        <SelectTrigger className="h-11 bg-white"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Employed">Employed</SelectItem>
                           <SelectItem value="Unemployed">Unemployed</SelectItem>
@@ -349,18 +349,18 @@ export default function StudentApplicationPage() {
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <Label className="text-slate-600 font-medium">Caste</Label>
-                      <Input className="h-11 bg-white" value={form.caste} onChange={e => setForm(f => ({ ...f, caste: e.target.value }))} />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.caste} onChange={e => setForm(f => ({ ...f, caste: e.target.value }))} />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-14 pt-4">
                     <div className="md:col-span-2 space-y-2">
                       <Label className="text-slate-600 font-medium">Address</Label>
-                      <Input className="h-11 bg-white" value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Your full residential address" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Your full residential address" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Pin Code</Label>
-                      <Input className="h-11 bg-white" value={form.pinCode} onChange={e => setForm(f => ({ ...f, pinCode: e.target.value }))} placeholder="Postal Code" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.pinCode} onChange={e => setForm(f => ({ ...f, pinCode: e.target.value }))} placeholder="Postal Code" />
                     </div>
                   </div>
                 </div>
@@ -379,27 +379,27 @@ export default function StudentApplicationPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Father's Name</Label>
-                      <Input className="h-11 bg-white" value={form.fatherName} onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father's full name" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.fatherName} onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father's full name" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Father's Phone</Label>
-                      <Input className="h-11 bg-white" value={form.fatherPhone} onChange={e => setForm(f => ({ ...f, fatherPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.fatherPhone} onChange={e => setForm(f => ({ ...f, fatherPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Mother's Name</Label>
-                      <Input className="h-11 bg-white" value={form.motherName} onChange={e => setForm(f => ({ ...f, motherName: e.target.value }))} placeholder="Mother's full name" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.motherName} onChange={e => setForm(f => ({ ...f, motherName: e.target.value }))} placeholder="Mother's full name" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Mother's Phone</Label>
-                      <Input className="h-11 bg-white" value={form.motherPhone} onChange={e => setForm(f => ({ ...f, motherPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.motherPhone} onChange={e => setForm(f => ({ ...f, motherPhone: e.target.value }))} placeholder="+91 XXXXX XXXXX" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Guardian's Name</Label>
-                      <Input className="h-11 bg-white" value={form.guardianName} onChange={e => setForm(f => ({ ...f, guardianName: e.target.value }))} placeholder="If applicable" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.guardianName} onChange={e => setForm(f => ({ ...f, guardianName: e.target.value }))} placeholder="If applicable" />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Family Phone</Label>
-                      <Input className="h-11 bg-white" value={form.familyPhone} onChange={e => setForm(f => ({ ...f, familyPhone: e.target.value }))} placeholder="General family contact" />
+                      <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.familyPhone} onChange={e => setForm(f => ({ ...f, familyPhone: e.target.value }))} placeholder="General family contact" />
                     </div>
                   </div>
                 </div>
