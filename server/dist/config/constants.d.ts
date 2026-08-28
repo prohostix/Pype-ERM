@@ -5,8 +5,10 @@ export declare const USER_ROLES: {
     readonly OPS_ADMIN: "ops_admin";
     readonly OPS_SUB_ADMIN: "ops_sub_admin";
     readonly FINANCE_ADMIN: "finance_admin";
+    readonly FINANCE_SUB_ADMIN: "finance_sub_admin";
     readonly HR_ADMIN: "hr_admin";
     readonly SALES_ADMIN: "sales_admin";
+    readonly SALES_SUB_ADMIN: "sales_sub_admin";
     readonly CENTER_ADMIN: "center_admin";
     readonly EMPLOYEE: "employee";
 };

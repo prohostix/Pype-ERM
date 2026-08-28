@@ -30,7 +30,7 @@ interface SubDepartment {
 
 export function SubDepartmentsPanel() {
   const { user } = useAuth();
-  const canManage = ['ops_admin', 'sales_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const canManage = ['ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
 
   const [subDepartments, setSubDepartments] = useState<SubDepartment[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);

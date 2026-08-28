@@ -24,8 +24,8 @@ router
 
 router
   .route('/requests/:id')
-  .get(authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), getEditDeleteRequest)
-  .patch(authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), respondToEditDeleteRequest);
+  .get(authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), getEditDeleteRequest)
+  .patch(authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), respondToEditDeleteRequest);
 
 router
   .route('/stats')

@@ -10,8 +10,8 @@ router.route('/leads').get(getLeads).post(createLead);
 router.route('/leads/:id').get(getLead).put(updateLead).delete(deleteLead);
 router.put('/leads/:id/convert', convertLead);
 // Target routes
-router.route('/targets').get(getTargets).post(authorize('sales_admin', 'ceo', 'general_manager'), createTarget);
-router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'ceo', 'general_manager'), updateTarget).delete(authorize('sales_admin', 'ceo', 'general_manager'), deleteTarget);
+router.route('/targets').get(getTargets).post(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), createTarget);
+router.route('/targets/:id').get(getTarget).put(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), updateTarget).delete(authorize('sales_admin', 'sales_sub_admin', 'ceo', 'general_manager'), deleteTarget);
 // Invite routes — available to all sales department employees
 router.route('/invites').get(listMyInvites).post(generateInvite);
 router.patch('/invites/:id/regenerate', regenerateInvite);
@@ -28,8 +28,8 @@ router.get('/student-applications', getSalesEnrollmentPipeline);
 router.post('/direct-enroll', createDirectEnrollment);
 router.put('/student-applications/:id/verify', verifySalesEnrollment);
 router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin'), approveSalesEnrollmentOps);
-router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'superadmin'), approveSalesEnrollmentFinance);
-router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'superadmin'), rejectSalesEnrollment);
+router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin'), approveSalesEnrollmentFinance);
+router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin'), rejectSalesEnrollment);
 // Sales Reports
 router.get('/reports/team', getTeamReport);
 router.get('/reports/counselor', getCounselorReport);

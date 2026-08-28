@@ -9,11 +9,18 @@ export type UserRole =
   | 'finance_admin'
   | 'finance_sub_admin'
   | 'hr_admin' 
-  | 'sales_admin' 
+  | 'sales_admin'
+  | 'sales_sub_admin' 
+  | 'sales_agent'
   | 'bde' 
   | 'center_admin' 
+  | 'university_admin'
+  | 'finance'
+  | 'sales'
+  | 'collections_admin'
+  | 'collections'
   | 'employee'
-  | 'staff'
+  | 'student'
   | 'general_manager';
 
 export type DepartmentType = 'operations' | 'finance' | 'hr' | 'sales' | 'custom' | 'general_manager' | 'ceo' | 'org_admin' | 'study_center';

@@ -726,7 +726,7 @@ export const getFinanceSalesUsers = asyncHandler(async (req, res) => {
             organizationId: req.user.organizationId,
             status: { not: 'resigned' },
             OR: [
-                { role: { in: ['sales_admin', 'sales'] } },
+                { role: { in: ['sales_admin', 'sales_sub_admin', 'sales'] } },
                 { department: { type: 'sales' } }
             ]
         },

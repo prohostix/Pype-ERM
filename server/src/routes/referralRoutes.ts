@@ -20,7 +20,7 @@ router.get('/validate/:slug', validateReferralSlug);
 // All other routes require authentication
 router.use(protect);
 
-const ALL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'bde', 'employee'];
+const ALL_ROLES = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'bde', 'employee'];
 
 // Generate and manage own referral links
 router
@@ -34,11 +34,11 @@ router
 // Admin routes for managing all referral links
 router
   .route('/links')
-  .get(authorize('sales_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getAllReferralLinks);
+  .get(authorize('sales_admin', 'sales_sub_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getAllReferralLinks);
 
 router
   .route('/links/:id')
-  .patch(authorize('sales_admin', 'org_admin', 'superadmin'), updateReferralLinkStatus);
+  .patch(authorize('sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'), updateReferralLinkStatus);
 
 // Referral tracking
 router
@@ -55,6 +55,6 @@ router
 
 router
   .route('/leaderboard')
-  .get(authorize('sales_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getReferralLeaderboard);
+  .get(authorize('sales_admin', 'sales_sub_admin', 'org_admin', 'ceo', 'general_manager', 'superadmin'), getReferralLeaderboard);
 
 export default router;

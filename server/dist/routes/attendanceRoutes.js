@@ -4,7 +4,7 @@ import { punchIn, punchOut, getTodayAttendance, getMonthlyLateSummary, getAttend
 const router = express.Router();
 // Static routes MUST come before /:id to avoid Express matching them as IDs
 // HR Settings routes
-router.get('/settings', protect, authorize('hr_admin', 'superadmin'), getHRSettings);
+router.get('/settings', protect, getHRSettings);
 router.post('/settings', protect, authorize('hr_admin', 'superadmin'), createOrUpdateHRSettings);
 router.put('/settings', protect, authorize('hr_admin', 'superadmin'), createOrUpdateHRSettings);
 // Biometric sync endpoint (called by biometric device/middleware)

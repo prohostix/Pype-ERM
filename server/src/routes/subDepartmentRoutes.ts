@@ -21,8 +21,8 @@ router.get('/', getSubDepartments);
 router.get('/:id', getSubDepartment);
 
 // Only admins can create/update/delete
-router.post('/', authorize('ops_admin', 'sales_admin', 'org_admin', 'superadmin'), createSubDepartment);
-router.patch('/:id', authorize('ops_admin', 'sales_admin', 'org_admin', 'superadmin', 'hr_admin'), updateSubDepartment);
-router.delete('/:id', authorize('ops_admin', 'sales_admin', 'org_admin', 'superadmin'), deleteSubDepartment);
+router.post('/', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'), createSubDepartment);
+router.patch('/:id', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin', 'hr_admin'), updateSubDepartment);
+router.delete('/:id', authorize('ops_admin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'superadmin'), deleteSubDepartment);
 
 export default router;

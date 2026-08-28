@@ -84,15 +84,15 @@ router.route('/leaves/:id')
   .get(getLeaveRequest)
   .put(updateLeaveRequest)
   .delete(deleteLeaveRequest);
-router.put('/leaves/:id/approve', authorize('hr_admin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), hrApproveLeave);
-router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), deptApproveLeave);
+router.put('/leaves/:id/approve', authorize('hr_admin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), hrApproveLeave);
+router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), deptApproveLeave);
 router.patch('/leaves/:id/hr-approve', authorize('hr_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), hrApproveLeave);
 
 // Attendance
 router.get('/attendance/my', getMyAttendance);
 router.get('/attendance/my-summary', getMyAttendanceSummary);
-router.get('/attendance/activity-report', authorize('hr_admin', 'ceo', 'general_manager', 'org_admin', 'sales_admin', 'bde', 'sub_department_manager'), getActivityReport);
-router.route('/attendance').get(authorize('hr_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'bde', 'sub_department_manager'), getAttendances).post(authorize('hr_admin'), markAttendance);
+router.get('/attendance/activity-report', authorize('hr_admin', 'ceo', 'general_manager', 'org_admin', 'sales_admin', 'sales_sub_admin', 'bde', 'sub_department_manager'), getActivityReport);
+router.route('/attendance').get(authorize('hr_admin', 'org_admin', 'ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'bde', 'sub_department_manager'), getAttendances).post(authorize('hr_admin'), markAttendance);
 router.route('/attendance/:id')
   .get(getAttendanceById)
   .put(authorize('hr_admin'), updateAttendance)

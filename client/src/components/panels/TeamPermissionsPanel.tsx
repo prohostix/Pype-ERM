@@ -13,6 +13,7 @@ import { getFinanceNavItems } from '@/pages/ModernFinanceDashboard';
 import { getHRNavItems } from '@/pages/ModernHRDashboard';
 import { getOpsNavItems } from '@/pages/ModernOpsDashboard';
 import { getCollectionsNavItems } from '@/pages/ModernCollectionsDashboard';
+import { getSalesNavItems } from '@/pages/ModernSalesDashboard';
 
 export default function TeamPermissionsPanel() {
   const [subordinates, setSubordinates] = useState<any[]>([]);
@@ -53,7 +54,7 @@ export default function TeamPermissionsPanel() {
       setLoadingSales(true);
       try {
         const res = await api.get('/users');
-        const salesRoles = ['sales_admin', 'sales', 'sales_agent', 'bde', 'staff', 'employee'];
+        const salesRoles = ['sales_admin', 'sales_sub_admin', 'sales', 'sales_agent', 'bde', 'employee'];
         const filtered = (res.data.data || []).filter((user: any) => salesRoles.includes(user.role));
         setAllSalesUsers(filtered);
       } catch (e: any) {
@@ -99,7 +100,9 @@ export default function TeamPermissionsPanel() {
       items = getHRNavItems();
     } else if (['collections_admin', 'collections'].includes(role)) {
       items = getCollectionsNavItems();
-    } else if (role === 'staff') {
+    } else if (['sales_admin', 'sales_sub_admin', 'sales', 'bde', 'sales_agent'].includes(role)) {
+      items = getSalesNavItems();
+    } else if (role === 'student') {
       items = [
         { id: 'overview', label: 'Overview' },
         { id: 'notifications', label: 'Notifications' },
@@ -118,6 +121,7 @@ export default function TeamPermissionsPanel() {
             case 'hr': items = getHRNavItems(); break;
             case 'finance': items = getFinanceNavItems(); break;
             case 'collections': items = getCollectionsNavItems(); break;
+            case 'sales': items = getSalesNavItems(); break;
           }
         } else if (deptType === 'collections') {
           items = getCollectionsNavItems();
@@ -146,7 +150,7 @@ export default function TeamPermissionsPanel() {
       ];
     }
 
-    if (role !== 'staff' && !items.some(t => t.id === 'meetings')) {
+    if (role !== 'student' && !items.some(t => t.id === 'meetings')) {
       items.push({ id: 'meetings', label: 'Meetings' });
     }
     

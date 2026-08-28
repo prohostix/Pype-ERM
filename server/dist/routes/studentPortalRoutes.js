@@ -3,7 +3,7 @@ import { getStudentProfile, getStudentNotifications, getStudentMaterials, getStu
 import { protect, authorize } from '../middleware/auth.js';
 const router = express.Router();
 router.use(protect);
-router.use(authorize('staff', 'org_admin', 'superadmin')); // staff = student role
+router.use(authorize('student', 'org_admin', 'superadmin')); // staff = student role
 router.get('/profile', getStudentProfile);
 router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);

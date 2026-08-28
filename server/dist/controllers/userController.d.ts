@@ -6,4 +6,5 @@ export declare const updateUser: (req: import("express").Request, res: Response,
 export declare const deleteUser: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getSubordinates: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const updateUserPermissions: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const updateSalesAssignment: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=userController.d.ts.map

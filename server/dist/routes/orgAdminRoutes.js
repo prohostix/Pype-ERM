@@ -7,7 +7,7 @@ router.use(protect);
 // Branch manager self-service — accessible to any authenticated user with a branchId
 router.get('/branches/my', getMyBranch);
 // Get all branches (read-only for ceo and ops_admin as well)
-router.get('/branches', authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'general_manager', 'ops_admin', 'sales_admin', 'sales_agent', 'bde', 'finance_admin'), getBranches);
+router.get('/branches', authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'general_manager', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'sales_agent', 'bde', 'finance_admin', 'finance_sub_admin', 'ops_sub_admin'), getBranches);
 router.use(authorize('org_admin', 'superadmin', 'hr_admin', 'ceo', 'general_manager'));
 // CEO Panel routes
 router.route('/ceo-panels').get(getCeoPanels).post(createCeoPanel);

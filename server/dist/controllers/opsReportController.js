@@ -5,6 +5,16 @@ export const getAdmissionReport = asyncHandler(async (req, res) => {
     const { month, year } = req.query;
     const organizationId = req.user.organizationId;
     let studentWhere = { organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        studentWhere.OR = [
+            { enrolledBy: null },
+            { referredBy: null },
+            { enrolledBy: { in: assignedIds } },
+            { referredBy: { in: assignedIds } }
+        ];
+    }
     if (month && year) {
         const startDate = new Date(Number(year), Number(month) - 1, 1);
         const endDate = new Date(Number(year), Number(month), 0, 23, 59, 59, 999);
@@ -59,8 +69,17 @@ export const getAdmissionReport = asyncHandler(async (req, res) => {
 // ─── Enrollment Report ───────────────────────────────────────────────────────
 export const getEnrollmentReport = asyncHandler(async (req, res) => {
     const organizationId = req.user.organizationId;
+    let enrollmentWhere = { organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        enrollmentWhere.OR = [
+            { salesUserId: null },
+            { salesUserId: { in: assignedIds } }
+        ];
+    }
     const enrollments = await prisma.enrollment.findMany({
-        where: { organizationId },
+        where: enrollmentWhere,
         select: { status: true, id: true }
     });
     const statusCounts = {
@@ -95,10 +114,24 @@ export const getEnrollmentReport = asyncHandler(async (req, res) => {
 // ─── University Report ───────────────────────────────────────────────────────
 export const getUniversityReport = asyncHandler(async (req, res) => {
     const organizationId = req.user.organizationId;
+    let studentsWhere = {};
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        studentsWhere.OR = [
+            { enrolledBy: null },
+            { referredBy: null },
+            { enrolledBy: { in: assignedIds } },
+            { referredBy: { in: assignedIds } }
+        ];
+    }
     const universities = await prisma.university.findMany({
         where: { organizationId },
         include: {
-            students: { select: { id: true } },
+            students: {
+                where: studentsWhere,
+                select: { id: true }
+            },
             programs: { select: { id: true } }
         }
     });
@@ -119,8 +152,19 @@ export const getUniversityReport = asyncHandler(async (req, res) => {
 // ─── Re-registration Report ──────────────────────────────────────────────────
 export const getReRegistrationReport = asyncHandler(async (req, res) => {
     const organizationId = req.user.organizationId;
+    let studentWhere = { organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        studentWhere.OR = [
+            { enrolledBy: null },
+            { referredBy: null },
+            { enrolledBy: { in: assignedIds } },
+            { referredBy: { in: assignedIds } }
+        ];
+    }
     const students = await prisma.student.findMany({
-        where: { organizationId },
+        where: studentWhere,
         select: { id: true, reregStatus: true }
     });
     let pending = 0;

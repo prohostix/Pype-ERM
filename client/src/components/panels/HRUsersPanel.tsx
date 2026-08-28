@@ -448,13 +448,14 @@ export function HRUsersPanel() {
   const getRoleBadgeColor = (role: string) => {
     const map: Record<string, string> = {
       employee: 'bg-blue-100 text-blue-800',
-      staff: 'bg-green-100 text-green-800',
+      student: 'bg-green-100 text-green-800',
       hr_admin: 'bg-orange-100 text-orange-800',
       finance_admin: 'bg-emerald-100 text-emerald-800',
       finance_sub_admin: 'bg-emerald-50 text-emerald-700',
       ops_admin: 'bg-indigo-100 text-indigo-800',
       ops_sub_admin: 'bg-violet-100 text-violet-800',
       sales_admin: 'bg-pink-100 text-pink-800',
+      sales_sub_admin: 'bg-pink-100 text-pink-800',
       center_admin: 'bg-cyan-100 text-cyan-800',
       bde: 'bg-yellow-100 text-yellow-800',
     };
@@ -618,6 +619,7 @@ export function HRUsersPanel() {
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
                     <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
                     <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                    <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                     <SelectItem value="sales_agent">Sales Agent</SelectItem>
                     <SelectItem value="bde">BDE</SelectItem>
                     <SelectItem value="collections_admin">Collections Admin</SelectItem>
@@ -1138,6 +1140,7 @@ export function HRUsersPanel() {
                   <SelectItem value="ops_admin">Operations Admin</SelectItem>
                   <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
                   <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                    <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                   <SelectItem value="sales_agent">Sales Agent</SelectItem>
                   <SelectItem value="bde">BDE</SelectItem>
                   <SelectItem value="collections_admin">Collections Admin</SelectItem>

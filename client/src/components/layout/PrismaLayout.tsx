@@ -306,7 +306,7 @@ export function PrismaLayout({
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-bold truncate text-sidebar-foreground">{userName || 'User'}</span>
-              <span className="text-[10px] text-sidebar-foreground/50 font-medium truncate capitalize">{(userRole === 'staff' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
+              <span className="text-[10px] text-sidebar-foreground/50 font-medium truncate capitalize">{(userRole === 'student' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
@@ -353,7 +353,7 @@ export function PrismaLayout({
             </div>
             
             <div className="h-8 w-px bg-border mx-1" />
-            {userRole !== 'staff' && (
+            {userRole !== 'student' && (
               <PunchWidget compact={true} />
             )}
             

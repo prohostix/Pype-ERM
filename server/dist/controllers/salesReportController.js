@@ -3,7 +3,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 // Helper to build hierarchy clause based on the authenticated user's role
 const buildHierarchyClause = (req) => {
     let whereClause = { organizationId: req.user.organizationId };
-    if (['superadmin', 'org_admin', 'ceo'].includes(req.user.role)) {
+    if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(req.user.role)) {
         // See all users
     }
     else if (req.user.role === 'center_admin') {

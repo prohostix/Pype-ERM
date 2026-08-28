@@ -18,7 +18,7 @@ interface TargetsPanelProps {
 
 export function TargetsPanel({ endpoint, title = 'Target Management' }: TargetsPanelProps) {
   const { user } = useAuth();
-  const canManage = user?.role === 'sales_admin' || user?.role === 'ceo' || user?.role === 'org_admin' || user?.role === 'superadmin';
+  const canManage = (user?.role === 'sales_admin' || user?.role === 'sales_sub_admin') || user?.role === 'ceo' || user?.role === 'org_admin' || user?.role === 'superadmin';
 
   const [targets, setTargets] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);

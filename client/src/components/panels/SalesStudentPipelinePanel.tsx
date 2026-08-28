@@ -64,6 +64,7 @@ const ROLE_LABELS: Record<string, string> = {
   finance_admin: 'Finance',
   finance_sub_admin: 'Finance',
   sales_admin: 'Sales',
+  sales_sub_admin: 'Sales',
   student: 'Student',
   system: 'System',
 };

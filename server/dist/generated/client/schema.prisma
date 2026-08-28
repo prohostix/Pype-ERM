@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/client"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
+  output        = "../src/generated/client"
 }
 
 datasource db {
@@ -247,6 +248,7 @@ model User {
   assistantManagedDepartments   Department[]         @relation("AssistantManagers")
   designations                  Designation[]        @relation("DesignationFilledBy")
   communicationLogs             CommunicationLog[]
+  assignedSalesUsers            Json?                @default("[]")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -1691,14 +1693,16 @@ enum UserRole {
   ops_admin
   ops_sub_admin
   finance_admin
+  finance_sub_admin
   hr_admin
   sales_admin
+  sales_sub_admin
   center_admin
   university_admin
   finance
   sales
   employee
-  staff
+  student
   collections_admin
   collections
   general_manager

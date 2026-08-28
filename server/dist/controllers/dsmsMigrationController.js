@@ -274,7 +274,7 @@ export const migrateFromDsms = asyncHandler(async (req, res) => {
                                                 parsedDob = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
                                             }
                                         }
-                                        // Create User record for student portal login (role: 'staff' acts as student)
+                                        // Create User record for student portal login (role: 'student' acts as student)
                                         let user = await prisma.user.findFirst({
                                             where: { email: enrichedEmail, organizationId }
                                         });
@@ -288,7 +288,7 @@ export const migrateFromDsms = asyncHandler(async (req, res) => {
                                                     email: enrichedEmail,
                                                     password: hashedPassword,
                                                     name: enrichedName,
-                                                    role: 'staff',
+                                                    role: 'student',
                                                     phone: enrichedPhone,
                                                     status: 'active'
                                                 }

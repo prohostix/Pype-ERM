@@ -55,7 +55,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   rejected:     { label: 'Rejected',         color: 'bg-red-500/10 text-red-600 border-red-500/20' },
 };
 
-const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'center_admin', 'ops_sub_admin'];
+const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
 
 export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const { user } = useAuth();

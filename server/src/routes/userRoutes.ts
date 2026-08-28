@@ -32,7 +32,7 @@ router
 
 router
   .route('/:id/permissions')
-  .put(authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'superadmin'), updateUserPermissions);
+  .put(authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'superadmin', 'sales_admin', 'sales_sub_admin', 'org_admin', 'ceo', 'general_manager'), updateUserPermissions);
 
 router
   .route('/:id/sales-assignment')

@@ -41,21 +41,8 @@ sudo mkdir -p /var/www/pype-erm
 sudo chown -R ubuntu:ubuntu /var/www/pype-erm
 
 # 6. Copy or Clone project contents to /var/www/pype-erm
-# Note: If running this script inside the cloned repository, we will copy the files.
-if [ -d "./client" ] && [ -d "./server" ] && [ "$PWD" != "/var/www/pype-erm" ]; then
-    echo "📂 Local repository files found. Copying files to /var/www/pype-erm..."
-    cp -R ./* /var/www/pype-erm/
-else
-    echo "📂 Pulling latest code from GitHub..."
-    if [ -d "/var/www/pype-erm/.git" ]; then
-        cd /var/www/pype-erm
-        git fetch origin main
-        git reset --hard origin/main
-        git clean -fd
-    else
-        git clone https://github.com/prohostix/Pype-ERM.git /var/www/pype-erm
-    fi
-fi
+# Note: Since we are using rsync from local, we assume the files are already in /var/www/pype-erm
+echo "📂 Using local files in /var/www/pype-erm..."
 
 # 7. Configure Server Environment variables (.env)
 cd /var/www/pype-erm/server
@@ -86,9 +73,14 @@ echo "🛠️  Building Backend Server..."
 npm install
 npx prisma db push
 npx prisma generate
-export NODE_OPTIONS="--max-old-space-size=2048"
-npm run build
-cp -R src/generated dist/
+if [ ! -d "dist" ] || [ ! -f "dist/server.js" ]; then
+    echo "⚙️  Building server..."
+    export NODE_OPTIONS="--max-old-space-size=2048"
+    npm run build
+else
+    echo "✅ Pre-built server dist folder found. Skipping build."
+fi
+cp -R src/generated dist/ 2>/dev/null || true
 
 # 9. Start Server via PM2
 echo "🚀 Starting backend server with PM2..."
@@ -102,9 +94,17 @@ cd /var/www/pype-erm/client
 if [ ! -f ".env" ]; then
     echo "VITE_API_URL=http://13.232.188.79/api/v1" > .env
 fi
-npm install
-export NODE_OPTIONS="--max-old-space-size=2048"
-npm run build
+
+if [ ! -d "dist" ] || [ ! -f "dist/index.html" ]; then
+    echo "⚙️  Building client..."
+    npm install
+    export NODE_OPTIONS="--max-old-space-size=2048"
+    npm run build
+else
+    echo "✅ Pre-built client dist folder found. Skipping Vite build."
+    # Just in case dependencies for some runtime scripts are needed, though mostly static.
+    npm install --omit=dev
+fi
 
 # 11. Configure Nginx Reverse Proxy
 echo "🌐 Configuring Nginx Reverse Proxy..."

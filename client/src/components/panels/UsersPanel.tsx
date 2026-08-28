@@ -190,6 +190,7 @@ export function UsersPanel() {
       finance_sub_admin: 'bg-green-400',
       ops_admin: 'bg-cyan-500',
       sales_admin: 'bg-pink-500',
+      sales_sub_admin: 'bg-pink-400',
       employee: 'bg-gray-500',
     };
     return colors[role] || 'bg-gray-500';
@@ -407,6 +408,7 @@ export function UsersPanel() {
                     <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
                     <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                    <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                     <SelectItem value="center_admin">Center Admin</SelectItem>
                     <SelectItem value="employee">Employee</SelectItem>
                     <SelectItem value="general_manager">General Manager</SelectItem>

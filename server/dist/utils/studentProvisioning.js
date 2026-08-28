@@ -25,7 +25,7 @@ export async function provisionStudentAfterApproval(enrollmentId) {
                     email: enrollment.studentEmail,
                     password: hashedPassword,
                     name: enrollment.studentName,
-                    role: 'staff', // Fallback role for student in UserRole enum
+                    role: 'student', // Fallback role for student in UserRole enum
                     phone: enrollment.studentPhone,
                     status: 'active',
                 },

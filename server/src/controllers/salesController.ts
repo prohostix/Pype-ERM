@@ -72,7 +72,7 @@ import { handleTargetRollup, syncParentTargets } from '../utils/targetUtils.js';
 // Targets
 export const getTargets = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { role, id: userId, organizationId, departmentId } = req.user;
-  const canManage = ['superadmin', 'org_admin', 'ceo', 'sales_admin', 'finance_admin', 'finance_sub_admin'].includes(role);
+  const canManage = ['superadmin', 'org_admin', 'ceo', 'sales_admin', 'sales_sub_admin', 'finance_admin', 'finance_sub_admin'].includes(role);
   
   const whereClause: any = { organizationId };
   if (!canManage) {
@@ -171,7 +171,7 @@ export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Respo
 export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { organizationId: req.user.organizationId };
 
-  if (['superadmin', 'org_admin', 'ceo'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     whereClause.OR = [];

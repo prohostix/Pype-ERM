@@ -11,7 +11,7 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
     }
     if (['superadmin', 'ceo', 'org_admin'].includes(role)) {
         metrics.totalEmployees = await prisma.user.count({
-            where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } }
+            where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
         });
         metrics.totalStudents = await prisma.student.count({ where: orgQuery });
         metrics.totalCenters = await prisma.studyCenter.count({ where: orgQuery });
@@ -20,14 +20,30 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         metrics.totalPrograms = await prisma.program.count({ where: orgQuery });
     }
     if (['ops_admin', 'ops_sub_admin', 'ceo', 'org_admin'].includes(role)) {
-        if (metrics.totalStudents === undefined) {
-            metrics.totalStudents = await prisma.student.count({ where: orgQuery });
+        let studentWhere = { ...orgQuery };
+        let enrollmentWhere = { ...orgQuery };
+        if (role === 'ops_sub_admin') {
+            const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+            const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+            studentWhere.OR = [
+                { enrolledBy: null },
+                { referredBy: null },
+                { enrolledBy: { in: assignedIds } },
+                { referredBy: { in: assignedIds } }
+            ];
+            enrollmentWhere.OR = [
+                { salesUserId: null },
+                { salesUserId: { in: assignedIds } }
+            ];
+        }
+        if (metrics.totalStudents === undefined || role === 'ops_sub_admin') {
+            metrics.totalStudents = await prisma.student.count({ where: studentWhere });
         }
         metrics.pendingApplications = await prisma.enrollment.count({
-            where: { ...orgQuery, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
+            where: { ...enrollmentWhere, status: { notIn: ['enrolled', 'rejected', 'department_rejected'] } }
         });
         const studentsStatus = await prisma.student.findMany({
-            where: orgQuery,
+            where: studentWhere,
             select: { admissionProgress: true, reregStatus: true, documents: true }
         });
         metrics.uniSubmissionsPending = studentsStatus.filter(s => {
@@ -65,7 +81,7 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         today.setHours(0, 0, 0, 0);
         if (metrics.totalEmployees === undefined) {
             metrics.totalEmployees = await prisma.user.count({
-                where: { organizationId: orgId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } }
+                where: { organizationId: orgId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
             });
         }
         metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId, date: today, status: 'present' } });
@@ -101,14 +117,14 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
         metrics.pendingLeaves = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
         metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
     }
-    if (['finance_admin', 'ceo', 'org_admin'].includes(role)) {
+    if (['finance_admin', 'finance_sub_admin', 'ceo', 'org_admin'].includes(role)) {
         const invoices = await prisma.invoice.findMany({ where: { organizationId: orgId, status: 'paid' }, select: { total: true } });
         metrics.totalRevenue = invoices.reduce((sum, inv) => sum + inv.total, 0);
         metrics.pendingInvoices = await prisma.invoice.count({ where: { organizationId: orgId, status: { in: ['draft', 'sent'] } } });
         metrics.totalPayments = await prisma.paymentEntry.count({ where: { organizationId: orgId } });
         metrics.pendingExpenses = await prisma.expenseClaim.count({ where: { organizationId: orgId, status: 'pending' } });
     }
-    if (['sales_admin', 'ceo'].includes(role)) {
+    if (['sales_admin', 'sales_sub_admin', 'ceo'].includes(role)) {
         metrics.totalLeads = await prisma.lead.count({ where: { organizationId: orgId } });
         metrics.convertedLeads = await prisma.lead.count({ where: { organizationId: orgId, status: 'converted' } });
     }

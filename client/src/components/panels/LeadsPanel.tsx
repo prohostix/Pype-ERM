@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 export function LeadsPanel() {
   const { user } = useAuth();
-  const isSalesAdmin = user?.role === 'sales_admin';
+  const isSalesAdmin = (user?.role === 'sales_admin' || user?.role === 'sales_sub_admin');
 
   const [leads, setLeads] = useState<any[]>([]);
   const [referralLinks, setReferralLinks] = useState<any[]>([]);

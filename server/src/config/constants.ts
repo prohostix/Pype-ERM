@@ -8,6 +8,7 @@ export const USER_ROLES = {
   FINANCE_SUB_ADMIN: 'finance_sub_admin',
   HR_ADMIN: 'hr_admin',
   SALES_ADMIN: 'sales_admin',
+  SALES_SUB_ADMIN: 'sales_sub_admin',
   CENTER_ADMIN: 'center_admin',
   EMPLOYEE: 'employee',
 } as const;

@@ -191,7 +191,8 @@ exports.Prisma.UserScalarFieldEnum = {
   allowAnywherePunchIn: 'allowAnywherePunchIn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  permissions: 'permissions'
+  permissions: 'permissions',
+  assignedSalesUsers: 'assignedSalesUsers'
 };
 
 exports.Prisma.EmployeeScalarFieldEnum = {
@@ -1310,14 +1311,16 @@ exports.UserRole = exports.$Enums.UserRole = {
   ops_admin: 'ops_admin',
   ops_sub_admin: 'ops_sub_admin',
   finance_admin: 'finance_admin',
+  finance_sub_admin: 'finance_sub_admin',
   hr_admin: 'hr_admin',
   sales_admin: 'sales_admin',
+  sales_sub_admin: 'sales_sub_admin',
   center_admin: 'center_admin',
   university_admin: 'university_admin',
   finance: 'finance',
   sales: 'sales',
   employee: 'employee',
-  staff: 'staff',
+  student: 'student',
   collections_admin: 'collections_admin',
   collections: 'collections',
   general_manager: 'general_manager',

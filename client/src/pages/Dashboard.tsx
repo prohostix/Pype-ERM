@@ -95,7 +95,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     fetchDeptAndSubDept();
   }, [useDepartmentDashboard, user]);
 
-  const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';
+  const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'student';
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
@@ -118,8 +118,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     // If we have a department type, route accordingly
     if (departmentType) {
       // Regular employees (not sub-dept managers) always get the employee dashboard
-      // Exception: Sales employees get the Sales dashboard (which has an employee portal)
-      if (!isSubDeptManager && departmentType !== 'sales' && departmentType !== 'collections') {
+      if (!isSubDeptManager && departmentType !== 'collections') {
         return <ModernEmployeeDashboard initialTab={initialTab} />;
       }
       // Sub-dept managers get the department admin dashboard
@@ -171,7 +170,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernHRDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'sales_admin') {
+  if (['sales_admin', 'sales_sub_admin'].includes(user?.role || '')) {
     return <ModernSalesDashboard initialTab={initialTab} />;
   }
 
@@ -187,7 +186,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernEmployeeDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'staff') {
+  if (user?.role === 'student') {
     return <ModernStudentPortal initialTab={initialTab} />;
   }
 

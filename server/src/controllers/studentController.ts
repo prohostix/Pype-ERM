@@ -6,7 +6,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { hashPassword, generateUserId } from '../utils/authUtils.js';
 import { sendEmail } from '../utils/emailService.js';
 
-const SALES_ROLES = ['sales_admin', 'sales', 'sales_agent', 'bde', 'employee', 'staff'];
+const SALES_ROLES = ['sales_admin', 'sales_sub_admin', 'sales', 'sales_agent', 'bde', 'employee', 'student'];
 
 export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   const where: any = { organizationId: req.user.organizationId };
@@ -169,14 +169,14 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         email,
         password: hashedPassword,
         name,
-        role: 'staff', // Fallback role for student in UserRole enum
+        role: 'student', // Fallback role for student in UserRole enum
         phone,
         status: 'active',
       },
     });
   } else {
     // SECURITY FIX: Do not overwrite passwords of existing admin/staff accounts!
-    if (studentUser.role !== 'staff') {
+    if (studentUser.role !== 'student') {
       res.status(400).json({ success: false, message: 'Email is already in use by an admin or staff account.' });
       return;
     }
@@ -357,7 +357,7 @@ export const updateStudent = asyncHandler(async (req: AuthRequest, res: Response
           email: studentExists.email,
           password: hashedPassword,
           name: studentExists.name,
-          role: 'staff',
+          role: 'student',
           phone: studentExists.phone,
           status: 'active'
         }
@@ -549,7 +549,7 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
             email: s.email,
             password: hashedPassword,
             name: s.name,
-            role: 'staff',
+            role: 'student',
             phone: s.phone || '',
             status: 'active',
             branchId: branchId || undefined,

@@ -272,7 +272,7 @@ export const approveSalesEnrollmentOps = asyncHandler(async (req, res) => {
         }
         // Notify finance admins
         const financeAdmins = await prisma.user.findMany({
-            where: { organizationId: req.user.organizationId, role: 'finance_admin', status: 'active' },
+            where: { organizationId: req.user.organizationId, role: { in: ['finance_admin', 'finance_sub_admin'] }, status: 'active' },
             select: { id: true },
         });
         for (const admin of financeAdmins) {
@@ -321,7 +321,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                     email: enrollment.studentEmail,
                     password: hashedPassword,
                     name: enrollment.studentName,
-                    role: 'staff', // Fallback role for student in UserRole enum
+                    role: 'student', // Fallback role for student in UserRole enum
                     phone: enrollment.studentPhone,
                     status: 'active',
                 },
@@ -396,7 +396,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
         status: 'enrolled',
         actorId: req.user.id,
         actorName: req.user.name,
-        actorRole: 'finance_admin',
+        actorRole: req.user.role === 'finance_sub_admin' ? 'finance_sub_admin' : 'finance_admin',
         timestamp: now.toISOString(),
         note: `Payment verified by Finance. ${credentialNote}.`,
     });
@@ -634,6 +634,14 @@ export const verifySalesEnrollment = asyncHandler(async (req, res) => {
     const allowedStatuses = ['sales_verification_pending', 'document_review', 'rejected', 'ops_rejected'];
     if (!allowedStatuses.includes(enrollment.status)) {
         res.status(400).json({ success: false, message: 'Enrollment cannot be resubmitted from its current status.' });
+        return;
+    }
+    if (!initialPaymentAmount || parseFloat(initialPaymentAmount) <= 0) {
+        res.status(400).json({ success: false, message: 'Initial fee amount paid is required and must be greater than zero.' });
+        return;
+    }
+    if (!receiptUrl) {
+        res.status(400).json({ success: false, message: 'Fee payment receipt screenshot is required.' });
         return;
     }
     const now = new Date();

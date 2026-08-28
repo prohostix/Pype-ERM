@@ -11,6 +11,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
   finance_sub_admin: 2,
   hr_admin: 2,
   sales_admin: 2,
+  sales_sub_admin: 2,
   center_admin: 2,
   university_admin: 2,
   collections_admin: 2,
@@ -18,7 +19,7 @@ const ROLE_HIERARCHY: Record<string, number> = {
   finance: 4,
   sales: 4,
   collections: 4,
-  staff: 4,
+  student: 4,
   bde: 4,
   sales_agent: 4,
   employee: 4

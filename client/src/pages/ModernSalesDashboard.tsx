@@ -37,6 +37,7 @@ import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { 
   BarChart, 
   Bar, 
@@ -58,7 +59,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initialTab?: string; isSubDeptManager?: boolean }) {
   const { user } = useAuth();
-  const isSalesAdmin = user?.role === 'sales_admin' || user?.role === 'bde' || isSubDeptManager;
+  const isSalesAdmin = user?.role === 'sales_admin' || (user?.role === 'employee' && isSubDeptManager && user?.department?.name === 'Sales');
 
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>({});
@@ -96,6 +97,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager }: { initial
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'team_permissions': return <TeamPermissionsPanel />;
       case 'meetings': return <MeetingsPanel />;
       case 'overview': return (
         <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={setActiveTab} />
@@ -604,8 +606,8 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Sales Portal</h1>
-          <p className="text-muted-foreground mt-1">{subDeptName} — {user?.designation || 'Sales Manager'}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{user?.name || 'Sales Dashboard'}</h1>
+          <p className="text-muted-foreground mt-1">{user?.designation || (user?.role === 'sales_sub_admin' ? 'Sales Sub Admin' : 'Sales Professional')}</p>
         </div>
       </div>
 

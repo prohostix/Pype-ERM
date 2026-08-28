@@ -18,7 +18,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
   if (['superadmin', 'ceo', 'org_admin'].includes(role)) {
     metrics.totalEmployees = await prisma.user.count({
-      where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } }
+      where: { ...orgQuery, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
     });
     metrics.totalStudents = await prisma.student.count({ where: orgQuery });
     metrics.totalCenters = await prisma.studyCenter.count({ where: orgQuery });
@@ -104,7 +104,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
 
     if (metrics.totalEmployees === undefined) {
       metrics.totalEmployees = await prisma.user.count({
-        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'staff'] } }, status: { not: 'resigned' } }
+        where: { organizationId: orgId as string, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } }
       });
     }
 
@@ -154,7 +154,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.pendingExpenses = await prisma.expenseClaim.count({ where: { organizationId: orgId, status: 'pending' } });
   }
 
-  if (['sales_admin', 'ceo'].includes(role)) {
+  if (['sales_admin', 'sales_sub_admin', 'ceo'].includes(role)) {
     metrics.totalLeads = await prisma.lead.count({ where: { organizationId: orgId } });
     metrics.convertedLeads = await prisma.lead.count({ where: { organizationId: orgId, status: 'converted' } });
   }

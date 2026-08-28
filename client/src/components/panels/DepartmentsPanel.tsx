@@ -165,7 +165,7 @@ export function DepartmentsPanel() {
       ceo: 'bg-indigo-500',
       org_admin: 'bg-teal-500',
       study_center: 'bg-cyan-500',
-      staff: 'bg-slate-500',
+      student: 'bg-slate-500',
       custom: 'bg-purple-500',
     };
     return colors[type] || 'bg-gray-500';

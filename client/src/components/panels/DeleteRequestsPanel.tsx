@@ -92,7 +92,7 @@ export function DeleteRequestsPanel() {
             {(() => {
               const role = user?.role as string;
               const canAct =
-                (req.status === 'pending_manager' && ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'hr_admin', 'sales_admin', 'center_admin'].includes(role)) ||
+                (req.status === 'pending_manager' && ['superadmin', 'org_admin', 'ceo', 'general_manager', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'center_admin'].includes(role)) ||
                 (req.status === 'pending_ceo' && ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role));
               if (!canAct) return null;
               const isFinalApprover = ['superadmin', 'org_admin'].includes(role) || req.status === 'pending_ceo';

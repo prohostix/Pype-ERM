@@ -39,13 +39,13 @@ router.post('/bulk-enrollment-update', authorize('org_admin', 'superadmin', 'ops
 router.post('/bulk-update-program', authorize('org_admin', 'superadmin'), bulkUpdateProgram);
 router.post('/bulk-record-payment', authorize('org_admin', 'superadmin'), bulkRecordPayment);
 router.post('/:id/notify', authorize('org_admin', 'superadmin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'employee'), notifyStudent);
-router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee'), upload.single('file'), uploadStudentDocument);
+router.post('/:id/documents', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee'), upload.single('file'), uploadStudentDocument);
 router.put('/:id/documents/:docIndex/status', authorize('org_admin', 'superadmin', 'ops_admin', 'employee', 'ceo'), updateDocumentStatus);
 router.put('/:id/photo/status', authorize('org_admin', 'superadmin', 'ops_admin', 'employee', 'ceo'), updatePhotoStatus);
 
-router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_manager', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager'), createStudent);
-router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
-router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
+router.route('/').get(getStudents).post(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin', 'general_manager'), createStudent);
+router.route('/:id').get(getStudent).put(authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), updateStudent).delete(authorize('org_admin', 'superadmin'), deleteStudent);
+router.put('/:id/progress/:stepId', authorize('org_admin', 'superadmin', 'center_admin', 'sales_admin', 'sales_sub_admin', 'employee', 'ops_admin', 'ops_sub_admin'), upload.single('proof'), updateAdmissionProgress);
 router.put('/:id/approve', authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), approveStudent);
 router.get('/:id/enrollments', getStudentEnrollments);
 

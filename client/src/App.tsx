@@ -127,8 +127,9 @@ function App() {
       case 'finance_sub_admin':
       case 'finance_admin':
       case 'hr_admin':
-      case 'sales_admin': return 'overview';
-      case 'staff': return 'overview';
+      case 'sales_admin':
+      case 'sales_sub_admin': return 'overview';
+      case 'student': return 'overview';
       default: return 'tasks';
     }
   };
@@ -152,7 +153,7 @@ function App() {
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
-    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_agent', 'bde'].includes(user.role)) {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user.role)) {
       api.get('/collections/metrics')
         .then(res => {
           if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
@@ -317,7 +318,7 @@ function App() {
     }
 
     // Branch manager — takes priority over role-specific nav
-    if ((user as any)?.branchId && user.role !== 'staff') {
+    if ((user as any)?.branchId && user.role !== 'student') {
       return getBranchManagerNavItems();
     }
 
@@ -337,6 +338,10 @@ function App() {
       return getSalesNavItems(true);
     }
 
+    if (user.role === 'sales_sub_admin') {
+      return getSalesNavItems(false);
+    }
+
     if (['collections_admin', 'collections'].includes(user.role)) {
       return getCollectionsNavItems();
     }
@@ -354,7 +359,7 @@ function App() {
     }
 
     const result = (() => {
-      if (user.role === 'staff') {
+      if (user.role === 'student') {
         return STUDENT_NAV_ITEMS;
       }
       if (user.role === 'employee') {
@@ -383,7 +388,7 @@ function App() {
       result.push({ id: 'collections', label: 'Collections' });
     }
 
-    if (user.role !== 'staff' && !result.some(t => t.id === 'meetings')) {
+    if (user.role !== 'student' && !result.some(t => t.id === 'meetings')) {
       result.push({ id: 'meetings', label: 'Meetings' });
     }
 
@@ -436,11 +441,11 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'sales_admin', 'collections_admin', 'collections'];
-    const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'];
+    const isEmployeeSubDeptManager = ['employee', 'student', 'bde', 'sales_agent'].includes(user?.role || '') && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
-    const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'staff';
-    const isStudentRole = user?.role === 'staff';
+    const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'student';
+    const isStudentRole = user?.role === 'student';
     if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager || isStudentRole)) {
       setViewMode('dashboard');
       setActiveTable(table);
@@ -867,7 +872,7 @@ function App() {
   // For employees with department or sub-department assignments, route to department dashboard
   // Branch managers are excluded — they always get the branch dashboard
   const shouldUseDepartmentDashboard = Boolean(
-    (user.role === 'employee' || user.role === 'staff') &&
+    (user.role === 'employee' || user.role === 'student') &&
     !(user as any).branchId &&
     (user.departmentId || (user as any).subDepartmentId) &&
     viewMode === 'dashboard'

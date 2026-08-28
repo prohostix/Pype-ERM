@@ -45,6 +45,7 @@ const roleIcons: Record<string, React.ElementType> = {
   finance_sub_admin: DollarSign,
   hr_admin: Briefcase,
   sales_admin: TrendingUp,
+  sales_sub_admin: TrendingUp,
   employee: User,
 };
 
@@ -58,6 +59,7 @@ const roleLabels: Record<string, string> = {
   finance_sub_admin: 'Finance Sub Admin',
   hr_admin: 'HR Admin',
   sales_admin: 'Sales Admin',
+  sales_sub_admin: 'Sales Sub Admin',
   employee: 'Employee',
 };
 

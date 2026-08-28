@@ -7,13 +7,13 @@ router.use(protect);
 // GST settings management
 router
     .route('/settings')
-    .post(authorize('finance_admin'), createGSTSetting)
-    .get(authorize('finance_admin', 'ops_admin'), getGSTSettings);
+    .post(authorize('finance_admin', 'finance_sub_admin'), createGSTSetting)
+    .get(authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), getGSTSettings);
 router
     .route('/settings/:id')
-    .get(authorize('finance_admin', 'ops_admin'), getGSTSetting)
-    .patch(authorize('finance_admin'), updateGSTSetting)
-    .delete(authorize('finance_admin'), deleteGSTSetting);
+    .get(authorize('finance_admin', 'finance_sub_admin', 'ops_admin'), getGSTSetting)
+    .patch(authorize('finance_admin', 'finance_sub_admin'), updateGSTSetting)
+    .delete(authorize('finance_admin', 'finance_sub_admin'), deleteGSTSetting);
 // GST calculation and lookup
 router
     .route('/applicable/:feeType')
@@ -23,6 +23,6 @@ router
     .post(protect, calculateGST);
 router
     .route('/summary')
-    .get(authorize('finance_admin'), getGSTSummary);
+    .get(authorize('finance_admin', 'finance_sub_admin'), getGSTSummary);
 export default router;
 //# sourceMappingURL=gstRoutes.js.map

@@ -7,6 +7,17 @@ export const getDocumentLogs = asyncHandler(async (req, res) => {
         where.type = type;
     if (status)
         where.status = status;
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        where.OR = [
+            { studentId: null },
+            { student: { enrolledBy: null } },
+            { student: { referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
     const logs = await prisma.documentLog.findMany({
         where,
         include: {
@@ -18,8 +29,19 @@ export const getDocumentLogs = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, count: logs.length, data: logs });
 });
 export const getDocumentLog = asyncHandler(async (req, res) => {
-    const log = await prisma.documentLog.findUnique({
-        where: { id: req.params.id, organizationId: req.user.organizationId },
+    let whereClause = { id: req.params.id, organizationId: req.user.organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        whereClause.OR = [
+            { studentId: null },
+            { student: { enrolledBy: null, referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
+    const log = await prisma.documentLog.findFirst({
+        where: whereClause,
         include: { student: true }
     });
     if (!log) {
@@ -50,8 +72,24 @@ export const createDocumentLog = asyncHandler(async (req, res) => {
 });
 export const updateDocumentLog = asyncHandler(async (req, res) => {
     const { status, notes, courierName, trackingNumber, dispatchDate, deliveryDate } = req.body;
+    let whereClause = { id: req.params.id, organizationId: req.user.organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        whereClause.OR = [
+            { studentId: null },
+            { student: { enrolledBy: null, referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
+    const existing = await prisma.documentLog.findFirst({ where: whereClause });
+    if (!existing) {
+        res.status(404).json({ success: false, message: 'Document log not found or unauthorized' });
+        return;
+    }
     const log = await prisma.documentLog.update({
-        where: { id: req.params.id, organizationId: req.user.organizationId },
+        where: { id: req.params.id },
         data: {
             status,
             notes,

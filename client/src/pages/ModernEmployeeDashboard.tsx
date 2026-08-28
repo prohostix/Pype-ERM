@@ -57,7 +57,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
     setLoading(true);
     try {
       // Check collections permission
-      const isSales = ['sales_admin', 'sales_agent', 'bde'].includes(user?.role || '');
+      const isSales = ['sales_admin', 'sales_sub_admin', 'sales_agent', 'bde'].includes(user?.role || '');
       if (!isSales) {
         api.get('/collections/metrics')
           .then(res => {

@@ -7,6 +7,16 @@ export const getExamRegistrations = asyncHandler(async (req, res) => {
         where.status = status;
     if (semester)
         where.semester = semester;
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        where.OR = [
+            { student: { enrolledBy: null } },
+            { student: { referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
     const registrations = await prisma.examRegistration.findMany({
         where,
         include: {
@@ -19,8 +29,18 @@ export const getExamRegistrations = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, count: registrations.length, data: registrations });
 });
 export const getExamRegistration = asyncHandler(async (req, res) => {
-    const registration = await prisma.examRegistration.findUnique({
-        where: { id: req.params.id, organizationId: req.user.organizationId },
+    let whereClause = { id: req.params.id, organizationId: req.user.organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        whereClause.OR = [
+            { student: { enrolledBy: null, referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
+    const registration = await prisma.examRegistration.findFirst({
+        where: whereClause,
         include: {
             student: {
                 select: { id: true, name: true, enrollmentNo: true, programId: true }
@@ -49,8 +69,23 @@ export const createExamRegistration = asyncHandler(async (req, res) => {
 });
 export const updateExamRegistration = asyncHandler(async (req, res) => {
     const { semester, subjectCodes, examCenter, status } = req.body;
+    let whereClause = { id: req.params.id, organizationId: req.user.organizationId };
+    if (req.user.role === 'ops_sub_admin') {
+        const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+        const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+        whereClause.OR = [
+            { student: { enrolledBy: null, referredBy: null } },
+            { student: { enrolledBy: { in: assignedIds } } },
+            { student: { referredBy: { in: assignedIds } } }
+        ];
+    }
+    const existing = await prisma.examRegistration.findFirst({ where: whereClause });
+    if (!existing) {
+        res.status(404).json({ success: false, message: 'Exam registration not found or unauthorized' });
+        return;
+    }
     const registration = await prisma.examRegistration.update({
-        where: { id: req.params.id, organizationId: req.user.organizationId },
+        where: { id: req.params.id },
         data: {
             semester,
             subjectCodes,
