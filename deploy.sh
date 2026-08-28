@@ -71,7 +71,7 @@ fi
 # 8. Build Server
 echo "🛠️  Building Backend Server..."
 npm install
-npx prisma db push
+npx prisma db push --accept-data-loss
 npx prisma generate
 if [ ! -d "dist" ] || [ ! -f "dist/server.js" ]; then
     echo "⚙️  Building server..."
