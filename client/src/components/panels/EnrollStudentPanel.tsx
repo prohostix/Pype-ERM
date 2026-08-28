@@ -32,6 +32,7 @@ interface Program {
   code: string;
   university?: University;
   feeStructures?: FeeStructure[];
+  specialisations?: string[];
 }
 
 interface WalletData {
@@ -51,7 +52,7 @@ export function EnrollStudentPanel() {
   const [submitting, setSubmitting] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedFeeModeId, setSelectedFeeModeId] = useState<string>('');
-  const [form, setForm] = useState({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+  const [form, setForm] = useState({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '' });
   const [students, setStudents] = useState<any[]>([]);
   const [studentMode, setStudentMode] = useState<'new' | 'existing'>('new');
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
@@ -80,20 +81,32 @@ export function EnrollStudentPanel() {
     if (!p.feeStructures || p.feeStructures.length === 0) return [];
     
     let studentSessionId: string | null = null;
+    let studentSpecialisation: string | null = null;
     if (studentMode === 'existing' && selectedStudentId) {
       const student = students.find((s: any) => s.id === selectedStudentId);
       if (student) {
         studentSessionId = typeof student.sessionId === 'object' ? student.sessionId?.id : student.sessionId;
+        studentSpecialisation = student.specialisation || null;
       }
+    } else {
+      studentSpecialisation = form.specialisation || null;
     }
 
     let fs = p.feeStructures.find(f => {
       const fSid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
-      return fSid === studentSessionId;
+      return fSid === studentSessionId && f.specialisation === studentSpecialisation;
     });
-    
+    if (!fs && studentSpecialisation) {
+      fs = p.feeStructures.find(f => {
+        const fSid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+        return fSid === studentSessionId && !f.specialisation;
+      });
+    }
     if (!fs) {
-      fs = p.feeStructures.find(f => !f.sessionId);
+      fs = p.feeStructures.find(f => !f.sessionId && f.specialisation === studentSpecialisation);
+    }
+    if (!fs && studentSpecialisation) {
+      fs = p.feeStructures.find(f => !f.sessionId && !f.specialisation);
     }
     if (!fs) {
       fs = p.feeStructures[0];
@@ -170,9 +183,14 @@ export function EnrollStudentPanel() {
 
   const handleEnroll = async () => {
     if (!selectedProgram) return;
-    const missing = Object.entries(form).filter(([, v]) => !v.trim()).map(([k]) => k);
+    const requiredFields = ['studentName', 'studentEmail', 'studentPhone', 'studentAddress'];
+    if (selectedProgram.specialisations && selectedProgram.specialisations.length > 0) {
+      requiredFields.push('specialisation');
+    }
+    const missing = requiredFields.filter(k => !(form as any)[k].trim());
+    
     if (missing.length > 0) {
-      toast.error(`Missing: ${missing.join(', ')}`);
+      toast.error(`Missing required fields: ${missing.join(', ')}`);
       return;
     }
     setSubmitting(true);
@@ -365,9 +383,10 @@ export function EnrollStudentPanel() {
                         studentEmail: s.email || '',
                         studentPhone: s.phone || '',
                         studentAddress: s.address || '',
+                        specialisation: s.specialisation || '',
                       });
                     } else {
-                      setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
+                      setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '' });
                     }
                   }}
                 >
@@ -376,6 +395,24 @@ export function EnrollStudentPanel() {
                     <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
                   ))}
                 </select>
+              </div>
+            )}
+
+            {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
+              <div className="space-y-1">
+                <Label>Specialisation</Label>
+                <Select
+                  value={form.specialisation}
+                  onValueChange={(val) => setForm(f => ({ ...f, specialisation: val }))}
+                  disabled={studentMode === 'existing'}
+                >
+                  <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
+                  <SelectContent>
+                    {selectedProgram.specialisations.map((spec: string) => (
+                      <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
 

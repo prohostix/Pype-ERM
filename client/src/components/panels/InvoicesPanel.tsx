@@ -134,10 +134,24 @@ export function InvoicesPanel() {
   // Auto-fill rates and tax from fee structure when admission selection changes
   useEffect(() => {
     if (serviceType === 'admission' && selectedProgId) {
-      const matchedFee = fees.find(f => {
+      const student = students.find(s => s.id === formData.studentId);
+      
+      let matchedFee = fees.find(f => {
         const progId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-        return progId === selectedProgId;
+        return progId === selectedProgId && f.specialisation === student?.specialisation;
       });
+      if (!matchedFee && student?.specialisation) {
+        matchedFee = fees.find(f => {
+          const progId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+          return progId === selectedProgId && !f.specialisation;
+        });
+      }
+      if (!matchedFee) {
+        matchedFee = fees.find(f => {
+          const progId = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+          return progId === selectedProgId;
+        });
+      }
 
       if (matchedFee) {
         const baseAmount = (matchedFee.registrationFee || 0) + (matchedFee.tuitionFee || 0) + (matchedFee.examFee || 0);
@@ -146,10 +160,11 @@ export function InvoicesPanel() {
 
         const progObj = programs.find(p => p.id === selectedProgId);
         const univObj = universities.find(u => u.id === selectedUnivId);
+        const specStr = student?.specialisation ? ` - ${student.specialisation}` : '';
 
         setFormData(prev => ({
           ...prev,
-          itemDescription: `Admission Fees for ${progObj?.name || 'Program'}${univObj ? ` (${univObj.name})` : ''}`,
+          itemDescription: `Admission Fees for ${progObj?.name || 'Program'}${specStr}${univObj ? ` (${univObj.name})` : ''}`,
           itemQty: '1',
           itemRate: baseAmount.toString(),
           tax: computedTax.toString()

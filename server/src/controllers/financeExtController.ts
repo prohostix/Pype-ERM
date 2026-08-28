@@ -116,7 +116,7 @@ export const generateReceipt = asyncHandler(async (req: AuthRequest, res: Respon
       studentName: invoice.student?.name || 'N/A',
       studentEmail: invoice.student?.email || '',
       enrollmentNo: invoice.student?.enrollmentNo || '',
-      program: invoice.student?.program?.name || '',
+      program: invoice.student?.program?.name ? `${invoice.student.program.name}${invoice.student.specialisation ? ` - ${invoice.student.specialisation}` : ''}` : '',
       university: invoice.student?.program?.university?.name || '',
       center: invoice.center?.name || 'Direct',
       items: invoice.items,

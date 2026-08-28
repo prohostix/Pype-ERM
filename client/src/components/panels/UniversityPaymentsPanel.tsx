@@ -103,7 +103,9 @@ export function UniversityPaymentsPanel() {
 
   // Helper calculation functions
   const calculatePaymentData = (student: StudentWithPayments) => {
-    const feeStructure = student.program?.feeStructures?.[0];
+    let feeStructure = student.program?.feeStructures?.find(f => f.sessionId === student.sessionId && f.specialisation === student.specialisation);
+    if (!feeStructure) feeStructure = student.program?.feeStructures?.find(f => f.sessionId === student.sessionId && !f.specialisation);
+    if (!feeStructure) feeStructure = student.program?.feeStructures?.[0];
     let totalUniversityFee = 0;
 
     if (feeStructure) {

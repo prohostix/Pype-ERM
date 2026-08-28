@@ -103,7 +103,9 @@ export function UniversityCommissionsPanel() {
 
   // Helper calculation functions
   const calculateCommissionData = (student: StudentWithCommissions) => {
-    const feeStructure = student.program?.feeStructures?.[0];
+    let feeStructure = student.program?.feeStructures?.find(f => f.sessionId === student.sessionId && f.specialisation === student.specialisation);
+    if (!feeStructure) feeStructure = student.program?.feeStructures?.find(f => f.sessionId === student.sessionId && !f.specialisation);
+    if (!feeStructure) feeStructure = student.program?.feeStructures?.[0];
     let totalUniversityFee = 0;
     let expectedCommission = 0;
     let baseCommissionRate = 0;
