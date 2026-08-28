@@ -22,7 +22,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import api from '@/lib/api';
-
+import { useAuth } from '@/hooks/useAuth';
 interface User {
   id?: string;
   name: string;
@@ -70,6 +70,8 @@ export function HRUsersPanel() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [subDepartments, setSubDepartments] = useState<SubDepartment[]>([]);
   const [designations, setDesignations] = useState<DesignationOption[]>([]);
+  const { user: currentUser } = useAuth();
+  const isOrgAdmin = currentUser?.role === 'org_admin' || currentUser?.role === 'superadmin' || currentUser?.role === 'ceo';
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
@@ -154,9 +156,11 @@ export function HRUsersPanel() {
       const response = await api.get('/users');
       const allUsers = response.data.data || response.data || [];
       // Exclude top-level admin roles — everyone else is headcount
-      const staffUsers = allUsers.filter((user: User) =>
-        !['ceo', 'org_admin', 'superadmin', 'student'].includes(user.role)
-      );
+      const staffUsers = allUsers.filter((u: User) => {
+        if (['ceo', 'org_admin', 'superadmin', 'student'].includes(u.role)) return false;
+        if (u.role === 'center_admin' && !isOrgAdmin) return false;
+        return true;
+      });
       setUsers(staffUsers);
     } catch (error) {
       console.error('Failed to fetch users:', error);
@@ -623,7 +627,7 @@ export function HRUsersPanel() {
                     <SelectItem value="sales_agent">Sales Agent</SelectItem>
                     <SelectItem value="bde">BDE</SelectItem>
                     <SelectItem value="collections_admin">Collections Admin</SelectItem>
-                    <SelectItem value="center_admin">Center Admin</SelectItem>
+                    {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                     <SelectItem value="general_manager">General Manager</SelectItem>
                   </SelectContent>
                 </Select>
@@ -1140,11 +1144,11 @@ export function HRUsersPanel() {
                   <SelectItem value="ops_admin">Operations Admin</SelectItem>
                   <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
                   <SelectItem value="sales_admin">Sales Admin</SelectItem>
-                    <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
+                  <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                   <SelectItem value="sales_agent">Sales Agent</SelectItem>
                   <SelectItem value="bde">BDE</SelectItem>
                   <SelectItem value="collections_admin">Collections Admin</SelectItem>
-                  <SelectItem value="center_admin">Center Admin</SelectItem>
+                  {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                   <SelectItem value="general_manager">General Manager</SelectItem>
                 </SelectContent>
               </Select>
