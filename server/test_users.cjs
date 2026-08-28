@@ -6,10 +6,8 @@ const client = new Client({
 async function run() {
   try {
     await client.connect();
-    const res = await client.query("SELECT COUNT(*) FROM \"User\" WHERE role::text = 'staff';");
-    console.log("Users with staff role:", res.rows[0].count);
-    const res2 = await client.query("SELECT COUNT(*) FROM \"User\" WHERE role::text = 'student';");
-    console.log("Users with student role:", res2.rows[0].count);
+    const res = await client.query("SELECT id, name, role, designation FROM \"User\" WHERE name IN ('APARNA P S', 'ABINAS V H', 'MUBASHIRA K');");
+    console.log("Users:", res.rows);
   } catch (error) {
     console.error("Error connecting or querying:", error.message);
   } finally {

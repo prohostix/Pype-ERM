@@ -55,7 +55,7 @@ export function EmployeesPanel() {
       // Also exclude resigned employees
       const employeesOnly = allUsers.filter((user: any) => {
         const role = user.role?.toLowerCase() || '';
-        return role !== 'ceo' && role !== 'org_admin' && user.status !== 'resigned';
+        return role !== 'ceo' && role !== 'org_admin' && role !== 'student' && user.status !== 'resigned';
       });
       setEmployees(employeesOnly);
     } catch (error) {
