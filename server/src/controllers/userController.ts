@@ -52,7 +52,7 @@ export const getUsers = asyncHandler(async (req: AuthRequest, res: Response) => 
   if (req.query.status) where.status = req.query.status as string;
 
   if (!req.query.role) {
-    where.email = { not: { endsWith: '@student.pypeerm.com' } };
+    where.role = { not: 'student' };
   }
 
   const users = await prisma.user.findMany({ where, select: USER_SELECT });
@@ -266,9 +266,9 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     }
   }
 
-  // Exclude students by ensuring email does not end with @student.pypeerm.com
-  if (!where.email) {
-    where.email = { not: { endsWith: '@student.pypeerm.com' } };
+  // Exclude students
+  if (!where.role) {
+    where.role = { not: 'student' };
   }
 
   const users = await prisma.user.findMany({
