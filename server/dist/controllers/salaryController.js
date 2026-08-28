@@ -65,7 +65,7 @@ export const upsertLeaveAllocation = asyncHandler(async (req, res) => {
 });
 export const bulkInitLeaveAllocations = asyncHandler(async (req, res) => {
     const { year = new Date().getFullYear(), casual, sick, earned } = req.body;
-    const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: 'active' } });
+    const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: 'active', NOT: { role: { in: ['student', 'center_admin'] } } } });
     const results = await Promise.all(users.map(u => prisma.leaveAllocation.upsert({
         where: { userId_year: { userId: u.id, year } },
         update: { casualLeave: casual, sickLeave: sick, earnedLeave: earned },

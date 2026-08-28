@@ -370,7 +370,7 @@ export const getAttendances = asyncHandler(async (req, res) => {
     const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
     let finalAttendances = [...attendances];
     if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
-        const orgQuery = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student'] } }, status: { not: 'resigned' } };
+        const orgQuery = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student', 'center_admin'] } }, status: { not: 'resigned' } };
         if (where.user?.branchId)
             orgQuery.branchId = where.user.branchId;
         const allEmployees = await prisma.user.findMany({ where: orgQuery });

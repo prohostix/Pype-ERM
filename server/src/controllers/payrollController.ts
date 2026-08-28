@@ -4,8 +4,12 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const where: any = { organizationId: req.user.organizationId };
+  if (req.user.role === 'hr_admin') {
+    where.user = { role: { not: 'center_admin' } };
+  }
   const payrolls = await prisma.payroll.findMany({
-    where: { organizationId: req.user.organizationId },
+    where,
     include: { user: { select: { name: true, email: true } } },
     orderBy: { createdAt: 'desc' }
   });

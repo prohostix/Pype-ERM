@@ -45,7 +45,16 @@ export const getUsers = asyncHandler(async (req, res) => {
     if (req.query.status)
         where.status = req.query.status;
     if (!req.query.role) {
-        where.role = { not: 'student' };
+        if (req.user.role === 'hr_admin') {
+            where.role = { notIn: ['student', 'center_admin'] };
+        }
+        else {
+            where.role = { not: 'student' };
+        }
+    }
+    else if (req.query.role === 'center_admin' && req.user.role === 'hr_admin') {
+        // Prevent HR from explicitly fetching center admins
+        where.role = 'none'; // invalid role to return empty
     }
     const users = await prisma.user.findMany({ where, select: USER_SELECT });
     res.status(200).json({ success: true, count: users.length, data: users });

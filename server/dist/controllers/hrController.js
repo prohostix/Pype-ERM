@@ -8,8 +8,12 @@ export const getLeaveRequests = asyncHandler(async (req, res) => {
     const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
     const isHR = role === 'hr_admin';
     const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
-    if (isGlobalAdmin || isHR) {
-        // Global admins and HR see all leaves
+    if (isGlobalAdmin) {
+        // Global admins see all leaves
+    }
+    else if (isHR) {
+        // HR admins see all leaves except center_admin
+        where.user = { role: { not: 'center_admin' } };
     }
     else if (DEPT_MANAGER_ROLES.includes(role)) {
         // Department managers see leaves in their department plus their own leaves
