@@ -16,6 +16,8 @@ export const getTasks = asyncHandler(async (req: AuthRequest, res: Response) => 
   }
   if (req.query.assignedTo) where.assignedTo = req.query.assignedTo as string;
   if (req.query.status) where.status = req.query.status as string;
+  if (req.query.departmentId) where.departmentId = req.query.departmentId as string;
+  if (req.query.priority) where.priority = req.query.priority as string;
   const tasks = await prisma.task.findMany({
     where,
     include: {
