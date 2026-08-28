@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { UniversityEnrollmentReviewPanel } from '@/components/panels/UniversityEnrollmentReviewPanel';
+import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
 interface Enrollment {
   id: string;
@@ -108,6 +109,19 @@ export function ModernUniversityDashboard({ initialTab }: { initialTab?: string 
           <p className="text-sm text-muted-foreground mt-1">University Admin Panel</p>
         </div>
         <UniversityEnrollmentReviewPanel />
+      </div>
+    );
+  }
+
+  // Render meetings tab
+  if (activeTab === 'meetings') {
+    return (
+      <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div>
+          <h1 className="text-2xl font-bold">{uniName}</h1>
+          <p className="text-sm text-muted-foreground mt-1">University Admin Panel</p>
+        </div>
+        <MeetingsPanel />
       </div>
     );
   }
