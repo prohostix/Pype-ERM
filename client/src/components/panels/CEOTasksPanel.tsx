@@ -429,7 +429,7 @@ export function CEOTasksPanel() {
                     <SelectItem key={m.id} value={m.id}>
                       <span className="font-medium">{m.name}</span>
                       <span className="text-muted-foreground ml-2 text-xs">
-                        {m.departmentId?.name ? `· ${m.departmentId.name}` : ''} · {m.role.replace(/_/g, ' ')}
+                        {departments.find(d => d.id === m.departmentId)?.name ? `· ${departments.find(d => d.id === m.departmentId)?.name}` : ''} · {m.role.replace(/_/g, ' ')}
                       </span>
                     </SelectItem>
                   ))}
