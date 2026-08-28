@@ -476,6 +476,8 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   hrRemarks: 'hrRemarks',
   deptApprovedBy: 'deptApprovedBy',
   hrApprovedBy: 'hrApprovedBy',
+  isHalfDay: 'isHalfDay',
+  halfDayType: 'halfDayType',
   appliedAt: 'appliedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

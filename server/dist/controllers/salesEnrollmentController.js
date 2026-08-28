@@ -34,7 +34,7 @@ export const validateStudentInviteToken = asyncHandler(async (req, res) => {
         },
         include: {
             university: { select: { id: true, name: true, code: true, logo: true } },
-            feeStructures: { select: { allowInitialFee: true } },
+            feeStructures: { select: { allowInitialFee: true, specialisation: true } },
         },
     });
     res.status(200).json({
@@ -42,7 +42,7 @@ export const validateStudentInviteToken = asyncHandler(async (req, res) => {
         data: {
             organizationName: invite.organization.name,
             referrerName: invite.referrer.name,
-            programs,
+            programs: programs.map(p => ({ ...p, specialisations: p.specialisations })),
             token,
         },
     });
@@ -50,7 +50,7 @@ export const validateStudentInviteToken = asyncHandler(async (req, res) => {
 // ─── Public: Student submits their data via invite link ───────────────────────
 export const submitStudentApplication = asyncHandler(async (req, res) => {
     const { token } = req.params;
-    const { studentName, studentEmail, studentPhone, studentAddress, programId, sessionId, documents, fatherName, dob, altPhone, pinCode, gender, category, religion, maritalStatus, employmentStatus, caste, motherName, motherPhone, fatherPhone, guardianName, familyPhone, photo } = req.body;
+    const { studentName, studentEmail, studentPhone, studentAddress, programId, sessionId, documents, fatherName, dob, altPhone, pinCode, gender, category, religion, maritalStatus, employmentStatus, caste, motherName, motherPhone, fatherPhone, guardianName, familyPhone, photo, specialisation } = req.body;
     // Validate required fields
     const missing = [];
     if (!studentName)
@@ -138,6 +138,7 @@ export const submitStudentApplication = asyncHandler(async (req, res) => {
             photo,
             documents: documents || [],
             programId,
+            specialisation: specialisation || null,
             studyCenterId: studyCenter?.id || null,
             sessionId: session.id,
             paymentPlan: req.body.paymentPlan || null,
@@ -359,6 +360,7 @@ export const approveSalesEnrollmentFinance = asyncHandler(async (req, res) => {
                     photo: enrollment.photo,
                     documents: enrollment.documents ? enrollment.documents : undefined,
                     programId: enrollment.programId,
+                    specialisation: enrollment.specialisation || null,
                     sessionId: enrollment.sessionId,
                     status: 'active',
                     referredBy: enrollment.salesUserId,

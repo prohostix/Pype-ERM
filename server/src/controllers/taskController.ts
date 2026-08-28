@@ -1,5 +1,27 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
+
+const ROLE_HIERARCHY: Record<string, number> = {
+  superadmin: 0,
+  org_admin: 1,
+  ceo: 1,
+  general_manager: 1,
+  ops_admin: 2,
+  finance_admin: 2,
+  hr_admin: 2,
+  sales_admin: 2,
+  center_admin: 2,
+  university_admin: 2,
+  collections_admin: 2,
+  ops_sub_admin: 3,
+  finance: 4,
+  sales: 4,
+  collections: 4,
+  staff: 4,
+  bde: 4,
+  sales_agent: 4,
+  employee: 4
+};
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
@@ -54,6 +76,18 @@ export const createTask = asyncHandler(async (req: AuthRequest, res: Response) =
     return;
   }
 
+  if (assignedTo) {
+    const assignee = await prisma.user.findUnique({ where: { id: assignedTo }, select: { role: true } });
+    if (assignee) {
+      const currentHierarchy = ROLE_HIERARCHY[req.user.role as string] ?? 99;
+      const assigneeHierarchy = ROLE_HIERARCHY[assignee.role as string] ?? 99;
+      if (assigneeHierarchy < currentHierarchy) {
+        res.status(403).json({ success: false, message: 'You cannot assign a task to someone above your rank.' });
+        return;
+      }
+    }
+  }
+
   const task = await prisma.task.create({
     data: {
       title,
@@ -76,7 +110,20 @@ export const updateTask = asyncHandler(async (req: AuthRequest, res: Response) =
   const updateData: any = {};
   if (title) updateData.title = title;
   if (description) updateData.description = description;
-  if (assignedTo) updateData.assignedTo = assignedTo;
+  
+  if (assignedTo) {
+    const assignee = await prisma.user.findUnique({ where: { id: assignedTo }, select: { role: true } });
+    if (assignee) {
+      const currentHierarchy = ROLE_HIERARCHY[req.user.role as string] ?? 99;
+      const assigneeHierarchy = ROLE_HIERARCHY[assignee.role as string] ?? 99;
+      if (assigneeHierarchy < currentHierarchy) {
+        res.status(403).json({ success: false, message: 'You cannot reassign a task to someone above your rank.' });
+        return;
+      }
+    }
+    updateData.assignedTo = assignedTo;
+  }
+  
   if (deadline) updateData.deadline = new Date(deadline);
   if (status) updateData.status = status;
   if (priority) updateData.priority = priority;
@@ -111,9 +158,17 @@ export const deleteTask = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const getAssignableUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const currentHierarchy = ROLE_HIERARCHY[req.user.role as string] ?? 99;
+
   const users = await prisma.user.findMany({
     where: { organizationId: req.user.organizationId, status: 'active' },
-    select: { id: true, name: true, email: true, designation: true, departmentId: true }
+    select: { id: true, name: true, email: true, designation: true, departmentId: true, role: true }
   });
-  res.status(200).json({ success: true, count: users.length, data: users });
+
+  const assignableUsers = users.filter(u => {
+    const userHierarchy = ROLE_HIERARCHY[u.role as string] ?? 99;
+    return userHierarchy >= currentHierarchy;
+  });
+
+  res.status(200).json({ success: true, count: assignableUsers.length, data: assignableUsers });
 });

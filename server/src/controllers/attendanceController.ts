@@ -434,7 +434,22 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
 
     const absentEmployees = allEmployees.filter(emp => !presentEmployeeIds.has(emp.id));
     
-    const isSunday = targetDate.getDay() === 0;
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = days[targetDate.getDay()];
+
+    const settings = await prisma.hRSettings.findUnique({
+      where: { organizationId: req.user.organizationId }
+    });
+    
+    let workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    if (settings && settings.officeHours) {
+      const officeHours = settings.officeHours as any;
+      if (officeHours.workingDays && Array.isArray(officeHours.workingDays)) {
+        workingDays = officeHours.workingDays;
+      }
+    }
+    
+    const isWorkingDay = workingDays.includes(todayName);
     
     const startOfDay = new Date(targetDate);
     startOfDay.setHours(0, 0, 0, 0);
@@ -449,8 +464,8 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       }
     });
 
-    const isHolidayOrSunday = isSunday || !!holiday;
-    const computedStatus = isHolidayOrSunday ? 'holiday' : 'absent';
+    const isHolidayOrWeekOff = !isWorkingDay || !!holiday;
+    const computedStatus = isHolidayOrWeekOff ? 'holiday' : 'absent';
 
     const mockAbsentRecords: any[] = absentEmployees.map(emp => ({
       id: `${computedStatus}-${emp.id}-${targetDate.getTime()}`,
@@ -466,7 +481,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       isLate: false,
       lateMinutes: 0,
       workingHours: 0,
-      notes: holiday ? holiday.name : (isSunday ? 'Sunday' : null),
+      notes: holiday ? holiday.name : (!isWorkingDay ? 'Week Off' : null),
       createdAt: new Date(),
       updatedAt: new Date(),
       user: emp

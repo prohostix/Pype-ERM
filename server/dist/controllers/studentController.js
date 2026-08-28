@@ -483,6 +483,7 @@ export const bulkImportStudents = asyncHandler(async (req, res) => {
                 universityId: program.universityId,
                 centerId: resolvedCenterId || undefined,
                 sessionId: resolvedSessionId || undefined,
+                specialisation: s.specialisation || null,
                 status: s.status || 'active',
                 isPrevious: isPrevious || s.isPrevious || false,
                 organizationId,

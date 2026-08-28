@@ -60,10 +60,12 @@ export const getLeaveRequest = asyncHandler(async (req, res) => {
     res.json({ success: true, data: leave });
 });
 export const createLeaveRequest = asyncHandler(async (req, res) => {
-    const { startDate, endDate, departmentId, ...rest } = req.body;
+    const { startDate, endDate, departmentId, isHalfDay, halfDayType, ...rest } = req.body;
     const leave = await prisma.leaveRequest.create({
         data: {
             ...rest,
+            isHalfDay: isHalfDay || false,
+            halfDayType: halfDayType || null,
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             employeeId: req.user.id,
@@ -79,20 +81,24 @@ export const updateLeaveRequest = asyncHandler(async (req, res) => {
         res.status(404).json({ success: false, message: 'Leave request not found' });
         return;
     }
-    const { startDate, endDate, leaveType, reason, status, remarks } = req.body;
+    const { startDate, endDate, leaveType, reason, status, remarks, isHalfDay, halfDayType } = req.body;
     const updateData = {};
     if (startDate)
         updateData.startDate = new Date(startDate);
     if (endDate)
         updateData.endDate = new Date(endDate);
     if (leaveType !== undefined)
-        updateData.leaveType = leaveType;
+        updateData.type = leaveType;
     if (reason !== undefined)
         updateData.reason = reason;
     if (status !== undefined)
         updateData.status = status;
     if (remarks !== undefined)
         updateData.remarks = remarks;
+    if (isHalfDay !== undefined)
+        updateData.isHalfDay = isHalfDay;
+    if (halfDayType !== undefined)
+        updateData.halfDayType = halfDayType;
     const leave = await prisma.leaveRequest.update({ where: { id: req.params.id }, data: updateData });
     res.json({ success: true, data: leave });
 });
@@ -127,6 +133,43 @@ export const hrApproveLeave = asyncHandler(async (req, res) => {
             hrApprovedBy: req.user.id
         }
     });
+    if (action === 'approve') {
+        // Generate attendance records for the leave duration
+        const startDate = new Date(leave.startDate);
+        const endDate = new Date(leave.endDate);
+        const statusToSet = leave.isHalfDay ? 'half_day' : 'leave';
+        // Loop through each day (inclusive)
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const dateOnly = new Date(d);
+            dateOnly.setHours(0, 0, 0, 0);
+            // Check if an attendance record exists for this employee on this date
+            const existing = await prisma.attendance.findFirst({
+                where: {
+                    employeeId: leave.employeeId,
+                    date: dateOnly
+                }
+            });
+            if (existing) {
+                // Update existing record
+                await prisma.attendance.update({
+                    where: { id: existing.id },
+                    data: { status: statusToSet }
+                });
+            }
+            else {
+                // Create new record
+                await prisma.attendance.create({
+                    data: {
+                        employeeId: leave.employeeId,
+                        organizationId: leave.organizationId,
+                        date: dateOnly,
+                        status: statusToSet,
+                        notes: `Leave Approved: ${leave.reason}`
+                    }
+                });
+            }
+        }
+    }
     res.json({ success: true, data: leave });
 });
 export const getLeaveStats = asyncHandler(async (req, res) => {

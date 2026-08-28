@@ -37521,6 +37521,8 @@ export namespace Prisma {
     hrRemarks: string | null
     deptApprovedBy: string | null
     hrApprovedBy: string | null
+    isHalfDay: boolean | null
+    halfDayType: string | null
     appliedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -37540,6 +37542,8 @@ export namespace Prisma {
     hrRemarks: string | null
     deptApprovedBy: string | null
     hrApprovedBy: string | null
+    isHalfDay: boolean | null
+    halfDayType: string | null
     appliedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -37559,6 +37563,8 @@ export namespace Prisma {
     hrRemarks: number
     deptApprovedBy: number
     hrApprovedBy: number
+    isHalfDay: number
+    halfDayType: number
     appliedAt: number
     createdAt: number
     updatedAt: number
@@ -37580,6 +37586,8 @@ export namespace Prisma {
     hrRemarks?: true
     deptApprovedBy?: true
     hrApprovedBy?: true
+    isHalfDay?: true
+    halfDayType?: true
     appliedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -37599,6 +37607,8 @@ export namespace Prisma {
     hrRemarks?: true
     deptApprovedBy?: true
     hrApprovedBy?: true
+    isHalfDay?: true
+    halfDayType?: true
     appliedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -37618,6 +37628,8 @@ export namespace Prisma {
     hrRemarks?: true
     deptApprovedBy?: true
     hrApprovedBy?: true
+    isHalfDay?: true
+    halfDayType?: true
     appliedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -37710,6 +37722,8 @@ export namespace Prisma {
     hrRemarks: string | null
     deptApprovedBy: string | null
     hrApprovedBy: string | null
+    isHalfDay: boolean
+    halfDayType: string | null
     appliedAt: Date
     createdAt: Date
     updatedAt: Date
@@ -37746,6 +37760,8 @@ export namespace Prisma {
     hrRemarks?: boolean
     deptApprovedBy?: boolean
     hrApprovedBy?: boolean
+    isHalfDay?: boolean
+    halfDayType?: boolean
     appliedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -37770,6 +37786,8 @@ export namespace Prisma {
     hrRemarks?: boolean
     deptApprovedBy?: boolean
     hrApprovedBy?: boolean
+    isHalfDay?: boolean
+    halfDayType?: boolean
     appliedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -37794,6 +37812,8 @@ export namespace Prisma {
     hrRemarks?: boolean
     deptApprovedBy?: boolean
     hrApprovedBy?: boolean
+    isHalfDay?: boolean
+    halfDayType?: boolean
     appliedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -37818,12 +37838,14 @@ export namespace Prisma {
     hrRemarks?: boolean
     deptApprovedBy?: boolean
     hrApprovedBy?: boolean
+    isHalfDay?: boolean
+    halfDayType?: boolean
     appliedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "departmentId" | "type" | "startDate" | "endDate" | "reason" | "status" | "deptAdminRemarks" | "hrRemarks" | "deptApprovedBy" | "hrApprovedBy" | "appliedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveRequest"]>
+  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "organizationId" | "departmentId" | "type" | "startDate" | "endDate" | "reason" | "status" | "deptAdminRemarks" | "hrRemarks" | "deptApprovedBy" | "hrApprovedBy" | "isHalfDay" | "halfDayType" | "appliedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | DepartmentDefaultArgs<ExtArgs>
     deptApprover?: boolean | LeaveRequest$deptApproverArgs<ExtArgs>
@@ -37869,6 +37891,8 @@ export namespace Prisma {
       hrRemarks: string | null
       deptApprovedBy: string | null
       hrApprovedBy: string | null
+      isHalfDay: boolean
+      halfDayType: string | null
       appliedAt: Date
       createdAt: Date
       updatedAt: Date
@@ -38313,6 +38337,8 @@ export namespace Prisma {
     readonly hrRemarks: FieldRef<"LeaveRequest", 'String'>
     readonly deptApprovedBy: FieldRef<"LeaveRequest", 'String'>
     readonly hrApprovedBy: FieldRef<"LeaveRequest", 'String'>
+    readonly isHalfDay: FieldRef<"LeaveRequest", 'Boolean'>
+    readonly halfDayType: FieldRef<"LeaveRequest", 'String'>
     readonly appliedAt: FieldRef<"LeaveRequest", 'DateTime'>
     readonly createdAt: FieldRef<"LeaveRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"LeaveRequest", 'DateTime'>
@@ -68071,10 +68097,10 @@ export namespace Prisma {
     readonly organizationId: FieldRef<"LeaveAllocation", 'String'>
     readonly userId: FieldRef<"LeaveAllocation", 'String'>
     readonly year: FieldRef<"LeaveAllocation", 'Int'>
-    readonly sickLeave: FieldRef<"LeaveAllocation", 'Int'>
-    readonly casualLeave: FieldRef<"LeaveAllocation", 'Int'>
-    readonly earnedLeave: FieldRef<"LeaveAllocation", 'Int'>
-    readonly complementaryLeave: FieldRef<"LeaveAllocation", 'Int'>
+    readonly sickLeave: FieldRef<"LeaveAllocation", 'Float'>
+    readonly casualLeave: FieldRef<"LeaveAllocation", 'Float'>
+    readonly earnedLeave: FieldRef<"LeaveAllocation", 'Float'>
+    readonly complementaryLeave: FieldRef<"LeaveAllocation", 'Float'>
     readonly createdBy: FieldRef<"LeaveAllocation", 'String'>
     readonly createdAt: FieldRef<"LeaveAllocation", 'DateTime'>
     readonly updatedAt: FieldRef<"LeaveAllocation", 'DateTime'>
@@ -97473,6 +97499,8 @@ export namespace Prisma {
     hrRemarks: 'hrRemarks',
     deptApprovedBy: 'deptApprovedBy',
     hrApprovedBy: 'hrApprovedBy',
+    isHalfDay: 'isHalfDay',
+    halfDayType: 'halfDayType',
     appliedAt: 'appliedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -101571,6 +101599,8 @@ export namespace Prisma {
     hrRemarks?: StringNullableFilter<"LeaveRequest"> | string | null
     deptApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
     hrApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    isHalfDay?: BoolFilter<"LeaveRequest"> | boolean
+    halfDayType?: StringNullableFilter<"LeaveRequest"> | string | null
     appliedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
@@ -101595,6 +101625,8 @@ export namespace Prisma {
     hrRemarks?: SortOrderInput | SortOrder
     deptApprovedBy?: SortOrderInput | SortOrder
     hrApprovedBy?: SortOrderInput | SortOrder
+    isHalfDay?: SortOrder
+    halfDayType?: SortOrderInput | SortOrder
     appliedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -101622,6 +101654,8 @@ export namespace Prisma {
     hrRemarks?: StringNullableFilter<"LeaveRequest"> | string | null
     deptApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
     hrApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    isHalfDay?: BoolFilter<"LeaveRequest"> | boolean
+    halfDayType?: StringNullableFilter<"LeaveRequest"> | string | null
     appliedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
@@ -101646,6 +101680,8 @@ export namespace Prisma {
     hrRemarks?: SortOrderInput | SortOrder
     deptApprovedBy?: SortOrderInput | SortOrder
     hrApprovedBy?: SortOrderInput | SortOrder
+    isHalfDay?: SortOrder
+    halfDayType?: SortOrderInput | SortOrder
     appliedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -101671,6 +101707,8 @@ export namespace Prisma {
     hrRemarks?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
     deptApprovedBy?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
     hrApprovedBy?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
+    isHalfDay?: BoolWithAggregatesFilter<"LeaveRequest"> | boolean
+    halfDayType?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
     appliedAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
@@ -104293,10 +104331,10 @@ export namespace Prisma {
     organizationId?: StringFilter<"LeaveAllocation"> | string
     userId?: StringFilter<"LeaveAllocation"> | string
     year?: IntFilter<"LeaveAllocation"> | number
-    sickLeave?: IntFilter<"LeaveAllocation"> | number
-    casualLeave?: IntFilter<"LeaveAllocation"> | number
-    earnedLeave?: IntFilter<"LeaveAllocation"> | number
-    complementaryLeave?: IntFilter<"LeaveAllocation"> | number
+    sickLeave?: FloatFilter<"LeaveAllocation"> | number
+    casualLeave?: FloatFilter<"LeaveAllocation"> | number
+    earnedLeave?: FloatFilter<"LeaveAllocation"> | number
+    complementaryLeave?: FloatFilter<"LeaveAllocation"> | number
     createdBy?: StringNullableFilter<"LeaveAllocation"> | string | null
     createdAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
@@ -104331,10 +104369,10 @@ export namespace Prisma {
     organizationId?: StringFilter<"LeaveAllocation"> | string
     userId?: StringFilter<"LeaveAllocation"> | string
     year?: IntFilter<"LeaveAllocation"> | number
-    sickLeave?: IntFilter<"LeaveAllocation"> | number
-    casualLeave?: IntFilter<"LeaveAllocation"> | number
-    earnedLeave?: IntFilter<"LeaveAllocation"> | number
-    complementaryLeave?: IntFilter<"LeaveAllocation"> | number
+    sickLeave?: FloatFilter<"LeaveAllocation"> | number
+    casualLeave?: FloatFilter<"LeaveAllocation"> | number
+    earnedLeave?: FloatFilter<"LeaveAllocation"> | number
+    complementaryLeave?: FloatFilter<"LeaveAllocation"> | number
     createdBy?: StringNullableFilter<"LeaveAllocation"> | string | null
     createdAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
@@ -104370,10 +104408,10 @@ export namespace Prisma {
     organizationId?: StringWithAggregatesFilter<"LeaveAllocation"> | string
     userId?: StringWithAggregatesFilter<"LeaveAllocation"> | string
     year?: IntWithAggregatesFilter<"LeaveAllocation"> | number
-    sickLeave?: IntWithAggregatesFilter<"LeaveAllocation"> | number
-    casualLeave?: IntWithAggregatesFilter<"LeaveAllocation"> | number
-    earnedLeave?: IntWithAggregatesFilter<"LeaveAllocation"> | number
-    complementaryLeave?: IntWithAggregatesFilter<"LeaveAllocation"> | number
+    sickLeave?: FloatWithAggregatesFilter<"LeaveAllocation"> | number
+    casualLeave?: FloatWithAggregatesFilter<"LeaveAllocation"> | number
+    earnedLeave?: FloatWithAggregatesFilter<"LeaveAllocation"> | number
+    complementaryLeave?: FloatWithAggregatesFilter<"LeaveAllocation"> | number
     createdBy?: StringNullableWithAggregatesFilter<"LeaveAllocation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LeaveAllocation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LeaveAllocation"> | Date | string
@@ -109741,6 +109779,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -109765,6 +109805,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -109779,6 +109821,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109803,6 +109847,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109822,6 +109868,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -109836,6 +109884,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109855,6 +109905,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112713,10 +112765,10 @@ export namespace Prisma {
   export type LeaveAllocationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneWithoutCreatedLeaveAllocationsNestedInput
@@ -112729,10 +112781,10 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112755,10 +112807,10 @@ export namespace Prisma {
   export type LeaveAllocationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -112768,10 +112820,10 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117505,6 +117557,8 @@ export namespace Prisma {
     hrRemarks?: SortOrder
     deptApprovedBy?: SortOrder
     hrApprovedBy?: SortOrder
+    isHalfDay?: SortOrder
+    halfDayType?: SortOrder
     appliedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -117524,6 +117578,8 @@ export namespace Prisma {
     hrRemarks?: SortOrder
     deptApprovedBy?: SortOrder
     hrApprovedBy?: SortOrder
+    isHalfDay?: SortOrder
+    halfDayType?: SortOrder
     appliedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -117543,6 +117599,8 @@ export namespace Prisma {
     hrRemarks?: SortOrder
     deptApprovedBy?: SortOrder
     hrApprovedBy?: SortOrder
+    isHalfDay?: SortOrder
+    halfDayType?: SortOrder
     appliedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -134525,6 +134583,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -134547,6 +134607,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -137167,10 +137229,10 @@ export namespace Prisma {
     organizationId?: StringFilter<"LeaveAllocation"> | string
     userId?: StringFilter<"LeaveAllocation"> | string
     year?: IntFilter<"LeaveAllocation"> | number
-    sickLeave?: IntFilter<"LeaveAllocation"> | number
-    casualLeave?: IntFilter<"LeaveAllocation"> | number
-    earnedLeave?: IntFilter<"LeaveAllocation"> | number
-    complementaryLeave?: IntFilter<"LeaveAllocation"> | number
+    sickLeave?: FloatFilter<"LeaveAllocation"> | number
+    casualLeave?: FloatFilter<"LeaveAllocation"> | number
+    earnedLeave?: FloatFilter<"LeaveAllocation"> | number
+    complementaryLeave?: FloatFilter<"LeaveAllocation"> | number
     createdBy?: StringNullableFilter<"LeaveAllocation"> | string | null
     createdAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveAllocation"> | Date | string
@@ -137209,6 +137271,8 @@ export namespace Prisma {
     hrRemarks?: StringNullableFilter<"LeaveRequest"> | string | null
     deptApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
     hrApprovedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    isHalfDay?: BoolFilter<"LeaveRequest"> | boolean
+    halfDayType?: StringNullableFilter<"LeaveRequest"> | string | null
     appliedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
@@ -139267,6 +139331,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -139289,6 +139355,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142655,6 +142723,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142677,6 +142747,8 @@ export namespace Prisma {
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142701,6 +142773,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142723,6 +142797,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142747,6 +142823,8 @@ export namespace Prisma {
     status?: $Enums.LeaveStatus
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142769,6 +142847,8 @@ export namespace Prisma {
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
     deptApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -214672,6 +214752,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -216523,10 +216605,10 @@ export namespace Prisma {
   export type LeaveAllocationUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneWithoutCreatedLeaveAllocationsNestedInput
@@ -216537,10 +216619,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216550,10 +216632,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216568,6 +216650,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216590,6 +216674,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -216608,6 +216694,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -218606,6 +218694,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -218870,6 +218960,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -218892,6 +218984,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -218910,6 +219004,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -220335,6 +220431,8 @@ export namespace Prisma {
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -220353,6 +220451,8 @@ export namespace Prisma {
     hrRemarks?: string | null
     deptApprovedBy?: string | null
     hrApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -220371,6 +220471,8 @@ export namespace Prisma {
     deptAdminRemarks?: string | null
     hrRemarks?: string | null
     deptApprovedBy?: string | null
+    isHalfDay?: boolean
+    halfDayType?: string | null
     appliedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -223208,10 +223310,10 @@ export namespace Prisma {
   export type LeaveAllocationUpdateWithoutCreatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutLeaveAllocationsNestedInput
@@ -223223,10 +223325,10 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -223236,10 +223338,10 @@ export namespace Prisma {
     organizationId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -223247,10 +223349,10 @@ export namespace Prisma {
   export type LeaveAllocationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneWithoutCreatedLeaveAllocationsNestedInput
@@ -223261,10 +223363,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223274,10 +223376,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
-    sickLeave?: IntFieldUpdateOperationsInput | number
-    casualLeave?: IntFieldUpdateOperationsInput | number
-    earnedLeave?: IntFieldUpdateOperationsInput | number
-    complementaryLeave?: IntFieldUpdateOperationsInput | number
+    sickLeave?: FloatFieldUpdateOperationsInput | number
+    casualLeave?: FloatFieldUpdateOperationsInput | number
+    earnedLeave?: FloatFieldUpdateOperationsInput | number
+    complementaryLeave?: FloatFieldUpdateOperationsInput | number
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223292,6 +223394,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223314,6 +223418,8 @@ export namespace Prisma {
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223332,6 +223438,8 @@ export namespace Prisma {
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223346,6 +223454,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223368,6 +223478,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223386,6 +223498,8 @@ export namespace Prisma {
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
     hrApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223400,6 +223514,8 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223422,6 +223538,8 @@ export namespace Prisma {
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -223440,6 +223558,8 @@ export namespace Prisma {
     deptAdminRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     hrRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     deptApprovedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isHalfDay?: BoolFieldUpdateOperationsInput | boolean
+    halfDayType?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

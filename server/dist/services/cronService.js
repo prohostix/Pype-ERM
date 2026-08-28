@@ -71,7 +71,8 @@ const startAutoAbsentCron = () => {
         console.log('🔄 Running auto absent check for missing attendances...');
         try {
             const today = new Date();
-            const isSunday = today.getDay() === 0;
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const todayName = days[today.getDay()];
             const todayStart = new Date(today);
             todayStart.setHours(0, 0, 0, 0);
             const todayEnd = new Date(today);
@@ -83,9 +84,26 @@ const startAutoAbsentCron = () => {
                 }
             });
             let insertedCount = 0;
+            const orgSettingsCache = {};
             for (const emp of activeEmployees) {
                 if (!emp.organizationId)
                     continue;
+                // Cache settings per organization
+                if (!orgSettingsCache[emp.organizationId]) {
+                    const settings = await prisma.hRSettings.findUnique({
+                        where: { organizationId: emp.organizationId }
+                    });
+                    let workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                    if (settings && settings.officeHours) {
+                        const officeHours = settings.officeHours;
+                        if (officeHours.workingDays && Array.isArray(officeHours.workingDays)) {
+                            workingDays = officeHours.workingDays;
+                        }
+                    }
+                    orgSettingsCache[emp.organizationId] = { workingDays };
+                }
+                const orgSettings = orgSettingsCache[emp.organizationId];
+                const isWorkingDay = orgSettings.workingDays.includes(todayName);
                 // Check if today is a Holiday in the database
                 const holiday = await prisma.holiday.findFirst({
                     where: {
@@ -93,9 +111,8 @@ const startAutoAbsentCron = () => {
                         date: { gte: todayStart, lte: todayEnd }
                     }
                 });
-                const isHolidayOrSunday = isSunday || !!holiday;
                 // Only generate absent records on normal working days
-                if (isHolidayOrSunday) {
+                if (!isWorkingDay || !!holiday) {
                     continue;
                 }
                 const existingRecord = await prisma.attendance.findFirst({

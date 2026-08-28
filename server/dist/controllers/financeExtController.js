@@ -97,7 +97,7 @@ export const generateReceipt = asyncHandler(async (req, res) => {
             studentName: invoice.student?.name || 'N/A',
             studentEmail: invoice.student?.email || '',
             enrollmentNo: invoice.student?.enrollmentNo || '',
-            program: invoice.student?.program?.name || '',
+            program: invoice.student?.program?.name ? `${invoice.student.program.name}${invoice.student.specialisation ? ` - ${invoice.student.specialisation}` : ''}` : '',
             university: invoice.student?.program?.university?.name || '',
             center: invoice.center?.name || 'Direct',
             items: invoice.items,
@@ -324,6 +324,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req, res) => {
             name: true,
             enrollmentNo: true,
             sessionId: true,
+            specialisation: true,
             joinDate: true,
             program: {
                 select: {
@@ -389,12 +390,16 @@ export const getStudentPaymentsLog = asyncHandler(async (req, res) => {
         let breakdown = [];
         let feeSt = undefined;
         if (student.program?.feeStructures?.length) {
-            feeSt = student.program.feeStructures.find((fs) => fs.sessionId === student.sessionId);
+            feeSt = student.program.feeStructures.find((fs) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
+            if (!feeSt)
+                feeSt = student.program.feeStructures.find((fs) => fs.sessionId === student.sessionId && !fs.specialisation);
             if (!feeSt)
                 feeSt = student.program.feeStructures[0];
         }
         if (!feeSt && student.university?.feeStructures?.length) {
-            feeSt = student.university.feeStructures.find((fs) => fs.sessionId === student.sessionId);
+            feeSt = student.university.feeStructures.find((fs) => fs.sessionId === student.sessionId && fs.specialisation === student.specialisation);
+            if (!feeSt)
+                feeSt = student.university.feeStructures.find((fs) => fs.sessionId === student.sessionId && !fs.specialisation);
             if (!feeSt)
                 feeSt = student.university.feeStructures[0];
         }

@@ -91,7 +91,21 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId as string, date: today, status: 'present' } });
     metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId as string, date: today, status: 'leave' } });
     
-    const isSunday = today.getDay() === 0;
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = days[today.getDay()];
+
+    const settings = await prisma.hRSettings.findUnique({
+      where: { organizationId: orgId as string }
+    });
+    
+    let workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    if (settings && settings.officeHours) {
+      const officeHours = settings.officeHours as any;
+      if (officeHours.workingDays && Array.isArray(officeHours.workingDays)) {
+        workingDays = officeHours.workingDays;
+      }
+    }
+    const isWorkingDay = workingDays.includes(todayName);
     const holiday = await prisma.holiday.findFirst({
       where: {
         organizationId: orgId as string,
@@ -102,7 +116,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       }
     });
 
-    if (isSunday || holiday) {
+    if (!isWorkingDay || holiday) {
       metrics.absentToday = 0;
     } else {
       metrics.absentToday = Math.max(0, metrics.totalEmployees - metrics.presentToday - metrics.onLeave);

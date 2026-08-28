@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, List, ChevronLeft, ChevronRight, CheckCircle, Clock, LogIn, LogOut, Camera, MapPin, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,6 +60,21 @@ export function AttendanceCalendar({
   const [selectedYear, setSelectedYear] = useState<number>(today.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState<number>(today.getMonth()); // 0-indexed
   const [loading, setLoading] = useState(false);
+  const [workingDays, setWorkingDays] = useState<string[]>(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get('/attendance/settings');
+        if (res.data?.data?.officeHours?.workingDays) {
+          setWorkingDays(res.data.data.officeHours.workingDays);
+        }
+      } catch (err) {
+        console.error('Failed to fetch working days settings:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   // Detail/view modal (for all users)
   const [detailOpen, setDetailOpen] = useState(false);
@@ -113,8 +128,9 @@ export function AttendanceCalendar({
   };
 
   const isWeekOff = (date: Date): boolean => {
-    // Sunday = 0, Saturday = 6
-    return date.getDay() === 0 || date.getDay() === 6;
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayName = days[date.getDay()];
+    return !workingDays.includes(dayName);
   };
 
   const isPast = (date: Date): boolean => {
@@ -221,8 +237,7 @@ export function AttendanceCalendar({
       const promises = [];
       for (let day = 1; day <= totalDays; day++) {
         const date = new Date(selectedYear, selectedMonth, day);
-        const dayOfWeek = date.getDay();
-        if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+        if (isWeekOff(date)) continue;
         const hasRecord = records.some(r => {
           const recDate = new Date(r.date);
           return recDate.getFullYear() === selectedYear && recDate.getMonth() === selectedMonth && recDate.getDate() === day;
@@ -368,7 +383,7 @@ export function AttendanceCalendar({
             {calendarDays.map((dayObj, index) => {
               if (dayObj === null) return <div key={`empty-${index}`} className="aspect-square" />;
               const formattedDay = dayObj.day < 10 ? `0${dayObj.day}` : dayObj.day.toString();
-              const isWeekend = dayObj.date.getDay() === 0 || dayObj.date.getDay() === 6;
+              const isWeekend = isWeekOff(dayObj.date);
               const hasInPhoto = !!dayObj.record?.checkInPhoto;
               const hasOutPhoto = !!dayObj.record?.checkOutPhoto;
               const isClickable = !!dayObj.record || (isHR && !isWeekend);

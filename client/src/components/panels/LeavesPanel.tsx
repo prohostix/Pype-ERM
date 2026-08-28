@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
@@ -43,6 +44,8 @@ interface LeaveRequest {
   hrApprover?: { name: string } | null;
   appliedAt: string;
   createdAt: string;
+  isHalfDay?: boolean;
+  halfDayType?: string;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
@@ -62,7 +65,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false);
-  const [form, setForm] = useState({ type: 'sick', startDate: '', endDate: '', reason: '' });
+  const [form, setForm] = useState({ type: 'sick', startDate: '', endDate: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
   const [submitting, setSubmitting] = useState(false);
 
   // Action dialog (approve/reject with remarks)
@@ -110,7 +113,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       await api.post('/hr/leaves', form);
       toast.success('Leave request submitted. Your department manager will review it.');
       setCreateOpen(false);
-      setForm({ type: 'sick', startDate: '', endDate: '', reason: '' });
+      setForm({ type: 'sick', startDate: '', endDate: '', reason: '', isHalfDay: false, halfDayType: 'first_half' });
       fetchLeaves();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to submit leave request');
@@ -268,6 +271,11 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                             {leave.department && (
                               <Badge variant="outline" className="text-[10px]">{leave.department.name}</Badge>
                             )}
+                            {leave.isHalfDay && (
+                              <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
+                                Half Day ({leave.halfDayType === 'first_half' ? '1st Half' : '2nd Half'})
+                              </Badge>
+                            )}
                           </div>
 
                           {/* Employee name */}
@@ -399,13 +407,44 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Start Date</Label>
-                <Input type="date" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} required />
+                <Input type="date" value={form.startDate} onChange={e => setForm(f => ({ ...f, startDate: e.target.value, endDate: f.isHalfDay ? e.target.value : f.endDate }))} required />
               </div>
               <div className="space-y-2">
                 <Label>End Date</Label>
-                <Input type="date" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} required />
+                <Input type="date" value={form.endDate} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} required disabled={form.isHalfDay} />
               </div>
             </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center space-x-2 h-10 mt-6">
+                <Switch
+                  id="isHalfDay"
+                  checked={form.isHalfDay}
+                  onCheckedChange={(checked) => {
+                    setForm(f => ({ 
+                      ...f, 
+                      isHalfDay: checked, 
+                      endDate: checked ? f.startDate : f.endDate 
+                    }));
+                  }}
+                />
+                <Label htmlFor="isHalfDay" className="cursor-pointer font-medium">Half Day Leave?</Label>
+              </div>
+
+              {form.isHalfDay && (
+                <div className="space-y-2">
+                  <Label>Which Half?</Label>
+                  <Select value={form.halfDayType} onValueChange={v => setForm(f => ({ ...f, halfDayType: v }))}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="first_half">First Half</SelectItem>
+                      <SelectItem value="second_half">Second Half</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label>Reason</Label>
               <Textarea value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} placeholder="Explain the reason for your leave..." rows={3} required />
