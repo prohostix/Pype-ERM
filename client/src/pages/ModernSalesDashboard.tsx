@@ -796,6 +796,7 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
           case 'support_requests': return <ComplaintsPanel />;
           case 'my_profile': return <MyProfilePanel />;
           case 'lead_management': return <LeadsPanel />;
+          case 'meetings': return <MeetingsPanel />;
         }
       })()}
     </div>
