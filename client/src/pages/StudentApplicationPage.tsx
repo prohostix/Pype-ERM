@@ -146,53 +146,71 @@ export default function StudentApplicationPage() {
   const selectedProgram = inviteData?.programs.find(p => p.id === form.programId) || inviteData?.programs[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100/80 flex items-center justify-center p-4 py-12 font-sans selection:bg-primary/10">
+    <div className="min-h-screen bg-[#fafafa] flex items-center justify-center p-4 py-12 font-sans selection:bg-primary/20">
       <div className="w-full max-w-4xl relative">
         {/* Decorative background blur */}
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-primary/5 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" />
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-400/5 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse animation-delay-2000" />
+        <div className="absolute top-0 -left-20 w-96 h-96 bg-primary/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse" />
+        <div className="absolute top-40 -right-20 w-96 h-96 bg-blue-400/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-pulse" style={{ animationDelay: '2s' }} />
 
-        <div className="relative">
+        <div className="relative z-10">
           {/* Header */}
-          <div className="text-center mb-10">
-            <div className="w-28 h-28 bg-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-black/5 ring-4 ring-white border border-slate-100 p-3 relative overflow-hidden group">
+          <div className="text-center mb-12 flex flex-col items-center">
+            <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] ring-1 ring-slate-900/5 p-4 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               {selectedProgram?.university?.logo ? (
                 <img 
                   src={selectedProgram.university.logo.startsWith('http') ? selectedProgram.university.logo : `${API_BASE}${selectedProgram.university.logo.startsWith('/') ? selectedProgram.university.logo : '/' + selectedProgram.university.logo}`} 
                   alt={selectedProgram.university.name} 
-                  className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105" 
+                  className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110" 
                 />
               ) : (
-                <GraduationCap className="w-12 h-12 text-primary relative z-10" />
+                <GraduationCap className="w-10 h-10 text-primary relative z-10" />
               )}
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">{selectedProgram?.university?.name || inviteData?.organizationName}</h1>
-            <p className="text-muted-foreground font-medium mt-2 text-lg">
-              {selectedProgram?.name} {selectedProgram?.courseType ? `(${selectedProgram.courseType})` : ''}
-            </p>
-            <div className="inline-flex items-center justify-center mt-4 bg-white/60 backdrop-blur-sm border border-slate-200/60 shadow-sm px-4 py-1.5 rounded-full">
-              <p className="text-muted-foreground text-xs font-medium">
-                Referred by <span className="font-bold text-slate-700">{inviteData?.referrerName}</span> <span className="mx-1 text-slate-300">•</span> {inviteData?.organizationName}
-              </p>
+            
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight max-w-2xl mx-auto leading-tight">
+              {selectedProgram?.university?.name || inviteData?.organizationName}
+            </h1>
+            
+            <div className="mt-5 flex flex-col items-center gap-4">
+              <span className="px-5 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-bold tracking-wide border border-blue-200/60 shadow-sm">
+                {selectedProgram?.name} {selectedProgram?.courseType ? `(${selectedProgram.courseType})` : ''}
+              </span>
+              
+              <div className="inline-flex items-center gap-2 text-sm text-slate-500 bg-white/80 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <span>Referred by</span>
+                <div className="flex items-center gap-1.5 font-medium text-slate-800">
+                  <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600 border border-slate-200 uppercase">
+                    {inviteData?.referrerName?.charAt(0) || 'U'}
+                  </div>
+                  {inviteData?.referrerName}
+                </div>
+                <span className="text-slate-300 mx-1">•</span>
+                <span className="font-medium text-slate-700">{inviteData?.organizationName}</span>
+              </div>
             </div>
           </div>
 
-          <Card className="shadow-2xl shadow-black/[0.03] border-slate-200/60 bg-white/95 backdrop-blur-sm overflow-hidden">
-            <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/80 to-blue-500" />
-            <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-6 pt-8 px-8">
-              <CardTitle className="text-2xl">Student Application Form</CardTitle>
-              <CardDescription className="text-base mt-1">Please fill in your details accurately to apply for enrollment</CardDescription>
+          <Card className="shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border-0 ring-1 ring-slate-900/5 bg-white/95 backdrop-blur-xl overflow-hidden rounded-3xl">
+            <div className="h-2 w-full bg-gradient-to-r from-blue-600 via-indigo-500 to-primary" />
+            <CardHeader className="bg-gradient-to-b from-slate-50/50 to-white border-b border-slate-100/80 pb-8 pt-10 px-10 text-center">
+              <CardTitle className="text-3xl font-bold tracking-tight text-slate-900">Student Application Form</CardTitle>
+              <CardDescription className="text-base mt-3 font-medium text-slate-500">Please fill in your details accurately to apply for enrollment</CardDescription>
             </CardHeader>
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-10">
+            <CardContent className="p-8 sm:p-12">
+              <form onSubmit={handleSubmit} className="space-y-12">
                 {/* Admission Details */}
-                <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">1</div>
-                    <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Admission Details</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
+                      1
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 tracking-tight">Admission Details</h3>
+                      <p className="text-sm text-slate-500 font-medium">Select your program and preferences</p>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-11">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Program <span className="text-red-500">*</span></Label>
                       <Select value={form.programId} onValueChange={v => setForm(f => ({ ...f, programId: v }))}>
@@ -249,12 +267,17 @@ export default function StudentApplicationPage() {
                 </div>
 
                 {/* Personal Details */}
-                <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">2</div>
-                    <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Personal Details</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
+                      2
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 tracking-tight">Personal Details</h3>
+                      <p className="text-sm text-slate-500 font-medium">Provide your identifying information</p>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-11">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Full Name <span className="text-red-500">*</span></Label>
                       <Input className="h-11 bg-white" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Your full name" required />
@@ -330,7 +353,7 @@ export default function StudentApplicationPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-11 pt-2">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-14 pt-4">
                     <div className="md:col-span-2 space-y-2">
                       <Label className="text-slate-600 font-medium">Address</Label>
                       <Input className="h-11 bg-white" value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Your full residential address" />
@@ -343,12 +366,17 @@ export default function StudentApplicationPage() {
                 </div>
 
                 {/* Family Details */}
-                <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">3</div>
-                    <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Family Details</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
+                      3
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 tracking-tight">Family Details</h3>
+                      <p className="text-sm text-slate-500 font-medium">Contact info for your parents or guardians</p>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-11">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Father's Name</Label>
                       <Input className="h-11 bg-white" value={form.fatherName} onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father's full name" />
@@ -377,12 +405,17 @@ export default function StudentApplicationPage() {
                 </div>
 
                 {/* Document & Photo Upload */}
-                <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">4</div>
-                    <h3 className="text-xl font-semibold text-slate-800 tracking-tight">Documents & Photo</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
+                      4
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 tracking-tight">Documents & Photo</h3>
+                      <p className="text-sm text-slate-500 font-medium">Upload required verification documents</p>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-8 pl-11">
+                  <div className="grid grid-cols-1 gap-8 pl-14">
                     
                     {/* Photo Upload */}
                     <div className="space-y-3 bg-slate-50/50 p-6 rounded-xl border border-slate-100">
@@ -490,8 +523,8 @@ export default function StudentApplicationPage() {
                   </div>
                 )}
 
-                <div className="pt-4 border-t border-slate-100">
-                  <Button type="submit" className="w-full text-lg h-14 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.99] font-bold" disabled={submitting}>
+                <div className="pt-6 border-t border-slate-100/80">
+                  <Button type="submit" className="w-full text-lg h-14 rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98] font-bold bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white border-0" disabled={submitting}>
                     {submitting ? 'Submitting Application...' : 'Submit Application Form'}
                   </Button>
                 </div>
