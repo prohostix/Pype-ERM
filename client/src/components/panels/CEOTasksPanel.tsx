@@ -27,9 +27,10 @@ interface Task {
   id: string;
   title: string;
   description: string;
-  assignedTo?: { id: string; name: string; email: string };
-  assignedBy?: { id: string; name: string; email: string };
-  departmentId?: { id: string; name: string };
+  assignee?: { name: string; email: string };
+  assigner?: { name: string; email: string };
+  department?: { name: string };
+  evidence?: string[];
   priority: 'low' | 'medium' | 'high' | 'critical';
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
   deadline: string;
@@ -50,7 +51,7 @@ interface Manager {
   email: string;
   role: string;
   designation?: string;
-  departmentId?: { id: string; name: string };
+  departmentId?: string;
 }
 
 const emptyForm = {
