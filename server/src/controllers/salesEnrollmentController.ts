@@ -44,7 +44,7 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
     },
     include: {
       university: { select: { id: true, name: true, code: true, logo: true } },
-      feeStructures: { select: { allowInitialFee: true } },
+      feeStructures: { select: { allowInitialFee: true, specialisation: true } },
     },
   });
 
@@ -53,7 +53,7 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
     data: {
       organizationName: invite.organization.name,
       referrerName: invite.referrer.name,
-      programs,
+      programs: programs.map(p => ({ ...p, specialisations: p.specialisations })),
       token,
     },
   });
@@ -86,7 +86,8 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
     fatherPhone,
     guardianName,
     familyPhone,
-    photo
+    photo,
+    specialisation
   } = req.body;
 
   // Validate required fields
@@ -183,6 +184,7 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
       photo,
       documents: documents || [],
       programId,
+      specialisation: specialisation || null,
       studyCenterId: studyCenter?.id || null,
       sessionId: session.id,
       paymentPlan: req.body.paymentPlan || null,

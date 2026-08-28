@@ -16,6 +16,7 @@ interface Program {
   courseType: string;
   university: { name: string; code: string; logo?: string | null };
   feeStructures?: { allowInitialFee: boolean }[];
+  specialisations?: string[];
 }
 
 interface InviteData {
@@ -41,6 +42,7 @@ export default function StudentApplicationPage() {
     studentPhone: '',
     studentAddress: '',
     programId: '',
+    specialisation: '',
     fatherName: '',
     dob: '',
     altPhone: '',
@@ -84,6 +86,13 @@ export default function StudentApplicationPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.programId) { setError('Please select a program'); return; }
+    
+    const selectedProgram = inviteData?.programs.find(p => p.id === form.programId);
+    if (selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && !form.specialisation) {
+      setError('Please select a specialisation');
+      return;
+    }
+    
     setSubmitting(true);
     setError('');
     try {
@@ -199,7 +208,30 @@ export default function StudentApplicationPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    {selectedProgram?.feeStructures?.[0]?.allowInitialFee && (
+                    
+                    {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
+                      <div className="space-y-2">
+                        <Label className="text-slate-600 font-medium">Specialisation <span className="text-red-500">*</span></Label>
+                        <Select value={form.specialisation} onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}>
+                          <SelectTrigger className="h-11 bg-white">
+                            <SelectValue placeholder="Select specialisation" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {selectedProgram.specialisations.map((s: string) => (
+                              <SelectItem key={s} value={s}>{s}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                    {(() => {
+                      let fs = selectedProgram?.feeStructures?.find(f => (f as any).specialisation === form.specialisation);
+                      if (!fs && form.specialisation) {
+                        fs = selectedProgram?.feeStructures?.find(f => !(f as any).specialisation);
+                      }
+                      if (!fs) fs = selectedProgram?.feeStructures?.[0];
+                      return fs?.allowInitialFee;
+                    })() && (
                       <div className="space-y-2">
                         <Label className="text-slate-600 font-medium">Payment Plan <span className="text-slate-400 font-normal text-xs ml-1">(Optional)</span></Label>
                         <Select value={form.paymentPlan} onValueChange={v => setForm(f => ({ ...f, paymentPlan: v }))}>
