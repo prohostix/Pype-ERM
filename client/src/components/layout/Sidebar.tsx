@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import type { UserRole, DepartmentType } from '@/types/erp';
 import { cn } from '@/lib/utils';
+import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -325,7 +326,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
             <img 
-              src={user.organization?.logo || "/pype-logo.png"} 
+              src={user.organization?.logo ? api.getFileUrl(user.organization.logo) : "/pype-logo.png"} 
               alt={user.organization?.name || "PYPE ERM"} 
               className="w-8 h-8 object-contain flex-shrink-0" 
             />
@@ -339,7 +340,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
         )}
         {isCollapsed && (
           <img 
-            src={user.organization?.logo || "/pype-logo.png"} 
+            src={user.organization?.logo ? api.getFileUrl(user.organization.logo) : "/pype-logo.png"} 
             alt={user.organization?.name || "PYPE ERM"} 
             className="w-8 h-8 object-contain mx-auto" 
             title={user.organization?.name || "PYPE ERM"}

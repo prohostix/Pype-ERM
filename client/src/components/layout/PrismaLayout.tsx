@@ -29,6 +29,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
+import { useAuth } from '@/hooks/useAuth';
+import api from '@/lib/api';
 
 interface TableItem {
   id: string;
@@ -62,6 +64,7 @@ export function PrismaLayout({
   organizationId,
   schema = 'public'
 }: PrismaLayoutProps) {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -228,12 +231,22 @@ export function PrismaLayout({
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="h-16 flex items-center px-6 gap-3 border-b border-sidebar-border relative">
-          <div className="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center shadow-lg">
-            <Database className="w-5 h-5 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-sm tracking-tight text-sidebar-foreground">PYPE ERM</span>
-            <span className="text-[10px] text-sidebar-foreground/50 uppercase font-bold tracking-widest">PYPE ERM</span>
+          {user?.organization?.logo ? (
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 bg-white">
+              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "PYPE ERM"} className="w-full h-full object-contain" />
+            </div>
+          ) : (
+            <div className="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center shadow-lg flex-shrink-0">
+              <Database className="w-5 h-5 text-white" />
+            </div>
+          )}
+          <div className="flex flex-col overflow-hidden">
+            <span className="font-bold text-sm tracking-tight text-sidebar-foreground truncate" title={user?.organization?.name || "PYPE ERM"}>
+              {user?.organization?.name || "PYPE ERM"}
+            </span>
+            <span className="text-[10px] text-sidebar-foreground/50 uppercase font-bold tracking-widest truncate">
+              {user?.organization?.name ? user.organization.name.substring(0, 15) : "PYPE ERM"}
+            </span>
           </div>
           {/* Mobile Close Button */}
           <Button 
