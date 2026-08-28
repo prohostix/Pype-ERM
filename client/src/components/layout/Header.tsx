@@ -29,6 +29,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import api from '@/lib/api';
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -104,6 +105,13 @@ export function Header({ onMenuToggle, title }: HeaderProps) {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
+      </div>
+
+      {/* Centered Organization Logo */}
+      <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
+        {user?.organization?.logo && (
+          <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-10 object-contain drop-shadow-sm" />
+        )}
       </div>
 
       {/* Right Section */}

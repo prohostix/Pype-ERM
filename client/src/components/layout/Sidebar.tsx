@@ -326,24 +326,24 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
             <img 
-              src={user.organization?.logo ? api.getFileUrl(user.organization.logo) : "/pype-logo.png"} 
-              alt={user.organization?.name || "PYPE ERM"} 
+              src="/pype-logo.png" 
+              alt="PYPE ERM" 
               className="w-8 h-8 object-contain flex-shrink-0" 
             />
             <span 
               className="font-bold text-lg truncate" 
-              title={user.organization?.name || "PYPE ERM"}
+              title="PYPE ERM"
             >
-              {user.organization?.name || "PYPE ERM"}
+              PYPE ERM
             </span>
           </div>
         )}
         {isCollapsed && (
           <img 
-            src={user.organization?.logo ? api.getFileUrl(user.organization.logo) : "/pype-logo.png"} 
-            alt={user.organization?.name || "PYPE ERM"} 
+            src="/pype-logo.png" 
+            alt="PYPE ERM" 
             className="w-8 h-8 object-contain mx-auto" 
-            title={user.organization?.name || "PYPE ERM"}
+            title="PYPE ERM"
           />
         )}
         <Button

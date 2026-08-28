@@ -231,21 +231,15 @@ export function PrismaLayout({
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="h-16 flex items-center px-6 gap-3 border-b border-sidebar-border relative">
-          {user?.organization?.logo ? (
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 bg-white">
-              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "PYPE ERM"} className="w-full h-full object-contain" />
-            </div>
-          ) : (
-            <div className="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center shadow-lg flex-shrink-0">
-              <Database className="w-5 h-5 text-white" />
-            </div>
-          )}
+          <div className="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center shadow-lg flex-shrink-0">
+            <Database className="w-5 h-5 text-white" />
+          </div>
           <div className="flex flex-col overflow-hidden">
-            <span className="font-bold text-sm tracking-tight text-sidebar-foreground truncate" title={user?.organization?.name || "PYPE ERM"}>
-              {user?.organization?.name || "PYPE ERM"}
+            <span className="font-bold text-sm tracking-tight text-sidebar-foreground truncate" title="PYPE ERM">
+              PYPE ERM
             </span>
             <span className="text-[10px] text-sidebar-foreground/50 uppercase font-bold tracking-widest truncate">
-              {user?.organization?.name ? user.organization.name.substring(0, 15) : "PYPE ERM"}
+              PYPE ERM
             </span>
           </div>
           {/* Mobile Close Button */}
@@ -357,6 +351,12 @@ export function PrismaLayout({
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground/30 hidden sm:block" />
             <span className="text-lg font-bold text-foreground truncate">{activeTableItem?.label}</span>
+          </div>
+
+          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
+            {user?.organization?.logo && (
+              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-10 object-contain drop-shadow-sm" />
+            )}
           </div>
 
           <div className="ml-auto flex items-center gap-4">
