@@ -22,7 +22,7 @@ export function FeeStructuresPanel() {
   const [selectedUniv, setSelectedUniv] = useState<any>(null);
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedProg, setSelectedProg] = useState<any>(null);
-  const [selectedSpecialisation, setSelectedSpecialisation] = useState<string | null>(null);
+  const [selectedSpecialisations, setSelectedSpecialisations] = useState<string[]>([]);
   const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -171,10 +171,10 @@ export function FeeStructuresPanel() {
     }
   };
 
-  const handleSelectSpecialisation = (spec: string) => {
-    setSelectedSpecialisation(spec);
-    loadFeeForProgramAndSpecialisation(selectedProg, spec);
-    setStep(4);
+  const handleToggleSpecialisation = (spec: string) => {
+    setSelectedSpecialisations(prev => 
+      prev.includes(spec) ? prev.filter(s => s !== spec) : [...prev, spec]
+    );
   };
 
   const handleSave = async () => {
@@ -198,11 +198,11 @@ export function FeeStructuresPanel() {
       dueDate: yf.dueDate || null
     }));
 
-    const payload = {
+    const createPayload = (spec: string | null) => ({
       programId: selectedProg.id,
       universityId: selectedUniv?.id || null,
       sessionId: selectedSession?.id || null,
-      specialisation: selectedSpecialisation || null,
+      specialisation: spec,
       feeLevel: 'program',
       registrationFee: Number(formData.registrationFee),
       tuitionFee: Number(formData.tuitionFee),
@@ -214,15 +214,18 @@ export function FeeStructuresPanel() {
       yearlyFees: formattedYearlyFees,
       installments: formData.billingCycle === 'installment' ? installments : [],
       additionalFees
-    };
+    });
 
     try {
       if (editingFeeId) {
-        await api.put(`/finance/fees/${editingFeeId}`, payload);
+        await api.put(`/finance/fees/${editingFeeId}`, createPayload(selectedSpecialisations[0] || null));
         toast.success('Fee structure updated');
       } else {
-        await api.post('/finance/fees', payload);
-        toast.success('Fee structure created');
+        const specsToSave = selectedSpecialisations.length > 0 ? selectedSpecialisations : [null];
+        for (const spec of specsToSave) {
+          await api.post('/finance/fees', createPayload(spec));
+        }
+        toast.success(specsToSave.length > 1 ? 'Fee structures created for all selected specialisations' : 'Fee structure created');
       }
       await fetchData();
       setStep(3);
@@ -402,18 +405,21 @@ export function FeeStructuresPanel() {
                     return (
                       <button
                         key={spec}
-                        onClick={() => handleSelectSpecialisation(spec)}
-                        className="flex flex-col p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left h-full"
+                        onClick={() => handleToggleSpecialisation(spec)}
+                        className={`flex flex-col p-4 border rounded-xl transition-all text-left h-full ${selectedSpecialisations.includes(spec) ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'hover:border-primary hover:bg-primary/5'}`}
                       >
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-full bg-blue-500/10 text-blue-500">
+                        <div className="flex items-center gap-3 mb-2 w-full">
+                          <div className={`p-2 rounded-full ${selectedSpecialisations.includes(spec) ? 'bg-primary text-primary-foreground' : 'bg-blue-500/10 text-blue-500'}`}>
                             <BookOpen className="w-5 h-5" />
                           </div>
-                          <div>
+                          <div className="flex-1">
                             <p className="font-semibold text-sm line-clamp-1">{spec}</p>
                           </div>
+                          {selectedSpecialisations.includes(spec) && (
+                             <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[10px] font-bold">✓</div>
+                          )}
                         </div>
-                        <div className="mt-auto pt-4 flex justify-between items-center">
+                        <div className="mt-auto pt-4 flex justify-between items-center w-full">
                            <Badge variant={hasFee ? 'default' : 'secondary'} className="text-[10px]">
                              {hasFee ? 'Configured' : 'Not Configured'}
                            </Badge>
@@ -423,6 +429,16 @@ export function FeeStructuresPanel() {
                   })}
                   {(!selectedProg.specialisations || selectedProg.specialisations.length === 0) && <p className="text-muted-foreground">No specialisations found.</p>}
                 </div>
+                {selectedSpecialisations.length > 0 && (
+                  <div className="mt-6 flex justify-end border-t pt-4">
+                    <Button onClick={() => {
+                      loadFeeForProgramAndSpecialisation(selectedProg, selectedSpecialisations[0]);
+                      setStep(4);
+                    }}>
+                      Continue to Configure Fee ({selectedSpecialisations.length})
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
