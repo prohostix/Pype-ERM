@@ -9,12 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { EmployeeProfilePanel } from '@/components/panels/EmployeeProfilePanel';
 import api from '@/lib/api';
-
+import { useAuth } from '@/hooks/useAuth';
 export function EmployeesPanel() {
   const [employees, setEmployees] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const { user: currentUser } = useAuth();
+  const isOrgAdmin = currentUser?.role === 'org_admin' || currentUser?.role === 'superadmin' || currentUser?.role === 'ceo';
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [profileUserId, setProfileUserId] = useState<string | null>(null);
@@ -55,7 +57,9 @@ export function EmployeesPanel() {
       // Also exclude resigned employees
       const employeesOnly = allUsers.filter((user: any) => {
         const role = user.role?.toLowerCase() || '';
-        return role !== 'ceo' && role !== 'org_admin' && role !== 'student' && user.status !== 'resigned';
+        if (role === 'ceo' || role === 'org_admin' || role === 'student' || user.status === 'resigned') return false;
+        if (role === 'center_admin' && !isOrgAdmin) return false;
+        return true;
       });
       setEmployees(employeesOnly);
     } catch (error) {
@@ -227,7 +231,7 @@ export function EmployeesPanel() {
                       <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
                       <SelectItem value="sales_admin">Sales Admin</SelectItem>
                       <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                      <SelectItem value="center_admin">Center Admin</SelectItem>
+                      {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                       <SelectItem value="general_manager">General Manager</SelectItem>
                     </SelectContent>
                   </Select>
