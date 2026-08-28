@@ -323,13 +323,27 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
       {/* Logo */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-800">
         {!isCollapsed && (
-          <div className="flex items-center gap-2">
-            <img src="/pype-logo.png" alt="PYPE ERM" className="w-8 h-8 object-contain" />
-            <span className="font-bold text-lg">PYPE ERM</span>
+          <div className="flex items-center gap-2 overflow-hidden">
+            <img 
+              src={user.organization?.logo || "/pype-logo.png"} 
+              alt={user.organization?.name || "PYPE ERM"} 
+              className="w-8 h-8 object-contain flex-shrink-0" 
+            />
+            <span 
+              className="font-bold text-lg truncate" 
+              title={user.organization?.name || "PYPE ERM"}
+            >
+              {user.organization?.name || "PYPE ERM"}
+            </span>
           </div>
         )}
         {isCollapsed && (
-          <img src="/pype-logo.png" alt="PYPE ERM" className="w-8 h-8 object-contain mx-auto" />
+          <img 
+            src={user.organization?.logo || "/pype-logo.png"} 
+            alt={user.organization?.name || "PYPE ERM"} 
+            className="w-8 h-8 object-contain mx-auto" 
+            title={user.organization?.name || "PYPE ERM"}
+          />
         )}
         <Button
           variant="ghost"
