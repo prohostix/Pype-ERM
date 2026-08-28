@@ -88,12 +88,16 @@ export const updateTask = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const completeTask = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const evidenceFiles = (req.files as any[]) || [];
+  const evidenceUrls = evidenceFiles.map(file => `/uploads/${file.filename}`);
+
   const task = await prisma.task.update({
     where: { id: req.params.id },
     data: {
       status: 'completed',
       completedAt: new Date(),
       remarks: req.body.remarks,
+      ...(evidenceUrls.length > 0 && { evidence: evidenceUrls })
     }
   });
   res.status(200).json({ success: true, data: task });
@@ -107,7 +111,7 @@ export const deleteTask = asyncHandler(async (req: AuthRequest, res: Response) =
 export const getAssignableUsers = asyncHandler(async (req: AuthRequest, res: Response) => {
   const users = await prisma.user.findMany({
     where: { organizationId: req.user.organizationId, status: 'active' },
-    select: { id: true, name: true, email: true, designation: true }
+    select: { id: true, name: true, email: true, designation: true, departmentId: true }
   });
   res.status(200).json({ success: true, count: users.length, data: users });
 });
