@@ -360,6 +360,7 @@ export const getStudentPaymentsLog = asyncHandler(async (req: AuthRequest, res: 
       name: true,
       enrollmentNo: true,
       sessionId: true,
+      specialisation: true,
       joinDate: true,
       program: {
         select: { 
