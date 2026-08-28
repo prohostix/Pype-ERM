@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, RefreshCw, CheckCircle2, Clock, AlertTriangle, ListTodo, Filter, Plus } from 'lucide-react';
+import { Search, RefreshCw, CheckCircle2, Clock, AlertTriangle, ListTodo, Filter, Plus, Paperclip } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -177,7 +177,7 @@ export function CEOTasksPanel() {
     setForm(f => ({
       ...f,
       assignedTo: managerId,
-      departmentId: mgr?.departmentId?.id || f.departmentId,
+      departmentId: mgr?.departmentId || f.departmentId,
     }));
   };
 
@@ -368,6 +368,21 @@ export function CEOTasksPanel() {
 
                         {task.remarks && (
                           <p className="text-[11px] text-muted-foreground mt-1.5 italic">"{task.remarks}"</p>
+                        )}
+                        {task.evidence && task.evidence.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {task.evidence.map((url: string, i: number) => (
+                              <a
+                                key={i}
+                                href={url.startsWith('/') ? `${url}` : url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 text-[11px] text-primary hover:underline"
+                              >
+                                <Paperclip className="w-3 h-3" />Evidence {i + 1}
+                              </a>
+                            ))}
+                          </div>
                         )}
                       </div>
                     </div>
