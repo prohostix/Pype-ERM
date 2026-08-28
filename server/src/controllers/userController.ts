@@ -233,12 +233,11 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     }
   }
 
-  // Exclude students from subordinates list
-  const studentQuery = where.organizationId ? { organizationId: where.organizationId } : {};
-  const students = await prisma.student.findMany({ where: studentQuery, select: { email: true } });
-  const studentEmails = students.map((s: any) => s.email);
-  if (studentEmails.length > 0) {
-    where.email = { notIn: studentEmails };
+  // Exclude students by ensuring role is not 'student' (already handled by targetRoles, but kept for safety if targetRoles is modified later)
+  if (where.role && where.role.in) {
+    where.role.in = where.role.in.filter((r: string) => r !== 'student');
+  } else {
+    where.role = { not: 'student' };
   }
 
   const users = await prisma.user.findMany({
