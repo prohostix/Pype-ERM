@@ -765,6 +765,11 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
     return;
   }
 
+  if (!receiptUrl) {
+    res.status(400).json({ success: false, message: 'Fee payment receipt screenshot is required.' });
+    return;
+  }
+
   const now = new Date();
 
   // Update enrollment with new details and move to document_review

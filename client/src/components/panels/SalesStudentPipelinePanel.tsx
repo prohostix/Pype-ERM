@@ -663,7 +663,7 @@ export function SalesStudentPipelinePanel() {
                 </div>
                 
                 <div className="space-y-1.5">
-                  <Label>Fee Payment Screenshot / Receipt</Label>
+                  <Label>Fee Payment Screenshot / Receipt <span className="text-rose-500">*</span></Label>
                   <div className="flex items-center gap-4">
                     {verifyForm.receiptUrl ? (
                       <div className="relative group inline-block">
@@ -717,8 +717,13 @@ export function SalesStudentPipelinePanel() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setVerifyDialogOpen(false)}>Cancel</Button>
             <Button disabled={isVerifying} onClick={async () => {
-              if (!verifyForm.initialPaymentAmount || verifyForm.initialPaymentAmount === '') {
-                toast.error('Please enter the Initial Fee Amount Paid');
+              if (!verifyForm.initialPaymentAmount || verifyForm.initialPaymentAmount === '' || parseFloat(verifyForm.initialPaymentAmount) <= 0) {
+                toast.error('Please enter a valid Initial Fee Amount Paid (must be greater than 0)');
+                return;
+              }
+
+              if (!verifyForm.receiptUrl) {
+                toast.error('Please upload the Fee Payment Screenshot / Receipt');
                 return;
               }
 
