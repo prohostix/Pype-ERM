@@ -237,7 +237,7 @@ export function FeeStructuresPanel() {
       
       toast.success(specsToSave.length > 1 ? 'Fee structures saved for all selected specialisations' : 'Fee structure saved');
       await fetchData();
-      setStep(3);
+      setStep(selectedProg?.specialisations?.length > 0 ? 3.5 : 3);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to save');
     } finally {
