@@ -15,7 +15,7 @@ function ReceiptDocument({ receipt, orgName }: { receipt: any; orgName: string }
   };
 
   const actualOrgName = receipt.organization?.name || orgName;
-  const logoUrl = receipt.organization?.logo;
+  const logoUrl = api.getFileUrl(receipt.organization?.logo);
   const totalPaid = (receipt.payments || []).reduce((sum: number, p: any) => sum + p.amount, 0);
   const balanceDue = receipt.balanceDue !== undefined ? receipt.balanceDue : Math.max(0, (receipt.total || 0) - totalPaid);
 

@@ -34,7 +34,7 @@ export function MyProfilePanel() {
           <CardContent className="pt-10 pb-8 flex flex-col items-center text-center">
             <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center mb-6 shadow-inner ring-4 ring-background">
               {user.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+                <img src={api.getFileUrl(user.avatar)} alt={user.name} className="w-full h-full rounded-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-primary" />
               )}
