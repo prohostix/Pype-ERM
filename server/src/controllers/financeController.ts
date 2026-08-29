@@ -439,7 +439,8 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     dueDate,
     additionalFees,
     allowInitialFee,
-    specialisation
+    specialisation,
+    installments
   } = req.body;
 
   const data: any = {
@@ -460,7 +461,8 @@ export const createFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     billingCycle: billingCycle || 'per_year',
     currency: currency || 'INR',
     allowInitialFee: allowInitialFee === true || allowInitialFee === 'true',
-    additionalFees: additionalFees || []
+    additionalFees: additionalFees || [],
+    installments: installments || []
   };
 
   if (effectiveFrom) {
@@ -496,7 +498,8 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     dueDate,
     additionalFees,
     allowInitialFee,
-    specialisation
+    specialisation,
+    installments
   } = req.body;
 
   const data: any = {
@@ -515,7 +518,8 @@ export const updateFeeStructure = asyncHandler(async (req: AuthRequest, res: Res
     billingCycle: billingCycle || 'per_year',
     currency: currency || 'INR',
     allowInitialFee: allowInitialFee === true || allowInitialFee === 'true',
-    additionalFees: additionalFees || []
+    additionalFees: additionalFees || [],
+    installments: installments || []
   };
 
   if (effectiveFrom) {
