@@ -72,11 +72,13 @@ function DayOverrideRow({ day, override, onChange, onRemove }: {
 
 // ─── Single location card with its own map ────────────────────────────────────
 
-function LocationCard({ loc, index, onChange, onRemove, onSetDefault }: {
+function LocationCard({ loc, index, onChange, onRemove, onSetDefault, onSave, saving }: {
   loc: any; index: number;
   onChange: (v: any) => void;
   onRemove: () => void;
   onSetDefault: () => void;
+  onSave: () => void;
+  saving?: boolean;
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<L.Map | null>(null);
@@ -151,6 +153,9 @@ function LocationCard({ loc, index, onChange, onRemove, onSetDefault }: {
             )}
             <Button variant="ghost" size="sm" className="text-xs h-7" onClick={useMyLocation}>
               <MapPin className="w-3 h-3 mr-1" />My Location
+            </Button>
+            <Button variant="default" size="sm" className="text-xs h-7" onClick={onSave} disabled={saving}>
+              {saving ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save Location
             </Button>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setExpanded(e => !e)}>
               {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -246,6 +251,18 @@ export function HRSettingsPanel() {
       toast.success('Settings saved');
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to save');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveLocation = async () => {
+    setSaving(true);
+    try {
+      await api.post('/attendance/settings', settings);
+      toast.success('Location saved successfully');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to save location');
     } finally {
       setSaving(false);
     }
@@ -491,6 +508,8 @@ export function HRSettingsPanel() {
                   onChange={val => updateLocation(i, val)}
                   onRemove={() => removeLocation(i)}
                   onSetDefault={() => setDefaultLocation(i)}
+                  onSave={handleSaveLocation}
+                  saving={saving}
                 />
               ))}
             </div>
