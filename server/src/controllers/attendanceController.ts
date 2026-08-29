@@ -137,7 +137,8 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (settings && settings.officeHours) {
     const officeHours = settings.officeHours as any;
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const currentDayName = weekdays[now.getDay()];
+    const istNow = new Date(now.getTime() + (330 * 60000));
+    const currentDayName = weekdays[istNow.getUTCDay()];
 
     // Find if there is a day override for today
     const overrides = officeHours.dayOverrides || [];
@@ -146,14 +147,17 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
     const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
 
+    // Convert UTC Date to IST to safely extract local hours/minutes
+    const punchHour = istNow.getUTCHours();
+    const punchMin = istNow.getUTCMinutes();
+    const punchTotalMins = punchHour * 60 + punchMin;
+    
     // Parse shift target check-in time
     const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
-    const targetCheckInDate = new Date(now);
-    targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+    const targetTotalMins = targetHour * 60 + targetMin;
 
-    // Calculate time difference
-    const diffMs = now.getTime() - targetCheckInDate.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
+    // Calculate time difference in minutes directly
+    const diffMins = punchTotalMins - targetTotalMins;
 
     if (diffMins > gracePeriod) {
       isLate = true;
@@ -540,7 +544,8 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
       const officeHours = settings.officeHours as any;
       const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const checkInDate = new Date(data.checkIn);
-      const currentDayName = weekdays[checkInDate.getDay()];
+      const istCheckIn = new Date(checkInDate.getTime() + (330 * 60000));
+      const currentDayName = weekdays[istCheckIn.getUTCDay()];
 
       const overrides = officeHours.dayOverrides || [];
       const dayOverride = overrides.find((o: any) => o.day === currentDayName);
@@ -548,12 +553,14 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
       const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
       const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
 
-      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
-      const targetCheckInDate = new Date(checkInDate);
-      targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+      const punchHour = istCheckIn.getUTCHours();
+      const punchMin = istCheckIn.getUTCMinutes();
+      const punchTotalMins = punchHour * 60 + punchMin;
 
-      const diffMs = checkInDate.getTime() - targetCheckInDate.getTime();
-      const diffMins = Math.floor(diffMs / 60000);
+      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+      const targetTotalMins = targetHour * 60 + targetMin;
+
+      const diffMins = punchTotalMins - targetTotalMins;
 
       if (diffMins > gracePeriod) {
         data.isLate = true;
@@ -596,7 +603,8 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
       const officeHours = settings.officeHours as any;
       const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const checkInDate = updateData.checkIn;
-      const currentDayName = weekdays[checkInDate.getDay()];
+      const istCheckIn = new Date(checkInDate.getTime() + (330 * 60000));
+      const currentDayName = weekdays[istCheckIn.getUTCDay()];
 
       const overrides = officeHours.dayOverrides || [];
       const dayOverride = overrides.find((o: any) => o.day === currentDayName);
@@ -604,12 +612,14 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
       const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
       const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
 
-      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
-      const targetCheckInDate = new Date(checkInDate);
-      targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+      const punchHour = istCheckIn.getUTCHours();
+      const punchMin = istCheckIn.getUTCMinutes();
+      const punchTotalMins = punchHour * 60 + punchMin;
 
-      const diffMs = checkInDate.getTime() - targetCheckInDate.getTime();
-      const diffMins = Math.floor(diffMs / 60000);
+      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+      const targetTotalMins = targetHour * 60 + targetMin;
+
+      const diffMins = punchTotalMins - targetTotalMins;
 
       if (diffMins > gracePeriod) {
         updateData.isLate = true;
