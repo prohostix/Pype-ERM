@@ -23,7 +23,7 @@ export function FeeStructuresPanel() {
   const [selectedSession, setSelectedSession] = useState<any>(null);
   const [selectedProg, setSelectedProg] = useState<any>(null);
   const [selectedSpecialisations, setSelectedSpecialisations] = useState<string[]>([]);
-  const [editingFeeId, setEditingFeeId] = useState<string | null>(null);
+
 
   const [formData, setFormData] = useState({
     registrationFee: '0',
@@ -120,7 +120,7 @@ export function FeeStructuresPanel() {
     });
 
     if (existing) {
-      setEditingFeeId(existing.id);
+
       setFormData({
         registrationFee: existing.registrationFee?.toString() || '0',
         tuitionFee: existing.tuitionFee?.toString() || '0',
@@ -143,7 +143,7 @@ export function FeeStructuresPanel() {
       })));
       setInstallments(Array.isArray(existing.installments) ? existing.installments : []);
     } else {
-      setEditingFeeId(null);
+
       setFormData({
         registrationFee: '0',
         tuitionFee: '0',
