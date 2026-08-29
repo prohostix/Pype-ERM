@@ -217,16 +217,25 @@ export function FeeStructuresPanel() {
     });
 
     try {
-      if (editingFeeId) {
-        await api.put(`/finance/fees/${editingFeeId}`, createPayload(selectedSpecialisations[0] || null));
-        toast.success('Fee structure updated');
-      } else {
-        const specsToSave = selectedSpecialisations.length > 0 ? selectedSpecialisations : [null];
-        for (const spec of specsToSave) {
-          await api.post('/finance/fees', createPayload(spec));
+      const specsToSave = selectedSpecialisations.length > 0 ? selectedSpecialisations : [null];
+      for (const spec of specsToSave) {
+        const payload = createPayload(spec);
+        
+        // Check if fee already exists for this specialisation
+        const existing = fees.find(f => {
+          const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
+          const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+          return pid === selectedProg.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
+        });
+
+        if (existing) {
+          await api.put(`/finance/fees/${existing.id}`, payload);
+        } else {
+          await api.post('/finance/fees', payload);
         }
-        toast.success(specsToSave.length > 1 ? 'Fee structures created for all selected specialisations' : 'Fee structure created');
       }
+      
+      toast.success(specsToSave.length > 1 ? 'Fee structures saved for all selected specialisations' : 'Fee structure saved');
       await fetchData();
       setStep(3);
     } catch (e: any) {
