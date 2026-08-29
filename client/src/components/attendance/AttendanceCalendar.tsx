@@ -288,32 +288,9 @@ export function AttendanceCalendar({
     return 'bg-slate-100 dark:bg-slate-800/40 text-muted-foreground border border-border hover:bg-muted'; // Future
   };
 
-  const getApiBase = () => {
-    return (import.meta as any).env?.VITE_API_URL || '';
-  };
-
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
     if (!url) return null;
-    if (url.startsWith('http')) return url;
-    
-    const baseUrl = getApiBase();
-    
-    let origin = '';
-    let apiPath = baseUrl;
-    
-    if (baseUrl.startsWith('http')) {
-      try {
-        const parsed = new URL(baseUrl);
-        origin = parsed.origin;
-        apiPath = parsed.pathname;
-      } catch (e) {}
-    }
-    
-    if (apiPath && url.startsWith(apiPath)) {
-      return origin ? `${origin}${url}` : url;
-    }
-    
-    return `${baseUrl}${url}`;
+    return api.getFileUrl(url);
   };
 
   return (

@@ -232,26 +232,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
 
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
     if (!url) return null;
-    if (url.startsWith('http')) return url;
-    
-    const baseUrl = (import.meta as any).env?.VITE_API_URL || '';
-    
-    let origin = '';
-    let apiPath = baseUrl;
-    
-    if (baseUrl.startsWith('http')) {
-      try {
-        const parsed = new URL(baseUrl);
-        origin = parsed.origin;
-        apiPath = parsed.pathname;
-      } catch (e) {}
-    }
-    
-    if (apiPath && url.startsWith(apiPath)) {
-      return origin ? `${origin}${url}` : url;
-    }
-    
-    return `${baseUrl}${url}`;
+    return api.getFileUrl(url);
   };
 
   return (
