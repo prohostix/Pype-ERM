@@ -51,6 +51,7 @@ export function FeeStructuresPanel() {
         api.get('/operations/universities'),
         api.get('/operations/sessions')
       ]);
+      console.log('FEES RESPONSE:', fRes.data.data);
       setFees(fRes.data.data || []);
       setPrograms(pRes.data.data || []);
       setUniversities(uRes.data.data || []);
@@ -114,8 +115,8 @@ export function FeeStructuresPanel() {
 
   const loadFeeForProgramAndSpecialisation = (p: any, spec: string | null) => {
     const existing = fees.find(f => {
-      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+      const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+      const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
       return pid === p.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
     });
 
@@ -223,8 +224,8 @@ export function FeeStructuresPanel() {
         
         // Check if fee already exists for this specialisation
         const existing = fees.find(f => {
-          const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-          const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+          const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+          const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
           return pid === selectedProg.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
         });
 
@@ -359,8 +360,8 @@ export function FeeStructuresPanel() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {progsForUniv.map(p => {
                     const hasFee = fees.some(f => {
-                      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-                      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+                      const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+                      const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
                       return pid === p.id && sid === (selectedSession?.id || null);
                     });
                     return (
@@ -407,8 +408,8 @@ export function FeeStructuresPanel() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {selectedProg.specialisations?.map((spec: string) => {
                     const hasFee = fees.some(f => {
-                      const pid = typeof f.programId === 'object' ? f.programId?.id : f.programId;
-                      const sid = typeof f.sessionId === 'object' ? f.sessionId?.id : f.sessionId;
+                      const pid = f.programId && typeof f.programId === 'object' ? f.programId.id : (f.programId ?? null);
+                      const sid = f.sessionId && typeof f.sessionId === 'object' ? f.sessionId.id : (f.sessionId ?? null);
                       return pid === selectedProg.id && sid === (selectedSession?.id || null) && (f.specialisation || null) === spec;
                     });
                     return (

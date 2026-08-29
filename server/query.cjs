@@ -1,11 +1,17 @@
-const { Client } = require('pg');
-const client = new Client({
-  connectionString: process.env.DATABASE_URL
+require('dotenv').config();
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient({
+  datasourceUrl: "postgresql://pypeerm:troy1999@pypeerm.cj0mo4q44gde.ap-south-1.rds.amazonaws.com:5432/postgres?schema=public&sslmode=no-verify"
 });
+
 async function main() {
-  await client.connect();
-  const res = await client.query('SELECT b.name as branch_name, COUNT(u.id) as user_count FROM "Branch" b LEFT JOIN "User" u ON b.id = u."branchId" GROUP BY b.name');
-  console.log(res.rows);
-  await client.end();
+  const fees = await prisma.feeStructure.findMany();
+  console.log(fees.map(f => ({
+    id: f.id,
+    programId: f.programId,
+    specialisation: f.specialisation,
+    feeLevel: f.feeLevel
+  })));
 }
-main().catch(console.error);
+
+main().catch(console.error).finally(() => prisma.$disconnect());
