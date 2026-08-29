@@ -249,7 +249,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   <div className="flex items-center gap-2">
                     {step.completed && step.proofUrl && (
                       <a 
-                        href={`${import.meta.env.VITE_API_URL || ''}${step.proofUrl}`} 
+                        href={api.getFileUrl(step.proofUrl)} 
                         target="_blank" 
                         rel="noreferrer"
                       >

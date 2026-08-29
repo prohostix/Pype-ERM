@@ -446,7 +446,7 @@ export function SalesEnrolledStudentsPanel() {
                           </div>
                           <Button variant="outline" size="sm" asChild>
                             <a
-                              href={doc.url.startsWith('/') ? `${import.meta.env.VITE_API_URL || 'http://localhost:6478/api/v1'}${doc.url}` : doc.url}
+                              href={api.getFileUrl(doc.url)}
                               target="_blank"
                               rel="noreferrer"
                               className="font-medium flex items-center gap-1"
