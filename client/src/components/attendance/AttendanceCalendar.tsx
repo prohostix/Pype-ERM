@@ -295,7 +295,25 @@ export function AttendanceCalendar({
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    return `${getApiBase()}${url}`;
+    
+    const baseUrl = getApiBase();
+    
+    let origin = '';
+    let apiPath = baseUrl;
+    
+    if (baseUrl.startsWith('http')) {
+      try {
+        const parsed = new URL(baseUrl);
+        origin = parsed.origin;
+        apiPath = parsed.pathname;
+      } catch (e) {}
+    }
+    
+    if (apiPath && url.startsWith(apiPath)) {
+      return origin ? `${origin}${url}` : url;
+    }
+    
+    return `${baseUrl}${url}`;
   };
 
   return (
