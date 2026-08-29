@@ -185,7 +185,7 @@ export function ProgramDetailPanel({
   };
 
   const handleDownload = (m: Material) => {
-    const url = m.fileUrl.startsWith('http') ? m.fileUrl : api.getFileUrl(m.fileUrl);
+    const url = api.getFileUrl(m.fileUrl);
     const a = document.createElement('a');
     a.href = url;
     a.download = m.fileName;

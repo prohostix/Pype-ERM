@@ -12,19 +12,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 const getDocUrl = (url: string) => {
-  if (!url) return '#';
-  if (url.startsWith('http')) return url;
-  
-  let normalizedUrl = url;
-  if (!normalizedUrl.startsWith('/')) {
-    normalizedUrl = normalizedUrl.startsWith('uploads/') ? `/${normalizedUrl}` : `/uploads/${normalizedUrl}`;
-  }
-
-  if (normalizedUrl.startsWith('/uploads')) {
-    const baseUrl = import.meta.env.VITE_API_URL || '/api/v1';
-    return `${baseUrl}${normalizedUrl}`;
-  }
-  return normalizedUrl;
+  return api.getFileUrl(url);
 };
 
 interface Enrollment {

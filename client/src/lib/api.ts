@@ -46,7 +46,24 @@ class ApiService {
   getFileUrl(path: string | undefined | null) {
     if (!path) return '';
     if (path.startsWith('http')) return path;
+    
     const baseUrl = this.getBaseUrl().replace(/\/$/, '');
+    
+    let origin = '';
+    let apiPath = baseUrl;
+    
+    if (baseUrl.startsWith('http')) {
+      try {
+        const parsed = new URL(baseUrl);
+        origin = parsed.origin;
+        apiPath = parsed.pathname.replace(/\/$/, '');
+      } catch (e) {}
+    }
+    
+    if (apiPath && path.startsWith(apiPath)) {
+      return origin ? `${origin}${path}` : path;
+    }
+    
     if (path.startsWith('/')) {
       return `${baseUrl}${path}`;
     }

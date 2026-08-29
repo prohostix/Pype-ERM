@@ -1511,7 +1511,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <div className="flex items-center gap-2 shrink-0">
                       {formData.photo && (
                         <a
-                          href={formData.photo.startsWith('http') ? formData.photo : `${api.getBaseUrl()}${formData.photo}`}
+                          href={api.getFileUrl(formData.photo)}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
@@ -2092,7 +2092,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <div className="flex items-center gap-4 mt-2 p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/20">
                               {formData.photo ? (
                                 <div className="relative group cursor-pointer inline-block">
-                                  <img src={formData.photo.startsWith('http') ? formData.photo : `${api.getBaseUrl()}${formData.photo}`} alt="Student" className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" />
+                                  <img src={api.getFileUrl(formData.photo)} alt="Student" className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" />
                                   <button
                                     type="button"
                                     onClick={() => setFormData({...formData, photo: ''})}
@@ -2214,7 +2214,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                   <div className="flex items-center gap-2 shrink-0">
                                     {existing?.url && (
                                       <a
-                                        href={existing.url.startsWith('http') ? existing.url : api.getFileUrl(existing.url)}
+                                        href={api.getFileUrl(existing.url)}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex items-center px-2.5 py-1.5 rounded-lg border bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50 cursor-pointer shadow-sm"
@@ -2493,7 +2493,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
                           <img 
-                            src={student.photo.startsWith('http') ? student.photo : `${api.getBaseUrl()}${student.photo}`} 
+                            src={api.getFileUrl(student.photo)} 
                             alt={student.name} 
                             className="w-full h-full object-cover"
                           />

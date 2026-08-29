@@ -9,6 +9,33 @@ import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:6478/api/v1';
 
+const getFileUrl = (path: string | undefined | null) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  
+  const baseUrl = API_BASE.replace(/\/$/, '');
+  
+  let origin = '';
+  let apiPath = baseUrl;
+  
+  if (baseUrl.startsWith('http')) {
+    try {
+      const parsed = new URL(baseUrl);
+      origin = parsed.origin;
+      apiPath = parsed.pathname.replace(/\/$/, '');
+    } catch (e) {}
+  }
+  
+  if (apiPath && path.startsWith(apiPath)) {
+    return origin ? `${origin}${path}` : path;
+  }
+  
+  if (path.startsWith('/')) {
+    return `${baseUrl}${path}`;
+  }
+  return `${baseUrl}/${path}`;
+};
+
 interface Program {
   id: string;
   name: string;
@@ -159,7 +186,7 @@ export default function StudentApplicationPage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               {selectedProgram?.university?.logo ? (
                 <img 
-                  src={selectedProgram.university.logo.startsWith('http') ? selectedProgram.university.logo : `${API_BASE}${selectedProgram.university.logo.startsWith('/') ? selectedProgram.university.logo : '/' + selectedProgram.university.logo}`} 
+                  src={getFileUrl(selectedProgram.university.logo)} 
                   alt={selectedProgram.university.name} 
                   className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110" 
                 />
@@ -424,7 +451,7 @@ export default function StudentApplicationPage() {
                         {form.photo ? (
                           <div className="relative group cursor-pointer inline-block">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
-                              <img src={form.photo.startsWith('http') ? form.photo : `${API_BASE}${form.photo.startsWith('/') ? form.photo : '/' + form.photo}`} alt="Student" className="w-full h-full object-cover" />
+                              <img src={getFileUrl(form.photo)} alt="Student" className="w-full h-full object-cover" />
                             </div>
                             <button
                               type="button"
@@ -477,7 +504,7 @@ export default function StudentApplicationPage() {
                                 <span className="text-sm font-semibold text-slate-700 group-hover:text-slate-900">{docType}</span>
                                 {existing?.url ? (
                                   <a 
-                                    href={existing.url.startsWith('http') ? existing.url : `${API_BASE}${existing.url.startsWith('/') ? existing.url : '/' + existing.url}`} 
+                                    href={getFileUrl(existing.url)} 
                                     target="_blank" 
                                     rel="noreferrer"
                                     className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md font-medium hover:bg-primary/20 flex items-center transition-colors"
