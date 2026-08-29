@@ -233,6 +233,13 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
     return <Badge className={variants[status] || ''}>{status?.replace('_', ' ')}</Badge>;
   };
 
+  const resolvePhotoUrl = (url: string | null | undefined): string | null => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    const baseUrl = (import.meta as any).env?.VITE_API_URL?.replace('/api/v1', '') || '';
+    return `${baseUrl}${url}`;
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -465,7 +472,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       <Dialog open={photoViewerOpen} onOpenChange={setPhotoViewerOpen}>
         <DialogContent className="sm:max-w-md p-1">
           {selectedPhoto && (
-            <img src={selectedPhoto.startsWith('http') ? selectedPhoto : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedPhoto}`} alt="Punch Photo" className="w-full rounded-lg" />
+            <img src={resolvePhotoUrl(selectedPhoto) || ''} alt="Punch Photo" className="w-full rounded-lg" />
           )}
         </DialogContent>
       </Dialog>
