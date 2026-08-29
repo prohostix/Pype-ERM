@@ -98,11 +98,11 @@ router.route('/marks').get(getInternalMarks).post(authorize('center_admin', 'ops
 router.route('/marks/:id').put(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), updateInternalMark).delete(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), deleteInternalMark);
 
 // Announcements
-router.route('/announcements').get(getAnnouncements).post(authorize('ops_admin', 'hr_admin'), createAnnouncement);
+router.route('/announcements').get(getAnnouncements).post(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), createAnnouncement);
 router.route('/announcements/:id')
   .get(getAnnouncement)
-  .put(authorize('ops_admin', 'hr_admin'), updateAnnouncement)
-  .delete(authorize('ops_admin', 'hr_admin'), deleteAnnouncement);
+  .put(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), updateAnnouncement)
+  .delete(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), deleteAnnouncement);
 
 // Onboarding — program allocation
 router.route('/centers/:id/allocations')

@@ -95,7 +95,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     fetchDeptAndSubDept();
   }, [useDepartmentDashboard, user]);
 
-  const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'student';
+  const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student';
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
@@ -166,7 +166,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     return <ModernOpsDashboard initialTab={initialTab} />;
   }
 
-  if (user?.role === 'hr_admin') {
+  if (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin') {
     return <ModernHRDashboard initialTab={initialTab} />;
   }
 

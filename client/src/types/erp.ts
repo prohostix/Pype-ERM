@@ -9,9 +9,9 @@ export type UserRole =
   | 'finance_admin'
   | 'finance_sub_admin'
   | 'hr_admin' 
+  | 'hr_sub_admin'
   | 'sales_admin'
-  | 'sales_sub_admin' 
-  | 
+  | 'sales_sub_admin'
   |  
   | 'center_admin' 
   | 'university_admin'

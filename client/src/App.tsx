@@ -127,6 +127,7 @@ function App() {
       case 'finance_sub_admin':
       case 'finance_admin':
       case 'hr_admin':
+      case 'hr_sub_admin':
       case 'sales_admin':
       case 'sales_sub_admin': return 'overview';
       case 'student': return 'overview';
@@ -229,7 +230,7 @@ function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const hasInviteToken = urlParams.has('token');
 
-  const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.branchId, deptType, isCollectionsOverseer]);
+  const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
 
   // Fetch data for active table — only when in table view mode
   useEffect(() => {
@@ -318,7 +319,7 @@ function App() {
     }
 
     // Branch manager — takes priority over role-specific nav
-    if ((user as any)?.branchId && user.role !== 'student') {
+    if ((user as any)?.isBranchManager && user.role !== 'student') {
       return getBranchManagerNavItems();
     }
 
@@ -330,7 +331,7 @@ function App() {
       return getFinanceNavItems();
     }
 
-    if (user.role === 'hr_admin') {
+    if (user.role === 'hr_admin' || user.role === 'hr_sub_admin') {
       return getHRNavItems();
     }
 
@@ -393,7 +394,7 @@ function App() {
     }
 
     let finalResult = result;
-    const adminRolesForTeams = ['finance_admin', 'finance_sub_admin', 'hr_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
+    const adminRolesForTeams = ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
     if (!adminRolesForTeams.includes(user.role)) {
       finalResult = finalResult.filter(item => item.id !== 'team_permissions');
     }
@@ -441,10 +442,10 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'];
     const isEmployeeSubDeptManager = ['employee', 'student'].includes(user?.role || '') && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
-    const isBranchManager = Boolean((user as any)?.branchId) && user?.role !== 'student';
+    const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student';
     const isStudentRole = user?.role === 'student';
     if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager || isStudentRole)) {
       setViewMode('dashboard');
@@ -873,7 +874,7 @@ function App() {
   // Branch managers are excluded — they always get the branch dashboard
   const shouldUseDepartmentDashboard = Boolean(
     (user.role === 'employee' || user.role === 'student') &&
-    !(user as any).branchId &&
+    !(user as any).isBranchManager &&
     (user.departmentId || (user as any).subDepartmentId) &&
     viewMode === 'dashboard'
   );

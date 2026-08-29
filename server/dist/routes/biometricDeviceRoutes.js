@@ -3,8 +3,8 @@ import { getDevices, getDevice, createDevice, updateDevice, deleteDevice } from 
 import { protect, authorize } from '../middleware/auth.js';
 const router = express.Router();
 router.use(protect);
-// Assuming 'superadmin' and 'hr_admin' can manage devices
-router.use(authorize('superadmin', 'hr_admin'));
+// Assuming 'superadmin' and 'hr_admin', 'hr_sub_admin' can manage devices
+router.use(authorize('superadmin', 'hr_admin', 'hr_sub_admin'));
 router.get('/', getDevices);
 router.get('/:id', getDevice);
 router.post('/', createDevice);

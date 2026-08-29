@@ -96,7 +96,7 @@ export default function TeamPermissionsPanel() {
       items = getOpsNavItems();
     } else if (['finance_admin', 'finance_sub_admin', 'finance'].includes(role)) {
       items = getFinanceNavItems();
-    } else if (role === 'hr_admin') {
+    } else if (role === 'hr_admin' || role === 'hr_sub_admin') {
       items = getHRNavItems();
     } else if (['collections_admin', 'collections'].includes(role)) {
       items = getCollectionsNavItems();

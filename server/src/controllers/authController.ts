@@ -142,6 +142,11 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
     centerStatus = center?.status ?? null;
   }
 
+  const managedBranch = await prisma.branch.findFirst({
+    where: { branchManagerId: user.id },
+    select: { id: true }
+  });
+
   res.status(200).json({
     success: true,
     data: {
@@ -159,6 +164,7 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         allowSystemPunchIn: user.allowSystemPunchIn,
         requireSelfiePunchIn: user.requireSelfiePunchIn,
         allowAnywherePunchIn: user.allowAnywherePunchIn,
+        isBranchManager: !!managedBranch,
         ...(centerStatus !== null && { centerStatus }),
       },
       token,
@@ -183,9 +189,14 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
   });
 
+  const managedBranch = await prisma.branch.findFirst({
+    where: { branchManagerId: req.user.id },
+    select: { id: true }
+  });
+
   res.status(200).json({
     success: true,
-    data: user,
+    data: { ...user, isBranchManager: !!managedBranch },
   });
 });
 

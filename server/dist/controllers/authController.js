@@ -112,6 +112,10 @@ export const login = asyncHandler(async (req, res) => {
         });
         centerStatus = center?.status ?? null;
     }
+    const managedBranch = await prisma.branch.findFirst({
+        where: { branchManagerId: user.id },
+        select: { id: true }
+    });
     res.status(200).json({
         success: true,
         data: {
@@ -129,6 +133,7 @@ export const login = asyncHandler(async (req, res) => {
                 allowSystemPunchIn: user.allowSystemPunchIn,
                 requireSelfiePunchIn: user.requireSelfiePunchIn,
                 allowAnywherePunchIn: user.allowAnywherePunchIn,
+                isBranchManager: !!managedBranch,
                 ...(centerStatus !== null && { centerStatus }),
             },
             token,
@@ -151,9 +156,13 @@ export const getMe = asyncHandler(async (req, res) => {
             organization: true, department: true, subDepartment: true,
         }
     });
+    const managedBranch = await prisma.branch.findFirst({
+        where: { branchManagerId: req.user.id },
+        select: { id: true }
+    });
     res.status(200).json({
         success: true,
-        data: user,
+        data: { ...user, isBranchManager: !!managedBranch },
     });
 });
 // @desc    Update user details

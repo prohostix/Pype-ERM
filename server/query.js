@@ -1,7 +1,11 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { Client } = require('pg');
+const client = new Client({
+  connectionString: process.env.DATABASE_URL
+});
 async function main() {
-  const branches = await prisma.branch.findMany({ select: { id: true, name: true } });
-  console.log(branches);
+  await client.connect();
+  const res = await client.query('SELECT b.name as branch_name, COUNT(u.id) as user_count FROM "Branch" b LEFT JOIN "User" u ON b.id = u."branchId" GROUP BY b.name');
+  console.log(res.rows);
+  await client.end();
 }
-main();
+main().catch(console.error);

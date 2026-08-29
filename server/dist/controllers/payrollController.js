@@ -2,7 +2,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 export const getPayrolls = asyncHandler(async (req, res) => {
     const where = { organizationId: req.user.organizationId };
-    if (req.user.role === 'hr_admin') {
+    if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
         where.user = { role: { not: 'center_admin' } };
     }
     const payrolls = await prisma.payroll.findMany({

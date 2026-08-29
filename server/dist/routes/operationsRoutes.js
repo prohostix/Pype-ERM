@@ -43,11 +43,11 @@ router.put('/sessions/:id/approve', authorize('finance_admin', 'finance_sub_admi
 router.route('/marks').get(getInternalMarks).post(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), createInternalMark);
 router.route('/marks/:id').put(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), updateInternalMark).delete(authorize('center_admin', 'ops_admin', 'org_admin', 'superadmin'), deleteInternalMark);
 // Announcements
-router.route('/announcements').get(getAnnouncements).post(authorize('ops_admin', 'hr_admin'), createAnnouncement);
+router.route('/announcements').get(getAnnouncements).post(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), createAnnouncement);
 router.route('/announcements/:id')
     .get(getAnnouncement)
-    .put(authorize('ops_admin', 'hr_admin'), updateAnnouncement)
-    .delete(authorize('ops_admin', 'hr_admin'), deleteAnnouncement);
+    .put(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), updateAnnouncement)
+    .delete(authorize('ops_admin', 'hr_admin', 'hr_sub_admin'), deleteAnnouncement);
 // Onboarding — program allocation
 router.route('/centers/:id/allocations')
     .get(authorize('ops_admin', 'ops_sub_admin', 'employee'), getProgramAllocations)

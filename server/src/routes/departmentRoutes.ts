@@ -35,8 +35,8 @@ router
   .delete(authorize('superadmin', 'org_admin'), deleteDepartment);
 
 // Manager management
-router.put('/:id/assign-manager', authorize('superadmin', 'org_admin', 'hr_admin'), assignManager);
-router.delete('/:id/remove-manager', authorize('superadmin', 'org_admin', 'hr_admin'), removeManager);
+router.put('/:id/assign-manager', authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), assignManager);
+router.delete('/:id/remove-manager', authorize('superadmin', 'org_admin', 'hr_admin', 'hr_sub_admin'), removeManager);
 
 // Assistant manager management
 router.post('/:id/assistant-managers', authorize('superadmin', 'org_admin'), addAssistantManager);

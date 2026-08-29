@@ -411,7 +411,7 @@ export const UserRole: {
   ops_sub_admin: 'ops_sub_admin',
   finance_admin: 'finance_admin',
   finance_sub_admin: 'finance_sub_admin',
-  hr_admin: 'hr_admin',
+  hr_admin: 'hr_admin', 'hr_sub_admin',
   sales_admin: 'sales_admin',
   sales_sub_admin: 'sales_sub_admin',
   center_admin: 'center_admin',

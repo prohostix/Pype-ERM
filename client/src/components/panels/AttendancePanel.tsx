@@ -18,8 +18,8 @@ interface AttendancePanelProps {
 
 export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const { user } = useAuth();
-  const isHR = !isMyPortal && user?.role === 'hr_admin';
-  const canViewAll = !isMyPortal && ['hr_admin', 'org_admin', 'ceo'].includes(user?.role || '');
+  const isHR = !isMyPortal && (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin');
+  const canViewAll = !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo'].includes(user?.role || '');
   const [attendance, setAttendance] = useState<any[]>([]);
   const [calendarAttendance, setCalendarAttendance] = useState<any[]>([]);
   const [holidays, setHolidays] = useState<any[]>([]);
@@ -34,7 +34,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>(canViewAll ? 'list' : 'calendar');
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'late'>('desc');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const [formData, setFormData] = useState({
@@ -150,10 +150,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
     }
   };
 
-  const activeEmployeeRecords = attendance.filter(rec => {
-    const empId = rec.employeeId?.id || rec.employeeId || rec.user?.id || '';
-    return empId.toString() === activeEmployeeId;
-  });
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,7 +233,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    const baseUrl = (import.meta as any).env?.VITE_API_URL?.replace('/api/v1', '') || '';
+    const baseUrl = (import.meta as any).env?.VITE_API_URL || '';
     return `${baseUrl}${url}`;
   };
 
@@ -354,7 +351,14 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       ) : (
         <Card className="border-none shadow-xl bg-card/65 backdrop-blur-xl">
           <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-border/40">
-            <CardTitle>Attendance Records List</CardTitle>
+            <div className="flex items-center gap-4">
+              <CardTitle>Attendance Records List</CardTitle>
+              {viewMode === 'list' && (
+                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-semibold shadow-sm">
+                  Late: {attendance.filter(r => r.isLate || r.status === 'late').length} {canViewAll && dateFilter ? 'Users' : 'Records'}
+                </Badge>
+              )}
+            </div>
             <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-1.5 h-9 text-xs font-semibold">
               <Calendar className="w-3.5 h-3.5" /> Calendar View
             </Button>
@@ -398,12 +402,16 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground font-medium">Sort:</span>
-                <button
-                  onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted transition-colors"
-                >
-                  {sortOrder === 'desc' ? '↓ Newest First' : '↑ Oldest First'}
-                </button>
+                <Select value={sortOrder} onValueChange={(val: any) => setSortOrder(val)}>
+                  <SelectTrigger className="h-8 border-border bg-background w-[140px] text-xs shadow-sm">
+                    <SelectValue placeholder="Sort" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="desc">↓ Newest First</SelectItem>
+                    <SelectItem value="asc">↑ Oldest First</SelectItem>
+                    <SelectItem value="late">Late First</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             {loading ? (
@@ -415,6 +423,12 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                 {[...attendance]
                   .filter(rec => rec && rec.id)
                   .sort((a, b) => {
+                    if (sortOrder === 'late') {
+                      const lateA = a.isLate ? (a.lateMinutes || 1) : 0;
+                      const lateB = b.isLate ? (b.lateMinutes || 1) : 0;
+                      if (lateA !== lateB) return lateB - lateA;
+                      return new Date(b.date).getTime() - new Date(a.date).getTime();
+                    }
                     const dateA = new Date(a.date).getTime();
                     const dateB = new Date(b.date).getTime();
                     return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;

@@ -83,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       collections_admin: ['finance', 'payments', 'collections'],
       collections: ['finance', 'collections'],
       hr_admin: ['hr', 'employees', 'attendance', 'leave', 'recruitment', 'complaints'],
+      hr_sub_admin: ['hr', 'employees', 'attendance', 'leave', 'recruitment', 'complaints'],
       sales_admin: ['sales', 'leads', 'deals', 'referrals', 'targets'],
       sales_sub_admin: ['sales', 'leads', 'deals', 'referrals', 'targets'],
       center_admin: ['center', 'students', 'invoices', 'marks'],

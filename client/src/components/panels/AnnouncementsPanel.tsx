@@ -29,7 +29,7 @@ const TYPE_COLORS: Record<string, string> = {
 
 export function AnnouncementsPanel() {
   const { user } = useAuth();
-  const canManage = ['hr_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
+  const canManage = ['hr_admin', 'hr_sub_admin', 'org_admin', 'superadmin'].includes(user?.role || '');
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);

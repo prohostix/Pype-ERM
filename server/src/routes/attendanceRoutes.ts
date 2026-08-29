@@ -21,11 +21,11 @@ const router = express.Router();
 
 // HR Settings routes
 router.get('/settings', protect, getHRSettings);
-router.post('/settings', protect, authorize('hr_admin', 'superadmin'), createOrUpdateHRSettings);
-router.put('/settings', protect, authorize('hr_admin', 'superadmin'), createOrUpdateHRSettings);
+router.post('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createOrUpdateHRSettings);
+router.put('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createOrUpdateHRSettings);
 
 // Biometric sync endpoint (called by biometric device/middleware)
-router.post('/biometric-sync', protect, authorize('hr_admin', 'superadmin'), biometricSync);
+router.post('/biometric-sync', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), biometricSync);
 
 // Employee routes - punch in/out
 router.post('/punch-in', protect, punchIn);
@@ -35,9 +35,9 @@ router.get('/late-summary', protect, getMonthlyLateSummary);
 router.get('/user/:userId', protect, getAttendanceByUserId);
 
 // HR routes - view all attendances
-router.get('/', protect, authorize('hr_admin', 'superadmin'), getAttendances);
-router.post('/', protect, authorize('hr_admin', 'superadmin'), createAttendance);
-router.put('/:id', protect, authorize('hr_admin', 'superadmin'), updateAttendance);
-router.delete('/:id', protect, authorize('hr_admin', 'superadmin'), deleteAttendance);
+router.get('/', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), getAttendances);
+router.post('/', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createAttendance);
+router.put('/:id', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), updateAttendance);
+router.delete('/:id', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), deleteAttendance);
 
 export default router;

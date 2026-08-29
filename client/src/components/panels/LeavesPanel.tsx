@@ -85,9 +85,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
   const role = user?.role || '';
   const userId = user?.id?.toString() || '';
-  const isBranchManager = Boolean((user as any)?.branchId);
+  const isBranchManager = Boolean((user as any)?.isBranchManager);
   const isDeptManager = DEPT_MANAGER_ROLES.includes(role) || isBranchManager;
-  const isHR = role === 'hr_admin';
+  const isHR = role === 'hr_admin' || role === 'hr_sub_admin';
   const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo';
 
   const fetchLeaves = async () => {

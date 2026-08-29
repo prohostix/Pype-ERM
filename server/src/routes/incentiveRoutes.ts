@@ -20,7 +20,7 @@ router.use(protect);
 router
   .route('/')
   .post(authorize('finance_admin', 'finance_sub_admin'), createIncentiveStructure)
-  .get(authorize('finance_admin', 'finance_sub_admin', 'hr_admin'), getIncentiveStructures);
+  .get(authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin'), getIncentiveStructures);
 
 router
   .route('/:id')

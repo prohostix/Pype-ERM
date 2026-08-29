@@ -37,7 +37,7 @@ interface DesignationNode {
 
 const ROLE_COLORS: Record<string, string> = {
   org_admin: '#7c3aed', ceo: '#2563eb', ops_admin: '#ea580c',
-  finance_admin: '#16a34a', finance_sub_admin: '#22c55e', hr_admin: '#db2777', sales_admin: '#ca8a04', sales_sub_admin: '#eab308',
+  finance_admin: '#16a34a', finance_sub_admin: '#22c55e', hr_admin: '#db2777', hr_sub_admin: '#f472b6', sales_admin: '#ca8a04', sales_sub_admin: '#eab308',
   center_admin: '#0d9488', ops_sub_admin: '#f97316', employee: '#6b7280', student: '#94a3b8',
 };
 

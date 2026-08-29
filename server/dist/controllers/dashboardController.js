@@ -76,7 +76,7 @@ export const getDashboardMetrics = asyncHandler(async (req, res) => {
             where: { organizationId: orgId, targetDate: { gte: today, lt: tomorrow } }
         }).catch(() => 0);
     }
-    if (['hr_admin', 'ceo', 'org_admin'].includes(role)) {
+    if (['hr_admin', 'hr_sub_admin', 'ceo', 'org_admin'].includes(role)) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         if (metrics.totalEmployees === undefined) {

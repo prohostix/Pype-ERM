@@ -37,7 +37,7 @@ router.get('/managers', authorize('ceo', 'general_manager'), getDepartmentManage
 router.post('/tasks', authorize('ceo', 'general_manager'), assignTask);
 
 // KPI / KRA org-wide report
-router.get('/kpi-kra-report', authorize('ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'hr_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
+router.get('/kpi-kra-report', authorize('ceo', 'general_manager', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'org_admin', 'superadmin'), getKPIKRAReport);
 
 // Activity logs for ceo/org_admin
 router.get('/activity-logs', authorize('ceo', 'general_manager', 'org_admin'), getActivityLogs);

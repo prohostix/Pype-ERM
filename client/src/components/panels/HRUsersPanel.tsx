@@ -454,6 +454,7 @@ export function HRUsersPanel() {
       employee: 'bg-blue-100 text-blue-800',
       student: 'bg-green-100 text-green-800',
       hr_admin: 'bg-orange-100 text-orange-800',
+      hr_sub_admin: 'bg-orange-100 text-orange-700',
       finance_admin: 'bg-emerald-100 text-emerald-800',
       finance_sub_admin: 'bg-emerald-50 text-emerald-700',
       ops_admin: 'bg-indigo-100 text-indigo-800',
@@ -618,6 +619,7 @@ export function HRUsersPanel() {
                   <SelectContent>
                     <SelectItem value="employee">Employee / Staff</SelectItem>
                     <SelectItem value="hr_admin">HR Admin</SelectItem>
+                    <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
                     <SelectItem value="finance_admin">Finance Admin</SelectItem>
                     <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
@@ -830,6 +832,11 @@ export function HRUsersPanel() {
                       <Badge className={getRoleBadgeColor(user.role)}>
                         {user.role}
                       </Badge>
+                      {user.branchId && (
+                        <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
+                          {user.branch?.name || (typeof user.branchId === 'object' ? (user.branchId as any)?.name : 'Assigned to Branch')}
+                        </Badge>
+                      )}
                       {user.status === 'inactive' && (
                         <Badge variant="outline" className="bg-orange-50 text-orange-700">
                           Inactive
@@ -1137,6 +1144,7 @@ export function HRUsersPanel() {
                 <SelectContent>
                   <SelectItem value="employee">Employee / Staff</SelectItem>
                   <SelectItem value="hr_admin">HR Admin</SelectItem>
+                  <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
                   <SelectItem value="finance_admin">Finance Admin</SelectItem>
                   <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                   <SelectItem value="ops_admin">Operations Admin</SelectItem>

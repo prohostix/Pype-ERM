@@ -248,6 +248,7 @@ export function EmployeeActivityReportPanel() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [search, setSearch] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('dept');
   const [departments, setDepartments] = useState<DeptSummary[]>([]);
   const [report, setReport] = useState<EmployeeReport[]>([]);
   const [scheduledHours, setScheduledHours] = useState(8);
@@ -278,9 +279,25 @@ export function EmployeeActivityReportPanel() {
     }
   };
 
-  const filtered = report.filter(e =>
-    !search || e.name.toLowerCase().includes(search.toLowerCase()) || e.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = report
+    .filter(e =>
+      !search || e.name.toLowerCase().includes(search.toLowerCase()) || e.email.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortOrder === 'late') {
+        const lateA = a.attendance?.isLate ? (a.attendance?.lateMinutes || 1) : 0;
+        const lateB = b.attendance?.isLate ? (b.attendance?.lateMinutes || 1) : 0;
+        if (lateA !== lateB) return lateB - lateA;
+        return a.name.localeCompare(b.name);
+      }
+      if (sortOrder === 'productive_desc') {
+        return (b.productiveHours || 0) - (a.productiveHours || 0);
+      }
+      if (sortOrder === 'wasted_desc') {
+        return (b.timeWasted || 0) - (a.timeWasted || 0);
+      }
+      return a.department.localeCompare(b.department) || a.name.localeCompare(b.name);
+    });
 
   const totalPresent = departments.reduce((s, d) => s + d.present, 0);
   const totalAbsent = departments.reduce((s, d) => s + d.absent, 0);
@@ -340,6 +357,19 @@ export function EmployeeActivityReportPanel() {
             onChange={e => setSearch(e.target.value)}
             className="pl-9 h-9"
           />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground font-medium">Sort:</span>
+          <select
+            value={sortOrder}
+            onChange={e => setSortOrder(e.target.value)}
+            className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          >
+            <option value="dept">Department / Name</option>
+            <option value="late">Late First</option>
+            <option value="productive_desc">Productive Hours (High-Low)</option>
+            <option value="wasted_desc">Time Wasted (High-Low)</option>
+          </select>
         </div>
       </div>
 

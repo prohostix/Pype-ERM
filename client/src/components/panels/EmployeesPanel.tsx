@@ -225,6 +225,7 @@ export function EmployeesPanel() {
                     <SelectContent>
                       <SelectItem value="employee">Employee / Staff</SelectItem>
                       <SelectItem value="hr_admin">HR Admin</SelectItem>
+                      <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
                       <SelectItem value="finance_admin">Finance Admin</SelectItem>
                       <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
                       <SelectItem value="ops_admin">Operations Admin</SelectItem>
@@ -354,7 +355,7 @@ export function EmployeesPanel() {
                         {employee.role}{employee.designation ? ` · ${employee.designation}` : ''} • {employee.department?.name || (typeof employee.departmentId === 'object' ? employee.departmentId?.name : '')}
                         {employee.branchId && (
                           <span className="ml-1 text-primary text-xs">
-                            · {typeof employee.branchId === 'object' ? employee.branchId?.name : 'Branch Manager'}
+                            · {employee.branch?.name || (typeof employee.branchId === 'object' ? employee.branchId?.name : 'Assigned to Branch')}
                           </span>
                         )}
                       </div>

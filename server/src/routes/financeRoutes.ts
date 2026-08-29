@@ -163,8 +163,8 @@ router.get('/salary-configs', authorize('finance_admin', 'finance_sub_admin'), g
 router.put('/salary-configs/:id/approve', authorize('finance_admin', 'finance_sub_admin'), approveSalaryConfig);
 
 // Payroll Batches (from HR)
-router.get('/payroll-batches', authorize('finance_admin', 'finance_sub_admin', 'hr_admin'), getPayrollBatches);
-router.get('/payroll-batches/:id', authorize('finance_admin', 'finance_sub_admin', 'hr_admin'), getPayrollBatch);
+router.get('/payroll-batches', authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin'), getPayrollBatches);
+router.get('/payroll-batches/:id', authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin'), getPayrollBatch);
 router.post('/payroll-batches/:id/approve', authorize('finance_admin', 'finance_sub_admin'), financeApprovePayrollBatch);
 router.post('/payroll-batches/:id/reject', authorize('finance_admin', 'finance_sub_admin'), financeRejectPayrollBatch);
 router.put('/payroll-batches/:id/payment-in-progress', authorize('finance_admin', 'finance_sub_admin'), markBatchPaymentInProgress);

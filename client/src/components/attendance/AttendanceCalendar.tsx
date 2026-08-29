@@ -140,7 +140,7 @@ export function AttendanceCalendar({
   };
 
   // Statistics — count absent for days with no record, past, not weekend, not holiday
-  let presentCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0, holidayCount = 0;
+  let presentCount = 0, lateCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0, holidayCount = 0;
   for (let day = 1; day <= totalDays; day++) {
     const date = new Date(selectedYear, selectedMonth, day);
     const record = records.find(r => {
@@ -149,7 +149,10 @@ export function AttendanceCalendar({
     });
 
     if (record) {
-      if (record.status === 'present' || record.status === 'late') presentCount++;
+      if (record.status === 'present') {
+        if (record.isLate) lateCount++;
+        else presentCount++;
+      } else if (record.status === 'late' || record.isLate) lateCount++;
       else if (record.status === 'absent') absentCount++;
       else if (record.status === 'half_day') halfDayCount++;
       else if (record.status === 'leave') leaveCount++;
@@ -286,7 +289,7 @@ export function AttendanceCalendar({
   };
 
   const getApiBase = () => {
-    return (import.meta as any).env?.VITE_API_URL?.replace('/api/v1', '') || '';
+    return (import.meta as any).env?.VITE_API_URL || '';
   };
 
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
@@ -355,9 +358,10 @@ export function AttendanceCalendar({
 
       <CardContent className="pt-6 space-y-8">
         {/* Summary */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
           {[
             { label: 'Present', count: presentCount, color: 'emerald' },
+            { label: 'Late', count: lateCount, color: 'yellow' },
             { label: 'Absent', count: absentCount, color: 'rose' },
             { label: 'Half Day', count: halfDayCount, color: 'amber' },
             { label: 'Paid Leave', count: leaveCount, color: 'purple' },

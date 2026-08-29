@@ -29,7 +29,7 @@ interface Poll {
 
 export function PollsPanel() {
   const { user } = useAuth();
-  const isHR = user?.role === 'hr_admin';
+  const isHR = user?.role === 'hr_admin' || user?.role === 'hr_sub_admin';
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);

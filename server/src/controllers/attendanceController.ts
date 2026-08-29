@@ -370,7 +370,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   
   const userFilters: any = { role: { not: 'student' } };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
@@ -531,7 +531,45 @@ export const createAttendance = asyncHandler(async (req: AuthRequest, res: Respo
     res.status(400).json({ success: false, message: 'Organization ID is required.' });
     return;
   }
-  const attendance = await prisma.attendance.create({ data: { ...req.body, organizationId: orgId } });
+
+  const data = { ...req.body, organizationId: orgId };
+
+  if (data.checkIn) {
+    const settings = await prisma.hRSettings.findFirst({ where: { organizationId: orgId } });
+    if (settings && settings.officeHours) {
+      const officeHours = settings.officeHours as any;
+      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const checkInDate = new Date(data.checkIn);
+      const currentDayName = weekdays[checkInDate.getDay()];
+
+      const overrides = officeHours.dayOverrides || [];
+      const dayOverride = overrides.find((o: any) => o.day === currentDayName);
+
+      const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
+      const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
+
+      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+      const targetCheckInDate = new Date(checkInDate);
+      targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+
+      const diffMs = checkInDate.getTime() - targetCheckInDate.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+
+      if (diffMins > gracePeriod) {
+        data.isLate = true;
+        data.lateMinutes = diffMins;
+        if (!data.status || data.status === 'present') {
+          data.status = 'late';
+        }
+      } else {
+        data.isLate = false;
+        data.lateMinutes = 0;
+        if (data.status === 'late') data.status = 'present';
+      }
+    }
+  }
+
+  const attendance = await prisma.attendance.create({ data });
   res.status(201).json({ success: true, data: attendance });
 });
 export const markAttendance = createAttendance;
@@ -551,6 +589,42 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   if (lateMinutes !== undefined) updateData.lateMinutes = Number(lateMinutes);
   if (workingHours !== undefined) updateData.workingHours = Number(workingHours);
   if (remarks !== undefined) updateData.remarks = remarks;
+
+  if (updateData.checkIn) {
+    const settings = await prisma.hRSettings.findFirst({ where: { organizationId: req.user.organizationId } });
+    if (settings && settings.officeHours) {
+      const officeHours = settings.officeHours as any;
+      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const checkInDate = updateData.checkIn;
+      const currentDayName = weekdays[checkInDate.getDay()];
+
+      const overrides = officeHours.dayOverrides || [];
+      const dayOverride = overrides.find((o: any) => o.day === currentDayName);
+
+      const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
+      const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
+
+      const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+      const targetCheckInDate = new Date(checkInDate);
+      targetCheckInDate.setHours(targetHour, targetMin, 0, 0);
+
+      const diffMs = checkInDate.getTime() - targetCheckInDate.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+
+      if (diffMins > gracePeriod) {
+        updateData.isLate = true;
+        updateData.lateMinutes = diffMins;
+        if (!updateData.status || updateData.status === 'present') {
+          updateData.status = 'late';
+        }
+      } else {
+        updateData.isLate = false;
+        updateData.lateMinutes = 0;
+        if (updateData.status === 'late') updateData.status = 'present';
+      }
+    }
+  }
+
   const updatedAttendance = await prisma.attendance.update({ where: { id: req.params.id }, data: updateData });
   res.json({ success: true, data: updatedAttendance });
 });
@@ -615,7 +689,7 @@ export const getActivityReport = asyncHandler(async (req: AuthRequest, res: Resp
     status: { not: 'resigned' }
   };
 
-  if (['superadmin', 'org_admin', 'ceo', 'hr_admin'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     userFilters.OR = [];
@@ -748,7 +822,7 @@ export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: 
   
   // Authorization check
   const isSelf = req.user.id === userId;
-  const isPrivileged = ['hr_admin', 'superadmin', 'org_admin', 'ceo'].includes(req.user.role);
+  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo'].includes(req.user.role);
   
   if (!isSelf && !isPrivileged) {
     res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });

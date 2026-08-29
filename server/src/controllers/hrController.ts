@@ -11,7 +11,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   const where: any = { organizationId };
 
   const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
-  const isHR = role === 'hr_admin';
+  const isHR = ['hr_admin', 'hr_sub_admin'].includes(role);
   const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
 
   if (isGlobalAdmin) {

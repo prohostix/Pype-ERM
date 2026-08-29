@@ -5,7 +5,7 @@ import { protect, authorize } from '../middleware/auth.js';
 const router = express.Router();
 
 router.use(protect);
-router.use(authorize('hr_admin', 'ceo', 'general_manager', 'superadmin'));
+router.use(authorize('hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'superadmin'));
 
 router.route('/')
   .get(getAssets)
