@@ -232,113 +232,120 @@ export default function TeamPermissionsPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold">Team Permissions</h2>
-          <p className="text-sm text-muted-foreground mt-1">Manage feature access and module permissions for your subordinates.</p>
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader className="pb-4 border-b">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Users className="w-5 h-5 text-primary" /> My Team
-            </CardTitle>
-            <div className="relative w-64">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
-              <Input
-                placeholder="Search team members..."
-                className="pl-9 h-9"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
+      <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-muted/30 border-b border-border/40 py-5 px-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-primary/10 rounded-xl">
+              <Shield className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-xl font-bold">Team Permissions</CardTitle>
+              <p className="text-xs text-muted-foreground mt-0.5">Manage feature access for your subordinates.</p>
             </div>
           </div>
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
+            <Input
+              placeholder="Search team members..."
+              className="pl-9 h-9 rounded-full bg-background border-slate-200/60 dark:border-slate-800/60"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 border-b">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Email</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Role</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Permissions Status</th>
-                  <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {loading ? (
-                  <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Loading team...</td></tr>
-                ) : filtered.length === 0 ? (
-                  <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No team members found.</td></tr>
-                ) : (
-                  filtered.map(emp => {
-                    const isCustom = emp.permissions && emp.permissions.includes('__custom__');
-                    return (
-                      <tr key={emp.id} className="hover:bg-muted/30">
-                        <td className="px-4 py-3 font-medium">{emp.name}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{emp.email}</td>
-                        <td className="px-4 py-3">
-                          <span className="px-2 py-1 bg-secondary text-secondary-foreground rounded-full text-xs capitalize">
+        <CardContent className="p-6">
+          {loading ? (
+            <div className="text-center py-16 text-muted-foreground bg-muted/10 rounded-2xl border border-dashed border-border/60">
+              <div className="flex justify-center mb-4">
+                <Users className="w-8 h-8 opacity-40 animate-pulse" />
+              </div>
+              Loading team...
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground rounded-2xl border border-dashed border-border/60 bg-muted/10">
+              <div className="p-4 bg-muted/30 rounded-full mb-4">
+                <Users className="w-8 h-8 opacity-40" />
+              </div>
+              <p className="text-sm font-medium">No team members found.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filtered.map(emp => {
+                const isCustom = emp.permissions && emp.permissions.includes('__custom__');
+                return (
+                  <div key={emp.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-6 border border-slate-200/60 dark:border-slate-800/60 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:bg-muted/20 transition-all duration-300 group bg-card gap-6">
+                    <div className="flex items-center gap-5">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xl text-primary flex-shrink-0">
+                        {(emp.name || '?')[0].toUpperCase()}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-base mb-1">{emp.name || 'Unknown'}</div>
+                        <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground mb-1">
+                          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-md text-xs capitalize font-medium">
                             {emp.role.replace(/_/g, ' ')}
                           </span>
-                        </td>
-                        <td className="px-4 py-3">
+                          <span className="opacity-50">•</span>
+                          <span>{emp.email}</span>
+                        </div>
+                        <div className="mt-3">
                           {isCustom ? (
-                            <div className="flex items-center gap-1.5 text-amber-600 text-xs font-medium">
-                              <ShieldAlert className="w-3.5 h-3.5" /> Customized
+                            <div className="flex items-center gap-1.5 text-amber-600 text-xs font-medium bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1 rounded-md w-max border border-amber-200/50 dark:border-amber-900/50">
+                              <ShieldAlert className="w-3.5 h-3.5" /> Customized Access
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
+                            <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md w-max border border-slate-200 dark:border-slate-700">
                               <ShieldCheck className="w-3.5 h-3.5" /> Role Default
                             </div>
                           )}
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <div className="flex justify-end gap-2">
-                            {emp.role === 'ops_sub_admin' && (
-                              <Button variant="outline" size="sm" onClick={() => handleManageSales(emp)}>
-                                <Users className="w-3.5 h-3.5 mr-1.5" /> Assign Sales Users
-                              </Button>
-                            )}
-                            <Button variant="outline" size="sm" onClick={() => handleManage(emp)}>
-                              <Shield className="w-3.5 h-3.5 mr-1.5" /> Manage Access
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
+                      {emp.role === 'ops_sub_admin' && (
+                        <Button variant="outline" size="sm" onClick={() => handleManageSales(emp)} className="rounded-full shadow-sm px-4">
+                          <Users className="w-4 h-4 mr-1.5 text-blue-500" /> Assign Sales Users
+                        </Button>
+                      )}
+                      <Button variant="outline" size="sm" onClick={() => handleManage(emp)} className="rounded-full shadow-sm px-4">
+                        <Shield className="w-4 h-4 mr-1.5 text-primary" /> Manage Access
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit Permissions</DialogTitle>
-            <DialogDescription>
-              Control what {selectedUser?.name} can see and do on their dashboard.
-            </DialogDescription>
+        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary/10 rounded-xl">
+                <ShieldAlert className="w-5 h-5 text-primary" />
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">Edit Permissions</DialogTitle>
+                <DialogDescription className="text-xs text-muted-foreground mt-0.5">
+                  Control what {selectedUser?.name} can see and do.
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
           
-          <div className="py-4 space-y-4">
-            <div className="bg-muted/50 p-3 rounded-lg flex items-start gap-3 border">
-              <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+          <div className="p-6">
+            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-xl flex items-start gap-3 border border-blue-100 dark:border-blue-900/50 mb-4">
+              <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium">Custom Overrides</p>
-                <p className="text-muted-foreground mt-0.5 text-xs">Unchecking a module completely hides it from the user's dashboard and navigation menu.</p>
+                <p className="font-semibold text-blue-700 dark:text-blue-400">Custom Overrides</p>
+                <p className="text-blue-600/80 dark:text-blue-300/80 mt-0.5 text-xs">Unchecking a module hides it completely from their dashboard and menu.</p>
               </div>
             </div>
 
-            <div className="space-y-3 mt-4 h-64 overflow-y-auto pr-2">
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
               {getModalPermissions().map(perm => (
-                <div key={perm.id} className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
+                <div key={perm.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
                   <Checkbox 
                     id={`perm-${perm.id}`} 
                     checked={permissionsForm.includes(perm.id)}
@@ -350,49 +357,56 @@ export default function TeamPermissionsPanel() {
                 </div>
               ))}
             </div>
-          </div>
 
-          <DialogFooter className="flex items-center justify-between sm:justify-between">
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground" onClick={handleResetToDefault} disabled={saving}>
-              Reset to Role Defaults
-            </Button>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)} disabled={saving}>Cancel</Button>
-              <Button onClick={handleSave} disabled={saving}>
-                {saving ? 'Saving...' : 'Save Permissions'}
+            <DialogFooter className="flex items-center justify-between sm:justify-between mt-6 pt-4 border-t border-border/40">
+              <Button variant="ghost" className="text-muted-foreground hover:text-foreground text-xs px-2" onClick={handleResetToDefault} disabled={saving}>
+                Reset to Defaults
               </Button>
-            </div>
-          </DialogFooter>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" className="rounded-full px-5" onClick={() => setDialogOpen(false)} disabled={saving}>Cancel</Button>
+                <Button className="rounded-full px-5 shadow-sm" onClick={handleSave} disabled={saving}>
+                  {saving ? 'Saving...' : 'Save Permissions'}
+                </Button>
+              </div>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* Sales Assignment Dialog */}
       <Dialog open={salesDialogOpen} onOpenChange={setSalesDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Assign Sales Users</DialogTitle>
-            <DialogDescription>
-              Assign specific sales personnel to {selectedUser?.name}. They will exclusively handle records generated by these users.
-            </DialogDescription>
+        <DialogContent className="sm:max-w-[500px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-500/10 rounded-xl">
+                <Users className="w-5 h-5 text-blue-600 dark:text-blue-500" />
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">Assign Sales Users</DialogTitle>
+                <DialogDescription className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                  Assign personnel exclusively to {selectedUser?.name}.
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
           
-          <div className="py-4 space-y-4">
-            <div className="bg-muted/50 p-3 rounded-lg flex items-start gap-3 border">
-              <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+          <div className="p-6">
+            <div className="bg-blue-50/50 dark:bg-blue-900/10 p-3 rounded-xl flex items-start gap-3 border border-blue-100 dark:border-blue-900/50 mb-4">
+              <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-medium">Data Visibility</p>
-                <p className="text-muted-foreground mt-0.5 text-xs">When users are assigned, this sub-admin will only see enrollments/students created by them, plus any unassigned records.</p>
+                <p className="font-semibold text-blue-700 dark:text-blue-400">Data Visibility</p>
+                <p className="text-blue-600/80 dark:text-blue-300/80 mt-0.5 text-xs">They will only see records from these assigned users or unassigned records.</p>
               </div>
             </div>
 
-            <div className="space-y-3 mt-4 h-64 overflow-y-auto pr-2">
+            <div className="space-y-2 mt-4 h-64 overflow-y-auto pr-2">
               {loadingSales ? (
                 <p className="text-center text-sm text-muted-foreground py-4">Loading sales personnel...</p>
               ) : allSalesUsers.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground py-4">No sales users found.</p>
               ) : (
                 allSalesUsers.map(user => (
-                  <div key={user.id} className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
+                  <div key={user.id} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60">
                     <Checkbox 
                       id={`sales-${user.id}`} 
                       checked={assignedSalesForm.includes(user.id)}
@@ -408,14 +422,14 @@ export default function TeamPermissionsPanel() {
                 ))
               )}
             </div>
-          </div>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSalesDialogOpen(false)} disabled={saving}>Cancel</Button>
-            <Button onClick={handleSaveSales} disabled={saving}>
-              {saving ? 'Saving...' : 'Save Assignments'}
-            </Button>
-          </DialogFooter>
+            <DialogFooter className="mt-6 pt-4 border-t border-border/40">
+              <Button variant="outline" className="rounded-full px-5" onClick={() => setSalesDialogOpen(false)} disabled={saving}>Cancel</Button>
+              <Button className="rounded-full px-5 shadow-sm bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveSales} disabled={saving}>
+                {saving ? 'Saving...' : 'Save Assignments'}
+              </Button>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

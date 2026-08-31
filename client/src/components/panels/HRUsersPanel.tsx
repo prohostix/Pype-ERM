@@ -80,7 +80,7 @@ export function HRUsersPanel() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -251,7 +251,7 @@ export function HRUsersPanel() {
 
   const handleTransfer = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedUser) return;
 
     try {
@@ -260,7 +260,7 @@ export function HRUsersPanel() {
         departmentId: (transferData.departmentId && transferData.departmentId !== 'none') ? transferData.departmentId : undefined,
         subDepartmentId: (transferData.subDepartmentId && transferData.subDepartmentId !== 'none') ? transferData.subDepartmentId : undefined,
       });
-      
+
       setTransferDialogOpen(false);
       setTransferData({ departmentId: '', subDepartmentId: '', reason: '' });
       setSelectedUser(null);
@@ -274,7 +274,7 @@ export function HRUsersPanel() {
 
   const handlePromotionDemotion = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedUser) return;
 
     try {
@@ -284,7 +284,7 @@ export function HRUsersPanel() {
         role: promotionData.newRole,
         reportingTo: (promotionData.reportingTo && promotionData.reportingTo !== 'none') ? promotionData.reportingTo : undefined,
       });
-      
+
       setPromotionDialogOpen(false);
       setPromotionData({ newDesignation: '', newRole: 'employee', reportingTo: '', type: 'promotion' });
       setSelectedUser(null);
@@ -298,7 +298,7 @@ export function HRUsersPanel() {
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       alert('Passwords do not match!');
       return;
@@ -325,7 +325,7 @@ export function HRUsersPanel() {
 
   const handleDelete = async (userId: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
-    
+
     try {
       await api.delete(`/users/${userId}`);
       fetchUsers();
@@ -462,7 +462,7 @@ export function HRUsersPanel() {
       sales_admin: 'bg-pink-100 text-pink-800',
       sales_sub_admin: 'bg-pink-100 text-pink-800',
       center_admin: 'bg-cyan-100 text-cyan-800',
-      
+
     };
     return map[role] || 'bg-gray-100 text-gray-800';
   };
@@ -471,7 +471,7 @@ export function HRUsersPanel() {
     const isResigned = user.status === 'resigned';
     if (activeTab === 'active' && isResigned) return false;
     if (activeTab === 'resigned' && !isResigned) return false;
-    
+
     if (selectedBranchFilter === 'all') return true;
     const empBranchId = typeof user.branchId === 'object' ? (user.branchId as any)?.id : (user.branchId || (user as any).branch?.id);
     return empBranchId?.toString() === selectedBranchFilter;
@@ -488,13 +488,18 @@ export function HRUsersPanel() {
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
-        <div>
-          <CardTitle>User Management</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage all staff accounts — HR, Finance, Ops, Sales, and Employees
-          </p>
+    <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
+      <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-muted/30 border-b border-border/40 py-5 px-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-primary/10 rounded-xl">
+            <Users className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold">User Management</CardTitle>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Manage all staff accounts — HR, Finance, Ops, Sales, and Employees
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {branches.length > 0 && (
@@ -522,442 +527,453 @@ export function HRUsersPanel() {
                 Add Employee User
               </Button>
             </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {editingUser ? 'Edit Employee User' : 'Create Employee User'}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-              </div>
-              {!editingUser && (
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {editingUser ? 'Edit Employee User' : 'Create Employee User'}
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="name">Full Name</Label>
                   <Input
-                    id="password"
-                    type="password" autoComplete="new-password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    minLength={6}
-                    placeholder="Minimum 6 characters"
                   />
                 </div>
-              )}
-              <div>
-                <Label htmlFor="designation">Designation</Label>
-                {designations.length > 0 ? (
-                  <Select
-                    value={formData.designation}
-                    onValueChange={(value) => {
-                      // Auto-fill department if designation has one
-                      const desig = designations.find(d => d.title === value);
-                      setFormData({
-                        ...formData,
-                        designation: value,
-                        departmentId: desig?.departmentId?.id || formData.departmentId,
-                      });
-                    }}
-                  >
-                    <SelectTrigger className="truncate">
-                      <SelectValue placeholder="Select from org chart..." className="truncate" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {designations.map(d => {
-                        const filled = d.filledBy?.length || 0;
-                        const vacant = d.maxHeadcount - filled;
-                        const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 ? ' (Full)' : ` (${vacant} open)`}`;
-                        return (
-                          <SelectItem key={d.id} value={d.title} disabled={vacant <= 0}>
-                            <span className="block max-w-[340px] truncate">{label}</span>
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <Input
-                    id="designation"
-                    value={formData.designation}
-                    onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                    placeholder="e.g., Senior Manager, Team Lead"
-                  />
-                )}
-                {designations.length === 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Tip: Org Admin can define positions in the Hierarchy chart for structured assignment.
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="role">Role</Label>
-                <Select
-                  value={formData.role}
-                  onValueChange={(value) => setFormData({ ...formData, role: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="employee">Employee / Staff</SelectItem>
-                    <SelectItem value="hr_admin">HR Admin</SelectItem>
-                    <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
-                    <SelectItem value="finance_admin">Finance Admin</SelectItem>
-                    <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
-                    <SelectItem value="ops_admin">Operations Admin</SelectItem>
-                    <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
-                    <SelectItem value="sales_admin">Sales Admin</SelectItem>
-                    <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                    <SelectItem value="collections_admin">Collections Admin</SelectItem>
-                    {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
-                    <SelectItem value="general_manager">General Manager</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="biometricId">Biometric Device PIN</Label>
-                <Input
-                  id="biometricId"
-                  placeholder="Optional (e.g. 101)"
-                  value={formData.biometricId}
-                  onChange={(e) => setFormData({ ...formData, biometricId: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="department">Primary Department</Label>
-                <Select
-                  value={formData.departmentId}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, departmentId: value, subDepartmentId: '' });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select department (optional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No Department</SelectItem>
-                    {departments.map((dept) => (
-                      <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id)!}>
-                        {dept.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="branch">Branch <span className="text-xs text-muted-foreground font-normal">(Main Office if empty)</span></Label>
-                <Select
-                  value={formData.branchId}
-                  onValueChange={(value) => {
-                    setFormData({ ...formData, branchId: value });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select branch (optional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Main Office / No Branch</SelectItem>
-                    {branches.map((branch: any) => (
-                      <SelectItem key={branch.id} value={branch.id}>
-                        {branch.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              {/* Additional departments — for branch managers etc. */}
-              <div>
-                <Label>Additional Departments <span className="text-xs text-muted-foreground font-normal">(for branch managers with multi-dept access)</span></Label>
-                <div className="mt-2 border rounded-lg p-3 space-y-2 max-h-36 overflow-y-auto bg-muted/30">
-                  {departments
-                    .filter(d => (d.id || d.id) !== formData.departmentId && (d.id || d.id) !== 'none')
-                    .map(dept => {
-                      const deptId = (dept.id || dept.id)!;
-                      const checked = formData.additionalDepartmentIds.includes(deptId);
-                      return (
-                        <label key={deptId} className="flex items-center gap-2 cursor-pointer text-sm">
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {
-                              const next = checked
-                                ? formData.additionalDepartmentIds.filter(id => id !== deptId)
-                                : [...formData.additionalDepartmentIds, deptId];
-                              setFormData({ ...formData, additionalDepartmentIds: next });
-                            }}
-                            className="rounded"
-                          />
-                          {dept.name}
-                          <span className="text-xs text-muted-foreground">({dept.type})</span>
-                        </label>
-                      );
-                    })}
-                  {departments.length === 0 && <p className="text-xs text-muted-foreground">No departments available</p>}
-                </div>
-              </div>
-              {formData.departmentId && subDepartments.length > 0 && (
                 <div>
-                  <Label htmlFor="subDepartment">Sub-Department</Label>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                </div>
+                {!editingUser && (
+                  <div>
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password" autoComplete="new-password"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      required
+                      minLength={6}
+                      placeholder="Minimum 6 characters"
+                    />
+                  </div>
+                )}
+                <div>
+                  <Label htmlFor="designation">Designation</Label>
+                  {designations.length > 0 ? (
+                    <Select
+                      value={formData.designation}
+                      onValueChange={(value) => {
+                        // Auto-fill department if designation has one
+                        const desig = designations.find(d => d.title === value);
+                        setFormData({
+                          ...formData,
+                          designation: value,
+                          departmentId: desig?.departmentId?.id || formData.departmentId,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="truncate">
+                        <SelectValue placeholder="Select from org chart..." className="truncate" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {designations.map(d => {
+                          const filled = d.filledBy?.length || 0;
+                          const vacant = d.maxHeadcount - filled;
+                          const label = `${d.title}${d.departmentId ? ` — ${d.departmentId.name}` : ''}${vacant <= 0 ? ' (Full)' : ` (${vacant} open)`}`;
+                          return (
+                            <SelectItem key={d.id} value={d.title} disabled={vacant <= 0}>
+                              <span className="block max-w-[340px] truncate">{label}</span>
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input
+                      id="designation"
+                      value={formData.designation}
+                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                      placeholder="e.g., Senior Manager, Team Lead"
+                    />
+                  )}
+                  {designations.length === 0 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tip: Org Admin can define positions in the Hierarchy chart for structured assignment.
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="role">Role</Label>
                   <Select
-                    value={formData.subDepartmentId}
-                    onValueChange={(value) => setFormData({ ...formData, subDepartmentId: value })}
+                    value={formData.role}
+                    onValueChange={(value) => setFormData({ ...formData, role: value })}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select sub-department (optional)" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No Sub-Department</SelectItem>
-                      {subDepartments.map((subDept) => (
-                        <SelectItem key={subDept.id || subDept.id} value={(subDept.id || subDept.id)!}>
-                          {subDept.name}
+                      <SelectItem value="employee">Employee / Staff</SelectItem>
+                      <SelectItem value="hr_admin">HR Admin</SelectItem>
+                      <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
+                      <SelectItem value="finance_admin">Finance Admin</SelectItem>
+                      <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
+                      <SelectItem value="ops_admin">Operations Admin</SelectItem>
+                      <SelectItem value="ops_sub_admin">Ops Sub Admin</SelectItem>
+                      <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                      <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
+                      <SelectItem value="collections_admin">Collections Admin</SelectItem>
+                      {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
+                      <SelectItem value="general_manager">General Manager</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="biometricId">Biometric Device PIN</Label>
+                  <Input
+                    id="biometricId"
+                    placeholder="Optional (e.g. 101)"
+                    value={formData.biometricId}
+                    onChange={(e) => setFormData({ ...formData, biometricId: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="department">Primary Department</Label>
+                  <Select
+                    value={formData.departmentId}
+                    onValueChange={(value) => {
+                      setFormData({ ...formData, departmentId: value, subDepartmentId: '' });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No Department</SelectItem>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id)!}>
+                          {dept.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              )}
-              <div>
-                <Label htmlFor="reportingTo">Reports To</Label>
-                <Select
-                  value={formData.reportingTo}
-                  onValueChange={(value) => setFormData({ ...formData, reportingTo: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select reporting manager (optional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No Manager</SelectItem>
-                    {users.filter(u => u.status !== 'resigned' && (u.id || u.id) !== (editingUser?.id || editingUser?.id)).map((user) => (
-                      <SelectItem key={user.id || user.id} value={(user.id || user.id)!}>
-                        {user.name} {user.designation ? `(${user.designation})` : ''}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <div className="space-y-0.5">
-                  <Label>Allow System Punch-In (Web/App)</Label>
-                  <p className="text-sm text-muted-foreground">If disabled, employee must use physical biometric device.</p>
+                <div>
+                  <Label htmlFor="branch">Branch <span className="text-xs text-muted-foreground font-normal">(Main Office if empty)</span></Label>
+                  <Select
+                    value={formData.branchId}
+                    onValueChange={(value) => {
+                      setFormData({ ...formData, branchId: value });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select branch (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Main Office / No Branch</SelectItem>
+                      {branches.map((branch: any) => (
+                        <SelectItem key={branch.id} value={branch.id}>
+                          {branch.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Switch
-                  checked={formData.allowSystemPunchIn}
-                  onCheckedChange={(checked) => setFormData({ ...formData, allowSystemPunchIn: checked })}
-                />
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <div className="space-y-0.5">
-                  <Label>Require Selfie for Punch-In</Label>
-                  <p className="text-sm text-muted-foreground">If enabled, employee must take a photo via webcam to punch in.</p>
+                {/* Additional departments — for branch managers etc. */}
+                <div>
+                  <Label>Additional Departments <span className="text-xs text-muted-foreground font-normal">(for branch managers with multi-dept access)</span></Label>
+                  <div className="mt-2 border rounded-lg p-3 space-y-2 max-h-36 overflow-y-auto bg-muted/30">
+                    {departments
+                      .filter(d => (d.id || d.id) !== formData.departmentId && (d.id || d.id) !== 'none')
+                      .map(dept => {
+                        const deptId = (dept.id || dept.id)!;
+                        const checked = formData.additionalDepartmentIds.includes(deptId);
+                        return (
+                          <label key={deptId} className="flex items-center gap-2 cursor-pointer text-sm">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {
+                                const next = checked
+                                  ? formData.additionalDepartmentIds.filter(id => id !== deptId)
+                                  : [...formData.additionalDepartmentIds, deptId];
+                                setFormData({ ...formData, additionalDepartmentIds: next });
+                              }}
+                              className="rounded"
+                            />
+                            {dept.name}
+                            <span className="text-xs text-muted-foreground">({dept.type})</span>
+                          </label>
+                        );
+                      })}
+                    {departments.length === 0 && <p className="text-xs text-muted-foreground">No departments available</p>}
+                  </div>
                 </div>
-                <Switch
-                  checked={formData.requireSelfiePunchIn}
-                  onCheckedChange={(checked) => setFormData({ ...formData, requireSelfiePunchIn: checked })}
-                />
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <div className="space-y-0.5">
-                  <Label>Allow Anywhere Punch-In</Label>
-                  <p className="text-sm text-muted-foreground">If enabled, employee bypasses the geofencing (location) restriction.</p>
+                {formData.departmentId && subDepartments.length > 0 && (
+                  <div>
+                    <Label htmlFor="subDepartment">Sub-Department</Label>
+                    <Select
+                      value={formData.subDepartmentId}
+                      onValueChange={(value) => setFormData({ ...formData, subDepartmentId: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select sub-department (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No Sub-Department</SelectItem>
+                        {subDepartments.map((subDept) => (
+                          <SelectItem key={subDept.id || subDept.id} value={(subDept.id || subDept.id)!}>
+                            {subDept.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div>
+                  <Label htmlFor="reportingTo">Reports To</Label>
+                  <Select
+                    value={formData.reportingTo}
+                    onValueChange={(value) => setFormData({ ...formData, reportingTo: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select reporting manager (optional)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No Manager</SelectItem>
+                      {users.filter(u => u.status !== 'resigned' && (u.id || u.id) !== (editingUser?.id || editingUser?.id)).map((user) => (
+                        <SelectItem key={user.id || user.id} value={(user.id || user.id)!}>
+                          {user.name} {user.designation ? `(${user.designation})` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Switch
-                  checked={formData.allowAnywherePunchIn}
-                  onCheckedChange={(checked) => setFormData({ ...formData, allowAnywherePunchIn: checked })}
-                />
-              </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setDialogOpen(false);
-                    resetForm();
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingUser ? 'Update' : 'Create'} User
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="space-y-0.5">
+                    <Label>Allow System Punch-In (Web/App)</Label>
+                    <p className="text-sm text-muted-foreground">If disabled, employee must use physical biometric device.</p>
+                  </div>
+                  <Switch
+                    checked={formData.allowSystemPunchIn}
+                    onCheckedChange={(checked) => setFormData({ ...formData, allowSystemPunchIn: checked })}
+                  />
+                </div>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="space-y-0.5">
+                    <Label>Require Selfie for Punch-In</Label>
+                    <p className="text-sm text-muted-foreground">If enabled, employee must take a photo via webcam to punch in.</p>
+                  </div>
+                  <Switch
+                    checked={formData.requireSelfiePunchIn}
+                    onCheckedChange={(checked) => setFormData({ ...formData, requireSelfiePunchIn: checked })}
+                  />
+                </div>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="space-y-0.5">
+                    <Label>Allow Anywhere Punch-In</Label>
+                    <p className="text-sm text-muted-foreground">If enabled, employee bypasses the geofencing (location) restriction.</p>
+                  </div>
+                  <Switch
+                    checked={formData.allowAnywherePunchIn}
+                    onCheckedChange={(checked) => setFormData({ ...formData, allowAnywherePunchIn: checked })}
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setDialogOpen(false);
+                      resetForm();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">
+                    {editingUser ? 'Update' : 'Create'} User
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
           </Dialog>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
           <TabsList>
             <TabsTrigger value="active">Active Staff</TabsTrigger>
             <TabsTrigger value="resigned">Resigned Staff</TabsTrigger>
           </TabsList>
         </Tabs>
-        
+
         {displayedUsers.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p>No users found in this category.</p>
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground rounded-2xl border border-dashed border-border/60 bg-muted/10">
+            <div className="p-4 bg-muted/30 rounded-full mb-4">
+              <Users className="w-8 h-8 opacity-40" />
+            </div>
+            <p className="text-sm font-medium">No users found in this category.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {displayedUsers
               .map((user) => {
-              const userId = user.id || user.id || '';
-              return (
-                <div
-                  key={userId}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-semibold">{user.name}</h3>
-                      <Badge className={getRoleBadgeColor(user.role)}>
-                        {user.role}
-                      </Badge>
-                      {user.branchId && (
-                        <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
-                          {user.branch?.name || (typeof user.branchId === 'object' ? (user.branchId as any)?.name : 'Assigned to Branch')}
+                const userId = user.id || user.id || '';
+                return (
+                  <div
+                    key={userId}
+                    className="flex flex-col xl:flex-row xl:items-center justify-between p-6 mb-4 border border-slate-200/60 dark:border-slate-800/60 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:bg-muted/20 transition-all duration-300 group bg-card gap-6"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-semibold">{user.name}</h3>
+                        <Badge className={getRoleBadgeColor(user.role)}>
+                          {user.role}
                         </Badge>
+                        {user.branchId && (
+                          <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5">
+                            {user.branch?.name || (typeof user.branchId === 'object' ? (user.branchId as any)?.name : 'Assigned to Branch')}
+                          </Badge>
+                        )}
+                        {user.status === 'inactive' && (
+                          <Badge variant="outline" className="bg-orange-50 text-orange-700">
+                            Inactive
+                          </Badge>
+                        )}
+                        {user.status === 'resigned' && (
+                          <Badge variant="outline" className="bg-red-50 text-red-700">
+                            Resigned
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
+                      {user.biometricId && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Biometric ID: {user.biometricId}
+                        </p>
                       )}
-                      {user.status === 'inactive' && (
-                        <Badge variant="outline" className="bg-orange-50 text-orange-700">
-                          Inactive
-                        </Badge>
+                      {user.designation && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Designation: {user.designation}
+                        </p>
                       )}
-                      {user.status === 'resigned' && (
-                        <Badge variant="outline" className="bg-red-50 text-red-700">
-                          Resigned
-                        </Badge>
+                      {user.department && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Department: {user.department.name}
+                          {user.subDepartment && ` → ${user.subDepartment.name}`}
+                        </p>
+                      )}
+                      {user.additionalDepartments && user.additionalDepartments.length > 0 && (
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Also: {user.additionalDepartments.map((d: any) => d.name || d).join(', ')}
+                        </p>
+                      )}
+                      {user.reportingToUser && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Reports to: {user.reportingToUser.name}
+                        </p>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
-                    {user.biometricId && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Biometric ID: {user.biometricId}
-                      </p>
-                    )}
-                    {user.designation && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Designation: {user.designation}
-                      </p>
-                    )}
-                    {user.department && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Department: {user.department.name}
-                        {user.subDepartment && ` → ${user.subDepartment.name}`}
-                      </p>
-                    )}
-                    {user.additionalDepartments && user.additionalDepartments.length > 0 && (
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        Also: {user.additionalDepartments.map((d: any) => d.name || d).join(', ')}
-                      </p>
-                    )}
-                    {user.reportingToUser && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Reports to: {user.reportingToUser.name}
-                      </p>
-                    )}
+                    <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openTransferDialog(user)}
+                        title="Transfer Employee"
+                      >
+                        <ArrowRightLeft className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openPromotionDialog(user, 'promotion')}
+                        title="Promote Employee"
+                      >
+                        <TrendingUp className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openPromotionDialog(user, 'demotion')}
+                        title="Demote Employee"
+                      >
+                        <TrendingDown className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openPasswordDialog(userId)}
+                        title="Change Password"
+                      >
+                        <Key className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditDialog(user)}
+                        title="Edit User"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleToggleStatus(user)}
+                        title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
+                        className={user.status === 'active' ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'}
+                      >
+                        {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleResign(user)}
+                        title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
+                        className={user.status === 'resigned' ? 'text-blue-500 hover:text-blue-600' : 'text-red-600 hover:text-red-700'}
+                      >
+                        {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(userId)}
+                        title="Delete User"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openTransferDialog(user)}
-                      title="Transfer Employee"
-                    >
-                      <ArrowRightLeft className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openPromotionDialog(user, 'promotion')}
-                      title="Promote Employee"
-                    >
-                      <TrendingUp className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openPromotionDialog(user, 'demotion')}
-                      title="Demote Employee"
-                    >
-                      <TrendingDown className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openPasswordDialog(userId)}
-                      title="Change Password"
-                    >
-                      <Key className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openEditDialog(user)}
-                      title="Edit User"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleToggleStatus(user)}
-                      title={user.status === 'active' ? 'Suspend User' : 'Activate User'}
-                      className={user.status === 'active' ? 'text-orange-500 hover:text-orange-600' : 'text-green-500 hover:text-green-600'}
-                    >
-                      {user.status === 'active' ? <Ban className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleResign(user)}
-                      title={user.status === 'resigned' ? 'Re-activate Employee' : 'Resign Employee'}
-                      className={user.status === 'resigned' ? 'text-blue-500 hover:text-blue-600' : 'text-red-600 hover:text-red-700'}
-                    >
-                      {user.status === 'resigned' ? <UserCheck className="w-4 h-4" /> : <UserMinus className="w-4 h-4" />}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(userId)}
-                      title="Delete User"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </CardContent>
 
       {/* Password Change Dialog */}
       <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Change User Password</DialogTitle>
+        <DialogContent className="sm:max-w-[425px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary/10 rounded-xl">
+                <Key className="w-5 h-5 text-primary" />
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">Change Password</DialogTitle>
+                <p className="text-xs text-muted-foreground mt-0.5 font-normal">Securely update credentials</p>
+              </div>
+            </div>
           </DialogHeader>
-          <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div className="p-6">
+            <form onSubmit={handlePasswordChange} className="space-y-4">
             <div>
               <Label htmlFor="newPassword">New Password</Label>
               <Input
@@ -993,27 +1009,42 @@ export function HRUsersPanel() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Update Password</Button>
+              <Button type="submit" className="rounded-full shadow-sm">Update Password</Button>
             </div>
           </form>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* Transfer Employee Dialog */}
       <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Transfer Employee</DialogTitle>
-          </DialogHeader>
-          {selectedUser && (
-            <div className="mb-4 p-3 bg-muted rounded-lg">
-              <p className="font-semibold">{selectedUser.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Current: {selectedUser.department?.name || 'No Department'}
-              </p>
+        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-500/10 rounded-xl">
+                <ArrowRightLeft className="w-5 h-5 text-blue-600 dark:text-blue-500" />
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">Transfer Employee</DialogTitle>
+                <p className="text-xs text-muted-foreground mt-0.5 font-normal">Reassign to a new department</p>
+              </div>
             </div>
-          )}
-          <form onSubmit={handleTransfer} className="space-y-4">
+          </DialogHeader>
+          <div className="p-6">
+            {selectedUser && (
+              <div className="mb-6 p-4 border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex flex-shrink-0 items-center justify-center text-blue-600 dark:text-blue-500 font-bold text-lg">
+                  {selectedUser.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-bold text-base">{selectedUser.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Current: {selectedUser.department?.name || 'No Department'}
+                  </p>
+                </div>
+              </div>
+            )}
+            <form onSubmit={handleTransfer} className="space-y-4">
             <div>
               <Label htmlFor="transferDepartment">New Department</Label>
               <Select
@@ -1076,29 +1107,48 @@ export function HRUsersPanel() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Transfer Employee</Button>
+              <Button type="submit" className="rounded-full shadow-sm bg-blue-600 hover:bg-blue-700 text-white">Transfer Employee</Button>
             </div>
           </form>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* Promotion/Demotion Dialog */}
       <Dialog open={promotionDialogOpen} onOpenChange={setPromotionDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {promotionData.type === 'promotion' ? 'Promote' : 'Demote'} Employee
-            </DialogTitle>
-          </DialogHeader>
-          {selectedUser && (
-            <div className="mb-4 p-3 bg-muted rounded-lg">
-              <p className="font-semibold">{selectedUser.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Current: {selectedUser.designation || 'No Designation'} ({selectedUser.role})
-              </p>
+        <DialogContent className="sm:max-w-[450px] border-none shadow-2xl rounded-2xl overflow-hidden p-0 gap-0">
+          <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className={`p-2.5 rounded-xl ${promotionData.type === 'promotion' ? "bg-green-500/10" : "bg-orange-500/10"}`}>
+                {promotionData.type === 'promotion' ? 
+                  <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-500" /> : 
+                  <TrendingDown className="w-5 h-5 text-orange-600 dark:text-orange-500" />
+                }
+              </div>
+              <div className="text-left">
+                <DialogTitle className="text-xl font-bold">
+                  {promotionData.type === 'promotion' ? 'Promote' : 'Demote'} Employee
+                </DialogTitle>
+                <p className="text-xs text-muted-foreground mt-0.5 font-normal">Update designation and role</p>
+              </div>
             </div>
-          )}
-          <form onSubmit={handlePromotionDemotion} className="space-y-4">
+          </DialogHeader>
+          <div className="p-6">
+            {selectedUser && (
+              <div className={`mb-6 p-4 border rounded-xl flex items-center gap-4 ${promotionData.type === 'promotion' ? "border-green-100 dark:border-green-900/50 bg-green-50/50 dark:bg-green-900/10" : "border-orange-100 dark:border-orange-900/50 bg-orange-50/50 dark:bg-orange-900/10"}`}>
+                <div className={`w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center font-bold text-lg ${promotionData.type === 'promotion' ? "bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-500" : "bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-500"}`}>
+                  {selectedUser.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-bold text-base">{selectedUser.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <span className={`w-1.5 h-1.5 rounded-full ${promotionData.type === 'promotion' ? "bg-green-500" : "bg-orange-500"}`}></span> 
+                    Current: {selectedUser.designation || 'No Designation'} ({selectedUser.role})
+                  </p>
+                </div>
+              </div>
+            )}
+            <form onSubmit={handlePromotionDemotion} className="space-y-4">
             <div>
               <Label htmlFor="newDesignation">New Designation</Label>
               {designations.length > 0 ? (
@@ -1188,11 +1238,12 @@ export function HRUsersPanel() {
               >
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" className={`rounded-full shadow-sm text-white ${promotionData.type === 'promotion' ? "bg-green-600 hover:bg-green-700" : "bg-orange-600 hover:bg-orange-700"}`}>
                 {promotionData.type === 'promotion' ? 'Promote' : 'Demote'} Employee
               </Button>
             </div>
           </form>
+          </div>
         </DialogContent>
       </Dialog>
     </Card>

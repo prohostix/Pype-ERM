@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { broadcastNotification } from './notificationController.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -180,6 +181,15 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
   });
 
+  // Notify HRs about the punch in
+  await broadcastNotification(
+    req.user.organizationId,
+    'general',
+    'Employee Punched In',
+    `${req.user.name} just punched in ${isLate ? `(Late by ${lateMinutes} mins)` : '(On Time)'}.`,
+    ['hr_admin', 'hr_sub_admin']
+  );
+
   res.status(201).json({
     success: true,
     message: isLate ? `Punched in successfully! (Late by ${lateMinutes} mins)` : 'Punched in successfully!',
@@ -312,6 +322,15 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
     }
   });
 
+  // Notify HRs about the punch out
+  await broadcastNotification(
+    req.user.organizationId,
+    'general',
+    'Employee Punched Out',
+    `${req.user.name} just punched out after ${workingHours} hrs.`,
+    ['hr_admin', 'hr_sub_admin']
+  );
+
   res.json({
     success: true,
     message: `Punched out successfully! Total duration: ${workingHours} hrs.`,
@@ -410,26 +429,44 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   
   // Status filter
   let requestedStatus = req.query.status as string;
-  if (requestedStatus && requestedStatus !== 'absent' && requestedStatus !== 'all') {
+  if (requestedStatus === 'paid_leave') requestedStatus = 'leave';
+  
+  const mockStatuses = ['absent', 'week_off', 'holiday', 'all'];
+
+  // Default to today if filtering by a mock status without a date
+  if (!isDateFiltered && requestedStatus && mockStatuses.includes(requestedStatus) && requestedStatus !== 'all') {
+    isDateFiltered = true;
+    targetDate = new Date();
+    const start = new Date(targetDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(targetDate);
+    end.setHours(23, 59, 59, 999);
+    where.date = { gte: start, lte: end };
+  }
+
+  if (requestedStatus && !mockStatuses.includes(requestedStatus)) {
     where.status = requestedStatus;
-  } else if (requestedStatus === 'all') {
-    // do not apply status filter
-  } else if (requestedStatus === 'absent') {
-    // we'll filter them later
   }
 
   const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
 
   let finalAttendances: any[] = [...attendances];
 
-  if (isDateFiltered && (!requestedStatus || requestedStatus === 'absent' || requestedStatus === 'all')) {
+  if (isDateFiltered && (!requestedStatus || mockStatuses.includes(requestedStatus))) {
     const orgQuery: any = { organizationId: req.user.organizationId, NOT: { role: { in: ['ceo', 'org_admin', 'superadmin', 'student', 'center_admin'] } }, status: { not: 'resigned' } };
-    if (where.user?.branchId) orgQuery.branchId = where.user.branchId;
+    
+    // Apply user filters to orgQuery so non-HR users only see their own/team's mock absents
+    if (where.user) {
+      if (where.user.branchId) orgQuery.branchId = where.user.branchId;
+      if (where.user.studyCenterId) orgQuery.studyCenterId = where.user.studyCenterId;
+      if (where.user.departmentId) orgQuery.departmentId = where.user.departmentId;
+      if (where.user.OR) orgQuery.OR = where.user.OR;
+    }
     
     const allEmployees = await prisma.user.findMany({ where: orgQuery });
     
     let presentEmployeeIds = new Set(attendances.map(a => a.employeeId));
-    if (requestedStatus === 'absent' || requestedStatus === 'all') {
+    if (requestedStatus && requestedStatus !== 'all') {
        const allAttendancesForDate = await prisma.attendance.findMany({ 
          where: { organizationId: where.organizationId, date: where.date, ...(where.user ? { user: where.user } : {}) }
        });
@@ -453,7 +490,7 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       }
     }
     
-    const isWorkingDay = workingDays.includes(todayName);
+    const isWorkingDay = workingDays.some(d => d.toLowerCase() === todayName.toLowerCase());
     
     const startOfDay = new Date(targetDate);
     startOfDay.setHours(0, 0, 0, 0);
@@ -492,21 +529,33 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
     }));
 
     if (requestedStatus === 'absent') {
-      finalAttendances = mockAbsentRecords;
+      finalAttendances = mockAbsentRecords.filter(m => m.status === 'absent');
+    } else if (requestedStatus === 'holiday') {
+      finalAttendances = mockAbsentRecords.filter(m => m.status === 'holiday' && m.notes !== 'Week Off');
+    } else if (requestedStatus === 'week_off') {
+      finalAttendances = mockAbsentRecords.filter(m => m.status === 'holiday' && m.notes === 'Week Off');
     } else {
       finalAttendances = [...finalAttendances, ...mockAbsentRecords];
     }
-    
-    // re-sort by date and then by name if date is same
-    finalAttendances.sort((a, b) => {
-      const d1 = new Date(a.date).getTime();
-      const d2 = new Date(b.date).getTime();
-      if (d1 !== d2) return d2 - d1;
-      const nameA = a.user?.name || '';
-      const nameB = b.user?.name || '';
-      return nameA.localeCompare(nameB);
-    });
+  } else if (mockStatuses.includes(requestedStatus) && !isDateFiltered) {
+    if (requestedStatus !== 'all') {
+      finalAttendances = [];
+    }
   }
+
+  // re-sort by date and then by name if date is same
+  finalAttendances.sort((a, b) => {
+    const d1 = new Date(a.date).getTime();
+    const d2 = new Date(b.date).getTime();
+    if (d1 !== d2 && !isNaN(d1) && !isNaN(d2)) {
+      return d2 - d1;
+    }
+    const nameA = (a.user?.name || '').toString().toLowerCase();
+    const nameB = (b.user?.name || '').toString().toLowerCase();
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
 
   res.json({ success: true, count: finalAttendances.length, data: finalAttendances });
 });
@@ -819,8 +868,123 @@ export const getMyAttendance = asyncHandler(async (req: AuthRequest, res: Respon
     res.json({ success: true, data: [] });
     return;
   }
-  const attendances = await prisma.attendance.findMany({ where: { employeeId: req.user.id }, orderBy: { date: 'desc' } });
-  res.json({ success: true, data: attendances });
+  
+  const where: any = { employeeId: req.user.id };
+  let isDateFiltered = false;
+  let targetDate = new Date();
+  
+  if (req.query.date) {
+    isDateFiltered = true;
+    targetDate = new Date(req.query.date as string);
+    const start = new Date(targetDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(targetDate);
+    end.setHours(23, 59, 59, 999);
+    where.date = { gte: start, lte: end };
+  }
+  
+  const mockStatuses = ['absent', 'week_off', 'holiday', 'all'];
+  let requestedStatus = req.query.status as string;
+  
+  if (requestedStatus === 'paid_leave') requestedStatus = 'leave';
+  
+  // Default to today if filtering by a mock status without a date
+  if (!isDateFiltered && requestedStatus && mockStatuses.includes(requestedStatus) && requestedStatus !== 'all') {
+    isDateFiltered = true;
+    targetDate = new Date();
+    const start = new Date(targetDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(targetDate);
+    end.setHours(23, 59, 59, 999);
+    where.date = { gte: start, lte: end };
+  }
+
+  if (requestedStatus && !mockStatuses.includes(requestedStatus)) {
+    where.status = requestedStatus;
+  }
+  
+  const attendances = await prisma.attendance.findMany({ 
+    where, 
+    orderBy: { date: 'desc' },
+    include: { user: true }
+  });
+  
+  let finalAttendances: any[] = [...attendances];
+
+  // Generate mock record if single date filtered and no attendance exists
+  if (isDateFiltered && (!requestedStatus || mockStatuses.includes(requestedStatus))) {
+    if (attendances.length === 0) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const todayName = days[targetDate.getDay()];
+
+      const settings = await prisma.hRSettings.findUnique({
+        where: { organizationId: req.user.organizationId }
+      });
+      
+      let workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      if (settings && settings.officeHours) {
+        const officeHours = settings.officeHours as any;
+        if (officeHours.workingDays && Array.isArray(officeHours.workingDays)) {
+          workingDays = officeHours.workingDays;
+        }
+      }
+      
+      const isWorkingDay = workingDays.some(d => d.toLowerCase() === todayName.toLowerCase());
+      
+      const startOfDay = new Date(targetDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(targetDate);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      const holiday = await prisma.holiday.findFirst({
+        where: {
+          organizationId: req.user.organizationId,
+          date: { gte: startOfDay, lte: endOfDay }
+        }
+      });
+
+      const isHolidayOrWeekOff = !isWorkingDay || !!holiday;
+      const computedStatus = isHolidayOrWeekOff ? 'holiday' : 'absent';
+
+      const mockRecord = {
+        id: `${computedStatus}-${req.user.id}-${targetDate.getTime()}`,
+        employeeId: req.user.id,
+        organizationId: req.user.organizationId,
+        date: targetDate,
+        status: computedStatus,
+        checkIn: null,
+        checkOut: null,
+        checkInLocation: null,
+        checkOutLocation: null,
+        isLate: false,
+        lateMinutes: 0,
+        workingHours: 0,
+        notes: holiday ? holiday.name : (!isWorkingDay ? 'Week Off' : null),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        user: req.user
+      };
+
+      if (requestedStatus === 'absent' && mockRecord.status === 'absent') {
+        finalAttendances.push(mockRecord);
+      } else if (requestedStatus === 'holiday' && mockRecord.status === 'holiday' && mockRecord.notes !== 'Week Off') {
+        finalAttendances.push(mockRecord);
+      } else if (requestedStatus === 'week_off' && mockRecord.status === 'holiday' && mockRecord.notes === 'Week Off') {
+        finalAttendances.push(mockRecord);
+      } else if (!requestedStatus || requestedStatus === 'all') {
+        finalAttendances.push(mockRecord);
+      }
+    }
+  } else if (mockStatuses.includes(requestedStatus) && !isDateFiltered) {
+    // If they ask for a mock status without a date, we can't efficiently generate history of absents, so return empty or what we have.
+    // For now, if we didn't add anything to where.status and they explicitly want a mock status, finalAttendances should be empty
+    // unless they requested 'all'
+    if (requestedStatus !== 'all') {
+       finalAttendances = []; 
+    }
+  }
+
+  res.json({ success: true, count: finalAttendances.length, data: finalAttendances });
 });
 
 export const getMyAttendanceSummary = asyncHandler(async (req: AuthRequest, res: Response) => {

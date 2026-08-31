@@ -249,6 +249,7 @@ model User {
   designations                  Designation[]        @relation("DesignationFilledBy")
   communicationLogs             CommunicationLog[]
   assignedSalesUsers            Json?                @default("[]")
+  fcmTokens                     UserFCMToken[]
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -1893,4 +1894,16 @@ model CommunicationLog {
   sender       User         @relation(fields: [sentBy], references: [id])
 
   @@index([organizationId])
+}
+
+model UserFCMToken {
+  id             String       @id @default(uuid())
+  userId         String
+  token          String       @unique
+  deviceType     String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

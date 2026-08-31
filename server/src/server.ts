@@ -12,6 +12,7 @@ import { connectDatabase, prisma } from './config/database.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { startEscalationCron } from './services/escalationService.js';
 import { initializeSocket } from './config/socket.js';
+import { initializeFirebase } from './config/firebase.config.js';
 import { startAllCronJobs } from './services/cronService.js';
 
 // Force DNS resolution to prefer IPv4 to avoid Supabase IPv6 ENETUNREACH errors on IPv4-only AWS instances
@@ -60,6 +61,7 @@ import iclockRoutes from './routes/iclockRoutes.js';
 import examRoutes from './routes/examRoutes.js';
 import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
+import fcmTokenRoutes from './routes/fcm-token.routes.js';
 
 const app: Application = express();
 
@@ -68,6 +70,9 @@ app.set('trust proxy', 1);
 
 // Connect to database
 connectDatabase();
+
+// Initialize Firebase Admin
+initializeFirebase();
 
 // Security middleware
 app.use(helmet());
@@ -151,6 +156,7 @@ app.use(`/api/${API_VERSION}/documents`, documentRoutes);
 app.use(`/api/${API_VERSION}/meetings`, meetingRoutes);
 app.use(`/api/${API_VERSION}/exams`, examRoutes);
 app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
+app.use(`/api/${API_VERSION}/fcm-token`, fcmTokenRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

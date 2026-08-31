@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Mail, Phone, UserCircle } from 'lucide-react';
+import { Plus, Edit, Trash2, Mail, Phone, UserCircle, Users, UserPlus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -180,160 +180,193 @@ export function EmployeesPanel() {
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
       />
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Employee Management</h2>
-          <p className="text-muted-foreground">Manage employee records and information</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Add Employee</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Employee' : 'Add New Employee'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>Full Name</Label>
-                <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-              </div>
-              <div>
-                <Label>Email</Label>
-                <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-              </div>
-              <div>
-                <Label>Phone</Label>
-                <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
-              </div>
-              {!editingId && (
-                <div>
-                  <Label>Password</Label>
-                  <Input
-                    type="password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    placeholder="Leave blank to use default (password123)"
-                  />
-                </div>
-              )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label>Role</Label>
-                  <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="employee">Employee / Staff</SelectItem>
-                      <SelectItem value="hr_admin">HR Admin</SelectItem>
-                      <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
-                      <SelectItem value="finance_admin">Finance Admin</SelectItem>
-                      <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
-                      <SelectItem value="ops_admin">Operations Admin</SelectItem>
-                      <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
-                      <SelectItem value="sales_admin">Sales Admin</SelectItem>
-                      <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                      {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
-                      <SelectItem value="general_manager">General Manager</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Designation</Label>
-                  <Input
-                    value={formData.designation}
-                    onChange={(e) => setFormData({...formData, designation: e.target.value})}
-                    placeholder="e.g. Branch Manager, CFO"
-                  />
-                </div>
-              </div>
-              {/* Branch assignment — makes this user the branch manager */}
-              {branches.length > 0 && (
-                <div>
-                  <Label>Assign as Branch Manager (optional)</Label>
-                  <Select value={formData.branchId} onValueChange={(value) => setFormData({...formData, branchId: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select branch to manage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">— None —</SelectItem>
-                      {branches.map((b: any) => (
-                        <SelectItem key={b.id} value={b.id}>
-                          {b.name} ({b.code})
-                          {b.branchManagerId ? ' · has manager' : ' · vacant'}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {formData.branchId && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      This user will be assigned as the branch manager and get access to all branch departments.
-                    </p>
-                  )}
-                </div>
-              )}
-              <div>
-                <Label>Department</Label>
-                <Select value={formData.departmentId} onValueChange={(value) => setFormData({...formData, departmentId: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select department" />
+
+      <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-md rounded-2xl overflow-hidden bg-card">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-muted/30 border-b border-border/40 py-5 px-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-primary/10 rounded-xl">
+              <Users className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-xl font-bold">Employee Directory</CardTitle>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Manage employee records and information
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            {branches.length > 0 && (
+              <div className="w-48 sm:w-56">
+                <Select value={selectedBranchFilter} onValueChange={setSelectedBranchFilter}>
+                  <SelectTrigger className="w-full h-9">
+                    <SelectValue placeholder="All Branches" />
                   </SelectTrigger>
                   <SelectContent>
-                    {departments.filter(dept => dept && (dept.id || dept.id)).map((dept) => (
-                      <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id).toString()}>
-                        {dept.name}
-                      </SelectItem>
+                    <SelectItem value="all">All Branches</SelectItem>
+                    {branches.map((b: any) => (
+                      <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label>Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="on_leave">On Leave</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-          <CardTitle>Employee Directory</CardTitle>
-          {branches.length > 0 && (
-            <div className="w-48 sm:w-56">
-              <Select value={selectedBranchFilter} onValueChange={setSelectedBranchFilter}>
-                <SelectTrigger className="w-full h-9">
-                  <SelectValue placeholder="All Branches" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Branches</SelectItem>
-                  {branches.map((b: any) => (
-                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+            )}
+            <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="h-9 rounded-full shadow-sm px-4">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add Employee
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto border-none shadow-2xl rounded-2xl p-0 gap-0">
+                <DialogHeader className="bg-muted/30 p-6 border-b border-border/40 m-0 space-y-0">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-primary/10 rounded-xl">
+                      {editingId ? <Edit className="w-5 h-5 text-primary" /> : <UserPlus className="w-5 h-5 text-primary" />}
+                    </div>
+                    <div className="text-left">
+                      <DialogTitle className="text-xl font-bold">{editingId ? 'Edit Employee' : 'Add New Employee'}</DialogTitle>
+                      <p className="text-xs text-muted-foreground mt-0.5 font-normal">Update the employee's details and roles</p>
+                    </div>
+                  </div>
+                </DialogHeader>
+                <div className="p-6">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <Label>Full Name</Label>
+                      <Input className="mt-1" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+                    </div>
+                    <div>
+                      <Label>Email</Label>
+                      <Input className="mt-1" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+                    </div>
+                    <div>
+                      <Label>Phone</Label>
+                      <Input className="mt-1" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+                    </div>
+                    {!editingId && (
+                      <div>
+                        <Label>Password</Label>
+                        <Input
+                          className="mt-1"
+                          type="password" autoComplete="new-password"
+                          value={formData.password}
+                          onChange={(e) => setFormData({...formData, password: e.target.value})}
+                          placeholder="Leave blank to use default (password123)"
+                        />
+                      </div>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Role</Label>
+                        <Select value={formData.role} onValueChange={(value) => setFormData({...formData, role: value})}>
+                          <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="employee">Employee / Staff</SelectItem>
+                            <SelectItem value="hr_admin">HR Admin</SelectItem>
+                            <SelectItem value="hr_sub_admin">HR Sub Admin</SelectItem>
+                            <SelectItem value="finance_admin">Finance Admin</SelectItem>
+                            <SelectItem value="finance_sub_admin">Finance Sub Admin</SelectItem>
+                            <SelectItem value="ops_admin">Operations Admin</SelectItem>
+                            <SelectItem value="ops_sub_admin">Operations Sub-Admin</SelectItem>
+                            <SelectItem value="sales_admin">Sales Admin</SelectItem>
+                            <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
+                            {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
+                            <SelectItem value="general_manager">General Manager</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Designation</Label>
+                        <Input
+                          className="mt-1"
+                          value={formData.designation}
+                          onChange={(e) => setFormData({...formData, designation: e.target.value})}
+                          placeholder="e.g. Branch Manager, CFO"
+                        />
+                      </div>
+                    </div>
+                    {/* Branch assignment — makes this user the branch manager */}
+                    {branches.length > 0 && (
+                      <div>
+                        <Label>Assign as Branch Manager (optional)</Label>
+                        <Select value={formData.branchId} onValueChange={(value) => setFormData({...formData, branchId: value})}>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Select branch to manage" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">— None —</SelectItem>
+                            {branches.map((b: any) => (
+                              <SelectItem key={b.id} value={b.id}>
+                                {b.name} ({b.code})
+                                {b.branchManagerId ? ' · has manager' : ' · vacant'}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {formData.branchId && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            This user will be assigned as the branch manager and get access to all branch departments.
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Department</Label>
+                        <Select value={formData.departmentId} onValueChange={(value) => setFormData({...formData, departmentId: value})}>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Select department" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {departments.filter(dept => dept && (dept.id || dept.id)).map((dept) => (
+                              <SelectItem key={dept.id || dept.id} value={(dept.id || dept.id).toString()}>
+                                {dept.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Status</Label>
+                        <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="active">Active</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                            <SelectItem value="on_leave">On Leave</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-border/40">
+                      <Button type="button" className="rounded-full px-6" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                      <Button type="submit" className="rounded-full px-6 shadow-sm">Save Employee</Button>
+                    </div>
+                  </form>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {loading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="text-center py-16 text-muted-foreground bg-muted/10 rounded-2xl border border-dashed border-border/60">
+              <div className="flex justify-center mb-4">
+                <Users className="w-8 h-8 opacity-40 animate-pulse" />
+              </div>
+              Loading employees...
+            </div>
           ) : employees.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No employees found</div>
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground rounded-2xl border border-dashed border-border/60 bg-muted/10">
+              <div className="p-4 bg-muted/30 rounded-full mb-4">
+                <Users className="w-8 h-8 opacity-40" />
+              </div>
+              <p className="text-sm font-medium">No employees found.</p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {employees
                 .filter(emp => emp && (emp.id || emp.id))
                 .filter(emp => {
@@ -344,48 +377,60 @@ export function EmployeesPanel() {
                 .map((employee) => {
                   const empId = employee.id || employee.id;
                   return (
-                  <div key={empId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                      {(employee.name || '?')[0].toUpperCase()}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium">{employee.name || 'Unknown'}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {employee.role}{employee.designation ? ` · ${employee.designation}` : ''} • {employee.department?.name || (typeof employee.departmentId === 'object' ? employee.departmentId?.name : '')}
-                        {employee.branchId && (
-                          <span className="ml-1 text-primary text-xs">
-                            · {employee.branch?.name || (typeof employee.branchId === 'object' ? employee.branchId?.name : 'Assigned to Branch')}
-                          </span>
-                        )}
+                    <div
+                      key={empId}
+                      className="flex flex-col xl:flex-row xl:items-center justify-between p-6 border border-slate-200/60 dark:border-slate-800/60 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:bg-muted/20 transition-all duration-300 group bg-card gap-6"
+                    >
+                      <div className="flex items-center gap-5">
+                        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xl text-primary flex-shrink-0">
+                          {(employee.name || '?')[0].toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-base mb-1.5">{employee.name || 'Unknown'}</div>
+                          <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground mb-2">
+                            <Badge variant="outline" className="font-medium bg-card">
+                              {employee.role}{employee.designation ? ` · ${employee.designation}` : ''}
+                            </Badge>
+                            {employee.department && (
+                              <Badge variant="outline" className="font-medium border-primary/20 text-primary bg-primary/5">
+                                {employee.department?.name || (typeof employee.departmentId === 'object' ? employee.departmentId?.name : '')}
+                              </Badge>
+                            )}
+                            {employee.branchId && (
+                              <Badge variant="outline" className="font-medium border-blue-500/20 text-blue-600 bg-blue-500/5">
+                                {employee.branch?.name || (typeof employee.branchId === 'object' ? employee.branchId?.name : 'Assigned to Branch')}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center flex-wrap gap-4 text-xs text-muted-foreground mt-1">
+                            <span className="flex items-center gap-1.5">
+                              <Mail className="w-3.5 h-3.5 opacity-70" /> {employee.email}
+                            </span>
+                            {employee.phone && (
+                              <span className="flex items-center gap-1.5">
+                                <Phone className="w-3.5 h-3.5 opacity-70" /> {employee.phone}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Mail className="w-3 h-3" /> {employee.email}
-                        </span>
-                        {employee.phone && (
-                          <span className="flex items-center gap-1">
-                            <Phone className="w-3 h-3" /> {employee.phone}
-                          </span>
-                        )}
+                      <div className="flex items-center gap-2 flex-wrap xl:justify-end opacity-60 group-hover:opacity-100 transition-opacity mt-4 xl:mt-0 pt-4 xl:pt-0 border-t border-border/50 xl:border-none">
+                        <div className="mr-3">
+                          {getStatusBadge(employee.status)}
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => openProfile(empId)} title="View Profile">
+                          <UserCircle className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(employee)} title="Edit Employee">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleDelete(empId)} title="Delete Employee">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {getStatusBadge(employee.status)}
-                    <Button variant="ghost" size="sm" onClick={() => openProfile(empId)} title="View Profile">
-                      <UserCircle className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(employee)}>
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(empId)}>
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-                );
-              })}
+                  );
+                })}
             </div>
           )}
         </CardContent>

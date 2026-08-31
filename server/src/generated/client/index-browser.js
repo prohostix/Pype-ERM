@@ -1242,6 +1242,15 @@ exports.Prisma.CommunicationLogScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserFCMTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  deviceType: 'deviceType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1313,6 +1322,7 @@ exports.UserRole = exports.$Enums.UserRole = {
   finance_admin: 'finance_admin',
   finance_sub_admin: 'finance_sub_admin',
   hr_admin: 'hr_admin',
+  hr_sub_admin: 'hr_sub_admin',
   sales_admin: 'sales_admin',
   sales_sub_admin: 'sales_sub_admin',
   center_admin: 'center_admin',
@@ -1531,7 +1541,8 @@ exports.Prisma.ModelName = {
   DocumentLog: 'DocumentLog',
   BiometricDevice: 'BiometricDevice',
   ExamRegistration: 'ExamRegistration',
-  CommunicationLog: 'CommunicationLog'
+  CommunicationLog: 'CommunicationLog',
+  UserFCMToken: 'UserFCMToken'
 };
 
 /**
