@@ -34,8 +34,15 @@ const prismaClientSingleton = () => {
           // Trigger push notification asynchronously using dynamic import to avoid circular dependencies
           import('../services/notification.service.js')
             .then(({ sendPushNotification }) => {
-              sendPushNotification(result.userId, result.title, result.message, { link: result.link || '' })
-                .catch(err => console.error('Error sending push notification from Prisma extension:', err));
+              const userId = (result as any).userId || (args.data as any).userId;
+              const title = (result as any).title || (args.data as any).title;
+              const message = (result as any).message || (args.data as any).message;
+              const link = (result as any).link || (args.data as any).link || '';
+
+              if (userId && title && message) {
+                sendPushNotification(userId as string, title as string, message as string, { link: link as string })
+                  .catch(err => console.error('Error sending push notification from Prisma extension:', err));
+              }
             })
             .catch(err => console.error('Failed to load notification service:', err));
           return result;
@@ -48,9 +55,16 @@ const prismaClientSingleton = () => {
             import('../services/notification.service.js')
               .then(({ sendPushNotification }) => {
                 Promise.allSettled(
-                  dataArray.map(item => 
-                    sendPushNotification(item.userId, item.title, item.message, { link: item.link || '' })
-                  )
+                  dataArray.map(item => {
+                    const userId = (item as any).userId;
+                    const title = (item as any).title;
+                    const message = (item as any).message;
+                    const link = (item as any).link || '';
+                    if (userId && title && message) {
+                      return sendPushNotification(userId as string, title as string, message as string, { link: link as string });
+                    }
+                    return Promise.resolve(false);
+                  })
                 ).catch(err => console.error('Error in batch push notifications:', err));
               })
               .catch(err => console.error('Failed to load notification service:', err));
