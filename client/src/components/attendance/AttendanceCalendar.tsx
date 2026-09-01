@@ -294,66 +294,69 @@ export function AttendanceCalendar({
   };
 
   return (
-    <Card className="border-none shadow-xl bg-card/65 backdrop-blur-xl">
-      <CardHeader className="flex flex-col sm:flex-row items-center justify-between pb-6 border-b border-border/40 gap-4">
-        <div>
-          <CardTitle className="text-xl font-bold flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-primary" /> Month-wise Attendance Calendar
-          </CardTitle>
-          <div className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
-            <span className="font-bold text-foreground">{employeeName}</span>
-            <span>•</span>
-            <span>{isHR ? 'Click any day to edit' : 'Click any day to view details'}</span>
+    <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-xl rounded-2xl bg-card/60 backdrop-blur-xl overflow-hidden">
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between p-5 sm:p-6 border-b border-border/40 bg-muted/20 gap-4">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="p-3 bg-primary/10 rounded-2xl shrink-0">
+            <Calendar className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold">Month-wise Calendar</CardTitle>
+            <div className="text-xs text-muted-foreground mt-1 flex flex-wrap items-center gap-2">
+              <span className="font-bold text-foreground bg-background px-2 py-0.5 rounded-md shadow-sm border border-border/50">{employeeName}</span>
+              <span className="hidden sm:inline">•</span>
+              <span>{isHR ? 'Click any day to edit' : 'Click any day to view details'}</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 bg-background border border-border rounded-lg px-2 py-1 shadow-sm">
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handlePrevMonth}>
+        <div className="flex flex-wrap items-center justify-end gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-1.5 bg-background border border-slate-200/50 dark:border-slate-800/50 rounded-xl p-1 shadow-sm">
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-muted" onClick={handlePrevMonth}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Select value={selectedMonth.toString()} onValueChange={(val) => setSelectedMonth(parseInt(val))}>
-              <SelectTrigger className="h-7 border-none bg-transparent shadow-none focus:ring-0 w-[110px] text-xs font-bold">
+              <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[110px] text-xs font-bold px-2">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 {MONTHS.map((m, idx) => (
                   <SelectItem key={m} value={idx.toString()} className="text-xs">{m}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={selectedYear.toString()} onValueChange={(val) => setSelectedYear(parseInt(val))}>
-              <SelectTrigger className="h-7 border-none bg-transparent shadow-none focus:ring-0 w-[80px] text-xs font-bold">
+              <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[80px] text-xs font-bold px-2">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 {years.map(y => (
                   <SelectItem key={y} value={y.toString()} className="text-xs">{y}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleNextMonth}>
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-muted" onClick={handleNextMonth}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
 
           <div className="flex items-center gap-2">
             {isHR && (
-              <Button variant="outline" size="sm" className="h-9 text-xs font-semibold gap-1.5"
+              <Button variant="outline" size="sm" className="h-10 rounded-xl shadow-sm text-xs font-semibold gap-1.5 px-4"
                 onClick={handleMarkAllPresent} disabled={loading}>
-                <CheckCircle className="w-3.5 h-3.5 text-primary" /> Mark Weekdays Present
+                <CheckCircle className="w-4 h-4 text-primary" /> Mark Weekdays
               </Button>
             )}
-            <Button variant="outline" size="sm" className="h-9 text-xs font-semibold gap-1.5" onClick={onToggleView}>
-              <List className="w-3.5 h-3.5" /> List View
+            <Button variant="outline" size="sm" className="h-10 rounded-xl shadow-sm text-xs font-semibold gap-1.5 px-4 transition-transform hover:scale-105" onClick={onToggleView}>
+              <List className="w-4 h-4 text-primary" /> List View
             </Button>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="pt-6 space-y-8">
-        {/* Summary */}
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
+      <CardContent className="p-5 sm:p-6 space-y-8">
+        {/* Summary KPIs */}
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-3">
           {[
             { label: 'Present', count: presentCount, color: 'emerald' },
             { label: 'Late', count: lateCount, color: 'yellow' },
@@ -363,22 +366,19 @@ export function AttendanceCalendar({
             { label: 'Holiday', count: holidayCount, color: 'orange' },
             { label: 'Week Off', count: weekOffCount, color: 'slate' },
           ].map(({ label, count, color }) => (
-            <div key={label} className={`flex items-center gap-3 p-3.5 rounded-xl border border-${color}-500/10 bg-${color}-500/5`}>
-              <div className={`w-2.5 h-10 bg-${color}-${color === 'slate' ? '400' : '500'} dark:bg-${color}-${color === 'slate' ? '600' : '500'} rounded-full shrink-0`} />
-              <div>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">{label}</span>
-                <span className={`text-2xl font-black text-${color}-600 dark:text-${color}-400 leading-none block mt-1`}>{count}</span>
-              </div>
+            <div key={label} className={`flex flex-col justify-center items-center gap-1.5 p-3 rounded-2xl border border-${color}-500/20 bg-background/50 hover:bg-${color}-500/5 shadow-sm transition-colors text-center`}>
+              <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{label}</span>
+              <span className={`text-3xl font-black text-${color}-600 dark:text-${color}-400 leading-none`}>{count}</span>
             </div>
           ))}
         </div>
 
         {/* Calendar Grid */}
-        <div className="border border-border/80 rounded-xl p-4 bg-background/50">
-          <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider pb-3 border-b border-border/60">
+        <div className="rounded-3xl p-5 bg-muted/30 border border-slate-200/60 dark:border-slate-800/60 shadow-inner">
+          <div className="grid grid-cols-7 gap-2 text-center text-[11px] font-bold text-muted-foreground uppercase tracking-widest pb-3 border-b border-border/40">
             {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => <div key={d}>{d}</div>)}
           </div>
-          <div className="grid grid-cols-7 gap-2 mt-3">
+          <div className="grid grid-cols-7 gap-3 mt-4">
             {calendarDays.map((dayObj, index) => {
               if (dayObj === null) return <div key={`empty-${index}`} className="aspect-square" />;
               const formattedDay = dayObj.day < 10 ? `0${dayObj.day}` : dayObj.day.toString();
@@ -389,16 +389,16 @@ export function AttendanceCalendar({
               return (
                 <button
                   key={`day-${dayObj.day}`}
-                  className={`aspect-square rounded-lg flex flex-col items-center justify-center font-bold text-sm transition-all shadow-sm ${getDayColor(dayObj)} ${isClickable ? 'cursor-pointer hover:scale-105 active:scale-95' : 'cursor-default'}`}
+                  className={`aspect-square rounded-2xl flex flex-col items-center justify-center font-black text-sm sm:text-base transition-all shadow-sm border ${getDayColor(dayObj)} ${isClickable ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : 'cursor-default'}`}
                   onClick={() => handleDayClick(dayObj)}
                   title={dayObj.record?.notes ? `Notes: ${dayObj.record.notes}` : undefined}
                 >
                   <span>{formattedDay}</span>
                   {dayObj.record?.isLate && (
-                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full mt-0.5" title="Late Check-in" />
+                    <span className="w-1.5 h-1.5 bg-yellow-300 rounded-full mt-1 shadow-sm" title="Late Check-in" />
                   )}
                   {(hasInPhoto || hasOutPhoto) && (
-                    <Camera className="w-2.5 h-2.5 mt-0.5 opacity-80" title="Selfie attached" />
+                    <Camera className="w-3 h-3 mt-1 opacity-80" title="Selfie attached" />
                   )}
                 </button>
               );
@@ -407,257 +407,293 @@ export function AttendanceCalendar({
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-500 inline-block" />Present / Late</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-rose-500 inline-block" />Absent</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-500 inline-block" />Half Day</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500 inline-block" />Leave</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-orange-400 inline-block" />Holiday</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-slate-400 inline-block" />Week Off</span>
-          <span className="flex items-center gap-1.5"><Camera className="w-3 h-3" />Selfie attached</span>
+        <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-[11px] font-medium text-muted-foreground bg-background/50 p-3 rounded-2xl border border-border/40 shadow-sm">
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-emerald-500 shadow-sm" />Present / Late</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-rose-500 shadow-sm" />Absent</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-amber-500 shadow-sm" />Half Day</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-purple-500 shadow-sm" />Leave</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-orange-400 shadow-sm" />Holiday</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-slate-400 shadow-sm" />Week Off</span>
+          <span className="flex items-center gap-1.5"><Camera className="w-3.5 h-3.5 text-muted-foreground" />Selfie attached</span>
         </div>
       </CardContent>
 
       {/* ─── Day Detail Modal (all users) ─── */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              <Calendar className="w-4 h-4 text-primary" />
-              {detailRecord?.date
-                ? new Date(detailRecord.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-                : ''}
-            </DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
+          <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
+            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+              <Calendar className="w-5 h-5" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl font-bold">
+                {detailRecord?.date
+                  ? new Date(detailRecord.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })
+                  : ''}
+              </DialogTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">Daily attendance details</p>
+            </div>
+          </div>
 
-          {detailRecord?.record ? (
-            <div className="space-y-4 pt-1">
-              {/* Status badge */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Status</span>
-                <Badge className={`text-xs font-semibold border ${STATUS_LABELS[detailRecord.record.status]?.color || 'bg-slate-100 text-slate-700'}`}>
-                  {STATUS_LABELS[detailRecord.record.status]?.label || detailRecord.record.status}
-                </Badge>
-                {detailRecord.record.isLate && (
-                  <Badge className="text-xs bg-red-100 text-red-700 border-red-300">Late</Badge>
+          <div className="p-6">
+            {detailRecord?.record ? (
+              <div className="space-y-5">
+                {/* Status badge */}
+                <div className="flex items-center gap-3 bg-muted/30 p-3 rounded-2xl border border-border/40">
+                  <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Status</span>
+                  <Badge className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full shadow-sm ${STATUS_LABELS[detailRecord.record.status]?.color || 'bg-slate-100 text-slate-700'}`}>
+                    {STATUS_LABELS[detailRecord.record.status]?.label || detailRecord.record.status}
+                  </Badge>
+                  {detailRecord.record.isLate && (
+                    <Badge className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 border-red-200 shadow-sm">Late</Badge>
+                  )}
+                </div>
+
+                {/* Punch times */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-2xl border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 shadow-sm relative overflow-hidden">
+                    <div className="absolute -right-4 -top-4 opacity-5">
+                      <LogIn className="w-20 h-20" />
+                    </div>
+                    <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 mb-2">
+                      <LogIn className="w-4 h-4" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Punch In</span>
+                    </div>
+                    <span className="text-xl font-black text-emerald-700 dark:text-emerald-300">
+                      {formatTime(detailRecord.record.checkIn)}
+                    </span>
+                  </div>
+                  <div className="p-4 rounded-2xl border bg-rose-50 dark:bg-rose-900/10 border-rose-200 dark:border-rose-800 shadow-sm relative overflow-hidden">
+                    <div className="absolute -right-4 -top-4 opacity-5">
+                      <LogOut className="w-20 h-20" />
+                    </div>
+                    <div className="flex items-center gap-2 text-rose-700 dark:text-rose-400 mb-2">
+                      <LogOut className="w-4 h-4" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Punch Out</span>
+                    </div>
+                    <span className="text-xl font-black text-rose-700 dark:text-rose-300">
+                      {formatTime(detailRecord.record.checkOut)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Working hours */}
+                <div className="flex items-center gap-3 p-4 rounded-2xl border bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 shadow-sm">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
+                    <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-blue-700/70 dark:text-blue-400/70 block">Working Hours</span>
+                    <span className="text-lg font-black text-blue-700 dark:text-blue-300">
+                      {calcWorkingHours(detailRecord.record.checkIn, detailRecord.record.checkOut)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Location info if available */}
+                {(detailRecord.record.checkInLocation || detailRecord.record.checkOutLocation) && (
+                  <div className="p-4 rounded-2xl border bg-muted/30 shadow-sm space-y-2">
+                    <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-muted-foreground mb-2">
+                      <MapPin className="w-4 h-4" /> Location
+                    </div>
+                    {detailRecord.record.checkInLocation?.address && (
+                      <div className="flex items-start gap-2 bg-background p-2.5 rounded-xl border border-border/50 text-xs">
+                        <span className="font-bold text-emerald-600 shrink-0">IN:</span>
+                        <span className="text-muted-foreground">{detailRecord.record.checkInLocation.address}</span>
+                      </div>
+                    )}
+                    {detailRecord.record.checkOutLocation?.address && (
+                      <div className="flex items-start gap-2 bg-background p-2.5 rounded-xl border border-border/50 text-xs">
+                        <span className="font-bold text-rose-600 shrink-0">OUT:</span>
+                        <span className="text-muted-foreground">{detailRecord.record.checkOutLocation.address}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Notes */}
+                {detailRecord.record.notes && (
+                  <div className="flex items-start gap-3 p-4 rounded-2xl border bg-yellow-500/5 border-yellow-500/20 text-sm shadow-sm">
+                    <div className="p-1.5 bg-yellow-500/10 rounded-lg shrink-0">
+                      <FileText className="w-4 h-4 text-yellow-600" />
+                    </div>
+                    <span className="text-yellow-800 dark:text-yellow-500/90 leading-relaxed font-medium pt-1 italic">"{detailRecord.record.notes}"</span>
+                  </div>
+                )}
+
+                {/* Selfie photos */}
+                {(detailRecord.record.checkInPhoto || detailRecord.record.checkOutPhoto) && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      <Camera className="w-4 h-4" /> Selfie Attachments
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {detailRecord.record.checkInPhoto && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider text-center bg-muted/50 py-1 rounded-md">Punch In Selfie</p>
+                          <button
+                            className="w-full overflow-hidden rounded-2xl border-2 border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all group"
+                            onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkInPhoto) || ''); setSelfieOpen(true); }}
+                          >
+                            <img
+                              src={resolvePhotoUrl(detailRecord.record.checkInPhoto) || ''}
+                              alt="Punch-in selfie"
+                              className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            />
+                          </button>
+                        </div>
+                      )}
+                      {detailRecord.record.checkOutPhoto && (
+                        <div className="space-y-2">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider text-center bg-muted/50 py-1 rounded-md">Punch Out Selfie</p>
+                          <button
+                            className="w-full overflow-hidden rounded-2xl border-2 border-border shadow-sm hover:border-primary/50 hover:shadow-md transition-all group"
+                            onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkOutPhoto) || ''); setSelfieOpen(true); }}
+                          >
+                            <img
+                              src={resolvePhotoUrl(detailRecord.record.checkOutPhoto) || ''}
+                              alt="Punch-out selfie"
+                              className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
-
-              {/* Punch times */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-xl border bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800">
-                  <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 mb-1">
-                    <LogIn className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wide">Punch In</span>
+            ) : (
+              <div className="text-center py-12 px-6 rounded-2xl border-2 border-dashed border-border/50 bg-muted/10">
+                {detailRecord && isHolidayDate(detailRecord.date) ? (
+                  <div className="space-y-2">
+                    <div className="text-4xl mb-3">🎉</div>
+                    <p className="font-bold text-lg text-orange-600">
+                      {holidays.find((h: any) => {
+                        const hd = new Date(h.date);
+                        return hd.getDate() === detailRecord.day &&
+                               hd.getMonth() === detailRecord.date.getMonth() &&
+                               hd.getFullYear() === detailRecord.date.getFullYear();
+                      })?.name || 'Public Holiday'}
+                    </p>
+                    <p className="text-muted-foreground text-sm">This day is a designated holiday.</p>
                   </div>
-                  <span className="text-lg font-black text-emerald-700 dark:text-emerald-300">
-                    {formatTime(detailRecord.record.checkIn)}
-                  </span>
-                </div>
-                <div className="p-3 rounded-xl border bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800">
-                  <div className="flex items-center gap-1.5 text-rose-700 dark:text-rose-400 mb-1">
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wide">Punch Out</span>
+                ) : detailRecord && isWeekOff(detailRecord.date) ? (
+                  <div className="space-y-2">
+                    <div className="text-4xl mb-3">😴</div>
+                    <p className="font-bold text-lg text-slate-500">Weekend / Day Off</p>
+                    <p className="text-muted-foreground text-sm">No attendance required today.</p>
                   </div>
-                  <span className="text-lg font-black text-rose-700 dark:text-rose-300">
-                    {formatTime(detailRecord.record.checkOut)}
-                  </span>
-                </div>
+                ) : detailRecord && isPast(detailRecord.date) ? (
+                  <div className="space-y-2">
+                    <div className="text-4xl mb-3">❌</div>
+                    <p className="font-bold text-lg text-rose-600">Absent</p>
+                    <p className="text-muted-foreground text-sm">No punch-in recorded for this working day.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Calendar className="w-10 h-10 text-muted-foreground opacity-30 mx-auto mb-3" />
+                    <p className="font-bold text-lg">No Record</p>
+                    <p className="text-muted-foreground text-sm">No attendance logged for this date.</p>
+                  </div>
+                )}
               </div>
-
-              {/* Working hours */}
-              <div className="flex items-center gap-2 p-3 rounded-xl border bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-                <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs font-bold uppercase tracking-wide text-blue-700 dark:text-blue-400">Working Hours</span>
-                <span className="ml-auto font-black text-blue-700 dark:text-blue-300">
-                  {calcWorkingHours(detailRecord.record.checkIn, detailRecord.record.checkOut)}
-                </span>
-              </div>
-
-              {/* Location info if available */}
-              {(detailRecord.record.checkInLocation || detailRecord.record.checkOutLocation) && (
-                <div className="p-3 rounded-xl border bg-muted/40 text-xs space-y-1">
-                  <div className="flex items-center gap-1.5 font-semibold text-muted-foreground mb-1">
-                    <MapPin className="w-3.5 h-3.5" /> Location
-                  </div>
-                  {detailRecord.record.checkInLocation?.address && (
-                    <p className="text-muted-foreground">In: {detailRecord.record.checkInLocation.address}</p>
-                  )}
-                  {detailRecord.record.checkOutLocation?.address && (
-                    <p className="text-muted-foreground">Out: {detailRecord.record.checkOutLocation.address}</p>
-                  )}
-                </div>
-              )}
-
-              {/* Notes */}
-              {detailRecord.record.notes && (
-                <div className="flex items-start gap-2 p-3 rounded-xl border bg-muted/40 text-xs">
-                  <FileText className="w-3.5 h-3.5 mt-0.5 text-muted-foreground shrink-0" />
-                  <span className="text-muted-foreground">{detailRecord.record.notes}</span>
-                </div>
-              )}
-
-              {/* Selfie photos */}
-              {(detailRecord.record.checkInPhoto || detailRecord.record.checkOutPhoto) && (
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                    <Camera className="w-3.5 h-3.5" /> Selfie Photos
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {detailRecord.record.checkInPhoto && (
-                      <div className="space-y-1">
-                        <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide text-center">Punch In</p>
-                        <button
-                          className="w-full overflow-hidden rounded-lg border border-border hover:opacity-90 transition-opacity"
-                          onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkInPhoto) || ''); setSelfieOpen(true); }}
-                        >
-                          <img
-                            src={resolvePhotoUrl(detailRecord.record.checkInPhoto) || ''}
-                            alt="Punch-in selfie"
-                            className="w-full h-32 object-cover"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                          />
-                        </button>
-                      </div>
-                    )}
-                    {detailRecord.record.checkOutPhoto && (
-                      <div className="space-y-1">
-                        <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide text-center">Punch Out</p>
-                        <button
-                          className="w-full overflow-hidden rounded-lg border border-border hover:opacity-90 transition-opacity"
-                          onClick={() => { setSelfieUrl(resolvePhotoUrl(detailRecord.record.checkOutPhoto) || ''); setSelfieOpen(true); }}
-                        >
-                          <img
-                            src={resolvePhotoUrl(detailRecord.record.checkOutPhoto) || ''}
-                            alt="Punch-out selfie"
-                            className="w-full h-32 object-cover"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                          />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-[10px] text-muted-foreground text-center">Tap photo to enlarge</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-sm">
-              {detailRecord && isHolidayDate(detailRecord.date) ? (
-                <div className="space-y-1">
-                  <p className="text-2xl">🎉</p>
-                  <p className="font-semibold text-orange-600">
-                    {holidays.find((h: any) => {
-                      const hd = new Date(h.date);
-                      return hd.getDate() === detailRecord.day &&
-                             hd.getMonth() === detailRecord.date.getMonth() &&
-                             hd.getFullYear() === detailRecord.date.getFullYear();
-                    })?.name || 'Public Holiday'}
-                  </p>
-                  <p className="text-muted-foreground text-xs">This day is a designated holiday</p>
-                </div>
-              ) : detailRecord && isWeekOff(detailRecord.date) ? (
-                <div className="space-y-1">
-                  <p className="text-2xl">😴</p>
-                  <p className="font-semibold text-slate-500">Week Off</p>
-                  <p className="text-muted-foreground text-xs">No attendance required on weekends</p>
-                </div>
-              ) : detailRecord && isPast(detailRecord.date) ? (
-                <div className="space-y-1">
-                  <p className="text-2xl">❌</p>
-                  <p className="font-semibold text-rose-600">Absent</p>
-                  <p className="text-muted-foreground text-xs">No punch-in recorded for this working day</p>
-                </div>
-              ) : (
-                <p className="text-muted-foreground">No attendance record for this day.</p>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* ─── Selfie Lightbox ─── */}
       <Dialog open={selfieOpen} onOpenChange={setSelfieOpen}>
-        <DialogContent className="max-w-sm p-2">
-          <img src={selfieUrl} alt="Selfie" className="w-full rounded-lg object-contain max-h-[70vh]" />
+        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl p-1 bg-black/90 overflow-hidden">
+          <img src={selfieUrl} alt="Selfie" className="w-full h-auto max-h-[80vh] rounded-2xl object-contain" />
         </DialogContent>
       </Dialog>
 
       {/* ─── HR Edit Day Attendance Dialog ─── */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="text-base">
-              Edit Attendance: {selectedDayRecord?.date
-                ? new Date(selectedDayRecord.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                : ''}
-            </DialogTitle>
-          </DialogHeader>
-
-          {/* If there's a record with selfies, show them in the edit modal too */}
-          {selectedDayRecord?.record && (selectedDayRecord.record.checkInPhoto || selectedDayRecord.record.checkOutPhoto) && (
-            <div className="flex gap-2 py-1">
-              {selectedDayRecord.record.checkInPhoto && (
-                <div className="flex-1 text-center space-y-0.5">
-                  <p className="text-[10px] text-muted-foreground font-semibold">In Selfie</p>
-                  <button onClick={() => { setSelfieUrl(resolvePhotoUrl(selectedDayRecord.record.checkInPhoto) || ''); setSelfieOpen(true); }}>
-                    <img src={resolvePhotoUrl(selectedDayRecord.record.checkInPhoto) || ''} alt="In selfie"
-                      className="h-20 w-full object-cover rounded-lg border" />
-                  </button>
-                </div>
-              )}
-              {selectedDayRecord.record.checkOutPhoto && (
-                <div className="flex-1 text-center space-y-0.5">
-                  <p className="text-[10px] text-muted-foreground font-semibold">Out Selfie</p>
-                  <button onClick={() => { setSelfieUrl(resolvePhotoUrl(selectedDayRecord.record.checkOutPhoto) || ''); setSelfieOpen(true); }}>
-                    <img src={resolvePhotoUrl(selectedDayRecord.record.checkOutPhoto) || ''} alt="Out selfie"
-                      className="h-20 w-full object-cover rounded-lg border" />
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          <form onSubmit={handleSaveDayAttendance} className="space-y-4 pt-2">
-            <div>
-              <Label>Status</Label>
-              <Select value={editForm.status} onValueChange={(val) => setEditForm(prev => ({ ...prev, status: val }))}>
-                <SelectTrigger className="w-full mt-1.5"><SelectValue placeholder="Select status" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="present">Present</SelectItem>
-                  <SelectItem value="absent">Absent</SelectItem>
-                  <SelectItem value="half_day">Half Day</SelectItem>
-                  <SelectItem value="leave">Leave / Paid Leave</SelectItem>
-                  <SelectItem value="late">Late Check-in</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label>Check In</Label>
-                <Input type="time" value={editForm.checkIn}
-                  onChange={e => setEditForm(prev => ({ ...prev, checkIn: e.target.value }))}
-                  className="mt-1.5" />
-              </div>
-              <div>
-                <Label>Check Out</Label>
-                <Input type="time" value={editForm.checkOut}
-                  onChange={e => setEditForm(prev => ({ ...prev, checkOut: e.target.value }))}
-                  className="mt-1.5" />
-              </div>
+        <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
+          <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
+            <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+              <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <Label>Remarks / Notes</Label>
-              <Input value={editForm.notes}
-                onChange={e => setEditForm(prev => ({ ...prev, notes: e.target.value }))}
-                placeholder="e.g. Work from home, client visit"
-                className="mt-1.5" />
+              <DialogTitle className="text-xl font-bold">Edit Attendance</DialogTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {selectedDayRecord?.date
+                  ? new Date(selectedDayRecord.date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                  : ''}
+              </p>
             </div>
-            <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-              <Button type="submit" size="sm" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
-            </div>
-          </form>
+          </div>
+
+          <div className="p-6">
+            {/* If there's a record with selfies, show them in the edit modal too */}
+            {selectedDayRecord?.record && (selectedDayRecord.record.checkInPhoto || selectedDayRecord.record.checkOutPhoto) && (
+              <div className="flex gap-4 mb-6 bg-muted/30 p-3 rounded-2xl border border-border/40">
+                {selectedDayRecord.record.checkInPhoto && (
+                  <div className="flex-1 text-center space-y-1">
+                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">In Selfie</p>
+                    <button onClick={() => { setSelfieUrl(resolvePhotoUrl(selectedDayRecord.record.checkInPhoto) || ''); setSelfieOpen(true); }} className="w-full">
+                      <img src={resolvePhotoUrl(selectedDayRecord.record.checkInPhoto) || ''} alt="In selfie"
+                        className="h-16 w-full object-cover rounded-xl border border-border shadow-sm hover:opacity-80 transition-opacity" />
+                    </button>
+                  </div>
+                )}
+                {selectedDayRecord.record.checkOutPhoto && (
+                  <div className="flex-1 text-center space-y-1">
+                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Out Selfie</p>
+                    <button onClick={() => { setSelfieUrl(resolvePhotoUrl(selectedDayRecord.record.checkOutPhoto) || ''); setSelfieOpen(true); }} className="w-full">
+                      <img src={resolvePhotoUrl(selectedDayRecord.record.checkOutPhoto) || ''} alt="Out selfie"
+                        className="h-16 w-full object-cover rounded-xl border border-border shadow-sm hover:opacity-80 transition-opacity" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <form onSubmit={handleSaveDayAttendance} className="space-y-5">
+              <div className="space-y-2">
+                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</Label>
+                <Select value={editForm.status} onValueChange={(val) => setEditForm(prev => ({ ...prev, status: val }))}>
+                  <SelectTrigger className="w-full rounded-xl h-11 shadow-sm"><SelectValue placeholder="Select status" /></SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="present">Present</SelectItem>
+                    <SelectItem value="absent">Absent</SelectItem>
+                    <SelectItem value="half_day">Half Day</SelectItem>
+                    <SelectItem value="leave">Leave / Paid Leave</SelectItem>
+                    <SelectItem value="late">Late Check-in</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-4 bg-muted/20 p-4 rounded-2xl border border-border/40">
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check In</Label>
+                  <Input type="time" value={editForm.checkIn}
+                    onChange={e => setEditForm(prev => ({ ...prev, checkIn: e.target.value }))}
+                    className="rounded-xl h-10 shadow-sm" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check Out</Label>
+                  <Input type="time" value={editForm.checkOut}
+                    onChange={e => setEditForm(prev => ({ ...prev, checkOut: e.target.value }))}
+                    className="rounded-xl h-10 shadow-sm" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Remarks / Notes</Label>
+                <Input value={editForm.notes}
+                  onChange={e => setEditForm(prev => ({ ...prev, notes: e.target.value }))}
+                  placeholder="e.g. Work from home, client visit"
+                  className="rounded-xl h-11 shadow-sm" />
+              </div>
+              <div className="flex justify-end gap-2 pt-4">
+                <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+                <Button type="submit" className="rounded-xl px-6 shadow-md" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
+              </div>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </Card>

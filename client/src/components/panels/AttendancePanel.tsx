@@ -220,14 +220,15 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   };
 
   const getStatusBadge = (status: string) => {
+    const baseStyle = "border-none rounded-full px-2.5 uppercase text-[10px] font-bold tracking-wider shadow-sm";
     const variants: any = {
-      present: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-none',
-      absent: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-none',
-      late: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-none',
-      half_day: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-none',
-      leave: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-none'
+      present: `bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400 ${baseStyle}`,
+      absent: `bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400 ${baseStyle}`,
+      late: `bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400 ${baseStyle}`,
+      half_day: `bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-400 ${baseStyle}`,
+      leave: `bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-400 ${baseStyle}`
     };
-    return <Badge className={variants[status] || ''}>{status?.replace('_', ' ')}</Badge>;
+    return <Badge className={variants[status] || baseStyle}>{status?.replace('_', ' ')}</Badge>;
   };
 
   const resolvePhotoUrl = (url: string | null | undefined): string | null => {
@@ -238,19 +239,26 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold">Attendance {canViewAll ? 'Management' : 'Records'}</h2>
-          <p className="text-muted-foreground">{canViewAll ? 'Track and manage employee attendance' : 'Your attendance history'}</p>
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-primary/10 rounded-2xl">
+            <Calendar className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Attendance {canViewAll ? 'Management' : 'Records'}</h2>
+            <p className="text-muted-foreground text-sm mt-1">{canViewAll ? 'Track and manage employee attendance.' : 'Your personal attendance history.'}</p>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           {canViewAll && viewMode === 'calendar' && (
-            <div className="flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-1.5 shadow-sm">
-              <Users className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-2 bg-muted/40 border border-slate-200/50 dark:border-slate-800/50 rounded-xl p-1.5 shadow-sm">
+              <div className="bg-background rounded-lg p-1.5 shadow-sm">
+                <Users className="w-4 h-4 text-primary" />
+              </div>
               <Select value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
-                <SelectTrigger className="h-7 border-none bg-transparent shadow-none focus:ring-0 w-[180px] text-xs font-bold">
+                <SelectTrigger className="h-8 border-none bg-transparent shadow-none focus:ring-0 w-[180px] text-xs font-bold px-2">
                   <SelectValue placeholder="Select Employee" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   {employees.map(emp => (
                     <SelectItem key={emp.id} value={emp.id.toString()} className="text-xs">
                       {emp.name}
@@ -262,7 +270,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
           )}
 
           {canViewAll && (
-            <Button variant="outline" size="sm" onClick={handleExportExcel} className="h-9 text-xs font-semibold gap-1.5 border-dashed border-primary hover:border-primary/80">
+            <Button variant="outline" size="sm" onClick={handleExportExcel} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4 gap-2 text-xs font-semibold">
               <Download className="w-4 h-4 text-primary" /> Download Report
             </Button>
           )}
@@ -270,20 +278,28 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
           {isHR && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button><Plus className="w-4 h-4 mr-2" />Mark Attendance</Button>
+                <Button className="rounded-xl shadow-md h-10 px-4 transition-transform hover:scale-105 active:scale-95">
+                  <Plus className="w-4 h-4 mr-2" /> Mark Attendance
+                </Button>
               </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
+              <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
+                <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
+                  <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+                    <Calendar className="w-5 h-5" />
+                  </div>
                   <div>
-                    <Label>Employee</Label>
+                    <DialogTitle className="text-xl">{editingId ? 'Edit Attendance' : 'Mark Attendance'}</DialogTitle>
+                    <p className="text-sm text-muted-foreground mt-0.5">Manually record or edit an employee's punch.</p>
+                  </div>
+                </div>
+                <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Employee</Label>
                     <Select value={formData.employeeId} onValueChange={(value) => setFormData({...formData, employeeId: value})}>
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-xl h-11">
                         <SelectValue placeholder="Select employee" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl">
                         {employees.filter(emp => emp && emp.id).map((emp) => (
                           <SelectItem key={emp.id} value={emp.id.toString()}>
                             {emp.name}
@@ -292,17 +308,17 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label>Date</Label>
-                    <Input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</Label>
+                    <Input type="date" className="rounded-xl h-11" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required />
                   </div>
-                  <div>
-                    <Label>Status</Label>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</Label>
                     <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-xl h-11">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl">
                         <SelectItem value="present">Present</SelectItem>
                         <SelectItem value="absent">Absent</SelectItem>
                         <SelectItem value="late">Late</SelectItem>
@@ -311,23 +327,23 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label>Check In</Label>
-                      <Input type="time" value={formData.checkIn} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-muted/30 p-4 rounded-2xl border border-border/40">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check In</Label>
+                      <Input type="time" className="rounded-xl h-10" value={formData.checkIn} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
                     </div>
-                    <div>
-                      <Label>Check Out</Label>
-                      <Input type="time" value={formData.checkOut} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
+                    <div className="space-y-2">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check Out</Label>
+                      <Input type="time" className="rounded-xl h-10" value={formData.checkOut} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
                     </div>
                   </div>
-                  <div>
-                    <Label>Notes</Label>
-                    <Input value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Optional notes" />
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Notes</Label>
+                    <Input className="rounded-xl h-11" value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Optional notes" />
                   </div>
-                  <div className="flex gap-2">
-                    <Button type="submit" className="flex-1">Save</Button>
-                    <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                  <div className="pt-2 flex justify-end gap-2">
+                    <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    <Button type="submit" className="rounded-xl px-6">Save Record</Button>
                   </div>
                 </form>
               </DialogContent>
@@ -347,75 +363,91 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
           isHR={isHR}
         />
       ) : (
-        <Card className="border-none shadow-xl bg-card/65 backdrop-blur-xl">
-          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-border/40">
+        <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-xl rounded-2xl bg-card/60 backdrop-blur-xl overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between p-5 sm:p-6 border-b border-border/40 bg-muted/20">
             <div className="flex items-center gap-4">
-              <CardTitle>Attendance Records List</CardTitle>
+              <CardTitle className="text-lg">Attendance Records</CardTitle>
               {viewMode === 'list' && (
-                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-semibold shadow-sm">
+                <Badge variant="outline" className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 font-bold shadow-sm rounded-full px-3">
                   Late: {attendance.filter(r => r.isLate || r.status === 'late').length} {canViewAll && dateFilter ? 'Users' : 'Records'}
                 </Badge>
               )}
             </div>
-            <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-1.5 h-9 text-xs font-semibold">
-              <Calendar className="w-3.5 h-3.5" /> Calendar View
+            <Button variant="outline" size="sm" onClick={() => setViewMode('calendar')} className="gap-2 rounded-xl border-slate-200/60 shadow-sm h-9 text-xs font-semibold px-4 transition-transform hover:scale-105">
+              <Calendar className="w-4 h-4 text-primary" /> Calendar View
             </Button>
           </CardHeader>
-          <CardContent className="pt-6">
-            {/* Date filter bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-5 p-3 rounded-xl bg-muted/30 border border-border/40">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <span className="text-xs font-semibold text-muted-foreground">Filter by Date</span>
-                <input
-                  type="date"
-                  value={dateFilter}
-                  onChange={(e) => handleDateFilterChange(e.target.value)}
-                  className="border border-border rounded-lg px-3 py-1.5 text-sm bg-background focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                {dateFilter && (
-                  <button
-                    onClick={() => handleDateFilterChange('')}
-                    className="text-xs text-muted-foreground hover:text-foreground underline"
-                  >
-                    Clear
-                  </button>
-                )}
+          <CardContent className="p-5 sm:p-6">
+            {/* Filter bar */}
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-2xl bg-muted/40 border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="bg-background p-2 rounded-xl shadow-sm border border-border/50">
+                  <Calendar className="w-4 h-4 text-primary" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="date"
+                    value={dateFilter}
+                    onChange={(e) => handleDateFilterChange(e.target.value)}
+                    className="border border-border/50 rounded-xl px-3 py-1.5 text-sm bg-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 h-9"
+                  />
+                  {dateFilter && (
+                    <button
+                      onClick={() => handleDateFilterChange('')}
+                      className="text-xs font-semibold text-muted-foreground hover:text-foreground underline decoration-dashed underline-offset-4"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground font-medium">Status:</span>
-                <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
-                  <SelectTrigger className="h-8 border-border bg-background w-[120px] text-xs shadow-sm">
-                    <SelectValue placeholder="All Statuses" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="present">Present</SelectItem>
-                    <SelectItem value="absent">Absent</SelectItem>
-                    <SelectItem value="late">Late</SelectItem>
-                    <SelectItem value="half_day">Half Day</SelectItem>
-                    <SelectItem value="leave">Leave</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground font-medium">Sort:</span>
-                <Select value={sortOrder} onValueChange={(val: any) => setSortOrder(val)}>
-                  <SelectTrigger className="h-8 border-border bg-background w-[140px] text-xs shadow-sm">
-                    <SelectValue placeholder="Sort" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="desc">↓ Newest First</SelectItem>
-                    <SelectItem value="asc">↑ Oldest First</SelectItem>
-                    <SelectItem value="late">Late First</SelectItem>
-                  </SelectContent>
-                </Select>
+              
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                  <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wider hidden md:inline">Status</span>
+                  <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
+                    <SelectTrigger className="h-9 rounded-xl border-border/50 bg-background w-full sm:w-[130px] text-xs shadow-sm font-medium">
+                      <SelectValue placeholder="All Statuses" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="present">Present</SelectItem>
+                      <SelectItem value="absent">Absent</SelectItem>
+                      <SelectItem value="late">Late</SelectItem>
+                      <SelectItem value="half_day">Half Day</SelectItem>
+                      <SelectItem value="leave">Leave</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+                  <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wider hidden md:inline">Sort</span>
+                  <Select value={sortOrder} onValueChange={(val: any) => setSortOrder(val)}>
+                    <SelectTrigger className="h-9 rounded-xl border-border/50 bg-background w-full sm:w-[140px] text-xs shadow-sm font-medium">
+                      <SelectValue placeholder="Sort" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="desc">↓ Newest First</SelectItem>
+                      <SelectItem value="asc">↑ Oldest First</SelectItem>
+                      <SelectItem value="late">Late First</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
+
+            {/* List */}
             {loading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="space-y-3">
+                {[1,2,3].map(i => <div key={i} className="h-20 bg-muted/40 rounded-2xl animate-pulse border border-border/50" />)}
+              </div>
             ) : attendance.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">No attendance records found</div>
+              <div className="text-center py-16 px-4 rounded-2xl border-2 border-dashed border-border/60 bg-muted/10">
+                <div className="bg-muted/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="w-8 h-8 text-muted-foreground opacity-50" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">No records found</h3>
+                <p className="text-sm text-muted-foreground mt-1">There are no attendance records matching your current filters.</p>
+              </div>
             ) : (
               <div className="space-y-3">
                 {[...attendance]
@@ -435,43 +467,63 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                   const recId = record.id;
                   const empName = record.employeeId?.name || record.employee?.name || record.user?.name || 'Unknown';
                   return (
-                    <div key={recId} className="flex items-center justify-between p-4 border border-border/60 rounded-xl hover:bg-muted/30 transition-colors">
-                      <div className="flex-1">
-                        <div className="font-bold text-sm text-foreground">{empName}</div>
-                        <div className="text-xs text-muted-foreground mt-1 flex items-center flex-wrap gap-2">
-                          <span>{new Date(record.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} •</span>
-                          
-                          <span className="flex items-center gap-1">
-                            {record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
-                            {record.checkInPhoto && (
-                              <Camera className="w-3.5 h-3.5 text-blue-500 cursor-pointer hover:text-blue-700" onClick={() => { setSelectedPhoto(record.checkInPhoto); setPhotoViewerOpen(true); }} />
-                            )}
-                          </span>
-                          <span>-</span>
-                          <span className="flex items-center gap-1">
-                            {record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}
-                            {record.checkOutPhoto && (
-                              <Camera className="w-3.5 h-3.5 text-blue-500 cursor-pointer hover:text-blue-700" onClick={() => { setSelectedPhoto(record.checkOutPhoto); setPhotoViewerOpen(true); }} />
-                            )}
-                          </span>
+                    <div key={recId} className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-card/40 hover:bg-card/80 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300 gap-4 overflow-hidden relative">
+                      {record.isLate && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500 rounded-l-2xl" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="font-bold text-base text-foreground truncate">{empName}</div>
+                          {getStatusBadge(record.status)}
                         </div>
-                        {record.notes && <div className="text-xs text-slate-500 mt-1 italic">"{record.notes}"</div>}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {getStatusBadge(record.status)}
-                        {isHR && (
-                          <div className="flex items-center gap-1">
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => handleEdit(record)}>
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            {recId && !recId.toString().startsWith('absent-') && (
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(recId)}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            )}
+                        
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium">
+                          <div className="flex items-center text-muted-foreground bg-muted/40 px-2.5 py-1.5 rounded-lg border border-border/40 shadow-sm">
+                            <Calendar className="w-3.5 h-3.5 mr-1.5 text-foreground/70" />
+                            {new Date(record.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
+                          
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
+                              <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">In</span>
+                              <span>{record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}</span>
+                              {record.checkInPhoto && (
+                                <button onClick={() => { setSelectedPhoto(record.checkInPhoto); setPhotoViewerOpen(true); }} className="p-0.5 hover:bg-primary/20 rounded-md transition-colors ml-1" title="View Check-in Photo">
+                                  <Camera className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                            <span className="text-muted-foreground/50">→</span>
+                            <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
+                              <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">Out</span>
+                              <span>{record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}</span>
+                              {record.checkOutPhoto && (
+                                <button onClick={() => { setSelectedPhoto(record.checkOutPhoto); setPhotoViewerOpen(true); }} className="p-0.5 hover:bg-primary/20 rounded-md transition-colors ml-1" title="View Check-out Photo">
+                                  <Camera className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        {record.notes && (
+                          <div className="mt-4 text-sm text-muted-foreground bg-muted/30 p-3 rounded-xl border border-border/30 italic">
+                            "{record.notes}"
                           </div>
                         )}
                       </div>
+                      
+                      {isHR && (
+                        <div className="flex items-center justify-end gap-2 shrink-0 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                          <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 gap-1.5 px-3" onClick={() => handleEdit(record)}>
+                            <Edit className="w-3.5 h-3.5 text-muted-foreground" /> Edit
+                          </Button>
+                          {recId && !recId.toString().startsWith('absent-') && (
+                            <Button variant="outline" size="sm" className="h-9 rounded-xl shadow-sm border-red-200 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 gap-1.5 px-3" onClick={() => handleDelete(recId)}>
+                              <Trash2 className="w-3.5 h-3.5" /> Delete
+                            </Button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
