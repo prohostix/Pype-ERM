@@ -12,24 +12,24 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:6478/api/v1';
 const getFileUrl = (path: string | undefined | null) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  
+
   const baseUrl = API_BASE.replace(/\/$/, '');
-  
+
   let origin = '';
   let apiPath = baseUrl;
-  
+
   if (baseUrl.startsWith('http')) {
     try {
       const parsed = new URL(baseUrl);
       origin = parsed.origin;
       apiPath = parsed.pathname.replace(/\/$/, '');
-    } catch (e) {}
+    } catch (e) { }
   }
-  
+
   if (apiPath && path.startsWith(apiPath)) {
     return origin ? `${origin}${path}` : path;
   }
-  
+
   if (path.startsWith('/')) {
     return `${baseUrl}${path}`;
   }
@@ -113,13 +113,13 @@ export default function StudentApplicationPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.programId) { setError('Please select a program'); return; }
-    
+
     const selectedProgram = inviteData?.programs.find(p => p.id === form.programId);
     if (selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && !form.specialisation) {
       setError('Please select a specialisation');
       return;
     }
-    
+
     setSubmitting(true);
     setError('');
     try {
@@ -185,25 +185,25 @@ export default function StudentApplicationPage() {
             <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] ring-1 ring-slate-900/5 p-4 relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               {selectedProgram?.university?.logo ? (
-                <img 
-                  src={getFileUrl(selectedProgram.university.logo)} 
-                  alt={selectedProgram.university.name} 
-                  className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110" 
+                <img
+                  src={getFileUrl(selectedProgram.university.logo)}
+                  alt={selectedProgram.university.name}
+                  className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-110"
                 />
               ) : (
                 <GraduationCap className="w-10 h-10 text-primary relative z-10" />
               )}
             </div>
-            
-            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight max-w-2xl mx-auto leading-tight">
+
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight max-w-2xl mx-auto leading-tight text-balance break-words">
               {selectedProgram?.university?.name || inviteData?.organizationName}
             </h1>
-            
+
             <div className="mt-5 flex flex-col items-center gap-4">
               <span className="px-5 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-bold tracking-wide border border-blue-200/60 shadow-sm">
                 {selectedProgram?.name} {selectedProgram?.courseType ? `(${selectedProgram.courseType})` : ''}
               </span>
-              
+
               <div className="inline-flex items-center gap-2 text-sm text-slate-500 bg-white/80 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-slate-200/80 shadow-sm">
                 <span>Referred by</span>
                 <div className="flex items-center gap-1.5 font-medium text-slate-800">
@@ -224,7 +224,7 @@ export default function StudentApplicationPage() {
               <CardTitle className="text-3xl font-bold tracking-tight text-slate-900">Student Application Form</CardTitle>
               <CardDescription className="text-base mt-3 font-medium text-slate-500">Please fill in your details accurately to apply for enrollment</CardDescription>
             </CardHeader>
-            <CardContent className="p-8 sm:p-12">
+            <CardContent className="p-5 sm:p-8 md:p-12">
               <form onSubmit={handleSubmit} className="space-y-12">
                 {/* Admission Details */}
                 <div className="space-y-6">
@@ -237,28 +237,28 @@ export default function StudentApplicationPage() {
                       <p className="text-sm text-slate-500 font-medium">Select your program and preferences</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-0 sm:pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Program <span className="text-red-500">*</span></Label>
                       <Select value={form.programId} onValueChange={v => setForm(f => ({ ...f, programId: v }))}>
-                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
+                        <SelectTrigger className="w-full overflow-hidden h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 [&>span]:truncate [&>span]:text-left">
                           <SelectValue placeholder="Select a program" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="max-w-[85vw] sm:max-w-[400px]">
                           {inviteData?.programs.map(p => (
-                            <SelectItem key={p.id} value={p.id}>
+                            <SelectItem key={p.id} value={p.id} className="break-words whitespace-normal">
                               {p.name} — {p.university.name} ({p.courseType})
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
                       <div className="space-y-2">
                         <Label className="text-slate-600 font-medium">Specialisation <span className="text-red-500">*</span></Label>
                         <Select value={form.specialisation} onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}>
-                          <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
+                          <SelectTrigger className="w-full overflow-hidden h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 [&>span]:truncate [&>span]:text-left">
                             <SelectValue placeholder="Select specialisation" />
                           </SelectTrigger>
                           <SelectContent>
@@ -269,7 +269,7 @@ export default function StudentApplicationPage() {
                         </Select>
                       </div>
                     )}
-                    {(() => {
+                    {/* {(() => {
                       let fs = selectedProgram?.feeStructures?.find(f => (f as any).specialisation === form.specialisation);
                       if (!fs && form.specialisation) {
                         fs = selectedProgram?.feeStructures?.find(f => !(f as any).specialisation);
@@ -289,7 +289,7 @@ export default function StudentApplicationPage() {
                           </SelectContent>
                         </Select>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
 
@@ -304,7 +304,7 @@ export default function StudentApplicationPage() {
                       <p className="text-sm text-slate-500 font-medium">Provide your identifying information</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-0 sm:pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Full Name <span className="text-red-500">*</span></Label>
                       <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="Your full name" required />
@@ -328,7 +328,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Gender</Label>
                       <Select value={form.gender} onValueChange={v => setForm(f => ({ ...f, gender: v }))}>
-                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Male">Male</SelectItem>
                           <SelectItem value="Female">Female</SelectItem>
@@ -339,7 +339,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Category</Label>
                       <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
-                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="General">General</SelectItem>
                           <SelectItem value="OBC">OBC</SelectItem>
@@ -356,7 +356,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Marital Status</Label>
                       <Select value={form.maritalStatus} onValueChange={v => setForm(f => ({ ...f, maritalStatus: v }))}>
-                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Single">Single</SelectItem>
                           <SelectItem value="Married">Married</SelectItem>
@@ -366,7 +366,7 @@ export default function StudentApplicationPage() {
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Employment Status</Label>
                       <Select value={form.employmentStatus} onValueChange={v => setForm(f => ({ ...f, employmentStatus: v }))}>
-                        <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Employed">Employed</SelectItem>
                           <SelectItem value="Unemployed">Unemployed</SelectItem>
@@ -380,7 +380,7 @@ export default function StudentApplicationPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-14 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-0 sm:pl-14 pt-4">
                     <div className="md:col-span-2 space-y-2">
                       <Label className="text-slate-600 font-medium">Address</Label>
                       <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Your full residential address" />
@@ -403,7 +403,7 @@ export default function StudentApplicationPage() {
                       <p className="text-sm text-slate-500 font-medium">Contact info for your parents or guardians</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-14">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-0 sm:pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Father's Name</Label>
                       <Input className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10" value={form.fatherName} onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father's full name" />
@@ -442,12 +442,12 @@ export default function StudentApplicationPage() {
                       <p className="text-sm text-slate-500 font-medium">Upload required verification documents</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-8 pl-14">
-                    
+                  <div className="grid grid-cols-1 gap-8 pl-0 sm:pl-14">
+
                     {/* Photo Upload */}
                     <div className="space-y-3 bg-slate-50/50 p-6 rounded-xl border border-slate-100">
                       <Label className="text-base font-semibold text-slate-800">Profile Photo</Label>
-                      <div className="flex items-center gap-6">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         {form.photo ? (
                           <div className="relative group cursor-pointer inline-block">
                             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
@@ -455,7 +455,7 @@ export default function StudentApplicationPage() {
                             </div>
                             <button
                               type="button"
-                              onClick={() => setForm({...form, photo: ''})}
+                              onClick={() => setForm({ ...form, photo: '' })}
                               className="absolute top-0 right-0 bg-rose-500 text-white rounded-full p-1.5 hover:bg-rose-600 transition-colors shadow-sm z-10 scale-0 group-hover:scale-100 origin-center duration-200"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -467,8 +467,8 @@ export default function StudentApplicationPage() {
                           </div>
                         )}
                         <div className="flex-1 max-w-sm">
-                          <Input 
-                            type="file" 
+                          <Input
+                            type="file"
                             accept="image/*"
                             className="text-sm bg-white h-11 cursor-pointer file:cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                             onChange={async (e) => {
@@ -503,9 +503,9 @@ export default function StudentApplicationPage() {
                               <div className="flex justify-between items-start mb-4">
                                 <span className="text-sm font-semibold text-slate-700 group-hover:text-slate-900">{docType}</span>
                                 {existing?.url ? (
-                                  <a 
-                                    href={getFileUrl(existing.url)} 
-                                    target="_blank" 
+                                  <a
+                                    href={getFileUrl(existing.url)}
+                                    target="_blank"
                                     rel="noreferrer"
                                     className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md font-medium hover:bg-primary/20 flex items-center transition-colors"
                                   >
@@ -525,7 +525,7 @@ export default function StudentApplicationPage() {
                                     const uploadData = new FormData();
                                     uploadData.append('file', file);
                                     const res = await axios.post(`${API_BASE}/public/upload`, uploadData);
-                                    
+
                                     const newDocs = (form.documents || []).filter((d: any) => d.type !== docType);
                                     newDocs.push({ type: docType, url: res.data.url });
                                     setForm({ ...form, documents: newDocs });

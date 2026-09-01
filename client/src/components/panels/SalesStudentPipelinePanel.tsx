@@ -133,8 +133,8 @@ export function SalesStudentPipelinePanel() {
             Refresh
           </Button>
 
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             className="bg-primary hover:bg-primary/90 text-white font-medium shadow-sm transition-all flex items-center"
             onClick={() => setEnrollDialogOpen(true)}
           >
@@ -143,8 +143,8 @@ export function SalesStudentPipelinePanel() {
           </Button>
 
           {/* Trigger shared full wizard form component instead of the simplified modal */}
-          <StudentsPanel 
-            triggerOpen={enrollDialogOpen} 
+          <StudentsPanel
+            triggerOpen={enrollDialogOpen}
             isSalesMode={true}
             onOpenChange={(open) => {
               setEnrollDialogOpen(open);
@@ -198,7 +198,7 @@ export function SalesStudentPipelinePanel() {
 
       {/* Enrollment list */}
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
@@ -234,14 +234,14 @@ export function SalesStudentPipelinePanel() {
                         <span>{e.program?.name || 'N/A'} {e.program?.code ? `(${e.program.code})` : ''}</span>
                         <span>{new Date(e.createdAt).toLocaleDateString()}</span>
                       </div>
-                      
+
                       {/* Rejected Items Notice */}
                       {(() => {
                         const docs = e.student?.documents || e.documents || [];
                         const photoStatus = e.student?.admissionProgress?.photoStatus;
                         const rejectedDocs = docs.filter((d: any) => d && d.status === 'rejected');
                         const hasRejectedPhoto = photoStatus === 'rejected';
-                        
+
                         if (rejectedDocs.length > 0 || hasRejectedPhoto) {
                           return (
                             <div className="mt-2 bg-red-50 border border-red-200 text-red-700 p-2 rounded text-xs">
@@ -311,7 +311,7 @@ export function SalesStudentPipelinePanel() {
                         const docs = e.student?.documents || e.documents || [];
                         const photoStatus = e.student?.admissionProgress?.photoStatus;
                         const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || photoStatus === 'rejected';
-                        
+
                         if (e.status === 'sales_verification_pending' || ((e.status === 'document_review' || e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected)) {
                           return (
                             <div className="mt-4">
@@ -369,8 +369,8 @@ export function SalesStudentPipelinePanel() {
                               <div className={cn(
                                 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0',
                                 h.status === 'enrolled' ? 'bg-green-100 text-green-700' :
-                                h.status.includes('rejected') ? 'bg-red-100 text-red-700' :
-                                'bg-muted text-muted-foreground'
+                                  h.status.includes('rejected') ? 'bg-red-100 text-red-700' :
+                                    'bg-muted text-muted-foreground'
                               )}>
                                 <User className="w-3.5 h-3.5" />
                               </div>
@@ -419,110 +419,110 @@ export function SalesStudentPipelinePanel() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label>Student Name</Label>
-                  <Input 
-                    value={verifyForm.studentName || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, studentName: e.target.value})} 
+                  <Input
+                    value={verifyForm.studentName || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, studentName: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Email</Label>
-                  <Input 
-                    value={verifyForm.studentEmail || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, studentEmail: e.target.value})} 
+                  <Input
+                    value={verifyForm.studentEmail || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, studentEmail: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Phone</Label>
-                  <Input 
-                    value={verifyForm.studentPhone || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, studentPhone: e.target.value})} 
+                  <Input
+                    value={verifyForm.studentPhone || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, studentPhone: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Father's Name</Label>
-                  <Input 
-                    value={verifyForm.fatherName || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, fatherName: e.target.value})} 
+                  <Input
+                    value={verifyForm.fatherName || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, fatherName: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Date of Birth</Label>
-                  <Input 
+                  <Input
                     type="date"
-                    value={verifyForm.dob ? new Date(verifyForm.dob).toISOString().split('T')[0] : ''} 
-                    onChange={e => setVerifyForm({...verifyForm, dob: e.target.value})} 
+                    value={verifyForm.dob ? new Date(verifyForm.dob).toISOString().split('T')[0] : ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, dob: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Alternate Phone</Label>
-                  <Input 
-                    value={verifyForm.altPhone || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, altPhone: e.target.value})} 
+                  <Input
+                    value={verifyForm.altPhone || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, altPhone: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Gender</Label>
-                  <Input value={verifyForm.gender || ''} onChange={e => setVerifyForm({...verifyForm, gender: e.target.value})} />
+                  <Input value={verifyForm.gender || ''} onChange={e => setVerifyForm({ ...verifyForm, gender: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Category</Label>
-                  <Input value={verifyForm.category || ''} onChange={e => setVerifyForm({...verifyForm, category: e.target.value})} />
+                  <Input value={verifyForm.category || ''} onChange={e => setVerifyForm({ ...verifyForm, category: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Religion</Label>
-                  <Input value={verifyForm.religion || ''} onChange={e => setVerifyForm({...verifyForm, religion: e.target.value})} />
+                  <Input value={verifyForm.religion || ''} onChange={e => setVerifyForm({ ...verifyForm, religion: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Marital Status</Label>
-                  <Input value={verifyForm.maritalStatus || ''} onChange={e => setVerifyForm({...verifyForm, maritalStatus: e.target.value})} />
+                  <Input value={verifyForm.maritalStatus || ''} onChange={e => setVerifyForm({ ...verifyForm, maritalStatus: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Employment Status</Label>
-                  <Input value={verifyForm.employmentStatus || ''} onChange={e => setVerifyForm({...verifyForm, employmentStatus: e.target.value})} />
+                  <Input value={verifyForm.employmentStatus || ''} onChange={e => setVerifyForm({ ...verifyForm, employmentStatus: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Caste</Label>
-                  <Input value={verifyForm.caste || ''} onChange={e => setVerifyForm({...verifyForm, caste: e.target.value})} />
+                  <Input value={verifyForm.caste || ''} onChange={e => setVerifyForm({ ...verifyForm, caste: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Mother's Name</Label>
-                  <Input value={verifyForm.motherName || ''} onChange={e => setVerifyForm({...verifyForm, motherName: e.target.value})} />
+                  <Input value={verifyForm.motherName || ''} onChange={e => setVerifyForm({ ...verifyForm, motherName: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Mother's Phone</Label>
-                  <Input value={verifyForm.motherPhone || ''} onChange={e => setVerifyForm({...verifyForm, motherPhone: e.target.value})} />
+                  <Input value={verifyForm.motherPhone || ''} onChange={e => setVerifyForm({ ...verifyForm, motherPhone: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Father's Phone</Label>
-                  <Input value={verifyForm.fatherPhone || ''} onChange={e => setVerifyForm({...verifyForm, fatherPhone: e.target.value})} />
+                  <Input value={verifyForm.fatherPhone || ''} onChange={e => setVerifyForm({ ...verifyForm, fatherPhone: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Guardian's Name</Label>
-                  <Input value={verifyForm.guardianName || ''} onChange={e => setVerifyForm({...verifyForm, guardianName: e.target.value})} />
+                  <Input value={verifyForm.guardianName || ''} onChange={e => setVerifyForm({ ...verifyForm, guardianName: e.target.value })} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Family Phone</Label>
-                  <Input value={verifyForm.familyPhone || ''} onChange={e => setVerifyForm({...verifyForm, familyPhone: e.target.value})} />
+                  <Input value={verifyForm.familyPhone || ''} onChange={e => setVerifyForm({ ...verifyForm, familyPhone: e.target.value })} />
                 </div>
                 <div className="space-y-1.5 col-span-2">
                   <Label>Address</Label>
-                  <Input 
-                    value={verifyForm.studentAddress || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, studentAddress: e.target.value})} 
+                  <Input
+                    value={verifyForm.studentAddress || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, studentAddress: e.target.value })}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label>PIN Code</Label>
-                  <Input 
-                    value={verifyForm.pinCode || ''} 
-                    onChange={e => setVerifyForm({...verifyForm, pinCode: e.target.value})} 
+                  <Input
+                    value={verifyForm.pinCode || ''}
+                    onChange={e => setVerifyForm({ ...verifyForm, pinCode: e.target.value })}
                   />
                 </div>
               </div>
 
               <div className="border-t pt-4 mt-4 space-y-4">
                 <h4 className="font-medium text-sm">Verify Documents & Photo</h4>
-                
+
                 {/* Photo Upload */}
                 <div className="mb-4">
                   <Label className="text-xs mb-1.5 block">Profile Photo</Label>
@@ -532,7 +532,7 @@ export function SalesStudentPipelinePanel() {
                         <img src={api.getFileUrl(verifyForm.photo)} alt="Student" className="w-16 h-16 rounded-full object-cover border" />
                         <button
                           type="button"
-                          onClick={() => setVerifyForm({...verifyForm, photo: ''})}
+                          onClick={() => setVerifyForm({ ...verifyForm, photo: '' })}
                           className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 transition-colors shadow-sm"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -547,8 +547,8 @@ export function SalesStudentPipelinePanel() {
                       {verifyingStudent?.student?.admissionProgress?.photoStatus === 'rejected' && (
                         <p className="text-xs text-red-600 mb-1 font-medium">Photo Rejected. Please re-upload.</p>
                       )}
-                      <Input 
-                        type="file" 
+                      <Input
+                        type="file"
                         accept="image/*"
                         className="text-xs file:h-7 file:py-0 file:px-2"
                         onChange={async (e) => {
@@ -581,9 +581,9 @@ export function SalesStudentPipelinePanel() {
                         <div className="flex justify-between items-start mb-2">
                           <span className="text-sm font-medium">{docType}</span>
                           {existing?.url && (
-                            <a 
-                              href={api.getFileUrl(existing.url)} 
-                              target="_blank" 
+                            <a
+                              href={api.getFileUrl(existing.url)}
+                              target="_blank"
                               rel="noreferrer"
                               className={cn("text-xs hover:underline", existing.status === 'rejected' ? "text-red-600" : "text-primary")}
                             >
@@ -642,11 +642,12 @@ export function SalesStudentPipelinePanel() {
                 <h4 className="font-medium text-sm">Fee Details</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label>Payment Plan (Optional)</Label>
-                    <select 
+                    <Label>Payment Plan <span className="text-red-500">*</span></Label>
+                    <select
+                      required
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       value={verifyForm.paymentPlan || ''}
-                      onChange={e => setVerifyForm({...verifyForm, paymentPlan: e.target.value})}
+                      onChange={e => setVerifyForm({ ...verifyForm, paymentPlan: e.target.value })}
                     >
                       <option value="">Select a plan</option>
                       <option value="lumpsum">One-Time Payment (Lump Sum)</option>
@@ -655,15 +656,15 @@ export function SalesStudentPipelinePanel() {
                   </div>
                   <div className="space-y-1.5">
                     <Label>Initial Fee Amount Paid <span className="text-rose-500">*</span></Label>
-                    <Input 
+                    <Input
                       type="number"
                       placeholder="e.g. 5000"
-                      value={verifyForm.initialPaymentAmount || ''} 
-                      onChange={e => setVerifyForm({...verifyForm, initialPaymentAmount: e.target.value})} 
+                      value={verifyForm.initialPaymentAmount || ''}
+                      onChange={e => setVerifyForm({ ...verifyForm, initialPaymentAmount: e.target.value })}
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-1.5">
                   <Label>Fee Payment Screenshot / Receipt <span className="text-rose-500">*</span></Label>
                   <div className="flex items-center gap-4">
@@ -672,7 +673,7 @@ export function SalesStudentPipelinePanel() {
                         <img src={api.getFileUrl(verifyForm.receiptUrl)} alt="Receipt" className="h-20 w-auto object-contain border rounded" />
                         <button
                           type="button"
-                          onClick={() => setVerifyForm({...verifyForm, receiptUrl: ''})}
+                          onClick={() => setVerifyForm({ ...verifyForm, receiptUrl: '' })}
                           className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 shadow"
                         >
                           <XCircle className="w-4 h-4" />
@@ -680,9 +681,9 @@ export function SalesStudentPipelinePanel() {
                       </div>
                     ) : (
                       <div className="w-full max-w-sm">
-                        <Input 
+                        <Input
                           id="fee-receipt-upload"
-                          type="file" 
+                          type="file"
                           accept="image/*,application/pdf"
                           className="hidden"
                           onChange={async (e) => {

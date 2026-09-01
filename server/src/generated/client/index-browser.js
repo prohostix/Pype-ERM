@@ -1251,6 +1251,14 @@ exports.Prisma.UserFCMTokenScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SystemSettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  group: 'group',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1542,7 +1550,8 @@ exports.Prisma.ModelName = {
   BiometricDevice: 'BiometricDevice',
   ExamRegistration: 'ExamRegistration',
   CommunicationLog: 'CommunicationLog',
-  UserFCMToken: 'UserFCMToken'
+  UserFCMToken: 'UserFCMToken',
+  SystemSetting: 'SystemSetting'
 };
 
 /**

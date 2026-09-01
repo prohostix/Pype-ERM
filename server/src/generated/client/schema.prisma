@@ -1907,3 +1907,11 @@ model UserFCMToken {
 
   @@index([userId])
 }
+
+model SystemSetting {
+  key       String   @id
+  value     Json
+  group     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
