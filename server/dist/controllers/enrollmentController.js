@@ -61,7 +61,8 @@ export const uploadReceipt = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('No receipt file uploaded');
     }
-    const fileUrl = `/uploads/${req.file.filename}`;
+    // @ts-ignore
+    const fileUrl = `/uploads/${req.file.key || req.file.filename}`;
     const enrollment = await prisma.enrollment.findUnique({
         where: { id: enrollmentId }
     });

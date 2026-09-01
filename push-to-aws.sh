@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-PEM_KEY="/Users/retro/Downloads/pypeerm.pem"
+PEM_KEY="/Users/apple/Documents/ProHostix/credentials/pypeerm.pem"
 SERVER_USER="ubuntu"
 SERVER_IP="13.232.188.79"
 TARGET_DIR="/var/www/pype-erm"

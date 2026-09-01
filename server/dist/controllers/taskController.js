@@ -136,7 +136,7 @@ export const updateTask = asyncHandler(async (req, res) => {
 });
 export const completeTask = asyncHandler(async (req, res) => {
     const evidenceFiles = req.files || [];
-    const evidenceUrls = evidenceFiles.map(file => `/uploads/${file.filename}`);
+    const evidenceUrls = evidenceFiles.map(file => `/uploads/${file.key || file.filename}`);
     const task = await prisma.task.update({
         where: { id: req.params.id },
         data: {

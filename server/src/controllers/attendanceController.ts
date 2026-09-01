@@ -5,6 +5,15 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { broadcastNotification } from './notificationController.js';
 import fs from 'fs';
 import path from 'path';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({
+  region: process.env.AWS_REGION || 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+  }
+});
 
 function getDistanceInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371000; // metres
@@ -42,10 +51,15 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
     try {
       const base64Data = photo.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, 'base64');
       const fileName = `selfie-in-${req.user.id}-${Date.now()}.jpg`;
-      const uploadPath = process.env.UPLOAD_PATH || './uploads';
-      if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
-      fs.writeFileSync(path.join(uploadPath, fileName), base64Data, 'base64');
+      const command = new PutObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME || 'pype-erm-uploads',
+        Key: fileName,
+        Body: buffer,
+        ContentType: 'image/jpeg'
+      });
+      await s3.send(command);
       checkInPhoto = `/api/v1/uploads/${fileName}`;
     } catch (err) {
       console.error('Failed to save selfie:', err);
@@ -270,10 +284,15 @@ export const punchOut = asyncHandler(async (req: AuthRequest, res: Response) => 
     }
     try {
       const base64Data = photo.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, 'base64');
       const fileName = `selfie-out-${req.user.id}-${Date.now()}.jpg`;
-      const uploadPath = process.env.UPLOAD_PATH || './uploads';
-      if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
-      fs.writeFileSync(path.join(uploadPath, fileName), base64Data, 'base64');
+      const command = new PutObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME || 'pype-erm-uploads',
+        Key: fileName,
+        Body: buffer,
+        ContentType: 'image/jpeg'
+      });
+      await s3.send(command);
       checkOutPhoto = `/api/v1/uploads/${fileName}`;
     } catch (err) {
       console.error('Failed to save selfie:', err);

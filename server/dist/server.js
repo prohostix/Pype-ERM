@@ -5,12 +5,13 @@ import compression from 'compression';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
-import path from 'path';
 import { createServer } from 'http';
 import dns from 'dns';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { connectDatabase, prisma } from './config/database.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { initializeSocket } from './config/socket.js';
+import { initializeFirebase } from './config/firebase.config.js';
 import { startAllCronJobs } from './services/cronService.js';
 // Force DNS resolution to prefer IPv4 to avoid Supabase IPv6 ENETUNREACH errors on IPv4-only AWS instances
 dns.setDefaultResultOrder('ipv4first');
@@ -56,21 +57,58 @@ import iclockRoutes from './routes/iclockRoutes.js';
 import examRoutes from './routes/examRoutes.js';
 import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
+import fcmTokenRoutes from './routes/fcm-token.routes.js';
+import appReleaseRoutes from './routes/appReleaseRoutes.js';
 const app = express();
 // Trust reverse proxy (Nginx) headers for rate limiting
 app.set('trust proxy', 1);
 // Connect to database
 connectDatabase();
+// Initialize Firebase Admin
+initializeFirebase();
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 // CORS
 app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     credentials: true,
 }));
-// Serve uploaded files
-app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
-app.use('/api/v1/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
+// Serve uploaded files via S3 proxy to maintain existing URLs
+const s3 = new S3Client({
+    region: process.env.AWS_REGION || 'us-east-1',
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+    }
+});
+const s3ProxyRoute = async (req, res) => {
+    try {
+        const key = req.params.key;
+        const command = new GetObjectCommand({
+            Bucket: process.env.AWS_S3_BUCKET_NAME || 'my-bucket',
+            Key: key,
+        });
+        const response = await s3.send(command);
+        if (response.ContentType) {
+            res.setHeader('Content-Type', response.ContentType);
+        }
+        if (response.Body) {
+            // @ts-ignore
+            response.Body.pipe(res);
+        }
+        else {
+            res.status(404).send('Not Found');
+        }
+    }
+    catch (err) {
+        console.error('S3 Fetch Error:', err);
+        res.status(404).send('Not Found');
+    }
+};
+app.get('/uploads/:key', s3ProxyRoute);
+app.get('/api/v1/uploads/:key', s3ProxyRoute);
 // Body parser
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
@@ -131,6 +169,8 @@ app.use(`/api/${API_VERSION}/documents`, documentRoutes);
 app.use(`/api/${API_VERSION}/meetings`, meetingRoutes);
 app.use(`/api/${API_VERSION}/exams`, examRoutes);
 app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
+app.use(`/api/${API_VERSION}/fcm-token`, fcmTokenRoutes);
+app.use(`/api/${API_VERSION}/app-releases`, appReleaseRoutes);
 // Health check
 app.get('/health', async (req, res) => {
     try {

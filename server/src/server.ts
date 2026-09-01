@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { createServer } from 'http';
 import dns from 'dns';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { connectDatabase, prisma } from './config/database.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { startEscalationCron } from './services/escalationService.js';
@@ -88,9 +89,40 @@ app.use(
   })
 );
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
-app.use('/api/v1/uploads', express.static(path.resolve(process.env.UPLOAD_PATH || './uploads')));
+// Serve uploaded files via S3 proxy to maintain existing URLs
+const s3 = new S3Client({
+  region: process.env.AWS_REGION || 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+  }
+});
+
+const s3ProxyRoute = async (req: express.Request, res: express.Response) => {
+  try {
+    const key = req.params.key;
+    const command = new GetObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME || 'my-bucket',
+      Key: key,
+    });
+    const response = await s3.send(command);
+    if (response.ContentType) {
+      res.setHeader('Content-Type', response.ContentType);
+    }
+    if (response.Body) {
+      // @ts-ignore
+      response.Body.pipe(res);
+    } else {
+      res.status(404).send('Not Found');
+    }
+  } catch (err) {
+    console.error('S3 Fetch Error:', err);
+    res.status(404).send('Not Found');
+  }
+};
+
+app.get('/uploads/:key', s3ProxyRoute);
+app.get('/api/v1/uploads/:key', s3ProxyRoute);
 
 // Body parser
 app.use(express.json({ limit: '5mb' }));

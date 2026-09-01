@@ -686,7 +686,8 @@ export const uploadStudentDocument = asyncHandler(async (req, res) => {
         res.status(400).json({ success: false, message: 'No file uploaded' });
         return;
     }
-    const fileUrl = `/uploads/${req.file.filename}`;
+    // @ts-ignore
+    const fileUrl = `/uploads/${req.file.key || req.file.filename}`;
     const docName = req.body.name || req.file.originalname;
     const currentDocs = Array.isArray(student.documents) ? student.documents : [];
     const updatedDocs = [
@@ -868,7 +869,8 @@ export const updateAdmissionProgress = asyncHandler(async (req, res) => {
     let proofUrl = currentStepData.proofUrl;
     if (status === 'completed' && req.file) {
         // Generate URL based on uploaded file
-        proofUrl = `/uploads/${req.file.filename}`;
+        // @ts-ignore
+        proofUrl = `/uploads/${req.file.key || req.file.filename}`;
     }
     // If we are marking as pending, we might want to clear the proofUrl? Or keep it? The prompt doesn't explicitly state to clear it, but let's clear it so they have to upload again if they re-complete it.
     if (status === 'pending') {

@@ -343,6 +343,16 @@ export type ExamRegistration = $Result.DefaultSelection<Prisma.$ExamRegistration
  * 
  */
 export type CommunicationLog = $Result.DefaultSelection<Prisma.$CommunicationLogPayload>
+/**
+ * Model UserFCMToken
+ * 
+ */
+export type UserFCMToken = $Result.DefaultSelection<Prisma.$UserFCMTokenPayload>
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = $Result.DefaultSelection<Prisma.$SystemSettingPayload>
 
 /**
  * Enums
@@ -411,7 +421,8 @@ export const UserRole: {
   ops_sub_admin: 'ops_sub_admin',
   finance_admin: 'finance_admin',
   finance_sub_admin: 'finance_sub_admin',
-  hr_admin: 'hr_admin', 'hr_sub_admin',
+  hr_admin: 'hr_admin',
+  hr_sub_admin: 'hr_sub_admin',
   sales_admin: 'sales_admin',
   sales_sub_admin: 'sales_sub_admin',
   center_admin: 'center_admin',
@@ -1498,6 +1509,26 @@ export class PrismaClient<
     * ```
     */
   get communicationLog(): Prisma.CommunicationLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userFCMToken`: Exposes CRUD operations for the **UserFCMToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserFCMTokens
+    * const userFCMTokens = await prisma.userFCMToken.findMany()
+    * ```
+    */
+  get userFCMToken(): Prisma.UserFCMTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.systemSetting`: Exposes CRUD operations for the **SystemSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SystemSettings
+    * const systemSettings = await prisma.systemSetting.findMany()
+    * ```
+    */
+  get systemSetting(): Prisma.SystemSettingDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1997,7 +2028,9 @@ export namespace Prisma {
     DocumentLog: 'DocumentLog',
     BiometricDevice: 'BiometricDevice',
     ExamRegistration: 'ExamRegistration',
-    CommunicationLog: 'CommunicationLog'
+    CommunicationLog: 'CommunicationLog',
+    UserFCMToken: 'UserFCMToken',
+    SystemSetting: 'SystemSetting'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2013,7 +2046,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog"
+      modelProps: "organization" | "license" | "department" | "user" | "employee" | "task" | "attendance" | "university" | "program" | "studyCenter" | "student" | "invoice" | "lead" | "complaint" | "notification" | "auditLog" | "announcement" | "holiday" | "leaveRequest" | "salaryConfig" | "payroll" | "branch" | "subDepartment" | "designation" | "meeting" | "vacancy" | "admissionSession" | "enrollment" | "expenseClaim" | "studyCenterWallet" | "walletTopUp" | "paymentEntry" | "gSTSetting" | "employeeProfile" | "hRSettings" | "ceoPanel" | "credentialRequest" | "editDeleteRequest" | "escalation" | "escalationLog" | "internalMark" | "leaveAllocation" | "payrollBatch" | "poll" | "programAllocation" | "referralLink" | "reregRule" | "sessionRequest" | "studyCenterInvite" | "target" | "universityAuthFee" | "feeStructure" | "universityCommission" | "enrollmentPayment" | "incentiveStructure" | "programMaterial" | "paymentSchedule" | "paymentLink" | "collectionOverseer" | "orgInquiry" | "universityPayment" | "asset" | "documentLog" | "biometricDevice" | "examRegistration" | "communicationLog" | "userFCMToken" | "systemSetting"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6901,6 +6934,154 @@ export namespace Prisma {
           }
         }
       }
+      UserFCMToken: {
+        payload: Prisma.$UserFCMTokenPayload<ExtArgs>
+        fields: Prisma.UserFCMTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserFCMTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserFCMTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.UserFCMTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserFCMTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          findMany: {
+            args: Prisma.UserFCMTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>[]
+          }
+          create: {
+            args: Prisma.UserFCMTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          createMany: {
+            args: Prisma.UserFCMTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserFCMTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>[]
+          }
+          delete: {
+            args: Prisma.UserFCMTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          update: {
+            args: Prisma.UserFCMTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserFCMTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserFCMTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserFCMTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserFCMTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserFCMTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.UserFCMTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserFCMToken>
+          }
+          groupBy: {
+            args: Prisma.UserFCMTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserFCMTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserFCMTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<UserFCMTokenCountAggregateOutputType> | number
+          }
+        }
+      }
+      SystemSetting: {
+        payload: Prisma.$SystemSettingPayload<ExtArgs>
+        fields: Prisma.SystemSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SystemSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SystemSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.SystemSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SystemSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          findMany: {
+            args: Prisma.SystemSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+          }
+          create: {
+            args: Prisma.SystemSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          createMany: {
+            args: Prisma.SystemSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SystemSettingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+          }
+          delete: {
+            args: Prisma.SystemSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          update: {
+            args: Prisma.SystemSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.SystemSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SystemSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SystemSettingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>[]
+          }
+          upsert: {
+            args: Prisma.SystemSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.SystemSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSystemSetting>
+          }
+          groupBy: {
+            args: Prisma.SystemSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SystemSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<SystemSettingCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -7075,6 +7256,8 @@ export namespace Prisma {
     biometricDevice?: BiometricDeviceOmit
     examRegistration?: ExamRegistrationOmit
     communicationLog?: CommunicationLogOmit
+    userFCMToken?: UserFCMTokenOmit
+    systemSetting?: SystemSettingOmit
   }
 
   /* Types for Logging */
@@ -7923,6 +8106,7 @@ export namespace Prisma {
     assistantManagedDepartments: number
     designations: number
     communicationLogs: number
+    fcmTokens: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7998,6 +8182,7 @@ export namespace Prisma {
     assistantManagedDepartments?: boolean | UserCountOutputTypeCountAssistantManagedDepartmentsArgs
     designations?: boolean | UserCountOutputTypeCountDesignationsArgs
     communicationLogs?: boolean | UserCountOutputTypeCountCommunicationLogsArgs
+    fcmTokens?: boolean | UserCountOutputTypeCountFcmTokensArgs
   }
 
   // Custom InputTypes
@@ -8513,6 +8698,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCommunicationLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommunicationLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFcmTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserFCMTokenWhereInput
   }
 
 
@@ -15391,6 +15583,7 @@ export namespace Prisma {
     assistantManagedDepartments?: boolean | User$assistantManagedDepartmentsArgs<ExtArgs>
     designations?: boolean | User$designationsArgs<ExtArgs>
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
+    fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -15589,6 +15782,7 @@ export namespace Prisma {
     assistantManagedDepartments?: boolean | User$assistantManagedDepartmentsArgs<ExtArgs>
     designations?: boolean | User$designationsArgs<ExtArgs>
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
+    fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15699,6 +15893,7 @@ export namespace Prisma {
       assistantManagedDepartments: Prisma.$DepartmentPayload<ExtArgs>[]
       designations: Prisma.$DesignationPayload<ExtArgs>[]
       communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
+      fcmTokens: Prisma.$UserFCMTokenPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16209,6 +16404,7 @@ export namespace Prisma {
     assistantManagedDepartments<T extends User$assistantManagedDepartmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assistantManagedDepartmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     designations<T extends User$designationsArgs<ExtArgs> = {}>(args?: Subset<T, User$designationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DesignationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     communicationLogs<T extends User$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fcmTokens<T extends User$fcmTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$fcmTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18658,6 +18854,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommunicationLogScalarFieldEnum | CommunicationLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.fcmTokens
+   */
+  export type User$fcmTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    where?: UserFCMTokenWhereInput
+    orderBy?: UserFCMTokenOrderByWithRelationInput | UserFCMTokenOrderByWithRelationInput[]
+    cursor?: UserFCMTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserFCMTokenScalarFieldEnum | UserFCMTokenScalarFieldEnum[]
   }
 
   /**
@@ -97085,6 +97305,2078 @@ export namespace Prisma {
 
 
   /**
+   * Model UserFCMToken
+   */
+
+  export type AggregateUserFCMToken = {
+    _count: UserFCMTokenCountAggregateOutputType | null
+    _min: UserFCMTokenMinAggregateOutputType | null
+    _max: UserFCMTokenMaxAggregateOutputType | null
+  }
+
+  export type UserFCMTokenMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    token: string | null
+    deviceType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserFCMTokenMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    token: string | null
+    deviceType: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserFCMTokenCountAggregateOutputType = {
+    id: number
+    userId: number
+    token: number
+    deviceType: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserFCMTokenMinAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    deviceType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserFCMTokenMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    deviceType?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserFCMTokenCountAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    deviceType?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserFCMTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserFCMToken to aggregate.
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFCMTokens to fetch.
+     */
+    orderBy?: UserFCMTokenOrderByWithRelationInput | UserFCMTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserFCMTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFCMTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFCMTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserFCMTokens
+    **/
+    _count?: true | UserFCMTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserFCMTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserFCMTokenMaxAggregateInputType
+  }
+
+  export type GetUserFCMTokenAggregateType<T extends UserFCMTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserFCMToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserFCMToken[P]>
+      : GetScalarType<T[P], AggregateUserFCMToken[P]>
+  }
+
+
+
+
+  export type UserFCMTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserFCMTokenWhereInput
+    orderBy?: UserFCMTokenOrderByWithAggregationInput | UserFCMTokenOrderByWithAggregationInput[]
+    by: UserFCMTokenScalarFieldEnum[] | UserFCMTokenScalarFieldEnum
+    having?: UserFCMTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserFCMTokenCountAggregateInputType | true
+    _min?: UserFCMTokenMinAggregateInputType
+    _max?: UserFCMTokenMaxAggregateInputType
+  }
+
+  export type UserFCMTokenGroupByOutputType = {
+    id: string
+    userId: string
+    token: string
+    deviceType: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: UserFCMTokenCountAggregateOutputType | null
+    _min: UserFCMTokenMinAggregateOutputType | null
+    _max: UserFCMTokenMaxAggregateOutputType | null
+  }
+
+  type GetUserFCMTokenGroupByPayload<T extends UserFCMTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserFCMTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserFCMTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserFCMTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], UserFCMTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserFCMTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    deviceType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFCMToken"]>
+
+  export type UserFCMTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    deviceType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFCMToken"]>
+
+  export type UserFCMTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    deviceType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userFCMToken"]>
+
+  export type UserFCMTokenSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    deviceType?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserFCMTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "deviceType" | "createdAt" | "updatedAt", ExtArgs["result"]["userFCMToken"]>
+  export type UserFCMTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserFCMTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UserFCMTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserFCMTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserFCMToken"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      token: string
+      deviceType: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userFCMToken"]>
+    composites: {}
+  }
+
+  type UserFCMTokenGetPayload<S extends boolean | null | undefined | UserFCMTokenDefaultArgs> = $Result.GetResult<Prisma.$UserFCMTokenPayload, S>
+
+  type UserFCMTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFCMTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserFCMTokenCountAggregateInputType | true
+    }
+
+  export interface UserFCMTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserFCMToken'], meta: { name: 'UserFCMToken' } }
+    /**
+     * Find zero or one UserFCMToken that matches the filter.
+     * @param {UserFCMTokenFindUniqueArgs} args - Arguments to find a UserFCMToken
+     * @example
+     * // Get one UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserFCMTokenFindUniqueArgs>(args: SelectSubset<T, UserFCMTokenFindUniqueArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserFCMToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserFCMTokenFindUniqueOrThrowArgs} args - Arguments to find a UserFCMToken
+     * @example
+     * // Get one UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserFCMTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFCMTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserFCMToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenFindFirstArgs} args - Arguments to find a UserFCMToken
+     * @example
+     * // Get one UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserFCMTokenFindFirstArgs>(args?: SelectSubset<T, UserFCMTokenFindFirstArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserFCMToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenFindFirstOrThrowArgs} args - Arguments to find a UserFCMToken
+     * @example
+     * // Get one UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserFCMTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFCMTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserFCMTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserFCMTokens
+     * const userFCMTokens = await prisma.userFCMToken.findMany()
+     * 
+     * // Get first 10 UserFCMTokens
+     * const userFCMTokens = await prisma.userFCMToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userFCMTokenWithIdOnly = await prisma.userFCMToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserFCMTokenFindManyArgs>(args?: SelectSubset<T, UserFCMTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserFCMToken.
+     * @param {UserFCMTokenCreateArgs} args - Arguments to create a UserFCMToken.
+     * @example
+     * // Create one UserFCMToken
+     * const UserFCMToken = await prisma.userFCMToken.create({
+     *   data: {
+     *     // ... data to create a UserFCMToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserFCMTokenCreateArgs>(args: SelectSubset<T, UserFCMTokenCreateArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserFCMTokens.
+     * @param {UserFCMTokenCreateManyArgs} args - Arguments to create many UserFCMTokens.
+     * @example
+     * // Create many UserFCMTokens
+     * const userFCMToken = await prisma.userFCMToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserFCMTokenCreateManyArgs>(args?: SelectSubset<T, UserFCMTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserFCMTokens and returns the data saved in the database.
+     * @param {UserFCMTokenCreateManyAndReturnArgs} args - Arguments to create many UserFCMTokens.
+     * @example
+     * // Create many UserFCMTokens
+     * const userFCMToken = await prisma.userFCMToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserFCMTokens and only return the `id`
+     * const userFCMTokenWithIdOnly = await prisma.userFCMToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserFCMTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, UserFCMTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserFCMToken.
+     * @param {UserFCMTokenDeleteArgs} args - Arguments to delete one UserFCMToken.
+     * @example
+     * // Delete one UserFCMToken
+     * const UserFCMToken = await prisma.userFCMToken.delete({
+     *   where: {
+     *     // ... filter to delete one UserFCMToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserFCMTokenDeleteArgs>(args: SelectSubset<T, UserFCMTokenDeleteArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserFCMToken.
+     * @param {UserFCMTokenUpdateArgs} args - Arguments to update one UserFCMToken.
+     * @example
+     * // Update one UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserFCMTokenUpdateArgs>(args: SelectSubset<T, UserFCMTokenUpdateArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserFCMTokens.
+     * @param {UserFCMTokenDeleteManyArgs} args - Arguments to filter UserFCMTokens to delete.
+     * @example
+     * // Delete a few UserFCMTokens
+     * const { count } = await prisma.userFCMToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserFCMTokenDeleteManyArgs>(args?: SelectSubset<T, UserFCMTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserFCMTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserFCMTokens
+     * const userFCMToken = await prisma.userFCMToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserFCMTokenUpdateManyArgs>(args: SelectSubset<T, UserFCMTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserFCMTokens and returns the data updated in the database.
+     * @param {UserFCMTokenUpdateManyAndReturnArgs} args - Arguments to update many UserFCMTokens.
+     * @example
+     * // Update many UserFCMTokens
+     * const userFCMToken = await prisma.userFCMToken.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserFCMTokens and only return the `id`
+     * const userFCMTokenWithIdOnly = await prisma.userFCMToken.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserFCMTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, UserFCMTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserFCMToken.
+     * @param {UserFCMTokenUpsertArgs} args - Arguments to update or create a UserFCMToken.
+     * @example
+     * // Update or create a UserFCMToken
+     * const userFCMToken = await prisma.userFCMToken.upsert({
+     *   create: {
+     *     // ... data to create a UserFCMToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserFCMToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserFCMTokenUpsertArgs>(args: SelectSubset<T, UserFCMTokenUpsertArgs<ExtArgs>>): Prisma__UserFCMTokenClient<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserFCMTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenCountArgs} args - Arguments to filter UserFCMTokens to count.
+     * @example
+     * // Count the number of UserFCMTokens
+     * const count = await prisma.userFCMToken.count({
+     *   where: {
+     *     // ... the filter for the UserFCMTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserFCMTokenCountArgs>(
+      args?: Subset<T, UserFCMTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserFCMTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserFCMToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserFCMTokenAggregateArgs>(args: Subset<T, UserFCMTokenAggregateArgs>): Prisma.PrismaPromise<GetUserFCMTokenAggregateType<T>>
+
+    /**
+     * Group by UserFCMToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFCMTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserFCMTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserFCMTokenGroupByArgs['orderBy'] }
+        : { orderBy?: UserFCMTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserFCMTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserFCMTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserFCMToken model
+   */
+  readonly fields: UserFCMTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserFCMToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserFCMTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserFCMToken model
+   */
+  interface UserFCMTokenFieldRefs {
+    readonly id: FieldRef<"UserFCMToken", 'String'>
+    readonly userId: FieldRef<"UserFCMToken", 'String'>
+    readonly token: FieldRef<"UserFCMToken", 'String'>
+    readonly deviceType: FieldRef<"UserFCMToken", 'String'>
+    readonly createdAt: FieldRef<"UserFCMToken", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserFCMToken", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserFCMToken findUnique
+   */
+  export type UserFCMTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFCMToken to fetch.
+     */
+    where: UserFCMTokenWhereUniqueInput
+  }
+
+  /**
+   * UserFCMToken findUniqueOrThrow
+   */
+  export type UserFCMTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFCMToken to fetch.
+     */
+    where: UserFCMTokenWhereUniqueInput
+  }
+
+  /**
+   * UserFCMToken findFirst
+   */
+  export type UserFCMTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFCMToken to fetch.
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFCMTokens to fetch.
+     */
+    orderBy?: UserFCMTokenOrderByWithRelationInput | UserFCMTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserFCMTokens.
+     */
+    cursor?: UserFCMTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFCMTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFCMTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserFCMTokens.
+     */
+    distinct?: UserFCMTokenScalarFieldEnum | UserFCMTokenScalarFieldEnum[]
+  }
+
+  /**
+   * UserFCMToken findFirstOrThrow
+   */
+  export type UserFCMTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFCMToken to fetch.
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFCMTokens to fetch.
+     */
+    orderBy?: UserFCMTokenOrderByWithRelationInput | UserFCMTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserFCMTokens.
+     */
+    cursor?: UserFCMTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFCMTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFCMTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserFCMTokens.
+     */
+    distinct?: UserFCMTokenScalarFieldEnum | UserFCMTokenScalarFieldEnum[]
+  }
+
+  /**
+   * UserFCMToken findMany
+   */
+  export type UserFCMTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which UserFCMTokens to fetch.
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserFCMTokens to fetch.
+     */
+    orderBy?: UserFCMTokenOrderByWithRelationInput | UserFCMTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserFCMTokens.
+     */
+    cursor?: UserFCMTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserFCMTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserFCMTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserFCMTokens.
+     */
+    distinct?: UserFCMTokenScalarFieldEnum | UserFCMTokenScalarFieldEnum[]
+  }
+
+  /**
+   * UserFCMToken create
+   */
+  export type UserFCMTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserFCMToken.
+     */
+    data: XOR<UserFCMTokenCreateInput, UserFCMTokenUncheckedCreateInput>
+  }
+
+  /**
+   * UserFCMToken createMany
+   */
+  export type UserFCMTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserFCMTokens.
+     */
+    data: UserFCMTokenCreateManyInput | UserFCMTokenCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserFCMToken createManyAndReturn
+   */
+  export type UserFCMTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserFCMTokens.
+     */
+    data: UserFCMTokenCreateManyInput | UserFCMTokenCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserFCMToken update
+   */
+  export type UserFCMTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserFCMToken.
+     */
+    data: XOR<UserFCMTokenUpdateInput, UserFCMTokenUncheckedUpdateInput>
+    /**
+     * Choose, which UserFCMToken to update.
+     */
+    where: UserFCMTokenWhereUniqueInput
+  }
+
+  /**
+   * UserFCMToken updateMany
+   */
+  export type UserFCMTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserFCMTokens.
+     */
+    data: XOR<UserFCMTokenUpdateManyMutationInput, UserFCMTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which UserFCMTokens to update
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * Limit how many UserFCMTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserFCMToken updateManyAndReturn
+   */
+  export type UserFCMTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * The data used to update UserFCMTokens.
+     */
+    data: XOR<UserFCMTokenUpdateManyMutationInput, UserFCMTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which UserFCMTokens to update
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * Limit how many UserFCMTokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserFCMToken upsert
+   */
+  export type UserFCMTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserFCMToken to update in case it exists.
+     */
+    where: UserFCMTokenWhereUniqueInput
+    /**
+     * In case the UserFCMToken found by the `where` argument doesn't exist, create a new UserFCMToken with this data.
+     */
+    create: XOR<UserFCMTokenCreateInput, UserFCMTokenUncheckedCreateInput>
+    /**
+     * In case the UserFCMToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserFCMTokenUpdateInput, UserFCMTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * UserFCMToken delete
+   */
+  export type UserFCMTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+    /**
+     * Filter which UserFCMToken to delete.
+     */
+    where: UserFCMTokenWhereUniqueInput
+  }
+
+  /**
+   * UserFCMToken deleteMany
+   */
+  export type UserFCMTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserFCMTokens to delete
+     */
+    where?: UserFCMTokenWhereInput
+    /**
+     * Limit how many UserFCMTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserFCMToken without action
+   */
+  export type UserFCMTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserFCMToken
+     */
+    select?: UserFCMTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserFCMToken
+     */
+    omit?: UserFCMTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserFCMTokenInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SystemSetting
+   */
+
+  export type AggregateSystemSetting = {
+    _count: SystemSettingCountAggregateOutputType | null
+    _min: SystemSettingMinAggregateOutputType | null
+    _max: SystemSettingMaxAggregateOutputType | null
+  }
+
+  export type SystemSettingMinAggregateOutputType = {
+    key: string | null
+    group: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingMaxAggregateOutputType = {
+    key: string | null
+    group: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SystemSettingCountAggregateOutputType = {
+    key: number
+    value: number
+    group: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SystemSettingMinAggregateInputType = {
+    key?: true
+    group?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingMaxAggregateInputType = {
+    key?: true
+    group?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SystemSettingCountAggregateInputType = {
+    key?: true
+    value?: true
+    group?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SystemSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSetting to aggregate.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SystemSettings
+    **/
+    _count?: true | SystemSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SystemSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SystemSettingMaxAggregateInputType
+  }
+
+  export type GetSystemSettingAggregateType<T extends SystemSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateSystemSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSystemSetting[P]>
+      : GetScalarType<T[P], AggregateSystemSetting[P]>
+  }
+
+
+
+
+  export type SystemSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SystemSettingWhereInput
+    orderBy?: SystemSettingOrderByWithAggregationInput | SystemSettingOrderByWithAggregationInput[]
+    by: SystemSettingScalarFieldEnum[] | SystemSettingScalarFieldEnum
+    having?: SystemSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SystemSettingCountAggregateInputType | true
+    _min?: SystemSettingMinAggregateInputType
+    _max?: SystemSettingMaxAggregateInputType
+  }
+
+  export type SystemSettingGroupByOutputType = {
+    key: string
+    value: JsonValue
+    group: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SystemSettingCountAggregateOutputType | null
+    _min: SystemSettingMinAggregateOutputType | null
+    _max: SystemSettingMaxAggregateOutputType | null
+  }
+
+  type GetSystemSettingGroupByPayload<T extends SystemSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SystemSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SystemSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], SystemSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SystemSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    group?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSetting"]>
+
+  export type SystemSettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    group?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSetting"]>
+
+  export type SystemSettingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    group?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemSetting"]>
+
+  export type SystemSettingSelectScalar = {
+    key?: boolean
+    value?: boolean
+    group?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SystemSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"key" | "value" | "group" | "createdAt" | "updatedAt", ExtArgs["result"]["systemSetting"]>
+
+  export type $SystemSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SystemSetting"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      key: string
+      value: Prisma.JsonValue
+      group: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["systemSetting"]>
+    composites: {}
+  }
+
+  type SystemSettingGetPayload<S extends boolean | null | undefined | SystemSettingDefaultArgs> = $Result.GetResult<Prisma.$SystemSettingPayload, S>
+
+  type SystemSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SystemSettingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SystemSettingCountAggregateInputType | true
+    }
+
+  export interface SystemSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SystemSetting'], meta: { name: 'SystemSetting' } }
+    /**
+     * Find zero or one SystemSetting that matches the filter.
+     * @param {SystemSettingFindUniqueArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SystemSettingFindUniqueArgs>(args: SelectSubset<T, SystemSettingFindUniqueArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SystemSetting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SystemSettingFindUniqueOrThrowArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SystemSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, SystemSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindFirstArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SystemSettingFindFirstArgs>(args?: SelectSubset<T, SystemSettingFindFirstArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SystemSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindFirstOrThrowArgs} args - Arguments to find a SystemSetting
+     * @example
+     * // Get one SystemSetting
+     * const systemSetting = await prisma.systemSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SystemSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, SystemSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SystemSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SystemSettings
+     * const systemSettings = await prisma.systemSetting.findMany()
+     * 
+     * // Get first 10 SystemSettings
+     * const systemSettings = await prisma.systemSetting.findMany({ take: 10 })
+     * 
+     * // Only select the `key`
+     * const systemSettingWithKeyOnly = await prisma.systemSetting.findMany({ select: { key: true } })
+     * 
+     */
+    findMany<T extends SystemSettingFindManyArgs>(args?: SelectSubset<T, SystemSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SystemSetting.
+     * @param {SystemSettingCreateArgs} args - Arguments to create a SystemSetting.
+     * @example
+     * // Create one SystemSetting
+     * const SystemSetting = await prisma.systemSetting.create({
+     *   data: {
+     *     // ... data to create a SystemSetting
+     *   }
+     * })
+     * 
+     */
+    create<T extends SystemSettingCreateArgs>(args: SelectSubset<T, SystemSettingCreateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SystemSettings.
+     * @param {SystemSettingCreateManyArgs} args - Arguments to create many SystemSettings.
+     * @example
+     * // Create many SystemSettings
+     * const systemSetting = await prisma.systemSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SystemSettingCreateManyArgs>(args?: SelectSubset<T, SystemSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SystemSettings and returns the data saved in the database.
+     * @param {SystemSettingCreateManyAndReturnArgs} args - Arguments to create many SystemSettings.
+     * @example
+     * // Create many SystemSettings
+     * const systemSetting = await prisma.systemSetting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SystemSettings and only return the `key`
+     * const systemSettingWithKeyOnly = await prisma.systemSetting.createManyAndReturn({
+     *   select: { key: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SystemSettingCreateManyAndReturnArgs>(args?: SelectSubset<T, SystemSettingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SystemSetting.
+     * @param {SystemSettingDeleteArgs} args - Arguments to delete one SystemSetting.
+     * @example
+     * // Delete one SystemSetting
+     * const SystemSetting = await prisma.systemSetting.delete({
+     *   where: {
+     *     // ... filter to delete one SystemSetting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SystemSettingDeleteArgs>(args: SelectSubset<T, SystemSettingDeleteArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SystemSetting.
+     * @param {SystemSettingUpdateArgs} args - Arguments to update one SystemSetting.
+     * @example
+     * // Update one SystemSetting
+     * const systemSetting = await prisma.systemSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SystemSettingUpdateArgs>(args: SelectSubset<T, SystemSettingUpdateArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SystemSettings.
+     * @param {SystemSettingDeleteManyArgs} args - Arguments to filter SystemSettings to delete.
+     * @example
+     * // Delete a few SystemSettings
+     * const { count } = await prisma.systemSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SystemSettingDeleteManyArgs>(args?: SelectSubset<T, SystemSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SystemSettings
+     * const systemSetting = await prisma.systemSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SystemSettingUpdateManyArgs>(args: SelectSubset<T, SystemSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SystemSettings and returns the data updated in the database.
+     * @param {SystemSettingUpdateManyAndReturnArgs} args - Arguments to update many SystemSettings.
+     * @example
+     * // Update many SystemSettings
+     * const systemSetting = await prisma.systemSetting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SystemSettings and only return the `key`
+     * const systemSettingWithKeyOnly = await prisma.systemSetting.updateManyAndReturn({
+     *   select: { key: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SystemSettingUpdateManyAndReturnArgs>(args: SelectSubset<T, SystemSettingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SystemSetting.
+     * @param {SystemSettingUpsertArgs} args - Arguments to update or create a SystemSetting.
+     * @example
+     * // Update or create a SystemSetting
+     * const systemSetting = await prisma.systemSetting.upsert({
+     *   create: {
+     *     // ... data to create a SystemSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SystemSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SystemSettingUpsertArgs>(args: SelectSubset<T, SystemSettingUpsertArgs<ExtArgs>>): Prisma__SystemSettingClient<$Result.GetResult<Prisma.$SystemSettingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SystemSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingCountArgs} args - Arguments to filter SystemSettings to count.
+     * @example
+     * // Count the number of SystemSettings
+     * const count = await prisma.systemSetting.count({
+     *   where: {
+     *     // ... the filter for the SystemSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends SystemSettingCountArgs>(
+      args?: Subset<T, SystemSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SystemSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SystemSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SystemSettingAggregateArgs>(args: Subset<T, SystemSettingAggregateArgs>): Prisma.PrismaPromise<GetSystemSettingAggregateType<T>>
+
+    /**
+     * Group by SystemSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SystemSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SystemSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SystemSettingGroupByArgs['orderBy'] }
+        : { orderBy?: SystemSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SystemSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystemSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SystemSetting model
+   */
+  readonly fields: SystemSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SystemSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SystemSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SystemSetting model
+   */
+  interface SystemSettingFieldRefs {
+    readonly key: FieldRef<"SystemSetting", 'String'>
+    readonly value: FieldRef<"SystemSetting", 'Json'>
+    readonly group: FieldRef<"SystemSetting", 'String'>
+    readonly createdAt: FieldRef<"SystemSetting", 'DateTime'>
+    readonly updatedAt: FieldRef<"SystemSetting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SystemSetting findUnique
+   */
+  export type SystemSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting findUniqueOrThrow
+   */
+  export type SystemSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting findFirst
+   */
+  export type SystemSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting findFirstOrThrow
+   */
+  export type SystemSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSetting to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting findMany
+   */
+  export type SystemSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which SystemSettings to fetch.
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SystemSettings to fetch.
+     */
+    orderBy?: SystemSettingOrderByWithRelationInput | SystemSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SystemSettings.
+     */
+    cursor?: SystemSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SystemSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SystemSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SystemSettings.
+     */
+    distinct?: SystemSettingScalarFieldEnum | SystemSettingScalarFieldEnum[]
+  }
+
+  /**
+   * SystemSetting create
+   */
+  export type SystemSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SystemSetting.
+     */
+    data: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
+  }
+
+  /**
+   * SystemSetting createMany
+   */
+  export type SystemSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SystemSettings.
+     */
+    data: SystemSettingCreateManyInput | SystemSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemSetting createManyAndReturn
+   */
+  export type SystemSettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * The data used to create many SystemSettings.
+     */
+    data: SystemSettingCreateManyInput | SystemSettingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SystemSetting update
+   */
+  export type SystemSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SystemSetting.
+     */
+    data: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
+    /**
+     * Choose, which SystemSetting to update.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting updateMany
+   */
+  export type SystemSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SystemSettings.
+     */
+    data: XOR<SystemSettingUpdateManyMutationInput, SystemSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemSettings to update
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * Limit how many SystemSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSetting updateManyAndReturn
+   */
+  export type SystemSettingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * The data used to update SystemSettings.
+     */
+    data: XOR<SystemSettingUpdateManyMutationInput, SystemSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which SystemSettings to update
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * Limit how many SystemSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSetting upsert
+   */
+  export type SystemSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SystemSetting to update in case it exists.
+     */
+    where: SystemSettingWhereUniqueInput
+    /**
+     * In case the SystemSetting found by the `where` argument doesn't exist, create a new SystemSetting with this data.
+     */
+    create: XOR<SystemSettingCreateInput, SystemSettingUncheckedCreateInput>
+    /**
+     * In case the SystemSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SystemSettingUpdateInput, SystemSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * SystemSetting delete
+   */
+  export type SystemSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+    /**
+     * Filter which SystemSetting to delete.
+     */
+    where: SystemSettingWhereUniqueInput
+  }
+
+  /**
+   * SystemSetting deleteMany
+   */
+  export type SystemSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SystemSettings to delete
+     */
+    where?: SystemSettingWhereInput
+    /**
+     * Limit how many SystemSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SystemSetting without action
+   */
+  export type SystemSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemSetting
+     */
+    select?: SystemSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SystemSetting
+     */
+    omit?: SystemSettingOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -98418,6 +100710,29 @@ export namespace Prisma {
   export type CommunicationLogScalarFieldEnum = (typeof CommunicationLogScalarFieldEnum)[keyof typeof CommunicationLogScalarFieldEnum]
 
 
+  export const UserFCMTokenScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    token: 'token',
+    deviceType: 'deviceType',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserFCMTokenScalarFieldEnum = (typeof UserFCMTokenScalarFieldEnum)[keyof typeof UserFCMTokenScalarFieldEnum]
+
+
+  export const SystemSettingScalarFieldEnum: {
+    key: 'key',
+    value: 'value',
+    group: 'group',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -99508,6 +101823,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentListRelationFilter
     designations?: DesignationListRelationFilter
     communicationLogs?: CommunicationLogListRelationFilter
+    fcmTokens?: UserFCMTokenListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -99625,6 +101941,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentOrderByRelationAggregateInput
     designations?: DesignationOrderByRelationAggregateInput
     communicationLogs?: CommunicationLogOrderByRelationAggregateInput
+    fcmTokens?: UserFCMTokenOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -99745,6 +102062,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentListRelationFilter
     designations?: DesignationListRelationFilter
     communicationLogs?: CommunicationLogListRelationFilter
+    fcmTokens?: UserFCMTokenListRelationFilter
   }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
@@ -106651,6 +108969,118 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CommunicationLog"> | Date | string
   }
 
+  export type UserFCMTokenWhereInput = {
+    AND?: UserFCMTokenWhereInput | UserFCMTokenWhereInput[]
+    OR?: UserFCMTokenWhereInput[]
+    NOT?: UserFCMTokenWhereInput | UserFCMTokenWhereInput[]
+    id?: StringFilter<"UserFCMToken"> | string
+    userId?: StringFilter<"UserFCMToken"> | string
+    token?: StringFilter<"UserFCMToken"> | string
+    deviceType?: StringNullableFilter<"UserFCMToken"> | string | null
+    createdAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserFCMTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    deviceType?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserFCMTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: UserFCMTokenWhereInput | UserFCMTokenWhereInput[]
+    OR?: UserFCMTokenWhereInput[]
+    NOT?: UserFCMTokenWhereInput | UserFCMTokenWhereInput[]
+    userId?: StringFilter<"UserFCMToken"> | string
+    deviceType?: StringNullableFilter<"UserFCMToken"> | string | null
+    createdAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "token">
+
+  export type UserFCMTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    deviceType?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserFCMTokenCountOrderByAggregateInput
+    _max?: UserFCMTokenMaxOrderByAggregateInput
+    _min?: UserFCMTokenMinOrderByAggregateInput
+  }
+
+  export type UserFCMTokenScalarWhereWithAggregatesInput = {
+    AND?: UserFCMTokenScalarWhereWithAggregatesInput | UserFCMTokenScalarWhereWithAggregatesInput[]
+    OR?: UserFCMTokenScalarWhereWithAggregatesInput[]
+    NOT?: UserFCMTokenScalarWhereWithAggregatesInput | UserFCMTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserFCMToken"> | string
+    userId?: StringWithAggregatesFilter<"UserFCMToken"> | string
+    token?: StringWithAggregatesFilter<"UserFCMToken"> | string
+    deviceType?: StringNullableWithAggregatesFilter<"UserFCMToken"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"UserFCMToken"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserFCMToken"> | Date | string
+  }
+
+  export type SystemSettingWhereInput = {
+    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    OR?: SystemSettingWhereInput[]
+    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    key?: StringFilter<"SystemSetting"> | string
+    value?: JsonFilter<"SystemSetting">
+    group?: StringNullableFilter<"SystemSetting"> | string | null
+    createdAt?: DateTimeFilter<"SystemSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"SystemSetting"> | Date | string
+  }
+
+  export type SystemSettingOrderByWithRelationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    group?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingWhereUniqueInput = Prisma.AtLeast<{
+    key?: string
+    AND?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    OR?: SystemSettingWhereInput[]
+    NOT?: SystemSettingWhereInput | SystemSettingWhereInput[]
+    value?: JsonFilter<"SystemSetting">
+    group?: StringNullableFilter<"SystemSetting"> | string | null
+    createdAt?: DateTimeFilter<"SystemSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"SystemSetting"> | Date | string
+  }, "key">
+
+  export type SystemSettingOrderByWithAggregationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    group?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SystemSettingCountOrderByAggregateInput
+    _max?: SystemSettingMaxOrderByAggregateInput
+    _min?: SystemSettingMinOrderByAggregateInput
+  }
+
+  export type SystemSettingScalarWhereWithAggregatesInput = {
+    AND?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
+    OR?: SystemSettingScalarWhereWithAggregatesInput[]
+    NOT?: SystemSettingScalarWhereWithAggregatesInput | SystemSettingScalarWhereWithAggregatesInput[]
+    key?: StringWithAggregatesFilter<"SystemSetting"> | string
+    value?: JsonWithAggregatesFilter<"SystemSetting">
+    group?: StringNullableWithAggregatesFilter<"SystemSetting"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SystemSetting"> | Date | string
+  }
+
   export type OrganizationCreateInput = {
     id?: string
     name: string
@@ -107355,6 +109785,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -107465,6 +109896,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -107575,6 +110007,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -107685,6 +110118,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -115181,6 +117615,124 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserFCMTokenCreateInput = {
+    id?: string
+    token: string
+    deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutFcmTokensInput
+  }
+
+  export type UserFCMTokenUncheckedCreateInput = {
+    id?: string
+    userId: string
+    token: string
+    deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFCMTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutFcmTokensNestedInput
+  }
+
+  export type UserFCMTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFCMTokenCreateManyInput = {
+    id?: string
+    userId: string
+    token: string
+    deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFCMTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFCMTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingCreateInput = {
+    key: string
+    value: JsonNullValueInput | InputJsonValue
+    group?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUncheckedCreateInput = {
+    key: string
+    value: JsonNullValueInput | InputJsonValue
+    group?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingUncheckedUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingCreateManyInput = {
+    key: string
+    value: JsonNullValueInput | InputJsonValue
+    group?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SystemSettingUpdateManyMutationInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SystemSettingUncheckedUpdateManyInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -116371,11 +118923,21 @@ export namespace Prisma {
     isNot?: UniversityWhereInput | null
   }
 
+  export type UserFCMTokenListRelationFilter = {
+    every?: UserFCMTokenWhereInput
+    some?: UserFCMTokenWhereInput
+    none?: UserFCMTokenWhereInput
+  }
+
   export type AssetOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type DocumentLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserFCMTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -120354,6 +122916,55 @@ export namespace Prisma {
     recipientCount?: SortOrder
   }
 
+  export type UserFCMTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    deviceType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserFCMTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    deviceType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserFCMTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    deviceType?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingCountOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    group?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingMaxOrderByAggregateInput = {
+    key?: SortOrder
+    group?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SystemSettingMinOrderByAggregateInput = {
+    key?: SortOrder
+    group?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type AdmissionSessionCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<AdmissionSessionCreateWithoutOrganizationInput, AdmissionSessionUncheckedCreateWithoutOrganizationInput> | AdmissionSessionCreateWithoutOrganizationInput[] | AdmissionSessionUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutOrganizationInput | AdmissionSessionCreateOrConnectWithoutOrganizationInput[]
@@ -124082,6 +126693,13 @@ export namespace Prisma {
     connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
   }
 
+  export type UserFCMTokenCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput> | UserFCMTokenCreateWithoutUserInput[] | UserFCMTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFCMTokenCreateOrConnectWithoutUserInput | UserFCMTokenCreateOrConnectWithoutUserInput[]
+    createMany?: UserFCMTokenCreateManyUserInputEnvelope
+    connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+  }
+
   export type AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -124624,6 +127242,13 @@ export namespace Prisma {
     connectOrCreate?: CommunicationLogCreateOrConnectWithoutSenderInput | CommunicationLogCreateOrConnectWithoutSenderInput[]
     createMany?: CommunicationLogCreateManySenderInputEnvelope
     connect?: CommunicationLogWhereUniqueInput | CommunicationLogWhereUniqueInput[]
+  }
+
+  export type UserFCMTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput> | UserFCMTokenCreateWithoutUserInput[] | UserFCMTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFCMTokenCreateOrConnectWithoutUserInput | UserFCMTokenCreateOrConnectWithoutUserInput[]
+    createMany?: UserFCMTokenCreateManyUserInputEnvelope
+    connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -125784,6 +128409,20 @@ export namespace Prisma {
     deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
   }
 
+  export type UserFCMTokenUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput> | UserFCMTokenCreateWithoutUserInput[] | UserFCMTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFCMTokenCreateOrConnectWithoutUserInput | UserFCMTokenCreateOrConnectWithoutUserInput[]
+    upsert?: UserFCMTokenUpsertWithWhereUniqueWithoutUserInput | UserFCMTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserFCMTokenCreateManyUserInputEnvelope
+    set?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    disconnect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    delete?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    update?: UserFCMTokenUpdateWithWhereUniqueWithoutUserInput | UserFCMTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserFCMTokenUpdateManyWithWhereWithoutUserInput | UserFCMTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
+  }
+
   export type AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<AdmissionSessionCreateWithoutApproverInput, AdmissionSessionUncheckedCreateWithoutApproverInput> | AdmissionSessionCreateWithoutApproverInput[] | AdmissionSessionUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: AdmissionSessionCreateOrConnectWithoutApproverInput | AdmissionSessionCreateOrConnectWithoutApproverInput[]
@@ -126858,6 +129497,20 @@ export namespace Prisma {
     update?: CommunicationLogUpdateWithWhereUniqueWithoutSenderInput | CommunicationLogUpdateWithWhereUniqueWithoutSenderInput[]
     updateMany?: CommunicationLogUpdateManyWithWhereWithoutSenderInput | CommunicationLogUpdateManyWithWhereWithoutSenderInput[]
     deleteMany?: CommunicationLogScalarWhereInput | CommunicationLogScalarWhereInput[]
+  }
+
+  export type UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput> | UserFCMTokenCreateWithoutUserInput[] | UserFCMTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserFCMTokenCreateOrConnectWithoutUserInput | UserFCMTokenCreateOrConnectWithoutUserInput[]
+    upsert?: UserFCMTokenUpsertWithWhereUniqueWithoutUserInput | UserFCMTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserFCMTokenCreateManyUserInputEnvelope
+    set?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    disconnect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    delete?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+    update?: UserFCMTokenUpdateWithWhereUniqueWithoutUserInput | UserFCMTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserFCMTokenUpdateManyWithWhereWithoutUserInput | UserFCMTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -132664,6 +135317,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCommunicationLogsInput, UserUpdateWithoutCommunicationLogsInput>, UserUncheckedUpdateWithoutCommunicationLogsInput>
   }
 
+  export type UserCreateNestedOneWithoutFcmTokensInput = {
+    create?: XOR<UserCreateWithoutFcmTokensInput, UserUncheckedCreateWithoutFcmTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFcmTokensInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutFcmTokensNestedInput = {
+    create?: XOR<UserCreateWithoutFcmTokensInput, UserUncheckedCreateWithoutFcmTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFcmTokensInput
+    upsert?: UserUpsertWithoutFcmTokensInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFcmTokensInput, UserUpdateWithoutFcmTokensInput>, UserUncheckedUpdateWithoutFcmTokensInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -135971,6 +138638,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -136080,6 +138748,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -138916,6 +141585,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -139025,6 +141695,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -139651,6 +142322,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -139760,6 +142432,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -139911,6 +142584,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -140020,6 +142694,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -140271,6 +142946,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -140380,6 +143056,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -145179,6 +147856,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -145288,6 +147966,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -145402,6 +148081,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -145511,6 +148191,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -145875,6 +148556,32 @@ export namespace Prisma {
 
   export type CommunicationLogCreateManySenderInputEnvelope = {
     data: CommunicationLogCreateManySenderInput | CommunicationLogCreateManySenderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserFCMTokenCreateWithoutUserInput = {
+    id?: string
+    token: string
+    deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFCMTokenUncheckedCreateWithoutUserInput = {
+    id?: string
+    token: string
+    deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFCMTokenCreateOrConnectWithoutUserInput = {
+    where: UserFCMTokenWhereUniqueInput
+    create: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserFCMTokenCreateManyUserInputEnvelope = {
+    data: UserFCMTokenCreateManyUserInput | UserFCMTokenCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -147786,6 +150493,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -147895,6 +150603,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -148180,6 +150889,34 @@ export namespace Prisma {
     data: XOR<CommunicationLogUpdateManyMutationInput, CommunicationLogUncheckedUpdateManyWithoutSenderInput>
   }
 
+  export type UserFCMTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserFCMTokenWhereUniqueInput
+    update: XOR<UserFCMTokenUpdateWithoutUserInput, UserFCMTokenUncheckedUpdateWithoutUserInput>
+    create: XOR<UserFCMTokenCreateWithoutUserInput, UserFCMTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserFCMTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserFCMTokenWhereUniqueInput
+    data: XOR<UserFCMTokenUpdateWithoutUserInput, UserFCMTokenUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserFCMTokenUpdateManyWithWhereWithoutUserInput = {
+    where: UserFCMTokenScalarWhereInput
+    data: XOR<UserFCMTokenUpdateManyMutationInput, UserFCMTokenUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserFCMTokenScalarWhereInput = {
+    AND?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
+    OR?: UserFCMTokenScalarWhereInput[]
+    NOT?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
+    id?: StringFilter<"UserFCMToken"> | string
+    userId?: StringFilter<"UserFCMToken"> | string
+    token?: StringFilter<"UserFCMToken"> | string
+    deviceType?: StringNullableFilter<"UserFCMToken"> | string | null
+    createdAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+    updatedAt?: DateTimeFilter<"UserFCMToken"> | Date | string
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -148440,6 +151177,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -148549,6 +151287,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -148833,6 +151572,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -148942,6 +151682,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -149103,6 +151844,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -149212,6 +151954,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -149326,6 +152069,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -149435,6 +152179,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -149606,6 +152351,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -149715,6 +152461,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -150009,6 +152756,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -150118,6 +152866,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -150238,6 +152987,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -150347,6 +153097,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -150530,6 +153281,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -150639,6 +153391,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -150907,6 +153660,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -151016,6 +153770,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -151294,6 +154049,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -151403,6 +154159,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -152222,6 +154979,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -152331,6 +155089,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -154600,6 +157359,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -154709,6 +157469,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -154976,6 +157737,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -155085,6 +157847,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -155199,6 +157962,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -155308,6 +158072,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -155487,6 +158252,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -155596,6 +158362,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -156055,6 +158822,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -156164,6 +158932,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -156443,6 +159212,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -156552,6 +159322,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -156672,6 +159443,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -156781,6 +159553,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -157487,6 +160260,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -157596,6 +160370,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -157710,6 +160485,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -157819,6 +160595,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -158139,6 +160916,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -158248,6 +161026,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -158827,6 +161606,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -158936,6 +161716,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -159056,6 +161837,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -159165,6 +161947,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -159503,6 +162286,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -159612,6 +162396,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutStudentsInput = {
@@ -160918,6 +163703,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -161027,6 +163813,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -161311,6 +164098,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -161420,6 +164208,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -161529,6 +164318,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -161638,6 +164428,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -161916,6 +164707,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -162025,6 +164817,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -162446,6 +165239,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -162555,6 +165349,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -162839,6 +165634,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -162948,6 +165744,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -163210,6 +166007,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -163319,6 +166117,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -163603,6 +166402,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -163712,6 +166512,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -164031,6 +166832,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -164140,6 +166942,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -164487,6 +167290,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -164596,6 +167400,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -165074,6 +167879,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -165183,6 +167989,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -165297,6 +168104,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -165406,6 +168214,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -165520,6 +168329,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -165629,6 +168439,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -165970,6 +168781,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -166079,6 +168891,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -166199,6 +169012,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -166308,6 +169122,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -166428,6 +169243,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -166537,6 +169353,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -166805,6 +169622,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -166914,6 +169732,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -167028,6 +169847,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -167137,6 +169957,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -167404,6 +170225,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -167513,6 +170335,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -167638,6 +170461,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -167747,6 +170571,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -167867,6 +170692,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -167976,6 +170802,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -168255,6 +171082,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -168364,6 +171192,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -168473,6 +171302,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -168582,6 +171412,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -168696,6 +171527,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -168805,6 +171637,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -168919,6 +171752,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -169028,6 +171862,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -169295,6 +172130,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -169404,6 +172240,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -169518,6 +172355,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -169627,6 +172465,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -169752,6 +172591,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -169861,6 +172701,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -169981,6 +172822,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -170090,6 +172932,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -170210,6 +173053,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -170319,6 +173163,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -170598,6 +173443,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -170707,6 +173553,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -170827,6 +173674,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -170936,6 +173784,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -171045,6 +173894,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -171154,6 +174004,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -171743,6 +174594,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -171852,6 +174704,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -172069,6 +174922,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -172178,6 +175032,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -172770,6 +175625,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -172879,6 +175735,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -173203,6 +176060,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -173312,6 +176170,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -173671,6 +176530,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -173780,6 +176640,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -174562,6 +177423,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -174671,6 +177533,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -175188,6 +178051,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHostedMeetingsInput = {
@@ -175297,6 +178161,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHostedMeetingsInput = {
@@ -175575,6 +178440,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
@@ -175684,6 +178550,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutMeetingsInput = {
@@ -176384,6 +179251,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -176493,6 +179361,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -176607,6 +179476,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -176716,6 +179586,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -177538,6 +180409,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -177647,6 +180519,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -177767,6 +180640,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -177876,6 +180750,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -178454,6 +181329,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -178563,6 +181439,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -178677,6 +181554,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -178786,6 +181664,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -179106,6 +181985,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
@@ -179215,6 +182095,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
@@ -179329,6 +182210,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -179438,6 +182320,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -179813,6 +182696,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -179922,6 +182806,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -180072,6 +182957,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -180181,6 +183067,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -180301,6 +183188,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -180410,6 +183298,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -180748,6 +183637,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
@@ -180857,6 +183747,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSalesLedEnrollmentsInput = {
@@ -180977,6 +183868,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -181086,6 +183978,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutEnrollmentsInput = {
@@ -181485,6 +184378,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -181594,6 +184488,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -181734,6 +184629,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -181843,6 +184739,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -181957,6 +184854,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -182066,6 +184964,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -182344,6 +185243,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -182453,6 +185353,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -182573,6 +185474,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -182682,6 +185584,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -183740,6 +186643,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -183849,6 +186753,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -184230,6 +187135,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -184339,6 +187245,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -184644,6 +187551,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -184753,6 +187661,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -185086,6 +187995,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -185195,6 +188105,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -185304,6 +188215,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -185413,6 +188325,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -185691,6 +188604,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -185800,6 +188714,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -186221,6 +189136,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -186330,6 +189246,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -186614,6 +189531,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -186723,6 +189641,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -187297,6 +190216,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -187406,6 +190326,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -187690,6 +190611,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -187799,6 +190721,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -188061,6 +190984,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -188170,6 +191094,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -188284,6 +191209,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -188393,6 +191319,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -188677,6 +191604,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -188786,6 +191714,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -188906,6 +191835,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -189015,6 +191945,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -189277,6 +192208,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -189386,6 +192318,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -189500,6 +192433,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -189609,6 +192543,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -189893,6 +192828,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -190002,6 +192938,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -190122,6 +193059,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -190231,6 +193169,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutDeptAdminEscalationsInput = {
@@ -190340,6 +193279,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -190449,6 +193389,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -190563,6 +193504,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -190672,6 +193614,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -190786,6 +193729,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -190895,6 +193839,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -191162,6 +194107,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -191271,6 +194217,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -191473,6 +194420,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -191582,6 +194530,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -191702,6 +194651,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -191811,6 +194761,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -191931,6 +194882,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -192040,6 +194992,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -192319,6 +195272,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -192428,6 +195382,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -193022,6 +195977,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -193131,6 +196087,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -193619,6 +196576,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -193728,6 +196686,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -194218,6 +197177,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -194327,6 +197287,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -194594,6 +197555,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -194703,6 +197665,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -194828,6 +197791,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -194937,6 +197901,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -195216,6 +198181,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -195325,6 +198291,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -195434,6 +198401,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -195543,6 +198511,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -195810,6 +198779,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -195919,6 +198889,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -196033,6 +199004,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -196142,6 +199114,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -196267,6 +199240,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -196376,6 +199350,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -196655,6 +199630,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -196764,6 +199740,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -196884,6 +199861,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -196993,6 +199971,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -197102,6 +200081,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -197211,6 +200191,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -197489,6 +200470,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -197598,6 +200580,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -197866,6 +200849,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -197975,6 +200959,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
@@ -198397,6 +201382,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -198506,6 +201492,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutProgramAllocationsInput = {
@@ -199083,6 +202070,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -199192,6 +202180,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -199476,6 +202465,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -199585,6 +202575,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -200118,6 +203109,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -200227,6 +203219,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -200585,6 +203578,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -200694,6 +203688,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -200819,6 +203814,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -200928,6 +203924,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -201304,6 +204301,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -201413,6 +204411,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -201724,6 +204723,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -201833,6 +204833,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -202172,6 +205173,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -202281,6 +205283,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -202538,6 +205541,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -202647,6 +205651,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -203085,6 +206090,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -203194,6 +206200,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -203462,6 +206469,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -203571,6 +206579,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -203902,6 +206911,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -204011,6 +207021,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -204338,6 +207349,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -204447,6 +207459,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -204882,6 +207895,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -204991,6 +208005,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -206574,6 +209589,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -206683,6 +209699,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -206797,6 +209814,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -206906,6 +209924,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -207184,6 +210203,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -207293,6 +210313,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -207413,6 +210434,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -207522,6 +210544,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -207996,6 +211019,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -208105,6 +211129,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -208448,6 +211473,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -208557,6 +211583,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InvoiceCreateWithoutScheduleInput = {
@@ -209344,6 +212371,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -209453,6 +212481,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -209889,6 +212918,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -209998,6 +213028,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationUpsertWithoutPaymentLinksInput = {
@@ -210589,6 +213620,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -210698,6 +213730,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -210982,6 +214015,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -211091,6 +214125,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -211868,6 +214903,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -211977,6 +215013,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -212102,6 +215139,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -212211,6 +215249,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutDocumentLogsInput = {
@@ -212320,6 +215359,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -212429,6 +215469,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -212673,6 +215714,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -212782,6 +215824,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type StudentUpsertWithoutDocumentLogsInput = {
@@ -214141,6 +217184,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommunicationLogsInput = {
@@ -214250,6 +217294,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommunicationLogsInput = {
@@ -214534,6 +217579,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -214643,6 +217689,463 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutFcmTokensInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+  }
+
+  export type UserUncheckedCreateWithoutFcmTokensInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+  }
+
+  export type UserCreateOrConnectWithoutFcmTokensInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFcmTokensInput, UserUncheckedCreateWithoutFcmTokensInput>
+  }
+
+  export type UserUpsertWithoutFcmTokensInput = {
+    update: XOR<UserUpdateWithoutFcmTokensInput, UserUncheckedUpdateWithoutFcmTokensInput>
+    create: XOR<UserCreateWithoutFcmTokensInput, UserUncheckedCreateWithoutFcmTokensInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFcmTokensInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFcmTokensInput, UserUncheckedUpdateWithoutFcmTokensInput>
+  }
+
+  export type UserUpdateWithoutFcmTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFcmTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type AdmissionSessionCreateManyOrganizationInput = {
@@ -218491,6 +221994,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -218600,6 +222104,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -219637,6 +223142,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -219746,6 +223252,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -219918,6 +223425,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -220027,6 +223535,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -221532,6 +225041,14 @@ export namespace Prisma {
     recipientCount?: number
     content?: string | null
     status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserFCMTokenCreateManyUserInput = {
+    id?: string
+    token: string
+    deviceType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -226101,6 +229618,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -226210,6 +229728,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -226436,6 +229955,30 @@ export namespace Prisma {
     recipientCount?: IntFieldUpdateOperationsInput | number
     content?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFCMTokenUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFCMTokenUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserFCMTokenUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -227273,6 +230816,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -227382,6 +230926,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -229533,6 +233078,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -229642,6 +233188,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -231109,6 +234656,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -231218,6 +234766,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -231639,6 +235188,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -231748,6 +235298,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -232196,6 +235747,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -232305,6 +235857,7 @@ export namespace Prisma {
     verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {

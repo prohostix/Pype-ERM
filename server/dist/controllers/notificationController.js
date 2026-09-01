@@ -21,7 +21,7 @@ export const deleteNotification = asyncHandler(async (req, res) => {
     res.json({ success: true, data: {} });
 });
 export const createNotification = async (organizationId, userId, type, title, message, data) => {
-    return await prisma.notification.create({
+    const notification = await prisma.notification.create({
         data: {
             organizationId,
             userId,
@@ -32,12 +32,14 @@ export const createNotification = async (organizationId, userId, type, title, me
             link: data && typeof data === 'string' ? data : (data?.link || undefined)
         }
     });
+    return notification;
 };
 export const broadcastNotification = async (organizationId, type, title, message, roles) => {
     const users = await prisma.user.findMany({
         where: { organizationId, role: roles ? { in: roles } : undefined, status: { not: 'resigned' } }
     });
     const notifications = users.map(u => ({ organizationId, userId: u.id, type, title, message, read: false }));
-    return await prisma.notification.createMany({ data: notifications });
+    const result = await prisma.notification.createMany({ data: notifications });
+    return result;
 };
 //# sourceMappingURL=notificationController.js.map
