@@ -45,10 +45,14 @@ const globalActivity = [
   { time: '23:59', requests: 180, latency: 46 },
 ];
 
-export function ModernSuperadminDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernSuperadminDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
 
   useEffect(() => {
     setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));

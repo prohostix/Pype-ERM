@@ -22,7 +22,7 @@ interface DashboardProps {
   initialTab?: string;
 }
 
-export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps) {
+export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTab }: DashboardProps) {
   const { user } = useAuth();
   const [departmentType, setDepartmentType] = useState<string | null>(null);
   const [hasSubDept, setHasSubDept] = useState(false);
@@ -99,7 +99,7 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
 
   // Branch managers always get the branch dashboard — skip all other routing
   if (isBranchManager) {
-    return <ModernBranchManagerDashboard initialTab={initialTab} />;
+    return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   // While fetching department type, don't render anything yet to avoid flash
@@ -119,75 +119,75 @@ export function Dashboard({ useDepartmentDashboard, initialTab }: DashboardProps
     if (departmentType) {
       // Regular employees (not sub-dept managers) always get the employee dashboard
       if (!isSubDeptManager && departmentType !== 'collections') {
-        return <ModernEmployeeDashboard initialTab={initialTab} />;
+        return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
       }
       // Sub-dept managers get the department admin dashboard
       switch (departmentType) {
         case 'hr':
-          return <ModernHRDashboard initialTab={initialTab} />;
+          return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         case 'finance':
-          return <ModernFinanceDashboard initialTab={initialTab} />;
+          return <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         case 'operations':
-          return <ModernOpsDashboard initialTab={initialTab} />;
+          return <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         case 'sales':
-          return <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} />;
+          return <ModernSalesDashboard initialTab={initialTab} isSubDeptManager={isSubDeptManager} onNavigate={onNavigateToTable} />;
         case 'collections':
-          return <ModernCollectionsDashboard initialTab={initialTab} />;
+          return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         case 'ceo':
         case 'general_manager':
-          return <ModernCEODashboard initialTab={initialTab} />;
+          return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         default:
-          return <ModernEmployeeDashboard initialTab={initialTab} />;
+          return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
       }
     }
 
     // No department type found — sub-dept manager with unknown parent dept type
     // Show employee dashboard (it has a My Sub-Dept tab for sub-dept managers)
-    return <ModernEmployeeDashboard initialTab={initialTab} />;
+    return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'superadmin') {
-    return <ModernSuperadminDashboard initialTab={initialTab} />;
+    return <ModernSuperadminDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'ceo' || user?.role === 'general_manager') {
-    return <ModernCEODashboard initialTab={initialTab} />;
+    return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'org_admin') {
-    return <ModernOrgAdminDashboard initialTab={initialTab} />;
+    return <ModernOrgAdminDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user?.role || '')) {
-    return <ModernFinanceDashboard initialTab={initialTab} />;
+    return <ModernFinanceDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['ops_admin', 'ops_sub_admin'].includes(user?.role || '')) {
-    return <ModernOpsDashboard initialTab={initialTab} />;
+    return <ModernOpsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin') {
-    return <ModernHRDashboard initialTab={initialTab} />;
+    return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['sales_admin', 'sales_sub_admin'].includes(user?.role || '')) {
-    return <ModernSalesDashboard initialTab={initialTab} />;
+    return <ModernSalesDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['collections_admin', 'collections'].includes(user?.role || '')) {
-    return <ModernCollectionsDashboard initialTab={initialTab} />;
+    return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'center_admin') {
-    return <ModernStudyCenterDashboard />;
+    return <ModernStudyCenterDashboard onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'employee') {
-    return <ModernEmployeeDashboard initialTab={initialTab} />;
+    return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'student') {
-    return <ModernStudentPortal initialTab={initialTab} />;
+    return <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   // Fallback for other staff/admin roles

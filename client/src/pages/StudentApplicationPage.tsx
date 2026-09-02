@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { UploadCloud, Upload, Trash2, CheckCircle, GraduationCap, AlertCircle } from 'lucide-react';
+import { UploadCloud, Upload, Trash2, CheckCircle, GraduationCap, AlertCircle, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import axios from 'axios';
 
@@ -240,33 +240,39 @@ export default function StudentApplicationPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-0 sm:pl-14">
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Program <span className="text-red-500">*</span></Label>
-                      <Select value={form.programId} onValueChange={v => setForm(f => ({ ...f, programId: v }))}>
-                        <SelectTrigger className="w-full overflow-hidden h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 [&>span]:truncate [&>span]:text-left">
-                          <SelectValue placeholder="Select a program" />
-                        </SelectTrigger>
-                        <SelectContent className="max-w-[85vw] sm:max-w-[400px]">
+                      <div className="relative">
+                        <select 
+                          value={form.programId} 
+                          onChange={e => setForm(f => ({ ...f, programId: e.target.value }))}
+                          className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                        >
+                          <option value="" disabled>Select a program</option>
                           {inviteData?.programs.map(p => (
-                            <SelectItem key={p.id} value={p.id} className="break-words whitespace-normal">
+                            <option key={p.id} value={p.id}>
                               {p.name} — {p.university.name} ({p.courseType})
-                            </SelectItem>
+                            </option>
                           ))}
-                        </SelectContent>
-                      </Select>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                      </div>
                     </div>
 
                     {selectedProgram?.specialisations && selectedProgram.specialisations.length > 0 && (
                       <div className="space-y-2">
                         <Label className="text-slate-600 font-medium">Specialisation <span className="text-red-500">*</span></Label>
-                        <Select value={form.specialisation} onValueChange={v => setForm(f => ({ ...f, specialisation: v }))}>
-                          <SelectTrigger className="w-full overflow-hidden h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 [&>span]:truncate [&>span]:text-left">
-                            <SelectValue placeholder="Select specialisation" />
-                          </SelectTrigger>
-                          <SelectContent>
+                        <div className="relative">
+                          <select 
+                            value={form.specialisation} 
+                            onChange={e => setForm(f => ({ ...f, specialisation: e.target.value }))}
+                            className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                          >
+                            <option value="" disabled>Select specialisation</option>
                             {selectedProgram.specialisations.map((s: string) => (
-                              <SelectItem key={s} value={s}>{s}</SelectItem>
+                              <option key={s} value={s}>{s}</option>
                             ))}
-                          </SelectContent>
-                        </Select>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                        </div>
                       </div>
                     )}
                     {/* {(() => {
@@ -283,7 +289,7 @@ export default function StudentApplicationPage() {
                           <SelectTrigger className="h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10">
                             <SelectValue placeholder="Select a plan" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="max-w-[85vw] sm:max-w-[400px]">
                             <SelectItem value="lumpsum">One-Time Payment (Lump Sum)</SelectItem>
                             <SelectItem value="installment">Installment Plan</SelectItem>
                           </SelectContent>
@@ -327,27 +333,37 @@ export default function StudentApplicationPage() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Gender</Label>
-                      <Select value={form.gender} onValueChange={v => setForm(f => ({ ...f, gender: v }))}>
-                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Female">Female</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="relative">
+                        <select 
+                          value={form.gender} 
+                          onChange={e => setForm(f => ({ ...f, gender: e.target.value }))}
+                          className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                        >
+                          <option value="" disabled>Select</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Category</Label>
-                      <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v }))}>
-                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="General">General</SelectItem>
-                          <SelectItem value="OBC">OBC</SelectItem>
-                          <SelectItem value="SC">SC</SelectItem>
-                          <SelectItem value="ST">ST</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="relative">
+                        <select 
+                          value={form.category} 
+                          onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+                          className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                        >
+                          <option value="" disabled>Select</option>
+                          <option value="General">General</option>
+                          <option value="OBC">OBC</option>
+                          <option value="SC">SC</option>
+                          <option value="ST">ST</option>
+                          <option value="Other">Other</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Religion</Label>
@@ -355,24 +371,34 @@ export default function StudentApplicationPage() {
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Marital Status</Label>
-                      <Select value={form.maritalStatus} onValueChange={v => setForm(f => ({ ...f, maritalStatus: v }))}>
-                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Single">Single</SelectItem>
-                          <SelectItem value="Married">Married</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="relative">
+                        <select 
+                          value={form.maritalStatus} 
+                          onChange={e => setForm(f => ({ ...f, maritalStatus: e.target.value }))}
+                          className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                        >
+                          <option value="" disabled>Select</option>
+                          <option value="Single">Single</option>
+                          <option value="Married">Married</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-slate-600 font-medium">Employment Status</Label>
-                      <Select value={form.employmentStatus} onValueChange={v => setForm(f => ({ ...f, employmentStatus: v }))}>
-                        <SelectTrigger className="w-full h-11 bg-slate-50/50 border-slate-200/80 focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10"><SelectValue placeholder="Select" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Employed">Employed</SelectItem>
-                          <SelectItem value="Unemployed">Unemployed</SelectItem>
-                          <SelectItem value="Student">Student</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="relative">
+                        <select 
+                          value={form.employmentStatus} 
+                          onChange={e => setForm(f => ({ ...f, employmentStatus: e.target.value }))}
+                          className="w-full h-11 px-3 py-2 bg-slate-50/50 border border-slate-200/80 rounded-md focus:bg-white hover:border-slate-300 transition-all duration-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] focus:shadow-[0_2px_15px_-3px_rgba(59,130,246,0.1)] focus:ring-4 focus:ring-blue-500/10 outline-none text-sm appearance-none"
+                        >
+                          <option value="" disabled>Select</option>
+                          <option value="Employed">Employed</option>
+                          <option value="Unemployed">Unemployed</option>
+                          <option value="Student">Student</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                      </div>
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <Label className="text-slate-600 font-medium">Caste</Label>
@@ -509,7 +535,7 @@ export default function StudentApplicationPage() {
                                     rel="noreferrer"
                                     className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md font-medium hover:bg-primary/20 flex items-center transition-colors"
                                   >
-                                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> Verified
+                                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> Uploaded
                                   </a>
                                 ) : (
                                   <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded-md">Pending</span>

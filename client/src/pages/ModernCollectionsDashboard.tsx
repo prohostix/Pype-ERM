@@ -21,9 +21,13 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
-export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernCollectionsDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
 
   const fetchCollectionsMetrics = async () => {
     try {
@@ -42,7 +46,7 @@ export function ModernCollectionsDashboard({ initialTab }: { initialTab?: string
       case 'meetings': return <MeetingsPanel />;
       case 'overview': return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2"><OverviewContent metrics={metrics} onNavigate={setActiveTab} /></div>
+          <div className="lg:col-span-2"><OverviewContent metrics={metrics} onNavigate={handleNavigate} /></div>
         </div>
       );
       case 'collections': return <CollectionsPanel />;

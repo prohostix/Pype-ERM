@@ -59,15 +59,19 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
-export function ModernFinanceDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
   useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
 
   const renderContent = () => {
     switch (activeTab) {
       case 'meetings': return <MeetingsPanel />;
       case 'team_permissions': return <TeamPermissionsPanel />;
-      case 'overview': return <OverviewContent onNavigate={setActiveTab} />;
+      case 'overview': return <OverviewContent onNavigate={handleNavigate} />;
       case 'invoices': return <InvoicesPanel />;
       case 'student_payment_log': return <StudentPaymentsLogPanel />;
       case 'payments': return <PaymentsPanel />;
@@ -216,6 +220,7 @@ function OverviewContent({ onNavigate }: any) {
       {/* Filters */}
       <div className="flex flex-wrap gap-4 items-center justify-between bg-card p-4 rounded-xl border">
         <div>
+          
           <h2 className="text-xl font-bold">Finance Overview</h2>
           <p className="text-sm text-muted-foreground">Monitor collections, expenses, and targets.</p>
         </div>

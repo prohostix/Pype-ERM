@@ -199,3 +199,8 @@
   gap: 0.5rem;
 }
 
+
+/* Prevent Radix UI body shrink */
+body[data-scroll-locked] {
+  padding-right: 0 !important;
+}

@@ -29,9 +29,13 @@ import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/api';
 
-export function ModernOrgAdminDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {

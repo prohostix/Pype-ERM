@@ -58,7 +58,7 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     
     const studentsStatus = await prisma.student.findMany({
       where: studentWhere,
-      select: { admissionProgress: true, reregStatus: true, documents: true }
+      select: { id: true, name: true, enrollmentNo: true, admissionProgress: true, reregStatus: true, documents: true }
     });
     
     metrics.uniSubmissionsPending = studentsStatus.filter(s => {
@@ -71,7 +71,18 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       const hasUnapprovedDocs = docs.length === 0 || docs.some((d: any) => d && d.status !== 'approved');
       const photoStatus = (s.admissionProgress as any)?.photoStatus;
       return hasUnapprovedDocs || photoStatus !== 'approved';
-    }).length;
+    }).map(s => {
+      const docs = Array.isArray((s as any).documents) ? (s as any).documents : [];
+      const unapprovedDocs = docs.filter((d: any) => d && d.status !== 'approved');
+      const photoStatus = (s.admissionProgress as any)?.photoStatus;
+      return {
+        id: (s as any).id,
+        name: (s as any).name,
+        enrollmentNo: (s as any).enrollmentNo,
+        unapprovedDocs,
+        photoStatus
+      };
+    });
     
     metrics.reRegistrationPending = studentsStatus.filter(s => {
       const rereg = s.reregStatus as any;

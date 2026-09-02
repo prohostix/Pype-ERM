@@ -43,9 +43,13 @@ import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivit
 import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
-export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
 
   useEffect(() => { setActiveTab(initialTab || 'overview'); }, [initialTab]);
   useEffect(() => {
@@ -58,7 +62,7 @@ export function ModernHRDashboard({ initialTab }: { initialTab?: string }) {
       case 'overview': return (
         <OverviewContent
           metrics={metrics}
-          onNavigate={setActiveTab}
+          onNavigate={handleNavigate}
         />
       );
       case 'users': return <HRUsersPanel />;

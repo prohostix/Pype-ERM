@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { 
-  Database, 
-  ChevronRight, 
-  LogOut, 
-  Search, 
-  Sun, 
+import {
+  Database,
+  ChevronRight,
+  LogOut,
+  Search,
+  Sun,
   Moon,
   LayoutDashboard,
   Users,
@@ -69,8 +69,8 @@ export function PrismaLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    return document.documentElement.classList.contains('dark') || 
-           localStorage.getItem('theme') === 'dark';
+    return document.documentElement.classList.contains('dark') ||
+      localStorage.getItem('theme') === 'dark';
   });
 
   useEffect(() => {
@@ -218,7 +218,7 @@ export function PrismaLayout({
     <div className="h-screen flex bg-background font-sans overflow-hidden relative">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -243,9 +243,9 @@ export function PrismaLayout({
             </span>
           </div>
           {/* Mobile Close Button */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="lg:hidden ml-auto h-8 w-8 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent"
             onClick={() => setIsSidebarOpen(false)}
           >
@@ -336,10 +336,10 @@ export function PrismaLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative min-w-0">
         <header className="h-12 sm:h-16 flex items-center px-3 sm:px-4 lg:px-8 gap-2 sm:gap-4 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="lg:hidden" 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
@@ -355,7 +355,7 @@ export function PrismaLayout({
 
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
             {user?.organization?.logo && (
-              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-10 object-contain drop-shadow-sm" />
+              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-24 object-contain drop-shadow-sm" />
             )}
           </div>
 
@@ -364,14 +364,14 @@ export function PrismaLayout({
               <ShieldCheck className="w-3.5 h-3.5 text-primary" />
               <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{schema}</span>
             </div>
-            
+
             <div className="h-8 w-px bg-border mx-1" />
             {userRole !== 'student' && (
               <PunchWidget compact={true} />
             )}
-            
+
             <NotificationBell userId={userId} organizationId={organizationId} />
-            
+
             {/* Settings dropdown */}
             <div className="relative">
               <button

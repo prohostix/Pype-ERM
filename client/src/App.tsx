@@ -115,8 +115,9 @@ const TABLE_TO_TAB: Record<string, string> = {
 
 function App() {
   const { user, logout } = useAuth();
-  const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
-  const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
+  const urlParams = new URLSearchParams(window.location.search);
+  const [viewMode, setViewMode] = useState<ViewMode>((urlParams.get('view') as ViewMode) || 'dashboard');
+  const [activeTab, setActiveTab] = useState<string | undefined>(urlParams.get('tab') || undefined);
 
   const getDefaultTable = (role?: string) => {
     switch (role) {
@@ -135,22 +136,64 @@ function App() {
     }
   };
   
-  const [activeTable, setActiveTable] = useState(() => getDefaultTable(user?.role));
+  const [activeTable, setActiveTable] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('table') || getDefaultTable(user?.role);
+  });
   const [tableData, setTableData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   // For employee sub-dept managers: track their department type to show correct nav
   const [deptType, setDeptType] = useState<string | null>(null);
   const [isCollectionsOverseer, setIsCollectionsOverseer] = useState(false);
 
-  // When user loads/changes, reset activeTable to the correct default
+  // When user loads/changes, reset activeTable to the correct default, or read from URL
   useEffect(() => {
     if (user?.role) {
-      setActiveTable(getDefaultTable(user.role));
-      setActiveTab(undefined);
-      setViewMode('dashboard');
+      const params = new URLSearchParams(window.location.search);
+      setActiveTable(params.get('table') || getDefaultTable(user.role));
+      setActiveTab(params.get('tab') || undefined);
+      setViewMode((params.get('view') as ViewMode) || 'dashboard');
       setDeptType(null);
     }
   }, [user?.role]);
+
+  // Handle Browser Back/Forward
+  useEffect(() => {
+    const handlePopState = () => {
+      if (!user?.role) return;
+      const params = new URLSearchParams(window.location.search);
+      setViewMode((params.get('view') as ViewMode) || 'dashboard');
+      setActiveTable(params.get('table') || getDefaultTable(user.role));
+      setActiveTab(params.get('tab') || undefined);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [user?.role]);
+
+  // Sync state to URL
+  useEffect(() => {
+    if (!user?.role) return;
+    const url = new URL(window.location.href);
+    
+    const currentView = url.searchParams.get('view') || 'dashboard';
+    const currentTable = url.searchParams.get('table') || getDefaultTable(user.role);
+    const currentTab = url.searchParams.get('tab') || undefined;
+
+    if (currentView === viewMode && currentTable === activeTable && currentTab === activeTab) {
+      return;
+    }
+
+    if (viewMode === 'dashboard') url.searchParams.delete('view');
+    else url.searchParams.set('view', viewMode);
+    
+    if (activeTable === getDefaultTable(user.role)) url.searchParams.delete('table');
+    else url.searchParams.set('table', activeTable);
+    
+    if (activeTab) url.searchParams.set('tab', activeTab);
+    else url.searchParams.delete('tab');
+    
+    window.history.pushState({}, '', url);
+  }, [viewMode, activeTable, activeTab, user?.role]);
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
@@ -227,11 +270,36 @@ function App() {
 
   // Route to StudentApplicationPage if path is /student-apply
   // Route to public pages if needed — NOTE: useMemo/useEffect must be declared before these returns
-  const urlParams = new URLSearchParams(window.location.search);
   const hasInviteToken = urlParams.has('token');
 
   const tables = useMemo(() => getAvailableTables(), [user?.role, (user as any)?.subDepartmentId, (user as any)?.isBranchManager, deptType, isCollectionsOverseer]);
 
+  // Validate activeTable against allowed tables for the user
+  useEffect(() => {
+    if (!user || tables.length === 0) return;
+    
+    // 'dashboard' and 'overview' are universally handled fallback states
+    if (activeTable === 'dashboard' || activeTable === 'overview') return;
+
+    const isValid = tables.some(t => t.id === activeTable);
+    if (!isValid) {
+      console.warn(`Unauthorized or invalid table: ${activeTable}. Resetting to default.`);
+      const defaultTable = getDefaultTable(user.role);
+      
+      setActiveTable(defaultTable);
+      setActiveTab(undefined);
+      setViewMode('dashboard');
+      
+      const url = new URL(window.location.href);
+      if (defaultTable === getDefaultTable(user.role)) url.searchParams.delete('table');
+      else url.searchParams.set('table', defaultTable);
+      
+      url.searchParams.delete('view');
+      url.searchParams.delete('tab');
+      
+      window.history.replaceState({}, '', url);
+    }
+  }, [activeTable, tables, user]);
   // Fetch data for active table — only when in table view mode
   useEffect(() => {
     if (user && activeTable !== 'dashboard' && viewMode === 'table') {
@@ -884,7 +952,12 @@ function App() {
       tables={tables}
       activeTable={activeTable}
       onTableChange={handleTableChange}
-      onLogout={logout}
+      onLogout={() => {
+        const url = new URL(window.location.href);
+        url.search = '';
+        window.history.replaceState({}, '', url);
+        logout();
+      }}
       userName={user?.name}
       userRole={user?.role}
       userId={user?.id?.toString()}
@@ -905,13 +978,26 @@ function App() {
           initialTab={activeTab}
         />
       ) : (
-        <DataGrid
-          columns={getColumns()}
-          data={tableData}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          loading={loading}
-        />
+        <div className="space-y-4 h-full flex flex-col">
+          <div>
+            <button 
+              onClick={(e) => { e.preventDefault(); handleTableChange('dashboard'); }} 
+              className="flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              Back to Dashboard
+            </button>
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <DataGrid
+              columns={getColumns()}
+              data={tableData}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              loading={loading}
+            />
+          </div>
+        </div>
       )}
     </PrismaLayout>
   );

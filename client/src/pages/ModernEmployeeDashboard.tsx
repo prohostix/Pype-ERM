@@ -33,7 +33,7 @@ import { EmployeeEscalationsPanel } from '@/components/panels/EmployeeEscalation
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 
-export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const { user } = useAuth();
   const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
   // Determine sub-dept type from populated subDepartmentId object
@@ -45,6 +45,11 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
   const [leaves, setLeaves] = useState<any[]>([]);
   const [attendance, setAttendance] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
+
   const [isCollectionsOverseer, setIsCollectionsOverseer] = useState(false);
 
   useEffect(() => {
@@ -127,7 +132,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />
             Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setActiveTab('notice-board')}>
+          <Button variant="outline" size="sm" onClick={() => handleNavigate('notice-board')}>
             <Bell className="w-4 h-4 mr-2" />
             Notices
           </Button>
@@ -160,7 +165,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
               icon={<Target className="w-5 h-5" />}
               subtext={dueSoonCount > 0 ? `${dueSoonCount} due this week` : 'No urgent deadlines'}
               color="primary"
-              onClick={() => setActiveTab('tasks')}
+              onClick={() => handleNavigate('tasks')}
             />
             <EmployeeMetric
               title="Efficiency Score"
@@ -168,7 +173,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
               icon={<Zap className="w-5 h-5" />}
               subtext="Based on task completion"
               color="success"
-              onClick={() => setActiveTab('tasks')}
+              onClick={() => handleNavigate('tasks')}
             />
             <EmployeeMetric
               title="Leaves Remaining"
@@ -176,7 +181,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
               icon={<Calendar className="w-5 h-5" />}
               subtext={`${usedDays} used of ${totalLeaveAllowance}`}
               color="info"
-              onClick={() => setActiveTab('leaves')}
+              onClick={() => handleNavigate('leaves')}
             />
             <EmployeeMetric
               title="Work Hours"
@@ -184,7 +189,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
               icon={<Clock className="w-5 h-5" />}
               subtext="Current week"
               color="warning"
-              onClick={() => setActiveTab('attendance')}
+              onClick={() => handleNavigate('attendance')}
             />
           </div>
 
@@ -196,7 +201,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
                   <CardTitle>Priority Tasks</CardTitle>
                   <CardDescription>Your pending assignments</CardDescription>
                 </div>
-                <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={() => setActiveTab('tasks')}>
+                <Button variant="ghost" size="sm" className="text-primary font-bold" onClick={() => handleNavigate('tasks')}>
                   View Board <ArrowUpRight className="ml-1 w-3 h-3" />
                 </Button>
               </CardHeader>
@@ -216,7 +221,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
                       priority={task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low'}
                       due={task.deadline ? new Date(task.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'No deadline'}
                       progress={task.progress || 0}
-                      onClick={() => setActiveTab('tasks')}
+                      onClick={() => handleNavigate('tasks')}
                     />
                   ))
                 )}
@@ -264,7 +269,7 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
                     <button
                       key={item.tab}
                       className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-muted transition-colors flex items-center justify-between"
-                      onClick={() => setActiveTab(item.tab)}
+                      onClick={() => handleNavigate(item.tab)}
                     >
                       <span className={cn('font-medium', item.color)}>{item.label}</span>
                       <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
@@ -281,22 +286,22 @@ export function ModernEmployeeDashboard({ initialTab }: { initialTab?: string })
               <ShortcutBtn
                 icon={<FileText className="w-5 h-5 text-primary" />}
                 title="Pay Slips"
-                onClick={() => setActiveTab('payslips')}
+                onClick={() => handleNavigate('payslips')}
               />
               <ShortcutBtn
                 icon={<Calendar className="w-5 h-5 text-info" />}
                 title="Holiday List"
-                onClick={() => setActiveTab('holidays')}
+                onClick={() => handleNavigate('holidays')}
               />
               <ShortcutBtn
                 icon={<MessageSquare className="w-5 h-5 text-success" />}
                 title="Announcements"
-                onClick={() => setActiveTab('announcements')}
+                onClick={() => handleNavigate('announcements')}
               />
               <ShortcutBtn
                 icon={<Star className="w-5 h-5 text-warning" />}
                 title="L&D Portal"
-                onClick={() => setActiveTab('ld-portal')}
+                onClick={() => handleNavigate('ld-portal')}
               />
             </div>
           </div>

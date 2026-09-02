@@ -26,11 +26,16 @@ import { ModernStaffPortal } from './ModernStaffPortal';
 import { toast } from 'sonner';
 
 interface StudentPortalProps {
+  onNavigate?: (tab: string) => void;
   initialTab?: string;
 }
 
-export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
+export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
   const [loading, setLoading] = useState(true);
   const [isNotStudent, setIsNotStudent] = useState(false);
   const [profile, setProfile] = useState<any>(null);
@@ -351,7 +356,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleNavigate(tab.id)}
             className={cn(
               "flex items-center gap-2 py-3 px-4 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
               activeTab === tab.id
@@ -375,7 +380,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
         {primaryTabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleNavigate(tab.id)}
             className={cn(
               "flex flex-col items-center justify-center gap-0.5 flex-1 py-2 rounded-lg transition-all relative",
               activeTab === tab.id
@@ -401,7 +406,7 @@ export function ModernStudentPortal({ initialTab }: StudentPortalProps) {
         {/* More button for overflow tabs */}
         {tabs.length > 5 && (
           <button
-            onClick={() => setActiveTab(tabs[5]?.id)}
+            onClick={() => handleNavigate(tabs[5]?.id)}
             className="flex flex-col items-center justify-center gap-0.5 flex-1 py-2 rounded-lg text-muted-foreground"
           >
             <div className="p-1.5"><BookOpen className="w-4 h-4" /></div>

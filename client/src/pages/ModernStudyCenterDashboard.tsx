@@ -13,8 +13,12 @@ import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import api from '@/lib/api';
 
-export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernStudyCenterDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
   const [metrics, setMetrics] = useState<any>({});
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -69,12 +73,12 @@ export function ModernStudyCenterDashboard({ initialTab }: { initialTab?: string
                   <h3 className="font-semibold">Quick Actions</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <button onClick={() => setActiveTab('enroll')} className="p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-left">
+                  <button onClick={() => handleNavigate('enroll')} className="p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-left">
                     <GraduationCap className="w-5 h-5 text-primary mb-2" />
                     <p className="text-sm font-semibold">Enroll Student</p>
                     <p className="text-xs text-muted-foreground">Submit a new enrollment</p>
                   </button>
-                  <button onClick={() => setActiveTab('wallet')} className="p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-left">
+                  <button onClick={() => handleNavigate('wallet')} className="p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-primary/5 transition-all text-left">
                     <Wallet className="w-5 h-5 text-success mb-2" />
                     <p className="text-sm font-semibold">Top Up Wallet</p>
                     <p className="text-xs text-muted-foreground">Request balance top-up</p>

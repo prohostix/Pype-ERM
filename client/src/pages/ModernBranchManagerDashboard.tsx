@@ -62,9 +62,13 @@ export function getBranchManagerNavItems() {
   ];
 }
 
-export function ModernBranchManagerDashboard({ initialTab }: { initialTab?: string }) {
+export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   useAuth();
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
   const [branch, setBranch] = useState<any>(null);
   const [metrics, setMetrics] = useState<any>({});
   const [leads, setLeads] = useState<any[]>([]);
@@ -99,7 +103,7 @@ export function ModernBranchManagerDashboard({ initialTab }: { initialTab?: stri
   const renderContent = () => {
     switch (activeTab) {
       case 'meetings': return <MeetingsPanel />;
-      case 'overview': return <BranchOverview branch={branch} metrics={metrics} leads={leads} targets={targets} loading={loading} onNavigate={setActiveTab} />;
+      case 'overview': return <BranchOverview branch={branch} metrics={metrics} leads={leads} targets={targets} loading={loading} onNavigate={handleNavigate} />;
       // Sales
       case 'leads': return <LeadsPanel />;
       case 'targets': return <TargetsPanel endpoint="/sales/targets" title="Branch Targets" />;
