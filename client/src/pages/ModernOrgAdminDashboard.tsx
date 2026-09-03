@@ -55,7 +55,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <p className="text-muted-foreground mt-1">Manage your organization's operations, finance, HR, and sales.</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
         {/* Sidebar navigation acts as the main router, so we don't render TabsList here */}
 
         <TabsContent value="overview">

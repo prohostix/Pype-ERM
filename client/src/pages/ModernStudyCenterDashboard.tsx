@@ -36,16 +36,20 @@ export function ModernStudyCenterDashboard({ initialTab, onNavigate }: { initial
         <p className="text-muted-foreground mt-1">Manage enrollments, wallet, and daily operations.</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="wallet">Wallet</TabsTrigger>
-          <TabsTrigger value="enroll">Enroll Student</TabsTrigger>
-          <TabsTrigger value="enrollments">My Enrollments</TabsTrigger>
-          <TabsTrigger value="marks">Internal Marks</TabsTrigger>
-          <TabsTrigger value="programs">Programs & Materials</TabsTrigger>
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
+        <div className="relative w-full max-w-full">
+          <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+            <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
+          <TabsTrigger value="wallet" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Wallet</TabsTrigger>
+          <TabsTrigger value="enroll" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Enroll Student</TabsTrigger>
+          <TabsTrigger value="enrollments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Enrollments</TabsTrigger>
+          <TabsTrigger value="marks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Internal Marks</TabsTrigger>
+          <TabsTrigger value="programs" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Programs & Materials</TabsTrigger>
+          <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Tasks</TabsTrigger>
         </TabsList>
+          </div>
+        </div>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

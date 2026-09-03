@@ -139,22 +139,26 @@ export function ModernEmployeeDashboard({ initialTab, onNavigate }: { initialTab
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="tasks">My Tasks</TabsTrigger>
-          <TabsTrigger value="leaves">My Leaves</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
-          <TabsTrigger value="notice-board">Notice Board</TabsTrigger>
-          <TabsTrigger value="announcements">Announcements</TabsTrigger>
-          <TabsTrigger value="holidays">Holiday List</TabsTrigger>
-          <TabsTrigger value="team">My Team</TabsTrigger>
-          {isSubDeptManager && <TabsTrigger value="my_subdept">My Sub-Dept</TabsTrigger>}
-          <TabsTrigger value="ld-portal">L&amp;D Portal</TabsTrigger>
-          <TabsTrigger value="escalations">Escalations</TabsTrigger>
-          {isCollectionsOverseer && <TabsTrigger value="collections">Collections</TabsTrigger>}
-          <TabsTrigger value="meetings">Meetings</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
+        <div className="relative w-full max-w-full">
+          <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+            <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
+          <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Tasks</TabsTrigger>
+          <TabsTrigger value="leaves" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Leaves</TabsTrigger>
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Attendance</TabsTrigger>
+          <TabsTrigger value="notice-board" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Notice Board</TabsTrigger>
+          <TabsTrigger value="announcements" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Announcements</TabsTrigger>
+          <TabsTrigger value="holidays" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Holiday List</TabsTrigger>
+          <TabsTrigger value="team" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Team</TabsTrigger>
+          {isSubDeptManager && <TabsTrigger value="my_subdept" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">My Sub-Dept</TabsTrigger>}
+          <TabsTrigger value="ld-portal" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">L&amp;D Portal</TabsTrigger>
+          <TabsTrigger value="escalations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Escalations</TabsTrigger>
+          {isCollectionsOverseer && <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>}
+          <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
         </TabsList>
+          </div>
+        </div>
 
         <TabsContent value="overview" className="space-y-6">
           {/* Productivity Stats */}
