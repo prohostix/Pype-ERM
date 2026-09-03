@@ -136,40 +136,58 @@ export function ReRegistrationPanel() {
                 <p className="text-muted-foreground">{searchQuery ? 'No pending re-registrations found matching your search.' : 'No pending re-registrations!'}</p>
               </div>
             ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program</TableHead>
-                      <TableHead>Current Sem</TableHead>
-                      <TableHead>Next Sem</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedPending.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>Semester 1</TableCell>
-                        <TableCell>Semester 2</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="space-y-6">
+                {(() => {
+                  const groupedStudents = paginatedPending.reduce((acc: Record<string, any[]>, student) => {
+                    const uniName = student.university?.name || student.program?.university?.name || 'Unknown University';
+                    const progName = student.program?.name || 'Unknown Program';
+                    const groupKey = `${uniName} - ${progName}`;
+                    if (!acc[groupKey]) acc[groupKey] = [];
+                    acc[groupKey].push(student);
+                    return acc;
+                  }, {});
+
+                  return Object.entries(groupedStudents).map(([groupKey, group]) => (
+                    <div key={groupKey} className="rounded-md border overflow-hidden">
+                      <div className="bg-muted px-4 py-2 border-b">
+                        <h3 className="font-semibold text-sm text-muted-foreground">{groupKey}</h3>
+                      </div>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Student</TableHead>
+                            <TableHead>Current Sem</TableHead>
+                            <TableHead>Next Sem</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {group.map((student) => {
+                            const currentSem = student.reregStatus?.currentSemester || student.academicProgress?.length || 1;
+                            const nextSem = student.reregStatus?.nextSemester || (currentSem + 1);
+                            return (
+                              <TableRow key={student.id}>
+                                <TableCell>
+                                  <div className="font-medium">{student.name}</div>
+                                  <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
+                                </TableCell>
+                                <TableCell>Semester {currentSem}</TableCell>
+                                <TableCell>Semester {nextSem}</TableCell>
+                                <TableCell>
+                                  <Badge variant="outline" className="text-orange-500 bg-orange-50">Pending Fee</Badge>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  ));
+                })()}
                 
                 {/* Pagination Controls */}
                 {totalPendingPages > 1 && (
@@ -234,40 +252,58 @@ export function ReRegistrationPanel() {
                 <p className="text-muted-foreground">{searchQuery ? 'No completed re-registrations found matching your search.' : 'No completed re-registrations yet.'}</p>
               </div>
             ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Program</TableHead>
-                      <TableHead>Current Sem</TableHead>
-                      <TableHead>Next Sem</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedCompleted.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell>
-                          <div className="font-medium">{student.name}</div>
-                          <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">{student.program?.name || 'N/A'}</div>
-                        </TableCell>
-                        <TableCell>Semester 1</TableCell>
-                        <TableCell>Semester 2</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Completed</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="space-y-6">
+                {(() => {
+                  const groupedStudents = paginatedCompleted.reduce((acc: Record<string, any[]>, student) => {
+                    const uniName = student.university?.name || student.program?.university?.name || 'Unknown University';
+                    const progName = student.program?.name || 'Unknown Program';
+                    const groupKey = `${uniName} - ${progName}`;
+                    if (!acc[groupKey]) acc[groupKey] = [];
+                    acc[groupKey].push(student);
+                    return acc;
+                  }, {});
+
+                  return Object.entries(groupedStudents).map(([groupKey, group]) => (
+                    <div key={groupKey} className="rounded-md border overflow-hidden">
+                      <div className="bg-muted px-4 py-2 border-b">
+                        <h3 className="font-semibold text-sm text-muted-foreground">{groupKey}</h3>
+                      </div>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Student</TableHead>
+                            <TableHead>Current Sem</TableHead>
+                            <TableHead>Next Sem</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {group.map((student) => {
+                            const currentSem = student.reregStatus?.currentSemester || student.academicProgress?.length || 1;
+                            const nextSem = student.reregStatus?.nextSemester || (currentSem + 1);
+                            return (
+                              <TableRow key={student.id}>
+                                <TableCell>
+                                  <div className="font-medium">{student.name}</div>
+                                  <div className="text-xs text-muted-foreground">{student.enrollmentNo || 'N/A'}</div>
+                                </TableCell>
+                                <TableCell>Semester {currentSem}</TableCell>
+                                <TableCell>Semester {nextSem}</TableCell>
+                                <TableCell>
+                                  <Badge variant="outline" className="text-green-600 bg-green-50 border-green-200">Completed</Badge>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <Button size="sm" variant="outline" onClick={() => setSelectedStudent(student)}>View Details</Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  ));
+                })()}
                 
                 {/* Pagination Controls */}
                 {totalCompletedPages > 1 && (
