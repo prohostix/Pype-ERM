@@ -12,6 +12,8 @@ import {
   getHRSettings,
   createOrUpdateHRSettings,
   biometricSync,
+  getPunchConfig,
+  syncOfflinePunches,
   getAttendanceByUserId,
 } from '../controllers/attendanceController.js';
 
@@ -28,6 +30,8 @@ router.put('/settings', protect, authorize('hr_admin', 'hr_sub_admin', 'superadm
 router.post('/biometric-sync', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), biometricSync);
 
 // Employee routes - punch in/out
+router.get('/punch-config', protect, getPunchConfig);
+router.post('/sync-offline', protect, syncOfflinePunches);
 router.post('/punch-in', protect, punchIn);
 router.post('/punch-out', protect, punchOut);
 router.get('/today', protect, getTodayAttendance);
