@@ -184,7 +184,7 @@ export function PayrollPanel() {
             <CardHeader><CardTitle>Payroll Records</CardTitle></CardHeader>
             <CardContent>
               {loading ? (
-                <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-16 bg-muted rounded-lg animate-pulse" />)}</div>
+                <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-16 bg-muted rounded-lg animate-pulse" />)}</div>
               ) : filtered.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <DollarSign className="w-12 h-12 mx-auto mb-4 opacity-30" />

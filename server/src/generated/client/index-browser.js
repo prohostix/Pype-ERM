@@ -492,6 +492,7 @@ exports.Prisma.SalaryConfigScalarFieldEnum = {
   allowances: 'allowances',
   deductions: 'deductions',
   lateDeductionPerMinute: 'lateDeductionPerMinute',
+  effectiveFrom: 'effectiveFrom',
   approvalStatus: 'approvalStatus',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',

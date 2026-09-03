@@ -60,6 +60,7 @@ const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', '
 export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const { user } = useAuth();
   const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
+  const [balances, setBalances] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
 
@@ -90,13 +91,20 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
   const isHR = role === 'hr_admin' || role === 'hr_sub_admin';
   const isEmployee = !isDeptManager && !isHR && role !== 'superadmin' && role !== 'org_admin' && role !== 'ceo';
 
+  const currentMonthStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthStr);
+
   const fetchLeaves = async () => {
     setLoading(true);
     try {
-      // Employees only see their own leaves; managers/HR see all UNLESS isMyPortal is true
       const endpoint = (isEmployee || isMyPortal) ? '/hr/leaves/my' : '/hr/leaves';
       const res = await api.get(endpoint);
       setLeaves(res.data.data || []);
+
+      if (isEmployee || isMyPortal) {
+        const balRes = await api.get(`/hr/leaves/balance?month=${selectedMonth}`);
+        setBalances(balRes.data.data);
+      }
     } catch {
       toast.error('Failed to fetch leave requests');
     } finally {
@@ -104,7 +112,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
     }
   };
 
-  useEffect(() => { fetchLeaves(); }, []);
+  useEffect(() => { fetchLeaves(); }, [selectedMonth]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,6 +219,89 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           )}
         </div>
       </div>
+
+      {/* My Leave Balances */}
+      {/* My Leave Balances */}
+      {balances && (
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-semibold">My Leave Balances</h3>
+            <Input 
+              type="month" 
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-48"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Sick Leave */}
+            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium">Sick Leave</p>
+                  <Badge variant="outline">{balances.sick.available.toFixed(1)} Available</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Accrued (This Month): {balances.sick.accrued.toFixed(1)}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Taken: {balances.sick.used.toFixed(1)}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Casual Leave */}
+            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium">Casual Leave</p>
+                  <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-200">{balances.casual.available.toFixed(1)} Available</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Accrued (Last 3m): {(balances.casual.accrued * 3).toFixed(1)}
+                </div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Taken: {balances.casual.used.toFixed(1)}
+                </div>
+                {balances.casual.carryForward > 0 && (
+                  <Badge variant="secondary" className="text-xs mt-1">
+                    +{balances.casual.carryForward.toFixed(1)} Carry Forward
+                  </Badge>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Earned Leave */}
+            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/60 backdrop-blur-xl">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium">Earned Leave</p>
+                  <Badge variant="outline">{balances.earned.available.toFixed(1)} Available</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Accrued (YTD): {balances.earned.accrued.toFixed(1)}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Taken: {balances.earned.used.toFixed(1)}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Unpaid */}
+            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-red-500/5 backdrop-blur-xl border-red-500/20">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium text-red-600">Loss of Pay</p>
+                  <Badge variant="destructive">{balances.unpaid.taken.toFixed(1)} Days</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mt-2">
+                  Leaves marked as unpaid due to insufficient balance.
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
       {/* Summary KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -13,15 +13,16 @@ import api from '@/lib/api';
 interface LeaveAllocation {
   id?: string;
   userId: any;
+  user?: User;
   year: number;
   sickLeave: number;
   casualLeave: number;
   earnedLeave: number;
   complementaryLeave: number;
-  usedSick: number;
-  usedCasual: number;
-  usedEarned: number;
-  usedComplementary: number;
+  usedSick?: number;
+  usedCasual?: number;
+  usedEarned?: number;
+  usedComplementary?: number;
 }
 
 interface User {
@@ -114,17 +115,15 @@ export function LeaveAllocationPanel() {
     }
   };
 
-  const allocatedUserIds = new Set(allocations.map(a =>
-    typeof a.userId === 'object' ? a.userId.id : a.userId
-  ));
+  const allocatedUserIds = new Set(allocations.map(a => a.userId));
   const unallocatedUsers = users.filter(u => !allocatedUserIds.has(u.id));
 
   const filtered = allocations.filter(a => {
-    const name = (a.userId && typeof a.userId === 'object' ? a.userId.name : '') || '';
+    const name = a.user?.name || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-  const remaining = (total: number, used: number) => Math.max(0, total - used);
+  const remaining = (total: number, used?: number) => Math.max(0, (total || 0) - (used || 0));
 
   return (
     <div className="space-y-6">
@@ -168,8 +167,8 @@ export function LeaveAllocationPanel() {
       ) : (
         <div className="space-y-3">
           {filtered.map(alloc => {
-            const user = typeof alloc.userId === 'object' ? alloc.userId : null;
-            const uid = user?.id || alloc.userId;
+            const user = alloc.user || null;
+            const uid = alloc.userId;
             return (
               <Card key={uid} className="hover:border-primary/30 transition-colors">
                 <CardContent className="p-4">
@@ -212,7 +211,7 @@ export function LeaveAllocationPanel() {
             <DialogTitle>Leave Allocation — {year}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
-            {!allocations.find(a => (typeof a.userId === 'object' ? a.userId.id : a.userId) === editingUserId) && (
+            {!allocations.find(a => a.userId === editingUserId) && (
               <div className="space-y-2">
                 <Label>Employee</Label>
                 <Select value={editingUserId} onValueChange={setEditingUserId}>

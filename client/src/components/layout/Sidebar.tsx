@@ -218,7 +218,7 @@ const navItems: NavItem[] = [
       { id: 'collections', label: 'Collections', icon: FileText, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
       { id: 'targets', label: 'Targets', icon: Target, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
       { id: 'fees', label: 'Fee Structures', icon: Settings, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'salary_approvals', label: 'Salary Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
+      { id: 'salary_approval', label: 'Salary Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
       { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
       { id: 'approvals', label: 'Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
     ],

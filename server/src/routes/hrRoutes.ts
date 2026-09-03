@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getLeaveRequests,
+  getMyLeaveBalance,
   getLeaveRequest,
   createLeaveRequest,
   updateLeaveRequest,
@@ -79,6 +80,7 @@ router.use(protect);
 // Leave Requests
 router.route('/leaves').get(getLeaveRequests).post(createLeaveRequest);
 router.route('/leaves/stats').get(authorize('hr_admin', 'hr_sub_admin', 'dept_admin'), getLeaveStats);
+router.get('/leaves/balance', getMyLeaveBalance);
 router.get('/leaves/my', getMyLeaves);
 router.route('/leaves/:id')
   .get(getLeaveRequest)

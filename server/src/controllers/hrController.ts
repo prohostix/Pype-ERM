@@ -57,6 +57,109 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
   res.json({ success: true, count: leaves.length, data: leaves });
 });
 
+export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { month } = req.query;
+  
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth() + 1;
+
+  if (month && typeof month === 'string') {
+    const parts = month.split('-');
+    if (parts.length === 2) {
+      currentYear = parseInt(parts[0], 10);
+      currentMonth = parseInt(parts[1], 10);
+    }
+  }
+
+  const allocation = await prisma.leaveAllocation.findFirst({
+    where: { userId: req.user.id, year: currentYear }
+  });
+
+  const defaultBalance = {
+    sick: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
+    casual: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
+    earned: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
+    unpaid: { taken: 0 }
+  };
+
+  if (!allocation) {
+    return res.json({ success: true, data: defaultBalance });
+  }
+
+  // 1. Sick Leave
+  const sickMonthlyAccrual = allocation.sickLeave / 12;
+  const usedSickThisMonthRaw = await prisma.leaveRequest.findMany({
+    where: {
+      employeeId: req.user.id, type: 'sick',
+      status: { in: ['approved', 'dept_approved'] },
+      startDate: { gte: new Date(currentYear, currentMonth - 1, 1), lt: new Date(currentYear, currentMonth, 1) }
+    }
+  });
+  const usedSickThisMonth = usedSickThisMonthRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+
+  // 2. Casual Leave (3 month lookback)
+  const casualMonthlyAccrual = allocation.casualLeave / 12;
+  const usedCasualRecentRaw = await prisma.leaveRequest.findMany({
+    where: {
+      employeeId: req.user.id, type: 'casual',
+      status: { in: ['approved', 'dept_approved'] },
+      startDate: { gte: new Date(currentYear, currentMonth - 3, 1), lt: new Date(currentYear, currentMonth, 1) }
+    }
+  });
+  const usedCasualRecent = usedCasualRecentRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+  const availableCasual = Math.max(0, (casualMonthlyAccrual * 3) - usedCasualRecent);
+  const carryForwardCasual = Math.max(0, availableCasual - casualMonthlyAccrual);
+
+  // 3. Earned Leave (YTD)
+  const earnedMonthlyAccrual = allocation.earnedLeave / 12;
+  const accruedEarned = earnedMonthlyAccrual * currentMonth;
+  const usedEarnedRaw = await prisma.leaveRequest.findMany({
+    where: {
+      employeeId: req.user.id, type: 'earned',
+      status: { in: ['approved', 'dept_approved'] },
+      startDate: { gte: new Date(currentYear, 0, 1), lt: new Date(currentYear + 1, 0, 1) }
+    }
+  });
+  const usedEarned = usedEarnedRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+
+  // 4. Unpaid Leave
+  const unpaidRaw = await prisma.leaveRequest.findMany({
+    where: {
+      employeeId: req.user.id, type: 'unpaid',
+      status: { in: ['approved', 'dept_approved'] },
+      startDate: { gte: new Date(currentYear, 0, 1), lt: new Date(currentYear + 1, 0, 1) }
+    }
+  });
+  const unpaidTaken = unpaidRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+
+  const balance = {
+    sick: {
+      yearlyLimit: allocation.sickLeave,
+      accrued: sickMonthlyAccrual,
+      used: usedSickThisMonth,
+      available: Math.max(0, sickMonthlyAccrual - usedSickThisMonth),
+      carryForward: 0
+    },
+    casual: {
+      yearlyLimit: allocation.casualLeave,
+      accrued: casualMonthlyAccrual,
+      used: usedCasualRecent,
+      available: availableCasual,
+      carryForward: carryForwardCasual
+    },
+    earned: {
+      yearlyLimit: allocation.earnedLeave,
+      accrued: accruedEarned,
+      used: usedEarned,
+      available: Math.max(0, accruedEarned - usedEarned),
+      carryForward: 0
+    },
+    unpaid: { taken: unpaidTaken }
+  };
+
+  res.json({ success: true, data: balance });
+});
+
 export const getLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
   const leave = await prisma.leaveRequest.findFirst({
     where: { id: req.params.id, organizationId: req.user.organizationId }
@@ -69,14 +172,71 @@ export const getLeaveRequest = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { startDate, endDate, departmentId, isHalfDay, halfDayType, ...rest } = req.body;
+  const { startDate, endDate, departmentId, isHalfDay, halfDayType, type, ...rest } = req.body;
+  
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const requestedDays = isHalfDay ? 0.5 : (end.getTime() - start.getTime()) / 86400000 + 1;
+  const currentYear = start.getFullYear();
+  const currentMonth = start.getMonth() + 1;
+
+  let finalType = type;
+
+  if (type === 'sick' || type === 'casual') {
+    const allocation = await prisma.leaveAllocation.findFirst({
+      where: { userId: req.user.id, year: currentYear }
+    });
+
+    if (!allocation) {
+      finalType = 'unpaid';
+    } else {
+      if (type === 'sick') {
+        const monthlyAccrual = allocation.sickLeave / 12;
+        const usedSickThisMonth = await prisma.leaveRequest.findMany({
+          where: {
+            employeeId: req.user.id,
+            type: 'sick',
+            status: { in: ['approved', 'dept_approved', 'pending'] },
+            startDate: { gte: new Date(currentYear, currentMonth - 1, 1), lt: new Date(currentYear, currentMonth, 1) }
+          }
+        });
+        
+        const usedDays = usedSickThisMonth.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+
+        if (requestedDays > (monthlyAccrual - usedDays)) {
+          finalType = 'unpaid';
+        }
+      } else if (type === 'casual') {
+        const monthlyAccrual = allocation.casualLeave / 12;
+        const lookbackStart = new Date(currentYear, currentMonth - 3, 1);
+        
+        const usedCasualRecent = await prisma.leaveRequest.findMany({
+          where: {
+            employeeId: req.user.id,
+            type: 'casual',
+            status: { in: ['approved', 'dept_approved', 'pending'] },
+            startDate: { gte: lookbackStart, lt: new Date(currentYear, currentMonth, 1) }
+          }
+        });
+        
+        const usedDays = usedCasualRecent.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+        const availableBalance = (monthlyAccrual * 3) - usedDays;
+        
+        if (requestedDays > availableBalance) {
+          finalType = 'unpaid';
+        }
+      }
+    }
+  }
+
   const leave = await prisma.leaveRequest.create({
     data: { 
       ...rest,
+      type: finalType,
       isHalfDay: isHalfDay || false,
       halfDayType: halfDayType || null,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      startDate: start,
+      endDate: end,
       employeeId: req.user.id, 
       organizationId: req.user.organizationId,
       departmentId: departmentId || req.user.departmentId || ''
