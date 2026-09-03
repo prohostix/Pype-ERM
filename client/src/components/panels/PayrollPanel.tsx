@@ -194,7 +194,7 @@ export function PayrollPanel() {
               ) : (
                 <div className="space-y-3">
                   {filtered.map(p => {
-                    const empName = p.employeeId?.name || p.employeeId?.userId?.name || 'Employee';
+                    const empName = (p as any).user?.name || p.employeeId?.name || p.employeeId?.userId?.name || 'Employee';
                     const isSelected = selectedIds.includes(p.id);
                     return (
                       <div key={p.id} className={`flex items-center gap-3 p-4 border rounded-lg transition-colors ${isSelected ? 'border-primary bg-primary/5' : 'hover:bg-muted/30'}`}>
@@ -286,7 +286,7 @@ export function PayrollPanel() {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              Edit Payroll — {editPayroll?.employeeId?.name || 'Employee'} ({editPayroll?.month})
+              Edit Payroll — {(editPayroll as any)?.user?.name || editPayroll?.employeeId?.name || 'Employee'} ({editPayroll?.month})
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-5 pt-2">

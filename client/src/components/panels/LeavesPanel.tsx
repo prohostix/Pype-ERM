@@ -101,10 +101,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       const res = await api.get(endpoint);
       setLeaves(res.data.data || []);
 
-      if (isEmployee || isMyPortal) {
-        const balRes = await api.get(`/hr/leaves/balance?month=${selectedMonth}`);
-        setBalances(balRes.data.data);
-      }
+      const balRes = await api.get(`/hr/leaves/balance?month=${selectedMonth}`);
+      setBalances(balRes.data.data);
     } catch {
       toast.error('Failed to fetch leave requests');
     } finally {
