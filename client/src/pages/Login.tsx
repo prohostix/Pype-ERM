@@ -29,9 +29,9 @@ export function Login() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4 sm:p-8">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
         <div className="p-8 sm:p-10">
-          <button onClick={(e) => { e.preventDefault(); window.history.back(); }} className="flex items-center text-sm text-slate-500 hover:text-slate-800 mb-4 transition-colors font-medium">
+          <button onClick={(e) => { e.preventDefault(); window.location.pathname = '/'; }} className="flex items-center text-sm text-slate-500 hover:text-slate-800 mb-4 transition-colors font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-            Back
+            Back to Home
           </button>
           {/* Logo */}
           <div className="flex flex-col items-center justify-center gap-4 mb-8">

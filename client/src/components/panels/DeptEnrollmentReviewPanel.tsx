@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -43,14 +43,14 @@ interface Enrollment {
 }
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
-  payment_pending:     { label: 'Fee Pending',      color: 'bg-orange-100 text-orange-700' },
-  document_review:     { label: 'Document Review',  color: 'bg-blue-100 text-blue-700' },
-  dept_review:         { label: 'Dept Review',      color: 'bg-purple-100 text-purple-700' },
-  finance_review:      { label: 'Finance Review',   color: 'bg-yellow-100 text-yellow-700' },
-  university_review:   { label: 'Univ. Review',     color: 'bg-indigo-100 text-indigo-700' },
-  enrolled:            { label: 'Enrolled',          color: 'bg-green-100 text-green-700' },
-  rejected:            { label: 'Rejected',          color: 'bg-red-100 text-red-700' },
-  department_rejected: { label: 'Dept Rejected',    color: 'bg-red-100 text-red-700' },
+  payment_pending: { label: 'Fee Pending', color: 'bg-orange-100 text-orange-700' },
+  document_review: { label: 'Document Review', color: 'bg-blue-100 text-blue-700' },
+  dept_review: { label: 'Dept Review', color: 'bg-purple-100 text-purple-700' },
+  finance_review: { label: 'Finance Review', color: 'bg-yellow-100 text-yellow-700' },
+  university_review: { label: 'Univ. Review', color: 'bg-indigo-100 text-indigo-700' },
+  enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700' },
+  rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700' },
+  department_rejected: { label: 'Dept Rejected', color: 'bg-red-100 text-red-700' },
 };
 
 function StatusBadge({ status }: { status: string }) {
@@ -223,24 +223,24 @@ export function DeptEnrollmentReviewPanel() {
       <div className="flex flex-col gap-4">
         {/* Top Filters */}
         <div className="flex flex-wrap items-center gap-3 bg-card p-4 rounded-xl border border-border shadow-sm">
-          <select 
-            value={filterBranch} 
+          <select
+            value={filterBranch}
             onChange={(e) => setFilterBranch(e.target.value)}
             className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
           >
             <option value="">Branch</option>
             {branches.map(b => <option key={b} value={b}>{b}</option>)}
           </select>
-          <select 
-            value={filterUniversity} 
+          <select
+            value={filterUniversity}
             onChange={(e) => setFilterUniversity(e.target.value)}
             className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
           >
             <option value="">University</option>
             {universities.map(u => <option key={u} value={u}>{u}</option>)}
           </select>
-          <select 
-            value={filterBatch} 
+          <select
+            value={filterBatch}
             onChange={(e) => setFilterBatch(e.target.value)}
             className="h-9 px-3 py-1 bg-background border border-input rounded-md text-sm outline-none"
           >
@@ -249,8 +249,8 @@ export function DeptEnrollmentReviewPanel() {
           </select>
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search Student..." 
+            <Input
+              placeholder="Search Student..."
               className="h-9 pl-9 w-full bg-background"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -278,82 +278,82 @@ export function DeptEnrollmentReviewPanel() {
       ) : (
         <div className="space-y-3">
           {filteredEnrollments.map(e => {
-                      const studentData = e.student;
-                      let canApprove = true;
-                      if (studentData) {
-                        const docs = Array.isArray(studentData.documents) ? studentData.documents : [];
-                        const unapprovedDocs = docs.filter((d: any) => d && d.status !== 'approved');
-                        const photoStatus = studentData.admissionProgress?.photoStatus;
-                        if (unapprovedDocs.length > 0 || photoStatus !== 'approved') {
-                          canApprove = false;
-                        }
-                      }
+            const studentData = e.student;
+            let canApprove = true;
+            if (studentData) {
+              const docs = Array.isArray(studentData.documents) ? studentData.documents : [];
+              const unapprovedDocs = docs.filter((d: any) => d && d.status !== 'approved');
+              const photoStatus = studentData.admissionProgress?.photoStatus;
+              if (unapprovedDocs.length > 0 || photoStatus !== 'approved') {
+                canApprove = false;
+              }
+            }
 
-                      return (
-                        <Card key={e.id} className="hover:border-primary/30 transition-colors">
-                          <CardContent className="p-4 flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-4 flex-1 min-w-0">
-                              {/* Student Photo Thumbnail */}
-                              <div className="shrink-0 relative">
-                                {e.student?.photo ? (
-                                  <img src={getDocUrl(e.student.photo)} alt="Student" className="w-12 h-12 rounded-full object-cover border" />
-                                ) : (
-                                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border">
-                                    <User className="w-5 h-5 text-muted-foreground" />
-                                  </div>
-                                )}
-                                {e.student?.admissionProgress?.photoStatus === 'approved' && (
-                                  <div className="absolute bottom-0 right-0 bg-success text-white rounded-full p-[2px]">
-                                    <CheckCircle className="w-3 h-3" />
-                                  </div>
-                                )}
-                              </div>
-                              
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                  <StatusBadge status={e.status} />
-                                  {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
-                                </div>
-                                <h4 className="font-semibold">{e.studentName}</h4>
-                                <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
-                                  <span>{e.studentEmail}</span>
-                                  {e.program && <span>{e.program.name} ({e.program.code})</span>}
-                                  {e.studyCenter && <span>{e.studyCenter.name}</span>}
-                                  <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
-                                </div>
-                                {/* Show dept remarks on completed tab */}
-                                {tab === 'completed' && e.departmentRemarks && (
-                                  <p className="text-xs mt-1.5 text-red-600 bg-red-50 px-2 py-1 rounded inline-block">
-                                    Rejected: {e.departmentRemarks}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex gap-2 shrink-0">
-                              <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
-                                <Eye className="w-4 h-4 mr-1" />View
-                              </Button>
-                              {tab === 'pending' && (
-                                <>
-                                  <Button 
-                                    size="sm" 
-                                    variant="outline" 
-                                    className={cn("text-success border-success/30 hover:bg-success/10", !canApprove && "opacity-50 cursor-not-allowed")} 
-                                    onClick={() => canApprove ? handleApprove(e.id) : toast.error("All documents and the photo must be explicitly approved first.")}
-                                    disabled={!canApprove}
-                                  >
-                                    <CheckCircle className="w-4 h-4 mr-1" />Approve
-                                  </Button>
-                                  <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10"
-                                    onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
-                                    <XCircle className="w-4 h-4 mr-1" />Reject
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      );
+            return (
+              <Card key={e.id} className="hover:border-primary/30 transition-colors">
+                <CardContent className="p-4 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    {/* Student Photo Thumbnail */}
+                    <div className="shrink-0 relative">
+                      {e.student?.photo ? (
+                        <img src={getDocUrl(e.student.photo)} alt="Student" className="w-12 h-12 rounded-full object-cover border" />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border">
+                          <User className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      )}
+                      {e.student?.admissionProgress?.photoStatus === 'approved' && (
+                        <div className="absolute bottom-0 right-0 bg-success text-white rounded-full p-[2px]">
+                          <CheckCircle className="w-3 h-3" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <StatusBadge status={e.status} />
+                        {e.enrollmentNumber && <span className="text-xs font-mono text-muted-foreground">{e.enrollmentNumber}</span>}
+                      </div>
+                      <h4 className="font-semibold">{e.studentName}</h4>
+                      <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
+                        <span>{e.studentEmail}</span>
+                        {e.program && <span>{e.program.name} ({e.program.code})</span>}
+                        {e.studyCenter && <span>{e.studyCenter.name}</span>}
+                        <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
+                      </div>
+                      {/* Show dept remarks on completed tab */}
+                      {tab === 'completed' && e.departmentRemarks && (
+                        <p className="text-xs mt-1.5 text-red-600 bg-red-50 px-2 py-1 rounded inline-block">
+                          Rejected: {e.departmentRemarks}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <Button size="sm" variant="outline" className="text-primary border-primary/30 hover:bg-primary/10" onClick={() => setViewStudent(e)}>
+                      <Eye className="w-4 h-4 mr-1" />View
+                    </Button>
+                    {tab === 'pending' && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={cn("text-success border-success/30 hover:bg-success/10", !canApprove && "opacity-50 cursor-not-allowed")}
+                          onClick={() => canApprove ? handleApprove(e.id) : toast.error("All documents and the photo must be explicitly approved first.")}
+                          disabled={!canApprove}
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />Approve
+                        </Button>
+                        <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                          onClick={() => { setRejectDialog({ open: true, id: e.id }); setRemarks(''); }}>
+                          <XCircle className="w-4 h-4 mr-1" />Reject
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
           })}
         </div>
       )}
@@ -541,14 +541,27 @@ export function DeptEnrollmentReviewPanel() {
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {docs.map((doc: any, i: number) => (
-                        <div key={i} className="flex flex-col border rounded-lg overflow-hidden group">
-                          <button 
+                        <div key={i} className="relative flex flex-col border rounded-lg group">
+                          {doc.url && (
+                            <a
+                              href={getDocUrl(doc.url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              download={doc.name || 'document'}
+                              onClick={(e) => e.stopPropagation()}
+                              className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center bg-background border rounded-full text-muted-foreground hover:text-primary hover:bg-muted shadow-sm transition-all z-10"
+                              title="Download document"
+                            >
+                              <Download className="w-4 h-4" />
+                            </a>
+                          )}
+                          <button
                             onClick={() => setPreviewDoc({ ...doc, index: i })}
-                            className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors flex-1 text-left">
+                            className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors w-full text-left rounded-t-lg">
                             <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/20 transition-colors">
                               <FileText className="w-4 h-4" />
                             </div>
-                            <div className="min-w-0 flex-1">
+                            <div className="min-w-0 flex-1 pr-4">
                               <p className="text-sm font-medium truncate flex items-center gap-2">
                                 {doc.type || 'Document'}
                                 {doc.status === 'approved' && <CheckCircle className="w-3 h-3 text-success" />}
@@ -558,7 +571,7 @@ export function DeptEnrollmentReviewPanel() {
                             </div>
                           </button>
                           {tab === 'pending' && (!doc.status || doc.status === 'pending') && (
-                            <div className="flex border-t divide-x bg-muted/20">
+                            <div className="flex border-t divide-x bg-muted/20 overflow-hidden rounded-b-lg">
                               <button
                                 onClick={() => handleDocAction(viewStudent.student.id, i, 'approved')}
                                 className="flex-1 py-1.5 text-[10px] font-medium text-success hover:bg-success/10 transition-colors flex items-center justify-center gap-1"
@@ -594,9 +607,9 @@ export function DeptEnrollmentReviewPanel() {
               <div className="flex items-center gap-2 mr-6">
                 {viewStudent && tab === 'pending' && (!previewDoc?.status || previewDoc?.status === 'pending') && (
                   <>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
+                    <Button
+                      size="sm"
+                      variant="outline"
                       className="text-success border-success hover:bg-success/10"
                       onClick={() => {
                         if (previewDoc && viewStudent?.student) {
@@ -607,9 +620,9 @@ export function DeptEnrollmentReviewPanel() {
                     >
                       <CheckCircle className="w-4 h-4 mr-2" /> Approve
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
+                    <Button
+                      size="sm"
+                      variant="outline"
                       className="text-destructive border-destructive hover:bg-destructive/10"
                       onClick={() => {
                         if (previewDoc && viewStudent?.student) {

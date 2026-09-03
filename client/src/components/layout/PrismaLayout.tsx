@@ -346,10 +346,18 @@ export function PrismaLayout({
           </Button>
 
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full h-10 w-10 shrink-0 mr-1"
+              onClick={() => window.history.back()}
+              title="Go Back"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+            </Button>
             <div className="p-2 rounded-lg bg-primary/10 text-primary hidden sm:flex">
               {activeTableItem?.icon}
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground/30 hidden sm:block" />
             <span className="text-lg font-bold text-foreground truncate">{activeTableItem?.label}</span>
           </div>
 
