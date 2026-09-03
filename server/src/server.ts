@@ -110,8 +110,15 @@ const s3ProxyRoute = async (req: express.Request, res: express.Response) => {
       res.setHeader('Content-Type', response.ContentType);
     }
     if (response.Body) {
-      // @ts-ignore
-      response.Body.pipe(res);
+      const stream = response.Body as any;
+      stream.on('error', (streamErr: any) => {
+        console.error('S3 Stream Error:', streamErr);
+        if (!res.headersSent) res.status(500).end();
+      });
+      res.on('error', (resErr) => {
+        console.error('Response Stream Error:', resErr);
+      });
+      stream.pipe(res);
     } else {
       res.status(404).send('Not Found');
     }
