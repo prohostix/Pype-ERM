@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
+import { sendPushNotification } from '../services/notification.service.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
@@ -242,6 +243,33 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
       departmentId: departmentId || req.user.departmentId || ''
     }
   });
+
+  try {
+    const me = await prisma.user.findUnique({ where: { id: req.user.id } });
+    let notifyUserId = me?.reportingTo;
+    
+    if (!notifyUserId && (departmentId || me?.departmentId)) {
+      const deptId = departmentId || me?.departmentId;
+      if (deptId) {
+        const dept = await prisma.department.findUnique({ where: { id: deptId } });
+        notifyUserId = dept?.managerId;
+      }
+    }
+
+    if (notifyUserId) {
+      sendPushNotification(notifyUserId, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+    } else {
+      const hrAdmins = await prisma.user.findMany({
+        where: { role: 'hr_admin', organizationId: req.user.organizationId }
+      });
+      hrAdmins.forEach(hr => {
+        sendPushNotification(hr.id, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      });
+    }
+  } catch (err) {
+    console.error("Failed to send notification:", err);
+  }
+
   res.status(201).json({ success: true, data: leave });
 });
 
@@ -285,6 +313,26 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
       deptApprovedBy: req.user.id
     }
   });
+
+  try {
+    const employee = await prisma.user.findUnique({ where: { id: leave.employeeId }});
+    const statusText = action === 'approve' ? 'approved by your department' : 'rejected by your department';
+    if (employee) {
+      sendPushNotification(employee.id, "Leave Request Update", `Your leave request was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+    }
+    
+    if (action === 'approve' && employee) {
+      const hrAdmins = await prisma.user.findMany({
+        where: { role: 'hr_admin', organizationId: employee.organizationId }
+      });
+      hrAdmins.forEach(hr => {
+        sendPushNotification(hr.id, "Pending HR Approval", `Department approved leave for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
   res.json({ success: true, data: leave });
 });
 
@@ -298,6 +346,16 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
       hrApprovedBy: req.user.id
     }
   });
+
+  try {
+    const employee = await prisma.user.findUnique({ where: { id: leave.employeeId }});
+    const statusText = action === 'approve' ? 'fully approved by HR' : 'rejected by HR';
+    if (employee) {
+      sendPushNotification(employee.id, "Leave Request Update", `Your leave request was ${statusText}.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 
   if (action === 'approve') {
     // Generate attendance records for the leave duration

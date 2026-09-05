@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.js';
+import { sendPushNotification } from '../services/notification.service.js';
 
 const ROLE_HIERARCHY: Record<string, number> = {
   superadmin: 0,
@@ -103,6 +104,16 @@ export const createTask = asyncHandler(async (req: AuthRequest, res: Response) =
       departmentId: departmentId || req.user.departmentId
     }
   });
+
+  if (assignedTo && assignedTo !== req.user.id) {
+    sendPushNotification(
+      assignedTo,
+      "New Task Assigned",
+      `You have been assigned a new task: ${task.title}`,
+      { type: "task_assigned", taskId: task.id }
+    ).catch(e => console.error("Push error:", e));
+  }
+
   res.status(201).json({ success: true, data: task });
 });
 
