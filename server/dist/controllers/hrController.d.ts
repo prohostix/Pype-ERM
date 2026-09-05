@@ -1,5 +1,6 @@
 import { Response } from 'express';
 export declare const getLeaveRequests: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getMyLeaveBalance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getLeaveRequest: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const createLeaveRequest: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const updateLeaveRequest: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;

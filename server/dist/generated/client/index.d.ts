@@ -39056,6 +39056,7 @@ export namespace Prisma {
     userId: string | null
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus | null
     approvedBy: string | null
     approvedAt: Date | null
@@ -39071,6 +39072,7 @@ export namespace Prisma {
     userId: string | null
     basicSalary: number | null
     lateDeductionPerMinute: number | null
+    effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus | null
     approvedBy: string | null
     approvedAt: Date | null
@@ -39088,6 +39090,7 @@ export namespace Prisma {
     allowances: number
     deductions: number
     lateDeductionPerMinute: number
+    effectiveFrom: number
     approvalStatus: number
     approvedBy: number
     approvedAt: number
@@ -39115,6 +39118,7 @@ export namespace Prisma {
     userId?: true
     basicSalary?: true
     lateDeductionPerMinute?: true
+    effectiveFrom?: true
     approvalStatus?: true
     approvedBy?: true
     approvedAt?: true
@@ -39130,6 +39134,7 @@ export namespace Prisma {
     userId?: true
     basicSalary?: true
     lateDeductionPerMinute?: true
+    effectiveFrom?: true
     approvalStatus?: true
     approvedBy?: true
     approvedAt?: true
@@ -39147,6 +39152,7 @@ export namespace Prisma {
     allowances?: true
     deductions?: true
     lateDeductionPerMinute?: true
+    effectiveFrom?: true
     approvalStatus?: true
     approvedBy?: true
     approvedAt?: true
@@ -39251,6 +39257,7 @@ export namespace Prisma {
     allowances: JsonValue | null
     deductions: JsonValue | null
     lateDeductionPerMinute: number | null
+    effectiveFrom: Date | null
     approvalStatus: $Enums.ApprovalStatus
     approvedBy: string | null
     approvedAt: Date | null
@@ -39287,6 +39294,7 @@ export namespace Prisma {
     allowances?: boolean
     deductions?: boolean
     lateDeductionPerMinute?: boolean
+    effectiveFrom?: boolean
     approvalStatus?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
@@ -39308,6 +39316,7 @@ export namespace Prisma {
     allowances?: boolean
     deductions?: boolean
     lateDeductionPerMinute?: boolean
+    effectiveFrom?: boolean
     approvalStatus?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
@@ -39329,6 +39338,7 @@ export namespace Prisma {
     allowances?: boolean
     deductions?: boolean
     lateDeductionPerMinute?: boolean
+    effectiveFrom?: boolean
     approvalStatus?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
@@ -39350,6 +39360,7 @@ export namespace Prisma {
     allowances?: boolean
     deductions?: boolean
     lateDeductionPerMinute?: boolean
+    effectiveFrom?: boolean
     approvalStatus?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
@@ -39359,7 +39370,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SalaryConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "basicSalary" | "allowances" | "deductions" | "lateDeductionPerMinute" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectedRemarks" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["salaryConfig"]>
+  export type SalaryConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "userId" | "basicSalary" | "allowances" | "deductions" | "lateDeductionPerMinute" | "effectiveFrom" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectedRemarks" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["salaryConfig"]>
   export type SalaryConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approver?: boolean | SalaryConfig$approverArgs<ExtArgs>
     creator?: boolean | SalaryConfig$creatorArgs<ExtArgs>
@@ -39395,6 +39406,7 @@ export namespace Prisma {
       allowances: Prisma.JsonValue | null
       deductions: Prisma.JsonValue | null
       lateDeductionPerMinute: number | null
+      effectiveFrom: Date | null
       approvalStatus: $Enums.ApprovalStatus
       approvedBy: string | null
       approvedAt: Date | null
@@ -39836,6 +39848,7 @@ export namespace Prisma {
     readonly allowances: FieldRef<"SalaryConfig", 'Json'>
     readonly deductions: FieldRef<"SalaryConfig", 'Json'>
     readonly lateDeductionPerMinute: FieldRef<"SalaryConfig", 'Float'>
+    readonly effectiveFrom: FieldRef<"SalaryConfig", 'DateTime'>
     readonly approvalStatus: FieldRef<"SalaryConfig", 'ApprovalStatus'>
     readonly approvedBy: FieldRef<"SalaryConfig", 'String'>
     readonly approvedAt: FieldRef<"SalaryConfig", 'DateTime'>
@@ -99819,6 +99832,7 @@ export namespace Prisma {
     allowances: 'allowances',
     deductions: 'deductions',
     lateDeductionPerMinute: 'lateDeductionPerMinute',
+    effectiveFrom: 'effectiveFrom',
     approvalStatus: 'approvalStatus',
     approvedBy: 'approvedBy',
     approvedAt: 'approvedAt',
@@ -104058,6 +104072,7 @@ export namespace Prisma {
     allowances?: JsonNullableFilter<"SalaryConfig">
     deductions?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
     approvedBy?: StringNullableFilter<"SalaryConfig"> | string | null
     approvedAt?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
@@ -104079,6 +104094,7 @@ export namespace Prisma {
     allowances?: SortOrderInput | SortOrder
     deductions?: SortOrderInput | SortOrder
     lateDeductionPerMinute?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
     approvalStatus?: SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
@@ -104103,6 +104119,7 @@ export namespace Prisma {
     allowances?: JsonNullableFilter<"SalaryConfig">
     deductions?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
     approvedBy?: StringNullableFilter<"SalaryConfig"> | string | null
     approvedAt?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
@@ -104124,6 +104141,7 @@ export namespace Prisma {
     allowances?: SortOrderInput | SortOrder
     deductions?: SortOrderInput | SortOrder
     lateDeductionPerMinute?: SortOrderInput | SortOrder
+    effectiveFrom?: SortOrderInput | SortOrder
     approvalStatus?: SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
@@ -104149,6 +104167,7 @@ export namespace Prisma {
     allowances?: JsonNullableWithAggregatesFilter<"SalaryConfig">
     deductions?: JsonNullableWithAggregatesFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableWithAggregatesFilter<"SalaryConfig"> | number | null
+    effectiveFrom?: DateTimeNullableWithAggregatesFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusWithAggregatesFilter<"SalaryConfig"> | $Enums.ApprovalStatus
     approvedBy?: StringNullableWithAggregatesFilter<"SalaryConfig"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"SalaryConfig"> | Date | string | null
@@ -112374,6 +112393,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -112393,6 +112413,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -112408,6 +112429,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112427,6 +112449,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112444,6 +112467,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -112459,6 +112483,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112474,6 +112499,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -120226,6 +120252,7 @@ export namespace Prisma {
     allowances?: SortOrder
     deductions?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
@@ -120246,6 +120273,7 @@ export namespace Prisma {
     userId?: SortOrder
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
@@ -120261,6 +120289,7 @@ export namespace Prisma {
     userId?: SortOrder
     basicSalary?: SortOrder
     lateDeductionPerMinute?: SortOrder
+    effectiveFrom?: SortOrder
     approvalStatus?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
@@ -137877,6 +137906,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -137894,6 +137924,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -140484,6 +140515,7 @@ export namespace Prisma {
     allowances?: JsonNullableFilter<"SalaryConfig">
     deductions?: JsonNullableFilter<"SalaryConfig">
     lateDeductionPerMinute?: FloatNullableFilter<"SalaryConfig"> | number | null
+    effectiveFrom?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
     approvalStatus?: EnumApprovalStatusFilter<"SalaryConfig"> | $Enums.ApprovalStatus
     approvedBy?: StringNullableFilter<"SalaryConfig"> | string | null
     approvedAt?: DateTimeNullableFilter<"SalaryConfig"> | Date | string | null
@@ -146330,6 +146362,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -146348,6 +146381,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -146372,6 +146406,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -146390,6 +146425,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -146414,6 +146450,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -146431,6 +146468,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -149723,6 +149761,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149740,6 +149779,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218805,6 +218845,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -221141,6 +221182,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -221158,6 +221200,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221174,6 +221217,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -224644,6 +224688,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedAt?: Date | string | null
     rejectedRemarks?: string | null
@@ -224660,6 +224705,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: number | null
+    effectiveFrom?: Date | string | null
     approvalStatus?: $Enums.ApprovalStatus
     approvedBy?: string | null
     approvedAt?: Date | string | null
@@ -228314,6 +228360,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -228332,6 +228379,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -228348,6 +228396,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -228362,6 +228411,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedRemarks?: NullableStringFieldUpdateOperationsInput | string | null
@@ -228380,6 +228430,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -228396,6 +228447,7 @@ export namespace Prisma {
     allowances?: NullableJsonNullValueInput | InputJsonValue
     deductions?: NullableJsonNullValueInput | InputJsonValue
     lateDeductionPerMinute?: NullableFloatFieldUpdateOperationsInput | number | null
+    effectiveFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approvalStatus?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

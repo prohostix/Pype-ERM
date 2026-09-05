@@ -7,16 +7,12 @@ function requireEnv(key) {
 }
 export const generateToken = (id) => {
     const secret = requireEnv('JWT_SECRET');
-    const options = {
-        expiresIn: (process.env.JWT_EXPIRE || '7d'),
-    };
+    const options = {};
     return jwt.sign({ id }, secret, options);
 };
 export const generateRefreshToken = (id) => {
     const secret = requireEnv('JWT_REFRESH_SECRET');
-    const options = {
-        expiresIn: (process.env.JWT_REFRESH_EXPIRE || '30d'),
-    };
+    const options = {};
     return jwt.sign({ id }, secret, options);
 };
 export const verifyToken = (token) => {

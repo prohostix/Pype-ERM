@@ -17,4 +17,6 @@ export declare const getActivityReport: (req: import("express").Request, res: Re
 export declare const getMyAttendance: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getMyAttendanceSummary: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 export declare const getAttendanceByUserId: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const getPunchConfig: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
+export declare const syncOfflinePunches: (req: import("express").Request, res: Response, next: import("express").NextFunction) => void;
 //# sourceMappingURL=attendanceController.d.ts.map

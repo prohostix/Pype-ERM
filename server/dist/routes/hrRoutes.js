@@ -1,5 +1,5 @@
 import express from 'express';
-import { getLeaveRequests, getLeaveRequest, createLeaveRequest, updateLeaveRequest, deleteLeaveRequest, deptApproveLeave, hrApproveLeave, getLeaveStats, getMyLeaves, getVacancies, getVacancy, createVacancy, updateVacancy, deleteVacancy, closeVacancy, validateVacancyForHiring, fillVacancyPosition, getVacancyStats, getComplaints, getComplaint, createComplaint, updateComplaint, deleteComplaint, resolveComplaint, getHolidays, getHoliday, createHoliday, updateHoliday, deleteHoliday, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, } from '../controllers/hrController.js';
+import { getLeaveRequests, getMyLeaveBalance, getLeaveRequest, createLeaveRequest, updateLeaveRequest, deleteLeaveRequest, deptApproveLeave, hrApproveLeave, getLeaveStats, getMyLeaves, getVacancies, getVacancy, createVacancy, updateVacancy, deleteVacancy, closeVacancy, validateVacancyForHiring, fillVacancyPosition, getVacancyStats, getComplaints, getComplaint, createComplaint, updateComplaint, deleteComplaint, resolveComplaint, getHolidays, getHoliday, createHoliday, updateHoliday, deleteHoliday, getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement, } from '../controllers/hrController.js';
 import { getAttendances, getAttendanceById, markAttendance, updateAttendance, deleteAttendance, getMyAttendance, getMyAttendanceSummary, getActivityReport, } from '../controllers/attendanceController.js';
 import { getEmployeeProfile, upsertEmployeeProfile, updateKPIs, updateKRAs, updateSalaryDetails, } from '../controllers/employeeProfileController.js';
 import { getPolls, createPoll, updatePoll, deletePoll, votePoll, } from '../controllers/pollController.js';
@@ -10,6 +10,7 @@ router.use(protect);
 // Leave Requests
 router.route('/leaves').get(getLeaveRequests).post(createLeaveRequest);
 router.route('/leaves/stats').get(authorize('hr_admin', 'hr_sub_admin', 'dept_admin'), getLeaveStats);
+router.get('/leaves/balance', getMyLeaveBalance);
 router.get('/leaves/my', getMyLeaves);
 router.route('/leaves/:id')
     .get(getLeaveRequest)

@@ -1215,7 +1215,7 @@ export const syncOfflinePunches = asyncHandler(async (req: AuthRequest, res: Res
       }
 
     } catch (err) {
-      errors.push({ punch, error: err.message });
+      errors.push({ punch, error: err instanceof Error ? err.message : String(err) });
     }
   }
 

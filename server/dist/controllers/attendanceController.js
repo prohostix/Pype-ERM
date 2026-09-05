@@ -935,4 +935,160 @@ export const getAttendanceByUserId = asyncHandler(async (req, res) => {
     });
     res.status(200).json({ success: true, count: attendances.length, data: attendances });
 });
+// ==========================================
+// OFFLINE PUNCH API IMPLEMENTATION
+// ==========================================
+export const getPunchConfig = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.status(400).json({ success: false, message: 'Only available for tenant organization employees.' });
+        return;
+    }
+    const settings = await prisma.hRSettings.findFirst({
+        where: { organizationId: req.user.organizationId }
+    });
+    res.status(200).json({
+        success: true,
+        data: {
+            requireSelfie: req.user.requireSelfiePunchIn || false,
+            allowAnywhere: req.user.allowAnywherePunchIn || false,
+            requireLocation: settings?.requireLocation || false,
+            defaultLocation: settings?.location || null,
+            locations: settings?.locations || [],
+            officeHours: settings?.officeHours || null,
+        }
+    });
+});
+export const syncOfflinePunches = asyncHandler(async (req, res) => {
+    if (!req.user.organizationId) {
+        res.status(400).json({ success: false, message: 'Only available for tenant organization employees.' });
+        return;
+    }
+    const { punches } = req.body;
+    if (!Array.isArray(punches)) {
+        res.status(400).json({ success: false, message: 'Punches must be an array.' });
+        return;
+    }
+    const settings = await prisma.hRSettings.findFirst({
+        where: { organizationId: req.user.organizationId }
+    });
+    const processedPunches = [];
+    const errors = [];
+    for (const punch of punches) {
+        try {
+            const { type, timestamp, latitude, longitude, address, photo } = punch;
+            const punchTime = new Date(timestamp);
+            let photoUrl;
+            if (photo) {
+                const base64Data = photo.replace(/^data:image\/\w+;base64,/, "");
+                const buffer = Buffer.from(base64Data, 'base64');
+                const fileName = `selfie-${type}-${req.user.id}-${Date.now()}.jpg`;
+                // This is async inside a loop but needed for S3
+                const command = new PutObjectCommand({
+                    Bucket: process.env.AWS_S3_BUCKET_NAME || 'pype-erm-uploads',
+                    Key: fileName,
+                    Body: buffer,
+                    ContentType: 'image/jpeg'
+                });
+                await s3.send(command);
+                photoUrl = `/api/v1/uploads/${fileName}`;
+            }
+            else if (req.user.requireSelfiePunchIn) {
+                errors.push({ punch, error: 'Selfie required but not provided.' });
+                continue;
+            }
+            const punchStart = new Date(punchTime);
+            punchStart.setHours(0, 0, 0, 0);
+            const punchEnd = new Date(punchTime);
+            punchEnd.setHours(23, 59, 59, 999);
+            // Late Calculation
+            let isLate = false;
+            let lateMinutes = 0;
+            let status = 'present';
+            if (type === 'in' && settings && settings.officeHours) {
+                const officeHours = settings.officeHours;
+                const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const istNow = new Date(punchTime.getTime() + (330 * 60000));
+                const currentDayName = weekdays[istNow.getUTCDay()];
+                const overrides = officeHours.dayOverrides || [];
+                const dayOverride = overrides.find((o) => o.day === currentDayName);
+                const checkInTarget = dayOverride?.checkInTime || officeHours.checkInTime || '09:00';
+                const gracePeriod = officeHours.graceMinutes !== undefined ? officeHours.graceMinutes : 15;
+                const punchHour = istNow.getUTCHours();
+                const punchMin = istNow.getUTCMinutes();
+                const punchTotalMins = punchHour * 60 + punchMin;
+                const [targetHour, targetMin] = checkInTarget.split(':').map(Number);
+                const targetTotalMins = targetHour * 60 + targetMin;
+                const diffMins = punchTotalMins - targetTotalMins;
+                if (diffMins > gracePeriod) {
+                    isLate = true;
+                    lateMinutes = diffMins;
+                    status = 'late';
+                }
+            }
+            const existing = await prisma.attendance.findFirst({
+                where: {
+                    employeeId: req.user.id,
+                    date: { gte: punchStart, lte: punchEnd }
+                }
+            });
+            if (type === 'in') {
+                if (!existing) {
+                    const attendance = await prisma.attendance.create({
+                        data: {
+                            employeeId: req.user.id,
+                            organizationId: req.user.organizationId,
+                            date: punchStart,
+                            checkIn: punchTime,
+                            checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+                            checkInPhoto: photoUrl,
+                            status,
+                            isLate,
+                            lateMinutes
+                        }
+                    });
+                    processedPunches.push(attendance);
+                }
+                else {
+                    errors.push({ punch, error: 'Already checked in for this date.' });
+                }
+            }
+            else if (type === 'out') {
+                if (!existing) {
+                    errors.push({ punch, error: 'Cannot check out without a check in.' });
+                }
+                else if (existing.checkOut) {
+                    errors.push({ punch, error: 'Already checked out for this date.' });
+                }
+                else {
+                    let workingHours = 0;
+                    if (existing.checkIn) {
+                        const diffMs = punchTime.getTime() - existing.checkIn.getTime();
+                        workingHours = parseFloat((diffMs / (1000 * 60 * 60)).toFixed(2));
+                    }
+                    const attendance = await prisma.attendance.update({
+                        where: { id: existing.id },
+                        data: {
+                            checkOut: punchTime,
+                            checkOutLocation: latitude ? { latitude, longitude, address } : undefined,
+                            checkOutPhoto: photoUrl,
+                            workingHours
+                        }
+                    });
+                    processedPunches.push(attendance);
+                }
+            }
+        }
+        catch (err) {
+            errors.push({ punch, error: err instanceof Error ? err.message : String(err) });
+        }
+    }
+    res.status(200).json({
+        success: true,
+        message: `Synced ${processedPunches.length} punches. ${errors.length} errors.`,
+        data: {
+            processed: processedPunches,
+            errors
+        }
+    });
+});
 //# sourceMappingURL=attendanceController.js.map

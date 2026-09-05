@@ -36,7 +36,8 @@ export const protect = async (req, res, next) => {
             next();
         }
         catch (error) {
-            res.status(401).json({ success: false, message: 'Invalid token' });
+            console.error('Auth protect error:', error);
+            res.status(401).json({ success: false, message: 'Invalid token: ' + (error instanceof Error ? error.message : String(error)) });
         }
     }
     catch (error) {
