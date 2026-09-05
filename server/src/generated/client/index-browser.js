@@ -1260,6 +1260,171 @@ exports.Prisma.SystemSettingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AcademicCenterScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  name: 'name',
+  code: 'code',
+  type: 'type',
+  status: 'status',
+  address: 'address',
+  city: 'city',
+  state: 'state',
+  pincode: 'pincode',
+  meetingPlatform: 'meetingPlatform',
+  onlineAccessUrl: 'onlineAccessUrl',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AcademicCounselorScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  phone: 'phone',
+  specialization: 'specialization',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterCounselorAssignmentScalarFieldEnum = {
+  id: 'id',
+  centerId: 'centerId',
+  counselorId: 'counselorId',
+  isPrimary: 'isPrimary',
+  assignedAt: 'assignedAt',
+  assignedBy: 'assignedBy',
+  status: 'status'
+};
+
+exports.Prisma.CenterTeacherScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  centerId: 'centerId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  specialization: 'specialization',
+  bio: 'bio',
+  avatar: 'avatar',
+  password: 'password',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterProgramScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  centerId: 'centerId',
+  counselorId: 'counselorId',
+  teacherId: 'teacherId',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  mode: 'mode',
+  duration: 'duration',
+  syllabus: 'syllabus',
+  thumbnail: 'thumbnail',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterMaterialScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  centerId: 'centerId',
+  programId: 'programId',
+  uploadedById: 'uploadedById',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  mediaUrl: 'mediaUrl',
+  fileKey: 'fileKey',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  duration: 'duration',
+  chapterOrTopic: 'chapterOrTopic',
+  sequenceOrder: 'sequenceOrder',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterClassScheduleScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  centerId: 'centerId',
+  programId: 'programId',
+  teacherId: 'teacherId',
+  title: 'title',
+  type: 'type',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  roomOrLocation: 'roomOrLocation',
+  meetingLink: 'meetingLink',
+  meetingPassword: 'meetingPassword',
+  recordingUrl: 'recordingUrl',
+  notes: 'notes',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterClassAttendanceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  classScheduleId: 'classScheduleId',
+  studentId: 'studentId',
+  studentEmail: 'studentEmail',
+  studentName: 'studentName',
+  status: 'status',
+  markedBy: 'markedBy',
+  markedById: 'markedById',
+  markedAt: 'markedAt',
+  notes: 'notes'
+};
+
+exports.Prisma.CenterStudentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  centerId: 'centerId',
+  studentCode: 'studentCode',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  phone: 'phone',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  guardianName: 'guardianName',
+  guardianPhone: 'guardianPhone',
+  address: 'address',
+  status: 'status',
+  admittedById: 'admittedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CenterEnrollmentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  programId: 'programId',
+  enrolledAt: 'enrolledAt',
+  enrolledBy: 'enrolledBy',
+  status: 'status',
+  progressPercent: 'progressPercent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1484,6 +1649,37 @@ exports.AssetStatus = exports.$Enums.AssetStatus = {
   DAMAGED: 'DAMAGED'
 };
 
+exports.AcademicCenterType = exports.$Enums.AcademicCenterType = {
+  OFFLINE: 'OFFLINE',
+  ONLINE: 'ONLINE'
+};
+
+exports.AcademicCenterStatus = exports.$Enums.AcademicCenterStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+};
+
+exports.AcademicMaterialType = exports.$Enums.AcademicMaterialType = {
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT',
+  EBOOK: 'EBOOK',
+  SYLLABUS: 'SYLLABUS',
+  RECORDED_CLASS: 'RECORDED_CLASS'
+};
+
+exports.AcademicClassType = exports.$Enums.AcademicClassType = {
+  OFFLINE_LECTURE: 'OFFLINE_LECTURE',
+  ONLINE_LIVE_CLASS: 'ONLINE_LIVE_CLASS'
+};
+
+exports.AcademicClassStatus = exports.$Enums.AcademicClassStatus = {
+  SCHEDULED: 'SCHEDULED',
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   Organization: 'Organization',
   License: 'License',
@@ -1552,7 +1748,17 @@ exports.Prisma.ModelName = {
   ExamRegistration: 'ExamRegistration',
   CommunicationLog: 'CommunicationLog',
   UserFCMToken: 'UserFCMToken',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  AcademicCenter: 'AcademicCenter',
+  AcademicCounselor: 'AcademicCounselor',
+  CenterCounselorAssignment: 'CenterCounselorAssignment',
+  CenterTeacher: 'CenterTeacher',
+  CenterProgram: 'CenterProgram',
+  CenterMaterial: 'CenterMaterial',
+  CenterClassSchedule: 'CenterClassSchedule',
+  CenterClassAttendance: 'CenterClassAttendance',
+  CenterStudent: 'CenterStudent',
+  CenterEnrollment: 'CenterEnrollment'
 };
 
 /**

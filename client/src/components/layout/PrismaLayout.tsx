@@ -23,7 +23,9 @@ import {
   Menu,
   GitBranch,
   Bell,
-  Video
+  Video,
+  BookOpen,
+  Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -32,7 +34,7 @@ import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
 
-interface TableItem {
+export interface TableItem {
   id: string;
   label: string;
   icon?: React.ReactNode;
@@ -113,6 +115,9 @@ export function PrismaLayout({
     switch (tableId) {
       case 'dashboard':
       case 'overview': return <LayoutDashboard className={iconClass} />;
+      case 'classes':
+      case 'live_classes': return <Video className={iconClass} />;
+      case 'materials': return <BookOpen className={iconClass} />;
       case 'users':
       case 'incentive_approval':
       case 'salary_approval':
@@ -130,6 +135,7 @@ export function PrismaLayout({
       case 'leave-alloc': return <FileText className={iconClass} />;
       case 'leads':
       case 'targets':
+      case 'kpi-kra':
       case 'sales_target':
       case 'my_target':
       case 'performance': return <TrendingUp className={iconClass} />;
@@ -141,7 +147,8 @@ export function PrismaLayout({
       case 'branches': return <Building2 className={iconClass} />;
       case 'organizations': return <ShieldCheck className={iconClass} />;
       case 'tasks':
-      case 'my_tasks': return <CheckCircle2 className={iconClass} />;
+      case 'my_tasks':
+      case 'delete_approvals': return <CheckCircle2 className={iconClass} />;
       case 'calendar':
       case 'sessions':
       case 'admission_sessions': return <Calendar className={iconClass} />;
@@ -160,6 +167,8 @@ export function PrismaLayout({
       case 'wallet_topups':
       case 'center_wallet': return <Wallet className={iconClass} />;
       case 'attendance':
+      case 'activity_report':
+      case 'activity-logs':
       case 'my_attendance':
       case 'pending_payment':
       case 'pending_payments':
@@ -168,7 +177,8 @@ export function PrismaLayout({
       case 'my_subdept':
       case 'sub_departments':
       case 'subdepartments': return <GitBranch className={iconClass} />;
-      case 'announcements': return <Bell className={iconClass} />;
+      case 'announcements':
+      case 'notifications': return <Bell className={iconClass} />;
       case 'programs':
       case 'ld_portal':
       case 'ld-portal':
@@ -374,7 +384,7 @@ export function PrismaLayout({
             </div>
 
             <div className="h-8 w-px bg-border mx-1" />
-            {userRole !== 'student' && (
+            {!['student', 'center_student', 'center_teacher', 'teacher', 'academic_counselor'].includes(userRole || '') && (
               <PunchWidget compact={true} />
             )}
 

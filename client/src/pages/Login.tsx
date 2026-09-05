@@ -20,6 +20,8 @@ export function Login() {
     const success = await login(email, password);
     if (!success) {
       setError('Invalid email or password');
+    } else {
+      window.history.replaceState({}, '', '/');
     }
 
     setIsLoading(false);

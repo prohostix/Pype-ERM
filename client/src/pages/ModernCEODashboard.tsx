@@ -146,6 +146,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
           <TabsTrigger value="students" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Students</TabsTrigger>
           <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Enrollment Review</TabsTrigger>
           <TabsTrigger value="invoices" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Invoices</TabsTrigger>
+          <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>
           <TabsTrigger value="leads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leads</TabsTrigger>
           <TabsTrigger value="university_commissions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Commissions</TabsTrigger>
           <TabsTrigger value="activity_report" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Report</TabsTrigger>
@@ -629,7 +630,7 @@ function EscalationsPanel() {
         </Card>
       </div>
 
-      <Tabs value={activeTab} onValueChange={handleNavigate}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="relative w-full max-w-full">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">

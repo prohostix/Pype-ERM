@@ -84,12 +84,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       collections: ['finance', 'collections'],
       hr_admin: ['hr', 'employees', 'attendance', 'leave', 'recruitment', 'complaints'],
       hr_sub_admin: ['hr', 'employees', 'attendance', 'leave', 'recruitment', 'complaints'],
-      sales_admin: ['sales', 'leads', 'deals', 'referrals', 'targets'],
-      sales_sub_admin: ['sales', 'leads', 'deals', 'referrals', 'targets'],
+      sales_admin: ['sales', 'leads', 'deals', 'referrals', 'targets', 'dashboard', 'all'],
+      sales_sub_admin: ['sales', 'leads', 'deals', 'referrals', 'targets', 'dashboard', 'all'],
+      sales: ['sales', 'leads', 'deals', 'referrals', 'targets', 'dashboard', 'all'],
       center_admin: ['center', 'students', 'invoices', 'marks'],
+      academic_counselor: ['dashboard', 'academic_centers', 'all'],
+      center_student: ['dashboard', 'all'],
+      center_teacher: ['dashboard', 'all'],
+      teacher: ['dashboard', 'all'],
       employee: ['tasks', 'attendance', 'leave', 'profile'],
       student: ['tasks', 'attendance', 'leave', 'profile'],
-      
     };
 
     const hasCustomPermissions = Array.isArray(user.permissions) && user.permissions.includes('__custom__');

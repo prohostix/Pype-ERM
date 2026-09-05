@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
 import { LandingPage } from '@/pages/LandingPage';
 import { Dashboard } from '@/pages/Dashboard';
-import { PrismaLayout } from '@/components/layout/PrismaLayout';
+import { PrismaLayout, type TableItem } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
 import PublicRegisterPage from '@/pages/PublicRegisterPage';
 import StudentApplicationPage from '@/pages/StudentApplicationPage';
@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 
 type ViewMode = 'dashboard' | 'table';
 
-const EMPLOYEE_NAV_ITEMS = [
+const EMPLOYEE_NAV_ITEMS: TableItem[] = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'tasks', label: 'My Tasks' },
   { id: 'leaves', label: 'My Leaves' },
@@ -30,11 +30,12 @@ const EMPLOYEE_NAV_ITEMS = [
   { id: 'ld-portal', label: 'L&D Portal' },
 ];
 
-const STUDENT_NAV_ITEMS = [
+const STUDENT_NAV_ITEMS: TableItem[] = [
   { id: 'overview', label: 'Overview' },
-  { id: 'notifications', label: 'Notifications' },
+  { id: 'classes', label: 'Live Classes' },
   { id: 'materials', label: 'Classes & E-Books' },
   { id: 'fees', label: 'Fee details' },
+  { id: 'notifications', label: 'Notifications' },
   { id: 'invoices', label: 'Invoices' },
   { id: 'refer_admission', label: 'Refer Admission' },
   { id: 'terms', label: 'Terms & Conditions' },
@@ -52,6 +53,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   branches: 'branches',
   settings: 'settings',
   dsms_migration: 'dsms_migration',
+  academic_centers: 'academic_centers',
   // Shared
   users: 'users',
   departments: 'departments',
@@ -91,8 +93,29 @@ const TABLE_TO_TAB: Record<string, string> = {
   enrollment_review: 'enrollment_review',
   // Sales
   leads: 'leads',
+  lead_management: 'lead_management',
   enrolled_students: 'enrolled_students',
+  payment_status: 'payment_status',
+  course_details_dash: 'course_details_dash',
+  course_details_res: 'course_details_res',
   invite_links: 'invite_links',
+  admission_status_overview: 'admission_status_overview',
+  admission_pipeline: 'admission_pipeline',
+  student_status: 'student_status',
+  team_members: 'team_members',
+  attendance_overview: 'attendance_overview',
+  assign_tasks: 'assign_tasks',
+  individual_target: 'individual_target',
+  team_reports: 'team_reports',
+  admission_reports: 'admission_reports',
+  conversion_report: 'conversion_report',
+  daily_activity_report: 'daily_activity_report',
+  counselor_admission_reports: 'counselor_admission_reports',
+  performance_reports: 'performance_reports',
+  university_details_res: 'university_details_res',
+  brochures: 'brochures',
+  approval_requests: 'approval_requests',
+  support_requests: 'support_requests',
   sub_departments: 'subdepartments',
   // CEO
   performance: 'performance',
@@ -111,6 +134,15 @@ const TABLE_TO_TAB: Record<string, string> = {
   audit_logs: 'overview',
   collections: 'collections',
   biometric_devices: 'biometric-devices',
+  // Student Portal
+  overview: 'overview',
+  classes: 'classes',
+  materials: 'materials',
+  fees: 'fees',
+  notifications: 'notifications',
+  refer_admission: 'refer_admission',
+  terms: 'terms',
+  help: 'help',
 };
 
 function App() {
@@ -130,8 +162,13 @@ function App() {
       case 'hr_admin':
       case 'hr_sub_admin':
       case 'sales_admin':
-      case 'sales_sub_admin': return 'overview';
-      case 'student': return 'overview';
+      case 'sales_sub_admin':
+      case 'sales': return 'overview';
+      case 'student':
+      case 'center_student': return 'overview';
+      case 'academic_counselor': return 'dashboard';
+      case 'center_teacher':
+      case 'teacher': return 'dashboard';
       default: return 'tasks';
     }
   };
@@ -197,7 +234,7 @@ function App() {
 
   // Check if standard user is designated collections overseer
   useEffect(() => {
-    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin'].includes(user.role)) {
+    if (user && !['superadmin', 'ceo', 'org_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'academic_counselor', 'center_student', 'student', 'center_teacher', 'teacher'].includes(user.role)) {
       api.get('/collections/metrics')
         .then(res => {
           if (res.data.success && res.data.data?.currentUserOversight?.isOverseer) {
@@ -318,10 +355,10 @@ function App() {
   }
 
   // Define available tables based on user role
-  function getAvailableTables() {
+  function getAvailableTables(): TableItem[] {
     if (!user) return [];
     
-    const baseTables = [
+    const baseTables: TableItem[] = [
       { id: 'dashboard', label: 'Dashboard' },
       { id: 'users', label: 'Users' },
       { id: 'tasks', label: 'Tasks' },
@@ -344,17 +381,27 @@ function App() {
 
     if (user.role === 'ceo' || user.role === 'general_manager') {
       return [
-        { id: 'dashboard', label: 'Dashboard' },
+        { id: 'dashboard', label: 'Executive Overview' },
         { id: 'performance', label: 'Performance' },
+        { id: 'kpi-kra', label: 'KPI / KRA Report' },
         { id: 'users', label: 'Users' },
         { id: 'departments', label: 'Departments' },
         { id: 'tasks', label: 'Tasks' },
         { id: 'escalations', label: 'Escalations' },
         { id: 'students', label: 'Students' },
+        { id: 'enrollment_review', label: 'Enrollment Review' },
         { id: 'invoices', label: 'Invoices' },
         { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
-        ...(user.role === 'ceo' ? [{ id: 'meetings', label: 'Meetings' }] : []),
+        { id: 'university_commissions', label: 'Commissions' },
+        { id: 'activity_report', label: 'Activity Report' },
+        ...(user.role === 'ceo'
+          ? [
+              { id: 'delete_approvals', label: 'Delete Approvals' },
+              { id: 'meetings', label: 'Meetings' },
+              { id: 'activity-logs', label: 'Activity Logs' },
+            ]
+          : []),
       ];
     }
 
@@ -369,6 +416,7 @@ function App() {
         { id: 'students', label: 'Students' },
         { id: 'universities', label: 'Universities' },
         { id: 'programs', label: 'Programs' },
+        { id: 'academic_centers', label: 'Academic Centers' },
         { id: 'study_centers', label: 'Study Centers' },
         { id: 'invoices', label: 'Invoices' },
         { id: 'payments', label: 'Payments' },
@@ -411,6 +459,10 @@ function App() {
       return getSalesNavItems(false);
     }
 
+    if (user.role === 'sales') {
+      return getSalesNavItems(false);
+    }
+
     if (['collections_admin', 'collections'].includes(user.role)) {
       return getCollectionsNavItems();
     }
@@ -427,10 +479,23 @@ function App() {
       ];
     }
 
-    const result = (() => {
-      if (user.role === 'student') {
-        return STUDENT_NAV_ITEMS;
-      }
+    if (user.role === 'academic_counselor') {
+      return [
+        { id: 'dashboard', label: 'Counselor Portal' },
+      ];
+    }
+
+    if (user.role === 'center_teacher' || user.role === 'teacher') {
+      return [
+        { id: 'dashboard', label: 'Teacher Portal' },
+      ];
+    }
+
+    if (user.role === 'student' || user.role === 'center_student') {
+      return [...STUDENT_NAV_ITEMS];
+    }
+
+    const result: TableItem[] = (() => {
       if (user.role === 'employee') {
         const isSubDeptManager = Boolean((user as any)?.subDepartmentId);
         if (deptType) {
@@ -453,24 +518,27 @@ function App() {
       return baseTables;
     })();
 
-    if (isCollectionsOverseer && !result.some(t => t.id === 'collections')) {
-      result.push({ id: 'collections', label: 'Collections' });
+    const mutableResult: TableItem[] = [...result];
+
+    if (isCollectionsOverseer && !mutableResult.some(t => t.id === 'collections')) {
+      mutableResult.push({ id: 'collections', label: 'Collections' });
     }
 
-    if (user.role !== 'student' && !result.some(t => t.id === 'meetings')) {
-      result.push({ id: 'meetings', label: 'Meetings' });
+    if (user.role !== 'student' && user.role !== 'center_student' && !mutableResult.some(t => t.id === 'meetings')) {
+      mutableResult.push({ id: 'meetings', label: 'Meetings' });
     }
 
-    let finalResult = result;
+    let finalResult: TableItem[] = mutableResult;
     const adminRolesForTeams = ['finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'];
     if (!adminRolesForTeams.includes(user.role)) {
       finalResult = finalResult.filter(item => item.id !== 'team_permissions');
     }
 
-    if (user.permissions && Array.isArray(user.permissions) && user.permissions.includes('__custom__')) {
-      const allowed = finalResult.filter(item => {
+    const userPermissions = user.permissions;
+    if (userPermissions && Array.isArray(userPermissions) && userPermissions.includes('__custom__')) {
+      const allowed: TableItem[] = finalResult.filter(item => {
         if (item.isSection || item.id === 'overview' || item.id === 'dashboard' || item.id === 'team_permissions' || item.id.startsWith('__')) return true;
-        return user.permissions.includes(item.id);
+        return userPermissions.includes(item.id);
       });
 
       // Remove sections that have no children
@@ -510,11 +578,11 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin', 'collections'];
-    const isEmployeeSubDeptManager = ['employee', 'student'].includes(user?.role || '') && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager'];
+    const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
-    const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student';
-    const isStudentRole = user?.role === 'student';
+    const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';
+    const isStudentRole = user?.role === 'student' || user?.role === 'center_student';
     if (user && (roleDashboardRoles.includes(user.role) || isEmployeeSubDeptManager || isEmployeeRole || isBranchManager || isStudentRole)) {
       setViewMode('dashboard');
       setActiveTable(table);
@@ -939,9 +1007,9 @@ function App() {
   }
 
   // For employees with department or sub-department assignments, route to department dashboard
-  // Branch managers are excluded — they always get the branch dashboard
+  // Branch managers and students are excluded
   const shouldUseDepartmentDashboard = Boolean(
-    (user.role === 'employee' || user.role === 'student') &&
+    user.role === 'employee' &&
     !(user as any).isBranchManager &&
     (user.departmentId || (user as any).subDepartmentId) &&
     viewMode === 'dashboard'

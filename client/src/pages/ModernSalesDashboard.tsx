@@ -37,6 +37,7 @@ import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { EscalationsPanel } from '@/components/panels/EscalationsPanel';
 import { ComplaintsPanel } from '@/components/panels/ComplaintsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
 import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { 
   BarChart, 
@@ -59,7 +60,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate }: { initialTab?: string; isSubDeptManager?: boolean; onNavigate?: (tab: string) => void }) {
   const { user } = useAuth();
-  const isSalesAdmin = user?.role === 'sales_admin' || (user?.role === 'employee' && isSubDeptManager && user?.department?.name === 'Sales');
+  const isDeptSales = user?.department?.type === 'sales' || user?.department?.name?.toLowerCase().includes('sales');
+  const isSalesAdmin = user?.role === 'sales_admin' || (user?.role === 'employee' && isSubDeptManager && isDeptSales);
 
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>({});
@@ -80,7 +82,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
     setLoading(true);
     try {
       const [metricsRes, studentsRes, targetsRes] = await Promise.all([
-        api.get('/dashboard/metrics'),
+        api.get('/dashboard/metrics').catch(() => ({ data: { data: {} } })),
         api.get('/students').catch(() => ({ data: { data: [] } })),
         api.get('/sales/targets').catch(() => ({ data: { data: [] } })),
       ]);
@@ -94,9 +96,9 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
     }
   };
 
-  // Sub-dept manager (employee in sales dept) — scoped personal view
+  // Sub-dept manager (employee in sales dept) or sales employee — scoped personal view
   if (!isSalesAdmin) {
-    return <SalesEmployeePortal initialTab={initialTab} user={user} />;
+    return <SalesEmployeePortal initialTab={initialTab} user={user} onNavigate={handleNavigate} />;
   }
 
   const renderContent = () => {
@@ -114,7 +116,15 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'student_status': return <StudentsPanel />;
       case 'student_applications':
       case 'pending_admissions':
+      case 'admission_status_overview':
       case 'admission_pipeline': return <SalesStudentPipelinePanel />;
+      case 'invite_links': return <SalesInvitePanel />;
+
+      // Payments
+      case 'payments':
+      case 'payment':
+      case 'payment_status':
+      case 'pending_payment': return <PaymentsPanel />;
 
       // My Team
       case 'team_members':
@@ -130,9 +140,12 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'target_vs_achievement':
       case 'individual_target':
       case 'achievement_tracking':
+      case 'incentive_status':
       case 'target_history': return <TargetsPanel endpoint="/sales/targets" title="Sales Targets" />;
 
       // Lead & Follow-up
+      case 'leads':
+      case 'lead_management':
       case 'total_leads':
       case 'follow_up_status':
       case 'hot_leads': return <LeadsPanel />;
@@ -147,8 +160,10 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
 
       // Performance & Reports
       case 'team_reports': return <SalesTeamReportPanel />;
-      case 'counselor_reports': return <SalesCounselorReportPanel />;
-      case 'admission_reports': return <SalesAdmissionReportPanel />;
+      case 'counselor_reports':
+      case 'performance_reports': return <SalesCounselorReportPanel />;
+      case 'admission_reports':
+      case 'counselor_admission_reports': return <SalesAdmissionReportPanel />;
       case 'conversion_report': return <SalesConversionReportPanel />;
 
       // Team Communication
@@ -159,13 +174,21 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'notice-board': return <NoticeBoardPanel />;
 
       // Sales Resources
-      case 'course_details': return <ProgramsPanel />;
-      case 'fee_structure': return <FeeStructuresPanel />;
-      case 'university_details': return <UniversitiesPanel />;
-      case 'sales_materials': return <NoticeBoardPanel />;
+      case 'course_details':
+      case 'course_details_dash':
+      case 'course_details_res':
+      case 'programs': return <ProgramsPanel />;
+      case 'fee_structure':
+      case 'fee_structure_res': return <FeeStructuresPanel />;
+      case 'university_details':
+      case 'university_details_res':
+      case 'universities': return <UniversitiesPanel />;
+      case 'sales_materials':
+      case 'brochures': return <NoticeBoardPanel />;
 
       // Requests & Approvals
-      case 'team_requests': return <EscalationsPanel />;
+      case 'team_requests':
+      case 'approval_requests': return <EscalationsPanel />;
       case 'admission_approval': return <SalesStudentPipelinePanel />;
       case 'support_requests': return <ComplaintsPanel />;
 
@@ -175,9 +198,10 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'my_payslips': return <PayrollPanel />;
       case 'holidays': return <HolidaysPanel />;
-      case 'invite_links': return <SalesInvitePanel />;
 
-      default: return null;
+      default: return (
+        <OverviewContent metrics={metrics} students={students} targets={targets} loading={loading} onNavigate={handleNavigate} />
+      );
     }
   };
 
@@ -199,12 +223,16 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
       { id: 'pending_actions', label: 'Pending Actions' },
 
       { id: '__enrollment', label: 'Enrollment', isSection: true },
+      { id: 'invite_links', label: 'Generate Student Link' },
       { id: 'admission_pipeline', label: 'Admission Pipeline' },
       { id: 'student_status', label: 'Student Status' },
+      { id: 'payment_status', label: 'Payment Status' },
+      { id: 'leads', label: 'Lead Management' },
 
       { id: '__my_team', label: 'My Team', isSection: true },
       { id: 'team_members', label: 'Team Members' },
       { id: 'attendance_overview', label: 'Attendance Overview' },
+      { id: 'team_permissions', label: 'Team Permissions' },
 
       { id: '__tasks', label: 'Task Management', isSection: true },
       { id: 'assign_tasks', label: 'Assign Tasks' },
@@ -556,16 +584,23 @@ function SalesMetric({ title, value, trend, icon, color, onClick }: any) {
 }
 
 // ─── Sales Employee Portal (sub-dept managers, sales employees) ───────────────
-function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: any }) {
+function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: string; user: any; onNavigate?: (tab: string) => void }) {
   const isSubDeptManager = Boolean(user?.subDepartmentId);
   const [activeTab, setActiveTab] = useState(initialTab || (isSubDeptManager ? 'my_subdept' : 'overview'));
   const [students, setStudents] = useState<any[]>([]);
   const [targets, setTargets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const handleNavigate = (tab: string) => {
+    setActiveTab(tab);
+    if (onNavigate) onNavigate(tab);
+  };
+
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
-    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
   }, [initialTab]);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -617,17 +652,17 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
 
       {/* Executive Overview Row 1: Performance */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-        <Card><CardContent className="p-4 text-center">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Admissions</p>
           <p className="text-2xl font-bold mt-1 text-primary">{loading ? '...' : myStudents.length}</p>
         </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Target</p>
           <p className="text-2xl font-bold mt-1">
             {loading ? '...' : myTargets.reduce((s: number, t: any) => s + (t.target || 0), 0)}
           </p>
         </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">Achievement %</p>
           <p className="text-2xl font-bold mt-1 text-info">
             {loading ? '...' : (myTargets.length > 0
@@ -635,13 +670,13 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
               : 0)}%
           </p>
         </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">My Collection</p>
           <p className="text-2xl font-bold mt-1 text-success">
             {loading ? '...' : `₹${actualCollection.toLocaleString('en-IN')}`}
           </p>
         </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('targets')}><CardContent className="p-4 text-center">
           <p className="text-[10px] text-muted-foreground uppercase font-bold">Expected Incentive</p>
           <p className="text-2xl font-bold mt-1 text-warning">
             {loading ? '...' : `₹${myTargets.reduce((s: number, t: any) => s + (t.achieved >= t.target ? (t.incentive || 0) : 0), 0).toLocaleString('en-IN')}`}
@@ -651,35 +686,35 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
 
       {/* Executive Overview Row 2: Admission Status */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-        <Card><CardContent className="p-4 flex items-center gap-3">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-yellow-500/10 rounded-full text-yellow-500"><Clock className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Verification Pending</p>
             <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'pending').length}</p>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-orange-500/10 rounded-full text-orange-500"><Zap className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Payment Pending</p>
             <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'payment_pending').length}</p>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('admission_status_overview')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-blue-500/10 rounded-full text-blue-500"><ArrowUpRight className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Handover Pending</p>
             <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'ops_pending').length}</p>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-green-500/10 rounded-full text-green-500"><Target className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Ops Accepted</p>
             <p className="text-xl font-bold">{loading ? '...' : myStudents.filter((s: any) => s.status === 'active').length}</p>
           </div>
         </CardContent></Card>
-        <Card><CardContent className="p-4 flex items-center gap-3">
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('enrolled_students')}><CardContent className="p-4 flex items-center gap-3">
           <div className="p-2 bg-red-500/10 rounded-full text-red-500"><BarChart3 className="w-4 h-4" /></div>
           <div>
             <p className="text-[10px] text-muted-foreground uppercase font-bold">Cancelled Admissions</p>
@@ -768,41 +803,103 @@ function SalesEmployeePortal({ initialTab, user }: { initialTab?: string; user: 
             </div>
           );
           case 'my_subdept': return isSubDeptManager ? <SubSalesPortalPanel /> : null;
+          
+          // Enrollment & Students
           case 'enrolled_students':
-          case 'my_total_admissions': return <StudentsPanel />;
-          case 'targets': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
-          case 'invite_links': return <SalesInvitePanel />;
-          case 'student_applications': return <SalesStudentPipelinePanel />;
-          case 'my_team': return <TeamPerformancePanel />;
-          case 'my_attendance': return <AttendancePanel isMyPortal />;
-          case 'my_leaves': return <LeavesPanel />;
-          case 'my_payslips': return <PayrollPanel />;
-          case 'tasks': return <TasksPanel />;
-          case 'announcements': return <AnnouncementsPanel />;
-          case 'notice-board': return <NoticeBoardPanel />;
-          case 'holidays': return <HolidaysPanel />;
+          case 'team_enrolled_students':
+          case 'student_status':
           case 'student_details_status':
-          case 'payment_status': return <StudentsPanel />;
-          case 'course_details_dash':
-          case 'course_details_res': return <ProgramsPanel />;
-          case 'create_student': return <EnrollStudentPanel />;
+          case 'my_total_admissions': return <StudentsPanel />;
+
+          // Payments
+          case 'payments':
+          case 'payment':
+          case 'payment_status':
+          case 'pending_payment': return <PaymentsPanel />;
+
+          // Pipeline & Invites
+          case 'invite_links': return <SalesInvitePanel />;
+          case 'student_applications':
+          case 'pending_admissions':
+          case 'admission_pipeline':
           case 'admission_status_overview':
           case 'document_status': return <SalesStudentPipelinePanel />;
-          case 'pending_tasks':
-          case 'completed_tasks_counselor': return <TasksPanel />;
+          case 'create_student':
+          case 'team_student_registration': return <EnrollStudentPanel />;
+
+          // Targets & Performance
+          case 'targets':
+          case 'target_vs_achievement':
+          case 'individual_target':
           case 'achievement':
           case 'admission_count':
           case 'incentive_status': return <TargetsPanel endpoint="/sales/targets" title="My Targets" />;
+
+          // Tasks
+          case 'tasks':
+          case 'pending_actions':
+          case 'lead_pending_actions':
+          case 'assign_tasks':
+          case 'task_status':
+          case 'pending_tasks':
+          case 'completed_tasks':
+          case 'completed_tasks_counselor': return <TasksPanel />;
+
+          // Leads
+          case 'leads':
+          case 'lead_management':
+          case 'total_leads':
+          case 'follow_up_status':
+          case 'hot_leads': return <LeadsPanel />;
+
+          // Reports
           case 'counselor_admission_reports':
-          case 'performance_reports': return <CEOKPIReportPanel />;
+          case 'admission_reports': return <SalesAdmissionReportPanel />;
+          case 'performance_reports':
+          case 'counselor_reports': return <SalesCounselorReportPanel />;
+          case 'team_reports': return <SalesTeamReportPanel />;
+          case 'conversion_report': return <SalesConversionReportPanel />;
+          case 'daily_activity_report':
+          case 'attendance_overview': return <EmployeeActivityReportPanel />;
+
+          // Resources
+          case 'course_details':
+          case 'course_details_dash':
+          case 'course_details_res':
+          case 'programs': return <ProgramsPanel />;
+          case 'university_details':
+          case 'university_details_res':
+          case 'universities': return <UniversitiesPanel />;
+          case 'fee_structure':
           case 'fee_structure_res': return <FeeStructuresPanel />;
-          case 'university_details_res': return <UniversitiesPanel />;
-          case 'brochures': return <NoticeBoardPanel />;
+          case 'brochures':
+          case 'sales_materials': return <NoticeBoardPanel />;
+
+          // Requests & Approvals
+          case 'team_requests':
           case 'approval_requests': return <EscalationsPanel />;
+          case 'admission_approval': return <SalesStudentPipelinePanel />;
           case 'support_requests': return <ComplaintsPanel />;
-          case 'my_profile': return <MyProfilePanel />;
-          case 'lead_management': return <LeadsPanel />;
+
+          // Team & Meetings
+          case 'my_team':
+          case 'team_members':
+          case 'todays_performance': return <TeamPerformancePanel />;
           case 'meetings': return <MeetingsPanel />;
+
+          // My Portal
+          case 'my_profile': return <MyProfilePanel />;
+          case 'my_attendance': return <AttendancePanel isMyPortal />;
+          case 'my_leaves': return <LeavesPanel />;
+          case 'my_payslips': return <PayrollPanel />;
+          case 'holidays': return <HolidaysPanel />;
+          case 'announcements':
+          case 'team_announcements': return <AnnouncementsPanel />;
+          case 'notice-board':
+          case 'team_notes':
+          case 'important_updates': return <NoticeBoardPanel />;
+
+          default: return null;
         }
       })()}
     </div>

@@ -11,11 +11,17 @@ import {
   ArrowRight,
   AlertCircle,
   CheckCircle,
-  Printer,
-  Sparkles,
-  TrendingUp,
-  ShieldCheck,
-  MessageSquare
+  Printer, 
+  Sparkles, 
+  TrendingUp, 
+  ShieldCheck, 
+  MessageSquare,
+  Video,
+  Clock,
+  MapPin,
+  ExternalLink,
+  PlayCircle,
+  UserCheck
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,7 +37,12 @@ interface StudentPortalProps {
 }
 
 export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalProps) {
-  const [activeTab, setActiveTab] = useState(initialTab || 'overview');
+  const [activeTab, setActiveTab] = useState(!initialTab || initialTab === 'dashboard' ? 'overview' : initialTab);
+
+  useEffect(() => {
+    setActiveTab(!initialTab || initialTab === 'dashboard' ? 'overview' : initialTab);
+  }, [initialTab]);
+
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
     if (onNavigate) onNavigate(tab);
@@ -42,11 +53,31 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const [notifications, setNotifications] = useState<any[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [materials, setMaterials] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [classFilter, setClassFilter] = useState<'all' | 'upcoming' | 'live' | 'online' | 'offline'>('all');
   const [schedules, setSchedules] = useState<any[]>([]);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [showPaymentGateway, setShowPaymentGateway] = useState<any>(null); // holds schedule or invoice to pay
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paying, setPaying] = useState(false);
+  const [markingAttendance, setMarkingAttendance] = useState<string | null>(null);
+
+  const handleRegisterAttendance = async (classId: string) => {
+    setMarkingAttendance(classId);
+    try {
+      const res = await api.post(`/student-portal/classes/${classId}/attendance`);
+      if (res.data.success) {
+        toast.success(res.data.message || 'Attendance registered successfully!');
+        setClasses((prev) =>
+          prev.map((c) => (c.id === classId ? { ...c, myAttendance: res.data.data } : c))
+        );
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to register attendance');
+    } finally {
+      setMarkingAttendance(null);
+    }
+  };
 
   useEffect(() => {
     fetchStudentData();
@@ -56,20 +87,39 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     setLoading(true);
     try {
       // 1. Fetch Profile to verify if user is linked to a student
-      const profileRes = await api.get('/student-portal/profile');
-      if (!profileRes.data.success || !profileRes.data.data) {
-        setIsNotStudent(true);
-        setLoading(false);
-        return;
+      const profileRes = await api.get('/student-portal/profile').catch(() => null);
+      if (profileRes?.data?.success && profileRes?.data?.data) {
+        setProfile(profileRes.data.data);
+      } else {
+        // Fallback: Check if this account belongs to an Academic Center student
+        const centerRes = await api.get('/academic-center/student-portal/dashboard').catch(() => null);
+        if (centerRes?.data?.success && centerRes.data.data?.student) {
+          const cs = centerRes.data.data.student;
+          const firstEnrollment = cs.enrollments?.[0];
+          setProfile({
+            id: cs.id,
+            name: cs.name,
+            email: cs.email,
+            phone: cs.phone,
+            admissionNo: cs.studentCode,
+            status: cs.status,
+            program: firstEnrollment?.program || null,
+            center: centerRes.data.data.center || null,
+          });
+        } else {
+          setIsNotStudent(true);
+          setLoading(false);
+          return;
+        }
       }
-      setProfile(profileRes.data.data);
 
-      // 2. Fetch other student portal data in parallel
-      const [notifRes, matRes, feeRes, invRes] = await Promise.all([
+      // 2. Fetch student portal data in parallel
+      const [notifRes, matRes, feeRes, invRes, classesRes] = await Promise.all([
         api.get('/student-portal/notifications').catch(() => ({ data: { data: { notifications: [], announcements: [] } } })),
         api.get('/student-portal/materials').catch(() => ({ data: { data: [] } })),
         api.get('/student-portal/fees').catch(() => ({ data: { data: { schedules: [], feeStructures: [] } } })),
         api.get('/student-portal/invoices').catch(() => ({ data: { data: [] } })),
+        api.get('/student-portal/classes').catch(() => ({ data: { data: [] } })),
       ]);
 
       setNotifications(notifRes.data.data?.notifications || []);
@@ -77,6 +127,16 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       setMaterials(matRes.data.data || []);
       setSchedules(feeRes.data.data?.schedules || []);
       setInvoices(invRes.data.data || []);
+
+      let fetchedClasses = classesRes.data.data || [];
+      if (fetchedClasses.length === 0) {
+        // Fallback to academic center classes endpoint if needed
+        const altClassesRes = await api.get('/academic-center/student-portal/classes').catch(() => null);
+        if (altClassesRes?.data?.success && Array.isArray(altClassesRes.data.data)) {
+          fetchedClasses = altClassesRes.data.data;
+        }
+      }
+      setClasses(fetchedClasses);
     } catch (error) {
       console.error('Failed to fetch student data:', error);
       setIsNotStudent(true);
@@ -267,12 +327,38 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
     }
   };
 
+  // Class helper utilities
+  const isClassLive = (cls: any) => {
+    const now = new Date();
+    const start = new Date(cls.startTime);
+    const end = new Date(cls.endTime);
+    return now >= start && now <= end;
+  };
+
+  const isClassUpcoming = (cls: any) => {
+    const now = new Date();
+    const end = new Date(cls.endTime || cls.startTime);
+    return end >= now;
+  };
+
+  const upcomingClasses = classes.filter(isClassUpcoming);
+  const liveClasses = classes.filter(isClassLive);
+
+  const filteredClasses = classes.filter((cls) => {
+    if (classFilter === 'upcoming') return isClassUpcoming(cls);
+    if (classFilter === 'live') return isClassLive(cls);
+    if (classFilter === 'online') return cls.type === 'ONLINE' || Boolean(cls.meetingLink);
+    if (classFilter === 'offline') return cls.type === 'OFFLINE' || Boolean(cls.roomOrLocation);
+    return true;
+  });
+
   // Nav tabs definition
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <User className="w-4 h-4" /> },
-    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
+    { id: 'classes', label: 'Live Classes', icon: <Video className="w-4 h-4" />, count: upcomingClasses.length },
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
     { id: 'fees', label: 'Fee details', icon: <CreditCard className="w-4 h-4" />, count: pendingSchedules.length },
+    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
     { id: 'invoices', label: 'Invoices', icon: <FileText className="w-4 h-4" /> },
     { id: 'refer_admission', label: 'Refer Admission', icon: <TrendingUp className="w-4 h-4" /> },
     { id: 'terms', label: 'Terms & Conditions', icon: <ShieldCheck className="w-4 h-4" /> },
@@ -497,6 +583,144 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                 )}
               </CardContent>
             </Card>
+
+            {/* UPCOMING CLASSES & LECTURES WIDGET ON OVERVIEW */}
+            <Card className="md:col-span-3 border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Video className="w-5 h-5 text-primary" /> Upcoming Classes & Lectures
+                  </CardTitle>
+                  <CardDescription>Live online sessions and campus lectures scheduled for your programs</CardDescription>
+                </div>
+                {classes.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleNavigate('classes')}
+                    className="text-xs text-primary hover:text-primary hover:bg-primary/10 gap-1 font-medium"
+                  >
+                    View All Schedule ({classes.length})
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Button>
+                )}
+              </CardHeader>
+              <CardContent>
+                {upcomingClasses.length === 0 ? (
+                  <div className="text-center py-6 text-muted-foreground text-xs">
+                    <Calendar className="w-8 h-8 mx-auto opacity-25 mb-1.5" />
+                    No upcoming classes scheduled right now.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {upcomingClasses.slice(0, 3).map((cls) => {
+                      const live = isClassLive(cls);
+                      const isOnline = cls.type === 'ONLINE' || Boolean(cls.meetingLink);
+                      return (
+                        <div key={cls.id} className="p-3.5 rounded-xl border border-border bg-background/50 flex flex-col justify-between hover:border-primary/40 transition-all shadow-xs">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-1">
+                              <Badge variant="outline" className={cn(
+                                "text-[10px] py-0 px-1.5 flex items-center gap-1",
+                                isOnline ? "bg-blue-500/10 text-blue-500 border-blue-500/20" : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                              )}>
+                                {isOnline ? <Video className="w-2.5 h-2.5" /> : <MapPin className="w-2.5 h-2.5" />}
+                                {isOnline ? 'Online Live' : 'Campus / Room'}
+                              </Badge>
+                              {live ? (
+                                <Badge variant="default" className="bg-emerald-600 text-[10px] py-0 px-1.5 animate-pulse text-white">
+                                  LIVE NOW
+                                </Badge>
+                              ) : (
+                                <span className="text-[10px] text-muted-foreground">
+                                  {new Date(cls.startTime).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                                </span>
+                              )}
+                            </div>
+                            <h4 className="font-semibold text-sm line-clamp-1">{cls.title}</h4>
+                            <p className="text-xs text-primary font-medium line-clamp-1">
+                              {cls.program?.university?.name ? `[${cls.program.university.name}] ` : ''}
+                              {cls.program?.name || profile?.program?.name}
+                            </p>
+                            <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span>
+                                {new Date(cls.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(cls.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                            {cls.teacher && (
+                              <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                                <User className="w-3 h-3 text-muted-foreground" />
+                                <span>Faculty: {cls.teacher.name}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="pt-2.5 mt-2 border-t flex flex-col gap-2">
+                            {/* Attendance status / action */}
+                            {isOnline ? (
+                              cls.myAttendance ? (
+                                <div className="flex items-center justify-between text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded">
+                                  <span className="flex items-center gap-1">
+                                    <CheckCircle className="w-3 h-3 text-emerald-500" />
+                                    Attendance: Present
+                                  </span>
+                                  <span className="text-[10px] text-muted-foreground font-normal">
+                                    {new Date(cls.myAttendance.markedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  </span>
+                                </div>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  disabled={markingAttendance === cls.id}
+                                  onClick={() => handleRegisterAttendance(cls.id)}
+                                  className="h-6 text-[11px] text-primary border-primary/30 hover:bg-primary/10 gap-1 font-medium justify-center"
+                                >
+                                  <UserCheck className="w-3 h-3" />
+                                  {markingAttendance === cls.id ? 'Marking...' : 'Register Attendance (Online)'}
+                                </Button>
+                              )
+                            ) : (
+                              <div className="text-[11px] text-muted-foreground flex items-center justify-between bg-muted/40 px-2 py-1 rounded">
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="w-3 h-3 text-primary" />
+                                  {cls.myAttendance ? (
+                                    <strong className={cls.myAttendance.status === 'PRESENT' ? 'text-emerald-600' : 'text-destructive'}>
+                                      Teacher Marked: {cls.myAttendance.status}
+                                    </strong>
+                                  ) : (
+                                    'Campus class (Teacher marks attendance)'
+                                  )}
+                                </span>
+                              </div>
+                            )}
+
+                            {isOnline && cls.meetingLink ? (
+                              <Button size="sm" className="h-7 text-xs gap-1 w-full font-medium" asChild>
+                                <a
+                                  href={cls.meetingLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => {
+                                    if (!cls.myAttendance) handleRegisterAttendance(cls.id);
+                                  }}
+                                >
+                                  <Video className="w-3 h-3" /> Join Class
+                                </a>
+                              </Button>
+                            ) : !isOnline && (
+                              <span className="text-xs font-medium text-foreground flex items-center gap-1">
+                                <MapPin className="w-3 h-3 text-primary" /> {cls.roomOrLocation || 'Physical Campus'}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         )}
 
@@ -559,6 +783,258 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
           </div>
         )}
 
+        {/* CLASSES & SCHEDULE */}
+        {activeTab === 'classes' && (
+          <div className="space-y-4">
+            <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Video className="w-5 h-5 text-primary" /> Classes & Lecture Schedule
+                  </CardTitle>
+                  <CardDescription>
+                    Live online lectures, classroom sessions, and recordings for your programs
+                  </CardDescription>
+                </div>
+                {/* Filter Pills */}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <Button
+                    size="sm"
+                    variant={classFilter === 'all' ? 'default' : 'outline'}
+                    onClick={() => setClassFilter('all')}
+                    className="h-7 text-xs px-2.5"
+                  >
+                    All ({classes.length})
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={classFilter === 'upcoming' ? 'default' : 'outline'}
+                    onClick={() => setClassFilter('upcoming')}
+                    className="h-7 text-xs px-2.5"
+                  >
+                    Upcoming ({upcomingClasses.length})
+                  </Button>
+                  {liveClasses.length > 0 && (
+                    <Button
+                      size="sm"
+                      variant={classFilter === 'live' ? 'default' : 'outline'}
+                      onClick={() => setClassFilter('live')}
+                      className="h-7 text-xs px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      Live Now ({liveClasses.length})
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant={classFilter === 'online' ? 'default' : 'outline'}
+                    onClick={() => setClassFilter('online')}
+                    className="h-7 text-xs px-2.5"
+                  >
+                    Online Live
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={classFilter === 'offline' ? 'default' : 'outline'}
+                    onClick={() => setClassFilter('offline')}
+                    className="h-7 text-xs px-2.5"
+                  >
+                    Campus / Offline
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {filteredClasses.length === 0 ? (
+                  <div className="text-center py-16 text-muted-foreground">
+                    <Video className="w-12 h-12 mx-auto opacity-20 mb-3" />
+                    <h3 className="font-semibold text-base text-foreground">No Classes Found</h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {classes.length === 0
+                        ? 'No classes have been scheduled for your program yet. Check back soon!'
+                        : 'No classes match the selected filter.'}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredClasses.map((cls) => {
+                      const live = isClassLive(cls);
+                      const isOnline = cls.type === 'ONLINE' || Boolean(cls.meetingLink);
+                      return (
+                        <div
+                          key={cls.id}
+                          className={cn(
+                            "p-4 rounded-xl border bg-background/50 hover:border-primary/40 transition-all flex flex-col justify-between shadow-xs",
+                            live ? "border-emerald-500/50 bg-emerald-500/5" : "border-border"
+                          )}
+                        >
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium",
+                                  isOnline
+                                    ? "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                                    : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                )}
+                              >
+                                {isOnline ? <Video className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
+                                {isOnline ? 'Online Live' : 'Campus / Room'}
+                              </Badge>
+
+                              {live ? (
+                                <Badge variant="default" className="bg-emerald-600 text-white text-[10px] animate-pulse">
+                                  LIVE NOW
+                                </Badge>
+                              ) : (
+                                <Badge variant="secondary" className="text-[10px] text-muted-foreground">
+                                  {cls.status || 'SCHEDULED'}
+                                </Badge>
+                              )}
+                            </div>
+
+                            <div>
+                              <h4 className="font-bold text-foreground text-sm line-clamp-2">{cls.title}</h4>
+                              <p className="text-xs text-primary font-medium mt-1">
+                                {cls.program?.university?.name ? (
+                                  <span className="opacity-80">[{cls.program.university.name}] </span>
+                                ) : null}
+                                {cls.program?.name || profile?.program?.name}
+                              </p>
+                            </div>
+
+                            <div className="space-y-1.5 text-xs text-muted-foreground pt-1 border-t border-border/50">
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                                <span>
+                                  {new Date(cls.startTime).toLocaleDateString([], {
+                                    weekday: 'short',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                  })}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                                <span>
+                                  {new Date(cls.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(cls.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </div>
+                              {cls.teacher && (
+                                <div className="flex items-center gap-2">
+                                  <User className="w-3.5 h-3.5 text-muted-foreground" />
+                                  <span>Instructor: <strong>{cls.teacher.name}</strong></span>
+                                </div>
+                              )}
+                              {!isOnline && (
+                                <div className="flex items-center gap-2 text-foreground">
+                                  <MapPin className="w-3.5 h-3.5 text-primary" />
+                                  <span>Location: <strong>{cls.roomOrLocation || 'Physical Campus'}</strong></span>
+                                </div>
+                              )}
+                              {cls.notes && (
+                                <div className="text-[11px] bg-muted/40 p-2 rounded text-muted-foreground italic">
+                                  {cls.notes}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="pt-3 mt-3 border-t border-border/60 space-y-2.5">
+                            {/* Attendance Status & Action Section */}
+                            <div className="p-2.5 rounded-lg border bg-muted/20 space-y-1.5">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="font-semibold text-foreground flex items-center gap-1">
+                                  <UserCheck className="w-3.5 h-3.5 text-primary" />
+                                  Attendance:
+                                </span>
+                                {cls.myAttendance ? (
+                                  <Badge
+                                    variant="outline"
+                                    className={cn(
+                                      "text-[10px] py-0.5 px-2 font-medium flex items-center gap-1",
+                                      cls.myAttendance.status === 'PRESENT'
+                                        ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30 dark:text-emerald-400"
+                                        : "bg-destructive/10 text-destructive border-destructive/30"
+                                    )}
+                                  >
+                                    <CheckCircle className="w-3 h-3" />
+                                    {cls.myAttendance.markedBy === 'STUDENT' ? 'Self-Registered: Present' : `Teacher Marked: ${cls.myAttendance.status}`}
+                                  </Badge>
+                                ) : isOnline ? (
+                                  <Badge variant="outline" className="text-[10px] text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20">
+                                    Pending Registration
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="outline" className="text-[10px] text-muted-foreground bg-muted border-muted-foreground/20">
+                                    Teacher Mark Only
+                                  </Badge>
+                                )}
+                              </div>
+
+                              {/* Action for Online Class: Register Attendance */}
+                              {isOnline && !cls.myAttendance && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  disabled={markingAttendance === cls.id}
+                                  onClick={() => handleRegisterAttendance(cls.id)}
+                                  className="w-full text-xs h-7 gap-1.5 border-primary/40 text-primary hover:bg-primary/10 font-semibold"
+                                >
+                                  <UserCheck className="w-3.5 h-3.5" />
+                                  {markingAttendance === cls.id ? 'Registering Attendance...' : 'Register Attendance (Present)'}
+                                </Button>
+                              )}
+
+                              {/* Info for Offline Class */}
+                              {!isOnline && !cls.myAttendance && (
+                                <p className="text-[11px] text-muted-foreground italic">
+                                  Physical campus session. Your instructor will mark your attendance in the classroom.
+                                </p>
+                              )}
+                            </div>
+
+                            {isOnline && cls.meetingLink && (
+                              <div className="flex items-center gap-2">
+                                <Button size="sm" className="w-full text-xs gap-1.5 h-8 font-semibold" asChild>
+                                  <a
+                                    href={cls.meetingLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => {
+                                      if (!cls.myAttendance) handleRegisterAttendance(cls.id);
+                                    }}
+                                  >
+                                    <Video className="w-3.5 h-3.5" /> Join Live Session
+                                    <ExternalLink className="w-3 h-3 opacity-70" />
+                                  </a>
+                                </Button>
+                              </div>
+                            )}
+                            {cls.meetingPassword && (
+                              <div className="flex items-center justify-between text-[11px] bg-muted/40 px-2 py-1 rounded">
+                                <span className="text-muted-foreground">Meeting Passcode:</span>
+                                <span className="font-mono font-bold text-foreground">{cls.meetingPassword}</span>
+                              </div>
+                            )}
+                            {cls.recordingUrl && (
+                              <Button size="sm" variant="outline" className="w-full text-xs gap-1.5 h-7" asChild>
+                                <a href={cls.recordingUrl} target="_blank" rel="noopener noreferrer">
+                                  <PlayCircle className="w-3.5 h-3.5 text-primary" /> Watch Recording
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* CLASSES & EBOOKS */}
         {activeTab === 'materials' && (
           <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
@@ -566,7 +1042,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
               <CardTitle className="text-lg flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-primary" /> Program Materials & E-Books
               </CardTitle>
-              <CardDescription>View and download textbooks, materials and syllabus for {profile?.program?.name}</CardDescription>
+              <CardDescription>View and download video lectures, textbooks, materials and syllabus for {profile?.program?.name}</CardDescription>
             </CardHeader>
             <CardContent>
               {materials.length === 0 ? (
@@ -576,28 +1052,44 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {materials.map((material) => (
-                    <div key={material.id} className="p-4 rounded-xl border border-border bg-background/50 hover:border-primary/30 transition-all flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between mb-2">
-                          <Badge variant="outline" className="capitalize text-[10px]">{material.type || 'E-Book'}</Badge>
-                          <span className="text-[10px] text-muted-foreground">{new Date(material.createdAt).toLocaleDateString()}</span>
+                  {materials.map((material) => {
+                    const isVideo = material.type === 'VIDEO_LECTURE' || material.mediaUrl?.includes('youtube') || material.mediaUrl?.includes('vimeo');
+                    return (
+                      <div key={material.id} className="p-4 rounded-xl border border-border bg-background/50 hover:border-primary/30 transition-all flex flex-col justify-between shadow-xs">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <Badge variant="outline" className="capitalize text-[10px]">
+                              {material.type ? material.type.replace('_', ' ') : 'Course Material'}
+                            </Badge>
+                            <span className="text-[10px] text-muted-foreground">{new Date(material.createdAt).toLocaleDateString()}</span>
+                          </div>
+                          <h4 className="font-bold text-foreground line-clamp-1">{material.title}</h4>
+                          {material.universityName && (
+                            <p className="text-[11px] text-primary font-medium mt-0.5">
+                              [{material.universityName}] {material.programName || ''}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">{material.description || 'No description provided.'}</p>
+                          {material.chapterOrTopic && (
+                            <p className="text-[11px] text-muted-foreground mt-1">Topic: <strong>{material.chapterOrTopic}</strong></p>
+                          )}
                         </div>
-                        <h4 className="font-bold text-foreground line-clamp-1">{material.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">{material.description || 'No description provided.'}</p>
+                        <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
+                          <span className="text-[10px] text-muted-foreground">
+                            {material.duration ? `Duration: ${material.duration}` : (material.fileSize ? `Size: ${material.fileSize}` : 'Digital Asset')}
+                          </span>
+                          {material.fileUrl && (
+                            <Button size="sm" variant={isVideo ? "default" : "outline"} className="text-xs h-7 gap-1" asChild>
+                              <a href={material.fileUrl} target="_blank" rel="noopener noreferrer">
+                                {isVideo ? <PlayCircle className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
+                                {isVideo ? 'Watch Lecture' : 'Download'}
+                              </a>
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
-                        <span className="text-[10px] text-muted-foreground">File Size: {material.fileSize || 'N/A'}</span>
-                        {material.fileUrl && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={material.fileUrl} target="_blank" rel="noopener noreferrer">
-                              <Download className="w-3.5 h-3.5 mr-1" /> Download
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </CardContent>

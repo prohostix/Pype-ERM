@@ -11,7 +11,7 @@ export const getInvoices = asyncHandler(async (req: AuthRequest, res: Response) 
   if (req.query.studentId) where.studentId = req.query.studentId as string;
 
   // Branch-level isolation for invoices list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.branchId = req.user.branchId;
   }
@@ -77,7 +77,7 @@ export const getPayments = asyncHandler(async (req: AuthRequest, res: Response) 
   const where: any = { organizationId: req.user.organizationId };
 
   // Branch-level isolation for payments list
-  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'];
+  const globalRoles = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin'];
   if (!globalRoles.includes(req.user.role) && req.user.branchId) {
     where.branchId = req.user.branchId;
   }

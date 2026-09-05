@@ -64,6 +64,7 @@ import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
 import fcmTokenRoutes from './routes/fcm-token.routes.js';
 import appReleaseRoutes from './routes/appReleaseRoutes.js';
+import academicCenterRoutes from './modules/academic-center/academicCenter.routes.js';
 
 const app: Application = express();
 
@@ -200,6 +201,7 @@ app.use(`/api/${API_VERSION}/exams`, examRoutes);
 app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
 app.use(`/api/${API_VERSION}/fcm-token`, fcmTokenRoutes);
 app.use(`/api/${API_VERSION}/app-releases`, appReleaseRoutes);
+app.use(`/api/${API_VERSION}/academic-center`, academicCenterRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

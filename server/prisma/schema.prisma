@@ -384,6 +384,10 @@ model Program {
   students           Student[]
   studyCenters       StudyCenter[]       @relation("ProgramToStudyCenter")
   assignedSubDepts   SubDepartment[]     @relation("SubDeptToProgram")
+  centerMaterials      CenterMaterial[]
+  centerClassSchedules CenterClassSchedule[]
+  centerEnrollments    CenterEnrollment[]
+  academicCenters      AcademicCenter[]    @relation("AcademicCenterPrograms")
 
   @@index([universityId])
   @@index([organizationId])
@@ -1916,3 +1920,288 @@ model SystemSetting {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// ==========================================
+// ACADEMIC CENTER MODULE (ISOLATED SYSTEM)
+// ==========================================
+
+enum AcademicCenterType {
+  OFFLINE
+  ONLINE
+}
+
+enum AcademicCenterStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum AcademicMaterialType {
+  VIDEO
+  DOCUMENT
+  EBOOK
+  SYLLABUS
+  RECORDED_CLASS
+}
+
+enum AcademicClassType {
+  OFFLINE_LECTURE
+  ONLINE_LIVE_CLASS
+}
+
+enum AcademicClassStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+model AcademicCenter {
+  id              String               @id @default(uuid())
+  organizationId  String
+  name            String
+  code            String
+  type            AcademicCenterType   @default(OFFLINE)
+  status          AcademicCenterStatus @default(ACTIVE)
+
+  // Offline campus details
+  address         String?
+  city            String?
+  state           String?
+  pincode         String?
+
+  // Online platform details
+  meetingPlatform String?
+  onlineAccessUrl String?
+
+  contactEmail    String?
+  contactPhone    String?
+  description     String?
+
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  counselors      CenterCounselorAssignment[]
+  programs        CenterProgram[]
+  assignedPrograms Program[]          @relation("AcademicCenterPrograms")
+  teachers        CenterTeacher[]
+  students        CenterStudent[]
+  schedules       CenterClassSchedule[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
+  @@index([type])
+}
+
+model AcademicCounselor {
+  id             String         @id @default(uuid())
+  organizationId String
+  userId         String?
+  name           String
+  email          String         @unique
+  password       String
+  phone          String?
+  specialization String?
+  status         String         @default("ACTIVE")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  assignments      CenterCounselorAssignment[]
+  programs         CenterProgram[]
+  materials        CenterMaterial[]
+  students         CenterStudent[]
+
+  @@index([organizationId])
+}
+
+model CenterCounselorAssignment {
+  id          String            @id @default(uuid())
+  centerId    String
+  counselorId String
+  isPrimary   Boolean           @default(true)
+  assignedAt  DateTime          @default(now())
+  assignedBy  String?
+  status      String            @default("ACTIVE")
+
+  center      AcademicCenter    @relation(fields: [centerId], references: [id], onDelete: Cascade)
+  counselor   AcademicCounselor @relation(fields: [counselorId], references: [id], onDelete: Cascade)
+
+  @@unique([centerId, counselorId])
+  @@index([centerId])
+  @@index([counselorId])
+}
+
+model CenterTeacher {
+  id             String          @id @default(uuid())
+  organizationId String
+  centerId       String
+  name           String
+  email          String
+  phone          String?
+  specialization String?
+  bio            String?
+  avatar         String?
+  password       String?
+  status         String          @default("ACTIVE")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  center         AcademicCenter  @relation(fields: [centerId], references: [id], onDelete: Cascade)
+  programs       CenterProgram[]
+  schedules      CenterClassSchedule[]
+
+  @@index([centerId])
+  @@index([organizationId])
+}
+
+model CenterProgram {
+  id             String             @id @default(uuid())
+  organizationId String
+  centerId       String
+  counselorId    String
+  teacherId      String?
+  name           String
+  code           String
+  description    String?
+  mode           String             @default("ONLINE")
+  duration       String?
+  syllabus       Json?              @default("[]")
+  thumbnail      String?
+  status         String             @default("ACTIVE")
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  center         AcademicCenter     @relation(fields: [centerId], references: [id], onDelete: Cascade)
+  counselor      AcademicCounselor  @relation(fields: [counselorId], references: [id], onDelete: Cascade)
+  teacher        CenterTeacher?     @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  @@unique([centerId, code])
+  @@index([centerId])
+  @@index([counselorId])
+  @@index([organizationId])
+}
+
+model CenterMaterial {
+  id             String               @id @default(uuid())
+  organizationId String
+  centerId       String
+  programId      String
+  uploadedById   String
+  title          String
+  description    String?
+  type           AcademicMaterialType
+  mediaUrl       String
+  fileKey        String?
+  fileSize       Int?
+  mimeType       String?
+  duration       Int?
+  chapterOrTopic String?
+  sequenceOrder  Int                  @default(0)
+  isPublished    Boolean              @default(true)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  program        Program              @relation(fields: [programId], references: [id], onDelete: Cascade)
+  uploadedBy     AcademicCounselor    @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([programId])
+  @@index([centerId])
+}
+
+model CenterClassSchedule {
+  id              String              @id @default(uuid())
+  organizationId  String
+  centerId        String
+  programId       String
+  teacherId       String?
+  title           String
+  type            AcademicClassType
+  startTime       DateTime
+  endTime         DateTime
+  roomOrLocation  String?
+  meetingLink     String?
+  meetingPassword String?
+  recordingUrl    String?
+  notes           String?
+  status          AcademicClassStatus @default(SCHEDULED)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  center          AcademicCenter      @relation(fields: [centerId], references: [id], onDelete: Cascade)
+  program         Program             @relation(fields: [programId], references: [id], onDelete: Cascade)
+  teacher         CenterTeacher?      @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  attendances     CenterClassAttendance[]
+
+  @@index([programId])
+  @@index([centerId])
+}
+
+model CenterClassAttendance {
+  id              String              @id @default(uuid())
+  organizationId  String
+  classScheduleId String
+  studentId       String?
+  studentEmail    String
+  studentName     String
+  status          String              @default("PRESENT")
+  markedBy        String              @default("STUDENT")
+  markedById      String?
+  markedAt        DateTime            @default(now())
+  notes           String?
+
+  classSchedule   CenterClassSchedule @relation(fields: [classScheduleId], references: [id], onDelete: Cascade)
+
+  @@unique([classScheduleId, studentEmail])
+  @@index([classScheduleId])
+  @@index([studentEmail])
+  @@index([organizationId])
+}
+
+model CenterStudent {
+  id             String             @id @default(uuid())
+  organizationId String
+  centerId       String
+  studentCode    String
+  name           String
+  email          String
+  password       String
+  phone          String?
+  dateOfBirth    DateTime?
+  gender         String?
+  guardianName   String?
+  guardianPhone  String?
+  address        String?
+  status         String             @default("ACTIVE")
+  admittedById   String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  center         AcademicCenter     @relation(fields: [centerId], references: [id], onDelete: Cascade)
+  admittedBy     AcademicCounselor? @relation(fields: [admittedById], references: [id], onDelete: SetNull)
+  enrollments    CenterEnrollment[]
+
+  @@unique([organizationId, studentCode])
+  @@unique([organizationId, email])
+  @@index([centerId])
+}
+
+model CenterEnrollment {
+  id              String            @id @default(uuid())
+  studentId       String
+  programId       String
+  enrolledAt      DateTime          @default(now())
+  enrolledBy      String?
+  status          String            @default("ACTIVE")
+  progressPercent Float             @default(0.0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  student         CenterStudent     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  program         Program           @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, programId])
+  @@index([studentId])
+  @@index([programId])
+}
+

@@ -21,6 +21,10 @@ export type UserRole =
   | 'collections'
   | 'employee'
   | 'student'
+  | 'academic_counselor'
+  | 'center_student'
+  | 'center_teacher'
+  | 'teacher'
   | 'general_manager';
 
 export type DepartmentType = 'operations' | 'finance' | 'hr' | 'sales' | 'custom' | 'general_manager' | 'ceo' | 'org_admin' | 'study_center';

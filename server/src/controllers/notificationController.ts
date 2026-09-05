@@ -5,11 +5,22 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { NotificationType, UserRole } from '../generated/client/index.js';
 
 export const getMyNotifications = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const userIds = [req.user.id];
+  if (req.user.email) {
+    const shadowUser = await prisma.user.findFirst({
+      where: { email: { equals: req.user.email, mode: 'insensitive' } },
+      select: { id: true },
+    });
+    if (shadowUser && !userIds.includes(shadowUser.id)) {
+      userIds.push(shadowUser.id);
+    }
+  }
+
   const notifications = await prisma.notification.findMany({
-    where: { userId: req.user.id },
+    where: { userId: { in: userIds } },
     orderBy: { createdAt: 'desc' }
   });
-  const unreadCount = await prisma.notification.count({ where: { userId: req.user.id, read: false } });
+  const unreadCount = await prisma.notification.count({ where: { userId: { in: userIds }, read: false } });
   res.json({ success: true, data: notifications, unreadCount });
 });
 
@@ -19,7 +30,17 @@ export const markAsRead = asyncHandler(async (req: AuthRequest, res: Response) =
 });
 
 export const markAllAsRead = asyncHandler(async (req: AuthRequest, res: Response) => {
-  await prisma.notification.updateMany({ where: { userId: req.user.id }, data: { read: true } });
+  const userIds = [req.user.id];
+  if (req.user.email) {
+    const shadowUser = await prisma.user.findFirst({
+      where: { email: { equals: req.user.email, mode: 'insensitive' } },
+      select: { id: true },
+    });
+    if (shadowUser && !userIds.includes(shadowUser.id)) {
+      userIds.push(shadowUser.id);
+    }
+  }
+  await prisma.notification.updateMany({ where: { userId: { in: userIds } }, data: { read: true } });
   res.json({ success: true, message: 'All marked as read' });
 });
 

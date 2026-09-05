@@ -45,6 +45,62 @@ export const protect = async (
       });
 
       if (!user) {
+        // Check if token belongs to an Academic Counselor
+        const counselor = await prisma.academicCounselor.findUnique({
+          where: { id: decoded.id },
+          select: { id: true, email: true, name: true, phone: true, specialization: true, status: true, organizationId: true },
+        });
+        if (counselor && counselor.status === 'ACTIVE') {
+          req.user = {
+            id: counselor.id,
+            email: counselor.email,
+            name: counselor.name,
+            role: 'academic_counselor',
+            organizationId: counselor.organizationId,
+            status: 'active',
+          };
+          next();
+          return;
+        }
+
+        // Check if token belongs to a Center Teacher
+        const teacherId = decoded.teacherId || decoded.id;
+        const centerTeacher = await prisma.centerTeacher.findUnique({
+          where: { id: teacherId },
+          select: { id: true, email: true, name: true, phone: true, specialization: true, status: true, organizationId: true, centerId: true },
+        });
+        if (centerTeacher && centerTeacher.status === 'ACTIVE') {
+          req.user = {
+            id: centerTeacher.id,
+            email: centerTeacher.email,
+            name: centerTeacher.name,
+            role: 'center_teacher',
+            organizationId: centerTeacher.organizationId,
+            centerId: centerTeacher.centerId,
+            status: 'active',
+          };
+          next();
+          return;
+        }
+
+        // Check if token belongs to a Center Student
+        const centerStudent = await prisma.centerStudent.findUnique({
+          where: { id: decoded.id },
+          select: { id: true, email: true, name: true, phone: true, studentCode: true, status: true, organizationId: true, centerId: true },
+        });
+        if (centerStudent && centerStudent.status === 'ACTIVE') {
+          req.user = {
+            id: centerStudent.id,
+            email: centerStudent.email,
+            name: centerStudent.name,
+            role: 'center_student',
+            organizationId: centerStudent.organizationId,
+            status: 'active',
+          };
+          next();
+          return;
+        }
+
         res.status(401).json({ success: false, message: 'User not found' });
         return;
       }

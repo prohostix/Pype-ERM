@@ -5,6 +5,10 @@ node_modules/
 
 # Production / Builds
 build/
+dist/
+client/dist/
+server/dist/
+*/dist/
 .svelte-kit
 .next
 .nuxt
@@ -43,3 +47,4 @@ Thumbs.db
 *.sln
 *.sw?
 server/uploads/
+*/dist

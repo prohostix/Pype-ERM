@@ -14,6 +14,8 @@ import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 import { ModernStudentPortal } from './ModernStudentPortal';
+import { AcademicCounselorPortal } from '@/modules/academic-center/AcademicCounselorPortal';
+import TeacherPortal from '@/modules/academic-center/TeacherPortal';
 
 
 interface DashboardProps {
@@ -117,11 +119,11 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
     // If we have a department type, route accordingly
     if (departmentType) {
-      // Regular employees (not sub-dept managers) always get the employee dashboard
-      if (!isSubDeptManager && departmentType !== 'collections') {
+      // Regular employees (not sub-dept managers) always get the employee dashboard, except collections and sales
+      if (!isSubDeptManager && departmentType !== 'collections' && departmentType !== 'sales') {
         return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
       }
-      // Sub-dept managers get the department admin dashboard
+      // Sub-dept managers and department employees get the department dashboard
       switch (departmentType) {
         case 'hr':
           return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
@@ -170,12 +172,24 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     return <ModernHRDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
-  if (['sales_admin', 'sales_sub_admin'].includes(user?.role || '')) {
+  if (['sales_admin', 'sales_sub_admin', 'sales'].includes(user?.role || '')) {
     return <ModernSalesDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['collections_admin', 'collections'].includes(user?.role || '')) {
     return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+  }
+
+  if (user?.role === 'academic_counselor') {
+    return <AcademicCounselorPortal />;
+  }
+
+  if (user?.role === 'center_teacher' || user?.role === 'teacher') {
+    return <TeacherPortal />;
+  }
+
+  if (user?.role === 'student' || user?.role === 'center_student') {
+    return <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'center_admin') {
@@ -184,10 +198,6 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
   if (user?.role === 'employee') {
     return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
-  }
-
-  if (user?.role === 'student') {
-    return <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   // Fallback for other staff/admin roles

@@ -95,7 +95,128 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
 
   const normalizedEmail = email.trim();
 
-  // Check for user
+  // 1. Check if user is a Center Teacher
+  const centerTeacher = await prisma.centerTeacher.findFirst({
+    where: {
+      email: {
+        equals: normalizedEmail,
+        mode: 'insensitive',
+      },
+    },
+    include: { center: true },
+  });
+
+  if (centerTeacher && centerTeacher.status === 'ACTIVE' && centerTeacher.password) {
+    const isMatch = await comparePassword(password, centerTeacher.password);
+    if (isMatch) {
+      const token = generateToken(centerTeacher.id);
+      const refreshToken = generateRefreshToken(centerTeacher.id);
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: centerTeacher.id,
+            name: centerTeacher.name,
+            email: centerTeacher.email,
+            role: 'center_teacher',
+            organizationId: centerTeacher.organizationId,
+            phone: centerTeacher.phone,
+            designation: centerTeacher.specialization || 'Faculty Instructor',
+            status: centerTeacher.status,
+            center: centerTeacher.center,
+            centerId: centerTeacher.centerId,
+          },
+          token,
+          refreshToken,
+        },
+      });
+      return;
+    }
+  }
+
+  // 2. Check if user is an Academic Counselor
+  const counselor = await prisma.academicCounselor.findFirst({
+    where: {
+      email: {
+        equals: normalizedEmail,
+        mode: 'insensitive',
+      },
+    },
+    include: {
+      assignments: {
+        where: { status: 'ACTIVE' },
+        include: { center: true },
+      },
+    },
+  });
+
+  if (counselor && counselor.status === 'ACTIVE' && counselor.password) {
+    const isMatch = await comparePassword(password, counselor.password);
+    if (isMatch) {
+      const token = generateToken(counselor.id);
+      const refreshToken = generateRefreshToken(counselor.id);
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: counselor.id,
+            name: counselor.name,
+            email: counselor.email,
+            role: 'academic_counselor',
+            organizationId: counselor.organizationId,
+            phone: counselor.phone,
+            designation: counselor.specialization || 'Academic Counselor',
+            status: counselor.status,
+            assignedCenters: counselor.assignments.map((a) => a.center),
+          },
+          token,
+          refreshToken,
+        },
+      });
+      return;
+    }
+  }
+
+  // 3. Check if user is a Center Student
+  const centerStudent = await prisma.centerStudent.findFirst({
+    where: {
+      email: {
+        equals: normalizedEmail,
+        mode: 'insensitive',
+      },
+    },
+    include: { center: true },
+  });
+
+  if (centerStudent && centerStudent.status === 'ACTIVE' && centerStudent.password) {
+    const isMatch = await comparePassword(password, centerStudent.password);
+    if (isMatch) {
+      const token = generateToken(centerStudent.id);
+      const refreshToken = generateRefreshToken(centerStudent.id);
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: centerStudent.id,
+            name: centerStudent.name,
+            email: centerStudent.email,
+            role: 'center_student',
+            organizationId: centerStudent.organizationId,
+            studentCode: centerStudent.studentCode,
+            phone: centerStudent.phone,
+            designation: 'Student',
+            status: centerStudent.status,
+            center: centerStudent.center,
+          },
+          token,
+          refreshToken,
+        },
+      });
+      return;
+    }
+  }
+
+  // 4. Check for standard system user
   const user = await prisma.user.findFirst({ 
     where: { 
       email: {
@@ -177,7 +298,89 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
 // @route   GET /api/v1/auth/me
 // @access  Private
 export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const user = await prisma.user.findUnique({
+  if (req.user?.role === 'center_teacher') {
+    const centerTeacher = await prisma.centerTeacher.findUnique({
+      where: { id: req.user.id },
+      include: { center: true },
+    });
+
+    if (centerTeacher) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: centerTeacher.id,
+          name: centerTeacher.name,
+          email: centerTeacher.email,
+          role: 'center_teacher',
+          organizationId: centerTeacher.organizationId,
+          phone: centerTeacher.phone,
+          designation: centerTeacher.specialization || 'Faculty Instructor',
+          status: centerTeacher.status,
+          center: centerTeacher.center,
+          centerId: centerTeacher.centerId,
+        },
+      });
+      return;
+    }
+  }
+
+  if (req.user?.role === 'academic_counselor') {
+    const counselor = await prisma.academicCounselor.findUnique({
+      where: { id: req.user.id },
+      include: {
+        assignments: {
+          where: { status: 'ACTIVE' },
+          include: { center: true },
+        },
+      },
+    });
+
+    if (counselor) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: counselor.id,
+          name: counselor.name,
+          email: counselor.email,
+          role: 'academic_counselor',
+          organizationId: counselor.organizationId,
+          phone: counselor.phone,
+          designation: counselor.specialization || 'Academic Counselor',
+          status: counselor.status,
+          assignedCenters: counselor.assignments.map((a) => a.center),
+        },
+      });
+      return;
+    }
+  }
+
+  if (req.user?.role === 'center_student') {
+    const centerStudent = await prisma.centerStudent.findUnique({
+      where: { id: req.user.id },
+      include: { center: true },
+    });
+
+    if (centerStudent) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: centerStudent.id,
+          name: centerStudent.name,
+          email: centerStudent.email,
+          role: 'center_student',
+          organizationId: centerStudent.organizationId,
+          studentCode: centerStudent.studentCode,
+          phone: centerStudent.phone,
+          designation: 'Student',
+          status: centerStudent.status,
+          center: centerStudent.center,
+        },
+      });
+      return;
+    }
+  }
+
+  let user = await prisma.user.findUnique({
     where: { id: req.user.id },
     select: {
       id: true, userId: true, email: true, name: true, role: true,
@@ -188,6 +391,87 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
       organization: true, department: true, subDepartment: true,
     }
   });
+
+  if (!user) {
+    const counselor = await prisma.academicCounselor.findUnique({
+      where: { id: req.user.id },
+      include: {
+        assignments: {
+          where: { status: 'ACTIVE' },
+          include: { center: true },
+        },
+      },
+    });
+
+    if (counselor) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: counselor.id,
+          name: counselor.name,
+          email: counselor.email,
+          role: 'academic_counselor',
+          organizationId: counselor.organizationId,
+          phone: counselor.phone,
+          designation: counselor.specialization || 'Academic Counselor',
+          status: counselor.status,
+          assignedCenters: counselor.assignments.map((a) => a.center),
+        },
+      });
+      return;
+    }
+
+    const centerStudent = await prisma.centerStudent.findUnique({
+      where: { id: req.user.id },
+      include: { center: true },
+    });
+
+    if (centerStudent) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: centerStudent.id,
+          name: centerStudent.name,
+          email: centerStudent.email,
+          role: 'center_student',
+          organizationId: centerStudent.organizationId,
+          studentCode: centerStudent.studentCode,
+          phone: centerStudent.phone,
+          designation: 'Student',
+          status: centerStudent.status,
+          center: centerStudent.center,
+        },
+      });
+      return;
+    }
+
+    const centerTeacher = await prisma.centerTeacher.findUnique({
+      where: { id: req.user.id },
+      include: { center: true },
+    });
+
+    if (centerTeacher) {
+      res.status(200).json({
+        success: true,
+        data: {
+          id: centerTeacher.id,
+          name: centerTeacher.name,
+          email: centerTeacher.email,
+          role: 'center_teacher',
+          organizationId: centerTeacher.organizationId,
+          phone: centerTeacher.phone,
+          designation: centerTeacher.specialization || 'Faculty Instructor',
+          status: centerTeacher.status,
+          center: centerTeacher.center,
+          centerId: centerTeacher.centerId,
+        },
+      });
+      return;
+    }
+
+    res.status(404).json({ success: false, message: 'User not found' });
+    return;
+  }
 
   const managedBranch = await prisma.branch.findFirst({
     where: { branchManagerId: req.user.id },
