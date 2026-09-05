@@ -1,1 +1,0 @@
-{"version":3,"file":"iclockController.d.ts","sourceRoot":"","sources":["../../src/controllers/iclockController.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAQ5C,eAAO,MAAM,eAAe,GAAU,KAAK,OAAO,EAAE,KAAK,QAAQ,kBA0BhE,CAAC;AAGF,eAAO,MAAM,gBAAgB,GAAI,KAAK,OAAO,EAAE,KAAK,QAAQ,SAG3D,CAAC;AAGF,eAAO,MAAM,cAAc,GAAU,KAAK,OAAO,EAAE,KAAK,QAAQ,gDAoH/D,CAAC"}
