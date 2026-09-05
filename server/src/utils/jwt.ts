@@ -8,17 +8,13 @@ function requireEnv(key: string): string {
 
 export const generateToken = (id: string): string => {
   const secret = requireEnv('JWT_SECRET');
-  const options: SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRE || '7d') as any,
-  };
+  const options: SignOptions = {};
   return jwt.sign({ id }, secret, options);
 };
 
 export const generateRefreshToken = (id: string): string => {
   const secret = requireEnv('JWT_REFRESH_SECRET');
-  const options: SignOptions = {
-    expiresIn: (process.env.JWT_REFRESH_EXPIRE || '30d') as any,
-  };
+  const options: SignOptions = {};
   return jwt.sign({ id }, secret, options);
 };
 

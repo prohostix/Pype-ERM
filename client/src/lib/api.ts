@@ -239,6 +239,15 @@ class ApiService {
     return resData;
   }
 
+  async uploadDocument(data: FormData) {
+    const response = await this.api.post('/documents/upload', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+
 
   // HR
   async getLeaveRequests(params?: any) {

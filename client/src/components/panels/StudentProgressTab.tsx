@@ -26,12 +26,13 @@ interface StudentProgressTabProps {
 }
 
 const ADMISSION_STEPS_CONFIG = [
-  { id: 'verification', label: 'Student Verification' },
-  { id: 'docs', label: 'Documents Verification' },
-  { id: 'uni_sub', label: 'University Submission' },
-  { id: 'enroll_no', label: 'Enrollment Number Updated' },
-  { id: 'portal', label: 'Student Portal Activated' },
-  { id: 'batch', label: 'Batch Allocation' },
+  { id: 'portal', label: 'Student Portal Activated', tag: 'Operation Steps' },
+  { id: 'verification', label: 'Student Verification', tag: 'Operation Steps' },
+  { id: 'docs', label: 'Documents Verification', tag: 'Operation Steps' },
+  { id: 'uni_sub', label: 'University Submission', tag: 'Operation Steps' },
+  { id: 'enroll_no', label: 'Enrollment Number Updated', tag: 'University Steps' },
+  { id: 'batch', label: 'Batch Allocation', tag: 'University Steps' },
+  { id: 'uni_portal', label: 'University Portals', tag: 'University Steps' },
 ];
 
 export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProps) {
@@ -56,7 +57,8 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     uni_sub: isUniversitySubmitted,
     enroll_no: hasEnrollmentNo,
     portal: isPortalActivated,
-    batch: isBatchAllocated
+    batch: isBatchAllocated,
+    uni_portal: false
   };
 
   const getSteps = () => ADMISSION_STEPS_CONFIG.map(config => {
@@ -64,6 +66,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     return {
       id: config.id,
       label: config.label,
+      tag: config.tag,
       completed: Boolean(dbData.completed) || Boolean(autoConditions[config.id]),
       proofUrl: dbData.proofUrl || null
     };
@@ -79,6 +82,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStep, setSelectedStep] = useState<any>(null);
   const [proofFile, setProofFile] = useState<File | null>(null);
+  const [enrollmentNo, setEnrollmentNo] = useState(student?.enrollmentNo || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isPgCourse = student?.program?.name?.toLowerCase().includes('pg') || student?.programId?.name?.toLowerCase().includes('pg');
@@ -111,6 +115,9 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
   const openCompletionModal = (step: any) => {
     setSelectedStep(step);
     setProofFile(null);
+    if (step.id === 'enroll_no') {
+      setEnrollmentNo(student?.enrollmentNo || '');
+    }
     setModalOpen(true);
   };
 
@@ -169,7 +176,29 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     }
   };
 
-  const handleConfirmCompletion = () => {
+  const handleConfirmCompletion = async () => {
+    if (selectedStep?.id === 'enroll_no') {
+      if (!enrollmentNo) {
+        toast.error('Please enter the enrollment number.');
+        return;
+      }
+      setIsSubmitting(true);
+      try {
+        const res = await api.updateStudent(student.id, { enrollmentNo });
+        if (res.success) {
+          toast.success('Enrollment number updated successfully');
+          // Automatically mark the step as completed
+          await submitProgressUpdate(selectedStep.id, 'completed', null);
+          if (onUpdate) onUpdate();
+        }
+      } catch (err: any) {
+        console.error(err);
+        toast.error('Failed to update enrollment number');
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
     if (!proofFile) {
       toast.error('Please upload a proof document to mark this step as completed.');
       return;
@@ -224,6 +253,28 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
     }
   };
 
+  const handleTermFileUpload = async (termIndex: number, field: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await api.uploadDocument(formData);
+      if (res.success && res.url) {
+        updateAcademicTerm(termIndex, field, res.url);
+        toast.success('Document uploaded successfully. Remember to save the term!');
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to upload document');
+    } finally {
+      setIsSubmitting(false);
+      e.target.value = '';
+    }
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
@@ -235,38 +286,52 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
         </h3>
         <Card className="shadow-sm border-border">
           <CardContent className="p-0">
-            <div className="divide-y divide-border">
-              {admissionSteps.map((step) => (
-                <div key={step.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    {step.completed ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-muted-foreground/30" />
-                    )}
-                    <span className="font-medium text-sm">{step.label}</span>
+            <div className="flex flex-col">
+              {Object.entries(admissionSteps.reduce((acc: any, step) => {
+                const group = step.tag || 'Other';
+                if (!acc[group]) acc[group] = [];
+                acc[group].push(step);
+                return acc;
+              }, {})).map(([group, steps]: [string, any], index) => (
+                <div key={group} className="flex flex-col">
+                  <div className={`bg-muted/50 px-4 py-2 border-border ${index === 0 ? 'border-b' : 'border-y'}`}>
+                    <span className="font-bold text-sm text-muted-foreground">{group}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {step.completed && step.proofUrl && (
-                      <a 
-                        href={api.getFileUrl(step.proofUrl)} 
-                        target="_blank" 
-                        rel="noreferrer"
-                      >
-                        <Button variant="ghost" size="sm" className="h-7 text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                          <Eye className="w-3 h-3" /> View Proof
-                        </Button>
-                      </a>
-                    )}
-                    <Button 
-                      variant={step.completed ? "outline" : "default"} 
-                      size="sm" 
-                      className="h-7 text-xs"
-                      onClick={() => handleToggleClick(step)}
-                      disabled={isSubmitting}
-                    >
-                      {step.completed ? 'Completed' : 'Pending'}
-                    </Button>
+                  <div className="divide-y divide-border">
+                    {steps.map((step: any) => (
+                      <div key={step.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
+                        <div className="flex items-center gap-3">
+                          {step.completed ? (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                          ) : (
+                            <Circle className="w-5 h-5 text-muted-foreground/30" />
+                          )}
+                          <span className="font-medium text-sm">{step.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {step.completed && step.proofUrl && (
+                            <a 
+                              href={api.getFileUrl(step.proofUrl)} 
+                              target="_blank" 
+                              rel="noreferrer"
+                            >
+                              <Button variant="ghost" size="sm" className="h-7 text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                <Eye className="w-3 h-3" /> View Proof
+                              </Button>
+                            </a>
+                          )}
+                          <Button 
+                            variant={step.completed ? "outline" : "default"} 
+                            size="sm" 
+                            className="h-7 text-xs"
+                            onClick={() => handleToggleClick(step)}
+                            disabled={isSubmitting}
+                          >
+                            {step.completed ? 'Completed' : 'Pending'}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -283,10 +348,11 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
         </h3>
         <div className="space-y-4">
           {academicTerms.map((term, index) => {
-            const isTermDisabled = term.isSaved && (user?.role !== 'org_admin' && user?.role !== 'superadmin');
+            const isPreviousTermSaved = index === 0 || academicTerms[index - 1].isSaved;
+            const isTermDisabled = !isPreviousTermSaved || (term.isSaved && (user?.role !== 'org_admin' && user?.role !== 'superadmin'));
 
             return (
-            <Card key={index} className="shadow-sm border-border overflow-hidden">
+            <Card key={index} className={`shadow-sm border-border overflow-hidden ${!isPreviousTermSaved ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
               <div className="bg-muted/50 px-4 py-2 border-b border-border flex items-center justify-between">
                 <span className="font-bold text-sm">{termLabel} {term.term}</span>
               </div>
@@ -298,42 +364,108 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Re-registration</span>
-                    <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
-                      value={term.reRegistration}
-                      onChange={(e) => updateAcademicTerm(index, 'reRegistration', e.target.value)}
-                      disabled={isTermDisabled}
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Completed">Completed</option>
-                    </select>
+                    <div className="flex flex-col gap-2">
+                      <select 
+                        className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
+                        value={term.reRegistration}
+                        onChange={(e) => updateAcademicTerm(index, 'reRegistration', e.target.value)}
+                        disabled={isTermDisabled}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                      {term.reRegistrationDoc ? (
+                        <a href={api.getFileUrl(term.reRegistrationDoc)} target="_blank" rel="noreferrer" title="View Document" className="w-full">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <Eye className="w-4 h-4 text-blue-600" />
+                          </Button>
+                        </a>
+                      ) : (
+                        <div className="relative w-full" title="Upload Document">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <UploadCloud className="w-4 h-4 text-muted-foreground" />
+                          </Button>
+                          <input 
+                            type="file" 
+                            className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                            disabled={isTermDisabled || isSubmitting}
+                            onChange={(e) => handleTermFileUpload(index, 'reRegistrationDoc', e)}
+                            accept=".pdf,.jpg,.jpeg,.png"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Exam Registration</span>
-                    <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
-                      value={term.examRegistration}
-                      onChange={(e) => updateAcademicTerm(index, 'examRegistration', e.target.value)}
-                      disabled={isTermDisabled}
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="Completed">Completed</option>
-                    </select>
+                    <div className="flex flex-col gap-2">
+                      <select 
+                        className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
+                        value={term.examRegistration}
+                        onChange={(e) => updateAcademicTerm(index, 'examRegistration', e.target.value)}
+                        disabled={isTermDisabled}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                      {term.examRegistrationDoc ? (
+                        <a href={api.getFileUrl(term.examRegistrationDoc)} target="_blank" rel="noreferrer" title="View Document" className="w-full">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <Eye className="w-4 h-4 text-blue-600" />
+                          </Button>
+                        </a>
+                      ) : (
+                        <div className="relative w-full" title="Upload Document">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <UploadCloud className="w-4 h-4 text-muted-foreground" />
+                          </Button>
+                          <input 
+                            type="file" 
+                            className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                            disabled={isTermDisabled || isSubmitting}
+                            onChange={(e) => handleTermFileUpload(index, 'examRegistrationDoc', e)}
+                            accept=".pdf,.jpg,.jpeg,.png"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold block mb-1">Result Status</span>
-                    <select 
-                      className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
-                      value={term.resultStatus}
-                      onChange={(e) => updateAcademicTerm(index, 'resultStatus', e.target.value)}
-                      disabled={isTermDisabled}
-                    >
-                      <option value="Pending">⏳ Pending</option>
-                      <option value="Passed">✅ Passed</option>
-                      <option value="Failed">❌ Failed</option>
-                      <option value="Supplementary">🔄 Supplementary</option>
-                      <option value="Withheld">🚫 Withheld</option>
-                    </select>
+                    <div className="flex flex-col gap-2">
+                      <select 
+                        className="w-full h-8 text-sm bg-background border border-input rounded-md px-2 disabled:opacity-50"
+                        value={term.resultStatus}
+                        onChange={(e) => updateAcademicTerm(index, 'resultStatus', e.target.value)}
+                        disabled={isTermDisabled}
+                      >
+                        <option value="Pending">⏳ Pending</option>
+                        <option value="Passed">✅ Passed</option>
+                        <option value="Failed">❌ Failed</option>
+                        <option value="Supplementary">🔄 Supplementary</option>
+                        <option value="Withheld">🚫 Withheld</option>
+                      </select>
+                      {term.resultStatusDoc ? (
+                        <a href={api.getFileUrl(term.resultStatusDoc)} target="_blank" rel="noreferrer" title="View Document" className="w-full">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <Eye className="w-4 h-4 text-blue-600" />
+                          </Button>
+                        </a>
+                      ) : (
+                        <div className="relative w-full" title="Upload Document">
+                          <Button size="sm" variant="outline" className="w-full h-8" disabled={isTermDisabled} type="button">
+                            <UploadCloud className="w-4 h-4 text-muted-foreground" />
+                          </Button>
+                          <input 
+                            type="file" 
+                            className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+                            disabled={isTermDisabled || isSubmitting}
+                            onChange={(e) => handleTermFileUpload(index, 'resultStatusDoc', e)}
+                            accept=".pdf,.jpg,.jpeg,.png"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
@@ -377,7 +509,7 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
                     <Button 
                       size="sm" 
                       className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                      disabled={isSubmitting || student.isPrevious}
+                      disabled={isSubmitting || student.isPrevious || !academicTerms.every(t => t.isSaved)}
                     >
                       {student.isPrevious ? 'Completed' : 'Mark as Completed'}
                     </Button>
@@ -407,29 +539,45 @@ export function StudentProgressTab({ student, onUpdate }: StudentProgressTabProp
           <DialogHeader>
             <DialogTitle>Complete Step</DialogTitle>
             <DialogDescription>
-              Please upload proof to mark "{selectedStep?.label}" as completed.
+              {selectedStep?.id === 'enroll_no' 
+                ? 'Please enter the enrollment number to complete this step.'
+                : `Please upload proof to mark "${selectedStep?.label}" as completed.`}
             </DialogDescription>
           </DialogHeader>
           
           <div className="py-4 space-y-4">
-            <div className="border-2 border-dashed border-border rounded-lg p-6 flex flex-col items-center justify-center text-center">
-              <UploadCloud className="w-10 h-10 text-muted-foreground mb-2" />
-              <p className="text-sm font-medium mb-1">Upload Proof Document</p>
-              <p className="text-xs text-muted-foreground mb-4">Supported formats: PDF, JPG, PNG (Max 10MB)</p>
-              <Input 
-                type="file" 
-                className="max-w-xs"
-                onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
-              />
-            </div>
+            {selectedStep?.id === 'enroll_no' ? (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Enrollment Number</label>
+                <Input 
+                  placeholder="Enter enrollment number"
+                  value={enrollmentNo}
+                  onChange={(e) => setEnrollmentNo(e.target.value)}
+                />
+              </div>
+            ) : (
+              <div className="border-2 border-dashed border-border rounded-lg p-6 flex flex-col items-center justify-center text-center">
+                <UploadCloud className="w-10 h-10 text-muted-foreground mb-2" />
+                <p className="text-sm font-medium mb-1">Upload Proof Document</p>
+                <p className="text-xs text-muted-foreground mb-4">Supported formats: PDF, JPG, PNG (Max 10MB)</p>
+                <Input 
+                  type="file" 
+                  className="max-w-xs"
+                  onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                  accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
+                />
+              </div>
+            )}
           </div>
           
           <DialogFooter>
             <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button onClick={handleConfirmCompletion} disabled={!proofFile || isSubmitting}>
+            <Button 
+              onClick={handleConfirmCompletion} 
+              disabled={isSubmitting || (selectedStep?.id === 'enroll_no' ? !enrollmentNo : !proofFile)}
+            >
               {isSubmitting ? 'Saving...' : 'Confirm & Complete'}
             </Button>
           </DialogFooter>
