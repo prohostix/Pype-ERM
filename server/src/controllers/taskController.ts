@@ -179,7 +179,17 @@ export const getAssignableUsers = asyncHandler(async (req: AuthRequest, res: Res
   });
 
   const assignableUsers = users.filter(u => {
+    // Everyone can always assign a task to themselves
+    if (u.id === req.user.id) return true;
+    
     const userHierarchy = ROLE_HIERARCHY[u.role as string] ?? 99;
+    
+    // If the requester is at the lowest hierarchy (Rank 4), they can ONLY see themselves
+    if (currentHierarchy >= 4) {
+      return false;
+    }
+    
+    // For managers/admins, they can see anyone at their rank or below
     return userHierarchy >= currentHierarchy;
   });
 
