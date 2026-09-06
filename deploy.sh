@@ -12,20 +12,14 @@ echo "=================================================="
 
 # 1. Update system packages
 echo "📦 Updating system package lists..."
-sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
-
-# 2. Install Node.js v20 LTS
-if ! command -v node &> /dev/null; then
-    echo "🟢 Node.js not found. Installing Node.js v20 LTS..."
-    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs
+# 1. Check Git, Nginx, and build dependencies
+if ! command -v nginx &> /dev/null || ! command -v git &> /dev/null; then
+    echo "🟢 Installing Git, Nginx, and build dependencies..."
+    sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq git nginx build-essential
 else
-    echo "✅ Node.js is already installed: $(node -v)"
+    echo "✅ Git and Nginx are already installed."
 fi
-
-# 3. Install Git and Nginx
-echo "🟢 Installing Git, Nginx, and build dependencies..."
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq git nginx build-essential
 
 # 4. Install PM2 Process Manager globally
 if ! command -v pm2 &> /dev/null; then
@@ -84,7 +78,7 @@ cp -R src/generated dist/ 2>/dev/null || true
 
 # 9. Start Server via PM2
 echo "🚀 Starting backend server with PM2..."
-sudo -u ubuntu pm2 restart pype-erm-server || sudo -u ubuntu pm2 start dist/server.js --name pype-erm-server
+sudo -u ubuntu pm2 restart all || sudo -u ubuntu pm2 start dist/server.js --name pype-erm-server
 
 sudo -u ubuntu pm2 save
 
@@ -117,6 +111,20 @@ server {
         root /var/www/pype-erm/client/dist;
         index index.html;
         try_files $uri $uri/ /index.html;
+    }
+
+    # High-timeout, unbuffered streaming for APK downloads
+    location /api/v1/app-releases/download/ {
+        proxy_pass http://localhost:6478/api/v1/app-releases/download/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        send_timeout 300s;
+        proxy_buffering off;
+        proxy_request_buffering off;
     }
 
     location /api/ {

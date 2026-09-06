@@ -74,9 +74,16 @@ export const downloadApk = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
-  res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-  res.setHeader('Content-Disposition', `attachment; filename="${manifest.apkFileName}"`);
-  
-  const fileStream = fs.createReadStream(filePath);
-  fileStream.pipe(res);
+  const absolutePath = path.resolve(filePath);
+
+  res.download(absolutePath, manifest.apkFileName, (err) => {
+    if (err) {
+      if (res.headersSent) {
+        // Headers already sent, stream closed or client aborted
+        return;
+      }
+      console.error('Error sending APK file:', err);
+      res.status(500).json({ success: false, message: 'Failed to download APK file' });
+    }
+  });
 });

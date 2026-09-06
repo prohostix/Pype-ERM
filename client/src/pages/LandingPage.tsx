@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Shield, Users, GraduationCap, DollarSign, Activity, FileText, CheckCircle, Play } from 'lucide-react';
+import { ArrowRight, Shield, Users, GraduationCap, DollarSign, Activity, FileText, CheckCircle, Play, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -55,10 +55,17 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
             <a href="#pricing" className="hover:text-slate-900 transition-colors">Pricing</a>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="/download"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/80 px-3 py-2 rounded-xl transition-all shadow-sm"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Get Mobile App</span>
+            </a>
             <Button 
               variant="ghost" 
-              className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold"
+              className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold text-sm"
               onClick={onGoToLogin}
             >
               Log in
