@@ -55,7 +55,7 @@ export function AcademicCentersAdminPanel() {
     city: '',
     state: '',
     pincode: '',
-    meetingPlatform: 'Zoom',
+    meetingPlatform: '',
     onlineAccessUrl: '',
     contactEmail: '',
     contactPhone: '',
@@ -116,6 +116,12 @@ export function AcademicCentersAdminPanel() {
         fetchData();
       }
     } catch (err: any) {
+      // Deletion approval workflow (202 Accepted) — DeleteApprovalContext already showed request submission toast
+      if (err?.message === 'DELETE_REQUESTED_NOT_COMPLETED' || err?.isDeleteRequest) {
+        setDeleteCenterModalOpen(false);
+        setCenterToDelete(null);
+        return;
+      }
       toast.error(err.response?.data?.message || 'Failed to delete Academic Center');
     } finally {
       setDeleting(false);
@@ -201,7 +207,7 @@ export function AcademicCentersAdminPanel() {
       city: '',
       state: '',
       pincode: '',
-      meetingPlatform: 'Zoom',
+      meetingPlatform: '',
       onlineAccessUrl: '',
       contactEmail: '',
       contactPhone: '',
@@ -222,7 +228,7 @@ export function AcademicCentersAdminPanel() {
       city: center.city || '',
       state: center.state || '',
       pincode: center.pincode || '',
-      meetingPlatform: center.meetingPlatform || 'Zoom',
+      meetingPlatform: center.meetingPlatform || '',
       onlineAccessUrl: center.onlineAccessUrl || '',
       contactEmail: center.contactEmail || '',
       contactPhone: center.contactPhone || '',
@@ -649,12 +655,7 @@ export function AcademicCentersAdminPanel() {
                           <div className="flex items-start gap-2 text-muted-foreground">
                             <Video className="w-3.5 h-3.5 mt-0.5 shrink-0 text-blue-600" />
                             <span>
-                              Platform: <strong className="text-foreground">{center.meetingPlatform || 'Online Portal'}</strong>
-                              {center.onlineAccessUrl && (
-                                <span className="block truncate text-[11px] text-blue-600 underline">
-                                  {center.onlineAccessUrl}
-                                </span>
-                              )}
+                              Delivery Mode: <strong className="text-foreground">Recorded Classes & LMS Portal</strong>
                             </span>
                           </div>
                         )}
@@ -932,310 +933,245 @@ export function AcademicCentersAdminPanel() {
 
       {/* MODAL 1: CREATE / EDIT CENTER */}
       <Dialog open={centerModalOpen} onOpenChange={setCenterModalOpen}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <DialogTitle>{editingCenter ? 'Edit Academic Center' : 'Create New Academic Center'}</DialogTitle>
-            <DialogDescription>
-              Specify whether this center operates as a physical Offline campus or an Online learning center.
+        <DialogContent className="sm:max-w-5xl max-h-[92vh] overflow-y-auto p-6 sm:p-8">
+          <DialogHeader className="pb-3 border-b">
+            <DialogTitle className="text-2xl font-bold tracking-tight">{editingCenter ? 'Edit Academic Center' : 'Create New Academic Center'}</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground mt-1">
+              Configure center delivery mode, basic identity, contact details, and associate a curriculum program.
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSaveCenter} className="space-y-4 pt-2">
-            {/* Type Selector (Offline vs Online) */}
-            <div className="space-y-2">
-              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Center Delivery Type</Label>
-              <div className="grid grid-cols-2 gap-3">
-                <div
-                  onClick={() => setCenterForm((prev) => ({ ...prev, type: 'OFFLINE' }))}
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${
-                    centerForm.type === 'OFFLINE'
-                      ? 'border-emerald-500 bg-emerald-500/10 shadow-xs'
-                      : 'border-border hover:border-muted-foreground/30'
-                  }`}
-                >
-                  <div className={`p-2 rounded-lg ${centerForm.type === 'OFFLINE' ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>
-                    <MapPin className="w-5 h-5" />
+          <form onSubmit={handleSaveCenter} className="space-y-6 pt-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              {/* LEFT COLUMN: Center Information & Settings */}
+              <div className="space-y-4">
+                {/* Basic Info: Name & Code */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="cName" className="text-xs font-semibold">Center Name *</Label>
+                    <Input
+                      id="cName"
+                      placeholder="e.g. Apex Learning Center"
+                      value={centerForm.name}
+                      onChange={(e) => setCenterForm({ ...centerForm, name: e.target.value })}
+                      className="h-10 text-sm"
+                      required
+                    />
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-sm">Offline Center</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">Physical campus / classroom institute</p>
-                  </div>
-                </div>
 
-                <div
-                  onClick={() => setCenterForm((prev) => ({ ...prev, type: 'ONLINE' }))}
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${
-                    centerForm.type === 'ONLINE'
-                      ? 'border-blue-500 bg-blue-500/10 shadow-xs'
-                      : 'border-border hover:border-muted-foreground/30'
-                  }`}
-                >
-                  <div className={`p-2 rounded-lg ${centerForm.type === 'ONLINE' ? 'bg-blue-500 text-white' : 'bg-muted text-muted-foreground'}`}>
-                    <Globe className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm">Online Center</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">Virtual center with live class platform</p>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="cCode" className="text-xs font-semibold">Unique Center Code *</Label>
+                    <Input
+                      id="cCode"
+                      placeholder="e.g. AC-MUM-01"
+                      value={centerForm.code}
+                      onChange={(e) => setCenterForm({ ...centerForm, code: e.target.value })}
+                      className="h-10 text-sm"
+                      required
+                    />
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Basic Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="cName">Center Name *</Label>
-                <Input
-                  id="cName"
-                  placeholder={centerForm.type === 'ONLINE' ? 'e.g. Apex Online Academy' : 'e.g. Metro Campus Mumbai'}
-                  value={centerForm.name}
-                  onChange={(e) => setCenterForm({ ...centerForm, name: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="cCode">Unique Center Code *</Label>
-                <Input
-                  id="cCode"
-                  placeholder={centerForm.type === 'ONLINE' ? 'e.g. AC-ON-01' : 'e.g. AC-MUM-01'}
-                  value={centerForm.code}
-                  onChange={(e) => setCenterForm({ ...centerForm, code: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Conditional Fields based on Offline vs. Online */}
-            {centerForm.type === 'OFFLINE' ? (
-              <div className="space-y-3 p-3.5 bg-emerald-500/5 rounded-xl border border-emerald-500/20">
-                <h5 className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5" />
-                  Physical Campus Location
-                </h5>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="cAddress">Address</Label>
+                {/* Location / Campus Address (Unified for all Centers) */}
+                <div className="space-y-3 p-3.5 bg-muted/40 rounded-xl border border-border/80">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    <Label htmlFor="cAddress" className="text-xs font-semibold">Center / Campus Address</Label>
+                  </div>
                   <Input
                     id="cAddress"
                     placeholder="Building, Street, Landmark"
                     value={centerForm.address}
                     onChange={(e) => setCenterForm({ ...centerForm, address: e.target.value })}
+                    className="h-9 text-xs bg-background"
+                  />
+
+                  <div className="grid grid-cols-3 gap-2.5">
+                    <div className="space-y-1">
+                      <Label htmlFor="cCity" className="text-[11px] font-medium text-muted-foreground">City</Label>
+                      <Input
+                        id="cCity"
+                        placeholder="City"
+                        value={centerForm.city}
+                        onChange={(e) => setCenterForm({ ...centerForm, city: e.target.value })}
+                        className="h-9 text-xs bg-background"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="cState" className="text-[11px] font-medium text-muted-foreground">State</Label>
+                      <Input
+                        id="cState"
+                        placeholder="State"
+                        value={centerForm.state}
+                        onChange={(e) => setCenterForm({ ...centerForm, state: e.target.value })}
+                        className="h-9 text-xs bg-background"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="cPincode" className="text-[11px] font-medium text-muted-foreground">Pincode</Label>
+                      <Input
+                        id="cPincode"
+                        placeholder="Pincode"
+                        value={centerForm.pincode}
+                        onChange={(e) => setCenterForm({ ...centerForm, pincode: e.target.value })}
+                        className="h-9 text-xs bg-background"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="cEmail" className="text-xs font-semibold">Contact Email</Label>
+                    <Input
+                      id="cEmail"
+                      type="email"
+                      placeholder="center@example.com"
+                      value={centerForm.contactEmail}
+                      onChange={(e) => setCenterForm({ ...centerForm, contactEmail: e.target.value })}
+                      className="h-10 text-sm"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="cPhone" className="text-xs font-semibold">Contact Phone</Label>
+                    <Input
+                      id="cPhone"
+                      placeholder="+91 9876543210"
+                      value={centerForm.contactPhone}
+                      onChange={(e) => setCenterForm({ ...centerForm, contactPhone: e.target.value })}
+                      className="h-10 text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Description / Notes */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="cDesc" className="text-xs font-semibold">Description / Notes</Label>
+                  <Textarea
+                    id="cDesc"
+                    rows={centerForm.type === 'OFFLINE' ? 2 : 3}
+                    placeholder="Brief description or purpose of this center..."
+                    value={centerForm.description}
+                    onChange={(e) => setCenterForm({ ...centerForm, description: e.target.value })}
+                    className="text-xs leading-relaxed resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* RIGHT COLUMN: Assigned Program Selection */}
+              <div className="space-y-3.5 p-4 bg-muted/20 rounded-2xl border flex flex-col h-full min-h-[400px]">
+                <div className="flex items-center justify-between gap-2 pb-1 border-b border-border/60">
+                  <div>
+                    <Label className="text-xs font-semibold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                      <BookOpen className="w-4 h-4 text-primary" />
+                      Assigned Program <span className="text-destructive font-bold">*</span>
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Bind this center to its curriculum program.
+                    </p>
+                  </div>
+                  <Badge
+                    variant={centerForm.programIds.length === 1 ? 'default' : 'destructive'}
+                    className="text-xs font-semibold shrink-0"
+                  >
+                    {centerForm.programIds.length === 1 ? '1 Selected' : 'Required'}
+                  </Badge>
+                </div>
+
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+                  <Input
+                    placeholder="Search programs by name, code or university..."
+                    value={programSearch}
+                    onChange={(e) => setProgramSearch(e.target.value)}
+                    className="h-10 pl-9 text-xs bg-background"
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="space-y-1">
-                    <Label htmlFor="cCity">City</Label>
-                    <Input
-                      id="cCity"
-                      placeholder="City"
-                      value={centerForm.city}
-                      onChange={(e) => setCenterForm({ ...centerForm, city: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="cState">State</Label>
-                    <Input
-                      id="cState"
-                      placeholder="State"
-                      value={centerForm.state}
-                      onChange={(e) => setCenterForm({ ...centerForm, state: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="cPincode">Pincode</Label>
-                    <Input
-                      id="cPincode"
-                      placeholder="Pincode"
-                      value={centerForm.pincode}
-                      onChange={(e) => setCenterForm({ ...centerForm, pincode: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3 p-3.5 bg-blue-500/5 rounded-xl border border-blue-500/20">
-                <h5 className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5" />
-                  Online Platform Details
-                </h5>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="cPlatform">Meeting Platform</Label>
-                    <Select
-                      value={centerForm.meetingPlatform}
-                      onValueChange={(val) => setCenterForm({ ...centerForm, meetingPlatform: val })}
-                    >
-                      <SelectTrigger id="cPlatform">
-                        <SelectValue placeholder="Select platform" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Zoom">Zoom</SelectItem>
-                        <SelectItem value="Google Meet">Google Meet</SelectItem>
-                        <SelectItem value="Microsoft Teams">Microsoft Teams</SelectItem>
-                        <SelectItem value="Custom Portal">Custom Portal</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <Label htmlFor="cUrl">Access / Portal URL</Label>
-                    <Input
-                      id="cUrl"
-                      placeholder="https://..."
-                      value={centerForm.onlineAccessUrl}
-                      onChange={(e) => setCenterForm({ ...centerForm, onlineAccessUrl: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Contact details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="cEmail">Contact Email</Label>
-                <Input
-                  id="cEmail"
-                  type="email"
-                  placeholder="center@example.com"
-                  value={centerForm.contactEmail}
-                  onChange={(e) => setCenterForm({ ...centerForm, contactEmail: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="cPhone">Contact Phone</Label>
-                <Input
-                  id="cPhone"
-                  placeholder="+91 9876543210"
-                  value={centerForm.contactPhone}
-                  onChange={(e) => setCenterForm({ ...centerForm, contactPhone: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="cDesc">Description / Notes</Label>
-              <Textarea
-                id="cDesc"
-                rows={2}
-                placeholder="Brief description of this center..."
-                value={centerForm.description}
-                onChange={(e) => setCenterForm({ ...centerForm, description: e.target.value })}
-              />
-            </div>
-
-            {/* Assign Program (Single Program Mandatory) */}
-            <div className="space-y-2.5 p-3.5 bg-muted/40 rounded-xl border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-primary" />
-                    Assigned Program (Single Program) <span className="text-destructive font-bold">*</span>
-                  </Label>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">
-                    Each academic center is bound to exactly one program. Select the program for this center.
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant={centerForm.programIds.length === 1 ? 'default' : 'destructive'}
-                    className="text-[11px] font-semibold"
-                  >
-                    {centerForm.programIds.length === 1 ? '1 Program Selected' : 'No Program Selected'}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="relative">
-                <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-muted-foreground" />
-                <Input
-                  placeholder="Search programs by name, code or university..."
-                  value={programSearch}
-                  onChange={(e) => setProgramSearch(e.target.value)}
-                  className="h-8 pl-8 text-xs bg-background"
-                />
-              </div>
-
-              <div className="max-h-48 overflow-y-auto border rounded-lg p-2 space-y-1.5 bg-background">
-                {filteredAvailablePrograms.length === 0 ? (
-                  <div className="text-center py-4 text-xs text-muted-foreground">
-                    {availablePrograms.length === 0
-                      ? 'No university programs found in this organization.'
-                      : 'No programs match your search query.'}
-                  </div>
-                ) : (
-                  filteredAvailablePrograms.map((prog) => {
-                    const isSelected = centerForm.programIds.includes(prog.id);
-                    return (
-                      <div
-                        key={prog.id}
-                        onClick={() => {
-                          setCenterForm((prev) => ({
-                            ...prev,
-                            programIds: [prog.id],
-                          }));
-                        }}
-                        className={`flex items-center justify-between p-2 rounded-lg border cursor-pointer text-xs transition-all ${
-                          isSelected
-                            ? 'bg-primary/10 border-primary/50 text-foreground font-medium shadow-2xs'
-                            : 'hover:bg-muted/50 border-border/70 text-muted-foreground'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div
-                            className={`w-4 h-4 rounded-full flex items-center justify-center border transition-colors shrink-0 ${
-                              isSelected
-                                ? 'border-primary bg-primary text-primary-foreground'
-                                : 'border-muted-foreground/40'
-                            }`}
-                          >
-                            {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-background" />}
+                <div className="flex-1 max-h-80 overflow-y-auto border rounded-xl p-2.5 space-y-2 bg-background shadow-2xs">
+                  {filteredAvailablePrograms.length === 0 ? (
+                    <div className="text-center py-12 text-xs text-muted-foreground">
+                      {availablePrograms.length === 0
+                        ? 'No university programs found in this organization.'
+                        : 'No programs match your search query.'}
+                    </div>
+                  ) : (
+                    filteredAvailablePrograms.map((prog) => {
+                      const isSelected = centerForm.programIds.includes(prog.id);
+                      return (
+                        <div
+                          key={prog.id}
+                          onClick={() => {
+                            setCenterForm((prev) => ({
+                              ...prev,
+                              programIds: [prog.id],
+                            }));
+                          }}
+                          className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer text-xs transition-all ${
+                            isSelected
+                              ? 'bg-primary/10 border-primary/60 text-foreground font-medium shadow-2xs'
+                              : 'hover:bg-muted/60 border-border/80 text-muted-foreground'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div
+                              className={`w-4 h-4 rounded-full flex items-center justify-center border transition-colors shrink-0 ${
+                                isSelected
+                                  ? 'border-primary bg-primary text-primary-foreground'
+                                  : 'border-muted-foreground/40'
+                              }`}
+                            >
+                              {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-background" />}
+                            </div>
+                            <div className="truncate space-y-0.5">
+                              <p className="font-semibold text-foreground leading-snug">{prog.name}</p>
+                              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                <span className="font-mono">{prog.code}</span>
+                                {prog.university && (
+                                  <>
+                                    <span>•</span>
+                                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-muted font-medium text-foreground">
+                                      {prog.university.name || prog.university.code}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                          <div className="truncate">
-                            <span className="font-semibold text-foreground">{prog.name}</span>
-                            <span className="ml-1.5 text-muted-foreground text-[11px]">({prog.code})</span>
-                            {prog.university && (
-                              <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-muted font-medium text-foreground">
-                                {prog.university.name || prog.university.code}
+                          <div className="flex items-center gap-2 shrink-0 ml-3">
+                            {typeof prog._count?.students === 'number' && (
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold border border-blue-500/20">
+                                {prog._count.students} {prog._count.students === 1 ? 'student' : 'students'}
                               </span>
+                            )}
+                            {isSelected && (
+                              <Badge variant="secondary" className="text-[10px] py-0 px-2 h-5 shrink-0 bg-primary/20 text-primary font-semibold">
+                                Selected
+                              </Badge>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                          {typeof prog._count?.students === 'number' && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold border border-blue-500/20">
-                              {prog._count.students} {prog._count.students === 1 ? 'student' : 'students'}
-                            </span>
-                          )}
-                          {isSelected && (
-                            <Badge variant="secondary" className="text-[10px] py-0 px-1.5 h-5 shrink-0 bg-primary/20 text-primary font-semibold">
-                              Selected
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
+                      );
+                    })
+                  )}
+                </div>
+
+                {centerForm.programIds.length === 0 && (
+                  <div className="flex items-center gap-1.5 text-xs text-destructive font-medium pt-1">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>Please select a curriculum program for this center.</span>
+                  </div>
                 )}
               </div>
-
-              {centerForm.programIds.length === 0 && (
-                <div className="flex items-center gap-1.5 text-xs text-destructive font-medium pt-1">
-                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-                  <span>Please select a program for this academic center.</span>
-                </div>
-              )}
             </div>
 
-            <DialogFooter className="pt-2">
-              <Button type="button" variant="outline" onClick={() => setCenterModalOpen(false)}>
+            <DialogFooter className="pt-4 border-t flex items-center justify-end gap-3">
+              <Button type="button" variant="outline" onClick={() => setCenterModalOpen(false)} className="h-10 px-5 text-sm">
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting || centerForm.programIds.length !== 1}>
+              <Button type="submit" disabled={submitting || centerForm.programIds.length !== 1} className="h-10 px-6 text-sm font-semibold">
                 {submitting ? 'Saving...' : editingCenter ? 'Update Center' : 'Create Center'}
               </Button>
             </DialogFooter>
@@ -1245,7 +1181,7 @@ export function AcademicCentersAdminPanel() {
 
       {/* MODAL 2: REGISTER COUNSELOR */}
       <Dialog open={counselorModalOpen} onOpenChange={setCounselorModalOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Register Academic Counselor</DialogTitle>
             <DialogDescription>
@@ -1773,9 +1709,11 @@ export function AcademicCentersAdminPanel() {
                   {centerToDelete.code}
                 </Badge>
               </div>
-              <p className="text-muted-foreground">
-                Type: <strong>{centerToDelete.type === 'ONLINE' ? 'Online Center' : 'Offline Campus'}</strong>
-                {centerToDelete.city && ` • ${centerToDelete.city}`}
+              <p className="text-muted-foreground flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span className="truncate">
+                  {[centerToDelete.address, centerToDelete.city, centerToDelete.state].filter(Boolean).join(', ') || 'Academic Center'}
+                </span>
               </p>
               <div className="flex items-center gap-4 text-[11px] text-muted-foreground pt-1 border-t border-rose-500/10">
                 <span>{centerToDelete._count?.programs || 0} Programs</span>

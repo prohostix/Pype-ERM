@@ -4,6 +4,31 @@ import prisma from '../../lib/prisma.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
 import { hashPassword } from '../../utils/authUtils.js';
 
+// Helpers to store and extract moduleName alongside notes in CenterClassSchedule
+export function parseClassNotes(rawNotes: string | null | undefined): { moduleName?: string; notes?: string } {
+  if (!rawNotes) return {};
+  try {
+    const parsed = JSON.parse(rawNotes);
+    if (typeof parsed === 'object' && parsed !== null) {
+      return {
+        moduleName: parsed.module || undefined,
+        notes: parsed.text || undefined,
+      };
+    }
+  } catch {
+    // rawNotes is plain text
+  }
+  return { notes: rawNotes };
+}
+
+export function serializeClassNotes(moduleName?: string, notes?: string): string | null {
+  if (!moduleName && !notes) return null;
+  if (moduleName) {
+    return JSON.stringify({ module: moduleName.trim(), text: notes?.trim() || '' });
+  }
+  return notes?.trim() || null;
+}
+
 // @desc    Schedule an Offline Lecture or Online Live Class
 // @route   POST /api/v1/academic-center/classes
 // @access  Private (Academic Counselor, Org Admin)
@@ -21,6 +46,7 @@ export const scheduleClass = asyncHandler(async (req: AcademicAuthRequest, res: 
     meetingPassword,
     recordingUrl,
     notes,
+    moduleName,
   } = req.body;
 
   const organizationId = req.academicUser?.organizationId;
@@ -96,7 +122,7 @@ export const scheduleClass = asyncHandler(async (req: AcademicAuthRequest, res: 
       meetingLink: meetingLink?.trim() || null,
       meetingPassword: meetingPassword?.trim() || null,
       recordingUrl: recordingUrl?.trim() || null,
-      notes: notes?.trim() || null,
+      notes: serializeClassNotes(moduleName, notes),
       status: 'SCHEDULED',
     },
     include: {
@@ -122,10 +148,15 @@ export const scheduleClass = asyncHandler(async (req: AcademicAuthRequest, res: 
     console.error('Error dispatching notifications on class schedule:', err)
   );
 
+  const parsed = parseClassNotes(newClass.notes);
+
   res.status(201).json({
     success: true,
     message: 'Class scheduled successfully! Notifications sent to teacher and enrolled students.',
-    data: newClass,
+    data: {
+      ...newClass,
+      moduleName: parsed.moduleName || null,
+    },
   });
 });
 
@@ -147,9 +178,12 @@ async function dispatchClassScheduledNotifications(newClass: any) {
       hour: '2-digit',
       minute: '2-digit',
     })}`;
+    const isRecorded = Boolean(newClass.recordingUrl || newClass.center?.type === 'ONLINE');
     const isOnline = newClass.type === 'ONLINE_LIVE_CLASS';
-    const classModeLabel = isOnline ? 'Online Live Class' : 'Campus Lecture';
-    const venueDetail = isOnline
+    const classModeLabel = isRecorded ? 'Recorded Video Lecture' : isOnline ? 'Online Live Class' : 'Campus Lecture';
+    const venueDetail = isRecorded
+      ? (newClass.recordingUrl ? `Lecture URL: ${newClass.recordingUrl}` : 'Recorded Video Lecture: Accessible in Student Portal')
+      : isOnline
       ? (newClass.meetingLink ? `Meeting Link: ${newClass.meetingLink}` : 'Live Class Platform')
       : `Venue: ${newClass.roomOrLocation || newClass.center?.address || 'Campus Classroom'}`;
     const programName = newClass.program?.name ? `[${newClass.program.name}] ` : '';
@@ -337,9 +371,17 @@ export const getClasses = asyncHandler(async (req: AcademicAuthRequest, res: Res
     },
   });
 
+  const formattedClasses = classes.map((cls) => {
+    const parsed = parseClassNotes(cls.notes);
+    return {
+      ...cls,
+      moduleName: parsed.moduleName || null,
+    };
+  });
+
   res.status(200).json({
     success: true,
-    data: classes,
+    data: formattedClasses,
   });
 });
 
@@ -359,8 +401,21 @@ export const updateClass = asyncHandler(async (req: AcademicAuthRequest, res: Re
     meetingPassword,
     recordingUrl,
     notes,
+    moduleName,
     status,
   } = req.body;
+
+  let serializedNotes: string | null | undefined = undefined;
+  if (notes !== undefined || moduleName !== undefined) {
+    const existing = await prisma.centerClassSchedule.findUnique({
+      where: { id },
+      select: { notes: true },
+    });
+    const parsedExisting = parseClassNotes(existing?.notes);
+    const finalModule = moduleName !== undefined ? moduleName : parsedExisting.moduleName;
+    const finalText = notes !== undefined ? notes : parsedExisting.notes;
+    serializedNotes = serializeClassNotes(finalModule, finalText);
+  }
 
   const updated = await prisma.centerClassSchedule.update({
     where: { id },
@@ -374,7 +429,7 @@ export const updateClass = asyncHandler(async (req: AcademicAuthRequest, res: Re
       ...(meetingLink !== undefined && { meetingLink }),
       ...(meetingPassword !== undefined && { meetingPassword }),
       ...(recordingUrl !== undefined && { recordingUrl }),
-      ...(notes !== undefined && { notes }),
+      ...(serializedNotes !== undefined && { notes: serializedNotes }),
       ...(status && { status: status as any }),
     },
     include: {
@@ -383,10 +438,15 @@ export const updateClass = asyncHandler(async (req: AcademicAuthRequest, res: Re
     },
   });
 
+  const parsedUpdated = parseClassNotes(updated.notes);
+
   res.status(200).json({
     success: true,
     message: 'Class updated successfully',
-    data: updated,
+    data: {
+      ...updated,
+      moduleName: parsedUpdated.moduleName || null,
+    },
   });
 });
 

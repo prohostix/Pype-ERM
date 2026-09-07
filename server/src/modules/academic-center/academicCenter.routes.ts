@@ -29,12 +29,20 @@ import {
   updateProgram,
   deleteProgram,
   getUniversities,
+  getProgramStructure,
+  saveProgramStructure,
+  assignProgramTeacher,
+  getProgramTeacherHistory,
 } from './program.controller.js';
 import {
   createMaterial,
   getMaterials,
   updateMaterial,
   deleteMaterial,
+  getAssessments,
+  createAssessment,
+  updateAssessment,
+  deleteAssessment,
 } from './material.controller.js';
 import {
   scheduleClass,
@@ -110,12 +118,22 @@ router.get('/programs', getPrograms);
 router.get('/programs/:id', getProgramById);
 router.put('/programs/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), updateProgram);
 router.delete('/programs/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), deleteProgram);
+router.get('/programs/:id/structure', getProgramStructure);
+router.put('/programs/:id/structure', requireRoles('academic_counselor', 'org_admin', 'superadmin'), saveProgramStructure);
+router.put('/programs/:id/assign-teacher', requireRoles('academic_counselor', 'org_admin', 'superadmin'), assignProgramTeacher);
+router.get('/programs/:id/teacher-history', requireRoles('academic_counselor', 'org_admin', 'superadmin'), getProgramTeacherHistory);
 
 // 5. Learning Materials (Videos, Documents, E-Books)
 router.post('/materials', requireRoles('academic_counselor', 'org_admin', 'superadmin'), createMaterial);
 router.get('/materials', getMaterials);
 router.put('/materials/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), updateMaterial);
 router.delete('/materials/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), deleteMaterial);
+
+// 5b. Assessments & Assignments
+router.get('/assessments', getAssessments);
+router.post('/assessments', requireRoles('academic_counselor', 'org_admin', 'superadmin'), createAssessment);
+router.put('/assessments/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), updateAssessment);
+router.delete('/assessments/:id', requireRoles('academic_counselor', 'org_admin', 'superadmin'), deleteAssessment);
 
 // 6. Classes & Live Sessions
 router.post('/classes', requireRoles('academic_counselor', 'org_admin', 'superadmin'), scheduleClass);

@@ -30,6 +30,7 @@ import {
   FileText,
   UserX,
   ShieldCheck,
+  Layers,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -78,6 +79,7 @@ interface ClassItem {
   roomOrLocation?: string;
   recordingUrl?: string;
   notes?: string;
+  moduleName?: string | null;
   status: string;
   program?: {
     id: string;
@@ -538,8 +540,14 @@ export default function TeacherPortal() {
                                   : "bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
                               )}
                             >
-                              {isOnline ? 'Online Class' : 'Campus Lecture'}
+                              {cls.recordingUrl || isOnline ? 'Recorded Class' : 'Campus Lecture'}
                             </Badge>
+                            {cls.moduleName && (
+                              <Badge variant="secondary" className="bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200 text-[10px] py-0 px-1.5 gap-1">
+                                <Layers className="w-3 h-3" />
+                                {cls.moduleName}
+                              </Badge>
+                            )}
                           </div>
 
                           <p className="text-xs text-muted-foreground">
@@ -557,21 +565,21 @@ export default function TeacherPortal() {
                               {new Date(cls.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(cls.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                             <span>
-                              {isOnline ? 'Zoom / Meet' : (cls.roomOrLocation || 'Campus Classroom')}
+                              {cls.recordingUrl || isOnline ? 'Recorded Video Lecture' : (cls.roomOrLocation || 'Campus Classroom')}
                             </span>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                          {isOnline && cls.meetingLink && (
+                          {(cls.recordingUrl || cls.meetingLink) && (
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => window.open(cls.meetingLink, '_blank')}
-                              className="h-8 text-xs gap-1.5 text-blue-600 hover:bg-blue-50"
+                              onClick={() => window.open(cls.recordingUrl || cls.meetingLink, '_blank')}
+                              className="h-8 text-xs gap-1.5 text-purple-600 hover:bg-purple-50 hover:text-purple-700"
                             >
                               <Video className="w-3.5 h-3.5" />
-                              Start Class
+                              {cls.recordingUrl || isOnline ? 'Watch Recording' : 'Start Class'}
                             </Button>
                           )}
                           <Button
@@ -699,17 +707,25 @@ export default function TeacherPortal() {
                     <CardHeader className="p-4 pb-2">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <Badge
-                            variant="outline"
-                            className={cn(
-                              "text-[10px] mb-1 font-semibold",
-                              isOnline
-                                ? "bg-blue-500/10 text-blue-500 border-blue-500/30"
-                                : "bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
+                          <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-[10px] font-semibold",
+                                isOnline
+                                  ? "bg-blue-500/10 text-blue-500 border-blue-500/30"
+                                  : "bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
+                              )}
+                            >
+                              {isOnline ? 'Online Live Class' : 'Campus Classroom'}
+                            </Badge>
+                            {cls.moduleName && (
+                              <Badge variant="secondary" className="bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-200 text-[10px] gap-1">
+                                <Layers className="w-3 h-3" />
+                                {cls.moduleName}
+                              </Badge>
                             )}
-                          >
-                            {isOnline ? 'Online Live Class' : 'Campus Classroom'}
-                          </Badge>
+                          </div>
                           <h4 className="font-semibold text-base leading-snug">{cls.title}</h4>
                           <p className="text-xs text-primary font-medium mt-0.5">
                             {cls.program?.university && `[${cls.program.university.name}] `}
@@ -739,28 +755,28 @@ export default function TeacherPortal() {
                         </div>
 
                         <div className="flex items-center gap-1.5 text-muted-foreground">
-                          {isOnline ? (
-                            <Globe className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                          {cls.recordingUrl || isOnline ? (
+                            <Video className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                           ) : (
                             <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           )}
                           <span className="truncate">
-                            {isOnline ? (cls.meetingLink ? 'Online Link Provided' : 'Live Platform') : (cls.roomOrLocation || 'Physical Campus Room')}
+                            {cls.recordingUrl || isOnline ? (cls.recordingUrl || cls.meetingLink ? 'Recorded Lecture Available' : 'Asynchronous LMS Class') : (cls.roomOrLocation || 'Physical Campus Room')}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 pt-1">
-                        {isOnline && cls.meetingLink && (
+                        {(cls.recordingUrl || cls.meetingLink) && (
                           <Button
                             type="button"
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(cls.meetingLink, '_blank')}
-                            className="h-8 text-xs flex-1 gap-1 text-blue-600 hover:bg-blue-50"
+                            onClick={() => window.open(cls.recordingUrl || cls.meetingLink, '_blank')}
+                            className="h-8 text-xs flex-1 gap-1 text-purple-600 hover:bg-purple-50"
                           >
                             <Video className="w-3.5 h-3.5" />
-                            Open Class
+                            {cls.recordingUrl || isOnline ? 'Watch Video' : 'Open Class'}
                           </Button>
                         )}
                         <Button
@@ -773,7 +789,7 @@ export default function TeacherPortal() {
                           )}
                         >
                           <UserCheck className="w-3.5 h-3.5" />
-                          {totalAttendanceRecords > 0 ? 'Edit Attendance' : 'Mark Attendance'}
+                          {cls.recordingUrl && !cls.meetingLink ? 'View Attendance' : totalAttendanceRecords > 0 ? 'Edit Attendance' : 'Mark Attendance'}
                         </Button>
                       </div>
                     </CardContent>
@@ -1270,8 +1286,9 @@ export default function TeacherPortal() {
                 })
                 .map((student) => {
                   const isPresent = student.status === 'PRESENT';
-                  const hasNote = !!student.notes && student.notes.trim().length > 0;
-                  const isExpanded = expandedNotes[student.email] || false;
+                  const hasNote = !!student.notes?.trim();
+                  const isExpanded = expandedNotes.has(student.email);
+                  const isPurelyRecordedClass = !!selectedClass?.recordingUrl && !selectedClass?.meetingLink;
 
                   return (
                     <div
@@ -1331,12 +1348,14 @@ export default function TeacherPortal() {
                           <div className="inline-flex rounded-lg p-0.5 bg-muted/50 border">
                             <button
                               type="button"
+                              disabled={isPurelyRecordedClass}
                               onClick={() => toggleStudentStatus(student.email, 'PRESENT')}
                               className={cn(
                                 "flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all",
                                 isPresent
                                   ? "bg-emerald-600 text-white shadow-xs"
-                                  : "text-muted-foreground hover:text-emerald-600 hover:bg-emerald-500/10"
+                                  : "text-muted-foreground hover:text-emerald-600 hover:bg-emerald-500/10",
+                                isPurelyRecordedClass && "opacity-50 cursor-not-allowed"
                               )}
                             >
                               <Check className="w-3.5 h-3.5" />
@@ -1344,12 +1363,14 @@ export default function TeacherPortal() {
                             </button>
                             <button
                               type="button"
+                              disabled={isPurelyRecordedClass}
                               onClick={() => toggleStudentStatus(student.email, 'ABSENT')}
                               className={cn(
                                 "flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all",
                                 !isPresent
                                   ? "bg-rose-600 text-white shadow-xs"
-                                  : "text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10"
+                                  : "text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10",
+                                isPurelyRecordedClass && "opacity-50 cursor-not-allowed"
                               )}
                             >
                               <X className="w-3.5 h-3.5" />
@@ -1387,8 +1408,14 @@ export default function TeacherPortal() {
                                 <button
                                   key={remark}
                                   type="button"
+                                  disabled={isPurelyRecordedClass}
                                   onClick={() => appendQuickRemark(student.email, remark)}
-                                  className="text-[10px] px-2 py-0.5 rounded-full bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border"
+                                  className={cn(
+                                    "text-[10px] px-2 py-0.5 rounded-full transition-colors border",
+                                    isPurelyRecordedClass 
+                                      ? "bg-muted text-muted-foreground opacity-50 cursor-not-allowed" 
+                                      : "bg-muted/60 hover:bg-primary/10 hover:text-primary"
+                                  )}
                                 >
                                   + {remark}
                                 </button>
@@ -1400,6 +1427,7 @@ export default function TeacherPortal() {
                             onChange={(e) => updateStudentNote(student.email, e.target.value)}
                             placeholder="Add specific remarks (e.g. excused absence reason, arrived 15 min late)..."
                             className="h-8 text-xs bg-muted/20"
+                            disabled={isPurelyRecordedClass}
                           />
                         </div>
                       )}
@@ -1429,17 +1457,19 @@ export default function TeacherPortal() {
                 onClick={() => setAttendanceModalOpen(false)}
                 disabled={attendanceSaving}
               >
-                Cancel
+                {!!selectedClass?.recordingUrl && !selectedClass?.meetingLink ? 'Close' : 'Cancel'}
               </Button>
-              <Button
-                type="button"
-                onClick={handleSaveAttendance}
-                disabled={attendanceSaving || studentSheet.length === 0}
-                className="bg-primary hover:bg-primary/90 text-white font-semibold gap-1.5 shadow-sm px-5"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                {attendanceSaving ? 'Saving Attendance...' : 'Save Attendance Sheet'}
-              </Button>
+              {!(!!selectedClass?.recordingUrl && !selectedClass?.meetingLink) && (
+                <Button
+                  type="button"
+                  onClick={handleSaveAttendance}
+                  disabled={attendanceSaving || studentSheet.length === 0}
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold gap-1.5 shadow-sm px-5"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  {attendanceSaving ? 'Saving Attendance...' : 'Save Attendance Sheet'}
+                </Button>
+              )}
             </div>
           </DialogFooter>
         </DialogContent>

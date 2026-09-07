@@ -413,9 +413,15 @@ export const updateCenter = asyncHandler(async (req: AcademicAuthRequest, res: R
 export const deleteCenter = asyncHandler(async (req: AcademicAuthRequest, res: Response) => {
   const { id } = req.params;
   const organizationId = req.academicUser?.organizationId;
+  const isSuperadmin = req.academicUser?.role === 'superadmin' || req.user?.role === 'superadmin';
+
+  const whereClause: any = { id };
+  if (!isSuperadmin && organizationId) {
+    whereClause.organizationId = organizationId;
+  }
 
   const center = await prisma.academicCenter.findFirst({
-    where: { id, organizationId },
+    where: whereClause,
   });
 
   if (!center) {
@@ -423,38 +429,63 @@ export const deleteCenter = asyncHandler(async (req: AcademicAuthRequest, res: R
     return;
   }
 
-  // Delete all center associations in transaction
+  // Delete all center associations in strict dependency order
   await prisma.$transaction(async (tx) => {
-    // 1. Delete materials for this center
-    await tx.centerMaterial.deleteMany({ where: { centerId: id } });
+    // 1. Delete class attendances for all schedules in this center
+    const schedules = await tx.centerClassSchedule.findMany({
+      where: { centerId: id },
+      select: { id: true },
+    });
+    const scheduleIds = schedules.map((s) => s.id);
+    if (scheduleIds.length > 0) {
+      await tx.centerClassAttendance.deleteMany({
+        where: { classScheduleId: { in: scheduleIds } },
+      });
+    }
 
     // 2. Delete class schedules for this center
     await tx.centerClassSchedule.deleteMany({ where: { centerId: id } });
 
-    // 3. Delete student enrollments and students for this center
-    await tx.centerEnrollment.deleteMany({
-      where: {
-        student: { centerId: id },
-      },
+    // 3. Delete materials uploaded for this center
+    await tx.centerMaterial.deleteMany({ where: { centerId: id } });
+
+    // 4. Delete center student enrollments and students
+    const students = await tx.centerStudent.findMany({
+      where: { centerId: id },
+      select: { id: true },
     });
+    const studentIds = students.map((s) => s.id);
+    if (studentIds.length > 0) {
+      await tx.centerEnrollment.deleteMany({
+        where: { studentId: { in: studentIds } },
+      });
+    }
     await tx.centerStudent.deleteMany({ where: { centerId: id } });
 
-    // 4. Delete counselor assignments
-    await tx.centerCounselorAssignment.deleteMany({ where: { centerId: id } });
-
-    // 5. Delete teachers for this center
-    await tx.centerTeacher.deleteMany({ where: { centerId: id } });
-
-    // 6. Delete center programs
+    // 5. Delete center programs (before teachers to prevent FK constraint on teacherId)
     await tx.centerProgram.deleteMany({ where: { centerId: id } });
 
-    // 7. Delete the academic center
+    // 6. Delete teachers registered for this center
+    await tx.centerTeacher.deleteMany({ where: { centerId: id } });
+
+    // 7. Delete counselor assignments for this center
+    await tx.centerCounselorAssignment.deleteMany({ where: { centerId: id } });
+
+    // 8. Disconnect assigned programs from implicit relation table
+    await tx.academicCenter.update({
+      where: { id },
+      data: {
+        assignedPrograms: { set: [] },
+      },
+    });
+
+    // 9. Delete the academic center
     await tx.academicCenter.delete({ where: { id } });
   });
 
   res.status(200).json({
     success: true,
-    message: `Academic Center '${center.name}' deleted successfully`,
+    message: `Academic Center '${center.name}' and all associated records deleted successfully`,
   });
 });
 

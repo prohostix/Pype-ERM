@@ -340,7 +340,7 @@ export const registerStudentAttendance = asyncHandler(async (req: AcademicAuthRe
 // @access  Private (Center Student)
 export const getStudentMaterials = asyncHandler(async (req: AcademicAuthRequest, res: Response) => {
   const studentId = req.academicUser?.studentId;
-  const { programId, type } = req.query;
+  const { programId, type, excludeAssessments } = req.query;
 
   if (!studentId) {
     res.status(403).json({ success: false, message: 'Student ID not found in token' });
@@ -382,8 +382,20 @@ export const getStudentMaterials = asyncHandler(async (req: AcademicAuthRequest,
     },
   });
 
+  const filtered = excludeAssessments === 'true'
+    ? materials.filter((m) => {
+        if (!m.description) return true;
+        try {
+          const p = JSON.parse(m.description);
+          return !p.isAssessment;
+        } catch {
+          return true;
+        }
+      })
+    : materials;
+
   res.status(200).json({
     success: true,
-    data: materials,
+    data: filtered,
   });
 });

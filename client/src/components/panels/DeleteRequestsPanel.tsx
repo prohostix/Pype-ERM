@@ -114,29 +114,61 @@ export function DeleteRequestsPanel() {
     );
   };
 
+  const pendingRequests = requests.filter(req => req.status === 'pending_manager' || req.status === 'pending_ceo');
+  const approvedRequests = requests.filter(req => req.status === 'approved');
+  const rejectedRequests = requests.filter(req => req.status === 'rejected');
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Delete Approvals</CardTitle>
+        <CardTitle className="flex items-center justify-between">
+          <span>Delete Approvals</span>
+          {pendingRequests.length > 0 && (
+            <Badge variant="destructive" className="text-xs font-semibold">
+              {pendingRequests.length} Pending
+            </Badge>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="pending" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="pending">Pending</TabsTrigger>
-            <TabsTrigger value="approved">Approved</TabsTrigger>
-            <TabsTrigger value="rejected">Rejected</TabsTrigger>
+            <TabsTrigger value="pending" className="flex items-center gap-1.5">
+              <span>Pending</span>
+              {pendingRequests.length > 0 && (
+                <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
+                  {pendingRequests.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="approved" className="flex items-center gap-1.5">
+              <span>Approved</span>
+              {approvedRequests.length > 0 && (
+                <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
+                  {approvedRequests.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="rejected" className="flex items-center gap-1.5">
+              <span>Rejected</span>
+              {rejectedRequests.length > 0 && (
+                <Badge variant="secondary" className="h-5 px-1.5 text-[10px]">
+                  {rejectedRequests.length}
+                </Badge>
+              )}
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="pending">
-            {renderRequestsList(requests.filter(req => req.status === 'pending_manager' || req.status === 'pending_ceo'))}
+            {renderRequestsList(pendingRequests)}
           </TabsContent>
           
           <TabsContent value="approved">
-            {renderRequestsList(requests.filter(req => req.status === 'approved'))}
+            {renderRequestsList(approvedRequests)}
           </TabsContent>
           
           <TabsContent value="rejected">
-            {renderRequestsList(requests.filter(req => req.status === 'rejected'))}
+            {renderRequestsList(rejectedRequests)}
           </TabsContent>
         </Tabs>
       </CardContent>

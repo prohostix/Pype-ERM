@@ -30,11 +30,16 @@ export const getEditDeleteRequests = asyncHandler(async (req: AuthRequest, res: 
     statusFilter = ['pending_manager', 'approved', 'rejected'];
   }
 
+  const whereClause: any = {
+    status: { in: statusFilter }
+  };
+
+  if (orgId && role !== 'superadmin') {
+    whereClause.organizationId = orgId;
+  }
+
   const requests = await prisma.editDeleteRequest.findMany({
-    where: {
-      organizationId: orgId,
-      status: { in: statusFilter }
-    },
+    where: whereClause,
     include: {
       user: {
         select: { id: true, name: true, email: true, role: true }
@@ -130,6 +135,43 @@ async function executeApprovedDeletion(entityId: string, organizationId: string)
       if (sub === 'leads') {
         await prisma.lead.delete({ where: { id } });
       }
+    } else if (endpoint === 'academic-center') {
+      if (sub === 'centers') {
+        // Delete all center associations in strict dependency order
+        await prisma.$transaction(async (tx) => {
+          const schedules = await tx.centerClassSchedule.findMany({
+            where: { centerId: id },
+            select: { id: true },
+          });
+          const scheduleIds = schedules.map((s) => s.id);
+          if (scheduleIds.length > 0) {
+            await tx.centerClassAttendance.deleteMany({
+              where: { classScheduleId: { in: scheduleIds } },
+            });
+          }
+          await tx.centerClassSchedule.deleteMany({ where: { centerId: id } });
+          await tx.centerMaterial.deleteMany({ where: { centerId: id } });
+          const students = await tx.centerStudent.findMany({
+            where: { centerId: id },
+            select: { id: true },
+          });
+          const studentIds = students.map((s) => s.id);
+          if (studentIds.length > 0) {
+            await tx.centerEnrollment.deleteMany({
+              where: { studentId: { in: studentIds } },
+            });
+          }
+          await tx.centerStudent.deleteMany({ where: { centerId: id } });
+          await tx.centerProgram.deleteMany({ where: { centerId: id } });
+          await tx.centerTeacher.deleteMany({ where: { centerId: id } });
+          await tx.centerCounselorAssignment.deleteMany({ where: { centerId: id } });
+          await tx.academicCenter.update({
+            where: { id },
+            data: { assignedPrograms: { set: [] } },
+          });
+          await tx.academicCenter.delete({ where: { id } });
+        });
+      }
     } else {
       return { success: false, error: `Unknown entity type: ${endpoint}` };
     }
@@ -217,12 +259,15 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
 
 export const getEditDeleteStats = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
+  const role = req.user.role;
+  const orgFilter: any = (orgId && role !== 'superadmin') ? { organizationId: orgId } : {};
+
   const [pendingManager, pendingCeo, approved, rejected, total] = await Promise.all([
-    prisma.editDeleteRequest.count({ where: { organizationId: orgId, status: 'pending_manager' } }),
-    prisma.editDeleteRequest.count({ where: { organizationId: orgId, status: 'pending_ceo' } }),
-    prisma.editDeleteRequest.count({ where: { organizationId: orgId, status: 'approved' } }),
-    prisma.editDeleteRequest.count({ where: { organizationId: orgId, status: 'rejected' } }),
-    prisma.editDeleteRequest.count({ where: { organizationId: orgId } }),
+    prisma.editDeleteRequest.count({ where: { ...orgFilter, status: 'pending_manager' } }),
+    prisma.editDeleteRequest.count({ where: { ...orgFilter, status: 'pending_ceo' } }),
+    prisma.editDeleteRequest.count({ where: { ...orgFilter, status: 'approved' } }),
+    prisma.editDeleteRequest.count({ where: { ...orgFilter, status: 'rejected' } }),
+    prisma.editDeleteRequest.count({ where: orgFilter }),
   ]);
   res.json({ success: true, data: { pendingManager, pendingCeo, approved, rejected, total } });
 });

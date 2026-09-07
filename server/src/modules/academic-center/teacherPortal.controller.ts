@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AcademicAuthRequest } from './academicAuth.middleware.js';
 import prisma from '../../lib/prisma.js';
 import { asyncHandler } from '../../utils/asyncHandler.js';
+import { parseClassNotes } from './class.controller.js';
 
 // Helper to resolve the authenticated teacher
 const getAuthenticatedTeacher = async (req: AcademicAuthRequest) => {
@@ -136,7 +137,10 @@ export const getTeacherDashboard = asyncHandler(async (req: AcademicAuthRequest,
         totalMonitoredStudents,
         overallAttendanceRate,
       },
-      upcomingClasses,
+      upcomingClasses: upcomingClasses.map((cls) => ({
+        ...cls,
+        moduleName: parseClassNotes(cls.notes).moduleName || null,
+      })),
     },
   });
 });
@@ -189,9 +193,14 @@ export const getTeacherClasses = asyncHandler(async (req: AcademicAuthRequest, r
     },
   });
 
+  const formattedClasses = classes.map((cls) => ({
+    ...cls,
+    moduleName: parseClassNotes(cls.notes).moduleName || null,
+  }));
+
   res.status(200).json({
     success: true,
-    data: classes,
+    data: formattedClasses,
   });
 });
 

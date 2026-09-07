@@ -17,6 +17,7 @@ import {
   UserCheck,
   GraduationCap,
   BarChart2,
+  Trash2,
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -75,6 +76,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
   const { user } = useAuth();
   const [metrics, setMetrics] = useState<any>({});
   const [analytics, setAnalytics] = useState<any>({ employeePerformance: [], departmentEfficiency: [] });
+  const [pendingDeletes, setPendingDeletes] = useState<number>(0);
   const [loadingMetrics, setLoadingMetrics] = useState(true);
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const handleNavigate = (tab: string) => {
@@ -91,12 +93,17 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
   const fetchAll = async () => {
     setLoadingMetrics(true);
     try {
-      const [metricsRes, analyticsRes] = await Promise.all([
+      const [metricsRes, analyticsRes, deleteStatsRes] = await Promise.all([
         api.get('/dashboard/metrics'),
         api.get('/ceo/analytics').catch(() => ({ data: { data: { employeePerformance: [], departmentEfficiency: [] } } })),
+        api.get('/edit-delete/stats').catch(() => ({ data: { data: { pendingCeo: 0, pendingManager: 0 } } })),
       ]);
       setMetrics(metricsRes.data.data || {});
       setAnalytics(analyticsRes.data.data || { employeePerformance: [], departmentEfficiency: [] });
+      const stats = deleteStatsRes.data?.data;
+      if (stats) {
+        setPendingDeletes((stats.pendingCeo || 0) + (stats.pendingManager || 0));
+      }
     } catch (e) {
       console.error('Failed to fetch CEO metrics:', e);
     } finally {
@@ -152,7 +159,14 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
           <TabsTrigger value="activity_report" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Report</TabsTrigger>
           {user?.role === 'ceo' && (
             <>
-              <TabsTrigger value="delete_approvals" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Delete Approvals</TabsTrigger>
+              <TabsTrigger value="delete_approvals" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5">
+                <span>Delete Approvals</span>
+                {pendingDeletes > 0 && (
+                  <Badge variant="destructive" className="ml-1 h-5 min-w-[20px] px-1.5 text-[10px] font-bold rounded-full">
+                    {pendingDeletes}
+                  </Badge>
+                )}
+              </TabsTrigger>
               <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
               <TabsTrigger value="activity-logs" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Logs</TabsTrigger>
             </>
@@ -162,6 +176,24 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
         </div>
 
         <TabsContent value="overview" className="space-y-8">
+          {/* Pending Delete Approvals Alert Banner (CEO only) */}
+          {user?.role === 'ceo' && pendingDeletes > 0 && (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                  <Trash2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">Action Required: {pendingDeletes} Deletion Request{pendingDeletes > 1 ? 's' : ''} Pending</p>
+                  <p className="text-xs text-amber-700/80 dark:text-amber-300/80">Department managers or admins submitted record deletion requests requiring authorization.</p>
+                </div>
+              </div>
+              <Button size="sm" variant="destructive" className="bg-amber-600 hover:bg-amber-700 text-white shrink-0" onClick={() => handleNavigate('delete_approvals')}>
+                Review Delete Requests ({pendingDeletes})
+              </Button>
+            </div>
+          )}
+
           {/* Hero Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard

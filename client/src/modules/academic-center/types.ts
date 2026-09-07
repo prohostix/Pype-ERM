@@ -104,13 +104,16 @@ export interface CenterProgram {
   universityId?: string;
   counselorId?: string;
   teacherId?: string | null;
+  assignedTeacher?: CenterTeacher | null;
+  teacher?: CenterTeacher | null;
+  centerProgramId?: string | null;
   name: string;
   code: string;
   description?: string | null;
   mode?: string;
   courseType?: string;
-  duration?: any;
-  syllabus?: any;
+  duration?: string | number | null;
+  syllabus?: unknown;
   thumbnail?: string | null;
   status: string;
   university?: {
@@ -119,7 +122,6 @@ export interface CenterProgram {
     code: string;
     logo?: string | null;
   };
-  teacher?: CenterTeacher | null;
   counselor?: { id: string; name: string; email: string };
   center?: { id: string; name: string; code: string; type: AcademicCenterType };
   _count?: {
@@ -132,7 +134,7 @@ export interface CenterProgram {
   };
   materials?: CenterMaterial[];
   schedules?: CenterClassSchedule[];
-  enrollments?: any[];
+  enrollments?: Array<Record<string, unknown>>;
 }
 
 export interface CenterMaterial {
@@ -177,6 +179,7 @@ export interface CenterClassSchedule {
   meetingPassword?: string | null;
   recordingUrl?: string | null;
   notes?: string | null;
+  moduleName?: string | null;
   status: AcademicClassStatus;
   program?: {
     id: string;
@@ -215,3 +218,61 @@ export interface CenterStudent {
     program: CenterProgram;
   }>;
 }
+
+export interface ModuleClassItem {
+  id?: string;
+  title: string;
+  type: 'RECORDED_VIDEO' | 'ONLINE_LIVE_CLASS' | 'OFFLINE_LECTURE';
+  recordingUrl?: string;
+  durationMins?: number;
+  startTime?: string;
+  endTime?: string;
+  meetingLink?: string;
+  meetingPassword?: string;
+  roomOrLocation?: string;
+  notes?: string;
+}
+
+export interface CourseModule {
+  id: string;
+  title: string;
+  description?: string;
+  topics: string[];
+  durationHours?: number;
+  classes?: ModuleClassItem[];
+}
+
+export interface TeacherHistoryEntry {
+  id: string;
+  previousTeacherId: string | null;
+  previousTeacherName: string;
+  newTeacherId: string | null;
+  newTeacherName: string;
+  changedById?: string | null;
+  changedByName: string;
+  changedAt: string;
+  remarks?: string;
+}
+
+export interface Assessment {
+  id: string;
+  centerId: string;
+  programId: string;
+  title: string;
+  module: string;
+  assessmentType: 'ASSIGNMENT' | 'QUIZ' | 'EXAM' | 'PROJECT' | string;
+  maxMarks: number;
+  dueDate?: string | null;
+  instructions?: string;
+  questionPaperUrl: string;
+  isPublished: boolean;
+  createdAt: string;
+  program?: {
+    id: string;
+    name: string;
+    code?: string;
+    university?: { id: string; name: string; code: string; logo?: string | null };
+  };
+  uploadedBy?: { id: string; name: string; email?: string };
+}
+

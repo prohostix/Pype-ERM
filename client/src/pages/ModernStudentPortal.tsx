@@ -868,18 +868,23 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                         >
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                              <Badge
-                                variant="outline"
-                                className={cn(
-                                  "text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium",
-                                  isOnline
-                                    ? "bg-blue-500/10 text-blue-500 border-blue-500/20"
-                                    : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                              {cls.recordingUrl || isOnline ? (
+                                  <Badge
+                                    variant="outline"
+                                    className="bg-purple-500/10 text-purple-600 border-purple-500/30 text-[10px] gap-1"
+                                  >
+                                    <Video className="w-3 h-3" />
+                                    {cls.recordingUrl ? 'Recorded Lecture' : 'Online Class'}
+                                  </Badge>
+                                ) : (
+                                  <Badge
+                                    variant="outline"
+                                    className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30 text-[10px] gap-1"
+                                  >
+                                    <MapPin className="w-3 h-3" />
+                                    Campus Lecture
+                                  </Badge>
                                 )}
-                              >
-                                {isOnline ? <Video className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
-                                {isOnline ? 'Online Live' : 'Campus / Room'}
-                              </Badge>
 
                               {live ? (
                                 <Badge variant="default" className="bg-emerald-600 text-white text-[10px] animate-pulse">
@@ -994,35 +999,29 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                               )}
                             </div>
 
-                            {isOnline && cls.meetingLink && (
+                            {cls.recordingUrl || (isOnline && cls.meetingLink) ? (
                               <div className="flex items-center gap-2">
-                                <Button size="sm" className="w-full text-xs gap-1.5 h-8 font-semibold" asChild>
+                                <Button size="sm" className="w-full text-xs gap-1.5 h-8 font-semibold bg-purple-600 hover:bg-purple-700 text-white" asChild>
                                   <a
-                                    href={cls.meetingLink}
+                                    href={cls.recordingUrl || cls.meetingLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={() => {
                                       if (!cls.myAttendance) handleRegisterAttendance(cls.id);
                                     }}
                                   >
-                                    <Video className="w-3.5 h-3.5" /> Join Live Session
+                                    <PlayCircle className="w-3.5 h-3.5" />
+                                    {cls.recordingUrl ? 'Watch Recorded Lecture' : 'Join Session'}
                                     <ExternalLink className="w-3 h-3 opacity-70" />
                                   </a>
                                 </Button>
                               </div>
-                            )}
-                            {cls.meetingPassword && (
+                            ) : null}
+                            {cls.meetingPassword && !cls.recordingUrl && (
                               <div className="flex items-center justify-between text-[11px] bg-muted/40 px-2 py-1 rounded">
                                 <span className="text-muted-foreground">Meeting Passcode:</span>
                                 <span className="font-mono font-bold text-foreground">{cls.meetingPassword}</span>
                               </div>
-                            )}
-                            {cls.recordingUrl && (
-                              <Button size="sm" variant="outline" className="w-full text-xs gap-1.5 h-7" asChild>
-                                <a href={cls.recordingUrl} target="_blank" rel="noopener noreferrer">
-                                  <PlayCircle className="w-3.5 h-3.5 text-primary" /> Watch Recording
-                                </a>
-                              </Button>
                             )}
                           </div>
                         </div>
