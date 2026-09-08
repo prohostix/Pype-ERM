@@ -407,7 +407,7 @@ export const getMonthlyLateSummary = asyncHandler(async (req: AuthRequest, res: 
   res.json({ success: true, data: Object.values(grouped), month, year });
 });
 
-export const getAttendances = asyncHandler(async (req: AuthRequest, res: Response) => {
+export const getAttendancesData = async (req: AuthRequest, forceStatus?: string) => {
   const where: any = { organizationId: req.user.organizationId };
   
   const userFilters: any = { role: { not: 'student' } };
@@ -447,10 +447,10 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   }
   
   // Status filter
-  let requestedStatus = req.query.status as string;
+  let requestedStatus = forceStatus || (req.query.status as string);
   if (requestedStatus === 'paid_leave') requestedStatus = 'leave';
   
-  const mockStatuses = ['absent', 'week_off', 'holiday', 'all'];
+  const mockStatuses = ['absent', 'week_off', 'holiday', 'leave', 'all'];
 
   // Default to today if filtering by a mock status without a date
   if (!isDateFiltered && requestedStatus && mockStatuses.includes(requestedStatus) && requestedStatus !== 'all') {
@@ -464,7 +464,11 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
   }
 
   if (requestedStatus && !mockStatuses.includes(requestedStatus)) {
-    where.status = requestedStatus;
+    if (requestedStatus === 'present') {
+      where.status = { in: ['present', 'late'] };
+    } else {
+      where.status = requestedStatus;
+    }
   }
 
   const attendances = await prisma.attendance.findMany({ where, include: { user: true }, orderBy: { date: 'desc' } });
@@ -524,28 +528,66 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       }
     });
 
-    const isHolidayOrWeekOff = !isWorkingDay || !!holiday;
-    const computedStatus = isHolidayOrWeekOff ? 'holiday' : 'absent';
+    const leaves = await prisma.leaveRequest.findMany({
+      where: {
+        organizationId: req.user.organizationId,
+        status: 'approved',
+        startDate: { lte: endOfDay },
+        endDate: { gte: startOfDay }
+      }
+    });
+    
+    const leaveMap = new Map(leaves.map(l => [l.employeeId, l]));
 
-    const mockAbsentRecords: any[] = absentEmployees.map(emp => ({
-      id: `${computedStatus}-${emp.id}-${targetDate.getTime()}`,
-      employeeId: emp.id,
-      organizationId: emp.organizationId,
-      branchId: emp.branchId,
-      date: targetDate,
-      status: computedStatus,
-      checkIn: null,
-      checkOut: null,
-      checkInLocation: null,
-      checkOutLocation: null,
-      isLate: false,
-      lateMinutes: 0,
-      workingHours: 0,
-      notes: holiday ? holiday.name : (!isWorkingDay ? 'Week Off' : null),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: emp
-    }));
+    // Annotate present/late attendances with leave info if any (e.g. half days)
+    finalAttendances.forEach(a => {
+      const empLeave = leaveMap.get(a.employeeId);
+      if (empLeave) {
+        let leaveNote = empLeave.isHalfDay 
+          ? `Half Day (${empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half'}) - ${empLeave.type} Leave` 
+          : `${empLeave.type} Leave`;
+        a.remarks = a.remarks ? `${a.remarks} | ${leaveNote}` : leaveNote;
+        (a as any)._hasLeave = true;
+      }
+    });
+
+    const isHolidayOrWeekOff = !isWorkingDay || !!holiday;
+
+    const mockAbsentRecords: any[] = absentEmployees.map(emp => {
+      let computedStatus = isHolidayOrWeekOff ? 'holiday' : 'absent';
+      let notes = holiday ? holiday.name : (!isWorkingDay ? 'Week Off' : null);
+      
+      const empLeave = leaveMap.get(emp.id);
+      if (empLeave) {
+        computedStatus = 'leave';
+        if (empLeave.isHalfDay) {
+          const hdText = empLeave.halfDayType === 'first_half' ? '1st Half' : '2nd Half';
+          notes = `Half Day (${hdText}) - ${empLeave.type} Leave`;
+        } else {
+          notes = `${empLeave.type} Leave`;
+        }
+      }
+
+      return {
+        id: `${computedStatus}-${emp.id}-${targetDate.getTime()}`,
+        employeeId: emp.id,
+        organizationId: emp.organizationId,
+        branchId: emp.branchId,
+        date: targetDate,
+        status: computedStatus,
+        checkIn: null,
+        checkOut: null,
+        checkInLocation: null,
+        checkOutLocation: null,
+        isLate: false,
+        lateMinutes: 0,
+        workingHours: 0,
+        notes,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        user: emp
+      };
+    });
 
     if (requestedStatus === 'absent') {
       finalAttendances = mockAbsentRecords.filter(m => m.status === 'absent');
@@ -553,6 +595,11 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
       finalAttendances = mockAbsentRecords.filter(m => m.status === 'holiday' && m.notes !== 'Week Off');
     } else if (requestedStatus === 'week_off') {
       finalAttendances = mockAbsentRecords.filter(m => m.status === 'holiday' && m.notes === 'Week Off');
+    } else if (requestedStatus === 'leave') {
+      finalAttendances = [
+        ...finalAttendances.filter((a: any) => a._hasLeave),
+        ...mockAbsentRecords.filter(m => m.status === 'leave')
+      ];
     } else {
       finalAttendances = [...finalAttendances, ...mockAbsentRecords];
     }
@@ -576,7 +623,42 @@ export const getAttendances = asyncHandler(async (req: AuthRequest, res: Respons
     return 0;
   });
 
+  return finalAttendances;
+};
+
+export const getAttendances = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const finalAttendances = await getAttendancesData(req);
   res.json({ success: true, count: finalAttendances.length, data: finalAttendances });
+});
+
+export const getAttendanceStats = asyncHandler(async (req: AuthRequest, res: Response) => {
+  // Pass 'all' to fetch all records and mock statuses for the date
+  const finalAttendances = await getAttendancesData(req, 'all');
+  
+  let present = 0, absent = 0, late = 0, half_day = 0, leave = 0;
+  
+  finalAttendances.forEach(a => {
+    if (a.status === 'present') present++;
+    if (a.status === 'absent') absent++;
+    if (a.status === 'late' || a.isLate) {
+      late++;
+      if (a.status !== 'present') present++; // Count late as present too if not already counted
+    }
+    if (a.status === 'half_day' || (a.notes && a.notes.includes('Half Day'))) half_day++;
+    if (a.status === 'leave' || a._hasLeave) leave++;
+  });
+  
+  res.json({ 
+    success: true, 
+    data: { 
+      present, 
+      absent, 
+      late, 
+      half_day, 
+      leave,
+      total: finalAttendances.length
+    } 
+  });
 });
 
 export const getAttendance = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -657,8 +739,8 @@ export const updateAttendance = asyncHandler(async (req: AuthRequest, res: Respo
   }
   const { checkIn, checkOut, status, isLate, lateMinutes, workingHours, remarks } = req.body;
   const updateData: any = {};
-  if (checkIn !== undefined) updateData.checkIn = new Date(checkIn);
-  if (checkOut !== undefined) updateData.checkOut = new Date(checkOut);
+  if (checkIn !== undefined) updateData.checkIn = checkIn ? new Date(checkIn) : null;
+  if (checkOut !== undefined) updateData.checkOut = checkOut ? new Date(checkOut) : null;
   if (status !== undefined) updateData.status = status;
   if (isLate !== undefined) updateData.isLate = isLate;
   if (lateMinutes !== undefined) updateData.lateMinutes = Number(lateMinutes);

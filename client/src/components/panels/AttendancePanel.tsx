@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Users, Download, Camera } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users, Download, Camera, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -37,12 +37,13 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'late'>('desc');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     employeeId: '',
     date: new Date().toISOString().split('T')[0],
     status: 'present',
-    checkIn: '09:00',
-    checkOut: '18:00',
+    checkIn: '',
+    checkOut: '',
+    lateMinutes: '',
     notes: ''
   });
 
@@ -165,8 +166,14 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
         status: formData.status,
         notes: formData.notes,
       };
-      if (formData.checkIn) payload.checkIn = toISO(formData.date, formData.checkIn);
-      if (formData.checkOut) payload.checkOut = toISO(formData.date, formData.checkOut);
+      
+      payload.checkIn = formData.checkIn ? toISO(formData.date, formData.checkIn) : null;
+      payload.checkOut = formData.checkOut ? toISO(formData.date, formData.checkOut) : null;
+
+      if (formData.lateMinutes !== undefined && formData.lateMinutes !== '') {
+        payload.lateMinutes = Number(formData.lateMinutes);
+        payload.isLate = payload.lateMinutes > 0;
+      }
 
       if (editingId) {
         await api.put(`/hr/attendance/${editingId}`, payload);
@@ -190,8 +197,9 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       employeeId: empId?.toString() || '',
       date: record.date ? new Date(record.date).toISOString().split('T')[0] : '',
       status: record.status || 'present',
-      checkIn: record.checkIn ? new Date(record.checkIn).toTimeString().slice(0, 5) : '09:00',
-      checkOut: record.checkOut ? new Date(record.checkOut).toTimeString().slice(0, 5) : '18:00',
+      checkIn: record.checkIn ? new Date(record.checkIn).toTimeString().slice(0, 5) : '',
+      checkOut: record.checkOut ? new Date(record.checkOut).toTimeString().slice(0, 5) : '',
+      lateMinutes: record.lateMinutes || '',
       notes: record.notes || ''
     });
     setDialogOpen(true);
@@ -213,8 +221,9 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
       employeeId: '',
       date: new Date().toISOString().split('T')[0],
       status: 'present',
-      checkIn: '09:00',
-      checkOut: '18:00',
+      checkIn: '',
+      checkOut: '',
+      lateMinutes: '',
       notes: ''
     });
   };
@@ -282,8 +291,8 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                   <Plus className="w-4 h-4 mr-2" /> Mark Attendance
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-                <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3">
+              <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0 max-h-[90vh] flex flex-col">
+                <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3 shrink-0">
                   <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
                     <Calendar className="w-5 h-5" />
                   </div>
@@ -292,7 +301,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                     <p className="text-sm text-muted-foreground mt-0.5">Manually record or edit an employee's punch.</p>
                   </div>
                 </div>
-                <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto">
                   <div className="space-y-2">
                     <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Employee</Label>
                     <Select value={formData.employeeId} onValueChange={(value) => setFormData({...formData, employeeId: value})}>
@@ -330,11 +339,29 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-muted/30 p-4 rounded-2xl border border-border/40">
                     <div className="space-y-2">
                       <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check In</Label>
-                      <Input type="time" className="rounded-xl h-10" value={formData.checkIn} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
+                      <div className="relative">
+                        <Input type="time" className="rounded-xl h-10 pr-8" value={formData.checkIn || ''} onChange={(e) => setFormData({...formData, checkIn: e.target.value})} />
+                        {formData.checkIn && (
+                          <button type="button" onClick={() => setFormData({...formData, checkIn: ''})} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Check Out</Label>
-                      <Input type="time" className="rounded-xl h-10" value={formData.checkOut} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
+                      <div className="relative">
+                        <Input type="time" className="rounded-xl h-10 pr-8" value={formData.checkOut || ''} onChange={(e) => setFormData({...formData, checkOut: e.target.value})} />
+                        {formData.checkOut && (
+                          <button type="button" onClick={() => setFormData({...formData, checkOut: ''})} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Late Minutes</Label>
+                      <Input type="number" min="0" placeholder="0" className="rounded-xl h-10" value={formData.lateMinutes} onChange={(e) => setFormData({...formData, lateMinutes: e.target.value})} />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -486,7 +513,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                           <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
                               <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">In</span>
-                              <span>{record.checkIn ? new Date(record.checkIn).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}</span>
+                              <span>{record.checkIn ? new Date(record.checkIn).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: true}) : '--'}</span>
                               {record.checkInPhoto && (
                                 <button onClick={() => { setSelectedPhoto(record.checkInPhoto); setPhotoViewerOpen(true); }} className="p-0.5 hover:bg-primary/20 rounded-md transition-colors ml-1" title="View Check-in Photo">
                                   <Camera className="w-3.5 h-3.5" />
@@ -496,7 +523,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
                             <span className="text-muted-foreground/50">→</span>
                             <div className="flex items-center gap-1.5 bg-primary/5 text-primary px-2.5 py-1.5 rounded-lg border border-primary/10 shadow-sm">
                               <span className="opacity-70 text-[10px] uppercase tracking-wider font-bold">Out</span>
-                              <span>{record.checkOut ? new Date(record.checkOut).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--'}</span>
+                              <span>{record.checkOut ? new Date(record.checkOut).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: true}) : '--'}</span>
                               {record.checkOutPhoto && (
                                 <button onClick={() => { setSelectedPhoto(record.checkOutPhoto); setPhotoViewerOpen(true); }} className="p-0.5 hover:bg-primary/20 rounded-md transition-colors ml-1" title="View Check-out Photo">
                                   <Camera className="w-3.5 h-3.5" />

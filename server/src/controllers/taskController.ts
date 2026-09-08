@@ -166,6 +166,29 @@ export const completeTask = asyncHandler(async (req: AuthRequest, res: Response)
 });
 
 export const deleteTask = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { reason } = req.body;
+  if (!reason) {
+    return res.status(400).json({ success: false, message: 'Deletion reason is mandatory' });
+  }
+
+  const task = await prisma.task.findUnique({ where: { id: req.params.id } });
+  if (!task) {
+    return res.status(404).json({ success: false, message: 'Task not found' });
+  }
+
+  // Create Audit Log for deletion
+  await prisma.auditLog.create({
+    data: {
+      organizationId: req.user.organizationId,
+      userId: req.user.id,
+      action: 'DELETE_TASK',
+      entityType: 'Task',
+      entityId: task.id,
+      oldValue: JSON.stringify(task),
+      newValue: JSON.stringify({ reason })
+    }
+  });
+
   await prisma.task.delete({ where: { id: req.params.id } });
   res.status(200).json({ success: true, data: {} });
 });

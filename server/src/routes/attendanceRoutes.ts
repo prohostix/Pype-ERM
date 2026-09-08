@@ -15,6 +15,7 @@ import {
   getPunchConfig,
   syncOfflinePunches,
   getAttendanceByUserId,
+  getAttendanceStats,
 } from '../controllers/attendanceController.js';
 
 const router = express.Router();
@@ -39,6 +40,7 @@ router.get('/late-summary', protect, getMonthlyLateSummary);
 router.get('/user/:userId', protect, getAttendanceByUserId);
 
 // HR routes - view all attendances
+router.get('/stats', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), getAttendanceStats);
 router.get('/', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), getAttendances);
 router.post('/', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), createAttendance);
 router.put('/:id', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), updateAttendance);

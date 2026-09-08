@@ -224,7 +224,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   const formatTime = (iso?: string) => {
     if (!iso) return '--:--';
-    return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   };
 
   const workingDuration = () => {
@@ -266,7 +266,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end">
              <span className="text-sm font-bold tabular-nums">
-               {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+               {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
              </span>
              <span className="text-[10px] text-muted-foreground leading-none">
                {currentTime.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}
@@ -316,7 +316,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
             {/* Live Clock */}
             <div className="text-center mb-4">
               <p className="text-4xl font-bold tracking-tight tabular-nums">
-                {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 {currentTime.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' })}
@@ -430,7 +430,7 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
                   <span>
                     {punchType === 'in' ? 'Check-in' : 'Check-out'} time:{' '}
                     <span className="font-bold text-foreground">
-                      {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </span>
                   </span>
                 </div>
