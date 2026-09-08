@@ -1128,38 +1128,40 @@ export default function TeacherPortal() {
             </div>
 
             {/* Bulk Fast Controls */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button
-                size="sm"
-                type="button"
-                onClick={() => handleMarkAll('PRESENT')}
-                className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium gap-1 px-3 shadow-xs"
-              >
-                <CheckCheck className="w-3.5 h-3.5" />
-                Mark All Present
-              </Button>
-              <Button
-                size="sm"
-                type="button"
-                variant="outline"
-                onClick={() => handleMarkAll('ABSENT')}
-                className="h-7 text-xs text-rose-600 dark:text-rose-400 border-rose-500/40 hover:bg-rose-500/10 font-medium gap-1 px-3"
-              >
-                <UserX className="w-3.5 h-3.5" />
-                Mark All Absent
-              </Button>
-              <Button
-                size="sm"
-                type="button"
-                variant="ghost"
-                onClick={handleInvertAttendance}
-                title="Invert Present / Absent status"
-                className="h-7 text-xs text-muted-foreground hover:text-foreground gap-1 px-2"
-              >
-                <RotateCcw className="w-3 h-3" />
-                Invert
-              </Button>
-            </div>
+            {!(!!selectedClass?.recordingUrl && !selectedClass?.meetingLink) && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  size="sm"
+                  type="button"
+                  onClick={() => handleMarkAll('PRESENT')}
+                  className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium gap-1 px-3 shadow-xs"
+                >
+                  <CheckCheck className="w-3.5 h-3.5" />
+                  Mark All Present
+                </Button>
+                <Button
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleMarkAll('ABSENT')}
+                  className="h-7 text-xs text-rose-600 dark:text-rose-400 border-rose-500/40 hover:bg-rose-500/10 font-medium gap-1 px-3"
+                >
+                  <UserX className="w-3.5 h-3.5" />
+                  Mark All Absent
+                </Button>
+                <Button
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                  onClick={handleInvertAttendance}
+                  title="Invert Present / Absent status"
+                  className="h-7 text-xs text-muted-foreground hover:text-foreground gap-1 px-2"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Invert
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Search Bar & Sort Dropdown */}
@@ -1287,7 +1289,7 @@ export default function TeacherPortal() {
                 .map((student) => {
                   const isPresent = student.status === 'PRESENT';
                   const hasNote = !!student.notes?.trim();
-                  const isExpanded = expandedNotes.has(student.email);
+                  const isExpanded = expandedNotes[student.email] || false;
                   const isPurelyRecordedClass = !!selectedClass?.recordingUrl && !selectedClass?.meetingLink;
 
                   return (
