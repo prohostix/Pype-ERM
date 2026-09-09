@@ -14,6 +14,8 @@ import {
   getDeptReviewEnrollments,
   approveDeptEnrollment,
   rejectDeptEnrollment,
+  updateEnrollmentDocumentStatus,
+  updateEnrollmentPhotoStatus,
 } from '../controllers/enrollmentReviewController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
@@ -41,5 +43,7 @@ router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);
 router.put('/review/:id/approve', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), approveDeptEnrollment);
 router.put('/review/:id/reject', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), rejectDeptEnrollment);
+router.put('/review/:id/documents/:docIndex/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), updateEnrollmentDocumentStatus);
+router.put('/review/:id/photo/status', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), updateEnrollmentPhotoStatus);
 
 export default router;

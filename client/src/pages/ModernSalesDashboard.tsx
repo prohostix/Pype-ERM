@@ -16,6 +16,7 @@ import { AttendancePanel } from '@/components/panels/AttendancePanel';
 import { TasksPanel } from '@/components/panels/TasksPanel';
 import { SalesInvitePanel } from '@/components/panels/SalesInvitePanel';
 import { SalesStudentPipelinePanel } from '@/components/panels/SalesStudentPipelinePanel';
+import { SalesAdminReviewPanel } from '@/components/panels/SalesAdminReviewPanel';
 import { AnnouncementsPanel } from '@/components/panels/AnnouncementsPanel';
 import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
@@ -189,7 +190,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
       // Requests & Approvals
       case 'team_requests':
       case 'approval_requests': return <EscalationsPanel />;
-      case 'admission_approval': return <SalesStudentPipelinePanel />;
+      case 'admission_approval': return <SalesAdminReviewPanel />;
       case 'support_requests': return <ComplaintsPanel />;
 
       // My Portal
@@ -878,7 +879,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           // Requests & Approvals
           case 'team_requests':
           case 'approval_requests': return <EscalationsPanel />;
-          case 'admission_approval': return <SalesStudentPipelinePanel />;
+          case 'admission_approval': return <SalesAdminReviewPanel />;
           case 'support_requests': return <ComplaintsPanel />;
 
           // Team & Meetings

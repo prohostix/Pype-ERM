@@ -469,7 +469,8 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
   const results = {
     imported: 0,
     skipped: 0,
-    errors: [] as string[]
+    errors: [] as string[],
+    existed: [] as string[]
   };
 
   for (const s of students) {
@@ -482,6 +483,11 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
 
       // Check if student email is already registered
       const existingStudent = await prisma.student.findUnique({ where: { email: s.email } });
+      if (existingStudent) {
+        results.skipped++;
+        results.existed.push(`Student with email ${s.email} already exists`);
+        continue;
+      }
 
       // Resolve program
       let program = null;
@@ -613,35 +619,27 @@ export const bulkImportStudents = asyncHandler(async (req: AuthRequest, res: Res
         enrolledBy: SALES_ROLES.includes(req.user.role) ? req.user.id : (salesUserId && salesUserId !== 'none' ? salesUserId : null)
       };
 
-      if (existingStudent) {
-        await prisma.student.update({
-          where: { id: existingStudent.id },
-          data: studentData
-        });
-      } else {
-        await prisma.student.create({
-          data: {
-            ...studentData,
-            credentials: { email: s.email, password: defaultPassword }
-          }
-        });
-      }
+      await prisma.student.create({
+        data: {
+          ...studentData,
+          credentials: { email: s.email, password: defaultPassword }
+        }
+      });
 
       results.imported++;
 
       // Send credentials email only for new students
-      if (!existingStudent) {
-        try {
-          await sendEmail(
-            s.email,
-            'Your Student Portal Credentials',
-            `Hello ${s.name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${s.email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
-            `<p>Hello <strong>${s.name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${s.email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
-          );
-        } catch (mailErr: any) {
-          results.errors.push(`Student ${s.name} (${s.email}) imported but email delivery failed: ${mailErr.message}`);
+      try {
+        await sendEmail(
+          s.email,
+          'Your Student Portal Credentials',
+          `Hello ${s.name},\n\nYour account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${s.email}\nPassword: ${defaultPassword}\n\nRegards,\nSchool Administration`,
+          `<p>Hello <strong>${s.name}</strong>,</p><p>Your account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${s.email}<br/><strong>Password:</strong> ${defaultPassword}</p><p>Regards,<br/>School Administration</p>`
+        );
+        } catch (emailErr) {
+          console.error(`Failed to send email to ${s.email}:`, emailErr);
+          // Don't fail the whole import if just email fails
         }
-      }
     } catch (err: any) {
       results.skipped++;
       results.errors.push(`Failed to import student ${s.name || 'Unknown'}: ${err.message}`);

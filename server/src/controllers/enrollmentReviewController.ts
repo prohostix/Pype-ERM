@@ -112,3 +112,82 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
   });
   res.json({ success: true, data: enrollment });
 });
+
+export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id, docIndex } = req.params;
+  const { status, remarks } = req.body;
+  
+  let whereClause: any = { id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { salesUserId: null },
+      { salesUserId: { in: assignedIds } }
+    ];
+  }
+  
+  const enrollment = await prisma.enrollment.findFirst({
+    where: whereClause,
+  });
+
+  if (!enrollment) {
+    res.status(404).json({ success: false, message: 'Enrollment not found' });
+    return;
+  }
+
+  const currentDocs = Array.isArray(enrollment.documents) ? (enrollment.documents as any[]) : [];
+  const index = parseInt(docIndex, 10);
+  
+  if (isNaN(index) || index < 0 || index >= currentDocs.length) {
+    res.status(400).json({ success: false, message: 'Invalid document index' });
+    return;
+  }
+
+  currentDocs[index].status = status;
+  if (remarks !== undefined) {
+    currentDocs[index].remarks = remarks;
+  }
+
+  await prisma.enrollment.update({
+    where: { id },
+    data: {
+      documents: currentDocs,
+    },
+  });
+
+  res.json({ success: true, message: 'Document status updated', data: currentDocs[index] });
+});
+
+export const updateEnrollmentPhotoStatus = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  let whereClause: any = { id };
+  if (req.user.role === 'ops_sub_admin') {
+    const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
+    const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
+    whereClause.OR = [
+      { salesUserId: null },
+      { salesUserId: { in: assignedIds } }
+    ];
+  }
+  
+  const enrollment = await prisma.enrollment.findFirst({
+    where: whereClause,
+  });
+
+  if (!enrollment) {
+    res.status(404).json({ success: false, message: 'Enrollment not found' });
+    return;
+  }
+
+  await prisma.enrollment.update({
+    where: { id },
+    data: {
+      photoStatus: status,
+    },
+  });
+
+  res.json({ success: true, message: 'Photo status updated' });
+});

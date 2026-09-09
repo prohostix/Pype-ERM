@@ -159,6 +159,7 @@ model User {
   allowSystemPunchIn            Boolean              @default(true)
   requireSelfiePunchIn          Boolean              @default(false)
   allowAnywherePunchIn          Boolean              @default(false)
+  requiresAttendance            Boolean              @default(true)
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
   permissions                   Json?                @default("[]")
@@ -949,6 +950,7 @@ model Enrollment {
   familyPhone          String?
   photo                String?
   documents            Json?              @default("[]")
+  photoStatus          String?
   receiptUrl           String?
   receiptVerified      Boolean            @default(false)
   receiptVerifiedAt    DateTime?
@@ -1358,6 +1360,8 @@ model StudyCenterInvite {
   token          String       @unique
   universityIds  String[]
   programIds     String[]
+  specializations Json?       @default("{}")
+  sessionIds     String[]     @default([])
   referredBy     String
   branchId       String?
   status         String       @default("pending")

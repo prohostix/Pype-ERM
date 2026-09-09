@@ -53,6 +53,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   hierarchy: 'hierarchy',
   branches: 'branches',
   settings: 'settings',
+  enrollment_link_config: 'enrollment_link_config',
   dsms_migration: 'dsms_migration',
   academic_centers: 'academic_centers',
   // Shared
@@ -440,6 +441,7 @@ function App() {
         { id: 'collections', label: 'Collections' },
         { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'settings', label: 'Organisation Settings' },
+        { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
         { id: 'meetings', label: 'Meetings' },
         { id: 'dsms_migration', label: 'DSMS Migration' },
       ];

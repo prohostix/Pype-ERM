@@ -41,6 +41,10 @@ interface User {
   branchId?: string;
   branch?: { id: string; name: string };
   biometricId?: string;
+  allowSystemPunchIn?: boolean;
+  requireSelfiePunchIn?: boolean;
+  allowAnywherePunchIn?: boolean;
+  requiresAttendance?: boolean;
 }
 
 interface Department {
@@ -95,7 +99,8 @@ export function HRUsersPanel() {
     biometricId: '',
     allowSystemPunchIn: true,
     requireSelfiePunchIn: false,
-    allowAnywherePunchIn: false
+    allowAnywherePunchIn: false,
+    requiresAttendance: true
   });
 
   const [transferData, setTransferData] = useState({
@@ -225,6 +230,7 @@ export function HRUsersPanel() {
           allowSystemPunchIn: formData.allowSystemPunchIn,
           requireSelfiePunchIn: formData.requireSelfiePunchIn,
           allowAnywherePunchIn: formData.allowAnywherePunchIn,
+          requiresAttendance: formData.requiresAttendance,
         });
       } else {
         await api.post('/users', {
@@ -238,6 +244,7 @@ export function HRUsersPanel() {
           allowSystemPunchIn: formData.allowSystemPunchIn,
           requireSelfiePunchIn: formData.requireSelfiePunchIn,
           allowAnywherePunchIn: formData.allowAnywherePunchIn,
+          requiresAttendance: formData.requiresAttendance,
         });
       }
       setDialogOpen(false);
@@ -354,17 +361,17 @@ export function HRUsersPanel() {
   };
 
   const handleResign = async (user: any) => {
+    const newStatus = user.status === 'resigned' ? 'active' : 'resigned';
+    const action = newStatus === 'resigned' ? 'resign' : 're-activate';
     try {
       const userId = user.id || user.id;
-      const newStatus = user.status === 'resigned' ? 'active' : 'resigned';
-      const action = newStatus === 'resigned' ? 'resign' : 're-activate';
       if (!window.confirm(`Are you sure you want to ${action} this employee?`)) {
         return;
       }
       await api.put(`/users/${userId}`, { status: newStatus });
       fetchUsers();
     } catch (error) {
-      console.error(`Failed to ${newStatus === 'resigned' ? 'resign' : 're-activate'} user:`, error);
+      console.error(`Failed to ${action} user:`, error);
       alert(`Failed to process action. Please try again.`);
     }
   };
@@ -397,7 +404,8 @@ export function HRUsersPanel() {
       biometricId: user.biometricId || '',
       allowSystemPunchIn: user.allowSystemPunchIn ?? true,
       requireSelfiePunchIn: user.requireSelfiePunchIn ?? false,
-      allowAnywherePunchIn: user.allowAnywherePunchIn ?? false
+      allowAnywherePunchIn: user.allowAnywherePunchIn ?? false,
+      requiresAttendance: user.requiresAttendance ?? true,
     });
     setDialogOpen(true);
   };
@@ -444,7 +452,8 @@ export function HRUsersPanel() {
       biometricId: '',
       allowSystemPunchIn: true,
       requireSelfiePunchIn: false,
-      allowAnywherePunchIn: false
+      allowAnywherePunchIn: false,
+      requiresAttendance: true,
     });
     setEditingUser(null);
   };
@@ -786,6 +795,17 @@ export function HRUsersPanel() {
                   <Switch
                     checked={formData.allowAnywherePunchIn}
                     onCheckedChange={(checked) => setFormData({ ...formData, allowAnywherePunchIn: checked })}
+                  />
+                </div>
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50">
+                  <div>
+                    <h4 className="text-sm font-semibold text-foreground">Requires Attendance</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">User must punch in/out to mark attendance</p>
+                  </div>
+                  <Switch
+                    checked={formData.requiresAttendance}
+                    onCheckedChange={(checked) => setFormData({ ...formData, requiresAttendance: checked })}
+                    className="data-[state=checked]:bg-primary"
                   />
                 </div>
                 <div className="flex justify-end gap-2 mt-4">

@@ -91,7 +91,8 @@ const startAutoAbsentCron = () => {
       const activeEmployees = await prisma.user.findMany({
         where: {
           role: { notIn: ['superadmin'] },
-          status: 'active'
+          status: 'active',
+          requiresAttendance: true
         }
       });
 

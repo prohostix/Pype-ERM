@@ -43,18 +43,58 @@ export const validateStudentInviteToken = asyncHandler(async (req: Request, res:
       ...(invite.universityIds.length > 0 ? { universityId: { in: invite.universityIds } } : {}),
     },
     include: {
-      university: { select: { id: true, name: true, code: true, logo: true } },
+      university: { select: { id: true, name: true, code: true, logo: true, enrollmentFormConfig: true } },
       feeStructures: { select: { allowInitialFee: true, specialisation: true } },
     },
   });
+
+  // Get sessions for this invite
+  const sessionWhere: any = {
+    organizationId: invite.organizationId,
+    status: { in: ['active', 'approved'] },
+  };
+  if ((invite as any).sessionIds?.length > 0) {
+    sessionWhere.id = { in: (invite as any).sessionIds };
+  } else if (invite.universityIds.length > 0) {
+    sessionWhere.OR = [
+      { universityId: { in: invite.universityIds } },
+      { universityId: null },
+    ];
+  }
+  const sessions = await prisma.admissionSession.findMany({
+    where: sessionWhere,
+    select: { id: true, name: true, startDate: true, endDate: true, status: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  // Fetch enrollment link config
+  const org = await prisma.organization.findUnique({
+    where: { id: invite.organizationId },
+    select: { metadata: true },
+  });
+  const metadata = (org?.metadata as any) || {};
+  const DEFAULT_ENROLLMENT_LINK_CONFIG = {
+    universityStep: 'mandatory',
+    programStep: 'optional',
+    specializationStep: 'optional',
+    sessionStep: 'optional',
+    expiryDays: 7,
+    allowMultipleUse: false,
+    requireDocuments: true,
+    requirePhoto: true,
+  };
+  const enrollmentLinkConfig = { ...DEFAULT_ENROLLMENT_LINK_CONFIG, ...(metadata.enrollmentLinkConfig || {}) };
 
   res.status(200).json({
     success: true,
     data: {
       organizationName: invite.organization.name,
       referrerName: invite.referrer.name,
-      programs: programs.map(p => ({ ...p, specialisations: p.specialisations })),
+      programs,
+      sessions,
       token,
+      enrollmentLinkConfig,
+      specializations: (invite as any).specializations || {}
     },
   });
 });
@@ -800,30 +840,47 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
       receiptUrl: receiptUrl !== undefined ? receiptUrl : enrollment.receiptUrl,
       paymentPlan: paymentPlan || enrollment.paymentPlan,
       initialPaymentAmount: initialPaymentAmount !== undefined ? Number(initialPaymentAmount) : enrollment.initialPaymentAmount,
-      status: 'document_review',
+    }
+  });
+
+  const org = await prisma.organization.findUnique({ where: { id: orgId } });
+  const metadata = org?.metadata as any;
+  const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
+  
+  const newStatus = requiresSalesAdmin ? 'sales_admin_review' : 'document_review';
+  const note = requiresSalesAdmin 
+    ? 'Sales user verified application and forwarded to Sales Admin for approval.'
+    : 'Sales user verified/resubmitted application and forwarded to Operations for document verification.';
+
+  const finalEnrollment = await prisma.enrollment.update({
+    where: { id },
+    data: {
+      status: newStatus,
       statusHistory: {
         push: {
-          status: 'document_review',
+          status: newStatus,
           actorId: salesUserId,
           actorName: req.user.name,
           timestamp: now.toISOString(),
-          note: 'Sales user verified/resubmitted application and forwarded to Operations for document verification.',
+          note: note,
         }
       }
     }
   });
 
-  if (updatedEnrollment.studentId) {
+  // Handle enrollment status summary logic if it exists...
+
+  if (finalEnrollment.studentId) {
     // Reset photoStatus to pending if photo is being updated (or even if it's the same, it means a resubmit)
-    const existingStudent = await prisma.student.findUnique({ where: { id: updatedEnrollment.studentId } });
+    const existingStudent = await prisma.student.findUnique({ where: { id: finalEnrollment.studentId } });
     const progress = (existingStudent?.admissionProgress as any) || {};
     const newProgress = { ...progress, photoStatus: 'pending' };
 
     await prisma.student.update({
-      where: { id: updatedEnrollment.studentId },
+      where: { id: finalEnrollment.studentId },
       data: {
-        documents: documents !== undefined ? documents : updatedEnrollment.documents,
-        photo: photo !== undefined ? photo : updatedEnrollment.photo,
+        documents: documents !== undefined ? documents : finalEnrollment.documents,
+        photo: photo !== undefined ? photo : finalEnrollment.photo,
         admissionProgress: newProgress,
       }
     });
@@ -831,24 +888,145 @@ export const verifySalesEnrollment = asyncHandler(async (req: AuthRequest, res: 
 
   // Notify ops admins
   try {
-    const opsAdmins = await prisma.user.findMany({
-      where: { organizationId: orgId, role: 'ops_admin', status: 'active' },
+    const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
+    const adminsToNotify = await prisma.user.findMany({
+      where: { organizationId: orgId, role: roleToNotify, status: 'active' },
       select: { id: true },
     });
-    for (const admin of opsAdmins) {
+    for (const admin of adminsToNotify) {
       await prisma.notification.create({
         data: {
           organizationId: orgId,
           userId: admin.id,
-          title: 'New Student Application for Review',
-          message: `${updatedEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review the documents.`,
+          title: requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review',
+          message: `${finalEnrollment.studentName} has been verified by Sales and applied for ${enrollment.program.name}. Please review.`,
           type: 'general',
           priority: 'medium',
-          link: 'enrollment_review',
+          link: requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review',
         },
       });
     }
   } catch (_) { /* non-critical */ }
 
-  res.json({ success: true, message: 'Enrollment verified and submitted to Operations.', data: updatedEnrollment });
+  res.json({ 
+    success: true, 
+    message: requiresSalesAdmin 
+      ? 'Enrollment verified and submitted to Sales Admin.' 
+      : 'Enrollment verified and submitted to Operations.', 
+    data: finalEnrollment 
+  });
+});
+
+export const getSalesAdminReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const baseWhere: any = {
+    organizationId: req.user.organizationId,
+    status: 'sales_admin_review'
+  };
+
+  // sales_admin: find subordinates via designation hierarchy (OrgHierarchyPanel)
+  if (req.user.role === 'sales_admin') {
+    // Step 1: Get the sales_admin's designations
+    const currentUser = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { designations: { select: { id: true } }, assignedSalesUsers: true }
+    });
+
+    const designationIds = currentUser?.designations?.map((d: any) => d.id) || [];
+    let subordinateUserIds: string[] = [];
+
+    if (designationIds.length > 0) {
+      // Step 2: Find all designations whose parent is one of the sales_admin's designations
+      const childDesignations = await prisma.designation.findMany({
+        where: { parentDesignationId: { in: designationIds } },
+        select: { id: true }
+      });
+      const childDesignationIds = childDesignations.map(d => d.id);
+
+      if (childDesignationIds.length > 0) {
+        // Step 3: Find all users assigned to those child designations
+        const subordinateUsers = await prisma.user.findMany({
+          where: {
+            organizationId: req.user.organizationId,
+            designations: { some: { id: { in: childDesignationIds } } },
+            status: { not: 'resigned' }
+          },
+          select: { id: true }
+        });
+        subordinateUserIds = subordinateUsers.map(u => u.id);
+      }
+    }
+
+    // Fallback: also include assignedSalesUsers (legacy/manual assignment)
+    const assignedIds = Array.isArray(currentUser?.assignedSalesUsers) ? (currentUser.assignedSalesUsers as string[]) : [];
+    const allSubordinateIds = [...new Set([...subordinateUserIds, ...assignedIds])];
+
+    if (allSubordinateIds.length > 0) {
+      baseWhere.salesUserId = { in: allSubordinateIds };
+    } else {
+      // No subordinates found — show nothing
+      baseWhere.salesUserId = { in: [] };
+    }
+  }
+  // org_admin / superadmin see all
+
+  const enrollments = await prisma.enrollment.findMany({
+    where: baseWhere,
+    include: {
+      program: { include: { university: true } },
+      studyCenter: true,
+      student: true
+    },
+    orderBy: { updatedAt: 'desc' }
+  });
+  res.json({ success: true, count: enrollments.length, data: enrollments });
+});
+
+export const approveBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const enrollment = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+  if (!enrollment || enrollment.status !== 'sales_admin_review') {
+    res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
+    return;
+  }
+  const updated = await prisma.enrollment.update({
+    where: { id: req.params.id },
+    data: {
+      status: 'document_review',
+      statusHistory: {
+        push: {
+          status: 'document_review',
+          actorId: req.user.id,
+          actorName: req.user.name,
+          timestamp: new Date().toISOString(),
+          note: 'Sales Admin approved application and forwarded to Operations.'
+        }
+      }
+    }
+  });
+  res.json({ success: true, data: updated, message: 'Application approved' });
+});
+
+export const rejectBySalesAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { remarks } = req.body;
+  const enrollment = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+  if (!enrollment || enrollment.status !== 'sales_admin_review') {
+    res.status(404).json({ success: false, message: 'Enrollment not found or not in review status' });
+    return;
+  }
+  const updated = await prisma.enrollment.update({
+    where: { id: req.params.id },
+    data: {
+      status: 'rejected',
+      departmentRemarks: remarks,
+      statusHistory: {
+        push: {
+          status: 'rejected',
+          actorId: req.user.id,
+          actorName: req.user.name,
+          timestamp: new Date().toISOString(),
+          note: `Sales Admin rejected: ${remarks || 'No remarks'}`
+        }
+      }
+    }
+  });
+  res.json({ success: true, data: updated, message: 'Application rejected' });
 });

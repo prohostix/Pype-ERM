@@ -101,6 +101,7 @@ export interface User {
   allowSystemPunchIn?: boolean;
   requireSelfiePunchIn?: boolean;
   allowAnywherePunchIn?: boolean;
+  requiresAttendance?: boolean;
   lastLogin?: Date;
   createdAt: Date;
   organization?: Organization;

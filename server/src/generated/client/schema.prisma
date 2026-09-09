@@ -159,6 +159,7 @@ model User {
   allowSystemPunchIn            Boolean              @default(true)
   requireSelfiePunchIn          Boolean              @default(false)
   allowAnywherePunchIn          Boolean              @default(false)
+  requiresAttendance            Boolean              @default(true)
   createdAt                     DateTime             @default(now())
   updatedAt                     DateTime             @updatedAt
   permissions                   Json?                @default("[]")
@@ -949,6 +950,7 @@ model Enrollment {
   familyPhone          String?
   photo                String?
   documents            Json?              @default("[]")
+  photoStatus          String?
   receiptUrl           String?
   receiptVerified      Boolean            @default(false)
   receiptVerifiedAt    DateTime?
@@ -1353,21 +1355,23 @@ model SessionRequest {
 }
 
 model StudyCenterInvite {
-  id             String       @id @default(uuid())
-  organizationId String
-  token          String       @unique
-  universityIds  String[]
-  programIds     String[]
-  referredBy     String
-  branchId       String?
-  status         String       @default("pending")
-  expiresAt      DateTime
-  usedAt         DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  branch         Branch?      @relation(fields: [branchId], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  referrer       User         @relation("InviteReferredBy", fields: [referredBy], references: [id])
+  id              String       @id @default(uuid())
+  organizationId  String
+  token           String       @unique
+  universityIds   String[]
+  programIds      String[]
+  specializations Json?        @default("{}")
+  sessionIds      String[]     @default([])
+  referredBy      String
+  branchId        String?
+  status          String       @default("pending")
+  expiresAt       DateTime
+  usedAt          DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  branch          Branch?      @relation(fields: [branchId], references: [id])
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  referrer        User         @relation("InviteReferredBy", fields: [referredBy], references: [id])
 
   @@index([organizationId, referredBy])
 }

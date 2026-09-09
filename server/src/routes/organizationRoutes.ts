@@ -8,6 +8,8 @@ import {
   assignLicense,
   getOrgInquiries,
   updateOrgInquiryStatus,
+  getEnrollmentLinkConfig,
+  updateEnrollmentLinkConfig,
 } from '../controllers/organizationController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
@@ -26,6 +28,10 @@ router
   .route('/')
   .get(authorize('superadmin', 'org_admin', 'ceo', 'general_manager', 'hr_admin', 'hr_sub_admin', 'finance_admin', 'finance_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'employee'), getOrganizations)
   .post(authorize('superadmin'), auditLog('create', 'Organization'), createOrganization);
+
+// Enrollment link configuration (must be before /:id to avoid route conflict)
+router.get('/enrollment-link-config', authorize('superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin'), getEnrollmentLinkConfig);
+router.put('/enrollment-link-config', authorize('superadmin', 'org_admin'), updateEnrollmentLinkConfig);
 
 router
   .route('/:id')

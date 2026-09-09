@@ -136,19 +136,42 @@ export const deleteTarget = asyncHandler(async (req: AuthRequest, res: Response)
 
 // Invites
 export const listMyInvites = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const invites = await prisma.studyCenterInvite.findMany({ where: { referredBy: req.user.id } });
-  res.json({ success: true, count: invites.length, data: invites });
+  const invites = await prisma.studyCenterInvite.findMany({
+    where: { referredBy: req.user.id },
+    orderBy: { createdAt: 'desc' },
+  });
+  // Resolve session names for display
+  const allSessionIds = [...new Set(invites.flatMap((i: any) => i.sessionIds || []))];
+  const sessions = allSessionIds.length > 0
+    ? await prisma.admissionSession.findMany({ where: { id: { in: allSessionIds } }, select: { id: true, name: true } })
+    : [];
+  const sessionMap = Object.fromEntries(sessions.map(s => [s.id, s]));
+  const enriched = invites.map((inv: any) => ({
+    ...inv,
+    sessionIds: (inv.sessionIds || []).map((id: string) => sessionMap[id] || { id, name: 'Unknown' }),
+  }));
+  res.json({ success: true, count: enriched.length, data: enriched });
 });
 export const generateInvite = asyncHandler(async (req: AuthRequest, res: Response) => {
+  // Read org config for expiry days
+  const org = await prisma.organization.findUnique({
+    where: { id: req.user.organizationId },
+    select: { metadata: true },
+  });
+  const orgMeta = (org?.metadata as any) || {};
+  const config = orgMeta.enrollmentLinkConfig || {};
+  const expiryDays = config.expiryDays || 7;
+
   const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + 7);
+  expiresAt.setDate(expiresAt.getDate() + expiryDays);
   const invite = await prisma.studyCenterInvite.create({
     data: {
       ...req.body,
       organizationId: req.user.organizationId,
       referredBy: req.user.id,
       token: Math.random().toString(36).substring(7).toUpperCase(),
-      expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : expiresAt
+      expiresAt: req.body.expiresAt ? new Date(req.body.expiresAt) : expiresAt,
+      specializations: req.body.specializations || {}
     }
   });
   res.status(201).json({ success: true, data: invite });
@@ -300,4 +323,26 @@ export const getProgramsByUniversity = asyncHandler(async (req: AuthRequest, res
     orderBy: { name: 'asc' }
   });
   res.json({ success: true, data: programs });
+});
+
+// Sessions by university (for invite creation)
+export const getSessionsByUniversity = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const uniIdsStr = req.query.universityIds as string;
+  const whereClause: any = {
+    organizationId: req.user.organizationId,
+    status: { in: ['active', 'approved'] },
+  };
+  if (uniIdsStr) {
+    const ids = uniIdsStr.split(',').filter(Boolean);
+    whereClause.OR = [
+      { universityId: { in: ids } },
+      { universityId: null },
+    ];
+  }
+  const sessions = await prisma.admissionSession.findMany({
+    where: whereClause,
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, name: true, startDate: true, endDate: true, status: true, universityId: true },
+  });
+  res.json({ success: true, data: sessions });
 });

@@ -95,13 +95,13 @@ export function UniversitiesPanel() {
     setEditingId(u.id);
     const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
     const conf = u.enrollmentFormConfig ? (typeof u.enrollmentFormConfig === 'string' ? JSON.parse(u.enrollmentFormConfig) : u.enrollmentFormConfig) : defaultConf;
-    
-    setFormData({ 
-      name: u.name, 
-      code: u.code, 
-      address: u.address || '', 
-      contact: u.contact || '', 
-      status: u.status, 
+
+    setFormData({
+      name: u.name,
+      code: u.code,
+      address: u.address || '',
+      contact: u.contact || '',
+      status: u.status,
       logo: u.logo || '',
       enrollmentFormConfig: {
         requiredFields: conf.requiredFields || defaultConf.requiredFields,
@@ -128,7 +128,7 @@ export function UniversitiesPanel() {
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ 
+    setFormData({
       name: '', code: '', address: '', contact: '', status: 'active', logo: '',
       enrollmentFormConfig: {
         requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'],
@@ -175,11 +175,11 @@ export function UniversitiesPanel() {
                     <Button type="button" variant="outline" size="sm" onClick={() => document.getElementById('uni-logo-input')?.click()}>
                       Upload Logo
                     </Button>
-                    <input 
-                      id="uni-logo-input" 
-                      type="file" 
-                      className="hidden" 
-                      accept="image/*" 
+                    <input
+                      id="uni-logo-input"
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
                       onChange={async (e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
@@ -196,7 +196,7 @@ export function UniversitiesPanel() {
                           console.error(err);
                           toast.error('Failed to upload logo', { id: toastId });
                         }
-                      }} 
+                      }}
                     />
                   </div>
                 </div>
@@ -229,7 +229,7 @@ export function UniversitiesPanel() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {/* Enrollment Form Config */}
               {isOrgAdmin && (
                 <div className="rounded-xl border p-4 space-y-4 bg-slate-50 dark:bg-slate-900">
@@ -252,9 +252,9 @@ export function UniversitiesPanel() {
                         { id: 'photo', label: 'Student Photo' }
                       ].map(f => (
                         <div key={f.id} className="flex items-center gap-2">
-                          <input 
-                            type="checkbox" 
-                            id={`field-${f.id}`} 
+                          <input
+                            type="checkbox"
+                            id={`field-${f.id}`}
                             checked={formData.enrollmentFormConfig.requiredFields.includes(f.id)}
                             onChange={(e) => {
                               const checked = e.target.checked;
@@ -262,7 +262,7 @@ export function UniversitiesPanel() {
                                 ...prev,
                                 enrollmentFormConfig: {
                                   ...prev.enrollmentFormConfig,
-                                  requiredFields: checked 
+                                  requiredFields: checked
                                     ? [...prev.enrollmentFormConfig.requiredFields, f.id]
                                     : prev.enrollmentFormConfig.requiredFields.filter(id => id !== f.id)
                                 }
@@ -275,19 +275,19 @@ export function UniversitiesPanel() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="pt-2 border-t">
                     <h3 className="font-semibold text-slate-800 dark:text-slate-200">Mandatory Documents</h3>
                     <p className="text-xs text-muted-foreground mb-3">Select which documents MUST be uploaded during direct enrollment.</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {[
-                        'Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 
-                        'Transfer Certificate', 'Birth Certificate', 'Degree Certificate'
+                        'Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate',
+                        'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate'
                       ].map(doc => (
                         <div key={doc} className="flex items-center gap-2">
-                          <input 
-                            type="checkbox" 
-                            id={`doc-${doc.replace(/\s+/g, '-')}`} 
+                          <input
+                            type="checkbox"
+                            id={`doc-${doc.replace(/\s+/g, '-')}`}
                             checked={formData.enrollmentFormConfig.requiredDocuments.includes(doc)}
                             onChange={(e) => {
                               const checked = e.target.checked;
@@ -295,7 +295,7 @@ export function UniversitiesPanel() {
                                 ...prev,
                                 enrollmentFormConfig: {
                                   ...prev.enrollmentFormConfig,
-                                  requiredDocuments: checked 
+                                  requiredDocuments: checked
                                     ? [...prev.enrollmentFormConfig.requiredDocuments, doc]
                                     : prev.enrollmentFormConfig.requiredDocuments.filter(d => d !== doc)
                                 }
@@ -328,8 +328,7 @@ export function UniversitiesPanel() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <button type="button"
                       onClick={() => { setAccessMode('all'); setSelectedBranchIds([]); }}
-                      className={`rounded-lg border-2 p-3 text-left transition-all ${
-                        accessMode === 'all'
+                      className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'all'
                           ? 'border-green-500 bg-green-50'
                           : 'border-slate-200 bg-white hover:border-green-300'}`}>
                       <Globe className={`h-5 w-5 mb-1 ${accessMode === 'all' ? 'text-green-600' : 'text-slate-400'}`} />
@@ -341,8 +340,7 @@ export function UniversitiesPanel() {
 
                     <button type="button"
                       onClick={() => { setAccessMode('exclusive'); setSelectedBranchIds(selectedBranchIds.slice(0, 1)); }}
-                      className={`rounded-lg border-2 p-3 text-left transition-all ${
-                        accessMode === 'exclusive'
+                      className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'exclusive'
                           ? 'border-amber-500 bg-amber-50'
                           : 'border-slate-200 bg-white hover:border-amber-300'}`}>
                       <Lock className={`h-5 w-5 mb-1 ${accessMode === 'exclusive' ? 'text-amber-600' : 'text-slate-400'}`} />
@@ -354,8 +352,7 @@ export function UniversitiesPanel() {
 
                     <button type="button"
                       onClick={() => setAccessMode('multi')}
-                      className={`rounded-lg border-2 p-3 text-left transition-all ${
-                        accessMode === 'multi'
+                      className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'multi'
                           ? 'border-cyan-500 bg-cyan-50'
                           : 'border-slate-200 bg-white hover:border-cyan-300'}`}>
                       <GitBranch className={`h-5 w-5 mb-1 ${accessMode === 'multi' ? 'text-cyan-600' : 'text-slate-400'}`} />
@@ -417,8 +414,7 @@ export function UniversitiesPanel() {
                           return (
                             <label key={b.id}
                               className="flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-slate-50 transition-colors">
-                              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
-                                checked ? 'bg-cyan-600 border-cyan-600' : 'border-slate-300'}`}
+                              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${checked ? 'bg-cyan-600 border-cyan-600' : 'border-slate-300'}`}
                                 onClick={() => setSelectedBranchIds(prev =>
                                   prev.includes(b.id) ? prev.filter(x => x !== b.id) : [...prev, b.id]
                                 )}>
@@ -560,13 +556,13 @@ export function UniversitiesPanel() {
           <ProgramFormDialog
             open={!!addProgramUniId}
             onOpenChange={(open) => { if (!open) setAddProgramUniId(null); }}
-            onSuccess={() => {}}
+            onSuccess={() => { }}
             defaultUniversityId={addProgramUniId || undefined}
           />
           <SessionFormDialog
             open={!!addSessionUniId}
             onOpenChange={(open) => { if (!open) setAddSessionUniId(null); }}
-            onSuccess={() => {}}
+            onSuccess={() => { }}
             defaultUniversityId={addSessionUniId || undefined}
           />
         </>

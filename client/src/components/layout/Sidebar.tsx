@@ -297,9 +297,15 @@ const navItems: NavItem[] = [
   },
   {
     id: 'settings',
-    label: 'Settings',
+    label: 'Organization Settings',
     icon: Settings,
     roles: ['superadmin', 'org_admin'],
+  },
+  {
+    id: 'enrollment_link_config',
+    label: 'Enrollment Link Config',
+    icon: Settings,
+    roles: ['org_admin'],
   },
 ];
 

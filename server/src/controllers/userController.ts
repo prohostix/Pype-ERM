@@ -12,7 +12,7 @@ const USER_SELECT = {
   departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
   biometricId: true, additionalDepartmentIds: true,
   assignedSalesUsers: true,
-  allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
+  allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true, requiresAttendance: true,
   organization: { select: { id: true, name: true } },
   department: { select: { id: true, name: true } },
   branch: { select: { id: true, name: true } },
@@ -94,7 +94,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
     email, name, phone, role, designation, reportingTo,
     departmentId, subDepartmentId, branchId, studyCenterId,
     organizationId: bodyOrgId, status, password, biometricId,
-    allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn
+    allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn, requiresAttendance
   } = req.body;
 
   // Enforce org scoping
@@ -141,6 +141,7 @@ export const createUser = asyncHandler(async (req: AuthRequest, res: Response) =
       allowSystemPunchIn: allowSystemPunchIn !== undefined ? allowSystemPunchIn : true,
       requireSelfiePunchIn: requireSelfiePunchIn !== undefined ? requireSelfiePunchIn : false,
       allowAnywherePunchIn: allowAnywherePunchIn !== undefined ? allowAnywherePunchIn : false,
+      requiresAttendance: requiresAttendance !== undefined ? requiresAttendance : true,
     },
     select: USER_SELECT,
   });
@@ -162,7 +163,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   const {
     name, phone, designation, reportingTo, status, avatar,
     departmentId, subDepartmentId, branchId, studyCenterId, role, password, biometricId, additionalDepartmentIds,
-    allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn
+    allowSystemPunchIn, requireSelfiePunchIn, allowAnywherePunchIn, requiresAttendance
   } = req.body;
 
   // Role restriction on update
@@ -211,6 +212,7 @@ export const updateUser = asyncHandler(async (req: AuthRequest, res: Response) =
   if (allowSystemPunchIn !== undefined) updateData.allowSystemPunchIn = allowSystemPunchIn;
   if (requireSelfiePunchIn !== undefined) updateData.requireSelfiePunchIn = requireSelfiePunchIn;
   if (allowAnywherePunchIn !== undefined) updateData.allowAnywherePunchIn = allowAnywherePunchIn;
+  if (requiresAttendance !== undefined) updateData.requiresAttendance = requiresAttendance;
 
   const user = await prisma.user.update({
     where: { id: req.params.id },
@@ -299,6 +301,7 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
       permissions: true,
       subDepartmentId: true,
       branchId: true,
+      assignedSalesUsers: true,
       department: {
         select: {
           type: true

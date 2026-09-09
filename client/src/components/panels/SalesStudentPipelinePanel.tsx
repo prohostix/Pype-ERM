@@ -573,7 +573,7 @@ export function SalesStudentPipelinePanel() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const existing = (verifyForm.documents || []).find((d: any) => d.type === docType);
                     const elementId = `sales-doc-upload-${docType.replace(/\s+/g, '-')}`;
                     return (

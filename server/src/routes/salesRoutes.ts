@@ -19,6 +19,7 @@ import {
   getMyCenterAdmissions,
   getMyCenterDetail,
   getProgramsByUniversity,
+  getSessionsByUniversity,
 } from '../controllers/salesController.js';
 import {
   getSalesEnrollmentPipeline,
@@ -27,6 +28,9 @@ import {
   approveSalesEnrollmentOps,
   approveSalesEnrollmentFinance,
   rejectSalesEnrollment,
+  getSalesAdminReviews,
+  approveBySalesAdmin,
+  rejectBySalesAdmin,
 } from '../controllers/salesEnrollmentController.js';
 import {
   getTeamReport,
@@ -56,6 +60,9 @@ router.patch('/invites/:id/regenerate', regenerateInvite);
 // Programs by university (for invite creation)
 router.get('/programs-by-university', getProgramsByUniversity);
 
+// Sessions by university (for invite creation)
+router.get('/sessions-by-university', getSessionsByUniversity);
+
 // Team performance
 router.get('/team-performance', getTeamPerformance);
 
@@ -71,6 +78,11 @@ router.put('/student-applications/:id/verify', verifySalesEnrollment);
 router.put('/student-applications/:id/approve-ops', authorize('ops_admin', 'superadmin'), approveSalesEnrollmentOps);
 router.put('/student-applications/:id/approve-finance', authorize('finance_admin', 'finance_sub_admin', 'superadmin'), approveSalesEnrollmentFinance);
 router.put('/student-applications/:id/reject', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'superadmin'), rejectSalesEnrollment);
+
+// Sales Admin Review Flow
+router.get('/sales-admin-reviews', authorize('sales_admin', 'superadmin', 'org_admin'), getSalesAdminReviews);
+router.put('/student-applications/:id/sales-admin-approve', authorize('sales_admin', 'superadmin', 'org_admin'), approveBySalesAdmin);
+router.put('/student-applications/:id/sales-admin-reject', authorize('sales_admin', 'superadmin', 'org_admin'), rejectBySalesAdmin);
 
 // Sales Reports
 router.get('/reports/team', getTeamReport);

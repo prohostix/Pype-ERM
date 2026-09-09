@@ -285,6 +285,7 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         allowSystemPunchIn: user.allowSystemPunchIn,
         requireSelfiePunchIn: user.requireSelfiePunchIn,
         allowAnywherePunchIn: user.allowAnywherePunchIn,
+        requiresAttendance: user.requiresAttendance,
         isBranchManager: !!managedBranch,
         ...(centerStatus !== null && { centerStatus }),
       },
@@ -387,7 +388,7 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
       phone: true, designation: true, status: true, lastLogin: true,
       avatar: true, reportingTo: true, organizationId: true,
       departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
-      allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true,
+      allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true, requiresAttendance: true,
       organization: true, department: true, subDepartment: true,
     }
   });

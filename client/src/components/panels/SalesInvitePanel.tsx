@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Copy, Check, RefreshCw, Link, RotateCcw, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Plus, Copy, Check, RefreshCw, Link, RotateCcw, ChevronRight, ChevronLeft, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,12 +11,14 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 interface University { id: string; name: string; code: string; }
-interface Program { id: string; name: string; code: string; universityId: string; courseType: string; }
+interface Program { id: string; name: string; code: string; universityId: string; courseType: string; specialisations?: string[]; }
+interface Session { id: string; name: string; startDate: string; endDate: string; status: string; universityId?: string | null; }
 interface Invite {
   id: string;
   token: string;
   universityIds: University[];
   programIds: Program[];
+  sessionIds: { id: string; name: string }[];
   status: 'pending' | 'used' | 'expired';
   expiresAt: string;
   inviteUrl?: string;
@@ -33,20 +35,35 @@ export function SalesInvitePanel() {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [totalSteps, setTotalSteps] = useState<2 | 3>(2);
   const [selectedUnis, setSelectedUnis] = useState<string[]>([]);
   const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+  const [selectedSpecializations, setSelectedSpecializations] = useState<Record<string, string[]>>({});
+  const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
+  const [loadingSessions, setLoadingSessions] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState<string | null>(null);
 
+  const [config, setConfig] = useState<any>(null);
+
   useEffect(() => {
+    fetchConfig();
     fetchInvites();
     fetchUniversities();
   }, []);
+
+  const fetchConfig = async () => {
+    try {
+      const res = await api.get('/organizations/enrollment-link-config');
+      if (res.data.success) setConfig(res.data.data);
+    } catch (_) {}
+  };
 
   const fetchInvites = async () => {
     setLoading(true);
@@ -68,15 +85,31 @@ export function SalesInvitePanel() {
   };
 
   const fetchPrograms = async (uniIds: string[]) => {
-    if (uniIds.length === 0) { setPrograms([]); return; }
+    if (uniIds.length === 0 && config?.universityStep !== 'hidden') { setPrograms([]); return; }
     setLoadingPrograms(true);
     try {
-      const res = await api.get(`/sales/programs-by-university?universityIds=${uniIds.join(',')}`);
+      const qs = uniIds.length > 0 ? `?universityIds=${uniIds.join(',')}` : '';
+      const res = await api.get(`/sales/programs-by-university${qs}`);
       setPrograms(res.data.data || []);
     } catch (_) {
       setPrograms([]);
     } finally {
       setLoadingPrograms(false);
+    }
+  };
+
+  const fetchSessions = async (uniIds: string[]) => {
+    setLoadingSessions(true);
+    try {
+      const qs = uniIds.length > 0 ? `?universityIds=${uniIds.join(',')}` : '';
+      const res = await api.get(`/sales/sessions-by-university${qs}`);
+      setSessions(res.data.data || []);
+      return res.data.data || [];
+    } catch (_) {
+      setSessions([]);
+      return [];
+    } finally {
+      setLoadingSessions(false);
     }
   };
 
@@ -86,10 +119,127 @@ export function SalesInvitePanel() {
   const toggleProgram = (id: string) =>
     setSelectedPrograms(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
+  const toggleSpecialization = (programId: string, spec: string) => {
+    setSelectedSpecializations(prev => {
+      const current = prev[programId] || [];
+      const updated = current.includes(spec) ? current.filter(x => x !== spec) : [...current, spec];
+      return { ...prev, [programId]: updated };
+    });
+  };
+
+  const toggleSession = (id: string) =>
+    setSelectedSessions(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
+  const handleOpenDialog = async () => {
+    setOpen(true);
+    let currentStep: 1 | 2 | 3 | 4 = 1;
+    let maxSteps: 2 | 3 | 4 = 2;
+
+    if (config?.universityStep === 'hidden') {
+      if (config?.programStep === 'hidden') {
+        if (config?.specializationStep === 'hidden') {
+          if (config?.sessionStep === 'hidden') {
+            // All steps hidden — generate directly
+            setOpen(false);
+            handleGenerate();
+            return;
+          } else {
+            currentStep = 4;
+            maxSteps = 4;
+            await fetchSessions([]);
+          }
+        } else {
+          currentStep = 3;
+          maxSteps = 4; // Or 3 if session is hidden
+        }
+      } else {
+        currentStep = 2;
+        await fetchPrograms([]);
+      }
+    }
+    setStep(currentStep as any);
+    setTotalSteps(maxSteps as any);
+  };
+
   const handleNextStep = async () => {
-    if (selectedUnis.length === 0) { toast.error('Select at least one university'); return; }
+    if (config?.universityStep === 'mandatory' && selectedUnis.length === 0) { 
+      toast.error('Select at least one university'); 
+      return; 
+    }
+    if (config?.programStep === 'hidden') {
+      // skip program step & specialization step
+      const fetchedSessions = await fetchSessions(selectedUnis);
+      if (fetchedSessions.length > 0 && config?.sessionStep !== 'hidden') {
+        setTotalSteps(4);
+        setStep(4 as any);
+      } else {
+        setTotalSteps(2);
+        handleGenerate();
+      }
+      return;
+    }
     await fetchPrograms(selectedUnis);
     setStep(2);
+  };
+
+  const handleProgramNext = async () => {
+    if (config?.programStep === 'mandatory' && selectedPrograms.length === 0) {
+      toast.error('Select at least one program');
+      return;
+    }
+    const hasSpecializations = programs.filter(p => selectedPrograms.includes(p.id)).some(p => p.specialisations && p.specialisations.length > 0);
+    if (hasSpecializations && config?.specializationStep !== 'hidden') {
+      setStep(3);
+      setTotalSteps(4);
+      return;
+    }
+    
+    if (config?.sessionStep === 'hidden') {
+      handleGenerate();
+      return;
+    }
+    const fetchedSessions = await fetchSessions(selectedUnis);
+    if (fetchedSessions.length > 0) {
+      setTotalSteps(4);
+      setStep(4 as any);
+    } else {
+      handleGenerate();
+    }
+  };
+
+  const handleSpecializationNext = async () => {
+    if (config?.specializationStep === 'mandatory') {
+      const selectedProgs = programs.filter(p => selectedPrograms.includes(p.id));
+      for (const p of selectedProgs) {
+        if (p.specialisations && p.specialisations.length > 0) {
+          const selectedForProg = selectedSpecializations[p.id] || [];
+          if (selectedForProg.length === 0) {
+            toast.error(`Select at least one specialization for program: ${p.name}`);
+            return;
+          }
+        }
+      }
+    }
+
+    if (config?.sessionStep === 'hidden') {
+      handleGenerate();
+      return;
+    }
+    const fetchedSessions = await fetchSessions(selectedUnis);
+    if (fetchedSessions.length > 0) {
+      setTotalSteps(4);
+      setStep(4 as any);
+    } else {
+      handleGenerate();
+    }
+  };
+
+  const handleSessionNext = async () => {
+    if (config?.sessionStep === 'mandatory' && selectedSessions.length === 0) {
+      toast.error('Select at least one session');
+      return;
+    }
+    handleGenerate();
   };
 
   const handleGenerate = async () => {
@@ -98,6 +248,8 @@ export function SalesInvitePanel() {
       const res = await api.post('/sales/invites', {
         universityIds: selectedUnis,
         programIds: selectedPrograms,
+        specializations: selectedSpecializations,
+        sessionIds: selectedSessions,
       });
       toast.success('Invite link generated');
       closeDialog();
@@ -117,10 +269,12 @@ export function SalesInvitePanel() {
 
   const closeDialog = () => {
     setOpen(false);
-    setStep(1);
     setSelectedUnis([]);
     setSelectedPrograms([]);
+    setSelectedSpecializations({});
+    setSelectedSessions([]);
     setPrograms([]);
+    setSessions([]);
   };
 
   const copyLink = (invite: Invite) => {
@@ -160,6 +314,15 @@ export function SalesInvitePanel() {
     return acc;
   }, {});
 
+  // Group sessions by university for display
+  const sessionsByUni = sessions.reduce<Record<string, { uniName: string; sessions: Session[] }>>((acc, s) => {
+    const uniId = s.universityId || '_global';
+    const uni = universities.find(u => u.id === uniId);
+    if (!acc[uniId]) acc[uniId] = { uniName: uni?.name || 'All Universities', sessions: [] };
+    acc[uniId].sessions.push(s);
+    return acc;
+  }, {});
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -171,7 +334,7 @@ export function SalesInvitePanel() {
           <Button variant="outline" size="sm" onClick={fetchInvites} disabled={loading}>
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
           </Button>
-          <Button size="sm" onClick={() => setOpen(true)}>
+          <Button size="sm" onClick={handleOpenDialog}>
             <Plus className="w-4 h-4 mr-2" />Generate Invite
           </Button>
         </div>
@@ -207,6 +370,15 @@ export function SalesInvitePanel() {
                       ))}
                     </div>
                   )}
+                  {inv.sessionIds && inv.sessionIds.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {inv.sessionIds.map(s => (
+                        <Badge key={s.id} variant="outline" className="text-[10px] bg-blue-50 border-blue-200 text-blue-700">
+                          <Calendar className="w-3 h-3 mr-1" />{s.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {inv.status === 'pending' && (
                   <Button variant="outline" size="sm" onClick={() => copyLink(inv)}>
@@ -229,7 +401,7 @@ export function SalesInvitePanel() {
           <DialogHeader>
             <DialogTitle>
               Generate Invite Link
-              <span className="text-sm font-normal text-muted-foreground ml-2">Step {step} of 2</span>
+              <span className="text-sm font-normal text-muted-foreground ml-2">Step {step} of {totalSteps}</span>
             </DialogTitle>
           </DialogHeader>
 
@@ -255,7 +427,7 @@ export function SalesInvitePanel() {
 
           {step === 2 && (
             <div className="space-y-3 py-2">
-              <Label>Select Programs <span className="text-muted-foreground font-normal">(optional)</span></Label>
+              <Label>Select Programs {config?.programStep === 'optional' && <span className="text-muted-foreground font-normal">(optional)</span>}</Label>
               {loadingPrograms ? (
                 <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-8 bg-muted rounded animate-pulse" />)}</div>
               ) : programs.length === 0 ? (
@@ -284,19 +456,96 @@ export function SalesInvitePanel() {
             </div>
           )}
 
+          {step === 3 && (
+            <div className="space-y-3 py-2">
+              <Label>Select Specializations {config?.specializationStep === 'optional' && <span className="text-muted-foreground font-normal">(optional)</span>}</Label>
+              <div className="space-y-4 max-h-64 overflow-y-auto pr-1">
+                {programs.filter(p => selectedPrograms.includes(p.id) && p.specialisations && p.specialisations.length > 0).map(p => (
+                  <div key={p.id}>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">{p.name}</p>
+                    <div className="space-y-1">
+                      {p.specialisations!.map(spec => (
+                        <div key={spec} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
+                          <Checkbox 
+                            id={`spec-${p.id}-${spec}`} 
+                            checked={(selectedSpecializations[p.id] || []).includes(spec)} 
+                            onCheckedChange={() => toggleSpecialization(p.id, spec)} 
+                          />
+                          <label htmlFor={`spec-${p.id}-${spec}`} className="text-sm cursor-pointer flex-1">
+                            {spec}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="space-y-3 py-2">
+              <Label>Select Sessions {config?.sessionStep === 'optional' && <span className="text-muted-foreground font-normal">(optional)</span>}</Label>
+              {loadingSessions ? (
+                <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-8 bg-muted rounded animate-pulse" />)}</div>
+              ) : sessions.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No active sessions found. You can still generate the invite.</p>
+              ) : (
+                <div className="space-y-4 max-h-64 overflow-y-auto pr-1">
+                  {Object.entries(sessionsByUni).map(([uniId, { uniName, sessions: uniSessions }]) => (
+                    <div key={uniId}>
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">{uniName}</p>
+                      <div className="space-y-1">
+                        {uniSessions.map(s => (
+                          <div key={s.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50">
+                            <Checkbox id={`sess-${s.id}`} checked={selectedSessions.includes(s.id)} onCheckedChange={() => toggleSession(s.id)} />
+                            <label htmlFor={`sess-${s.id}`} className="text-sm cursor-pointer flex-1">
+                              {s.name}
+                              <span className="text-muted-foreground text-xs ml-1">
+                                ({new Date(s.startDate).toLocaleDateString()} — {new Date(s.endDate).toLocaleDateString()})
+                              </span>
+                              <Badge variant="outline" className="text-[10px] ml-1">{s.status}</Badge>
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           <DialogFooter className="gap-2">
-            {step === 2 && (
-              <Button variant="outline" onClick={() => setStep(1)}>
+            {step > 1 && config?.universityStep !== 'hidden' && (
+              <Button variant="outline" onClick={() => {
+                if (step === 4 && config?.specializationStep !== 'hidden') {
+                  const hasSpecializations = programs.filter(p => selectedPrograms.includes(p.id)).some(p => p.specialisations && p.specialisations.length > 0);
+                  if (hasSpecializations) setStep(3);
+                  else if (config?.programStep !== 'hidden') setStep(2);
+                  else setStep(1);
+                }
+                else if (step === 3 && config?.programStep !== 'hidden') setStep(2);
+                else setStep(1);
+              }}>
                 <ChevronLeft className="w-4 h-4 mr-1" />Back
               </Button>
             )}
             <Button variant="outline" onClick={closeDialog}>Cancel</Button>
             {step === 1 ? (
-              <Button onClick={handleNextStep} disabled={selectedUnis.length === 0}>
+              <Button onClick={handleNextStep}>
+                Next <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            ) : step === 2 ? (
+              <Button onClick={handleProgramNext} disabled={loadingSessions}>
+                {loadingSessions ? 'Checking sessions...' : 'Next'} <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            ) : step === 3 ? (
+              <Button onClick={handleSpecializationNext} disabled={loadingSessions}>
                 Next <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             ) : (
-              <Button onClick={handleGenerate} disabled={submitting}>
+              <Button onClick={handleSessionNext} disabled={submitting}>
                 {submitting ? 'Generating...' : 'Generate & Copy Link'}
               </Button>
             )}

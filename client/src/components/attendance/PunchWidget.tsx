@@ -254,7 +254,13 @@ export function PunchWidget({ compact = false }: PunchWidgetProps) {
 
   return (
     <>
-      {user?.allowSystemPunchIn === false ? (
+      {user?.requiresAttendance === false ? (
+        <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            <p className="text-sm text-muted-foreground font-medium">Attendance marking is not required.</p>
+          </CardContent>
+        </Card>
+      ) : user?.allowSystemPunchIn === false ? (
         <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
             <LogOut className="w-8 h-8 mb-4 text-muted-foreground opacity-50" />

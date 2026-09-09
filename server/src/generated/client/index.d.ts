@@ -16443,6 +16443,7 @@ export namespace Prisma {
     allowSystemPunchIn: boolean | null
     requireSelfiePunchIn: boolean | null
     allowAnywherePunchIn: boolean | null
+    requiresAttendance: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16471,6 +16472,7 @@ export namespace Prisma {
     allowSystemPunchIn: boolean | null
     requireSelfiePunchIn: boolean | null
     allowAnywherePunchIn: boolean | null
+    requiresAttendance: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16500,6 +16502,7 @@ export namespace Prisma {
     allowSystemPunchIn: number
     requireSelfiePunchIn: number
     allowAnywherePunchIn: number
+    requiresAttendance: number
     createdAt: number
     updatedAt: number
     permissions: number
@@ -16532,6 +16535,7 @@ export namespace Prisma {
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
     allowAnywherePunchIn?: true
+    requiresAttendance?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16560,6 +16564,7 @@ export namespace Prisma {
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
     allowAnywherePunchIn?: true
+    requiresAttendance?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16589,6 +16594,7 @@ export namespace Prisma {
     allowSystemPunchIn?: true
     requireSelfiePunchIn?: true
     allowAnywherePunchIn?: true
+    requiresAttendance?: true
     createdAt?: true
     updatedAt?: true
     permissions?: true
@@ -16693,6 +16699,7 @@ export namespace Prisma {
     allowSystemPunchIn: boolean
     requireSelfiePunchIn: boolean
     allowAnywherePunchIn: boolean
+    requiresAttendance: boolean
     createdAt: Date
     updatedAt: Date
     permissions: JsonValue | null
@@ -16741,6 +16748,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -16860,6 +16868,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -16898,6 +16907,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
@@ -16936,13 +16946,14 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     permissions?: boolean
     assignedSalesUsers?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "allowAnywherePunchIn" | "createdAt" | "updatedAt" | "permissions" | "assignedSalesUsers", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "organizationId" | "departmentId" | "additionalDepartmentIds" | "branchId" | "subDepartmentId" | "ceoPanelId" | "studyCenterId" | "universityId" | "email" | "password" | "name" | "role" | "avatar" | "phone" | "designation" | "reportingTo" | "status" | "lastLogin" | "biometricId" | "allowSystemPunchIn" | "requireSelfiePunchIn" | "allowAnywherePunchIn" | "requiresAttendance" | "createdAt" | "updatedAt" | "permissions" | "assignedSalesUsers", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvedSessions?: boolean | User$approvedSessionsArgs<ExtArgs>
     createdSessions?: boolean | User$createdSessionsArgs<ExtArgs>
@@ -17168,6 +17179,7 @@ export namespace Prisma {
       allowSystemPunchIn: boolean
       requireSelfiePunchIn: boolean
       allowAnywherePunchIn: boolean
+      requiresAttendance: boolean
       createdAt: Date
       updatedAt: Date
       permissions: Prisma.JsonValue | null
@@ -17706,6 +17718,7 @@ export namespace Prisma {
     readonly allowSystemPunchIn: FieldRef<"User", 'Boolean'>
     readonly requireSelfiePunchIn: FieldRef<"User", 'Boolean'>
     readonly allowAnywherePunchIn: FieldRef<"User", 'Boolean'>
+    readonly requiresAttendance: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly permissions: FieldRef<"User", 'Json'>
@@ -51234,6 +51247,7 @@ export namespace Prisma {
     guardianName: string | null
     familyPhone: string | null
     photo: string | null
+    photoStatus: string | null
     receiptUrl: string | null
     receiptVerified: boolean | null
     receiptVerifiedAt: Date | null
@@ -51286,6 +51300,7 @@ export namespace Prisma {
     guardianName: string | null
     familyPhone: string | null
     photo: string | null
+    photoStatus: string | null
     receiptUrl: string | null
     receiptVerified: boolean | null
     receiptVerifiedAt: Date | null
@@ -51340,6 +51355,7 @@ export namespace Prisma {
     familyPhone: number
     photo: number
     documents: number
+    photoStatus: number
     receiptUrl: number
     receiptVerified: number
     receiptVerifiedAt: number
@@ -51402,6 +51418,7 @@ export namespace Prisma {
     guardianName?: true
     familyPhone?: true
     photo?: true
+    photoStatus?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -51454,6 +51471,7 @@ export namespace Prisma {
     guardianName?: true
     familyPhone?: true
     photo?: true
+    photoStatus?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -51508,6 +51526,7 @@ export namespace Prisma {
     familyPhone?: true
     photo?: true
     documents?: true
+    photoStatus?: true
     receiptUrl?: true
     receiptVerified?: true
     receiptVerifiedAt?: true
@@ -51649,6 +51668,7 @@ export namespace Prisma {
     familyPhone: string | null
     photo: string | null
     documents: JsonValue | null
+    photoStatus: string | null
     receiptUrl: string | null
     receiptVerified: boolean
     receiptVerifiedAt: Date | null
@@ -51722,6 +51742,7 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -51787,6 +51808,7 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -51851,6 +51873,7 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -51915,6 +51938,7 @@ export namespace Prisma {
     familyPhone?: boolean
     photo?: boolean
     documents?: boolean
+    photoStatus?: boolean
     receiptUrl?: boolean
     receiptVerified?: boolean
     receiptVerifiedAt?: boolean
@@ -51924,7 +51948,7 @@ export namespace Prisma {
     paymentPlan?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -52023,6 +52047,7 @@ export namespace Prisma {
       familyPhone: string | null
       photo: string | null
       documents: Prisma.JsonValue | null
+      photoStatus: string | null
       receiptUrl: string | null
       receiptVerified: boolean
       receiptVerifiedAt: Date | null
@@ -52508,6 +52533,7 @@ export namespace Prisma {
     readonly familyPhone: FieldRef<"Enrollment", 'String'>
     readonly photo: FieldRef<"Enrollment", 'String'>
     readonly documents: FieldRef<"Enrollment", 'Json'>
+    readonly photoStatus: FieldRef<"Enrollment", 'String'>
     readonly receiptUrl: FieldRef<"Enrollment", 'String'>
     readonly receiptVerified: FieldRef<"Enrollment", 'Boolean'>
     readonly receiptVerifiedAt: FieldRef<"Enrollment", 'DateTime'>
@@ -77218,6 +77244,8 @@ export namespace Prisma {
     token: number
     universityIds: number
     programIds: number
+    specializations: number
+    sessionIds: number
     referredBy: number
     branchId: number
     status: number
@@ -77261,6 +77289,8 @@ export namespace Prisma {
     token?: true
     universityIds?: true
     programIds?: true
+    specializations?: true
+    sessionIds?: true
     referredBy?: true
     branchId?: true
     status?: true
@@ -77349,6 +77379,8 @@ export namespace Prisma {
     token: string
     universityIds: string[]
     programIds: string[]
+    specializations: JsonValue | null
+    sessionIds: string[]
     referredBy: string
     branchId: string | null
     status: string
@@ -77381,6 +77413,8 @@ export namespace Prisma {
     token?: boolean
     universityIds?: boolean
     programIds?: boolean
+    specializations?: boolean
+    sessionIds?: boolean
     referredBy?: boolean
     branchId?: boolean
     status?: boolean
@@ -77399,6 +77433,8 @@ export namespace Prisma {
     token?: boolean
     universityIds?: boolean
     programIds?: boolean
+    specializations?: boolean
+    sessionIds?: boolean
     referredBy?: boolean
     branchId?: boolean
     status?: boolean
@@ -77417,6 +77453,8 @@ export namespace Prisma {
     token?: boolean
     universityIds?: boolean
     programIds?: boolean
+    specializations?: boolean
+    sessionIds?: boolean
     referredBy?: boolean
     branchId?: boolean
     status?: boolean
@@ -77435,6 +77473,8 @@ export namespace Prisma {
     token?: boolean
     universityIds?: boolean
     programIds?: boolean
+    specializations?: boolean
+    sessionIds?: boolean
     referredBy?: boolean
     branchId?: boolean
     status?: boolean
@@ -77444,7 +77484,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudyCenterInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "token" | "universityIds" | "programIds" | "referredBy" | "branchId" | "status" | "expiresAt" | "usedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studyCenterInvite"]>
+  export type StudyCenterInviteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "token" | "universityIds" | "programIds" | "specializations" | "sessionIds" | "referredBy" | "branchId" | "status" | "expiresAt" | "usedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studyCenterInvite"]>
   export type StudyCenterInviteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | StudyCenterInvite$branchArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -77474,6 +77514,8 @@ export namespace Prisma {
       token: string
       universityIds: string[]
       programIds: string[]
+      specializations: Prisma.JsonValue | null
+      sessionIds: string[]
       referredBy: string
       branchId: string | null
       status: string
@@ -77912,6 +77954,8 @@ export namespace Prisma {
     readonly token: FieldRef<"StudyCenterInvite", 'String'>
     readonly universityIds: FieldRef<"StudyCenterInvite", 'String[]'>
     readonly programIds: FieldRef<"StudyCenterInvite", 'String[]'>
+    readonly specializations: FieldRef<"StudyCenterInvite", 'Json'>
+    readonly sessionIds: FieldRef<"StudyCenterInvite", 'String[]'>
     readonly referredBy: FieldRef<"StudyCenterInvite", 'String'>
     readonly branchId: FieldRef<"StudyCenterInvite", 'String'>
     readonly status: FieldRef<"StudyCenterInvite", 'String'>
@@ -113135,6 +113179,7 @@ export namespace Prisma {
     allowSystemPunchIn: 'allowSystemPunchIn',
     requireSelfiePunchIn: 'requireSelfiePunchIn',
     allowAnywherePunchIn: 'allowAnywherePunchIn',
+    requiresAttendance: 'requiresAttendance',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     permissions: 'permissions',
@@ -113690,6 +113735,7 @@ export namespace Prisma {
     familyPhone: 'familyPhone',
     photo: 'photo',
     documents: 'documents',
+    photoStatus: 'photoStatus',
     receiptUrl: 'receiptUrl',
     receiptVerified: 'receiptVerified',
     receiptVerifiedAt: 'receiptVerifiedAt',
@@ -114066,6 +114112,8 @@ export namespace Prisma {
     token: 'token',
     universityIds: 'universityIds',
     programIds: 'programIds',
+    specializations: 'specializations',
+    sessionIds: 'sessionIds',
     referredBy: 'referredBy',
     branchId: 'branchId',
     status: 'status',
@@ -115666,6 +115714,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     allowAnywherePunchIn?: BoolFilter<"User"> | boolean
+    requiresAttendance?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -115784,6 +115833,7 @@ export namespace Prisma {
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
     allowAnywherePunchIn?: SortOrder
+    requiresAttendance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -115905,6 +115955,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     allowAnywherePunchIn?: BoolFilter<"User"> | boolean
+    requiresAttendance?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -116023,6 +116074,7 @@ export namespace Prisma {
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
     allowAnywherePunchIn?: SortOrder
+    requiresAttendance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrderInput | SortOrder
@@ -116060,6 +116112,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
     allowAnywherePunchIn?: BoolWithAggregatesFilter<"User"> | boolean
+    requiresAttendance?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     permissions?: JsonNullableWithAggregatesFilter<"User">
@@ -119015,6 +119068,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -119080,6 +119134,7 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     photo?: SortOrderInput | SortOrder
     documents?: SortOrderInput | SortOrder
+    photoStatus?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrderInput | SortOrder
@@ -119149,6 +119204,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -119214,6 +119270,7 @@ export namespace Prisma {
     familyPhone?: SortOrderInput | SortOrder
     photo?: SortOrderInput | SortOrder
     documents?: SortOrderInput | SortOrder
+    photoStatus?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrderInput | SortOrder
@@ -119276,6 +119333,7 @@ export namespace Prisma {
     familyPhone?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     photo?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     documents?: JsonNullableWithAggregatesFilter<"Enrollment">
+    photoStatus?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     receiptVerified?: BoolWithAggregatesFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
@@ -121227,6 +121285,8 @@ export namespace Prisma {
     token?: StringFilter<"StudyCenterInvite"> | string
     universityIds?: StringNullableListFilter<"StudyCenterInvite">
     programIds?: StringNullableListFilter<"StudyCenterInvite">
+    specializations?: JsonNullableFilter<"StudyCenterInvite">
+    sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
@@ -121245,6 +121305,8 @@ export namespace Prisma {
     token?: SortOrder
     universityIds?: SortOrder
     programIds?: SortOrder
+    specializations?: SortOrderInput | SortOrder
+    sessionIds?: SortOrder
     referredBy?: SortOrder
     branchId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -121266,6 +121328,8 @@ export namespace Prisma {
     organizationId?: StringFilter<"StudyCenterInvite"> | string
     universityIds?: StringNullableListFilter<"StudyCenterInvite">
     programIds?: StringNullableListFilter<"StudyCenterInvite">
+    specializations?: JsonNullableFilter<"StudyCenterInvite">
+    sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
@@ -121284,6 +121348,8 @@ export namespace Prisma {
     token?: SortOrder
     universityIds?: SortOrder
     programIds?: SortOrder
+    specializations?: SortOrderInput | SortOrder
+    sessionIds?: SortOrder
     referredBy?: SortOrder
     branchId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -121305,6 +121371,8 @@ export namespace Prisma {
     token?: StringWithAggregatesFilter<"StudyCenterInvite"> | string
     universityIds?: StringNullableListFilter<"StudyCenterInvite">
     programIds?: StringNullableListFilter<"StudyCenterInvite">
+    specializations?: JsonNullableWithAggregatesFilter<"StudyCenterInvite">
+    sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringWithAggregatesFilter<"StudyCenterInvite"> | string
     branchId?: StringNullableWithAggregatesFilter<"StudyCenterInvite"> | string | null
     status?: StringWithAggregatesFilter<"StudyCenterInvite"> | string
@@ -124691,6 +124759,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -124809,6 +124878,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -124913,6 +124983,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -125031,6 +125102,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -125142,6 +125214,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -125166,6 +125239,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -125197,6 +125271,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -128452,6 +128527,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -128516,6 +128592,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -128562,6 +128639,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -128626,6 +128704,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -128681,6 +128760,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -128726,6 +128806,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -128779,6 +128860,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -130830,6 +130912,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -130846,6 +130930,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     branchId?: string | null
     status?: string
@@ -130860,6 +130946,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -130876,6 +130964,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -130891,6 +130981,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     branchId?: string | null
     status?: string
@@ -130905,6 +130997,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -130918,6 +131012,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -135180,6 +135276,7 @@ export namespace Prisma {
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
     allowAnywherePunchIn?: SortOrder
+    requiresAttendance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     permissions?: SortOrder
@@ -135210,6 +135307,7 @@ export namespace Prisma {
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
     allowAnywherePunchIn?: SortOrder
+    requiresAttendance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -135238,6 +135336,7 @@ export namespace Prisma {
     allowSystemPunchIn?: SortOrder
     requireSelfiePunchIn?: SortOrder
     allowAnywherePunchIn?: SortOrder
+    requiresAttendance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -137088,6 +137187,7 @@ export namespace Prisma {
     familyPhone?: SortOrder
     photo?: SortOrder
     documents?: SortOrder
+    photoStatus?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
@@ -137144,6 +137244,7 @@ export namespace Prisma {
     guardianName?: SortOrder
     familyPhone?: SortOrder
     photo?: SortOrder
+    photoStatus?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
@@ -137196,6 +137297,7 @@ export namespace Prisma {
     guardianName?: SortOrder
     familyPhone?: SortOrder
     photo?: SortOrder
+    photoStatus?: SortOrder
     receiptUrl?: SortOrder
     receiptVerified?: SortOrder
     receiptVerifiedAt?: SortOrder
@@ -138276,6 +138378,8 @@ export namespace Prisma {
     token?: SortOrder
     universityIds?: SortOrder
     programIds?: SortOrder
+    specializations?: SortOrder
+    sessionIds?: SortOrder
     referredBy?: SortOrder
     branchId?: SortOrder
     status?: SortOrder
@@ -151659,6 +151763,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type StudyCenterInviteCreatesessionIdsInput = {
+    set: string[]
+  }
+
   export type BranchCreateNestedOneWithoutInvitesInput = {
     create?: XOR<BranchCreateWithoutInvitesInput, BranchUncheckedCreateWithoutInvitesInput>
     connectOrCreate?: BranchCreateOrConnectWithoutInvitesInput
@@ -151683,6 +151791,11 @@ export namespace Prisma {
   }
 
   export type StudyCenterInviteUpdateprogramIdsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type StudyCenterInviteUpdatesessionIdsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -154746,6 +154859,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -154808,6 +154922,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -156235,6 +156350,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -156249,6 +156366,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     branchId?: string | null
     status?: string
@@ -156612,6 +156731,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -156728,6 +156848,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -157558,6 +157679,7 @@ export namespace Prisma {
     familyPhone?: StringNullableFilter<"Enrollment"> | string | null
     photo?: StringNullableFilter<"Enrollment"> | string | null
     documents?: JsonNullableFilter<"Enrollment">
+    photoStatus?: StringNullableFilter<"Enrollment"> | string | null
     receiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     receiptVerified?: BoolFilter<"Enrollment"> | boolean
     receiptVerifiedAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
@@ -158730,6 +158852,8 @@ export namespace Prisma {
     token?: StringFilter<"StudyCenterInvite"> | string
     universityIds?: StringNullableListFilter<"StudyCenterInvite">
     programIds?: StringNullableListFilter<"StudyCenterInvite">
+    specializations?: JsonNullableFilter<"StudyCenterInvite">
+    sessionIds?: StringNullableListFilter<"StudyCenterInvite">
     referredBy?: StringFilter<"StudyCenterInvite"> | string
     branchId?: StringNullableFilter<"StudyCenterInvite"> | string | null
     status?: StringFilter<"StudyCenterInvite"> | string
@@ -159047,6 +159171,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFilter<"User"> | boolean
     requireSelfiePunchIn?: BoolFilter<"User"> | boolean
     allowAnywherePunchIn?: BoolFilter<"User"> | boolean
+    requiresAttendance?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     permissions?: JsonNullableFilter<"User">
@@ -159560,6 +159685,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -159677,6 +159803,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160297,6 +160424,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160413,6 +160541,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160559,6 +160688,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160676,6 +160806,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -160921,6 +161052,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -161038,6 +161170,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -162301,6 +162434,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162363,6 +162497,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162419,6 +162554,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162481,6 +162617,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162537,6 +162674,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162600,6 +162738,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162655,6 +162794,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162717,6 +162857,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162773,6 +162914,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -162835,6 +162977,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -165243,6 +165386,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -165258,6 +165403,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -165837,6 +165984,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -165954,6 +166102,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166062,6 +166211,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -166178,6 +166328,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168476,6 +168627,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -168593,6 +168745,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169160,6 +169313,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169277,6 +169431,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169555,6 +169710,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169672,6 +169828,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169827,6 +169984,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -169944,6 +170102,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170052,6 +170211,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170169,6 +170329,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170334,6 +170495,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170451,6 +170613,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170739,6 +170902,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170856,6 +171020,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -170970,6 +171135,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171087,6 +171253,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171264,6 +171431,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171381,6 +171549,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171643,6 +171812,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -171760,6 +171930,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172032,6 +172203,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172149,6 +172321,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -172970,6 +173143,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173086,6 +173260,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -173790,6 +173965,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -173852,6 +174028,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -175282,6 +175459,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -175344,6 +175522,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -175686,6 +175865,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -175803,6 +175983,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176064,6 +176245,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176181,6 +176363,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176289,6 +176472,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176406,6 +176590,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176579,6 +176764,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -176695,6 +176881,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177157,6 +177344,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177274,6 +177462,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177547,6 +177736,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177664,6 +177854,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177778,6 +177969,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -177895,6 +178087,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178185,6 +178378,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -178247,6 +178441,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -178595,6 +178790,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178712,6 +178908,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178820,6 +179017,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -178937,6 +179135,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179259,6 +179458,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179376,6 +179576,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -179949,6 +180150,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180066,6 +180268,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180180,6 +180383,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180297,6 +180501,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180637,6 +180842,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -180754,6 +180960,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182054,6 +182261,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182171,6 +182379,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182449,6 +182658,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182566,6 +182776,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182669,6 +182880,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -182786,6 +182998,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183058,6 +183271,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183175,6 +183389,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183590,6 +183805,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183707,6 +183923,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -183985,6 +184202,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184102,6 +184320,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184358,6 +184577,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184475,6 +184695,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184753,6 +184974,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -184870,6 +185092,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185183,6 +185406,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185300,6 +185524,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185641,6 +185866,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -185758,6 +185984,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186230,6 +186457,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186347,6 +186575,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186455,6 +186684,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186572,6 +186802,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186680,6 +186911,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -186797,6 +187029,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187132,6 +187365,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187249,6 +187483,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187363,6 +187598,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187480,6 +187716,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187594,6 +187831,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187711,6 +187949,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -187973,6 +188212,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188090,6 +188330,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188198,6 +188439,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188315,6 +188557,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188576,6 +188819,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188693,6 +188937,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188812,6 +189057,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -188929,6 +189175,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189043,6 +189290,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189160,6 +189408,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189433,6 +189682,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189550,6 +189800,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189653,6 +189904,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189770,6 +190022,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189878,6 +190131,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -189995,6 +190249,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190103,6 +190358,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190220,6 +190476,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190481,6 +190738,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190598,6 +190856,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190706,6 +190965,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190823,6 +191083,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -190942,6 +191203,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191059,6 +191321,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191173,6 +191436,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191290,6 +191554,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191404,6 +191669,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191521,6 +191787,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191794,6 +192061,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -191911,6 +192179,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192025,6 +192294,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192142,6 +192412,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192245,6 +192516,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192362,6 +192634,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -192894,6 +193167,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     status?: string
     expiresAt: Date | string
     usedAt?: Date | string | null
@@ -192909,6 +193184,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     status?: string
     expiresAt: Date | string
@@ -192945,6 +193222,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193061,6 +193339,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193273,6 +193552,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193390,6 +193670,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -193976,6 +194257,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194093,6 +194375,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194411,6 +194694,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194527,6 +194811,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -194889,6 +195174,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195006,6 +195292,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195782,6 +196069,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -195899,6 +196187,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196410,6 +196699,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196527,6 +196817,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196799,6 +197090,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -196916,6 +197208,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197610,6 +197903,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197727,6 +198021,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197835,6 +198130,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -197952,6 +198248,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198477,6 +198774,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -198539,6 +198837,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -198776,6 +199075,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -198893,6 +199193,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199007,6 +199308,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199124,6 +199426,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199704,6 +200007,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199821,6 +200125,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -199929,6 +200234,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200046,6 +200352,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200368,6 +200675,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200485,6 +200793,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200593,6 +200902,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -200710,6 +201020,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201079,6 +201390,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201196,6 +201508,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201340,6 +201653,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201457,6 +201771,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201571,6 +201886,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -201688,6 +202004,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202028,6 +202345,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202145,6 +202463,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202259,6 +202578,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202376,6 +202696,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202769,6 +203090,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -202886,6 +203208,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203020,6 +203343,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203137,6 +203461,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203245,6 +203570,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203362,6 +203688,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203634,6 +203961,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203751,6 +204079,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203865,6 +204194,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -203982,6 +204312,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205034,6 +205365,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205151,6 +205483,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205526,6 +205859,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205643,6 +205977,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -205942,6 +206277,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206059,6 +206395,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206386,6 +206723,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206503,6 +206841,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206606,6 +206945,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206723,6 +207063,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -206995,6 +207336,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207112,6 +207454,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207527,6 +207870,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207644,6 +207988,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -207922,6 +208267,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208039,6 +208385,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208607,6 +208954,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -208724,6 +209072,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209002,6 +209351,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209119,6 +209469,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209375,6 +209726,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209492,6 +209844,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209600,6 +209953,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209717,6 +210071,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -209995,6 +210350,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210112,6 +210468,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210226,6 +210583,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210343,6 +210701,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210599,6 +210958,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210716,6 +211076,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210824,6 +211185,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -210941,6 +211303,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211219,6 +211582,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211336,6 +211700,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211450,6 +211815,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211567,6 +211933,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211670,6 +212037,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211787,6 +212155,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -211895,6 +212264,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212012,6 +212382,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212120,6 +212491,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212237,6 +212609,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212498,6 +212871,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212615,6 +212989,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212811,6 +213186,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -212928,6 +213304,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213042,6 +213419,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213159,6 +213537,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213273,6 +213652,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213390,6 +213770,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213663,6 +214044,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -213780,6 +214162,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -214368,6 +214751,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -214485,6 +214869,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -214967,6 +215352,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215084,6 +215470,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215568,6 +215955,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215685,6 +216073,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -215946,6 +216335,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216063,6 +216453,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216182,6 +216573,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216299,6 +216691,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216572,6 +216965,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216689,6 +217083,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216792,6 +217187,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -216909,6 +217305,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217170,6 +217567,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217287,6 +217685,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217395,6 +217794,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217512,6 +217912,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217631,6 +218032,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -217748,6 +218150,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218021,6 +218424,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218138,6 +218542,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218252,6 +218657,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218369,6 +218775,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218472,6 +218879,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218589,6 +218997,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218861,6 +219270,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -218978,6 +219388,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219240,6 +219651,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219357,6 +219769,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219781,6 +220194,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -219898,6 +220312,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220477,6 +220892,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220594,6 +221010,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220872,6 +221289,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -220989,6 +221407,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221532,6 +221951,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -221649,6 +222069,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222001,6 +222422,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222118,6 +222540,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222237,6 +222660,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222354,6 +222778,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222724,6 +223149,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -222841,6 +223267,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223146,6 +223573,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223263,6 +223691,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223596,6 +224025,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223713,6 +224143,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -223964,6 +224395,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224081,6 +224513,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224513,6 +224946,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224630,6 +225064,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -224892,6 +225327,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -225009,6 +225445,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -225334,6 +225771,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -225451,6 +225889,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -225772,6 +226211,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -225889,6 +226329,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -226326,6 +226767,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -226443,6 +226885,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -227574,6 +228017,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -227637,6 +228081,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -227812,6 +228257,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -227875,6 +228321,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -228028,6 +228475,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228145,6 +228593,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228253,6 +228702,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228370,6 +228820,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228642,6 +229093,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228759,6 +229211,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228873,6 +229326,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -228990,6 +229444,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -229466,6 +229921,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -229583,6 +230039,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -229928,6 +230385,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -230045,6 +230503,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -230826,6 +231285,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -230943,6 +231403,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -231373,6 +231834,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -231490,6 +231952,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -232075,6 +232538,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -232192,6 +232656,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -232470,6 +232935,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -232587,6 +233053,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233358,6 +233825,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233475,6 +233943,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233594,6 +234063,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233711,6 +234181,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233814,6 +234285,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -233931,6 +234403,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -234169,6 +234642,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -234286,6 +234760,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -235639,6 +236114,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -235756,6 +236232,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236034,6 +236511,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236151,6 +236629,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236254,6 +236733,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236371,6 +236851,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236490,6 +236971,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -236607,6 +237089,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -239542,6 +240025,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -240040,6 +240524,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     branchId?: string | null
     status?: string
@@ -240177,6 +240663,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -240980,6 +241467,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -241042,6 +241530,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -241096,6 +241585,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -242644,6 +243134,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -242658,6 +243150,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -242672,6 +243166,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -243049,6 +243545,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -243165,6 +243662,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -243275,6 +243773,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -243778,6 +244277,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244197,6 +244697,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244313,6 +244814,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244423,6 +244925,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244480,6 +244983,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244597,6 +245101,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244707,6 +245212,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -244968,6 +245474,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -245021,6 +245528,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -245075,6 +245583,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -245127,6 +245636,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -245180,6 +245690,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -246024,6 +246535,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     branchId?: string | null
     status?: string
     expiresAt: Date | string
@@ -246159,6 +246672,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -246904,6 +247418,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -246966,6 +247481,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247020,6 +247536,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247065,6 +247582,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247127,6 +247645,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247181,6 +247700,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247226,6 +247746,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247289,6 +247810,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247343,6 +247865,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247387,6 +247910,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247449,6 +247973,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247503,6 +248028,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247548,6 +248074,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247610,6 +248137,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247664,6 +248192,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -250299,6 +250828,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -250314,6 +250845,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -250328,6 +250861,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -250681,6 +251216,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -250797,6 +251333,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -250907,6 +251444,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -251384,6 +251922,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -251887,6 +252426,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -252003,6 +252543,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -252113,6 +252654,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -252408,6 +252950,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -252676,6 +253219,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -252738,6 +253282,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -252792,6 +253337,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -253590,6 +254136,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -253751,6 +254298,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -253874,6 +254422,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -253936,6 +254485,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -253990,6 +254540,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -254421,6 +254972,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -254537,6 +255089,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -254647,6 +255200,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -254942,6 +255496,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -255136,6 +255691,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255198,6 +255754,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255252,6 +255809,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255683,6 +256241,8 @@ export namespace Prisma {
     token: string
     universityIds?: StudyCenterInviteCreateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteCreateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteCreatesessionIdsInput | string[]
     referredBy: string
     status?: string
     expiresAt: Date | string
@@ -255715,6 +256275,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -255952,6 +256513,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255967,6 +256530,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -255981,6 +256546,8 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     universityIds?: StudyCenterInviteUpdateuniversityIdsInput | string[]
     programIds?: StudyCenterInviteUpdateprogramIdsInput | string[]
+    specializations?: NullableJsonNullValueInput | InputJsonValue
+    sessionIds?: StudyCenterInviteUpdatesessionIdsInput | string[]
     referredBy?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -256007,6 +256574,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256123,6 +256691,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256233,6 +256802,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256397,6 +256967,7 @@ export namespace Prisma {
     allowSystemPunchIn?: boolean
     requireSelfiePunchIn?: boolean
     allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256539,6 +257110,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256655,6 +257227,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -256765,6 +257338,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -257106,6 +257680,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -257223,6 +257798,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -257333,6 +257909,7 @@ export namespace Prisma {
     allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
     requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
     allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: NullableJsonNullValueInput | InputJsonValue
@@ -257383,6 +257960,7 @@ export namespace Prisma {
     familyPhone?: string | null
     photo?: string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: string | null
     receiptUrl?: string | null
     receiptVerified?: boolean
     receiptVerifiedAt?: Date | string | null
@@ -257503,6 +258081,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -257565,6 +258144,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -257619,6 +258199,7 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: NullableJsonNullValueInput | InputJsonValue
+    photoStatus?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiptVerified?: BoolFieldUpdateOperationsInput | boolean
     receiptVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

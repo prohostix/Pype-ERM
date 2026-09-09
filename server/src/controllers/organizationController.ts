@@ -37,9 +37,22 @@ export const createOrganization = asyncHandler(async (req: AuthRequest, res: Res
 });
 
 export const updateOrganization = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { enrollmentApprovalFlow, ...restData } = req.body;
+  
+  let updateData: any = { ...restData };
+
+  if (enrollmentApprovalFlow !== undefined) {
+    const existingOrg = await prisma.organization.findUnique({ where: { id: req.params.id } });
+    const currentMetadata = (existingOrg?.metadata as any) || {};
+    updateData.metadata = {
+      ...currentMetadata,
+      enrollmentApprovalFlow
+    };
+  }
+
   const organization = await prisma.organization.update({
     where: { id: req.params.id },
-    data: req.body
+    data: updateData
   });
   res.status(200).json({ success: true, data: organization });
 });
@@ -83,4 +96,49 @@ export const updateOrgInquiryStatus = asyncHandler(async (req: AuthRequest, res:
     data: { status }
   });
   res.status(200).json({ success: true, data: inquiry });
+});
+
+// ─── Enrollment Link Configuration ───────────────────────────────────────────
+
+const DEFAULT_ENROLLMENT_LINK_CONFIG = {
+  universityStep: 'mandatory',
+  programStep: 'optional',
+  specializationStep: 'optional',
+  sessionStep: 'optional',
+  expiryDays: 7,
+  allowMultipleUse: false,
+  requireDocuments: true,
+  requirePhoto: true,
+};
+
+export const getEnrollmentLinkConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const org = await prisma.organization.findUnique({
+    where: { id: req.user.organizationId },
+    select: { metadata: true },
+  });
+  const metadata = (org?.metadata as any) || {};
+  const config = { ...DEFAULT_ENROLLMENT_LINK_CONFIG, ...(metadata.enrollmentLinkConfig || {}) };
+  res.status(200).json({ success: true, data: config });
+});
+
+export const updateEnrollmentLinkConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const org = await prisma.organization.findUnique({
+    where: { id: orgId },
+    select: { metadata: true },
+  });
+  const existingMetadata = (org?.metadata as any) || {};
+  const newConfig = { ...DEFAULT_ENROLLMENT_LINK_CONFIG, ...(existingMetadata.enrollmentLinkConfig || {}), ...req.body };
+
+  await prisma.organization.update({
+    where: { id: orgId },
+    data: {
+      metadata: {
+        ...existingMetadata,
+        enrollmentLinkConfig: newConfig,
+      },
+    },
+  });
+
+  res.status(200).json({ success: true, data: newConfig, message: 'Enrollment link configuration updated' });
 });

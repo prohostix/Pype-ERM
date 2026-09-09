@@ -17,7 +17,8 @@ export function OrganizationSettingsPanel() {
     email: '',
     phone: '',
     address: '',
-    logo: ''
+    logo: '',
+    enrollmentApprovalFlow: 'direct'
   });
 
   useEffect(() => {
@@ -35,7 +36,8 @@ export function OrganizationSettingsPanel() {
           email: org.email || '',
           phone: org.phone || '',
           address: org.address || '',
-          logo: org.logo || ''
+          logo: org.logo || '',
+          enrollmentApprovalFlow: (org.metadata as any)?.enrollmentApprovalFlow || 'direct'
         });
       }
     } catch (err) {
@@ -159,6 +161,23 @@ export function OrganizationSettingsPanel() {
                 onChange={e => setFormData({ ...formData, address: e.target.value })}
                 placeholder="e.g. 1st Floor, Building Block 4"
               />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t">
+            <div className="space-y-2">
+              <Label>Enrollment Approval Flow</Label>
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={formData.enrollmentApprovalFlow}
+                onChange={e => setFormData({ ...formData, enrollmentApprovalFlow: e.target.value })}
+              >
+                <option value="direct">Direct to Operations (Default)</option>
+                <option value="sales_admin_approval">Require Sales Admin Approval</option>
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Determine if sales enrollments go directly to operations or if they require a sales admin's approval first.
+              </p>
             </div>
           </div>
 

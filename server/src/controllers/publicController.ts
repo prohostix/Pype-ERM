@@ -41,3 +41,14 @@ export const createOrgInquiry = asyncHandler(async (req: Request, res: Response)
   });
   res.status(201).json({ success: true, data: inquiry });
 });
+
+export const getCountries = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const response = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,flag');
+    if (!response.ok) throw new Error('Failed to fetch countries');
+    const data = await response.json();
+    res.json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch countries' });
+  }
+});

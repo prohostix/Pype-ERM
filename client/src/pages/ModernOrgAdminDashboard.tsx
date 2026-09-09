@@ -23,6 +23,7 @@ import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentRev
 import { OrganizationSettingsPanel } from '@/components/panels/OrganizationSettingsPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
+import { EnrollmentLinkConfigPanel } from '@/components/panels/EnrollmentLinkConfigPanel';
 import DsmsMigrationPanel from '@/components/panels/DsmsMigrationPanel';
 import { AcademicCentersAdminPanel } from '@/modules/academic-center/AcademicCentersAdminPanel';
 
@@ -93,6 +94,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
         <TabsContent value="enrollment_review"><DeptEnrollmentReviewPanel /></TabsContent>
         <TabsContent value="settings"><OrganizationSettingsPanel /></TabsContent>
+        <TabsContent value="enrollment_link_config"><EnrollmentLinkConfigPanel /></TabsContent>
         <TabsContent value="biometric-devices"><BiometricDevicesPanel /></TabsContent>
         <TabsContent value="meetings">
           <MeetingsPanel />

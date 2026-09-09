@@ -72,7 +72,7 @@ export function SalaryConfigPanel() {
 
   const openEdit = (config?: SalaryConfig, userId?: string) => {
     if (config) {
-      setEditingUserId(typeof config.userId === 'object' ? config.userId.id : config.userId);
+      setEditingUserId(config.userId);
       setForm({
         basicSalary: config.basicSalary,
         allowances: { ...config.allowances },
@@ -114,12 +114,12 @@ export function SalaryConfigPanel() {
   };
 
   const configuredUserIds = new Set(configs.map(c =>
-    typeof c.userId === 'object' ? c.userId.id : c.userId
+    c.userId
   ));
   const unconfiguredUsers = users.filter(u => !configuredUserIds.has(u.id));
 
   const filtered = configs.filter(c => {
-    const name = (c.userId && typeof c.userId === 'object' ? c.userId.name : '') || '';
+    const name = c.user?.name || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
@@ -148,7 +148,7 @@ export function SalaryConfigPanel() {
       <Input placeholder="Search employee..." value={search} onChange={e => setSearch(e.target.value)} className="max-w-xs" />
 
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1, 2, 3].map(i => <div key={i} className="h-20 bg-muted rounded-xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center text-muted-foreground">
@@ -160,7 +160,7 @@ export function SalaryConfigPanel() {
       ) : (
         <div className="space-y-3">
           {filtered.map(config => {
-            const user = typeof config.userId === 'object' ? config.userId : null;
+            const user = config.user || null;
             const uid = user?.id || config.userId;
             const grossAmt = config.basicSalary + Object.values(config.allowances).reduce((s, v) => s + (v || 0), 0);
             const netAmt = grossAmt - Object.values(config.deductions).reduce((s, v) => s + (v || 0), 0);
@@ -237,7 +237,7 @@ export function SalaryConfigPanel() {
           </DialogHeader>
           <div className="space-y-5 pt-2">
             {/* Employee selector (only when creating new) */}
-            {!configs.find(c => (typeof c.userId === 'object' ? c.userId.id : c.userId) === editingUserId) && (
+            {!configs.find(c => c.userId === editingUserId) && (
               <div className="space-y-2">
                 <Label>Employee</Label>
                 <Select value={editingUserId} onValueChange={setEditingUserId}>

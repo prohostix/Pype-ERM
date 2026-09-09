@@ -27,7 +27,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewingProfileStudent, setViewingProfileStudent] = useState<any>(null);
-  
+
   useEffect(() => {
     if (triggerOpen !== undefined) {
       setDialogOpen(triggerOpen);
@@ -49,13 +49,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formStep, setFormStep] = useState(0); // 0=Admission, 1=Personal, 2=Family, 3=Documents
-  
+
   // Bulk Import State
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
   const [bulkData, setBulkData] = useState('');
   const [bulkFormat, setBulkFormat] = useState<'csv' | 'json'>('csv');
   const [bulkIsPrevious, setBulkIsPrevious] = useState(false);
   const [bulkErrors, setBulkErrors] = useState<string[]>([]);
+  const [bulkExisted, setBulkExisted] = useState<string[]>([]);
   const [bulkUniversityId, setBulkUniversityId] = useState<string>('');
   const [bulkProgramId, setBulkProgramId] = useState<string>('none');
   const [bulkSessionId, setBulkSessionId] = useState<string>('none');
@@ -190,13 +191,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   };
 
   const STATUS_COLORS: Record<string, string> = {
-    payment_pending:     'bg-orange-100 text-orange-700',
-    document_review:     'bg-blue-100 text-blue-700',
-    dept_review:         'bg-purple-100 text-purple-700',
-    finance_review:      'bg-yellow-100 text-yellow-700',
-    university_review:   'bg-indigo-100 text-indigo-700',
-    enrolled:            'bg-green-100 text-green-700',
-    rejected:            'bg-red-100 text-red-700',
+    payment_pending: 'bg-orange-100 text-orange-700',
+    document_review: 'bg-blue-100 text-blue-700',
+    dept_review: 'bg-purple-100 text-purple-700',
+    finance_review: 'bg-yellow-100 text-yellow-700',
+    university_review: 'bg-indigo-100 text-indigo-700',
+    enrolled: 'bg-green-100 text-green-700',
+    rejected: 'bg-red-100 text-red-700',
     department_rejected: 'bg-red-100 text-red-700',
   };
 
@@ -382,8 +383,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
     const prog = filteredPrograms.find((p: any) => p.id === formData.programId);
     if (!prog || !prog.university || !prog.university.enrollmentFormConfig) return defaultConf;
-    const conf = typeof prog.university.enrollmentFormConfig === 'string' 
-      ? JSON.parse(prog.university.enrollmentFormConfig) 
+    const conf = typeof prog.university.enrollmentFormConfig === 'string'
+      ? JSON.parse(prog.university.enrollmentFormConfig)
       : prog.university.enrollmentFormConfig;
     return {
       requiredFields: conf.requiredFields || defaultConf.requiredFields,
@@ -402,7 +403,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // If we're not on the final step, just advance to the next step.
     // Because the button is type="submit", the browser will natively validate 
     // all fields in the CURRENT step before this function even fires!
@@ -576,33 +577,33 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
   const getActiveFeeStructure = () => {
     const selectedProgramObj = filteredPrograms.find((p: any) => p.id === formData.programId);
     let relevantFeeStructure = null;
-    
+
     if (selectedProgramObj?.feeStructures?.length > 0) {
       // First try to match both session and specialisation
-      relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
-        f.sessionId === formData.sessionId && 
+      relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) =>
+        f.sessionId === formData.sessionId &&
         (f.specialisation || null) === (formData.specialisation || null)
       );
-      
+
       // Fallback: match only specialisation (null session)
       if (!relevantFeeStructure) {
-        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
-          !f.sessionId && 
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) =>
+          !f.sessionId &&
           (f.specialisation || null) === (formData.specialisation || null)
         );
       }
 
       // Fallback: match only session (null specialisation)
       if (!relevantFeeStructure) {
-        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
-          f.sessionId === formData.sessionId && 
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) =>
+          f.sessionId === formData.sessionId &&
           !f.specialisation
         );
       }
 
       // Fallback: match null session and null specialisation
       if (!relevantFeeStructure) {
-        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) => 
+        relevantFeeStructure = selectedProgramObj.feeStructures.find((f: any) =>
           !f.sessionId && !f.specialisation
         );
       }
@@ -621,7 +622,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
     let periodName = '';
     let amount = 0;
-    
+
     if (formData.paymentPlan === 'full') {
       periodName = 'One Time (Full Payment)';
       if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
@@ -635,18 +636,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       if (relevantFeeStructure.billingCycle === 'per_year') {
         periodName = 'First Year';
         if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
-          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
-                   Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                   Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
+          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) +
+            Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) +
+            Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
         } else {
           amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
         }
       } else if (relevantFeeStructure.billingCycle === 'per_semester') {
         periodName = 'First Semester';
         if (Array.isArray(relevantFeeStructure.yearlyFees) && relevantFeeStructure.yearlyFees.length > 0) {
-          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) + 
-                   Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) + 
-                   Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
+          amount = Number(relevantFeeStructure.yearlyFees[0].tuitionFee || 0) +
+            Number(relevantFeeStructure.yearlyFees[0].registrationFee || 0) +
+            Number(relevantFeeStructure.yearlyFees[0].examFee || 0);
         } else {
           amount = Number(relevantFeeStructure.tuitionFee || 0) + Number(relevantFeeStructure.registrationFee || 0) + Number(relevantFeeStructure.examFee || 0);
         }
@@ -771,18 +772,18 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         if (matchedUniv) {
           univPrograms = programs.filter(p => p.universityId === matchedUniv.id);
         } else if (rowUnivName) {
-          univPrograms = programs.filter(p => 
-            p.university?.name?.toLowerCase()?.includes(rowUnivName) || 
+          univPrograms = programs.filter(p =>
+            p.university?.name?.toLowerCase()?.includes(rowUnivName) ||
             p.university?.code?.toLowerCase()?.includes(rowUnivName)
           );
         }
-        
+
         const cleanStr = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
         const cleanRowProg = cleanStr(rowProgramName);
 
         // 1. Try finding by exact code match in scoped programs
         matchedProgram = univPrograms.find(p => p.code?.toLowerCase() === rowProgramName);
-        
+
         // 2. If not found, try matching by name
         if (!matchedProgram) {
           matchedProgram = univPrograms.find(p => p.name.toLowerCase() === rowProgramName);
@@ -796,19 +797,19 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         // 4. Prefix match in scoped programs (e.g., 'mba' matches 'mba (mizoram)')
         if (!matchedProgram && rowProgramName.length > 1) {
           matchedProgram = univPrograms.find(p => {
-             const pName = p.name.toLowerCase();
-             return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
+            const pName = p.name.toLowerCase();
+            return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
           });
         }
 
         // 5. Fallback to global search if univ was not matched
         if (!matchedProgram && rowUnivName && !matchedUniv) {
-          matchedProgram = programs.find(p => 
-            p.name.toLowerCase() === rowProgramName && 
+          matchedProgram = programs.find(p =>
+            p.name.toLowerCase() === rowProgramName &&
             (p.university?.name?.toLowerCase()?.includes(rowUnivName) ?? false)
           );
         }
-        
+
         // 6. Absolute fallbacks (scoped to the selected university)
         if (!matchedProgram) {
           matchedProgram = univPrograms.find(p => p.name.toLowerCase() === rowProgramName || p.code?.toLowerCase() === rowProgramName);
@@ -818,8 +819,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         }
         if (!matchedProgram && rowProgramName.length > 1) {
           matchedProgram = univPrograms.find(p => {
-             const pName = p.name.toLowerCase();
-             return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
+            const pName = p.name.toLowerCase();
+            return pName.startsWith(rowProgramName + ' ') || pName.startsWith(rowProgramName + '(') || pName.startsWith(rowProgramName + '-');
           });
         }
       }
@@ -833,15 +834,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       const resolvedCenterId = matchedCenter?.id || undefined;
 
       const dob = s.dob || s.dateofbirth || s.date_of_birth || '';
-      
+
       // Match Session strictly to the university if possible
       const sessionStr = (s.session || s.admissionsession || s.admission_session || '').toString().trim().toLowerCase();
       let matchedSession = null;
       if (sessionStr) {
         let univSessions = sessions;
         if (matchedUniv) {
-          univSessions = sessions.filter(sess => 
-            sess.universityId === matchedUniv.id || 
+          univSessions = sessions.filter(sess =>
+            sess.universityId === matchedUniv.id ||
             (sess.programId && programs.find((p: any) => p.id === sess.programId)?.universityId === matchedUniv.id)
           );
         }
@@ -878,6 +879,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     }
 
     setBulkErrors([]);
+    setBulkExisted([]);
     try {
       const res = await api.post('/students/bulk-import', {
         students: studentPayload,
@@ -885,10 +887,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         branchId: selectedBranchId || undefined,
         salesUserId: selectedSalesUserId === 'none' ? undefined : selectedSalesUserId
       });
-      const { imported, skipped, errors } = res.data.data;
-      if (skipped > 0 && errors?.length > 0) {
-        setBulkErrors(errors);
-        toast.warning(`Imported ${imported} student(s). ${skipped} row(s) had issues — see details below.`);
+      const { imported, skipped, errors, existed } = res.data.data;
+      if (existed?.length > 0) setBulkExisted(existed);
+      if (errors?.length > 0) setBulkErrors(errors);
+      if (skipped > 0 && (errors?.length > 0 || existed?.length > 0)) {
+        toast.warning(`Imported ${imported} student(s). ${skipped} row(s) skipped — see details below.`);
       } else {
         toast.success(`Successfully imported ${imported} student(s)!`);
         setBulkDialogOpen(false);
@@ -926,12 +929,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           const worksheet = workbook.Sheets[firstSheetName];
           // Convert sheet to JSON array
           const jsonData = XLSX.utils.sheet_to_json(worksheet);
-          
+
           if (jsonData.length === 0) {
             toast.error('No data found in the Excel sheet.');
             return;
           }
-          
+
           // Format keys to lowercase to match our parser
           const formattedData = jsonData.map((row: any) => {
             const newRow: any = {};
@@ -1093,7 +1096,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   const filteredStudents = students.filter(s => {
     if (!s) return false;
-    
+
     // Status filter
     if (activeFilter === 'current' && s.isPrevious) return false;
     if (activeFilter === 'previous' && !s.isPrevious) return false;
@@ -1174,11 +1177,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   key={i}
                   type="button"
                   onClick={() => setFormStep(i)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                    formStep === i
-                      ? 'bg-primary text-primary-foreground shadow'
-                      : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${formStep === i
+                    ? 'bg-primary text-primary-foreground shadow'
+                    : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
+                    }`}
                 >
                   {i === 0 && <BookOpen className="w-3 h-3" />}
                   {i === 1 && <User className="w-3 h-3" />}
@@ -1204,7 +1206,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         type="checkbox"
                         id="isPreviousMain"
                         checked={formData.isPrevious}
-                        onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                        onChange={(e) => setFormData({ ...formData, isPrevious: e.target.checked })}
                         className="w-4 h-4 rounded border-slate-300 accent-amber-600"
                       />
                       <div>
@@ -1220,7 +1222,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <>
                         <div>
                           <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                          <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                          <Select value={formData.branchId} onValueChange={(v) => setFormData({ ...formData, branchId: v === '__none__' ? '' : v })}>
                             <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
                             <SelectContent>
                               <SelectItem value="__none__">— No Branch —</SelectItem>
@@ -1232,7 +1234,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         </div>
                         <div>
                           <Label className="font-medium">University *</Label>
-                          <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                          <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
                             <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
                             <SelectContent>
                               {universities.filter((u: any) => u && u.id).map((u: any) => (
@@ -1245,7 +1247,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     ) : (
                       <div className="col-span-2">
                         <Label className="font-medium">University *</Label>
-                        <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                        <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
                           <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
                           <SelectContent>
                             {universities.filter((u: any) => u && u.id).map((u: any) => (
@@ -1261,7 +1263,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label className="font-medium">Program *</Label>
-                      <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v, specialisation: ''})} disabled={!formData.universityId}>
+                      <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v, specialisation: '' })} disabled={!formData.universityId}>
                         <SelectTrigger>
                           <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
                         </SelectTrigger>
@@ -1277,7 +1279,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </div>
                     <div>
                       <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})} disabled={!formData.programId}>
+                      <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v === '__none__' ? '' : v })} disabled={!formData.programId}>
                         <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="__none__">— No Session —</SelectItem>
@@ -1293,7 +1295,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
                     <div className="mt-4">
                       <Label className="font-medium">Specialisation *</Label>
-                      <Select value={formData.specialisation} onValueChange={(v) => setFormData({...formData, specialisation: v})}>
+                      <Select value={formData.specialisation} onValueChange={(v) => setFormData({ ...formData, specialisation: v })}>
                         <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
                         <SelectContent>
                           {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
@@ -1306,41 +1308,41 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
                   {/* Payment Plan & Fee */}
                   {getActiveFeeStructure() && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <Label className="font-medium">Payment Plan *</Label>
-                        <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
-                          <SelectTrigger><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="full">Full (One Time)</SelectItem>
-                            <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
-                          </SelectContent>
-                        </Select>
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div>
+                          <Label className="font-medium">Payment Plan *</Label>
+                          <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({ ...formData, paymentPlan: v })}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="full">Full (One Time)</SelectItem>
+                              <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="font-medium">Initial Fee Amount *</Label>
+                          <Input
+                            type="number"
+                            placeholder="e.g. 5000"
+                            value={formData.initialPaymentAmount || ''}
+                            onChange={e => setFormData({ ...formData, initialPaymentAmount: e.target.value })}
+                            required
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <Label className="font-medium">Initial Fee Amount *</Label>
-                        <Input 
-                          type="number"
-                          placeholder="e.g. 5000"
-                          value={formData.initialPaymentAmount || ''} 
-                          onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
-                          required
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div>
+                          <Label className="font-medium">Payment Date *</Label>
+                          <Input
+                            type="date"
+                            value={formData.initialPaymentDate || ''}
+                            onChange={e => setFormData({ ...formData, initialPaymentDate: e.target.value })}
+                            required
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <Label className="font-medium">Payment Date *</Label>
-                        <Input 
-                          type="date"
-                          value={formData.initialPaymentDate || ''} 
-                          onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
-                          required
-                        />
-                      </div>
-                    </div>
-                  </>
+                    </>
                   )}
 
                   {renderFeeDisplay()}
@@ -1352,7 +1354,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="e.g. PYPEER001"
                         value={formData.enrollmentNo}
-                        onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, enrollmentNo: e.target.value })}
                       />
                     </div>
                     {editingId && (
@@ -1375,13 +1377,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         type="date"
                         value={formData.admissionDate}
-                        onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
                       />
                     </div>
                     {editingId && (
                       <div>
                         <Label className="font-medium">Status</Label>
-                        <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                        <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
                           <SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="active">Active</SelectItem>
@@ -1405,7 +1407,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Student's name"
                         value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
                       />
                     </div>
@@ -1415,7 +1417,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         type="email"
                         placeholder="student@example.com"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required={isFieldReq('email')}
                       />
                     </div>
@@ -1427,7 +1429,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Primary phone"
                         value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         required
                       />
                     </div>
@@ -1436,7 +1438,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         type="date"
                         value={formData.dob}
-                        onChange={(e) => setFormData({...formData, dob: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
                         required={isFieldReq('dob')}
                       />
                     </div>
@@ -1447,7 +1449,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <Textarea
                       placeholder="Permanent address"
                       value={formData.address}
-                      onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       required={isFieldReq('address')}
                     />
                   </div>
@@ -1458,7 +1460,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="6-digit pincode"
                         value={formData.pinCode}
-                        onChange={(e) => setFormData({...formData, pinCode: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })}
                         required={isFieldReq('pinCode')}
                       />
                     </div>
@@ -1467,7 +1469,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Secondary phone"
                         value={formData.altPhone}
-                        onChange={(e) => setFormData({...formData, altPhone: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })}
                         required={isFieldReq('altPhone')}
                       />
                     </div>
@@ -1479,7 +1481,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="e.g. Christian, Hindu, Muslim"
                         value={formData.religion}
-                        onChange={(e) => setFormData({...formData, religion: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, religion: e.target.value })}
                         required={isFieldReq('religion')}
                       />
                     </div>
@@ -1488,7 +1490,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="e.g. General, OBC, SC, ST"
                         value={formData.caste}
-                        onChange={(e) => setFormData({...formData, caste: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, caste: e.target.value })}
                         required={isFieldReq('caste')}
                       />
                     </div>
@@ -1562,7 +1564,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Father's full name"
                         value={formData.fatherName}
-                        onChange={(e) => setFormData({...formData, fatherName: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
                         required={isFieldReq('fatherName')}
                       />
                     </div>
@@ -1571,7 +1573,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Father's phone"
                         value={formData.fatherPhone}
-                        onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, fatherPhone: e.target.value })}
                         required={isFieldReq('fatherPhone')}
                       />
                     </div>
@@ -1583,7 +1585,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Mother's full name"
                         value={formData.motherName}
-                        onChange={(e) => setFormData({...formData, motherName: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
                         required={isFieldReq('motherName')}
                       />
                     </div>
@@ -1592,7 +1594,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       <Input
                         placeholder="Mother's phone"
                         value={formData.motherPhone}
-                        onChange={(e) => setFormData({...formData, motherPhone: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, motherPhone: e.target.value })}
                         required={isFieldReq('motherPhone')}
                       />
                     </div>
@@ -1604,7 +1606,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               {formStep === 3 && (
                 <div className="space-y-4">
                   <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const isOptional = !isDocReq(docType);
                     const existing = (formData.documents || []).find((d: any) => d.type === docType);
                     const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
@@ -1687,7 +1689,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 // Update label in existing document array if already uploaded
                                 const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
                                 if (hasOther) {
-                                  const newDocs = (formData.documents || []).map((d: any) => 
+                                  const newDocs = (formData.documents || []).map((d: any) =>
                                     d.type === 'Other' ? { ...d, label: nextVal } : d
                                   );
                                   setFormData({ ...formData, documents: newDocs });
@@ -1708,10 +1710,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   <p className="text-sm text-slate-600 dark:text-slate-400">
                     Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
                   </p>
-                  
+
                   <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
                     <Label className="font-semibold text-sm">Upload Receipt *</Label>
-                    
+
                     <div className="flex items-center gap-4">
                       {formData.receiptUrl && (
                         <div className="w-16 h-16 rounded overflow-hidden border">
@@ -1778,9 +1780,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
   if (viewingProfileStudent) {
     return (
-      <StudentProfilePanel 
-        student={viewingProfileStudent} 
-        onBack={() => setViewingProfileStudent(null)} 
+      <StudentProfilePanel
+        student={viewingProfileStudent}
+        onBack={() => setViewingProfileStudent(null)}
       />
     );
   }
@@ -1792,7 +1794,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">Student Management</h2>
           <p className="text-muted-foreground text-sm hidden sm:block">Manage student records, bulk imports, communications, and installment schedules</p>
         </div>
-        
+
         <div className="flex items-center gap-2 flex-shrink-0">
           {canWrite && (
             <>
@@ -1815,11 +1817,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           key={i}
                           type="button"
                           onClick={() => setFormStep(i)}
-                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                            formStep === i
-                              ? 'bg-primary text-primary-foreground shadow'
-                              : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
-                          }`}
+                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${formStep === i
+                            ? 'bg-primary text-primary-foreground shadow'
+                            : 'bg-slate-100 dark:bg-slate-800 text-muted-foreground hover:bg-slate-200 dark:hover:bg-slate-700'
+                            }`}
                         >
                           {i === 0 && <BookOpen className="w-3 h-3" />}
                           {i === 1 && <User className="w-3 h-3" />}
@@ -1845,7 +1846,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 type="checkbox"
                                 id="isPreviousMain"
                                 checked={formData.isPrevious}
-                                onChange={(e) => setFormData({...formData, isPrevious: e.target.checked})}
+                                onChange={(e) => setFormData({ ...formData, isPrevious: e.target.checked })}
                                 className="w-4 h-4 rounded border-slate-300 accent-amber-600"
                               />
                               <div>
@@ -1861,7 +1862,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               <>
                                 <div>
                                   <Label className="font-medium">Branch <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                                  <Select value={formData.branchId} onValueChange={(v) => setFormData({...formData, branchId: v === '__none__' ? '' : v})}>
+                                  <Select value={formData.branchId} onValueChange={(v) => setFormData({ ...formData, branchId: v === '__none__' ? '' : v })}>
                                     <SelectTrigger><SelectValue placeholder="Select branch..." /></SelectTrigger>
                                     <SelectContent>
                                       <SelectItem value="__none__">— No Branch —</SelectItem>
@@ -1873,7 +1874,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 </div>
                                 <div>
                                   <Label className="font-medium">University *</Label>
-                                  <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                  <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
                                     <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
                                     <SelectContent>
                                       {universities.filter((u: any) => u && u.id).map((u: any) => (
@@ -1886,7 +1887,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             ) : (
                               <div className="col-span-2">
                                 <Label className="font-medium">University *</Label>
-                                <Select value={formData.universityId} onValueChange={(v) => setFormData({...formData, universityId: v, programId: ''})}>
+                                <Select value={formData.universityId} onValueChange={(v) => setFormData({ ...formData, universityId: v, programId: '' })}>
                                   <SelectTrigger><SelectValue placeholder="Select university..." /></SelectTrigger>
                                   <SelectContent>
                                     {universities.filter((u: any) => u && u.id).map((u: any) => (
@@ -1902,7 +1903,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Program *</Label>
-                              <Select value={formData.programId} onValueChange={(v) => setFormData({...formData, programId: v, specialisation: ''})} disabled={!formData.universityId}>
+                              <Select value={formData.programId} onValueChange={(v) => setFormData({ ...formData, programId: v, specialisation: '' })} disabled={!formData.universityId}>
                                 <SelectTrigger>
                                   <SelectValue placeholder={formData.universityId ? 'Select program...' : 'Select a university first'} />
                                 </SelectTrigger>
@@ -1918,7 +1919,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             </div>
                             <div>
                               <Label className="font-medium">Session <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
-                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({...formData, sessionId: v === '__none__' ? '' : v})} disabled={!formData.programId}>
+                              <Select value={formData.sessionId} onValueChange={(v) => setFormData({ ...formData, sessionId: v === '__none__' ? '' : v })} disabled={!formData.programId}>
                                 <SelectTrigger><SelectValue placeholder={formData.programId ? "Select session..." : "Select program first"} /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="__none__">— No Session —</SelectItem>
@@ -1934,7 +1935,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations?.length > 0 && (
                             <div className="mt-4">
                               <Label className="font-medium">Specialisation *</Label>
-                              <Select value={formData.specialisation} onValueChange={(v) => setFormData({...formData, specialisation: v})}>
+                              <Select value={formData.specialisation} onValueChange={(v) => setFormData({ ...formData, specialisation: v })}>
                                 <SelectTrigger><SelectValue placeholder="Select specialisation..." /></SelectTrigger>
                                 <SelectContent>
                                   {filteredPrograms.find((p: any) => p.id === formData.programId)?.specialisations.map((spec: string) => (
@@ -1947,41 +1948,41 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
 
                           {/* Payment Plan & Fee */}
                           {getActiveFeeStructure() && (
-                          <>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                              <div>
-                                <Label className="font-medium">Payment Plan *</Label>
-                                <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({...formData, paymentPlan: v})}>
-                                  <SelectTrigger><SelectValue /></SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="full">Full (One Time)</SelectItem>
-                                    <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                            <>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                  <Label className="font-medium">Payment Plan *</Label>
+                                  <Select value={formData.paymentPlan} onValueChange={(v) => setFormData({ ...formData, paymentPlan: v })}>
+                                    <SelectTrigger><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="full">Full (One Time)</SelectItem>
+                                      <SelectItem value="per_year_sem">Per Year / Semester</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div>
+                                  <Label className="font-medium">Initial Fee Amount *</Label>
+                                  <Input
+                                    type="number"
+                                    placeholder="e.g. 5000"
+                                    value={formData.initialPaymentAmount || ''}
+                                    onChange={e => setFormData({ ...formData, initialPaymentAmount: e.target.value })}
+                                    required
+                                  />
+                                </div>
                               </div>
-                              <div>
-                                <Label className="font-medium">Initial Fee Amount *</Label>
-                                <Input 
-                                  type="number"
-                                  placeholder="e.g. 5000"
-                                  value={formData.initialPaymentAmount || ''} 
-                                  onChange={e => setFormData({...formData, initialPaymentAmount: e.target.value})} 
-                                  required
-                                />
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                  <Label className="font-medium">Payment Date *</Label>
+                                  <Input
+                                    type="date"
+                                    value={formData.initialPaymentDate || ''}
+                                    onChange={e => setFormData({ ...formData, initialPaymentDate: e.target.value })}
+                                    required
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                              <div>
-                                <Label className="font-medium">Payment Date *</Label>
-                                <Input 
-                                  type="date"
-                                  value={formData.initialPaymentDate || ''} 
-                                  onChange={e => setFormData({...formData, initialPaymentDate: e.target.value})} 
-                                  required
-                                />
-                              </div>
-                            </div>
-                          </>
+                            </>
                           )}
 
                           {renderFeeDisplay()}
@@ -1993,7 +1994,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               <Input
                                 placeholder="e.g. PYPEER001"
                                 value={formData.enrollmentNo || ''}
-                                onChange={(e) => setFormData({...formData, enrollmentNo: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, enrollmentNo: e.target.value })}
                               />
                             </div>
                             {editingId && (
@@ -2016,14 +2017,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                               <Input
                                 type="date"
                                 value={formData.admissionDate}
-                                onChange={(e) => setFormData({...formData, admissionDate: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
                                 required={formData.isPrevious}
                               />
                             </div>
                             {editingId && (
                               <div>
                                 <Label className="font-medium">Status</Label>
-                                <Select value={formData.status} onValueChange={(v) => setFormData({...formData, status: v})}>
+                                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
                                   <SelectTrigger><SelectValue /></SelectTrigger>
                                   <SelectContent>
                                     <SelectItem value="pending">Pending</SelectItem>
@@ -2044,46 +2045,46 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         <div className="space-y-4">
                           <div>
                             <Label className="font-medium">Full Name *</Label>
-                            <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required placeholder="Student's full name" />
+                            <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required placeholder="Student's full name" />
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Email {isFieldReq('email') && '*'}</Label>
-                              <Input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required={isFieldReq('email')} placeholder="student@example.com" />
+                              <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required={isFieldReq('email')} placeholder="student@example.com" />
                             </div>
                             <div>
                               <Label className="font-medium">Contact Number *</Label>
-                              <Input value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required placeholder="10-digit mobile" />
+                              <Input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required placeholder="10-digit mobile" />
                             </div>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Date of Birth {isFieldReq('dob') && '*'}</Label>
-                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} required={isFieldReq('dob')} />
+                              <Input type="date" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required={isFieldReq('dob')} />
                             </div>
                             <div>
                               <Label className="font-medium">Alternate Phone {isFieldReq('altPhone') && '*'}</Label>
-                              <Input value={formData.altPhone} onChange={(e) => setFormData({...formData, altPhone: e.target.value})} required={isFieldReq('altPhone')} placeholder="Optional" />
+                              <Input value={formData.altPhone} onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })} required={isFieldReq('altPhone')} placeholder="Optional" />
                             </div>
                           </div>
                           <div>
                             <Label className="font-medium">Address {isFieldReq('address') && '*'}</Label>
-                            <Textarea value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} required={isFieldReq('address')} placeholder="Full residential address" rows={2} />
+                            <Textarea value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} required={isFieldReq('address')} placeholder="Full residential address" rows={2} />
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">PIN Code {isFieldReq('pinCode') && '*'}</Label>
-                              <Input value={formData.pinCode} onChange={(e) => setFormData({...formData, pinCode: e.target.value})} required={isFieldReq('pinCode')} placeholder="6-digit PIN" maxLength={6} />
+                              <Input value={formData.pinCode} onChange={(e) => setFormData({ ...formData, pinCode: e.target.value })} required={isFieldReq('pinCode')} placeholder="6-digit PIN" maxLength={6} />
                             </div>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <Label className="font-medium">Religion {isFieldReq('religion') && '*'}</Label>
-                              <Input value={formData.religion} onChange={(e) => setFormData({...formData, religion: e.target.value})} required={isFieldReq('religion')} placeholder="e.g. Hindu, Muslim, Christian" />
+                              <Input value={formData.religion} onChange={(e) => setFormData({ ...formData, religion: e.target.value })} required={isFieldReq('religion')} placeholder="e.g. Hindu, Muslim, Christian" />
                             </div>
                             <div>
                               <Label className="font-medium">Caste / Category {isFieldReq('caste') && '*'}</Label>
-                              <Input value={formData.caste} onChange={(e) => setFormData({...formData, caste: e.target.value})} required={isFieldReq('caste')} placeholder="e.g. OBC, SC, ST, General" />
+                              <Input value={formData.caste} onChange={(e) => setFormData({ ...formData, caste: e.target.value })} required={isFieldReq('caste')} placeholder="e.g. OBC, SC, ST, General" />
                             </div>
                           </div>
                           {/* Photo */}
@@ -2095,7 +2096,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                   <img src={api.getFileUrl(formData.photo)} alt="Student" className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" />
                                   <button
                                     type="button"
-                                    onClick={() => setFormData({...formData, photo: ''})}
+                                    onClick={() => setFormData({ ...formData, photo: '' })}
                                     className="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full p-1 hover:bg-rose-600 transition-colors shadow-sm"
                                     title="Remove Photo"
                                   >
@@ -2156,11 +2157,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
                                 <Label className="font-medium">Father's Name {isFieldReq('fatherName') && '*'}</Label>
-                                <Input value={formData.fatherName} onChange={(e) => setFormData({...formData, fatherName: e.target.value})} required={isFieldReq('fatherName')} placeholder="Father's full name" />
+                                <Input value={formData.fatherName} onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })} required={isFieldReq('fatherName')} placeholder="Father's full name" />
                               </div>
                               <div>
                                 <Label className="font-medium">Father's Mobile {isFieldReq('fatherPhone') && '*'}</Label>
-                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({...formData, fatherPhone: e.target.value})} required={isFieldReq('fatherPhone')} placeholder="10-digit mobile" />
+                                <Input value={formData.fatherPhone} onChange={(e) => setFormData({ ...formData, fatherPhone: e.target.value })} required={isFieldReq('fatherPhone')} placeholder="10-digit mobile" />
                               </div>
                             </div>
                           </div>
@@ -2171,11 +2172,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
                                 <Label className="font-medium">Mother's Name {isFieldReq('motherName') && '*'}</Label>
-                                <Input value={formData.motherName} onChange={(e) => setFormData({...formData, motherName: e.target.value})} required={isFieldReq('motherName')} placeholder="Mother's full name" />
+                                <Input value={formData.motherName} onChange={(e) => setFormData({ ...formData, motherName: e.target.value })} required={isFieldReq('motherName')} placeholder="Mother's full name" />
                               </div>
                               <div>
                                 <Label className="font-medium">Mother's Mobile {isFieldReq('motherPhone') && '*'}</Label>
-                                <Input value={formData.motherPhone} onChange={(e) => setFormData({...formData, motherPhone: e.target.value})} required={isFieldReq('motherPhone')} placeholder="10-digit mobile" />
+                                <Input value={formData.motherPhone} onChange={(e) => setFormData({ ...formData, motherPhone: e.target.value })} required={isFieldReq('motherPhone')} placeholder="10-digit mobile" />
                               </div>
                             </div>
                           </div>
@@ -2186,7 +2187,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       {formStep === 3 && (
                         <div className="space-y-4">
                           <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                             const isOptional = !isDocReq(docType);
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}-2`;
@@ -2269,7 +2270,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                         // Update label in existing document array if already uploaded
                                         const hasOther = (formData.documents || []).find((d: any) => d.type === 'Other');
                                         if (hasOther) {
-                                          const newDocs = (formData.documents || []).map((d: any) => 
+                                          const newDocs = (formData.documents || []).map((d: any) =>
                                             d.type === 'Other' ? { ...d, label: nextVal } : d
                                           );
                                           setFormData({ ...formData, documents: newDocs });
@@ -2290,10 +2291,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                           <p className="text-sm text-slate-600 dark:text-slate-400">
                             Upload the fee payment receipt. Once uploaded, it will be sent to the Finance team for verification.
                           </p>
-                          
+
                           <div className="border rounded-xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/50 space-y-4">
                             <Label className="font-semibold text-sm">Upload Receipt *</Label>
-                            
+
                             <div className="flex items-center gap-4">
                               {formData.receiptUrl && (
                                 <div className="w-16 h-16 rounded overflow-hidden border">
@@ -2379,8 +2380,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <Label className="text-xs text-muted-foreground block mb-1">Search Students (Name, Email, Enrollment, Center)</Label>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Type name, email, enrollment number..." 
+                <Input
+                  placeholder="Type name, email, enrollment number..."
                   className="pl-8 text-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -2492,9 +2493,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       )}
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center overflow-hidden border border-slate-200">
                         {student.photo ? (
-                          <img 
-                            src={api.getFileUrl(student.photo)} 
-                            alt={student.name} 
+                          <img
+                            src={api.getFileUrl(student.photo)}
+                            alt={student.name}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -2515,16 +2516,16 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         </div>
                       </div>
                     </div>
-                    
-                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
-                        <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
 
-                        {/* View Profile */}
-                        <Button variant="default" size="icon" className="w-8 h-8" onClick={() => setViewingProfileStudent(student)} title="View Profile">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        
-                        {/* Send system notification */}
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
+                      <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
+
+                      {/* View Profile */}
+                      <Button variant="default" size="icon" className="w-8 h-8" onClick={() => setViewingProfileStudent(student)} title="View Profile">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+
+                      {/* Send system notification */}
                       <Button variant="outline" size="icon" className="w-8 h-8" onClick={() => handleOpenNotif(student)} title="Send Notification">
                         <Bell className="w-4 h-4 text-amber-500" />
                       </Button>
@@ -2564,7 +2565,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                   </div>
                 );
               })}
-              
+
               {/* Bulk Floating Action Bar */}
               {isOrgAdmin && selectedStudentIds.size > 0 && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900 text-white rounded-2xl shadow-2xl px-5 py-3 border border-slate-700">
@@ -2605,9 +2606,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredStudents.length)} of {filteredStudents.length} students
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                     >
@@ -2616,9 +2617,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     <div className="text-sm font-medium px-2">
                       Page {currentPage} of {totalPages}
                     </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
@@ -2780,11 +2781,28 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               />
             </div>
 
+            {/* Already existed students */}
+            {bulkExisted.length > 0 && (
+              <div className="rounded-lg border border-yellow-500/40 bg-yellow-500/5 p-3 space-y-1.5">
+                <p className="text-sm font-semibold text-yellow-600 dark:text-yellow-400 flex items-center gap-1.5">
+                  ℹ️ Already Existed — Skipped ({bulkExisted.length})
+                </p>
+                <ul className="text-xs space-y-1 max-h-36 overflow-y-auto pr-1">
+                  {bulkExisted.map((msg, i) => (
+                    <li key={i} className="text-muted-foreground border-l-2 border-yellow-500/30 pl-2 py-0.5">
+                      {msg}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-muted-foreground pt-1">These students were not modified. Their existing records are safe.</p>
+              </div>
+            )}
+
             {/* Per-row import error details */}
             {bulkErrors.length > 0 && (
               <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 space-y-1.5">
                 <p className="text-sm font-semibold text-destructive flex items-center gap-1.5">
-                  ⚠️ Import Issues ({bulkErrors.length})
+                  ❌ Import Errors ({bulkErrors.length})
                 </p>
                 <ul className="text-xs space-y-1 max-h-36 overflow-y-auto pr-1">
                   {bulkErrors.map((err, i) => (
@@ -2793,13 +2811,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs text-muted-foreground pt-1">Students without issues were imported successfully. Fix the rows above and re-upload.</p>
+                <p className="text-xs text-muted-foreground pt-1">Fix the rows above and re-upload to add them.</p>
               </div>
             )}
 
             <div className="flex gap-2 pt-2">
               <Button onClick={handleBulkImport} className="flex-1">Start Import Process</Button>
-              <Button variant="outline" onClick={() => { setBulkDialogOpen(false); setBulkErrors([]); }}>Close</Button>
+              <Button variant="outline" onClick={() => { setBulkDialogOpen(false); setBulkErrors([]); setBulkExisted([]); }}>Close</Button>
             </div>
           </div>
         </DialogContent>
@@ -2884,15 +2902,15 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div>
                   <Label>Installment Title</Label>
-                  <Input value={newSchedule.title} onChange={(e) => setNewSchedule({...newSchedule, title: e.target.value})} />
+                  <Input value={newSchedule.title} onChange={(e) => setNewSchedule({ ...newSchedule, title: e.target.value })} />
                 </div>
                 <div>
                   <Label>Amount (₹)</Label>
-                  <Input type="number" value={newSchedule.amount} onChange={(e) => setNewSchedule({...newSchedule, amount: e.target.value})} />
+                  <Input type="number" value={newSchedule.amount} onChange={(e) => setNewSchedule({ ...newSchedule, amount: e.target.value })} />
                 </div>
                 <div>
                   <Label>Due Date</Label>
-                  <Input type="date" value={newSchedule.dueDate} onChange={(e) => setNewSchedule({...newSchedule, dueDate: e.target.value})} />
+                  <Input type="date" value={newSchedule.dueDate} onChange={(e) => setNewSchedule({ ...newSchedule, dueDate: e.target.value })} />
                 </div>
               </div>
               <Button size="sm" onClick={handleCreateSchedule} className="mt-4 w-full">Create Milestone</Button>
@@ -2962,7 +2980,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
         </DialogContent>
       </Dialog>
 
-      
+
       {/* Progress Dialog */}
       <Dialog open={progressDialogOpen} onOpenChange={setProgressDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -2970,11 +2988,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
             <DialogTitle>Update Progress - {progressDialogStudent?.name}</DialogTitle>
           </DialogHeader>
           {progressDialogStudent && (
-            <StudentProgressTab 
-              student={progressDialogStudent} 
+            <StudentProgressTab
+              student={progressDialogStudent}
               onUpdate={() => {
                 fetchStudents();
-              }} 
+              }}
             />
           )}
         </DialogContent>
@@ -2991,7 +3009,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
           </DialogHeader>
 
           {enrollHistoryLoading ? (
-            <div className="space-y-3 py-4">{[1,2].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}</div>
+            <div className="space-y-3 py-4">{[1, 2].map(i => <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />)}</div>
           ) : enrollHistoryData.length === 0 ? (
             <p className="text-sm text-muted-foreground py-8 text-center">No enrollment records found for this student.</p>
           ) : (
@@ -3023,7 +3041,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                         </p>
                       </div>
                       <span className="text-xs text-muted-foreground shrink-0">
-                        {new Date(enr.createdAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })}
+                        {new Date(enr.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </span>
                     </div>
 
