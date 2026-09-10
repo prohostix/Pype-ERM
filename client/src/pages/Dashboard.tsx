@@ -14,8 +14,6 @@ import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 import { ModernStudentPortal } from './ModernStudentPortal';
-import { AcademicCounselorPortal } from '@/modules/academic-center/AcademicCounselorPortal';
-import TeacherPortal from '@/modules/academic-center/TeacherPortal';
 
 
 interface DashboardProps {
@@ -180,15 +178,7 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
     return <ModernCollectionsDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
-  if (user?.role === 'academic_counselor') {
-    return <AcademicCounselorPortal />;
-  }
-
-  if (user?.role === 'center_teacher' || user?.role === 'teacher') {
-    return <TeacherPortal />;
-  }
-
-  if (user?.role === 'student' || user?.role === 'center_student') {
+  if (user?.role === 'student') {
     return <ModernStudentPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 

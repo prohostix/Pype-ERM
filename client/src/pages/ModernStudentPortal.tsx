@@ -91,26 +91,9 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       if (profileRes?.data?.success && profileRes?.data?.data) {
         setProfile(profileRes.data.data);
       } else {
-        // Fallback: Check if this account belongs to an Academic Center student
-        const centerRes = await api.get('/academic-center/student-portal/dashboard').catch(() => null);
-        if (centerRes?.data?.success && centerRes.data.data?.student) {
-          const cs = centerRes.data.data.student;
-          const firstEnrollment = cs.enrollments?.[0];
-          setProfile({
-            id: cs.id,
-            name: cs.name,
-            email: cs.email,
-            phone: cs.phone,
-            admissionNo: cs.studentCode,
-            status: cs.status,
-            program: firstEnrollment?.program || null,
-            center: centerRes.data.data.center || null,
-          });
-        } else {
-          setIsNotStudent(true);
-          setLoading(false);
-          return;
-        }
+        setIsNotStudent(true);
+        setLoading(false);
+        return;
       }
 
       // 2. Fetch student portal data in parallel
@@ -129,13 +112,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
       setInvoices(invRes.data.data || []);
 
       let fetchedClasses = classesRes.data.data || [];
-      if (fetchedClasses.length === 0) {
-        // Fallback to academic center classes endpoint if needed
-        const altClassesRes = await api.get('/academic-center/student-portal/classes').catch(() => null);
-        if (altClassesRes?.data?.success && Array.isArray(altClassesRes.data.data)) {
-          fetchedClasses = altClassesRes.data.data;
-        }
-      }
+
       setClasses(fetchedClasses);
     } catch (error) {
       console.error('Failed to fetch student data:', error);

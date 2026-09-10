@@ -64,6 +64,7 @@ import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
 import fcmTokenRoutes from './routes/fcm-token.routes.js';
 import appReleaseRoutes from './routes/appReleaseRoutes.js';
+import reportsRoutes from './routes/reportsRoutes.js';
 
 const app: Application = express();
 
@@ -181,6 +182,7 @@ app.use(`/api/${API_VERSION}/ceo`, ceoRoutes);
 app.use(`/api/${API_VERSION}/org`, orgAdminRoutes);
 app.use(`/api/${API_VERSION}/sub-departments`, subDepartmentRoutes);
 app.use(`/api/${API_VERSION}/credentials`, credentialRoutes);
+app.use(`/api/${API_VERSION}/reports`, reportsRoutes);
 app.use(`/api/${API_VERSION}/edit-delete`, editDeleteRoutes);
 app.use(`/api/${API_VERSION}/rereg`, reregRoutes);
 app.use(`/api/${API_VERSION}/referrals`, referralRoutes);

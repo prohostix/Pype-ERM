@@ -135,43 +135,6 @@ async function executeApprovedDeletion(entityId: string, organizationId: string)
       if (sub === 'leads') {
         await prisma.lead.delete({ where: { id } });
       }
-    } else if (endpoint === 'academic-center') {
-      if (sub === 'centers') {
-        // Delete all center associations in strict dependency order
-        await prisma.$transaction(async (tx) => {
-          const schedules = await tx.centerClassSchedule.findMany({
-            where: { centerId: id },
-            select: { id: true },
-          });
-          const scheduleIds = schedules.map((s) => s.id);
-          if (scheduleIds.length > 0) {
-            await tx.centerClassAttendance.deleteMany({
-              where: { classScheduleId: { in: scheduleIds } },
-            });
-          }
-          await tx.centerClassSchedule.deleteMany({ where: { centerId: id } });
-          await tx.centerMaterial.deleteMany({ where: { centerId: id } });
-          const students = await tx.centerStudent.findMany({
-            where: { centerId: id },
-            select: { id: true },
-          });
-          const studentIds = students.map((s) => s.id);
-          if (studentIds.length > 0) {
-            await tx.centerEnrollment.deleteMany({
-              where: { studentId: { in: studentIds } },
-            });
-          }
-          await tx.centerStudent.deleteMany({ where: { centerId: id } });
-          await tx.centerProgram.deleteMany({ where: { centerId: id } });
-          await tx.centerTeacher.deleteMany({ where: { centerId: id } });
-          await tx.centerCounselorAssignment.deleteMany({ where: { centerId: id } });
-          await tx.academicCenter.update({
-            where: { id },
-            data: { assignedPrograms: { set: [] } },
-          });
-          await tx.academicCenter.delete({ where: { id } });
-        });
-      }
     } else {
       return { success: false, error: `Unknown entity type: ${endpoint}` };
     }

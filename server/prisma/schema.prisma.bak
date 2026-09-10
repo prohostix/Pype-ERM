@@ -1,7 +1,7 @@
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
-  output        = "../src/generated/client"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -385,6 +385,10 @@ model Program {
   students           Student[]
   studyCenters       StudyCenter[]       @relation("ProgramToStudyCenter")
   assignedSubDepts   SubDepartment[]     @relation("SubDeptToProgram")
+  centerMaterials      CenterMaterial[]
+  centerClassSchedules CenterClassSchedule[]
+  centerEnrollments    CenterEnrollment[]
+  academicCenters      AcademicCenter[]    @relation("AcademicCenterPrograms")
 
   @@index([universityId])
   @@index([organizationId])
@@ -672,7 +676,7 @@ model LeaveRequest {
   deptApprovedBy   String?
   hrApprovedBy     String?
   isHalfDay        Boolean      @default(false)
-  halfDayType      String? // "first_half" or "second_half"
+  halfDayType      String?      // "first_half" or "second_half"
   appliedAt        DateTime     @default(now())
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
@@ -952,7 +956,7 @@ model Enrollment {
   receiptVerifiedAt    DateTime?
   receiptVerifiedBy    String?
   initialPaymentAmount Float?
-  initialPaymentDate   DateTime?
+  initialPaymentDate DateTime?
   paymentPlan          String?
   departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
   financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
@@ -1351,23 +1355,23 @@ model SessionRequest {
 }
 
 model StudyCenterInvite {
-  id              String       @id @default(uuid())
-  organizationId  String
-  token           String       @unique
-  universityIds   String[]
-  programIds      String[]
-  specializations Json?        @default("{}")
-  sessionIds      String[]     @default([])
-  referredBy      String
-  branchId        String?
-  status          String       @default("pending")
-  expiresAt       DateTime
-  usedAt          DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  branch          Branch?      @relation(fields: [branchId], references: [id])
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  referrer        User         @relation("InviteReferredBy", fields: [referredBy], references: [id])
+  id             String       @id @default(uuid())
+  organizationId String
+  token          String       @unique
+  universityIds  String[]
+  programIds     String[]
+  specializations Json?       @default("{}")
+  sessionIds     String[]     @default([])
+  referredBy     String
+  branchId       String?
+  status         String       @default("pending")
+  expiresAt      DateTime
+  usedAt         DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  branch         Branch?      @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  referrer       User         @relation("InviteReferredBy", fields: [referredBy], references: [id])
 
   @@index([organizationId, referredBy])
 }
@@ -1902,13 +1906,13 @@ model CommunicationLog {
 }
 
 model UserFCMToken {
-  id         String   @id @default(uuid())
-  userId     String
-  token      String   @unique
-  deviceType String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String       @id @default(uuid())
+  userId         String
+  token          String       @unique
+  deviceType     String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -1920,3 +1924,4 @@ model SystemSetting {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

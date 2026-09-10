@@ -118,12 +118,7 @@ export async function resolveTargetName(url: string): Promise<string | null> {
       }
     }
 
-    if (endpoint === 'academic-center') {
-      if (parts[1] === 'centers') {
-        const c = await prisma.academicCenter.findUnique({ where: { id }, select: { name: true, code: true } });
-        return c ? `Academic Center: ${c.name} (${c.code})` : null;
-      }
-    }
+
   } catch (e) {
     console.error('Error resolving target name', e);
   }

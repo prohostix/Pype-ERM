@@ -384,7 +384,7 @@ export function PrismaLayout({
             </div>
 
             <div className="h-8 w-px bg-border mx-1" />
-            {!['student', 'center_student', 'center_teacher', 'teacher', 'academic_counselor'].includes(userRole || '') && (
+            {!['student', 'teacher'].includes(userRole || '') && (
               <PunchWidget compact={true} />
             )}
 

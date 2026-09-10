@@ -25,7 +25,6 @@ import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
 import { EnrollmentLinkConfigPanel } from '@/components/panels/EnrollmentLinkConfigPanel';
 import DsmsMigrationPanel from '@/components/panels/DsmsMigrationPanel';
-import { AcademicCentersAdminPanel } from '@/modules/academic-center/AcademicCentersAdminPanel';
 
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -82,7 +81,6 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="students"><StudentsPanel /></TabsContent>
         <TabsContent value="universities"><UniversitiesPanel /></TabsContent>
         <TabsContent value="programs"><ProgramsPanel /></TabsContent>
-        <TabsContent value="academic_centers"><AcademicCentersAdminPanel /></TabsContent>
         <TabsContent value="centers"><StudyCentersPanel /></TabsContent>
         <TabsContent value="invoices"><InvoicesPanel /></TabsContent>
         <TabsContent value="payments"><PaymentsPanel /></TabsContent>
