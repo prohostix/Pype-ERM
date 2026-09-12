@@ -31,7 +31,7 @@ export const protect = async (
       if (!jwtSecret) throw new Error('JWT_SECRET not configured');
       const decoded: any = jwt.verify(token, jwtSecret);
       
-      const user = await prisma.user.findUnique({
+      let user = await prisma.user.findUnique({
         where: { id: decoded.id },
         select: {
           id: true, userId: true, email: true, name: true, role: true,
@@ -43,6 +43,25 @@ export const protect = async (
           organization: true, department: true, branch: true, studyCenter: true,
         }
       });
+
+      if (!user) {
+        const faculty = await prisma.faculty.findUnique({
+          where: { id: decoded.id }
+        });
+        
+        if (faculty) {
+          user = {
+            id: faculty.id,
+            email: faculty.email,
+            name: faculty.name,
+            role: 'faculty',
+            organizationId: faculty.organizationId,
+            status: faculty.status,
+            createdAt: faculty.createdAt,
+            updatedAt: faculty.updatedAt
+          } as any;
+        }
+      }
 
       if (!user) {
         res.status(401).json({ success: false, message: 'Invalid token or user not found' });

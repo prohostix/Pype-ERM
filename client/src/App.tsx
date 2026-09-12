@@ -56,6 +56,8 @@ const TABLE_TO_TAB: Record<string, string> = {
   enrollment_link_config: 'enrollment_link_config',
   dsms_migration: 'dsms_migration',
   academic_centers: 'academic_centers',
+  faculties: 'faculties',
+
   // Shared
   users: 'users',
   departments: 'departments',
@@ -428,7 +430,9 @@ function App() {
         { id: 'students', label: 'Students' },
         { id: 'universities', label: 'Universities' },
         { id: 'programs', label: 'Programs' },
+        { id: 'faculties', label: 'Faculties' },
         { id: 'academic_centers', label: 'Academic Centers' },
+
         { id: 'study_centers', label: 'Study Centers' },
         { id: 'invoices', label: 'Invoices' },
         { id: 'payments', label: 'Payments' },
@@ -495,6 +499,14 @@ function App() {
     if (user.role === 'academic_counselor') {
       return [
         { id: 'dashboard', label: 'Counselor Portal' },
+      ];
+    }
+
+    if (user.role === 'faculty') {
+      return [
+        { id: 'dashboard', label: 'Overview' },
+        { id: 'assignments', label: 'My Schedule' },
+        { id: 'classes', label: 'My Classes' },
       ];
     }
 
@@ -591,7 +603,7 @@ function App() {
 
     // For role-specific dashboards (ops, hr, finance, sales, collections), the nav item IDs
     // are already the correct tab IDs — pass them directly
-    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager'];
+    const roleDashboardRoles = ['ops_admin', 'ops_sub_admin', 'finance_admin', 'finance_sub_admin', 'finance', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'sales', 'collections_admin', 'collections', 'academic_counselor', 'center_teacher', 'teacher', 'ceo', 'general_manager', 'faculty'];
     const isEmployeeSubDeptManager = user?.role === 'employee' && Boolean((user as any)?.subDepartmentId) && Boolean(deptType);
     const isEmployeeRole = user?.role === 'employee';
     const isBranchManager = Boolean((user as any)?.isBranchManager) && user?.role !== 'student' && user?.role !== 'center_student';

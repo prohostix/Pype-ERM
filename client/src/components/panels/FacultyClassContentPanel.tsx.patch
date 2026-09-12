@@ -1,0 +1,74 @@
+--- client/src/components/panels/FacultyClassContentPanel.tsx
++++ client/src/components/panels/FacultyClassContentPanel.tsx
+@@ -339,5 +339,78 @@
+ 
+       {/* Module and Material Dialogs */}
+-      
++      <Dialog open={moduleDialogOpen} onOpenChange={setModuleDialogOpen}>
++        <DialogContent>
++          <DialogHeader><DialogTitle>{editingModuleId ? 'Edit Module' : 'Create Module'}</DialogTitle></DialogHeader>
++          <form onSubmit={handleModuleSubmit} className="space-y-4 pt-4">
++            <div className="space-y-2">
++              <Label>Module Title</Label>
++              <Input value={moduleForm.title} onChange={e => setModuleForm({ ...moduleForm, title: e.target.value })} required />
++            </div>
++            <div className="space-y-2">
++              <Label>Description</Label>
++              <Textarea value={moduleForm.description} onChange={e => setModuleForm({ ...moduleForm, description: e.target.value })} />
++            </div>
++            <div className="space-y-2">
++              <Label>Order</Label>
++              <Input type="number" value={moduleForm.order} onChange={e => setModuleForm({ ...moduleForm, order: e.target.value })} />
++            </div>
++            <Button type="submit" className="w-full">{editingModuleId ? 'Save Changes' : 'Create Module'}</Button>
++          </form>
++        </DialogContent>
++      </Dialog>
++
++      <Dialog open={lessonDialogOpen} onOpenChange={setLessonDialogOpen}>
++        <DialogContent>
++          <DialogHeader><DialogTitle>{editingLessonId ? 'Edit Lesson' : 'Create Lesson'}</DialogTitle></DialogHeader>
++          <form onSubmit={handleLessonSubmit} className="space-y-4 pt-4">
++            <div className="space-y-2">
++              <Label>Lesson Title</Label>
++              <Input value={lessonForm.title} onChange={e => setLessonForm({ ...lessonForm, title: e.target.value })} required />
++            </div>
++            <div className="space-y-2">
++              <Label>Description</Label>
++              <Textarea value={lessonForm.description} onChange={e => setLessonForm({ ...lessonForm, description: e.target.value })} />
++            </div>
++            <div className="space-y-2">
++              <Label>Order</Label>
++              <Input type="number" value={lessonForm.order} onChange={e => setLessonForm({ ...lessonForm, order: e.target.value })} />
++            </div>
++            <Button type="submit" className="w-full">{editingLessonId ? 'Save Changes' : 'Create Lesson'}</Button>
++          </form>
++        </DialogContent>
++      </Dialog>
++
++      <Dialog open={materialDialogOpen} onOpenChange={setMaterialDialogOpen}>
++        <DialogContent>
++          <DialogHeader><DialogTitle>Upload Material</DialogTitle></DialogHeader>
++          <form onSubmit={handleMaterialSubmit} className="space-y-4 pt-4">
++            <div className="space-y-2">
++              <Label>Title</Label>
++              <Input value={materialForm.title} onChange={e => setMaterialForm({ ...materialForm, title: e.target.value })} required />
++            </div>
++            <div className="space-y-2">
++              <Label>Description (Optional)</Label>
++              <Textarea value={materialForm.description} onChange={e => setMaterialForm({ ...materialForm, description: e.target.value })} />
++            </div>
++            <div className="space-y-2">
++              <Label>File</Label>
++              <Input type="file" ref={fileInputRef} onChange={e => setUploadFile(e.target.files?.[0] || null)} required />
++            </div>
++            <Button type="submit" className="w-full" disabled={uploading}>
++              {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
++              {uploading ? 'Uploading...' : 'Upload File'}
++            </Button>
++          </form>
++        </DialogContent>
++      </Dialog>
+     </div>
+   );
+ }

@@ -64,6 +64,11 @@ import communicationRoutes from './routes/communicationRoutes.js';
 import biometricDeviceRoutes from './routes/biometricDeviceRoutes.js';
 import fcmTokenRoutes from './routes/fcm-token.routes.js';
 import appReleaseRoutes from './routes/appReleaseRoutes.js';
+import facultyRoutes from './routes/facultyRoutes.js';
+import facultyPortalRoutes from './routes/facultyPortalRoutes.js';
+import academicCenterRoutes from './routes/academicCenterRoutes.js';
+import academicClassRoutes from './routes/academicClassRoutes.js';
+import academicBatchRoutes from './routes/academicBatchRoutes.js';
 
 const app: Application = express();
 
@@ -101,6 +106,8 @@ const s3 = new S3Client({
 const s3ProxyRoute = async (req: express.Request, res: express.Response) => {
   try {
     const key = req.params.key;
+    const downloadName = req.query.downloadName as string;
+
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME || 'my-bucket',
       Key: key,
@@ -109,6 +116,14 @@ const s3ProxyRoute = async (req: express.Request, res: express.Response) => {
     if (response.ContentType) {
       res.setHeader('Content-Type', response.ContentType);
     }
+
+    if (downloadName) {
+      const safeName = downloadName.replace(/[^a-zA-Z0-9.\-_ ]/g, '_');
+      res.setHeader('Content-Disposition', `attachment; filename="${safeName}"`);
+    } else {
+      res.setHeader('Content-Disposition', `inline; filename="${key}"`);
+    }
+
     if (response.Body) {
       const stream = response.Body as any;
       stream.on('error', (streamErr: any) => {
@@ -200,6 +215,11 @@ app.use(`/api/${API_VERSION}/exams`, examRoutes);
 app.use(`/api/${API_VERSION}/communications`, communicationRoutes);
 app.use(`/api/${API_VERSION}/fcm-token`, fcmTokenRoutes);
 app.use(`/api/${API_VERSION}/app-releases`, appReleaseRoutes);
+app.use(`/api/${API_VERSION}/faculties`, facultyRoutes);
+app.use(`/api/${API_VERSION}/faculty-portal`, facultyPortalRoutes);
+app.use(`/api/${API_VERSION}/academic-centers`, academicCenterRoutes);
+app.use(`/api/${API_VERSION}/academic-classes`, academicClassRoutes);
+app.use(`/api/${API_VERSION}/academic-batches`, academicBatchRoutes);
 
 // Health check
 app.get('/health', async (req, res) => {

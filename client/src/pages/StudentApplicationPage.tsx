@@ -344,7 +344,9 @@ export default function StudentApplicationPage() {
     if (!form.programId) { setError('Please select a program'); return; }
 
     // Phone validation — must be exactly 10 digits (after country code)
-    const phoneDigits = form.studentPhone.replace(/^\+\d{1,3}/, '').replace(/\D/g, '');
+    const matchedCode = countryCodes.find(c => form.studentPhone.startsWith(c.code));
+    const codeStr = matchedCode?.code || '';
+    const phoneDigits = form.studentPhone.slice(codeStr.length).replace(/\D/g, '');
     if (phoneDigits.length !== 10) {
       setError('Please enter a valid 10-digit phone number');
       return;

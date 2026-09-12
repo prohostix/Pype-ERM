@@ -14,6 +14,7 @@ import { ModernEmployeeDashboard } from './ModernEmployeeDashboard';
 import { ModernStaffPortal } from './ModernStaffPortal';
 import { ModernBranchManagerDashboard } from './ModernBranchManagerDashboard';
 import { ModernStudentPortal } from './ModernStudentPortal';
+import { ModernFacultyPortal } from './ModernFacultyPortal';
 
 
 interface DashboardProps {
@@ -156,6 +157,10 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
   if (user?.role === 'org_admin') {
     return <ModernOrgAdminDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+  }
+
+  if (user?.role === 'faculty') {
+    return <ModernFacultyPortal initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (['finance_admin', 'finance_sub_admin', 'finance'].includes(user?.role || '')) {

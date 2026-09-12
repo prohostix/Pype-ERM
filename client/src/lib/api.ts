@@ -43,8 +43,22 @@ class ApiService {
     return API_BASE_URL;
   }
 
-  getFileUrl(path: string | undefined | null) {
+  getFileUrl(path: string | undefined | null, downloadName?: string) {
     if (!path) return '';
+    if (path.startsWith('http') && path.includes('amazonaws.com') && path.includes('s3')) {
+      try {
+        const url = new URL(path);
+        const key = url.pathname.split('/').pop();
+        if (key) {
+          const baseUrl = this.getBaseUrl().replace(/\/$/, '');
+          let proxyUrl = `${baseUrl}/uploads/${key}`;
+          if (downloadName) {
+            proxyUrl += `?downloadName=${encodeURIComponent(downloadName)}`;
+          }
+          return proxyUrl;
+        }
+      } catch (e) {}
+    }
     if (path.startsWith('http')) return path;
     
     const baseUrl = this.getBaseUrl().replace(/\/$/, '');

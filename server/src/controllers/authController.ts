@@ -111,6 +111,48 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
   });
 
   if (!user) {
+    const faculty = await prisma.faculty.findFirst({
+      where: {
+        email: {
+          equals: normalizedEmail,
+          mode: 'insensitive'
+        }
+      }
+    });
+
+    if (faculty) {
+      if (!faculty.password) {
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        return;
+      }
+      
+      const isMatch = await comparePassword(password, faculty.password);
+      if (!isMatch) {
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        return;
+      }
+
+      const token = generateToken(faculty.id);
+      const refreshToken = generateRefreshToken(faculty.id);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: faculty.id,
+            name: faculty.name,
+            email: faculty.email,
+            role: 'faculty',
+            organizationId: faculty.organizationId,
+            status: faculty.status,
+          },
+          token,
+          refreshToken,
+        },
+      });
+      return;
+    }
+
     res.status(401).json({ success: false, message: 'Invalid credentials' });
     return;
   }
@@ -182,14 +224,35 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   let user = await prisma.user.findUnique({
     where: { id: req.user.id },
     select: {
-      id: true, userId: true, email: true, name: true, role: true,
-      phone: true, designation: true, status: true, lastLogin: true,
-      avatar: true, reportingTo: true, organizationId: true,
-      departmentId: true, subDepartmentId: true, branchId: true, studyCenterId: true,
-      allowSystemPunchIn: true, requireSelfiePunchIn: true, allowAnywherePunchIn: true, requiresAttendance: true,
-      organization: true, department: true, subDepartment: true,
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      avatar: true,
+      designation: true,
+      organizationId: true,
+      departmentId: true,
+      subDepartmentId: true,
+      branchId: true,
+      studyCenterId: true,
+      ceoPanelId: true,
     }
   });
+
+  if (!user) {
+    const faculty = await prisma.faculty.findUnique({
+      where: { id: req.user.id }
+    });
+    if (faculty) {
+      user = {
+        id: faculty.id,
+        name: faculty.name,
+        email: faculty.email,
+        role: 'faculty',
+        organizationId: faculty.organizationId,
+      } as any;
+    }
+  }
 
   if (!user) {
     res.status(404).json({ success: false, message: 'User not found' });

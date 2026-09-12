@@ -1011,65 +1011,115 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
           </div>
         )}
 
-        {/* CLASSES & EBOOKS */}
+        {/* CURRICULUM & MATERIALS */}
         {activeTab === 'materials' && (
-          <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-primary" /> Program Materials & E-Books
-              </CardTitle>
-              <CardDescription>View and download video lectures, textbooks, materials and syllabus for {profile?.program?.name}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {materials.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <BookOpen className="w-12 h-12 mx-auto opacity-20 mb-3" />
-                  No digital course materials uploaded for this program.
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {materials.map((material) => {
-                    const isVideo = material.type === 'VIDEO_LECTURE' || material.mediaUrl?.includes('youtube') || material.mediaUrl?.includes('vimeo');
-                    return (
-                      <div key={material.id} className="p-4 rounded-xl border border-border bg-background/50 hover:border-primary/30 transition-all flex flex-col justify-between shadow-xs">
-                        <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <Badge variant="outline" className="capitalize text-[10px]">
-                              {material.type ? material.type.replace('_', ' ') : 'Course Material'}
-                            </Badge>
-                            <span className="text-[10px] text-muted-foreground">{new Date(material.createdAt).toLocaleDateString()}</span>
-                          </div>
-                          <h4 className="font-bold text-foreground line-clamp-1">{material.title}</h4>
-                          {material.universityName && (
-                            <p className="text-[11px] text-primary font-medium mt-0.5">
-                              [{material.universityName}] {material.programName || ''}
-                            </p>
-                          )}
-                          <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">{material.description || 'No description provided.'}</p>
-                          {material.chapterOrTopic && (
-                            <p className="text-[11px] text-muted-foreground mt-1">Topic: <strong>{material.chapterOrTopic}</strong></p>
-                          )}
-                        </div>
-                        <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
-                          <span className="text-[10px] text-muted-foreground">
-                            {material.duration ? `Duration: ${material.duration}` : (material.fileSize ? `Size: ${material.fileSize}` : 'Digital Asset')}
-                          </span>
-                          {material.fileUrl && (
-                            <Button size="sm" variant={isVideo ? "default" : "outline"} className="text-xs h-7 gap-1" asChild>
-                              <a href={material.fileUrl} target="_blank" rel="noopener noreferrer">
-                                {isVideo ? <PlayCircle className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
-                                {isVideo ? 'Watch Lecture' : 'Download'}
-                              </a>
-                            </Button>
+          <div className="space-y-6">
+            <Card className="border-none bg-card/60 backdrop-blur-md shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" /> My Curriculum & Materials
+                </CardTitle>
+                <CardDescription>View your course structure, lessons, and access study materials for completed sessions.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {(!classes || classes.length === 0) ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <BookOpen className="w-12 h-12 mx-auto opacity-20 mb-3" />
+                    No curriculum data found for your batch.
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    {classes.map((cls: any) => (
+                      <div key={cls.id} className="space-y-4">
+                        <h3 className="font-bold text-xl text-foreground flex items-center gap-2">
+                          <BookOpen className="w-6 h-6 text-indigo-500" /> {cls.name}
+                        </h3>
+                        
+                        <div className="space-y-4">
+                          {cls.modules?.length === 0 ? (
+                            <p className="text-sm text-muted-foreground italic">No modules added yet.</p>
+                          ) : (
+                            cls.modules?.map((mod: any) => (
+                              <Card key={mod.id} className="border-border shadow-sm overflow-hidden">
+                                <div className="bg-muted/30 p-4 border-b">
+                                  <h4 className="font-semibold text-base">{mod.title}</h4>
+                                  {mod.description && <p className="text-sm text-muted-foreground mt-1">{mod.description}</p>}
+                                </div>
+                                <div className="divide-y divide-border/50">
+                                  {mod.lessons?.length === 0 ? (
+                                    <div className="p-4 text-sm text-muted-foreground italic">No lessons in this module.</div>
+                                  ) : (
+                                    mod.lessons?.map((lesson: any) => (
+                                      <div key={lesson.id} className="p-4 bg-background">
+                                        <div className="flex items-start justify-between gap-4">
+                                          <div>
+                                            <h5 className="font-medium text-foreground flex items-center gap-2">
+                                              <div className={`w-1.5 h-1.5 rounded-full ${lesson.isCompleted ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                                              {lesson.title}
+                                            </h5>
+                                            {lesson.description && <p className="text-xs text-muted-foreground mt-1 ml-3.5">{lesson.description}</p>}
+                                          </div>
+                                          <div>
+                                            {lesson.isCompleted ? (
+                                              <Badge variant="outline" className="bg-emerald-500/10 text-emerald-700 border-emerald-500/20"><CheckCircle className="w-3 h-3 mr-1" /> Completed</Badge>
+                                            ) : (
+                                              <Badge variant="outline" className="text-slate-500"><Clock className="w-3 h-3 mr-1" /> Pending</Badge>
+                                            )}
+                                          </div>
+                                        </div>
+
+                                        {/* Materials Sub-section */}
+                                        <div className="mt-4 ml-3.5 pl-4 border-l-2 border-border/50">
+                                          {lesson.isCompleted ? (
+                                            lesson.materials && lesson.materials.length > 0 ? (
+                                              <div className="space-y-2 mt-2">
+                                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Available Materials</p>
+                                                {lesson.materials.map((mat: any) => {
+                                                  const desiredFilename = `${cls.name} - ${mod.title} - ${lesson.title} - ${mat.title}${mat.fileName ? ' - ' + mat.fileName : ''}`;
+                                                  const url = api.getFileUrl(mat.fileUrl, desiredFilename);
+                                                  return (
+                                                    <div key={mat.id} className="flex items-center justify-between p-2 rounded-lg border bg-muted/20 hover:bg-muted/40 transition-colors">
+                                                      <div className="flex items-center gap-3">
+                                                        <FileText className="w-4 h-4 text-indigo-500" />
+                                                        <div>
+                                                          <p className="text-sm font-medium leading-tight">{mat.title}</p>
+                                                          <p className="text-[10px] text-muted-foreground">{mat.fileName || 'Document'}</p>
+                                                        </div>
+                                                      </div>
+                                                      <Button size="sm" variant="outline" className="h-7 text-xs" asChild>
+                                                        <a href={url} target="_blank" rel="noopener noreferrer">
+                                                          <Download className="w-3.5 h-3.5 mr-1" /> View
+                                                        </a>
+                                                      </Button>
+                                                    </div>
+                                                  );
+                                                })}
+                                              </div>
+                                            ) : (
+                                              <p className="text-xs text-muted-foreground italic mt-2">No materials uploaded for this lesson.</p>
+                                            )
+                                          ) : (
+                                            <div className="flex items-center gap-2 p-2.5 rounded-md bg-slate-50 dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 mt-2">
+                                              <AlertCircle className="w-4 h-4 text-slate-400" />
+                                              <p className="text-xs text-slate-500">Materials are locked. Complete this lesson's live class to unlock its study materials.</p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))
+                                  )}
+                                </div>
+                              </Card>
+                            ))
                           )}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* FEE DETAILS (PAYMENT SCHEDULES) */}

@@ -280,6 +280,16 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    id: 'faculty-portal',
+    label: 'Faculty Portal',
+    icon: GraduationCap,
+    roles: ['faculty'],
+    children: [
+      { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, roles: ['faculty'] },
+      { id: 'classes', label: 'My Classes', icon: BookOpen, roles: ['faculty'] },
+    ],
+  },
+  {
     id: 'staff',
     label: 'Staff Portal',
     icon: Users,

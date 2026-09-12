@@ -98,23 +98,68 @@ export const getStudentNotifications = asyncHandler(async (req: AuthRequest, res
 // GET /student-portal/classes - Get scheduled classes (online live + offline campus)
 export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Response) => {
   const student = await getLinkedStudent(req.user.id);
-  let programIds: string[] = [];
-
-  if (student) {
-    const mainProgramId = student.programId;
-    const enrolledProgramIds = (student.enrollments || []).map((e: any) => e.programId).filter(Boolean);
-    programIds = Array.from(new Set([mainProgramId, ...enrolledProgramIds].filter(Boolean)));
+  
+  if (!student) {
+    return res.json({ success: true, data: [] });
   }
 
-  const whereClause: any = {
-    organizationId: req.user.organizationId,
-  };
+  const batches = await prisma.academicBatch.findMany({
+    where: { 
+      OR: [
+        { students: { some: { id: student.id } } },
+        student.academicBatchId ? { id: student.academicBatchId } : {}
+      ].filter(condition => Object.keys(condition).length > 0)
+    },
+    include: {
+      academicClass: {
+        include: {
+          modules: {
+            orderBy: { order: 'asc' },
+            include: {
+              lessons: {
+                orderBy: { order: 'asc' },
+                include: {
+                  materials: true,
+                  academicSessions: true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
 
-  if (programIds.length > 0) {
-    whereClause.programId = { in: programIds };
+  if (!batches || batches.length === 0) {
+    return res.json({ success: true, data: [] });
   }
 
-  res.json({ success: true, data: [] });
+  const resultData = batches.filter(b => b.academicClass).map(batch => {
+    const classData = batch.academicClass;
+    const formattedModules = classData.modules.map((mod: any) => ({
+      id: mod.id,
+      title: mod.title,
+      description: mod.description,
+      lessons: mod.lessons.map((lesson: any) => {
+        const isCompleted = lesson.academicSessions.some((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
+        return {
+          id: lesson.id,
+          title: lesson.title,
+          description: lesson.description,
+          isCompleted,
+          materials: isCompleted ? lesson.materials : []
+        };
+      })
+    }));
+
+    return {
+      id: classData.id,
+      name: classData.name,
+      modules: formattedModules
+    };
+  });
+
+  res.json({ success: true, data: resultData });
 });
 
 // POST /student-portal/classes/:classId/attendance

@@ -326,6 +326,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   joinDate: 'joinDate',
   enrolledAt: 'enrolledAt',
   reregStatus: 'reregStatus',
+  academicBatchId: 'academicBatchId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   referredBy: 'referredBy',
@@ -1264,6 +1265,153 @@ exports.Prisma.SystemSettingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FacultyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  password: 'password',
+  specialization: 'specialization',
+  status: 'status',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AcademicCenterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  address: 'address',
+  programIds: 'programIds',
+  status: 'status',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AcademicClassScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  academicCenterId: 'academicCenterId',
+  programIds: 'programIds',
+  inchargeId: 'inchargeId',
+  status: 'status',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ClassModuleScalarFieldEnum = {
+  id: 'id',
+  academicClassId: 'academicClassId',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ModuleLessonScalarFieldEnum = {
+  id: 'id',
+  classModuleId: 'classModuleId',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  facultyId: 'facultyId',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LessonFacultyHistoryScalarFieldEnum = {
+  id: 'id',
+  moduleLessonId: 'moduleLessonId',
+  previousFacultyId: 'previousFacultyId',
+  newFacultyId: 'newFacultyId',
+  reason: 'reason',
+  changedById: 'changedById',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ClassMaterialScalarFieldEnum = {
+  id: 'id',
+  moduleLessonId: 'moduleLessonId',
+  title: 'title',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  uploadedBy: 'uploadedBy',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
+};
+
+exports.Prisma.AcademicBatchScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  academicClassId: 'academicClassId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  capacity: 'capacity',
+  status: 'status',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentBatchTransferScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fromBatchId: 'fromBatchId',
+  toBatchId: 'toBatchId',
+  academicClassId: 'academicClassId',
+  transferredById: 'transferredById',
+  organizationId: 'organizationId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BatchLessonAssignmentScalarFieldEnum = {
+  id: 'id',
+  academicBatchId: 'academicBatchId',
+  moduleLessonId: 'moduleLessonId',
+  facultyId: 'facultyId',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AcademicSessionScalarFieldEnum = {
+  id: 'id',
+  academicClassId: 'academicClassId',
+  classModuleId: 'classModuleId',
+  moduleLessonId: 'moduleLessonId',
+  academicBatchId: 'academicBatchId',
+  facultyId: 'facultyId',
+  startedById: 'startedById',
+  status: 'status',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAcademicAttendanceScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  studentId: 'studentId',
+  status: 'status',
+  remarks: 'remarks',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1488,6 +1636,19 @@ exports.AssetStatus = exports.$Enums.AssetStatus = {
   DAMAGED: 'DAMAGED'
 };
 
+exports.AcademicSessionStatus = exports.$Enums.AcademicSessionStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.AcademicAttendanceStatus = exports.$Enums.AcademicAttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  EXCUSED: 'EXCUSED'
+};
+
 exports.Prisma.ModelName = {
   Organization: 'Organization',
   License: 'License',
@@ -1556,7 +1717,19 @@ exports.Prisma.ModelName = {
   ExamRegistration: 'ExamRegistration',
   CommunicationLog: 'CommunicationLog',
   UserFCMToken: 'UserFCMToken',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  Faculty: 'Faculty',
+  AcademicCenter: 'AcademicCenter',
+  AcademicClass: 'AcademicClass',
+  ClassModule: 'ClassModule',
+  ModuleLesson: 'ModuleLesson',
+  LessonFacultyHistory: 'LessonFacultyHistory',
+  ClassMaterial: 'ClassMaterial',
+  AcademicBatch: 'AcademicBatch',
+  StudentBatchTransfer: 'StudentBatchTransfer',
+  BatchLessonAssignment: 'BatchLessonAssignment',
+  AcademicSession: 'AcademicSession',
+  StudentAcademicAttendance: 'StudentAcademicAttendance'
 };
 
 /**
