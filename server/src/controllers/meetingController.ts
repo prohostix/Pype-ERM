@@ -59,7 +59,7 @@ export const getMeetings = async (req: AuthRequest, res: Response) => {
 export const createMeeting = async (req: AuthRequest, res: Response) => {
   try {
     const { organizationId, id: hostId } = req.user!;
-    const { title, agenda, date, time, duration, attendees } = req.body;
+    const { title, agenda, date, time, duration, attendees, type, meetingUrl } = req.body;
 
     if (!organizationId) {
       return res.status(400).json({ message: 'Organization ID is required' });
@@ -74,7 +74,9 @@ export const createMeeting = async (req: AuthRequest, res: Response) => {
         date: new Date(date),
         time,
         duration: duration ? parseInt(duration) : null,
-        attendees: attendees || []
+        attendees: attendees || [],
+        type: type || 'offline',
+        meetingUrl: meetingUrl || null
       },
       include: {
         host: {
@@ -94,7 +96,7 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { role, id: userId } = req.user!;
-    const { title, agenda, date, time, duration, attendees, status, minutes } = req.body;
+    const { title, agenda, date, time, duration, attendees, status, minutes, type, meetingUrl, rescheduleReason, followUps } = req.body;
 
     const meeting = await prisma.meeting.findUnique({ where: { id } });
 
@@ -104,6 +106,36 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
 
     if (meeting.hostId !== userId && role !== 'ceo' && role !== 'org_admin') {
       return res.status(403).json({ message: 'Unauthorized to update this meeting' });
+    }
+
+    let updatedRescheduleHistory = Array.isArray(meeting.rescheduleHistory) ? meeting.rescheduleHistory : [];
+    
+    let dateChanged = false;
+    let timeChanged = false;
+    
+    if (date !== undefined) {
+      const newDateStr = new Date(date).toISOString().split('T')[0];
+      const oldDateStr = new Date(meeting.date).toISOString().split('T')[0];
+      if (newDateStr !== oldDateStr) dateChanged = true;
+    }
+    
+    if (time !== undefined && time !== meeting.time) {
+      timeChanged = true;
+    }
+
+    if (dateChanged || timeChanged) {
+      updatedRescheduleHistory = [
+        ...updatedRescheduleHistory,
+        {
+          oldDate: meeting.date,
+          oldTime: meeting.time,
+          newDate: date ? new Date(date) : meeting.date,
+          newTime: time || meeting.time,
+          reason: rescheduleReason || 'No reason provided',
+          rescheduledBy: userId,
+          timestamp: new Date().toISOString()
+        }
+      ];
     }
 
     const updatedMeeting = await prisma.meeting.update({
@@ -116,7 +148,11 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
         ...(duration !== undefined && { duration: parseInt(duration) }),
         ...(attendees !== undefined && { attendees }),
         ...(status !== undefined && { status }),
-        ...(minutes !== undefined && { minutes })
+        ...(minutes !== undefined && { minutes }),
+        ...(type !== undefined && { type }),
+        ...(meetingUrl !== undefined && { meetingUrl }),
+        ...(followUps !== undefined && { followUps }),
+        rescheduleHistory: updatedRescheduleHistory
       },
       include: {
         host: {

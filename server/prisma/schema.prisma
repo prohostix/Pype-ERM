@@ -857,7 +857,11 @@ model Meeting {
   hostId         String
   attendees      Json         @default("[]")
   status         String       @default("scheduled")
+  type           String       @default("offline")
+  meetingUrl     String?
   minutes        String?
+  rescheduleHistory Json      @default("[]")
+  followUps      Json         @default("[]")
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   host           User         @relation("MeetingHost", fields: [hostId], references: [id])

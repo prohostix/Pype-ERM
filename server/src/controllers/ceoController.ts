@@ -26,6 +26,110 @@ export const handleEscalation = asyncHandler(async (req: AuthRequest, res: Respo
   res.json({ success: true, data: escalation });
 });
 
+export const getSalesDetails = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+  const enrollments = await prisma.enrollment.findMany({
+    where: {
+      organizationId: orgId,
+      createdAt: { gte: thirtyDaysAgo }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  const grouped: Record<string, number> = {};
+  enrollments.forEach(e => {
+    const dateStr = e.createdAt.toISOString().split('T')[0];
+    grouped[dateStr] = (grouped[dateStr] || 0) + 1;
+  });
+
+  const salesPerDay = Object.keys(grouped).map(date => ({ date, count: grouped[date] }));
+
+  res.json({ success: true, data: { salesPerDay, details: enrollments } });
+});
+
+export const getRevenueDetails = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+  const payments = await prisma.paymentEntry.findMany({
+    where: {
+      organizationId: orgId,
+      receivedAt: { gte: thirtyDaysAgo }
+    },
+    select: { amount: true, receivedAt: true }
+  });
+
+  const grouped: Record<string, number> = {};
+  payments.forEach(p => {
+    const dateStr = p.receivedAt.toISOString().split('T')[0];
+    grouped[dateStr] = (grouped[dateStr] || 0) + p.amount;
+  });
+
+  const revenuePerDate = Object.keys(grouped).map(date => ({ date, revenue: grouped[date] }));
+
+  res.json({ success: true, data: { revenuePerDate } });
+});
+
+export const getAdmissionsList = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 20;
+  const skip = (page - 1) * limit;
+
+  const [totalCount, students] = await Promise.all([
+    prisma.student.count({ where: { organizationId: orgId } }),
+    prisma.student.findMany({
+      where: { organizationId: orgId },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit
+    })
+  ]);
+
+  res.json({
+    success: true,
+    data: students,
+    totalCount,
+    currentPage: page,
+    totalPages: Math.ceil(totalCount / limit)
+  });
+});
+
+export const getPendingInvoicesList = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 20;
+  const skip = (page - 1) * limit;
+
+  const [totalCount, invoices] = await Promise.all([
+    prisma.invoice.count({ where: { organizationId: orgId, status: 'draft' } }),
+    prisma.invoice.findMany({
+      where: { organizationId: orgId, status: 'draft' },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+      include: {
+        student: { select: { id: true, name: true, email: true } },
+        center: { select: { id: true, name: true } }
+      }
+    })
+  ]);
+
+  res.json({
+    success: true,
+    data: invoices,
+    totalCount,
+    currentPage: page,
+    totalPages: Math.ceil(totalCount / limit)
+  });
+});
+
 export const getAnalytics = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
   const [totalStudents, totalCenters, activePrograms] = await Promise.all([
@@ -85,4 +189,85 @@ export const getActivityLogs = asyncHandler(async (req: AuthRequest, res: Respon
     take: 500
   });
   res.json({ success: true, count: logs.length, data: logs });
+});
+
+export const getSalesCounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  sevenDaysAgo.setHours(0, 0, 0, 0);
+
+  const [totalSales, revenueAgg, totalAdmission, totalPendingPayments] = await Promise.all([
+    prisma.enrollment.count({ where: { organizationId: orgId, createdAt: { gte: sevenDaysAgo } } }),
+    prisma.paymentEntry.aggregate({ where: { organizationId: orgId, receivedAt: { gte: sevenDaysAgo } }, _sum: { amount: true } }),
+    prisma.student.count({ where: { organizationId: orgId, createdAt: { gte: sevenDaysAgo } } }),
+    prisma.invoice.count({ where: { organizationId: orgId, status: 'draft', createdAt: { gte: sevenDaysAgo } } })
+  ]);
+  
+  const totalRevenue = revenueAgg._sum.amount || 0;
+  
+  res.json({ success: true, data: { totalSales, totalRevenue, totalAdmission, totalPendingPayments } });
+});
+
+export const getOverallSalesCounts = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  
+  const [totalSales, revenueAgg, totalAdmission, totalPendingPayments] = await Promise.all([
+    prisma.enrollment.count({ where: { organizationId: orgId } }),
+    prisma.paymentEntry.aggregate({ where: { organizationId: orgId }, _sum: { amount: true } }),
+    prisma.student.count({ where: { organizationId: orgId } }),
+    prisma.invoice.count({ where: { organizationId: orgId, status: 'draft' } })
+  ]);
+  
+  const totalRevenue = revenueAgg._sum.amount || 0;
+  
+  res.json({ success: true, data: { totalSales, totalRevenue, totalAdmission, totalPendingPayments } });
+});
+
+export const getRevenueTrend = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  
+  // Calculate date 7 days ago
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  sevenDaysAgo.setHours(0, 0, 0, 0);
+
+  const payments = await prisma.paymentEntry.findMany({
+    where: {
+      organizationId: orgId,
+      receivedAt: {
+        gte: sevenDaysAgo,
+      }
+    },
+    select: {
+      amount: true,
+      receivedAt: true
+    }
+  });
+
+  const trend: Record<string, number> = {};
+  
+  // Initialize last 7 days with 0
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().split('T')[0];
+    trend[dateStr] = 0;
+  }
+
+  // Aggregate payments by day
+  payments.forEach(p => {
+    const dateStr = p.receivedAt.toISOString().split('T')[0];
+    if (trend[dateStr] !== undefined) {
+      trend[dateStr] += p.amount;
+    }
+  });
+
+  const result = Object.keys(trend).map(date => ({
+    date,
+    revenue: trend[date]
+  }));
+
+  res.json({ success: true, data: result });
 });

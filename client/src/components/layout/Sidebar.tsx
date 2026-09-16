@@ -271,12 +271,12 @@ const navItems: NavItem[] = [
     id: 'employee',
     label: 'My Workspace',
     icon: Briefcase,
-    roles: ['employee'],
+    roles: ['employee', 'hr_admin', 'hr_sub_admin'],
     children: [
-      { id: 'my-tasks', label: 'My Tasks', icon: CheckSquare, roles: ['employee'] },
-      { id: 'my-attendance', label: 'Attendance', icon: Calendar, roles: ['employee'] },
-      { id: 'my-leaves', label: 'Apply Leave', icon: Calendar, roles: ['employee'] },
-      { id: 'my-complaints', label: 'Complaints', icon: MessageSquare, roles: ['employee'] },
+      { id: 'my-tasks', label: 'My Tasks', icon: CheckSquare, roles: ['employee', 'hr_admin', 'hr_sub_admin'] },
+      { id: 'my-attendance', label: 'Attendance', icon: Calendar, roles: ['employee', 'hr_admin', 'hr_sub_admin'] },
+      { id: 'my-leaves', label: 'Apply Leave', icon: Calendar, roles: ['employee', 'hr_admin', 'hr_sub_admin'] },
+      { id: 'my-complaints', label: 'Complaints', icon: MessageSquare, roles: ['employee', 'hr_admin', 'hr_sub_admin'] },
     ],
   },
   {

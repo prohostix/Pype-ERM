@@ -1135,6 +1135,84 @@ export const getAttendanceByUserId = asyncHandler(async (req: AuthRequest, res: 
   res.status(200).json({ success: true, count: attendances.length, data: attendances });
 });
 
+export const getMonthlyAttendanceSummary = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { userId } = req.params;
+  
+  // Authorization check
+  const isSelf = req.user.id === userId;
+  const isPrivileged = ['hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'].includes(req.user.role);
+  
+  if (!isSelf && !isPrivileged) {
+    res.status(403).json({ success: false, message: "Not authorized to view this user's attendance" });
+    return;
+  }
+
+  const { month, year } = req.query;
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const targetYear = year ? parseInt(year as string, 10) : currentYear;
+  const targetMonth = month ? parseInt(month as string, 10) : currentMonth;
+
+  // Calculate start and end dates for the month
+  const startDate = new Date(targetYear, targetMonth - 1, 1);
+  const endDate = new Date(targetYear, targetMonth, 0, 23, 59, 59, 999);
+
+  const where: any = {
+    employeeId: userId,
+    date: {
+      gte: startDate,
+      lte: endDate
+    }
+  };
+
+  if (req.user.organizationId) {
+    where.organizationId = req.user.organizationId;
+  }
+
+  // Fetch the user information (for avatar/image)
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      avatar: true,
+      role: true,
+    }
+  });
+
+  const attendances = await prisma.attendance.findMany({
+    where,
+    orderBy: { date: 'asc' }
+  });
+
+  const stats = {
+    present: 0,
+    absent: 0,
+    halfDay: 0,
+    late: 0,
+    leaves: 0
+  };
+
+  attendances.forEach(record => {
+    if (record.status === 'present') stats.present++;
+    else if (record.status === 'absent') stats.absent++;
+    else if (record.status === 'half_day') stats.halfDay++;
+    else if (record.status === 'on_leave') stats.leaves++;
+    
+    if (record.isLate) stats.late++;
+  });
+
+  res.status(200).json({ 
+    success: true, 
+    data: {
+      user,
+      stats,
+      attendanceData: attendances
+    } 
+  });
+});
 
 // ==========================================
 // OFFLINE PUNCH API IMPLEMENTATION

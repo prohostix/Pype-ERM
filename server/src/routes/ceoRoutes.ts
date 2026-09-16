@@ -11,6 +11,13 @@ import {
   getCenterOnboardingOverview,
   getStudentEnrollmentOverview,
   getActivityLogs,
+  getSalesCounts,
+  getOverallSalesCounts,
+  getRevenueTrend,
+  getSalesDetails,
+  getRevenueDetails,
+  getAdmissionsList,
+  getPendingInvoicesList,
 } from '../controllers/ceoController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -23,6 +30,14 @@ router.use(protect);
 router.get('/metrics/performance', authorize('ceo', 'general_manager'), getPerformanceMetrics);
 router.get('/metrics/risk', authorize('ceo', 'general_manager'), getRiskMetrics);
 router.get('/analytics', authorize('ceo', 'general_manager'), getAnalytics);
+router.get('/sales-counts', authorize('ceo', 'general_manager'), getSalesCounts);
+router.get('/overall-sales-counts', authorize('ceo', 'general_manager'), getOverallSalesCounts);
+router.get('/revenue-trend', authorize('ceo', 'general_manager'), getRevenueTrend);
+
+router.get('/sales-details', authorize('ceo', 'general_manager'), getSalesDetails);
+router.get('/revenue-details', authorize('ceo', 'general_manager'), getRevenueDetails);
+router.get('/admissions-list', authorize('ceo', 'general_manager'), getAdmissionsList);
+router.get('/pending-invoices', authorize('ceo', 'general_manager'), getPendingInvoicesList);
 
 // Center onboarding & enrollment overview
 router.get('/center-onboarding', authorize('ceo', 'general_manager'), getCenterOnboardingOverview);

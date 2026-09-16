@@ -591,7 +591,11 @@ exports.Prisma.MeetingScalarFieldEnum = {
   hostId: 'hostId',
   attendees: 'attendees',
   status: 'status',
+  type: 'type',
+  meetingUrl: 'meetingUrl',
   minutes: 'minutes',
+  rescheduleHistory: 'rescheduleHistory',
+  followUps: 'followUps',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

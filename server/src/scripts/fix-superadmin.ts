@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 
 async function main() {
   const email = 'superadmin@erp.com';
-  const newPassword = 'Admin@1234';
+  const newPassword = 'worldbesterm';
   
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(newPassword, salt);

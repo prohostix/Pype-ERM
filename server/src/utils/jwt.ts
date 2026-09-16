@@ -8,13 +8,15 @@ function requireEnv(key: string): string {
 
 export const generateToken = (id: string): string => {
   const secret = requireEnv('JWT_SECRET');
-  const options: SignOptions = {};
+  // Set expiresIn to a very long time (100 years) so the token practically never expires
+  const options: SignOptions = { expiresIn: '100y' };
   return jwt.sign({ id }, secret, options);
 };
 
 export const generateRefreshToken = (id: string): string => {
   const secret = requireEnv('JWT_REFRESH_SECRET');
-  const options: SignOptions = {};
+  // Set expiresIn to a very long time (100 years) so the refresh token practically never expires
+  const options: SignOptions = { expiresIn: '100y' };
   return jwt.sign({ id }, secret, options);
 };
 

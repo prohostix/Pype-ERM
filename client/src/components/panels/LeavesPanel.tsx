@@ -209,7 +209,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
             <RefreshCw className={cn('w-4 h-4 mr-2 text-muted-foreground', loading && 'animate-spin')} />
             Refresh
           </Button>
-          {!isHR && (
+          {(!isHR || isMyPortal) && (
             <Button size="sm" onClick={() => setCreateOpen(true)} className="rounded-xl shadow-md h-10 px-4 transition-transform hover:scale-105 active:scale-95">
               <Plus className="w-4 h-4 mr-2" />
               New Request

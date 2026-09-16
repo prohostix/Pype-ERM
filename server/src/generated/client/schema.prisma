@@ -847,21 +847,25 @@ model Designation {
 }
 
 model Meeting {
-  id             String       @id @default(uuid())
-  organizationId String
-  title          String?
-  agenda         String
-  date           DateTime
-  time           String
-  duration       Int?
-  hostId         String
-  attendees      Json         @default("[]")
-  status         String       @default("scheduled")
-  minutes        String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  host           User         @relation("MeetingHost", fields: [hostId], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id                String       @id @default(uuid())
+  organizationId    String
+  title             String?
+  agenda            String
+  date              DateTime
+  time              String
+  duration          Int?
+  hostId            String
+  attendees         Json         @default("[]")
+  status            String       @default("scheduled")
+  type              String       @default("offline")
+  meetingUrl        String?
+  minutes           String?
+  rescheduleHistory Json         @default("[]")
+  followUps         Json         @default("[]")
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  host              User         @relation("MeetingHost", fields: [hostId], references: [id])
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId, date])
   @@index([hostId])

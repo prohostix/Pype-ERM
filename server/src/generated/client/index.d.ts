@@ -48047,6 +48047,8 @@ export namespace Prisma {
     duration: number | null
     hostId: string | null
     status: string | null
+    type: string | null
+    meetingUrl: string | null
     minutes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -48062,6 +48064,8 @@ export namespace Prisma {
     duration: number | null
     hostId: string | null
     status: string | null
+    type: string | null
+    meetingUrl: string | null
     minutes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -48078,7 +48082,11 @@ export namespace Prisma {
     hostId: number
     attendees: number
     status: number
+    type: number
+    meetingUrl: number
     minutes: number
+    rescheduleHistory: number
+    followUps: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -48103,6 +48111,8 @@ export namespace Prisma {
     duration?: true
     hostId?: true
     status?: true
+    type?: true
+    meetingUrl?: true
     minutes?: true
     createdAt?: true
     updatedAt?: true
@@ -48118,6 +48128,8 @@ export namespace Prisma {
     duration?: true
     hostId?: true
     status?: true
+    type?: true
+    meetingUrl?: true
     minutes?: true
     createdAt?: true
     updatedAt?: true
@@ -48134,7 +48146,11 @@ export namespace Prisma {
     hostId?: true
     attendees?: true
     status?: true
+    type?: true
+    meetingUrl?: true
     minutes?: true
+    rescheduleHistory?: true
+    followUps?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -48237,7 +48253,11 @@ export namespace Prisma {
     hostId: string
     attendees: JsonValue
     status: string
+    type: string
+    meetingUrl: string | null
     minutes: string | null
+    rescheduleHistory: JsonValue
+    followUps: JsonValue
     createdAt: Date
     updatedAt: Date
     _count: MeetingCountAggregateOutputType | null
@@ -48272,7 +48292,11 @@ export namespace Prisma {
     hostId?: boolean
     attendees?: boolean
     status?: boolean
+    type?: boolean
+    meetingUrl?: boolean
     minutes?: boolean
+    rescheduleHistory?: boolean
+    followUps?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     host?: boolean | UserDefaultArgs<ExtArgs>
@@ -48290,7 +48314,11 @@ export namespace Prisma {
     hostId?: boolean
     attendees?: boolean
     status?: boolean
+    type?: boolean
+    meetingUrl?: boolean
     minutes?: boolean
+    rescheduleHistory?: boolean
+    followUps?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     host?: boolean | UserDefaultArgs<ExtArgs>
@@ -48308,7 +48336,11 @@ export namespace Prisma {
     hostId?: boolean
     attendees?: boolean
     status?: boolean
+    type?: boolean
+    meetingUrl?: boolean
     minutes?: boolean
+    rescheduleHistory?: boolean
+    followUps?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     host?: boolean | UserDefaultArgs<ExtArgs>
@@ -48326,12 +48358,16 @@ export namespace Prisma {
     hostId?: boolean
     attendees?: boolean
     status?: boolean
+    type?: boolean
+    meetingUrl?: boolean
     minutes?: boolean
+    rescheduleHistory?: boolean
+    followUps?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "title" | "agenda" | "date" | "time" | "duration" | "hostId" | "attendees" | "status" | "minutes" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "title" | "agenda" | "date" | "time" | "duration" | "hostId" | "attendees" | "status" | "type" | "meetingUrl" | "minutes" | "rescheduleHistory" | "followUps" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
   export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     host?: boolean | UserDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -48362,7 +48398,11 @@ export namespace Prisma {
       hostId: string
       attendees: Prisma.JsonValue
       status: string
+      type: string
+      meetingUrl: string | null
       minutes: string | null
+      rescheduleHistory: Prisma.JsonValue
+      followUps: Prisma.JsonValue
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["meeting"]>
@@ -48800,7 +48840,11 @@ export namespace Prisma {
     readonly hostId: FieldRef<"Meeting", 'String'>
     readonly attendees: FieldRef<"Meeting", 'Json'>
     readonly status: FieldRef<"Meeting", 'String'>
+    readonly type: FieldRef<"Meeting", 'String'>
+    readonly meetingUrl: FieldRef<"Meeting", 'String'>
     readonly minutes: FieldRef<"Meeting", 'String'>
+    readonly rescheduleHistory: FieldRef<"Meeting", 'Json'>
+    readonly followUps: FieldRef<"Meeting", 'Json'>
     readonly createdAt: FieldRef<"Meeting", 'DateTime'>
     readonly updatedAt: FieldRef<"Meeting", 'DateTime'>
   }
@@ -116621,7 +116665,11 @@ export namespace Prisma {
     hostId: 'hostId',
     attendees: 'attendees',
     status: 'status',
+    type: 'type',
+    meetingUrl: 'meetingUrl',
     minutes: 'minutes',
+    rescheduleHistory: 'rescheduleHistory',
+    followUps: 'followUps',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -121667,7 +121715,11 @@ export namespace Prisma {
     hostId?: StringFilter<"Meeting"> | string
     attendees?: JsonFilter<"Meeting">
     status?: StringFilter<"Meeting"> | string
+    type?: StringFilter<"Meeting"> | string
+    meetingUrl?: StringNullableFilter<"Meeting"> | string | null
     minutes?: StringNullableFilter<"Meeting"> | string | null
+    rescheduleHistory?: JsonFilter<"Meeting">
+    followUps?: JsonFilter<"Meeting">
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
     host?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -121685,7 +121737,11 @@ export namespace Prisma {
     hostId?: SortOrder
     attendees?: SortOrder
     status?: SortOrder
+    type?: SortOrder
+    meetingUrl?: SortOrderInput | SortOrder
     minutes?: SortOrderInput | SortOrder
+    rescheduleHistory?: SortOrder
+    followUps?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     host?: UserOrderByWithRelationInput
@@ -121706,7 +121762,11 @@ export namespace Prisma {
     hostId?: StringFilter<"Meeting"> | string
     attendees?: JsonFilter<"Meeting">
     status?: StringFilter<"Meeting"> | string
+    type?: StringFilter<"Meeting"> | string
+    meetingUrl?: StringNullableFilter<"Meeting"> | string | null
     minutes?: StringNullableFilter<"Meeting"> | string | null
+    rescheduleHistory?: JsonFilter<"Meeting">
+    followUps?: JsonFilter<"Meeting">
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
     host?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -121724,7 +121784,11 @@ export namespace Prisma {
     hostId?: SortOrder
     attendees?: SortOrder
     status?: SortOrder
+    type?: SortOrder
+    meetingUrl?: SortOrderInput | SortOrder
     minutes?: SortOrderInput | SortOrder
+    rescheduleHistory?: SortOrder
+    followUps?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MeetingCountOrderByAggregateInput
@@ -121748,7 +121812,11 @@ export namespace Prisma {
     hostId?: StringWithAggregatesFilter<"Meeting"> | string
     attendees?: JsonWithAggregatesFilter<"Meeting">
     status?: StringWithAggregatesFilter<"Meeting"> | string
+    type?: StringWithAggregatesFilter<"Meeting"> | string
+    meetingUrl?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
     minutes?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
+    rescheduleHistory?: JsonWithAggregatesFilter<"Meeting">
+    followUps?: JsonWithAggregatesFilter<"Meeting">
     createdAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
   }
@@ -131200,7 +131268,11 @@ export namespace Prisma {
     duration?: number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutHostedMeetingsInput
@@ -131218,7 +131290,11 @@ export namespace Prisma {
     hostId: string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -131232,7 +131308,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutHostedMeetingsNestedInput
@@ -131250,7 +131330,11 @@ export namespace Prisma {
     hostId?: StringFieldUpdateOperationsInput | string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -131266,7 +131350,11 @@ export namespace Prisma {
     hostId: string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -131280,7 +131368,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -131296,7 +131388,11 @@ export namespace Prisma {
     hostId?: StringFieldUpdateOperationsInput | string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -139985,7 +140081,11 @@ export namespace Prisma {
     hostId?: SortOrder
     attendees?: SortOrder
     status?: SortOrder
+    type?: SortOrder
+    meetingUrl?: SortOrder
     minutes?: SortOrder
+    rescheduleHistory?: SortOrder
+    followUps?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -140004,6 +140104,8 @@ export namespace Prisma {
     duration?: SortOrder
     hostId?: SortOrder
     status?: SortOrder
+    type?: SortOrder
+    meetingUrl?: SortOrder
     minutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -140019,6 +140121,8 @@ export namespace Prisma {
     duration?: SortOrder
     hostId?: SortOrder
     status?: SortOrder
+    type?: SortOrder
+    meetingUrl?: SortOrder
     minutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -159773,7 +159877,11 @@ export namespace Prisma {
     duration?: number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutHostedMeetingsInput
@@ -159789,7 +159897,11 @@ export namespace Prisma {
     hostId: string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -162848,7 +162960,11 @@ export namespace Prisma {
     hostId?: StringFilter<"Meeting"> | string
     attendees?: JsonFilter<"Meeting">
     status?: StringFilter<"Meeting"> | string
+    type?: StringFilter<"Meeting"> | string
+    meetingUrl?: StringNullableFilter<"Meeting"> | string | null
     minutes?: StringNullableFilter<"Meeting"> | string | null
+    rescheduleHistory?: JsonFilter<"Meeting">
+    followUps?: JsonFilter<"Meeting">
     createdAt?: DateTimeFilter<"Meeting"> | Date | string
     updatedAt?: DateTimeFilter<"Meeting"> | Date | string
   }
@@ -168744,7 +168860,11 @@ export namespace Prisma {
     duration?: number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutMeetingsInput
@@ -168760,7 +168880,11 @@ export namespace Prisma {
     duration?: number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -253923,7 +254047,11 @@ export namespace Prisma {
     hostId: string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -256137,7 +256265,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutHostedMeetingsNestedInput
@@ -256153,7 +256285,11 @@ export namespace Prisma {
     hostId?: StringFieldUpdateOperationsInput | string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -256168,7 +256304,11 @@ export namespace Prisma {
     hostId?: StringFieldUpdateOperationsInput | string
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -260226,7 +260366,11 @@ export namespace Prisma {
     duration?: number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: string
+    type?: string
+    meetingUrl?: string | null
     minutes?: string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -263376,7 +263520,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutMeetingsNestedInput
@@ -263392,7 +263540,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -263407,7 +263559,11 @@ export namespace Prisma {
     duration?: NullableIntFieldUpdateOperationsInput | number | null
     attendees?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    meetingUrl?: NullableStringFieldUpdateOperationsInput | string | null
     minutes?: NullableStringFieldUpdateOperationsInput | string | null
+    rescheduleHistory?: JsonNullValueInput | InputJsonValue
+    followUps?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

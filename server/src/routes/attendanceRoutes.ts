@@ -15,6 +15,7 @@ import {
   getPunchConfig,
   syncOfflinePunches,
   getAttendanceByUserId,
+  getMonthlyAttendanceSummary,
   getAttendanceStats,
 } from '../controllers/attendanceController.js';
 
@@ -38,6 +39,7 @@ router.post('/punch-out', protect, punchOut);
 router.get('/today', protect, getTodayAttendance);
 router.get('/late-summary', protect, getMonthlyLateSummary);
 router.get('/user/:userId', protect, getAttendanceByUserId);
+router.get('/user/:userId/monthly-summary', protect, getMonthlyAttendanceSummary);
 
 // HR routes - view all attendances
 router.get('/stats', protect, authorize('hr_admin', 'hr_sub_admin', 'superadmin'), getAttendanceStats);
