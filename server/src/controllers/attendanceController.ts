@@ -1199,7 +1199,7 @@ export const getMonthlyAttendanceSummary = asyncHandler(async (req: AuthRequest,
     if (record.status === 'present') stats.present++;
     else if (record.status === 'absent') stats.absent++;
     else if (record.status === 'half_day') stats.halfDay++;
-    else if (record.status === 'on_leave') stats.leaves++;
+    else if (record.status === 'leave') stats.leaves++;
     
     if (record.isLate) stats.late++;
   });

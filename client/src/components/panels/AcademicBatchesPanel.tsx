@@ -241,14 +241,8 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
             </p>
           </div>
         </div>
-        {canWrite && (
-          <div className="flex gap-2">
-            <Button onClick={openHistoryModal} variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50">
-              <History className="w-4 h-4 mr-2" /> Transfer History
-            </Button>
-          </div>
-        )}
-        {!canWrite && canAllocate && (
+        
+        {isPrincipal && (
           <div className="flex gap-2">
             <Button onClick={openHistoryModal} variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50">
               <History className="w-4 h-4 mr-2" /> Transfer History

@@ -127,9 +127,9 @@ export const updateMeeting = async (req: AuthRequest, res: Response) => {
       updatedRescheduleHistory = [
         ...updatedRescheduleHistory,
         {
-          oldDate: meeting.date,
+          oldDate: meeting.date instanceof Date ? meeting.date.toISOString() : meeting.date,
           oldTime: meeting.time,
-          newDate: date ? new Date(date) : meeting.date,
+          newDate: date ? new Date(date).toISOString() : (meeting.date instanceof Date ? meeting.date.toISOString() : meeting.date),
           newTime: time || meeting.time,
           reason: rescheduleReason || 'No reason provided',
           rescheduledBy: userId,
