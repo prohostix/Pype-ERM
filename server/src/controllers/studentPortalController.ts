@@ -120,7 +120,13 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
                 orderBy: { order: 'asc' },
                 include: {
                   materials: true,
-                  academicSessions: true
+                  academicSessions: {
+                    include: {
+                      attendances: {
+                        where: { studentId: student.id }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -141,12 +147,18 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
       title: mod.title,
       description: mod.description,
       lessons: mod.lessons.map((lesson: any) => {
-        const isCompleted = lesson.academicSessions.some((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
+        const session = lesson.academicSessions.find((s: any) => s.status === 'COMPLETED' && s.academicBatchId === batch.id);
+        const isCompleted = !!session;
+        const myAttendance = session?.attendances?.[0] || null;
         return {
           id: lesson.id,
           title: lesson.title,
           description: lesson.description,
           isCompleted,
+          sessionId: session?.id || null,
+          myRating: myAttendance?.rating || null,
+          myReview: myAttendance?.review || null,
+          canRate: isCompleted && myAttendance,
           materials: isCompleted ? lesson.materials : []
         };
       })
@@ -265,3 +277,39 @@ export const submitReferral = asyncHandler(async (req: AuthRequest, res: Respons
 
   res.status(201).json({ success: true, data: lead });
 });
+
+// POST /student-portal/sessions/:sessionId/rate
+export const rateSession = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { sessionId } = req.params;
+  const { rating, review } = req.body;
+  const student = await getLinkedStudent(req.user.id);
+
+  if (!student) {
+    return res.status(404).json({ success: false, message: 'No student record found linked to your account' });
+  }
+
+  if (typeof rating !== 'number' || rating < 1 || rating > 5) {
+    return res.status(400).json({ success: false, message: 'Rating must be an integer between 1 and 5' });
+  }
+
+  const attendanceRecord = await prisma.studentAcademicAttendance.findUnique({
+    where: {
+      sessionId_studentId: {
+        sessionId,
+        studentId: student.id
+      }
+    }
+  });
+
+  if (!attendanceRecord) {
+    return res.status(404).json({ success: false, message: 'You are not a participant in this session or attendance has not been recorded yet.' });
+  }
+
+  const updatedRecord = await prisma.studentAcademicAttendance.update({
+    where: { id: attendanceRecord.id },
+    data: { rating, review }
+  });
+
+  res.json({ success: true, message: 'Thank you for rating this session!', data: updatedRecord });
+});
+

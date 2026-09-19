@@ -1,0 +1,10 @@
+import prisma from './src/lib/prisma.js';
+
+async function main() {
+  const org = await prisma.organization.findFirst({
+    where: { name: { contains: 'Medugare', mode: 'insensitive' } }
+  });
+  console.log(JSON.stringify(org, null, 2));
+}
+
+main().catch(console.error).finally(() => prisma.$disconnect());

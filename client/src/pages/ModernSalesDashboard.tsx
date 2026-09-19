@@ -24,6 +24,7 @@ import { SubSalesPortalPanel } from '@/components/panels/SubSalesPortalPanel';
 import { TeamPerformancePanel } from '@/components/panels/TeamPerformancePanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { EnrollStudentPanel } from '@/components/panels/EnrollStudentPanel';
+import { ProvisionalEnrollmentPanel } from '@/components/panels/ProvisionalEnrollmentPanel';
 import { EmployeeActivityReportPanel } from '@/components/panels/EmployeeActivityReportPanel';
 import { LeadsPanel } from '@/components/panels/LeadsPanel';
 import { CEOKPIReportPanel } from '@/components/panels/CEOKPIReportPanel';
@@ -112,6 +113,7 @@ export function ModernSalesDashboard({ initialTab, isSubDeptManager, onNavigate 
 
       // Enrollment
       case 'team_student_registration': return <EnrollStudentPanel />;
+      case 'provisional_enrollment': return <ProvisionalEnrollmentPanel />;
       case 'team_enrolled_students':
       case 'enrolled_students':
       case 'student_status': return <StudentsPanel />;
@@ -225,6 +227,7 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
       { id: '__enrollment', label: 'Enrollment', isSection: true },
       { id: 'invite_links', label: 'Generate Student Link' },
+      { id: 'provisional_enrollment', label: 'Provisional Enrollment' },
       { id: 'admission_pipeline', label: 'Admission Pipeline' },
       { id: 'student_status', label: 'Student Status' },
       { id: 'payment_status', label: 'Payment Status' },
@@ -284,6 +287,7 @@ export function getSalesNavItems(isSalesAdmin?: boolean) {
 
     { id: '__pipeline', label: 'Student Pipeline', isSection: true },
     { id: 'invite_links', label: 'Generate Student Link' },
+    { id: 'provisional_enrollment', label: 'Provisional Enrollment' },
     { id: 'admission_status_overview', label: 'Admission Status Overview' },
 
     { id: '__tasks', label: 'Tasks', isSection: true },
@@ -827,6 +831,7 @@ function SalesEmployeePortal({ initialTab, user, onNavigate }: { initialTab?: st
           case 'document_status': return <SalesStudentPipelinePanel />;
           case 'create_student':
           case 'team_student_registration': return <EnrollStudentPanel />;
+          case 'provisional_enrollment': return <ProvisionalEnrollmentPanel />;
 
           // Targets & Performance
           case 'targets':

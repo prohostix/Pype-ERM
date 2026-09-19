@@ -32,6 +32,7 @@ import { LeavesPanel } from '@/components/panels/LeavesPanel';
 import { FinanceCenterVerificationPanel } from '@/components/panels/FinanceCenterVerificationPanel';
 import { WalletTopUpsPanel } from '@/components/panels/WalletTopUpsPanel';
 import { FinanceEnrollmentsPanel } from '@/components/panels/FinanceEnrollmentsPanel';
+import { ProvisionalFinancePanel } from '@/components/panels/ProvisionalFinancePanel';
 import { IncomeExpenditurePanel } from '@/components/panels/IncomeExpenditurePanel';
 import { ProfitLossPanel } from '@/components/panels/ProfitLossPanel';
 import { FinanceSalaryApprovalPanel } from '@/components/panels/FinanceSalaryApprovalPanel';
@@ -93,6 +94,7 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'students': return <StudentsPanel />;
       case 'admissions': return <AdmissionSessionsPanel />;
       case 'enrollments': return <FinanceEnrollmentsPanel />;
+      case 'provisional_verifications': return <ProvisionalFinancePanel />;
       
       case 'sales_target': return <FinanceSalesTargetsPanel />;
       case 'my_target': return <TargetsPanel endpoint="/finance/targets" title="My Finance Targets" />;
@@ -151,6 +153,7 @@ export function getFinanceNavItems() {
     { id: 'students', label: 'Students' },
     { id: 'admissions', label: 'Admissions' },
     { id: 'enrollments', label: 'Enrollments' },
+    { id: 'provisional_verifications', label: 'Provisional Verifications' },
     
     { id: '__targets_section', label: '🎯 Targets', isSection: true },
     { id: 'sales_target', label: 'Sales Target' },

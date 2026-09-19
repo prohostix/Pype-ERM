@@ -9,6 +9,8 @@ import {
   getMyCenterStatus,
   submitMyCenterPayment,
   uploadReceipt,
+  completeProvisionalEnrollment,
+  getMyProvisionalEnrollments
 } from '../controllers/enrollmentController.js';
 import {
   getDeptReviewEnrollments,
@@ -33,11 +35,13 @@ router.get('/wallet/topups', authorize('center_admin', 'sales_admin', 'sales_sub
 router.get('/programs', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getEnrollablePrograms);
 router.post('/enroll', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), createEnrollment);
 router.get('/enrollments', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getMyEnrollments);
+router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getMyProvisionalEnrollments);
 
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);
 router.post('/submit-payment', authorize('center_admin'), upload.single('proofFile'), submitMyCenterPayment);
 router.post('/:id/receipt', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), upload.single('receipt'), uploadReceipt);
+router.put('/:id/provisional-complete', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), completeProvisionalEnrollment);
 
 // Dept/Sub-dept manager review routes
 router.get('/review', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'ceo', 'general_manager'), getDeptReviewEnrollments);

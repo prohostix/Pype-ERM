@@ -7,7 +7,8 @@ import {
   registerClassAttendance,
   getStudentFees,
   getStudentInvoices,
-  submitReferral
+  submitReferral,
+  rateSession
 } from '../controllers/studentPortalController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -21,6 +22,7 @@ router.get('/notifications', getStudentNotifications);
 router.get('/materials', getStudentMaterials);
 router.get('/classes', getStudentClasses);
 router.post('/classes/:classId/attendance', registerClassAttendance);
+router.post('/sessions/:sessionId/rate', rateSession);
 router.get('/fees', getStudentFees);
 router.get('/invoices', getStudentInvoices);
 router.post('/refer', submitReferral);

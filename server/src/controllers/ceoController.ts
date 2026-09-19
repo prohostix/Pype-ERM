@@ -194,15 +194,15 @@ export const getActivityLogs = asyncHandler(async (req: AuthRequest, res: Respon
 export const getSalesCounts = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
   
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  sevenDaysAgo.setHours(0, 0, 0, 0);
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
 
   const [totalSales, revenueAgg, totalAdmission, totalPendingPayments] = await Promise.all([
-    prisma.enrollment.count({ where: { organizationId: orgId, createdAt: { gte: sevenDaysAgo } } }),
-    prisma.paymentEntry.aggregate({ where: { organizationId: orgId, receivedAt: { gte: sevenDaysAgo } }, _sum: { amount: true } }),
-    prisma.student.count({ where: { organizationId: orgId, createdAt: { gte: sevenDaysAgo } } }),
-    prisma.invoice.count({ where: { organizationId: orgId, status: 'draft', createdAt: { gte: sevenDaysAgo } } })
+    prisma.enrollment.count({ where: { organizationId: orgId, createdAt: { gte: thirtyDaysAgo } } }),
+    prisma.paymentEntry.aggregate({ where: { organizationId: orgId, receivedAt: { gte: thirtyDaysAgo } }, _sum: { amount: true } }),
+    prisma.student.count({ where: { organizationId: orgId, createdAt: { gte: thirtyDaysAgo } } }),
+    prisma.invoice.count({ where: { organizationId: orgId, status: 'draft', createdAt: { gte: thirtyDaysAgo } } })
   ]);
   
   const totalRevenue = revenueAgg._sum.amount || 0;
@@ -228,16 +228,16 @@ export const getOverallSalesCounts = asyncHandler(async (req: AuthRequest, res: 
 export const getRevenueTrend = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
   
-  // Calculate date 7 days ago
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  sevenDaysAgo.setHours(0, 0, 0, 0);
+  // Calculate date 30 days ago
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  thirtyDaysAgo.setHours(0, 0, 0, 0);
 
   const payments = await prisma.paymentEntry.findMany({
     where: {
       organizationId: orgId,
       receivedAt: {
-        gte: sevenDaysAgo,
+        gte: thirtyDaysAgo,
       }
     },
     select: {
@@ -248,8 +248,8 @@ export const getRevenueTrend = asyncHandler(async (req: AuthRequest, res: Respon
 
   const trend: Record<string, number> = {};
   
-  // Initialize last 7 days with 0
-  for (let i = 6; i >= 0; i--) {
+  // Initialize last 30 days with 0
+  for (let i = 29; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
     const dateStr = d.toISOString().split('T')[0];

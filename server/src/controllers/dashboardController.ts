@@ -420,3 +420,96 @@ export const getFinanceOverviewMetrics = asyncHandler(async (req: AuthRequest, r
     }
   });
 });
+
+export const getSalesOverviewMetrics = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.organizationId;
+  const userId = req.user.id;
+
+  const today = new Date();
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  // 1. Team and My Targets for this month
+  const targets = await prisma.target.findMany({
+    where: { 
+      organizationId: orgId,
+      createdAt: { gte: startOfMonth }
+    }
+  });
+  
+  let teamTarget = 0;
+  let myTarget = 0;
+  
+  targets.forEach(t => {
+    teamTarget += t.target;
+    if (t.employeeId === userId) {
+      myTarget += t.target;
+    }
+  });
+
+  // 2. Team and My Admissions (Enrollments) this month
+  const enrollments = await prisma.enrollment.findMany({
+    where: {
+      organizationId: orgId,
+      createdAt: { gte: startOfMonth }
+    },
+    include: {
+      student: true
+    }
+  });
+
+  let teamAdmissions = enrollments.length;
+  let myAdmissions = 0;
+  
+  // assuming student.counselorId is the user id or we just assume all if not tracking counselor in enrollment directly.
+  // Actually, we'll check student's counselor.
+  // We can just rely on the count where student.userId = req.user.id, or enrollment creator if exists.
+  // We'll count myAdmissions based on student userId if it exists.
+  enrollments.forEach(e => {
+    // If student model has a relation to user or counselor
+    if (e.student && (e.student as any).userId === userId) {
+      myAdmissions++;
+    }
+  });
+
+  // 3. Team and My Sales (Revenue via PaymentEntry or just total sales value)
+  const payments = await prisma.paymentEntry.findMany({
+    where: {
+      organizationId: orgId,
+      createdAt: { gte: startOfMonth }
+    },
+    include: {
+      invoice: {
+        include: {
+          student: true
+        }
+      }
+    }
+  });
+
+  let teamSales = 0;
+  let mySales = 0;
+
+  payments.forEach(p => {
+    teamSales += p.amount;
+    if (p.invoice && p.invoice.student && (p.invoice.student as any).userId === userId) {
+      mySales += p.amount;
+    }
+  });
+
+  const teamAchieved = teamTarget > 0 ? Math.round((teamSales / teamTarget) * 100) : 0;
+  const myAchieved = myTarget > 0 ? Math.round((mySales / myTarget) * 100) : 0;
+
+  res.status(200).json({
+    success: true,
+    data: {
+      teamSales,
+      mySales,
+      teamAdmissions,
+      myAdmissions,
+      teamTarget,
+      myTarget,
+      teamAchieved,
+      myAchieved
+    }
+  });
+});

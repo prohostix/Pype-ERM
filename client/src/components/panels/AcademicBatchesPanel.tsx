@@ -17,6 +17,8 @@ import { toast } from 'sonner';
 export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass: any; onBack: () => void }) {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
+  const isPrincipal = user?.role === 'faculty' && user?.id === academicClass?.inchargeId;
+  const canAllocate = isPrincipal;
   const [batches, setBatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   
@@ -244,8 +246,12 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
             <Button onClick={openHistoryModal} variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50">
               <History className="w-4 h-4 mr-2" /> Transfer History
             </Button>
-            <Button onClick={() => setDialogOpen(true)} className="bg-teal-600 hover:bg-teal-700 text-white shadow-md">
-              <Plus className="w-4 h-4 mr-2" /> Add Batch
+          </div>
+        )}
+        {!canWrite && canAllocate && (
+          <div className="flex gap-2">
+            <Button onClick={openHistoryModal} variant="outline" className="border-teal-200 text-teal-700 hover:bg-teal-50">
+              <History className="w-4 h-4 mr-2" /> Transfer History
             </Button>
           </div>
         )}
@@ -282,7 +288,7 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
               <div className="relative p-5 border-b border-border/50 bg-gradient-to-br from-teal-50/50 to-transparent dark:from-teal-950/20">
                 <div className="flex justify-between items-start">
                   <h3 className="text-lg font-bold line-clamp-1 flex-1 pr-2">{b.name}</h3>
-                  {canWrite && (
+                  {(canWrite || canAllocate) && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8 -mt-1 -mr-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -290,15 +296,21 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-40 rounded-xl">
-                        <DropdownMenuItem onClick={() => handleEdit(b)} className="cursor-pointer gap-2">
-                          <Edit className="w-4 h-4" /> Edit Batch
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openAllocationDialog(b)} className="cursor-pointer gap-2">
-                          <Users className="w-4 h-4" /> Allocate Students
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteClick(b.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2">
-                          <Trash2 className="w-4 h-4" /> Request Deletion
-                        </DropdownMenuItem>
+                        {canWrite && (
+                          <DropdownMenuItem onClick={() => handleEdit(b)} className="cursor-pointer gap-2">
+                            <Edit className="w-4 h-4" /> Edit Batch
+                          </DropdownMenuItem>
+                        )}
+                        {canAllocate && (
+                          <DropdownMenuItem onClick={() => openAllocationDialog(b)} className="cursor-pointer gap-2">
+                            <Users className="w-4 h-4" /> Allocate Students
+                          </DropdownMenuItem>
+                        )}
+                        {canWrite && (
+                          <DropdownMenuItem onClick={() => handleDeleteClick(b.id)} className="cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-600 gap-2">
+                            <Trash2 className="w-4 h-4" /> Request Deletion
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}
@@ -339,7 +351,7 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
                   <span className="font-medium text-blue-700 dark:text-blue-300">{b.capacity ? Math.max(0, b.capacity - (b._count?.students || 0)) + ' Slots' : 'Unlimited'}</span>
                 </div>
               </div>
-              {canWrite && (
+              {canAllocate && (
                 <div className="p-4 border-t border-border/50 bg-card">
                   <Button onClick={() => openAllocationDialog(b)} variant="outline" className="w-full rounded-xl border-teal-200 text-teal-700 hover:bg-teal-50 dark:border-teal-800 dark:hover:bg-teal-900/30">
                     <Users className="w-4 h-4 mr-2" /> Allocate Students
@@ -427,7 +439,7 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
                             <p className="text-sm font-medium truncate">{student.name}</p>
                             <p className="text-xs text-muted-foreground">ID: {student.enrollmentNo || 'N/A'}</p>
                           </div>
-                          {canWrite && (
+                          {canAllocate && (
                             <Button 
                               type="button" 
                               variant="ghost" 

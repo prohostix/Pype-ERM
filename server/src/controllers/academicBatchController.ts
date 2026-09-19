@@ -198,6 +198,10 @@ export const smartAllocate = asyncHandler(async (req: Request, res: Response) =>
     return res.status(404).json({ success: false, message: 'Batch not found' });
   }
 
+  if (user.role === 'faculty' && batch.academicClass.inchargeId !== user.id) {
+    return res.status(403).json({ success: false, message: 'Only the principal in charge can allocate students to this batch' });
+  }
+
   const currentCount = batch._count.students;
   if (batch.capacity && currentCount >= batch.capacity) {
     return res.status(400).json({ success: false, message: 'Batch is already at full capacity' });
@@ -232,7 +236,8 @@ export const smartAllocate = asyncHandler(async (req: Request, res: Response) =>
     studentId: sid,
     toBatchId: batch.id,
     academicClassId: batch.academicClassId,
-    transferredById: user.id,
+    transferredById: user.role === 'faculty' ? null : user.id,
+    transferredByFacultyId: user.role === 'faculty' ? user.id : null,
     organizationId,
     reason: 'Initial Smart Allocation'
   }));
@@ -267,6 +272,7 @@ export const manualAllocate = asyncHandler(async (req: Request, res: Response) =
   const batch = await prisma.academicBatch.findFirst({
     where: { id, organizationId },
     include: {
+      academicClass: true,
       _count: {
         select: { students: true }
       }
@@ -275,6 +281,10 @@ export const manualAllocate = asyncHandler(async (req: Request, res: Response) =
 
   if (!batch) {
     return res.status(404).json({ success: false, message: 'Batch not found' });
+  }
+
+  if (user.role === 'faculty' && batch.academicClass.inchargeId !== user.id) {
+    return res.status(403).json({ success: false, message: 'Only the principal in charge can allocate students to this batch' });
   }
 
   const currentCount = batch._count.students;
@@ -290,7 +300,8 @@ export const manualAllocate = asyncHandler(async (req: Request, res: Response) =
     studentId: sid,
     toBatchId: batch.id,
     academicClassId: batch.academicClassId,
-    transferredById: user.id,
+    transferredById: user.role === 'faculty' ? null : user.id,
+    transferredByFacultyId: user.role === 'faculty' ? user.id : null,
     organizationId,
     reason: 'Initial Manual Allocation'
   }));
@@ -339,11 +350,16 @@ export const transferStudent = asyncHandler(async (req: Request, res: Response) 
   }
 
   const fromBatch = await prisma.academicBatch.findUnique({
-    where: { id: fromBatchId }
+    where: { id: fromBatchId },
+    include: { academicClass: true }
   });
 
   if (!fromBatch || fromBatch.organizationId !== organizationId) {
     return res.status(404).json({ success: false, message: 'Source batch not found' });
+  }
+
+  if (user.role === 'faculty' && fromBatch.academicClass.inchargeId !== user.id) {
+    return res.status(403).json({ success: false, message: 'Only the principal in charge can transfer students from this batch' });
   }
 
   const toBatch = await prisma.academicBatch.findUnique({
@@ -387,7 +403,8 @@ export const transferStudent = asyncHandler(async (req: Request, res: Response) 
         fromBatchId,
         toBatchId,
         academicClassId: fromBatch.academicClassId,
-        transferredById: user.id,
+        transferredById: user.role === 'faculty' ? null : user.id,
+        transferredByFacultyId: user.role === 'faculty' ? user.id : null,
         organizationId,
         reason: reason || null
       }

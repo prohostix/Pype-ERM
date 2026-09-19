@@ -540,3 +540,146 @@ export const getBatchSessions = asyncHandler(async (req: AuthRequest, res: Respo
   
   res.status(200).json({ success: true, data: sessions });
 });
+
+// --- Faculty Punch In / Punch Out ---
+
+export const punchInSession = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { sessionId } = req.params;
+  
+  const session = await prisma.academicSession.findUnique({ where: { id: sessionId } });
+  if (!session || session.facultyId !== req.user.id) {
+    return res.status(403).json({ success: false, message: 'Access denied' });
+  }
+
+  const updated = await prisma.academicSession.update({
+    where: { id: sessionId },
+    data: { 
+      facultyPunchInTime: new Date(),
+      facultyPunchStatus: 'PENDING'
+    }
+  });
+
+  res.status(200).json({ success: true, data: updated, message: 'Punched in successfully' });
+});
+
+export const punchOutSession = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { sessionId } = req.params;
+
+  const session = await prisma.academicSession.findUnique({ where: { id: sessionId } });
+  if (!session || session.facultyId !== req.user.id) {
+    return res.status(403).json({ success: false, message: 'Access denied' });
+  }
+
+  const updated = await prisma.academicSession.update({
+    where: { id: sessionId },
+    data: { facultyPunchOutTime: new Date() }
+  });
+
+  res.status(200).json({ success: true, data: updated, message: 'Punched out successfully' });
+});
+
+export const getFacultyAttendancesByClass = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+
+  const ac = await prisma.academicClass.findFirst({ where: { id: classId, inchargeId: req.user.id } });
+  if (!ac) return res.status(403).json({ success: false, message: 'Unauthorized' });
+
+  const sessions = await prisma.academicSession.findMany({
+    where: { academicClassId: classId, facultyPunchInTime: { not: null } },
+    include: {
+      faculty: { select: { id: true, name: true } },
+      moduleLesson: { select: { id: true, title: true } },
+      academicBatch: { select: { id: true, name: true } }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  res.status(200).json({ success: true, data: sessions });
+});
+
+export const approveFacultyPunch = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { sessionId } = req.params;
+  const { status, remarks } = req.body;
+
+  const session = await prisma.academicSession.findUnique({ 
+    where: { id: sessionId },
+    include: { academicClass: true }
+  });
+
+  if (!session || session.academicClass.inchargeId !== req.user.id) {
+    return res.status(403).json({ success: false, message: 'Access denied. Must be Principal In-charge.' });
+  }
+
+  if (session.facultyPunchStatus === 'APPROVED' || session.facultyPunchStatus === 'REJECTED') {
+    return res.status(400).json({ success: false, message: 'Attendance has already been processed and cannot be changed.' });
+  }
+
+  const updated = await prisma.academicSession.update({
+    where: { id: sessionId },
+    data: { 
+      facultyPunchStatus: status,
+      facultyPunchRemarks: remarks || null
+    }
+  });
+
+  res.status(200).json({ success: true, data: updated, message: `Attendance ${status.toLowerCase()}` });
+});
+
+// @desc    Get student reviews for sessions in a class (Only Principal)
+// @route   GET /api/v1/faculty-portal/classes/:classId/reviews
+export const getClassReviews = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { classId } = req.params;
+
+  // Verify Principal
+  const ac = await prisma.academicClass.findFirst({ where: { id: classId, inchargeId: req.user.id } });
+  if (!ac) return res.status(403).json({ success: false, message: 'Unauthorized. Only the Principal In-charge can view these reviews.' });
+
+  const sessions = await prisma.academicSession.findMany({
+    where: {
+      academicClassId: classId,
+      status: 'COMPLETED'
+    },
+    include: {
+      moduleLesson: true,
+      academicBatch: true,
+      faculty: true,
+      attendances: {
+        where: { rating: { not: null } },
+        include: { student: true }
+      }
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  const reviewsByBatch = sessions
+    .filter(s => s.attendances.length > 0)
+    .reduce((acc, session) => {
+      const batchName = session.academicBatch?.name || 'Unknown Batch';
+      if (!acc[batchName]) acc[batchName] = [];
+      
+      acc[batchName].push({
+        sessionId: session.id,
+        lessonTitle: session.moduleLesson?.title || 'Unknown Lesson',
+        teacherName: session.faculty?.name || 'Unassigned',
+        date: session.createdAt,
+        reviews: session.attendances.map(att => ({
+          studentName: att.student.name,
+          rating: att.rating,
+          review: att.review,
+          date: att.updatedAt
+        }))
+      });
+      return acc;
+    }, {} as Record<string, any[]>);
+
+  const formattedData = Object.entries(reviewsByBatch).map(([batchName, sessions]) => ({
+    batchName,
+    sessions
+  }));
+
+  res.json({ success: true, data: formattedData });
+});

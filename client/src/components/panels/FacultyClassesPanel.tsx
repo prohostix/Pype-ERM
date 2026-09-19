@@ -7,7 +7,9 @@ import {
   GraduationCap,
   Folder,
   Loader2,
-  Clock
+  Clock,
+  CheckCircle2,
+  Star
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -17,9 +19,12 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { FacultyClassContentPanel } from './FacultyClassContentPanel';
 import { FacultyBatchDashboardPanel } from './FacultyBatchDashboardPanel';
+import { AcademicBatchesPanel } from './AcademicBatchesPanel';
+import { FacultyAttendanceApproval } from './FacultyAttendanceApproval';
+import { FacultyClassReviews } from './FacultyClassReviews';
 
 export function FacultyClassesPanel() {
-  const [view, setView] = useState<'classes' | 'batches' | 'students' | 'content'>('classes');
+  const [view, setView] = useState<string>('classes');
   const [classes, setClasses] = useState<any[]>([]);
   const [batches, setBatches] = useState<any[]>([]);
   const [students, setStudents] = useState<any[]>([]);
@@ -139,6 +144,18 @@ export function FacultyClassesPanel() {
 
   if (view === 'batchDashboard' && selectedClass && selectedBatch) {
     return <FacultyBatchDashboardPanel academicClass={selectedClass} academicBatch={selectedBatch} onBack={() => setView('batches')} />;
+  }
+
+  if (view === 'allocations' && selectedClass) {
+    return <AcademicBatchesPanel academicClass={selectedClass} onBack={() => setView('classes')} />;
+  }
+
+  if (view === 'facultyAttendance' && selectedClass) {
+    return <FacultyAttendanceApproval academicClass={selectedClass} onBack={() => setView('classes')} />;
+  }
+
+  if (view === 'reviews' && selectedClass) {
+    return <FacultyClassReviews academicClass={selectedClass} onBack={() => setView('classes')} />;
   }
 
   if (view === 'batches') {
@@ -289,20 +306,50 @@ export function FacultyClassesPanel() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-200/50 dark:border-slate-800/50">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="h-9 px-4 rounded-full text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-sm transition-all duration-300"
-                    onClick={(e) => { e.stopPropagation(); setView('content'); setSelectedClass(c); }}
-                  >
-                    <Folder className="w-4 h-4 mr-2" /> 
-                    <span className="font-semibold text-xs tracking-wide">Configure</span>
-                  </Button>
+                <div className="flex flex-wrap items-center justify-between pt-4 gap-2 border-t border-slate-200/50 dark:border-slate-800/50">
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 px-4 rounded-full text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 shadow-sm transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); setView('content'); setSelectedClass(c); }}
+                    >
+                      <Folder className="w-4 h-4 mr-2" /> 
+                      <span className="font-semibold text-xs tracking-wide">Configure</span>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 px-4 rounded-full text-teal-700 bg-teal-50 border-teal-200 hover:bg-teal-600 hover:text-white hover:border-teal-600 shadow-sm transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); setView('allocations'); setSelectedClass(c); }}
+                    >
+                      <Users className="w-4 h-4 mr-2" /> 
+                      <span className="font-semibold text-xs tracking-wide">Allocate Students</span>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 px-4 rounded-full text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 shadow-sm transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); setView('facultyAttendance'); setSelectedClass(c); }}
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-2" /> 
+                      <span className="font-semibold text-xs tracking-wide">Approvals</span>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 px-4 rounded-full text-purple-700 bg-purple-50 border-purple-200 hover:bg-purple-600 hover:text-white hover:border-purple-600 shadow-sm transition-all duration-300"
+                      onClick={(e) => { e.stopPropagation(); setView('reviews'); setSelectedClass(c); }}
+                    >
+                      <Star className="w-4 h-4 mr-2" /> 
+                      <span className="font-semibold text-xs tracking-wide">Reviews</span>
+                    </Button>
+                  </div>
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     className="h-9 px-4 rounded-full text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-300 group-hover:translate-x-1"
+                    onClick={(e) => { e.stopPropagation(); setSelectedClass(c); fetchBatches(c.id); }}
                   >
                     <span className="font-semibold text-xs tracking-wide mr-1">View Batches</span>
                     <ChevronRight className="w-4 h-4" />

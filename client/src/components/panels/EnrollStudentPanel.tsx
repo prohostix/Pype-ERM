@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
@@ -52,22 +53,27 @@ export function EnrollStudentPanel() {
   const [submitting, setSubmitting] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedFeeModeId, setSelectedFeeModeId] = useState<string>('');
+  const [selectedUniversityId, setSelectedUniversityId] = useState<string>('all');
   const [form, setForm] = useState({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '' });
   const [students, setStudents] = useState<any[]>([]);
-  const [studentMode, setStudentMode] = useState<'new' | 'existing'>('new');
+  const [studentMode, setStudentMode] = useState<'new' | 'existing' | 'provisional'>('new');
+  const [provisionalEnrollments, setProvisionalEnrollments] = useState<any[]>([]);
+  const [selectedProvisionalId, setSelectedProvisionalId] = useState<string>('');
   const [selectedStudentId, setSelectedStudentId] = useState<string>('');
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [progsRes, walletRes, studentsRes] = await Promise.all([
+      const [progsRes, walletRes, studentsRes, provRes] = await Promise.all([
         api.get('/enrollment/programs'),
         api.get('/enrollment/wallet'),
         api.get('/students').catch(() => ({ data: { data: [] } })),
+        api.get('/enrollment/provisional').catch(() => ({ data: { data: [] } })),
       ]);
       setPrograms(progsRes.data.data || []);
       setWallet(walletRes.data.data);
       setStudents(studentsRes.data.data || []);
+      setProvisionalEnrollments(provRes.data.data?.filter((e: any) => e.status === 'provisional_finance_verified') || []);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load');
     } finally {
@@ -195,17 +201,26 @@ export function EnrollStudentPanel() {
     }
     setSubmitting(true);
     try {
-      await api.post('/enrollment/enroll', { 
-        ...form, 
-        studentId: studentMode === 'existing' ? selectedStudentId : undefined,
-        programId: selectedProgram.id,
-        feeMode: selectedFeeModeId 
-      });
+      if (studentMode === 'provisional' && selectedProvisionalId) {
+        await api.put(`/enrollment/${selectedProvisionalId}/provisional-complete`, {
+          ...form,
+          programId: selectedProgram.id,
+          feeMode: selectedFeeModeId 
+        });
+      } else {
+        await api.post('/enrollment/enroll', { 
+          ...form, 
+          studentId: studentMode === 'existing' ? selectedStudentId : undefined,
+          programId: selectedProgram.id,
+          feeMode: selectedFeeModeId 
+        });
+      }
       toast.success('Enrollment submitted successfully');
       setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '' });
       setSelectedProgram(null);
       setSelectedFeeModeId('');
       setSelectedStudentId('');
+      setSelectedProvisionalId('');
       setStudentMode('new');
       fetchData();
     } catch (e: any) {
@@ -249,8 +264,32 @@ export function EnrollStudentPanel() {
             ) : programs.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">No programs available for enrollment.</p>
             ) : (
+              <>
+              <div className="mb-4">
+                <Label className="text-xs text-muted-foreground mb-1 block">Filter by University</Label>
+                <Select 
+                  value={selectedUniversityId} 
+                  onValueChange={v => {
+                    setSelectedUniversityId(v);
+                    setSelectedProgram(null);
+                    setSelectedFeeModeId('');
+                  }}
+                >
+                  <SelectTrigger><SelectValue placeholder="All Universities" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Universities</SelectItem>
+                    {Array.from(new Map(
+                      programs
+                        .filter(p => p.university && p.university.id)
+                        .map(p => [p.university!.id, p.university])
+                    ).values()).map((u: any) => (
+                      <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-3">
-                {programs.map(p => {
+                {programs.filter(p => selectedUniversityId === 'all' || p.university?.id === selectedUniversityId).map(p => {
                   const isSelected = selectedProgram?.id === p.id;
                   const defaultTotal = getRequiredFee(p);
                   const canAffordDefault = balance >= defaultTotal;
@@ -334,6 +373,7 @@ export function EnrollStudentPanel() {
                   );
                 })}
               </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -365,6 +405,14 @@ export function EnrollStudentPanel() {
                 }} />
                 <span className="text-sm font-medium">Existing Student</span>
               </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={studentMode === 'provisional'} onChange={() => {
+                  setStudentMode('provisional');
+                  setSelectedProvisionalId('');
+                  setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '' });
+                }} />
+                <span className="text-sm font-medium">From Provisional</span>
+              </label>
             </div>
 
             {studentMode === 'existing' && (
@@ -393,6 +441,44 @@ export function EnrollStudentPanel() {
                   <option value="">-- Choose Student --</option>
                   {students.map(s => (
                     <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {studentMode === 'provisional' && (
+              <div className="space-y-1 pb-2 border-b">
+                <Label>Select Verified Provisional Enrollment</Label>
+                <select 
+                  className="w-full border rounded-md p-2 bg-background text-sm"
+                  value={selectedProvisionalId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    setSelectedProvisionalId(id);
+                    const p = provisionalEnrollments.find(pe => pe.id === id);
+                    if (p) {
+                      setForm({
+                        studentName: p.studentName || '',
+                        studentEmail: p.studentEmail || '',
+                        studentPhone: p.studentPhone || '',
+                        studentAddress: p.studentAddress === 'To be filled' ? '' : p.studentAddress || '',
+                        specialisation: p.specialisation || '',
+                      });
+                      if (p.programId) {
+                         const prog = programs.find(pr => pr.id === p.programId);
+                         if (prog) {
+                           setSelectedProgram(prog);
+                         }
+                      }
+                    } else {
+                      setForm({ studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '' });
+                      setSelectedProgram(null);
+                    }
+                  }}
+                >
+                  <option value="">-- Choose Provisional Enrollment --</option>
+                  {provisionalEnrollments.map(p => (
+                    <option key={p.id} value={p.id}>{p.studentName} ({p.studentEmail})</option>
                   ))}
                 </select>
               </div>
@@ -435,7 +521,7 @@ export function EnrollStudentPanel() {
             <Button
               className="w-full mt-2"
               onClick={handleEnroll}
-              disabled={!selectedProgram || !selectedFeeModeId || submitting || (balance < currentRequiredFee)}
+              disabled={!selectedProgram || !selectedFeeModeId || submitting || (balance < currentRequiredFee) || (studentMode === 'provisional' && !selectedProvisionalId)}
             >
               <GraduationCap className="w-4 h-4 mr-2" />
               {submitting ? 'Enrolling...' : 'Enroll Student'}

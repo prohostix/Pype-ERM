@@ -922,69 +922,71 @@ model AdmissionSession {
 }
 
 model Enrollment {
-  id                   String             @id @default(uuid())
-  organizationId       String
-  studentId            String?
-  programId            String
-  specialisation       String?
-  studyCenterId        String?
-  sessionId            String?
-  enrollmentNumber     String?            @unique
-  studentName          String
-  studentEmail         String
-  studentPhone         String
-  studentAddress       String
-  status               String             @default("payment_pending")
-  departmentRemarks    String?
-  financeRemarks       String?
-  departmentReviewedBy String?
-  departmentReviewedAt DateTime?
-  financeReviewedBy    String?
-  financeReviewedAt    DateTime?
-  enrolledAt           DateTime?
-  statusHistory        Json               @default("[]")
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  universityRemarks    String?
-  universityReviewedAt DateTime?
-  universityReviewedBy String?
-  salesUserId          String?
-  altPhone             String?
-  dob                  DateTime?
-  fatherName           String?
-  pinCode              String?
-  gender               String?
-  category             String?
-  religion             String?
-  maritalStatus        String?
-  employmentStatus     String?
-  caste                String?
-  motherName           String?
-  motherPhone          String?
-  fatherPhone          String?
-  guardianName         String?
-  familyPhone          String?
-  photo                String?
-  documents            Json?              @default("[]")
-  photoStatus          String?
-  receiptUrl           String?
-  receiptVerified      Boolean            @default(false)
-  receiptVerifiedAt    DateTime?
-  receiptVerifiedBy    String?
-  initialPaymentAmount Float?
-  initialPaymentDate   DateTime?
-  paymentPlan          String?
-  departmentReviewer   User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
-  financeReviewer      User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
-  organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  program              Program            @relation(fields: [programId], references: [id])
-  receiptVerifier      User?              @relation("ReceiptVerifiedBy", fields: [receiptVerifiedBy], references: [id])
-  salesUser            User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
-  session              AdmissionSession?  @relation(fields: [sessionId], references: [id])
-  student              Student?           @relation(fields: [studentId], references: [id])
-  studyCenter          StudyCenter?       @relation(fields: [studyCenterId], references: [id])
-  universityReviewer   User?              @relation("UniversityReviewedBy", fields: [universityReviewedBy], references: [id])
-  payment              EnrollmentPayment?
+  id                    String             @id @default(uuid())
+  organizationId        String
+  studentId             String?
+  programId             String
+  specialisation        String?
+  studyCenterId         String?
+  sessionId             String?
+  enrollmentNumber      String?            @unique
+  studentName           String
+  studentEmail          String
+  studentPhone          String
+  studentAddress        String
+  status                String             @default("payment_pending")
+  departmentRemarks     String?
+  financeRemarks        String?
+  departmentReviewedBy  String?
+  departmentReviewedAt  DateTime?
+  financeReviewedBy     String?
+  financeReviewedAt     DateTime?
+  enrolledAt            DateTime?
+  statusHistory         Json               @default("[]")
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  universityRemarks     String?
+  universityReviewedAt  DateTime?
+  universityReviewedBy  String?
+  salesUserId           String?
+  altPhone              String?
+  dob                   DateTime?
+  fatherName            String?
+  isProvisional         Boolean            @default(false)
+  provisionalReceiptUrl String?
+  pinCode               String?
+  gender                String?
+  category              String?
+  religion              String?
+  maritalStatus         String?
+  employmentStatus      String?
+  caste                 String?
+  motherName            String?
+  motherPhone           String?
+  fatherPhone           String?
+  guardianName          String?
+  familyPhone           String?
+  photo                 String?
+  documents             Json?              @default("[]")
+  photoStatus           String?
+  receiptUrl            String?
+  receiptVerified       Boolean            @default(false)
+  receiptVerifiedAt     DateTime?
+  receiptVerifiedBy     String?
+  initialPaymentAmount  Float?
+  initialPaymentDate    DateTime?
+  paymentPlan           String?
+  departmentReviewer    User?              @relation("DeptReviewedBy", fields: [departmentReviewedBy], references: [id])
+  financeReviewer       User?              @relation("FinanceReviewedBy", fields: [financeReviewedBy], references: [id])
+  organization          Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  program               Program            @relation(fields: [programId], references: [id])
+  receiptVerifier       User?              @relation("ReceiptVerifiedBy", fields: [receiptVerifiedBy], references: [id])
+  salesUser             User?              @relation("SalesUserEnrollments", fields: [salesUserId], references: [id])
+  session               AdmissionSession?  @relation(fields: [sessionId], references: [id])
+  student               Student?           @relation(fields: [studentId], references: [id])
+  studyCenter           StudyCenter?       @relation(fields: [studyCenterId], references: [id])
+  universityReviewer    User?              @relation("UniversityReviewedBy", fields: [universityReviewedBy], references: [id])
+  payment               EnrollmentPayment?
 
   @@unique([studentId, programId, sessionId])
   @@index([organizationId, status])
@@ -1963,6 +1965,7 @@ model Faculty {
   newFacultyHistories      LessonFacultyHistory[]  @relation("NewFaculty")
   changedFacultyHistories  LessonFacultyHistory[]  @relation("ChangedBy")
   batchLessonAssignments   BatchLessonAssignment[]
+  studentBatchTransfers    StudentBatchTransfer[]
 
   @@index([organizationId])
 }
@@ -2111,20 +2114,22 @@ model AcademicBatch {
 }
 
 model StudentBatchTransfer {
-  id              String         @id @default(uuid())
-  studentId       String
-  student         Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  fromBatchId     String?
-  fromBatch       AcademicBatch? @relation("TransferredFrom", fields: [fromBatchId], references: [id], onDelete: Cascade)
-  toBatchId       String
-  toBatch         AcademicBatch  @relation("TransferredTo", fields: [toBatchId], references: [id], onDelete: Cascade)
-  academicClassId String
-  academicClass   AcademicClass  @relation(fields: [academicClassId], references: [id], onDelete: Cascade)
-  transferredById String
-  transferredBy   User           @relation(fields: [transferredById], references: [id], onDelete: Cascade)
-  organizationId  String
-  reason          String?
-  createdAt       DateTime       @default(now())
+  id                     String         @id @default(uuid())
+  studentId              String
+  student                Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fromBatchId            String?
+  fromBatch              AcademicBatch? @relation("TransferredFrom", fields: [fromBatchId], references: [id], onDelete: Cascade)
+  toBatchId              String
+  toBatch                AcademicBatch  @relation("TransferredTo", fields: [toBatchId], references: [id], onDelete: Cascade)
+  academicClassId        String
+  academicClass          AcademicClass  @relation(fields: [academicClassId], references: [id], onDelete: Cascade)
+  transferredById        String?
+  transferredBy          User?          @relation(fields: [transferredById], references: [id], onDelete: Cascade)
+  transferredByFacultyId String?
+  transferredByFaculty   Faculty?       @relation(fields: [transferredByFacultyId], references: [id], onDelete: Cascade)
+  organizationId         String
+  reason                 String?
+  createdAt              DateTime       @default(now())
 
   @@index([academicClassId])
   @@index([organizationId])
@@ -2176,6 +2181,12 @@ model AcademicSession {
   endTime         DateTime?
   organizationId  String
 
+  // Faculty Attendance / Punch fields
+  facultyPunchInTime  DateTime?
+  facultyPunchOutTime DateTime?
+  facultyPunchStatus  String?   @default("PENDING") // PENDING, APPROVED, REJECTED
+  facultyPunchRemarks String?
+
   academicClass AcademicClass @relation(fields: [academicClassId], references: [id])
   classModule   ClassModule   @relation(fields: [classModuleId], references: [id])
   moduleLesson  ModuleLesson  @relation(fields: [moduleLessonId], references: [id])
@@ -2202,6 +2213,8 @@ model StudentAcademicAttendance {
   studentId      String
   status         AcademicAttendanceStatus
   remarks        String?
+  rating         Int?
+  review         String?
   organizationId String
 
   session      AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)

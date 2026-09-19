@@ -952,6 +952,8 @@ model Enrollment {
   altPhone             String?
   dob                  DateTime?
   fatherName           String?
+  isProvisional        Boolean            @default(false)
+  provisionalReceiptUrl String?
   pinCode              String?
   gender               String?
   category             String?
@@ -1963,6 +1965,7 @@ model Faculty {
   newFacultyHistories      LessonFacultyHistory[]  @relation("NewFaculty")
   changedFacultyHistories  LessonFacultyHistory[]  @relation("ChangedBy")
   batchLessonAssignments   BatchLessonAssignment[]
+  studentBatchTransfers    StudentBatchTransfer[]
 
   @@index([organizationId])
 }
@@ -2120,8 +2123,10 @@ model StudentBatchTransfer {
   toBatch         AcademicBatch  @relation("TransferredTo", fields: [toBatchId], references: [id], onDelete: Cascade)
   academicClassId String
   academicClass   AcademicClass  @relation(fields: [academicClassId], references: [id], onDelete: Cascade)
-  transferredById String
-  transferredBy   User           @relation(fields: [transferredById], references: [id], onDelete: Cascade)
+  transferredById String?
+  transferredBy   User?           @relation(fields: [transferredById], references: [id], onDelete: Cascade)
+  transferredByFacultyId String?
+  transferredByFaculty   Faculty? @relation(fields: [transferredByFacultyId], references: [id], onDelete: Cascade)
   organizationId  String
   reason          String?
   createdAt       DateTime       @default(now())
@@ -2172,9 +2177,15 @@ model AcademicSession {
   facultyId       String // The teacher
   startedById     String // The principal who started it
   status          AcademicSessionStatus @default(IN_PROGRESS)
-  startTime       DateTime              @default(now())
-  endTime         DateTime?
-  organizationId  String
+  startTime           DateTime              @default(now())
+  endTime             DateTime?
+  organizationId      String
+
+  // Faculty Attendance / Punch fields
+  facultyPunchInTime  DateTime?
+  facultyPunchOutTime DateTime?
+  facultyPunchStatus  String?               @default("PENDING") // PENDING, APPROVED, REJECTED
+  facultyPunchRemarks String?
 
   academicClass AcademicClass @relation(fields: [academicClassId], references: [id])
   classModule   ClassModule   @relation(fields: [classModuleId], references: [id])
@@ -2202,6 +2213,8 @@ model StudentAcademicAttendance {
   studentId      String
   status         AcademicAttendanceStatus
   remarks        String?
+  rating         Int?
+  review         String?
   organizationId String
 
   session      AcademicSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)

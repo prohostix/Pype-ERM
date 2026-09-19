@@ -22,6 +22,6 @@ router.put('/:id', authorize('org_admin', 'superadmin'), updateClass);
 router.delete('/:id', authorize('org_admin', 'superadmin'), deleteClass);
 
 // Get transfer history for a class
-router.get('/:id/transfer-history', authorize('org_admin', 'superadmin'), getTransferHistory);
+router.get('/:id/transfer-history', authorize('faculty'), getTransferHistory);
 
 export default router;

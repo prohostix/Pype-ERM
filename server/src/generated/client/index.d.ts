@@ -10847,6 +10847,7 @@ export namespace Prisma {
     newFacultyHistories: number
     changedFacultyHistories: number
     batchLessonAssignments: number
+    studentBatchTransfers: number
   }
 
   export type FacultyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10859,6 +10860,7 @@ export namespace Prisma {
     newFacultyHistories?: boolean | FacultyCountOutputTypeCountNewFacultyHistoriesArgs
     changedFacultyHistories?: boolean | FacultyCountOutputTypeCountChangedFacultyHistoriesArgs
     batchLessonAssignments?: boolean | FacultyCountOutputTypeCountBatchLessonAssignmentsArgs
+    studentBatchTransfers?: boolean | FacultyCountOutputTypeCountStudentBatchTransfersArgs
   }
 
   // Custom InputTypes
@@ -10933,6 +10935,13 @@ export namespace Prisma {
    */
   export type FacultyCountOutputTypeCountBatchLessonAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchLessonAssignmentWhereInput
+  }
+
+  /**
+   * FacultyCountOutputType without action
+   */
+  export type FacultyCountOutputTypeCountStudentBatchTransfersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentBatchTransferWhereInput
   }
 
 
@@ -51983,6 +51992,8 @@ export namespace Prisma {
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
+    isProvisional: boolean | null
+    provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
     category: string | null
@@ -52036,6 +52047,8 @@ export namespace Prisma {
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
+    isProvisional: boolean | null
+    provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
     category: string | null
@@ -52090,6 +52103,8 @@ export namespace Prisma {
     altPhone: number
     dob: number
     fatherName: number
+    isProvisional: number
+    provisionalReceiptUrl: number
     pinCode: number
     gender: number
     category: number
@@ -52154,6 +52169,8 @@ export namespace Prisma {
     altPhone?: true
     dob?: true
     fatherName?: true
+    isProvisional?: true
+    provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
     category?: true
@@ -52207,6 +52224,8 @@ export namespace Prisma {
     altPhone?: true
     dob?: true
     fatherName?: true
+    isProvisional?: true
+    provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
     category?: true
@@ -52261,6 +52280,8 @@ export namespace Prisma {
     altPhone?: true
     dob?: true
     fatherName?: true
+    isProvisional?: true
+    provisionalReceiptUrl?: true
     pinCode?: true
     gender?: true
     category?: true
@@ -52403,6 +52424,8 @@ export namespace Prisma {
     altPhone: string | null
     dob: Date | null
     fatherName: string | null
+    isProvisional: boolean
+    provisionalReceiptUrl: string | null
     pinCode: string | null
     gender: string | null
     category: string | null
@@ -52477,6 +52500,8 @@ export namespace Prisma {
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
+    isProvisional?: boolean
+    provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
     category?: boolean
@@ -52543,6 +52568,8 @@ export namespace Prisma {
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
+    isProvisional?: boolean
+    provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
     category?: boolean
@@ -52608,6 +52635,8 @@ export namespace Prisma {
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
+    isProvisional?: boolean
+    provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
     category?: boolean
@@ -52673,6 +52702,8 @@ export namespace Prisma {
     altPhone?: boolean
     dob?: boolean
     fatherName?: boolean
+    isProvisional?: boolean
+    provisionalReceiptUrl?: boolean
     pinCode?: boolean
     gender?: boolean
     category?: boolean
@@ -52697,7 +52728,7 @@ export namespace Prisma {
     paymentPlan?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "studentId" | "programId" | "specialisation" | "studyCenterId" | "sessionId" | "enrollmentNumber" | "studentName" | "studentEmail" | "studentPhone" | "studentAddress" | "status" | "departmentRemarks" | "financeRemarks" | "departmentReviewedBy" | "departmentReviewedAt" | "financeReviewedBy" | "financeReviewedAt" | "enrolledAt" | "statusHistory" | "createdAt" | "updatedAt" | "universityRemarks" | "universityReviewedAt" | "universityReviewedBy" | "salesUserId" | "altPhone" | "dob" | "fatherName" | "isProvisional" | "provisionalReceiptUrl" | "pinCode" | "gender" | "category" | "religion" | "maritalStatus" | "employmentStatus" | "caste" | "motherName" | "motherPhone" | "fatherPhone" | "guardianName" | "familyPhone" | "photo" | "documents" | "photoStatus" | "receiptUrl" | "receiptVerified" | "receiptVerifiedAt" | "receiptVerifiedBy" | "initialPaymentAmount" | "initialPaymentDate" | "paymentPlan", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departmentReviewer?: boolean | Enrollment$departmentReviewerArgs<ExtArgs>
     financeReviewer?: boolean | Enrollment$financeReviewerArgs<ExtArgs>
@@ -52782,6 +52813,8 @@ export namespace Prisma {
       altPhone: string | null
       dob: Date | null
       fatherName: string | null
+      isProvisional: boolean
+      provisionalReceiptUrl: string | null
       pinCode: string | null
       gender: string | null
       category: string | null
@@ -53268,6 +53301,8 @@ export namespace Prisma {
     readonly altPhone: FieldRef<"Enrollment", 'String'>
     readonly dob: FieldRef<"Enrollment", 'DateTime'>
     readonly fatherName: FieldRef<"Enrollment", 'String'>
+    readonly isProvisional: FieldRef<"Enrollment", 'Boolean'>
+    readonly provisionalReceiptUrl: FieldRef<"Enrollment", 'String'>
     readonly pinCode: FieldRef<"Enrollment", 'String'>
     readonly gender: FieldRef<"Enrollment", 'String'>
     readonly category: FieldRef<"Enrollment", 'String'>
@@ -101756,6 +101791,7 @@ export namespace Prisma {
     newFacultyHistories?: boolean | Faculty$newFacultyHistoriesArgs<ExtArgs>
     changedFacultyHistories?: boolean | Faculty$changedFacultyHistoriesArgs<ExtArgs>
     batchLessonAssignments?: boolean | Faculty$batchLessonAssignmentsArgs<ExtArgs>
+    studentBatchTransfers?: boolean | Faculty$studentBatchTransfersArgs<ExtArgs>
     _count?: boolean | FacultyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["faculty"]>
 
@@ -101812,6 +101848,7 @@ export namespace Prisma {
     newFacultyHistories?: boolean | Faculty$newFacultyHistoriesArgs<ExtArgs>
     changedFacultyHistories?: boolean | Faculty$changedFacultyHistoriesArgs<ExtArgs>
     batchLessonAssignments?: boolean | Faculty$batchLessonAssignmentsArgs<ExtArgs>
+    studentBatchTransfers?: boolean | Faculty$studentBatchTransfersArgs<ExtArgs>
     _count?: boolean | FacultyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FacultyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -101834,6 +101871,7 @@ export namespace Prisma {
       newFacultyHistories: Prisma.$LessonFacultyHistoryPayload<ExtArgs>[]
       changedFacultyHistories: Prisma.$LessonFacultyHistoryPayload<ExtArgs>[]
       batchLessonAssignments: Prisma.$BatchLessonAssignmentPayload<ExtArgs>[]
+      studentBatchTransfers: Prisma.$StudentBatchTransferPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -102250,6 +102288,7 @@ export namespace Prisma {
     newFacultyHistories<T extends Faculty$newFacultyHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Faculty$newFacultyHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonFacultyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     changedFacultyHistories<T extends Faculty$changedFacultyHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, Faculty$changedFacultyHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonFacultyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batchLessonAssignments<T extends Faculty$batchLessonAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Faculty$batchLessonAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchLessonAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    studentBatchTransfers<T extends Faculty$studentBatchTransfersArgs<ExtArgs> = {}>(args?: Subset<T, Faculty$studentBatchTransfersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentBatchTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -102903,6 +102942,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchLessonAssignmentScalarFieldEnum | BatchLessonAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Faculty.studentBatchTransfers
+   */
+  export type Faculty$studentBatchTransfersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentBatchTransfer
+     */
+    select?: StudentBatchTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentBatchTransfer
+     */
+    omit?: StudentBatchTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentBatchTransferInclude<ExtArgs> | null
+    where?: StudentBatchTransferWhereInput
+    orderBy?: StudentBatchTransferOrderByWithRelationInput | StudentBatchTransferOrderByWithRelationInput[]
+    cursor?: StudentBatchTransferWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentBatchTransferScalarFieldEnum | StudentBatchTransferScalarFieldEnum[]
   }
 
   /**
@@ -111483,6 +111546,7 @@ export namespace Prisma {
     toBatchId: string | null
     academicClassId: string | null
     transferredById: string | null
+    transferredByFacultyId: string | null
     organizationId: string | null
     reason: string | null
     createdAt: Date | null
@@ -111495,6 +111559,7 @@ export namespace Prisma {
     toBatchId: string | null
     academicClassId: string | null
     transferredById: string | null
+    transferredByFacultyId: string | null
     organizationId: string | null
     reason: string | null
     createdAt: Date | null
@@ -111507,6 +111572,7 @@ export namespace Prisma {
     toBatchId: number
     academicClassId: number
     transferredById: number
+    transferredByFacultyId: number
     organizationId: number
     reason: number
     createdAt: number
@@ -111521,6 +111587,7 @@ export namespace Prisma {
     toBatchId?: true
     academicClassId?: true
     transferredById?: true
+    transferredByFacultyId?: true
     organizationId?: true
     reason?: true
     createdAt?: true
@@ -111533,6 +111600,7 @@ export namespace Prisma {
     toBatchId?: true
     academicClassId?: true
     transferredById?: true
+    transferredByFacultyId?: true
     organizationId?: true
     reason?: true
     createdAt?: true
@@ -111545,6 +111613,7 @@ export namespace Prisma {
     toBatchId?: true
     academicClassId?: true
     transferredById?: true
+    transferredByFacultyId?: true
     organizationId?: true
     reason?: true
     createdAt?: true
@@ -111629,7 +111698,8 @@ export namespace Prisma {
     fromBatchId: string | null
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById: string | null
+    transferredByFacultyId: string | null
     organizationId: string
     reason: string | null
     createdAt: Date
@@ -111659,6 +111729,7 @@ export namespace Prisma {
     toBatchId?: boolean
     academicClassId?: boolean
     transferredById?: boolean
+    transferredByFacultyId?: boolean
     organizationId?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -111666,7 +111737,8 @@ export namespace Prisma {
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }, ExtArgs["result"]["studentBatchTransfer"]>
 
   export type StudentBatchTransferSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -111676,6 +111748,7 @@ export namespace Prisma {
     toBatchId?: boolean
     academicClassId?: boolean
     transferredById?: boolean
+    transferredByFacultyId?: boolean
     organizationId?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -111683,7 +111756,8 @@ export namespace Prisma {
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }, ExtArgs["result"]["studentBatchTransfer"]>
 
   export type StudentBatchTransferSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -111693,6 +111767,7 @@ export namespace Prisma {
     toBatchId?: boolean
     academicClassId?: boolean
     transferredById?: boolean
+    transferredByFacultyId?: boolean
     organizationId?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -111700,7 +111775,8 @@ export namespace Prisma {
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }, ExtArgs["result"]["studentBatchTransfer"]>
 
   export type StudentBatchTransferSelectScalar = {
@@ -111710,32 +111786,36 @@ export namespace Prisma {
     toBatchId?: boolean
     academicClassId?: boolean
     transferredById?: boolean
+    transferredByFacultyId?: boolean
     organizationId?: boolean
     reason?: boolean
     createdAt?: boolean
   }
 
-  export type StudentBatchTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromBatchId" | "toBatchId" | "academicClassId" | "transferredById" | "organizationId" | "reason" | "createdAt", ExtArgs["result"]["studentBatchTransfer"]>
+  export type StudentBatchTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "fromBatchId" | "toBatchId" | "academicClassId" | "transferredById" | "transferredByFacultyId" | "organizationId" | "reason" | "createdAt", ExtArgs["result"]["studentBatchTransfer"]>
   export type StudentBatchTransferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }
   export type StudentBatchTransferIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }
   export type StudentBatchTransferIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     fromBatch?: boolean | StudentBatchTransfer$fromBatchArgs<ExtArgs>
     toBatch?: boolean | AcademicBatchDefaultArgs<ExtArgs>
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
-    transferredBy?: boolean | UserDefaultArgs<ExtArgs>
+    transferredBy?: boolean | StudentBatchTransfer$transferredByArgs<ExtArgs>
+    transferredByFaculty?: boolean | StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>
   }
 
   export type $StudentBatchTransferPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -111745,7 +111825,8 @@ export namespace Prisma {
       fromBatch: Prisma.$AcademicBatchPayload<ExtArgs> | null
       toBatch: Prisma.$AcademicBatchPayload<ExtArgs>
       academicClass: Prisma.$AcademicClassPayload<ExtArgs>
-      transferredBy: Prisma.$UserPayload<ExtArgs>
+      transferredBy: Prisma.$UserPayload<ExtArgs> | null
+      transferredByFaculty: Prisma.$FacultyPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -111753,7 +111834,8 @@ export namespace Prisma {
       fromBatchId: string | null
       toBatchId: string
       academicClassId: string
-      transferredById: string
+      transferredById: string | null
+      transferredByFacultyId: string | null
       organizationId: string
       reason: string | null
       createdAt: Date
@@ -112155,7 +112237,8 @@ export namespace Prisma {
     fromBatch<T extends StudentBatchTransfer$fromBatchArgs<ExtArgs> = {}>(args?: Subset<T, StudentBatchTransfer$fromBatchArgs<ExtArgs>>): Prisma__AcademicBatchClient<$Result.GetResult<Prisma.$AcademicBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     toBatch<T extends AcademicBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AcademicBatchDefaultArgs<ExtArgs>>): Prisma__AcademicBatchClient<$Result.GetResult<Prisma.$AcademicBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     academicClass<T extends AcademicClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AcademicClassDefaultArgs<ExtArgs>>): Prisma__AcademicClassClient<$Result.GetResult<Prisma.$AcademicClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    transferredBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transferredBy<T extends StudentBatchTransfer$transferredByArgs<ExtArgs> = {}>(args?: Subset<T, StudentBatchTransfer$transferredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    transferredByFaculty<T extends StudentBatchTransfer$transferredByFacultyArgs<ExtArgs> = {}>(args?: Subset<T, StudentBatchTransfer$transferredByFacultyArgs<ExtArgs>>): Prisma__FacultyClient<$Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -112191,6 +112274,7 @@ export namespace Prisma {
     readonly toBatchId: FieldRef<"StudentBatchTransfer", 'String'>
     readonly academicClassId: FieldRef<"StudentBatchTransfer", 'String'>
     readonly transferredById: FieldRef<"StudentBatchTransfer", 'String'>
+    readonly transferredByFacultyId: FieldRef<"StudentBatchTransfer", 'String'>
     readonly organizationId: FieldRef<"StudentBatchTransfer", 'String'>
     readonly reason: FieldRef<"StudentBatchTransfer", 'String'>
     readonly createdAt: FieldRef<"StudentBatchTransfer", 'DateTime'>
@@ -112611,6 +112695,44 @@ export namespace Prisma {
      */
     include?: AcademicBatchInclude<ExtArgs> | null
     where?: AcademicBatchWhereInput
+  }
+
+  /**
+   * StudentBatchTransfer.transferredBy
+   */
+  export type StudentBatchTransfer$transferredByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * StudentBatchTransfer.transferredByFaculty
+   */
+  export type StudentBatchTransfer$transferredByFacultyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Faculty
+     */
+    select?: FacultySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Faculty
+     */
+    omit?: FacultyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacultyInclude<ExtArgs> | null
+    where?: FacultyWhereInput
   }
 
   /**
@@ -113767,6 +113889,10 @@ export namespace Prisma {
     startTime: Date | null
     endTime: Date | null
     organizationId: string | null
+    facultyPunchInTime: Date | null
+    facultyPunchOutTime: Date | null
+    facultyPunchStatus: string | null
+    facultyPunchRemarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -113783,6 +113909,10 @@ export namespace Prisma {
     startTime: Date | null
     endTime: Date | null
     organizationId: string | null
+    facultyPunchInTime: Date | null
+    facultyPunchOutTime: Date | null
+    facultyPunchStatus: string | null
+    facultyPunchRemarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -113799,6 +113929,10 @@ export namespace Prisma {
     startTime: number
     endTime: number
     organizationId: number
+    facultyPunchInTime: number
+    facultyPunchOutTime: number
+    facultyPunchStatus: number
+    facultyPunchRemarks: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -113817,6 +113951,10 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     organizationId?: true
+    facultyPunchInTime?: true
+    facultyPunchOutTime?: true
+    facultyPunchStatus?: true
+    facultyPunchRemarks?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -113833,6 +113971,10 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     organizationId?: true
+    facultyPunchInTime?: true
+    facultyPunchOutTime?: true
+    facultyPunchStatus?: true
+    facultyPunchRemarks?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -113849,6 +113991,10 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     organizationId?: true
+    facultyPunchInTime?: true
+    facultyPunchOutTime?: true
+    facultyPunchStatus?: true
+    facultyPunchRemarks?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -113938,6 +114084,10 @@ export namespace Prisma {
     startTime: Date
     endTime: Date | null
     organizationId: string
+    facultyPunchInTime: Date | null
+    facultyPunchOutTime: Date | null
+    facultyPunchStatus: string | null
+    facultyPunchRemarks: string | null
     createdAt: Date
     updatedAt: Date
     _count: AcademicSessionCountAggregateOutputType | null
@@ -113971,6 +114121,10 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     organizationId?: boolean
+    facultyPunchInTime?: boolean
+    facultyPunchOutTime?: boolean
+    facultyPunchStatus?: boolean
+    facultyPunchRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
@@ -113996,6 +114150,10 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     organizationId?: boolean
+    facultyPunchInTime?: boolean
+    facultyPunchOutTime?: boolean
+    facultyPunchStatus?: boolean
+    facultyPunchRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
@@ -114019,6 +114177,10 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     organizationId?: boolean
+    facultyPunchInTime?: boolean
+    facultyPunchOutTime?: boolean
+    facultyPunchStatus?: boolean
+    facultyPunchRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
@@ -114042,11 +114204,15 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     organizationId?: boolean
+    facultyPunchInTime?: boolean
+    facultyPunchOutTime?: boolean
+    facultyPunchStatus?: boolean
+    facultyPunchRemarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AcademicSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "academicClassId" | "classModuleId" | "moduleLessonId" | "academicBatchId" | "facultyId" | "startedById" | "status" | "startTime" | "endTime" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["academicSession"]>
+  export type AcademicSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "academicClassId" | "classModuleId" | "moduleLessonId" | "academicBatchId" | "facultyId" | "startedById" | "status" | "startTime" | "endTime" | "organizationId" | "facultyPunchInTime" | "facultyPunchOutTime" | "facultyPunchStatus" | "facultyPunchRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["academicSession"]>
   export type AcademicSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     academicClass?: boolean | AcademicClassDefaultArgs<ExtArgs>
     classModule?: boolean | ClassModuleDefaultArgs<ExtArgs>
@@ -114101,6 +114267,10 @@ export namespace Prisma {
       startTime: Date
       endTime: Date | null
       organizationId: string
+      facultyPunchInTime: Date | null
+      facultyPunchOutTime: Date | null
+      facultyPunchStatus: string | null
+      facultyPunchRemarks: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["academicSession"]>
@@ -114545,6 +114715,10 @@ export namespace Prisma {
     readonly startTime: FieldRef<"AcademicSession", 'DateTime'>
     readonly endTime: FieldRef<"AcademicSession", 'DateTime'>
     readonly organizationId: FieldRef<"AcademicSession", 'String'>
+    readonly facultyPunchInTime: FieldRef<"AcademicSession", 'DateTime'>
+    readonly facultyPunchOutTime: FieldRef<"AcademicSession", 'DateTime'>
+    readonly facultyPunchStatus: FieldRef<"AcademicSession", 'String'>
+    readonly facultyPunchRemarks: FieldRef<"AcademicSession", 'String'>
     readonly createdAt: FieldRef<"AcademicSession", 'DateTime'>
     readonly updatedAt: FieldRef<"AcademicSession", 'DateTime'>
   }
@@ -114996,8 +115170,18 @@ export namespace Prisma {
 
   export type AggregateStudentAcademicAttendance = {
     _count: StudentAcademicAttendanceCountAggregateOutputType | null
+    _avg: StudentAcademicAttendanceAvgAggregateOutputType | null
+    _sum: StudentAcademicAttendanceSumAggregateOutputType | null
     _min: StudentAcademicAttendanceMinAggregateOutputType | null
     _max: StudentAcademicAttendanceMaxAggregateOutputType | null
+  }
+
+  export type StudentAcademicAttendanceAvgAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type StudentAcademicAttendanceSumAggregateOutputType = {
+    rating: number | null
   }
 
   export type StudentAcademicAttendanceMinAggregateOutputType = {
@@ -115006,6 +115190,8 @@ export namespace Prisma {
     studentId: string | null
     status: $Enums.AcademicAttendanceStatus | null
     remarks: string | null
+    rating: number | null
+    review: string | null
     organizationId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -115017,6 +115203,8 @@ export namespace Prisma {
     studentId: string | null
     status: $Enums.AcademicAttendanceStatus | null
     remarks: string | null
+    rating: number | null
+    review: string | null
     organizationId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -115028,6 +115216,8 @@ export namespace Prisma {
     studentId: number
     status: number
     remarks: number
+    rating: number
+    review: number
     organizationId: number
     createdAt: number
     updatedAt: number
@@ -115035,12 +115225,22 @@ export namespace Prisma {
   }
 
 
+  export type StudentAcademicAttendanceAvgAggregateInputType = {
+    rating?: true
+  }
+
+  export type StudentAcademicAttendanceSumAggregateInputType = {
+    rating?: true
+  }
+
   export type StudentAcademicAttendanceMinAggregateInputType = {
     id?: true
     sessionId?: true
     studentId?: true
     status?: true
     remarks?: true
+    rating?: true
+    review?: true
     organizationId?: true
     createdAt?: true
     updatedAt?: true
@@ -115052,6 +115252,8 @@ export namespace Prisma {
     studentId?: true
     status?: true
     remarks?: true
+    rating?: true
+    review?: true
     organizationId?: true
     createdAt?: true
     updatedAt?: true
@@ -115063,6 +115265,8 @@ export namespace Prisma {
     studentId?: true
     status?: true
     remarks?: true
+    rating?: true
+    review?: true
     organizationId?: true
     createdAt?: true
     updatedAt?: true
@@ -115107,6 +115311,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: StudentAcademicAttendanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StudentAcademicAttendanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: StudentAcademicAttendanceMinAggregateInputType
@@ -115137,6 +115353,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: StudentAcademicAttendanceCountAggregateInputType | true
+    _avg?: StudentAcademicAttendanceAvgAggregateInputType
+    _sum?: StudentAcademicAttendanceSumAggregateInputType
     _min?: StudentAcademicAttendanceMinAggregateInputType
     _max?: StudentAcademicAttendanceMaxAggregateInputType
   }
@@ -115147,10 +115365,14 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks: string | null
+    rating: number | null
+    review: string | null
     organizationId: string
     createdAt: Date
     updatedAt: Date
     _count: StudentAcademicAttendanceCountAggregateOutputType | null
+    _avg: StudentAcademicAttendanceAvgAggregateOutputType | null
+    _sum: StudentAcademicAttendanceSumAggregateOutputType | null
     _min: StudentAcademicAttendanceMinAggregateOutputType | null
     _max: StudentAcademicAttendanceMaxAggregateOutputType | null
   }
@@ -115175,6 +115397,8 @@ export namespace Prisma {
     studentId?: boolean
     status?: boolean
     remarks?: boolean
+    rating?: boolean
+    review?: boolean
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -115189,6 +115413,8 @@ export namespace Prisma {
     studentId?: boolean
     status?: boolean
     remarks?: boolean
+    rating?: boolean
+    review?: boolean
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -115203,6 +115429,8 @@ export namespace Prisma {
     studentId?: boolean
     status?: boolean
     remarks?: boolean
+    rating?: boolean
+    review?: boolean
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -115217,12 +115445,14 @@ export namespace Prisma {
     studentId?: boolean
     status?: boolean
     remarks?: boolean
+    rating?: boolean
+    review?: boolean
     organizationId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StudentAcademicAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "studentId" | "status" | "remarks" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["studentAcademicAttendance"]>
+  export type StudentAcademicAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "studentId" | "status" | "remarks" | "rating" | "review" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["studentAcademicAttendance"]>
   export type StudentAcademicAttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | AcademicSessionDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -115252,6 +115482,8 @@ export namespace Prisma {
       studentId: string
       status: $Enums.AcademicAttendanceStatus
       remarks: string | null
+      rating: number | null
+      review: string | null
       organizationId: string
       createdAt: Date
       updatedAt: Date
@@ -115686,6 +115918,8 @@ export namespace Prisma {
     readonly studentId: FieldRef<"StudentAcademicAttendance", 'String'>
     readonly status: FieldRef<"StudentAcademicAttendance", 'AcademicAttendanceStatus'>
     readonly remarks: FieldRef<"StudentAcademicAttendance", 'String'>
+    readonly rating: FieldRef<"StudentAcademicAttendance", 'Int'>
+    readonly review: FieldRef<"StudentAcademicAttendance", 'String'>
     readonly organizationId: FieldRef<"StudentAcademicAttendance", 'String'>
     readonly createdAt: FieldRef<"StudentAcademicAttendance", 'DateTime'>
     readonly updatedAt: FieldRef<"StudentAcademicAttendance", 'DateTime'>
@@ -116747,6 +116981,8 @@ export namespace Prisma {
     altPhone: 'altPhone',
     dob: 'dob',
     fatherName: 'fatherName',
+    isProvisional: 'isProvisional',
+    provisionalReceiptUrl: 'provisionalReceiptUrl',
     pinCode: 'pinCode',
     gender: 'gender',
     category: 'category',
@@ -117604,6 +117840,7 @@ export namespace Prisma {
     toBatchId: 'toBatchId',
     academicClassId: 'academicClassId',
     transferredById: 'transferredById',
+    transferredByFacultyId: 'transferredByFacultyId',
     organizationId: 'organizationId',
     reason: 'reason',
     createdAt: 'createdAt'
@@ -117637,6 +117874,10 @@ export namespace Prisma {
     startTime: 'startTime',
     endTime: 'endTime',
     organizationId: 'organizationId',
+    facultyPunchInTime: 'facultyPunchInTime',
+    facultyPunchOutTime: 'facultyPunchOutTime',
+    facultyPunchStatus: 'facultyPunchStatus',
+    facultyPunchRemarks: 'facultyPunchRemarks',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -117650,6 +117891,8 @@ export namespace Prisma {
     studentId: 'studentId',
     status: 'status',
     remarks: 'remarks',
+    rating: 'rating',
+    review: 'review',
     organizationId: 'organizationId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -122084,6 +122327,8 @@ export namespace Prisma {
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    isProvisional?: BoolFilter<"Enrollment"> | boolean
+    provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
     category?: StringNullableFilter<"Enrollment"> | string | null
@@ -122150,6 +122395,8 @@ export namespace Prisma {
     altPhone?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
+    isProvisional?: SortOrder
+    provisionalReceiptUrl?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
@@ -122220,6 +122467,8 @@ export namespace Prisma {
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    isProvisional?: BoolFilter<"Enrollment"> | boolean
+    provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
     category?: StringNullableFilter<"Enrollment"> | string | null
@@ -122286,6 +122535,8 @@ export namespace Prisma {
     altPhone?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     fatherName?: SortOrderInput | SortOrder
+    isProvisional?: SortOrder
+    provisionalReceiptUrl?: SortOrderInput | SortOrder
     pinCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
@@ -122349,6 +122600,8 @@ export namespace Prisma {
     altPhone?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    isProvisional?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    provisionalReceiptUrl?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     pinCode?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     gender?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     category?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
@@ -126153,6 +126406,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryListRelationFilter
     changedFacultyHistories?: LessonFacultyHistoryListRelationFilter
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
+    studentBatchTransfers?: StudentBatchTransferListRelationFilter
   }
 
   export type FacultyOrderByWithRelationInput = {
@@ -126176,6 +126430,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryOrderByRelationAggregateInput
     changedFacultyHistories?: LessonFacultyHistoryOrderByRelationAggregateInput
     batchLessonAssignments?: BatchLessonAssignmentOrderByRelationAggregateInput
+    studentBatchTransfers?: StudentBatchTransferOrderByRelationAggregateInput
   }
 
   export type FacultyWhereUniqueInput = Prisma.AtLeast<{
@@ -126202,6 +126457,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryListRelationFilter
     changedFacultyHistories?: LessonFacultyHistoryListRelationFilter
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
+    studentBatchTransfers?: StudentBatchTransferListRelationFilter
   }, "id">
 
   export type FacultyOrderByWithAggregationInput = {
@@ -126865,7 +127121,8 @@ export namespace Prisma {
     fromBatchId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     toBatchId?: StringFilter<"StudentBatchTransfer"> | string
     academicClassId?: StringFilter<"StudentBatchTransfer"> | string
-    transferredById?: StringFilter<"StudentBatchTransfer"> | string
+    transferredById?: StringNullableFilter<"StudentBatchTransfer"> | string | null
+    transferredByFacultyId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     organizationId?: StringFilter<"StudentBatchTransfer"> | string
     reason?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     createdAt?: DateTimeFilter<"StudentBatchTransfer"> | Date | string
@@ -126873,7 +127130,8 @@ export namespace Prisma {
     fromBatch?: XOR<AcademicBatchNullableScalarRelationFilter, AcademicBatchWhereInput> | null
     toBatch?: XOR<AcademicBatchScalarRelationFilter, AcademicBatchWhereInput>
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
-    transferredBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    transferredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    transferredByFaculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
   }
 
   export type StudentBatchTransferOrderByWithRelationInput = {
@@ -126882,7 +127140,8 @@ export namespace Prisma {
     fromBatchId?: SortOrderInput | SortOrder
     toBatchId?: SortOrder
     academicClassId?: SortOrder
-    transferredById?: SortOrder
+    transferredById?: SortOrderInput | SortOrder
+    transferredByFacultyId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     reason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -126891,6 +127150,7 @@ export namespace Prisma {
     toBatch?: AcademicBatchOrderByWithRelationInput
     academicClass?: AcademicClassOrderByWithRelationInput
     transferredBy?: UserOrderByWithRelationInput
+    transferredByFaculty?: FacultyOrderByWithRelationInput
   }
 
   export type StudentBatchTransferWhereUniqueInput = Prisma.AtLeast<{
@@ -126902,7 +127162,8 @@ export namespace Prisma {
     fromBatchId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     toBatchId?: StringFilter<"StudentBatchTransfer"> | string
     academicClassId?: StringFilter<"StudentBatchTransfer"> | string
-    transferredById?: StringFilter<"StudentBatchTransfer"> | string
+    transferredById?: StringNullableFilter<"StudentBatchTransfer"> | string | null
+    transferredByFacultyId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     organizationId?: StringFilter<"StudentBatchTransfer"> | string
     reason?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     createdAt?: DateTimeFilter<"StudentBatchTransfer"> | Date | string
@@ -126910,7 +127171,8 @@ export namespace Prisma {
     fromBatch?: XOR<AcademicBatchNullableScalarRelationFilter, AcademicBatchWhereInput> | null
     toBatch?: XOR<AcademicBatchScalarRelationFilter, AcademicBatchWhereInput>
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
-    transferredBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    transferredBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    transferredByFaculty?: XOR<FacultyNullableScalarRelationFilter, FacultyWhereInput> | null
   }, "id">
 
   export type StudentBatchTransferOrderByWithAggregationInput = {
@@ -126919,7 +127181,8 @@ export namespace Prisma {
     fromBatchId?: SortOrderInput | SortOrder
     toBatchId?: SortOrder
     academicClassId?: SortOrder
-    transferredById?: SortOrder
+    transferredById?: SortOrderInput | SortOrder
+    transferredByFacultyId?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     reason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -126937,7 +127200,8 @@ export namespace Prisma {
     fromBatchId?: StringNullableWithAggregatesFilter<"StudentBatchTransfer"> | string | null
     toBatchId?: StringWithAggregatesFilter<"StudentBatchTransfer"> | string
     academicClassId?: StringWithAggregatesFilter<"StudentBatchTransfer"> | string
-    transferredById?: StringWithAggregatesFilter<"StudentBatchTransfer"> | string
+    transferredById?: StringNullableWithAggregatesFilter<"StudentBatchTransfer"> | string | null
+    transferredByFacultyId?: StringNullableWithAggregatesFilter<"StudentBatchTransfer"> | string | null
     organizationId?: StringWithAggregatesFilter<"StudentBatchTransfer"> | string
     reason?: StringNullableWithAggregatesFilter<"StudentBatchTransfer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StudentBatchTransfer"> | Date | string
@@ -127033,6 +127297,10 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"AcademicSession"> | Date | string
     endTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
     organizationId?: StringFilter<"AcademicSession"> | string
+    facultyPunchInTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchOutTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchStatus?: StringNullableFilter<"AcademicSession"> | string | null
+    facultyPunchRemarks?: StringNullableFilter<"AcademicSession"> | string | null
     createdAt?: DateTimeFilter<"AcademicSession"> | Date | string
     updatedAt?: DateTimeFilter<"AcademicSession"> | Date | string
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
@@ -127057,6 +127325,10 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
     organizationId?: SortOrder
+    facultyPunchInTime?: SortOrderInput | SortOrder
+    facultyPunchOutTime?: SortOrderInput | SortOrder
+    facultyPunchStatus?: SortOrderInput | SortOrder
+    facultyPunchRemarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     academicClass?: AcademicClassOrderByWithRelationInput
@@ -127084,6 +127356,10 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"AcademicSession"> | Date | string
     endTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
     organizationId?: StringFilter<"AcademicSession"> | string
+    facultyPunchInTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchOutTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchStatus?: StringNullableFilter<"AcademicSession"> | string | null
+    facultyPunchRemarks?: StringNullableFilter<"AcademicSession"> | string | null
     createdAt?: DateTimeFilter<"AcademicSession"> | Date | string
     updatedAt?: DateTimeFilter<"AcademicSession"> | Date | string
     academicClass?: XOR<AcademicClassScalarRelationFilter, AcademicClassWhereInput>
@@ -127108,6 +127384,10 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
     organizationId?: SortOrder
+    facultyPunchInTime?: SortOrderInput | SortOrder
+    facultyPunchOutTime?: SortOrderInput | SortOrder
+    facultyPunchStatus?: SortOrderInput | SortOrder
+    facultyPunchRemarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AcademicSessionCountOrderByAggregateInput
@@ -127130,6 +127410,10 @@ export namespace Prisma {
     startTime?: DateTimeWithAggregatesFilter<"AcademicSession"> | Date | string
     endTime?: DateTimeNullableWithAggregatesFilter<"AcademicSession"> | Date | string | null
     organizationId?: StringWithAggregatesFilter<"AcademicSession"> | string
+    facultyPunchInTime?: DateTimeNullableWithAggregatesFilter<"AcademicSession"> | Date | string | null
+    facultyPunchOutTime?: DateTimeNullableWithAggregatesFilter<"AcademicSession"> | Date | string | null
+    facultyPunchStatus?: StringNullableWithAggregatesFilter<"AcademicSession"> | string | null
+    facultyPunchRemarks?: StringNullableWithAggregatesFilter<"AcademicSession"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"AcademicSession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AcademicSession"> | Date | string
   }
@@ -127143,6 +127427,8 @@ export namespace Prisma {
     studentId?: StringFilter<"StudentAcademicAttendance"> | string
     status?: EnumAcademicAttendanceStatusFilter<"StudentAcademicAttendance"> | $Enums.AcademicAttendanceStatus
     remarks?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
+    rating?: IntNullableFilter<"StudentAcademicAttendance"> | number | null
+    review?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
     organizationId?: StringFilter<"StudentAcademicAttendance"> | string
     createdAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
@@ -127157,6 +127443,8 @@ export namespace Prisma {
     studentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
+    review?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -127175,6 +127463,8 @@ export namespace Prisma {
     studentId?: StringFilter<"StudentAcademicAttendance"> | string
     status?: EnumAcademicAttendanceStatusFilter<"StudentAcademicAttendance"> | $Enums.AcademicAttendanceStatus
     remarks?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
+    rating?: IntNullableFilter<"StudentAcademicAttendance"> | number | null
+    review?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
     organizationId?: StringFilter<"StudentAcademicAttendance"> | string
     createdAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
@@ -127189,12 +127479,16 @@ export namespace Prisma {
     studentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
+    review?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: StudentAcademicAttendanceCountOrderByAggregateInput
+    _avg?: StudentAcademicAttendanceAvgOrderByAggregateInput
     _max?: StudentAcademicAttendanceMaxOrderByAggregateInput
     _min?: StudentAcademicAttendanceMinOrderByAggregateInput
+    _sum?: StudentAcademicAttendanceSumOrderByAggregateInput
   }
 
   export type StudentAcademicAttendanceScalarWhereWithAggregatesInput = {
@@ -127206,6 +127500,8 @@ export namespace Prisma {
     studentId?: StringWithAggregatesFilter<"StudentAcademicAttendance"> | string
     status?: EnumAcademicAttendanceStatusWithAggregatesFilter<"StudentAcademicAttendance"> | $Enums.AcademicAttendanceStatus
     remarks?: StringNullableWithAggregatesFilter<"StudentAcademicAttendance"> | string | null
+    rating?: IntNullableWithAggregatesFilter<"StudentAcademicAttendance"> | number | null
+    review?: StringNullableWithAggregatesFilter<"StudentAcademicAttendance"> | string | null
     organizationId?: StringWithAggregatesFilter<"StudentAcademicAttendance"> | string
     createdAt?: DateTimeWithAggregatesFilter<"StudentAcademicAttendance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StudentAcademicAttendance"> | Date | string
@@ -131653,6 +131949,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -131718,6 +132016,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -131765,6 +132065,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131830,6 +132132,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131886,6 +132190,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -131932,6 +132238,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131986,6 +132294,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -136008,6 +136318,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateInput = {
@@ -136030,6 +136341,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUpdateInput = {
@@ -136052,6 +136364,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateInput = {
@@ -136074,6 +136387,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyCreateManyInput = {
@@ -136763,7 +137077,8 @@ export namespace Prisma {
     fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
     toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
     academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
-    transferredBy: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateInput = {
@@ -136772,7 +137087,8 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -136787,7 +137103,8 @@ export namespace Prisma {
     fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
     toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
     academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
-    transferredBy?: UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateInput = {
@@ -136796,7 +137113,8 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136808,7 +137126,8 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -136827,7 +137146,8 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136904,6 +137224,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -136928,6 +137252,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -136938,6 +137266,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -136962,6 +137294,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -136979,6 +137315,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -136988,6 +137328,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -137004,6 +137348,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -137012,6 +137360,8 @@ export namespace Prisma {
     id?: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     session: AcademicSessionCreateNestedOneWithoutAttendancesInput
@@ -137025,6 +137375,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -137034,6 +137386,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: AcademicSessionUpdateOneRequiredWithoutAttendancesNestedInput
@@ -137047,6 +137401,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -137058,6 +137414,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -137067,6 +137425,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -137077,6 +137437,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140308,6 +140670,8 @@ export namespace Prisma {
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
+    isProvisional?: SortOrder
+    provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
     category?: SortOrder
@@ -140366,6 +140730,8 @@ export namespace Prisma {
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
+    isProvisional?: SortOrder
+    provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
     category?: SortOrder
@@ -140419,6 +140785,8 @@ export namespace Prisma {
     altPhone?: SortOrder
     dob?: SortOrder
     fatherName?: SortOrder
+    isProvisional?: SortOrder
+    provisionalReceiptUrl?: SortOrder
     pinCode?: SortOrder
     gender?: SortOrder
     category?: SortOrder
@@ -142817,6 +143185,7 @@ export namespace Prisma {
     toBatchId?: SortOrder
     academicClassId?: SortOrder
     transferredById?: SortOrder
+    transferredByFacultyId?: SortOrder
     organizationId?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -142829,6 +143198,7 @@ export namespace Prisma {
     toBatchId?: SortOrder
     academicClassId?: SortOrder
     transferredById?: SortOrder
+    transferredByFacultyId?: SortOrder
     organizationId?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -142841,6 +143211,7 @@ export namespace Prisma {
     toBatchId?: SortOrder
     academicClassId?: SortOrder
     transferredById?: SortOrder
+    transferredByFacultyId?: SortOrder
     organizationId?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -142900,6 +143271,10 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     organizationId?: SortOrder
+    facultyPunchInTime?: SortOrder
+    facultyPunchOutTime?: SortOrder
+    facultyPunchStatus?: SortOrder
+    facultyPunchRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -142916,6 +143291,10 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     organizationId?: SortOrder
+    facultyPunchInTime?: SortOrder
+    facultyPunchOutTime?: SortOrder
+    facultyPunchStatus?: SortOrder
+    facultyPunchRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -142932,6 +143311,10 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     organizationId?: SortOrder
+    facultyPunchInTime?: SortOrder
+    facultyPunchOutTime?: SortOrder
+    facultyPunchStatus?: SortOrder
+    facultyPunchRemarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -142969,9 +143352,15 @@ export namespace Prisma {
     studentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    rating?: SortOrder
+    review?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type StudentAcademicAttendanceAvgOrderByAggregateInput = {
+    rating?: SortOrder
   }
 
   export type StudentAcademicAttendanceMaxOrderByAggregateInput = {
@@ -142980,6 +143369,8 @@ export namespace Prisma {
     studentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    rating?: SortOrder
+    review?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -142991,9 +143382,15 @@ export namespace Prisma {
     studentId?: SortOrder
     status?: SortOrder
     remarks?: SortOrder
+    rating?: SortOrder
+    review?: SortOrder
     organizationId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type StudentAcademicAttendanceSumOrderByAggregateInput = {
+    rating?: SortOrder
   }
 
   export type EnumAcademicAttendanceStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -156054,6 +156451,13 @@ export namespace Prisma {
     connect?: BatchLessonAssignmentWhereUniqueInput | BatchLessonAssignmentWhereUniqueInput[]
   }
 
+  export type StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput = {
+    create?: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput> | StudentBatchTransferCreateWithoutTransferredByFacultyInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput[]
+    connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput | StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput[]
+    createMany?: StudentBatchTransferCreateManyTransferredByFacultyInputEnvelope
+    connect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+  }
+
   export type AcademicClassUncheckedCreateNestedManyWithoutInchargeInput = {
     create?: XOR<AcademicClassCreateWithoutInchargeInput, AcademicClassUncheckedCreateWithoutInchargeInput> | AcademicClassCreateWithoutInchargeInput[] | AcademicClassUncheckedCreateWithoutInchargeInput[]
     connectOrCreate?: AcademicClassCreateOrConnectWithoutInchargeInput | AcademicClassCreateOrConnectWithoutInchargeInput[]
@@ -156115,6 +156519,13 @@ export namespace Prisma {
     connectOrCreate?: BatchLessonAssignmentCreateOrConnectWithoutFacultyInput | BatchLessonAssignmentCreateOrConnectWithoutFacultyInput[]
     createMany?: BatchLessonAssignmentCreateManyFacultyInputEnvelope
     connect?: BatchLessonAssignmentWhereUniqueInput | BatchLessonAssignmentWhereUniqueInput[]
+  }
+
+  export type StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput = {
+    create?: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput> | StudentBatchTransferCreateWithoutTransferredByFacultyInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput[]
+    connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput | StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput[]
+    createMany?: StudentBatchTransferCreateManyTransferredByFacultyInputEnvelope
+    connect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
   }
 
   export type OrganizationUpdateOneRequiredWithoutFacultiesNestedInput = {
@@ -156251,6 +156662,20 @@ export namespace Prisma {
     deleteMany?: BatchLessonAssignmentScalarWhereInput | BatchLessonAssignmentScalarWhereInput[]
   }
 
+  export type StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput = {
+    create?: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput> | StudentBatchTransferCreateWithoutTransferredByFacultyInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput[]
+    connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput | StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput[]
+    upsert?: StudentBatchTransferUpsertWithWhereUniqueWithoutTransferredByFacultyInput | StudentBatchTransferUpsertWithWhereUniqueWithoutTransferredByFacultyInput[]
+    createMany?: StudentBatchTransferCreateManyTransferredByFacultyInputEnvelope
+    set?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    disconnect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    delete?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    connect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    update?: StudentBatchTransferUpdateWithWhereUniqueWithoutTransferredByFacultyInput | StudentBatchTransferUpdateWithWhereUniqueWithoutTransferredByFacultyInput[]
+    updateMany?: StudentBatchTransferUpdateManyWithWhereWithoutTransferredByFacultyInput | StudentBatchTransferUpdateManyWithWhereWithoutTransferredByFacultyInput[]
+    deleteMany?: StudentBatchTransferScalarWhereInput | StudentBatchTransferScalarWhereInput[]
+  }
+
   export type AcademicClassUncheckedUpdateManyWithoutInchargeNestedInput = {
     create?: XOR<AcademicClassCreateWithoutInchargeInput, AcademicClassUncheckedCreateWithoutInchargeInput> | AcademicClassCreateWithoutInchargeInput[] | AcademicClassUncheckedCreateWithoutInchargeInput[]
     connectOrCreate?: AcademicClassCreateOrConnectWithoutInchargeInput | AcademicClassCreateOrConnectWithoutInchargeInput[]
@@ -156375,6 +156800,20 @@ export namespace Prisma {
     update?: BatchLessonAssignmentUpdateWithWhereUniqueWithoutFacultyInput | BatchLessonAssignmentUpdateWithWhereUniqueWithoutFacultyInput[]
     updateMany?: BatchLessonAssignmentUpdateManyWithWhereWithoutFacultyInput | BatchLessonAssignmentUpdateManyWithWhereWithoutFacultyInput[]
     deleteMany?: BatchLessonAssignmentScalarWhereInput | BatchLessonAssignmentScalarWhereInput[]
+  }
+
+  export type StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput = {
+    create?: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput> | StudentBatchTransferCreateWithoutTransferredByFacultyInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput[]
+    connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput | StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput[]
+    upsert?: StudentBatchTransferUpsertWithWhereUniqueWithoutTransferredByFacultyInput | StudentBatchTransferUpsertWithWhereUniqueWithoutTransferredByFacultyInput[]
+    createMany?: StudentBatchTransferCreateManyTransferredByFacultyInputEnvelope
+    set?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    disconnect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    delete?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    connect?: StudentBatchTransferWhereUniqueInput | StudentBatchTransferWhereUniqueInput[]
+    update?: StudentBatchTransferUpdateWithWhereUniqueWithoutTransferredByFacultyInput | StudentBatchTransferUpdateWithWhereUniqueWithoutTransferredByFacultyInput[]
+    updateMany?: StudentBatchTransferUpdateManyWithWhereWithoutTransferredByFacultyInput | StudentBatchTransferUpdateManyWithWhereWithoutTransferredByFacultyInput[]
+    deleteMany?: StudentBatchTransferScalarWhereInput | StudentBatchTransferScalarWhereInput[]
   }
 
   export type AcademicCenterCreateprogramIdsInput = {
@@ -157371,6 +157810,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type FacultyCreateNestedOneWithoutStudentBatchTransfersInput = {
+    create?: XOR<FacultyCreateWithoutStudentBatchTransfersInput, FacultyUncheckedCreateWithoutStudentBatchTransfersInput>
+    connectOrCreate?: FacultyCreateOrConnectWithoutStudentBatchTransfersInput
+    connect?: FacultyWhereUniqueInput
+  }
+
   export type StudentUpdateOneRequiredWithoutStudentBatchTransfersNestedInput = {
     create?: XOR<StudentCreateWithoutStudentBatchTransfersInput, StudentUncheckedCreateWithoutStudentBatchTransfersInput>
     connectOrCreate?: StudentCreateOrConnectWithoutStudentBatchTransfersInput
@@ -157405,12 +157850,24 @@ export namespace Prisma {
     update?: XOR<XOR<AcademicClassUpdateToOneWithWhereWithoutStudentBatchTransfersInput, AcademicClassUpdateWithoutStudentBatchTransfersInput>, AcademicClassUncheckedUpdateWithoutStudentBatchTransfersInput>
   }
 
-  export type UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput = {
+  export type UserUpdateOneWithoutStudentBatchTransfersNestedInput = {
     create?: XOR<UserCreateWithoutStudentBatchTransfersInput, UserUncheckedCreateWithoutStudentBatchTransfersInput>
     connectOrCreate?: UserCreateOrConnectWithoutStudentBatchTransfersInput
     upsert?: UserUpsertWithoutStudentBatchTransfersInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudentBatchTransfersInput, UserUpdateWithoutStudentBatchTransfersInput>, UserUncheckedUpdateWithoutStudentBatchTransfersInput>
+  }
+
+  export type FacultyUpdateOneWithoutStudentBatchTransfersNestedInput = {
+    create?: XOR<FacultyCreateWithoutStudentBatchTransfersInput, FacultyUncheckedCreateWithoutStudentBatchTransfersInput>
+    connectOrCreate?: FacultyCreateOrConnectWithoutStudentBatchTransfersInput
+    upsert?: FacultyUpsertWithoutStudentBatchTransfersInput
+    disconnect?: FacultyWhereInput | boolean
+    delete?: FacultyWhereInput | boolean
+    connect?: FacultyWhereUniqueInput
+    update?: XOR<XOR<FacultyUpdateToOneWithWhereWithoutStudentBatchTransfersInput, FacultyUpdateWithoutStudentBatchTransfersInput>, FacultyUncheckedUpdateWithoutStudentBatchTransfersInput>
   }
 
   export type AcademicBatchCreateNestedOneWithoutLessonAssignmentsInput = {
@@ -158402,6 +158859,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -158424,6 +158885,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -158443,6 +158908,8 @@ export namespace Prisma {
     id?: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     session: AcademicSessionCreateNestedOneWithoutAttendancesInput
@@ -158455,6 +158922,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -159231,6 +159700,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -159294,6 +159765,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -161530,6 +162003,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutOrganizationInput = {
@@ -161551,6 +162025,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutOrganizationInput = {
@@ -161762,6 +162237,10 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"AcademicSession"> | Date | string
     endTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
     organizationId?: StringFilter<"AcademicSession"> | string
+    facultyPunchInTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchOutTime?: DateTimeNullableFilter<"AcademicSession"> | Date | string | null
+    facultyPunchStatus?: StringNullableFilter<"AcademicSession"> | string | null
+    facultyPunchRemarks?: StringNullableFilter<"AcademicSession"> | string | null
     createdAt?: DateTimeFilter<"AcademicSession"> | Date | string
     updatedAt?: DateTimeFilter<"AcademicSession"> | Date | string
   }
@@ -161791,6 +162270,8 @@ export namespace Prisma {
     studentId?: StringFilter<"StudentAcademicAttendance"> | string
     status?: EnumAcademicAttendanceStatusFilter<"StudentAcademicAttendance"> | $Enums.AcademicAttendanceStatus
     remarks?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
+    rating?: IntNullableFilter<"StudentAcademicAttendance"> | number | null
+    review?: StringNullableFilter<"StudentAcademicAttendance"> | string | null
     organizationId?: StringFilter<"StudentAcademicAttendance"> | string
     createdAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"StudentAcademicAttendance"> | Date | string
@@ -162438,6 +162919,8 @@ export namespace Prisma {
     altPhone?: StringNullableFilter<"Enrollment"> | string | null
     dob?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     fatherName?: StringNullableFilter<"Enrollment"> | string | null
+    isProvisional?: BoolFilter<"Enrollment"> | boolean
+    provisionalReceiptUrl?: StringNullableFilter<"Enrollment"> | string | null
     pinCode?: StringNullableFilter<"Enrollment"> | string | null
     gender?: StringNullableFilter<"Enrollment"> | string | null
     category?: StringNullableFilter<"Enrollment"> | string | null
@@ -166668,6 +167151,7 @@ export namespace Prisma {
     fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
     toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
     academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateWithoutTransferredByInput = {
@@ -166676,6 +167160,7 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -167489,6 +167974,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167552,6 +168039,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167609,6 +168098,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167672,6 +168163,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167729,6 +168222,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167793,6 +168288,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167849,6 +168346,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167912,6 +168411,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -167969,6 +168470,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -168032,6 +168535,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -171952,7 +172457,8 @@ export namespace Prisma {
     fromBatchId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     toBatchId?: StringFilter<"StudentBatchTransfer"> | string
     academicClassId?: StringFilter<"StudentBatchTransfer"> | string
-    transferredById?: StringFilter<"StudentBatchTransfer"> | string
+    transferredById?: StringNullableFilter<"StudentBatchTransfer"> | string | null
+    transferredByFacultyId?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     organizationId?: StringFilter<"StudentBatchTransfer"> | string
     reason?: StringNullableFilter<"StudentBatchTransfer"> | string | null
     createdAt?: DateTimeFilter<"StudentBatchTransfer"> | Date | string
@@ -179329,6 +179835,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -179392,6 +179900,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -180537,6 +181047,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -180600,6 +181112,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -183454,7 +183968,8 @@ export namespace Prisma {
     fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
     toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
     academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
-    transferredBy: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateWithoutStudentInput = {
@@ -183462,7 +183977,8 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -183521,6 +184037,8 @@ export namespace Prisma {
     id?: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     session: AcademicSessionCreateNestedOneWithoutAttendancesInput
@@ -183532,6 +184050,8 @@ export namespace Prisma {
     sessionId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -183613,6 +184133,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -183676,6 +184198,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -204896,6 +205420,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -204959,6 +205485,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -235419,6 +235947,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -235483,6 +236013,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -235659,6 +236191,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -235723,6 +236257,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -245287,6 +245823,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -245309,6 +245849,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -245329,6 +245873,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -245351,6 +245899,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -245557,6 +246109,40 @@ export namespace Prisma {
 
   export type BatchLessonAssignmentCreateManyFacultyInputEnvelope = {
     data: BatchLessonAssignmentCreateManyFacultyInput | BatchLessonAssignmentCreateManyFacultyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StudentBatchTransferCreateWithoutTransferredByFacultyInput = {
+    id?: string
+    organizationId: string
+    reason?: string | null
+    createdAt?: Date | string
+    student: StudentCreateNestedOneWithoutStudentBatchTransfersInput
+    fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
+    toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
+    academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+  }
+
+  export type StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput = {
+    id?: string
+    studentId: string
+    fromBatchId?: string | null
+    toBatchId: string
+    academicClassId: string
+    transferredById?: string | null
+    organizationId: string
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type StudentBatchTransferCreateOrConnectWithoutTransferredByFacultyInput = {
+    where: StudentBatchTransferWhereUniqueInput
+    create: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput>
+  }
+
+  export type StudentBatchTransferCreateManyTransferredByFacultyInputEnvelope = {
+    data: StudentBatchTransferCreateManyTransferredByFacultyInput | StudentBatchTransferCreateManyTransferredByFacultyInput[]
     skipDuplicates?: boolean
   }
 
@@ -245883,6 +246469,22 @@ export namespace Prisma {
   export type BatchLessonAssignmentUpdateManyWithWhereWithoutFacultyInput = {
     where: BatchLessonAssignmentScalarWhereInput
     data: XOR<BatchLessonAssignmentUpdateManyMutationInput, BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyInput>
+  }
+
+  export type StudentBatchTransferUpsertWithWhereUniqueWithoutTransferredByFacultyInput = {
+    where: StudentBatchTransferWhereUniqueInput
+    update: XOR<StudentBatchTransferUpdateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedUpdateWithoutTransferredByFacultyInput>
+    create: XOR<StudentBatchTransferCreateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedCreateWithoutTransferredByFacultyInput>
+  }
+
+  export type StudentBatchTransferUpdateWithWhereUniqueWithoutTransferredByFacultyInput = {
+    where: StudentBatchTransferWhereUniqueInput
+    data: XOR<StudentBatchTransferUpdateWithoutTransferredByFacultyInput, StudentBatchTransferUncheckedUpdateWithoutTransferredByFacultyInput>
+  }
+
+  export type StudentBatchTransferUpdateManyWithWhereWithoutTransferredByFacultyInput = {
+    where: StudentBatchTransferScalarWhereInput
+    data: XOR<StudentBatchTransferUpdateManyMutationInput, StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyInput>
   }
 
   export type OrganizationCreateWithoutAcademicCentersInput = {
@@ -246305,7 +246907,8 @@ export namespace Prisma {
     student: StudentCreateNestedOneWithoutStudentBatchTransfersInput
     fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
     toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
-    transferredBy: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateWithoutAcademicClassInput = {
@@ -246313,7 +246916,8 @@ export namespace Prisma {
     studentId: string
     fromBatchId?: string | null
     toBatchId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -246377,6 +246981,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutInchargedClassesInput = {
@@ -246398,6 +247003,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutInchargedClassesInput = {
@@ -246585,6 +247191,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     classModule: ClassModuleCreateNestedOneWithoutAcademicSessionsInput
@@ -246607,6 +247217,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -246781,6 +247395,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutInchargedClassesInput = {
@@ -246802,6 +247417,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutAcademicClassesInput = {
@@ -247248,6 +247864,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -247270,6 +247890,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -247627,6 +248251,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutModuleLessonsInput = {
@@ -247648,6 +248273,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutModuleLessonsInput = {
@@ -247835,6 +248461,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -247857,6 +248487,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -248031,6 +248665,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutModuleLessonsInput = {
@@ -248052,6 +248687,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutModuleLessonsInput = {
@@ -248353,6 +248989,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutPreviousFacultyHistoriesInput = {
@@ -248374,6 +249011,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutPreviousFacultyHistoriesInput = {
@@ -248400,6 +249038,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutPreviousFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutNewFacultyHistoriesInput = {
@@ -248421,6 +249060,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutPreviousFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutNewFacultyHistoriesInput = {
@@ -248447,6 +249087,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutPreviousFacultyInput
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutChangedFacultyHistoriesInput = {
@@ -248468,6 +249109,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutPreviousFacultyInput
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutChangedFacultyHistoriesInput = {
@@ -248721,6 +249363,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutPreviousFacultyHistoriesInput = {
@@ -248742,6 +249385,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUpsertWithoutNewFacultyHistoriesInput = {
@@ -248774,6 +249418,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutPreviousFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutNewFacultyHistoriesInput = {
@@ -248795,6 +249440,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutPreviousFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUpsertWithoutChangedFacultyHistoriesInput = {
@@ -248827,6 +249473,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutPreviousFacultyNestedInput
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutChangedFacultyHistoriesInput = {
@@ -248848,6 +249495,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutPreviousFacultyNestedInput
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutLessonFacultyHistoriesInput = {
@@ -249085,6 +249733,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutClassMaterialsInput = {
@@ -249106,6 +249755,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutClassMaterialsInput = {
@@ -249359,6 +250009,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutClassMaterialsInput = {
@@ -249380,6 +250031,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutClassMaterialsInput = {
@@ -249571,7 +250223,8 @@ export namespace Prisma {
     student: StudentCreateNestedOneWithoutStudentBatchTransfersInput
     toBatch: AcademicBatchCreateNestedOneWithoutTransfersToInput
     academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
-    transferredBy: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateWithoutFromBatchInput = {
@@ -249579,7 +250232,8 @@ export namespace Prisma {
     studentId: string
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -249603,7 +250257,8 @@ export namespace Prisma {
     student: StudentCreateNestedOneWithoutStudentBatchTransfersInput
     fromBatch?: AcademicBatchCreateNestedOneWithoutTransfersFromInput
     academicClass: AcademicClassCreateNestedOneWithoutStudentBatchTransfersInput
-    transferredBy: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredBy?: UserCreateNestedOneWithoutStudentBatchTransfersInput
+    transferredByFaculty?: FacultyCreateNestedOneWithoutStudentBatchTransfersInput
   }
 
   export type StudentBatchTransferUncheckedCreateWithoutToBatchInput = {
@@ -249611,7 +250266,8 @@ export namespace Prisma {
     studentId: string
     fromBatchId?: string | null
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -249842,6 +250498,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -249864,6 +250524,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: StudentAcademicAttendanceUncheckedCreateNestedManyWithoutSessionInput
@@ -250806,6 +251470,55 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutStudentBatchTransfersInput, UserUncheckedCreateWithoutStudentBatchTransfersInput>
   }
 
+  export type FacultyCreateWithoutStudentBatchTransfersInput = {
+    id?: string
+    name: string
+    email: string
+    phone?: string | null
+    password?: string | null
+    specialization?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutFacultiesInput
+    inchargedClasses?: AcademicClassCreateNestedManyWithoutInchargeInput
+    taughtSessions?: AcademicSessionCreateNestedManyWithoutFacultyInput
+    startedSessions?: AcademicSessionCreateNestedManyWithoutStartedByInput
+    classMaterials?: ClassMaterialCreateNestedManyWithoutFacultyInput
+    moduleLessons?: ModuleLessonCreateNestedManyWithoutFacultyInput
+    previousFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutPreviousFacultyInput
+    newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
+    changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
+    batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+  }
+
+  export type FacultyUncheckedCreateWithoutStudentBatchTransfersInput = {
+    id?: string
+    name: string
+    email: string
+    phone?: string | null
+    password?: string | null
+    specialization?: string | null
+    status?: string
+    organizationId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inchargedClasses?: AcademicClassUncheckedCreateNestedManyWithoutInchargeInput
+    taughtSessions?: AcademicSessionUncheckedCreateNestedManyWithoutFacultyInput
+    startedSessions?: AcademicSessionUncheckedCreateNestedManyWithoutStartedByInput
+    classMaterials?: ClassMaterialUncheckedCreateNestedManyWithoutFacultyInput
+    moduleLessons?: ModuleLessonUncheckedCreateNestedManyWithoutFacultyInput
+    previousFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutPreviousFacultyInput
+    newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
+    changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+  }
+
+  export type FacultyCreateOrConnectWithoutStudentBatchTransfersInput = {
+    where: FacultyWhereUniqueInput
+    create: XOR<FacultyCreateWithoutStudentBatchTransfersInput, FacultyUncheckedCreateWithoutStudentBatchTransfersInput>
+  }
+
   export type StudentUpsertWithoutStudentBatchTransfersInput = {
     update: XOR<StudentUpdateWithoutStudentBatchTransfersInput, StudentUncheckedUpdateWithoutStudentBatchTransfersInput>
     create: XOR<StudentCreateWithoutStudentBatchTransfersInput, StudentUncheckedCreateWithoutStudentBatchTransfersInput>
@@ -251303,6 +252016,61 @@ export namespace Prisma {
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type FacultyUpsertWithoutStudentBatchTransfersInput = {
+    update: XOR<FacultyUpdateWithoutStudentBatchTransfersInput, FacultyUncheckedUpdateWithoutStudentBatchTransfersInput>
+    create: XOR<FacultyCreateWithoutStudentBatchTransfersInput, FacultyUncheckedCreateWithoutStudentBatchTransfersInput>
+    where?: FacultyWhereInput
+  }
+
+  export type FacultyUpdateToOneWithWhereWithoutStudentBatchTransfersInput = {
+    where?: FacultyWhereInput
+    data: XOR<FacultyUpdateWithoutStudentBatchTransfersInput, FacultyUncheckedUpdateWithoutStudentBatchTransfersInput>
+  }
+
+  export type FacultyUpdateWithoutStudentBatchTransfersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutFacultiesNestedInput
+    inchargedClasses?: AcademicClassUpdateManyWithoutInchargeNestedInput
+    taughtSessions?: AcademicSessionUpdateManyWithoutFacultyNestedInput
+    startedSessions?: AcademicSessionUpdateManyWithoutStartedByNestedInput
+    classMaterials?: ClassMaterialUpdateManyWithoutFacultyNestedInput
+    moduleLessons?: ModuleLessonUpdateManyWithoutFacultyNestedInput
+    previousFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutPreviousFacultyNestedInput
+    newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
+    changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+  }
+
+  export type FacultyUncheckedUpdateWithoutStudentBatchTransfersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inchargedClasses?: AcademicClassUncheckedUpdateManyWithoutInchargeNestedInput
+    taughtSessions?: AcademicSessionUncheckedUpdateManyWithoutFacultyNestedInput
+    startedSessions?: AcademicSessionUncheckedUpdateManyWithoutStartedByNestedInput
+    classMaterials?: ClassMaterialUncheckedUpdateManyWithoutFacultyNestedInput
+    moduleLessons?: ModuleLessonUncheckedUpdateManyWithoutFacultyNestedInput
+    previousFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutPreviousFacultyNestedInput
+    newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
+    changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+  }
+
   export type AcademicBatchCreateWithoutLessonAssignmentsInput = {
     id?: string
     name: string
@@ -251396,6 +252164,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutPreviousFacultyInput
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutBatchLessonAssignmentsInput = {
@@ -251417,6 +252186,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutPreviousFacultyInput
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutBatchLessonAssignmentsInput = {
@@ -251715,6 +252485,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutPreviousFacultyNestedInput
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutBatchLessonAssignmentsInput = {
@@ -251736,6 +252507,7 @@ export namespace Prisma {
     previousFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutPreviousFacultyNestedInput
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutBatchLessonAssignmentsInput = {
@@ -252076,6 +252848,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutTaughtSessionsInput = {
@@ -252097,6 +252870,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutTaughtSessionsInput = {
@@ -252123,6 +252897,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyUncheckedCreateWithoutStartedSessionsInput = {
@@ -252144,6 +252919,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutNewFacultyInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedCreateNestedManyWithoutChangedByInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedCreateNestedManyWithoutFacultyInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByFacultyInput
   }
 
   export type FacultyCreateOrConnectWithoutStartedSessionsInput = {
@@ -252330,6 +253106,8 @@ export namespace Prisma {
     id?: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutAcademicAttendancesInput
@@ -252341,6 +253119,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -252548,6 +253328,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutTaughtSessionsInput = {
@@ -252569,6 +253350,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUpsertWithoutStartedSessionsInput = {
@@ -252601,6 +253383,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutStartedSessionsInput = {
@@ -252622,6 +253405,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type OrganizationUpsertWithoutAcademicSessionsInput = {
@@ -252826,6 +253610,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     academicClass: AcademicClassCreateNestedOneWithoutAcademicSessionsInput
@@ -252849,6 +253637,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -253174,6 +253966,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -253197,6 +253993,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -253524,6 +254324,10 @@ export namespace Prisma {
     status?: $Enums.AcademicSessionStatus
     startTime?: Date | string
     endTime?: Date | string | null
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -253534,6 +254338,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -253820,6 +254626,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -254615,6 +255423,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -254637,6 +255449,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -254653,6 +255469,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -254661,6 +255481,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: AcademicSessionUpdateOneRequiredWithoutAttendancesNestedInput
@@ -254673,6 +255495,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -254683,6 +255507,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -255531,6 +256357,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -255594,6 +256422,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -255649,6 +256479,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -258073,6 +258905,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateWithoutOrganizationInput = {
@@ -258094,6 +258927,7 @@ export namespace Prisma {
     newFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutNewFacultyNestedInput
     changedFacultyHistories?: LessonFacultyHistoryUncheckedUpdateManyWithoutChangedByNestedInput
     batchLessonAssignments?: BatchLessonAssignmentUncheckedUpdateManyWithoutFacultyNestedInput
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyNestedInput
   }
 
   export type FacultyUncheckedUpdateManyWithoutOrganizationInput = {
@@ -259567,6 +260401,7 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -259813,6 +260648,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -259867,6 +260704,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -259922,6 +260761,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -259975,6 +260816,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -260029,6 +260872,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -261081,6 +261926,7 @@ export namespace Prisma {
     fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
     toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
     academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateWithoutTransferredByInput = {
@@ -261089,6 +261935,7 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -261100,6 +261947,7 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -261796,6 +262644,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -261859,6 +262709,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -261914,6 +262766,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -261960,6 +262814,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262023,6 +262879,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262078,6 +262936,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262124,6 +262984,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262188,6 +263050,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262243,6 +263107,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262288,6 +263154,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262351,6 +263219,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262406,6 +263276,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262452,6 +263324,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262515,6 +263389,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -262570,6 +263446,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -267358,6 +268236,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -267578,6 +268458,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -267641,6 +268523,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -267696,6 +268580,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -268280,6 +269166,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -268567,6 +269455,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -268630,6 +269520,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -268685,6 +269577,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -269600,7 +270494,8 @@ export namespace Prisma {
     fromBatchId?: string | null
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -269611,6 +270506,8 @@ export namespace Prisma {
     sessionId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -269663,6 +270560,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -269793,7 +270692,8 @@ export namespace Prisma {
     fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
     toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
     academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
-    transferredBy?: UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateWithoutStudentInput = {
@@ -269801,7 +270701,8 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269812,7 +270713,8 @@ export namespace Prisma {
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269822,6 +270724,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     session?: AcademicSessionUpdateOneRequiredWithoutAttendancesNestedInput
@@ -269833,6 +270737,8 @@ export namespace Prisma {
     sessionId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269843,6 +270749,8 @@ export namespace Prisma {
     sessionId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269921,6 +270829,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -269984,6 +270894,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -270039,6 +270951,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -272196,6 +273110,8 @@ export namespace Prisma {
     altPhone?: string | null
     dob?: Date | string | null
     fatherName?: string | null
+    isProvisional?: boolean
+    provisionalReceiptUrl?: string | null
     pinCode?: string | null
     gender?: string | null
     category?: string | null
@@ -272318,6 +273234,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -272381,6 +273299,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -272436,6 +273356,8 @@ export namespace Prisma {
     altPhone?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    isProvisional?: BoolFieldUpdateOperationsInput | boolean
+    provisionalReceiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     pinCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
@@ -272942,6 +273864,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -272957,6 +273883,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -273024,6 +273954,18 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type StudentBatchTransferCreateManyTransferredByFacultyInput = {
+    id?: string
+    studentId: string
+    fromBatchId?: string | null
+    toBatchId: string
+    academicClassId: string
+    transferredById?: string | null
+    organizationId: string
+    reason?: string | null
+    createdAt?: Date | string
+  }
+
   export type AcademicClassUpdateWithoutInchargeInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -273070,6 +274012,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -273092,6 +274038,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -273108,6 +274058,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273117,6 +274071,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -273139,6 +274097,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -273155,6 +274117,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273356,6 +274322,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentBatchTransferUpdateWithoutTransferredByFacultyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
+    toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
+    academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+  }
+
+  export type StudentBatchTransferUncheckedUpdateWithoutTransferredByFacultyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBatchId?: StringFieldUpdateOperationsInput | string
+    academicClassId?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentBatchTransferUncheckedUpdateManyWithoutTransferredByFacultyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    toBatchId?: StringFieldUpdateOperationsInput | string
+    academicClassId?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AcademicClassCreateManyAcademicCenterInput = {
     id?: string
     name: string
@@ -273413,7 +274415,8 @@ export namespace Prisma {
     studentId: string
     fromBatchId?: string | null
     toBatchId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -273430,6 +274433,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -273464,7 +274471,8 @@ export namespace Prisma {
     student?: StudentUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
     fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
     toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
-    transferredBy?: UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateWithoutAcademicClassInput = {
@@ -273472,7 +274480,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -273483,7 +274492,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     toBatchId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -273494,6 +274504,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classModule?: ClassModuleUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -273516,6 +274530,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -273532,6 +274550,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273627,6 +274649,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -273647,6 +274673,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -273669,6 +274699,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -273685,6 +274719,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273741,6 +274779,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -273782,6 +274824,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -273804,6 +274850,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -273820,6 +274870,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -273925,7 +274979,8 @@ export namespace Prisma {
     studentId: string
     toBatchId: string
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -273936,7 +274991,8 @@ export namespace Prisma {
     studentId: string
     fromBatchId?: string | null
     academicClassId: string
-    transferredById: string
+    transferredById?: string | null
+    transferredByFacultyId?: string | null
     organizationId: string
     reason?: string | null
     createdAt?: Date | string
@@ -273953,6 +275009,10 @@ export namespace Prisma {
     startTime?: Date | string
     endTime?: Date | string | null
     organizationId: string
+    facultyPunchInTime?: Date | string | null
+    facultyPunchOutTime?: Date | string | null
+    facultyPunchStatus?: string | null
+    facultyPunchRemarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -274023,7 +275083,8 @@ export namespace Prisma {
     student?: StudentUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
     toBatch?: AcademicBatchUpdateOneRequiredWithoutTransfersToNestedInput
     academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
-    transferredBy?: UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateWithoutFromBatchInput = {
@@ -274031,7 +275092,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -274042,7 +275104,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     toBatchId?: StringFieldUpdateOperationsInput | string
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -274056,7 +275119,8 @@ export namespace Prisma {
     student?: StudentUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
     fromBatch?: AcademicBatchUpdateOneWithoutTransfersFromNestedInput
     academicClass?: AcademicClassUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
-    transferredBy?: UserUpdateOneRequiredWithoutStudentBatchTransfersNestedInput
+    transferredBy?: UserUpdateOneWithoutStudentBatchTransfersNestedInput
+    transferredByFaculty?: FacultyUpdateOneWithoutStudentBatchTransfersNestedInput
   }
 
   export type StudentBatchTransferUncheckedUpdateWithoutToBatchInput = {
@@ -274064,7 +275128,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -274075,7 +275140,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     fromBatchId?: NullableStringFieldUpdateOperationsInput | string | null
     academicClassId?: StringFieldUpdateOperationsInput | string
-    transferredById?: StringFieldUpdateOperationsInput | string
+    transferredById?: NullableStringFieldUpdateOperationsInput | string | null
+    transferredByFacultyId?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -274086,6 +275152,10 @@ export namespace Prisma {
     status?: EnumAcademicSessionStatusFieldUpdateOperationsInput | $Enums.AcademicSessionStatus
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicClass?: AcademicClassUpdateOneRequiredWithoutAcademicSessionsNestedInput
@@ -274108,6 +275178,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: StudentAcademicAttendanceUncheckedUpdateManyWithoutSessionNestedInput
@@ -274124,6 +275198,10 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
+    facultyPunchInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    facultyPunchStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    facultyPunchRemarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -274329,6 +275407,8 @@ export namespace Prisma {
     studentId: string
     status: $Enums.AcademicAttendanceStatus
     remarks?: string | null
+    rating?: number | null
+    review?: string | null
     organizationId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -274338,6 +275418,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutAcademicAttendancesNestedInput
@@ -274349,6 +275431,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -274359,6 +275443,8 @@ export namespace Prisma {
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumAcademicAttendanceStatusFieldUpdateOperationsInput | $Enums.AcademicAttendanceStatus
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    review?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

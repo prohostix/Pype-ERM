@@ -2,7 +2,8 @@ import express from 'express';
 import { protect, authorize } from '../middleware/auth.js';
 import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
   getBatchSessions,
-  uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession } from '../controllers/facultyPortalController.js';
+  uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
+  punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews } from '../controllers/facultyPortalController.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
@@ -55,5 +56,11 @@ router.route('/sessions/active').get(getActiveSessions);
 router.route('/sessions/:sessionId/students').get(getSessionStudents);
 router.route('/sessions/:sessionId/attendance').post(submitSessionAttendance);
 router.route('/sessions/:sessionId/end').post(endSession);
+
+router.route('/sessions/:sessionId/punch-in').post(punchInSession);
+router.route('/sessions/:sessionId/punch-out').post(punchOutSession);
+router.route('/sessions/:sessionId/approve-punch').post(approveFacultyPunch);
+router.route('/classes/:classId/faculty-attendances').get(getFacultyAttendancesByClass);
+router.route('/classes/:classId/reviews').get(getClassReviews);
 
 export default router;

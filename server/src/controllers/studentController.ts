@@ -232,6 +232,14 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
 
   if (req.body.isPipelineApplication) {
     const now = new Date();
+    
+    const org = await prisma.organization.findUnique({ where: { id: req.user.organizationId } });
+    const metadata = org?.metadata as any;
+    const requiresSalesAdmin = metadata?.enrollmentApprovalFlow === 'sales_admin_approval';
+    
+    const baseStatus = req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending';
+    const initialStatus = requiresSalesAdmin ? 'sales_admin_review' : baseStatus;
+
     await prisma.enrollment.create({
       data: {
         organizationId: req.user.organizationId,
@@ -248,7 +256,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         sessionId: student.sessionId,
         paymentPlan: req.body.paymentPlan || null,
         initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
-        status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
+        status: initialStatus,
         receiptUrl: req.body.receiptUrl || null,
         salesUserId: req.user.id,
         gender: student.gender,
@@ -274,31 +282,37 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
             note: `Sales rep ${req.user.name} directly enrolled student via wizard`,
           },
           {
-            status: req.body.receiptUrl ? 'receipt_submitted' : 'payment_pending',
+            status: initialStatus,
             actorId: 'system',
             timestamp: now.toISOString(),
-            note: req.body.receiptUrl ? 'Receipt uploaded, awaiting Finance verification' : 'Awaiting payment receipt upload',
+            note: requiresSalesAdmin 
+              ? 'Awaiting Sales Admin approval' 
+              : (req.body.receiptUrl ? 'Receipt uploaded, awaiting Finance verification' : 'Awaiting payment receipt upload'),
           },
         ],
       } as any,
     });
 
-    // Notify ops admins
+    // Notify admins
     try {
-      const opsAdmins = await prisma.user.findMany({
-        where: { organizationId: req.user.organizationId, role: 'ops_admin', status: 'active' },
+      const roleToNotify = requiresSalesAdmin ? 'sales_admin' : 'ops_admin';
+      const linkToUse = requiresSalesAdmin ? 'sales_enrollment_review' : 'enrollment_review';
+      const titleToUse = requiresSalesAdmin ? 'New Student Application for Sales Approval' : 'New Student Application for Review';
+      
+      const admins = await prisma.user.findMany({
+        where: { organizationId: req.user.organizationId, role: roleToNotify, status: 'active' },
         select: { id: true },
       });
-      for (const admin of opsAdmins) {
+      for (const admin of admins) {
         await prisma.notification.create({
           data: {
             organizationId: req.user.organizationId,
             userId: admin.id,
-            title: 'New Student Application for Review',
+            title: titleToUse,
             message: `${student.name} has been directly enrolled by ${req.user.name} and is ready for review.`,
             type: 'general',
             priority: 'medium',
-            link: 'enrollment_review',
+            link: linkToUse,
           },
         });
       }

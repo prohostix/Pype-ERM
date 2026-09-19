@@ -28,8 +28,8 @@ router.delete('/:id', authorize('org_admin', 'superadmin'), deleteBatch);
 // Student Allocation Routes
 router.get('/:id/students', getBatchStudents);
 router.get('/:id/unallocated', getUnallocatedStudents);
-router.post('/:id/smart-allocate', authorize('org_admin', 'superadmin'), smartAllocate);
-router.post('/:id/manual-allocate', authorize('org_admin', 'superadmin'), manualAllocate);
-router.post('/:id/transfer', authorize('org_admin', 'superadmin'), transferStudent);
+router.post('/:id/smart-allocate', authorize('faculty'), smartAllocate);
+router.post('/:id/manual-allocate', authorize('faculty'), manualAllocate);
+router.post('/:id/transfer', authorize('faculty'), transferStudent);
 
 export default router;

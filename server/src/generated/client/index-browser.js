@@ -664,6 +664,8 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   altPhone: 'altPhone',
   dob: 'dob',
   fatherName: 'fatherName',
+  isProvisional: 'isProvisional',
+  provisionalReceiptUrl: 'provisionalReceiptUrl',
   pinCode: 'pinCode',
   gender: 'gender',
   category: 'category',
@@ -1374,6 +1376,7 @@ exports.Prisma.StudentBatchTransferScalarFieldEnum = {
   toBatchId: 'toBatchId',
   academicClassId: 'academicClassId',
   transferredById: 'transferredById',
+  transferredByFacultyId: 'transferredByFacultyId',
   organizationId: 'organizationId',
   reason: 'reason',
   createdAt: 'createdAt'
@@ -1401,6 +1404,10 @@ exports.Prisma.AcademicSessionScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   organizationId: 'organizationId',
+  facultyPunchInTime: 'facultyPunchInTime',
+  facultyPunchOutTime: 'facultyPunchOutTime',
+  facultyPunchStatus: 'facultyPunchStatus',
+  facultyPunchRemarks: 'facultyPunchRemarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1411,6 +1418,8 @@ exports.Prisma.StudentAcademicAttendanceScalarFieldEnum = {
   studentId: 'studentId',
   status: 'status',
   remarks: 'remarks',
+  rating: 'rating',
+  review: 'review',
   organizationId: 'organizationId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

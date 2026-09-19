@@ -11,6 +11,11 @@ export function AttendanceManager({ sessionId, sessionData, onBack }: { sessionI
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [ending, setEnding] = useState(false);
+  const [punchInTime, setPunchInTime] = useState<string | null>(sessionData?.facultyPunchInTime || null);
+  const [punchOutTime, setPunchOutTime] = useState<string | null>(sessionData?.facultyPunchOutTime || null);
+  const [punchStatus, setPunchStatus] = useState<string | null>(sessionData?.facultyPunchStatus || null);
+  const [punchRemarks, setPunchRemarks] = useState<string | null>(sessionData?.facultyPunchRemarks || null);
+  const [punching, setPunching] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -58,6 +63,33 @@ export function AttendanceManager({ sessionId, sessionData, onBack }: { sessionI
       toast.error('Failed to save attendance');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handlePunchIn = async () => {
+    setPunching(true);
+    try {
+      const res = await api.post(`/faculty-portal/sessions/${sessionId}/punch-in`);
+      setPunchInTime(res.data.data.facultyPunchInTime);
+      setPunchStatus(res.data.data.facultyPunchStatus);
+      toast.success('Punched in successfully');
+    } catch (err) {
+      toast.error('Failed to punch in');
+    } finally {
+      setPunching(false);
+    }
+  };
+
+  const handlePunchOut = async () => {
+    setPunching(true);
+    try {
+      const res = await api.post(`/faculty-portal/sessions/${sessionId}/punch-out`);
+      setPunchOutTime(res.data.data.facultyPunchOutTime);
+      toast.success('Punched out successfully');
+    } catch (err) {
+      toast.error('Failed to punch out');
+    } finally {
+      setPunching(false);
     }
   };
 
@@ -120,6 +152,42 @@ export function AttendanceManager({ sessionId, sessionData, onBack }: { sessionI
             {ending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <StopCircle className="w-4 h-4 mr-2" />}
             End Class
           </Button>
+        </div>
+      </div>
+
+      {/* Faculty Attendance Panel */}
+      <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/20 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-900/50 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-indigo-900 dark:text-indigo-300 flex items-center gap-2">
+              <Clock className="w-4 h-4" /> My Attendance (Faculty)
+            </h3>
+            <div className="text-sm mt-1 flex flex-wrap gap-x-6 gap-y-1 text-slate-600 dark:text-slate-400">
+              <p>Punch In: {punchInTime ? new Date(punchInTime).toLocaleTimeString() : <span className="italic text-slate-400">Not recorded</span>}</p>
+              <p>Punch Out: {punchOutTime ? new Date(punchOutTime).toLocaleTimeString() : <span className="italic text-slate-400">Not recorded</span>}</p>
+              {punchStatus && (
+                <p>Status: <span className={`font-bold ${punchStatus === 'APPROVED' ? 'text-emerald-600' : punchStatus === 'REJECTED' ? 'text-red-600' : 'text-amber-600'}`}>{punchStatus}</span></p>
+              )}
+            </div>
+            {punchRemarks && <p className="text-xs text-red-500 mt-1 font-medium">Principal Remarks: {punchRemarks}</p>}
+          </div>
+          <div className="flex items-center gap-2">
+            {!punchInTime ? (
+              <Button onClick={handlePunchIn} disabled={punching} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">
+                {punching ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
+                Punch In Now
+              </Button>
+            ) : !punchOutTime ? (
+              <Button onClick={handlePunchOut} disabled={punching} className="bg-amber-500 hover:bg-amber-600 text-white shadow-md">
+                {punching ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Clock className="w-4 h-4 mr-2" />}
+                Punch Out
+              </Button>
+            ) : (
+              <Button disabled variant="outline" className="opacity-50">
+                Attendance Recorded
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 

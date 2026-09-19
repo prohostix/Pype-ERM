@@ -294,14 +294,16 @@ export function FacultyBatchDashboardPanel({ academicClass, academicBatch, onBac
                                     <><Play className="w-3.5 h-3.5 mr-1" /> Start Lesson</>
                                   )}
                                 </Button>
-                                <Button variant="default" size="sm" onClick={() => { 
-                                  setAssignLesson(lesson); 
-                                  setSelectedFacultyId(teacherId || 'none');
-                                  setAssignReason(''); 
-                                  setAssignDialogOpen(true); 
-                                }} className="h-8 text-xs">
-                                  <UserPlus className="w-3.5 h-3.5 mr-1" /> Assign Teacher
-                                </Button>
+                                {!isCompleted && (
+                                  <Button variant="default" size="sm" onClick={() => { 
+                                    setAssignLesson(lesson); 
+                                    setSelectedFacultyId(teacherId || 'none');
+                                    setAssignReason(''); 
+                                    setAssignDialogOpen(true); 
+                                  }} className="h-8 text-xs">
+                                    <UserPlus className="w-3.5 h-3.5 mr-1" /> Assign Teacher
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           </div>

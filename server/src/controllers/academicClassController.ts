@@ -136,6 +136,15 @@ export const getTransferHistory = asyncHandler(async (req: Request, res: Respons
     return res.status(400).json({ success: false, message: 'Organization ID is required' });
   }
 
+  if (user.role === 'faculty') {
+    const academicClass = await prisma.academicClass.findFirst({
+      where: { id, organizationId }
+    });
+    if (!academicClass || academicClass.inchargeId !== user.id) {
+      return res.status(403).json({ success: false, message: 'Only the principal in charge can view transfer history' });
+    }
+  }
+
   const history = await prisma.studentBatchTransfer.findMany({
     where: {
       academicClassId: id,

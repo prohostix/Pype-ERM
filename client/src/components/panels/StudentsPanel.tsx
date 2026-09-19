@@ -1606,7 +1606,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
               {formStep === 3 && (
                 <div className="space-y-4">
                   <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                  {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const isOptional = !isDocReq(docType);
                     const existing = (formData.documents || []).find((d: any) => d.type === docType);
                     const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
@@ -1740,7 +1740,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 const res = await api.post('/documents/upload', uploadData, {
                                   headers: { 'Content-Type': 'multipart/form-data' }
                                 });
-                                setFormData({ ...formData, receiptUrl: res.data.fileUrl });
+                                setFormData({ ...formData, receiptUrl: res.data.url });
                                 toast.success('Receipt uploaded successfully');
                               } catch (err: any) {
                                 toast.error('Failed to upload receipt');
@@ -2187,7 +2187,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                       {formStep === 3 && (
                         <div className="space-y-4">
                           <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
-                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
+                          {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                             const isOptional = !isDocReq(docType);
                             const existing = (formData.documents || []).find((d: any) => d.type === docType);
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}-2`;
@@ -2302,13 +2302,13 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                 </div>
                               )}
                               <div className="flex-1">
-                                <Label htmlFor="receipt-upload" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <Label htmlFor="receipt-upload-2" className="inline-flex items-center justify-center px-4 py-2 border rounded-md text-sm font-medium cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                                   <Upload className="w-4 h-4 mr-2" />
                                   {formData.receiptUrl ? 'Change Receipt' : 'Upload File'}
                                 </Label>
                                 <input
                                   type="file"
-                                  id="receipt-upload"
+                                  id="receipt-upload-2"
                                   className="hidden"
                                   accept="image/*,.pdf"
                                   onChange={async (e) => {
@@ -2321,7 +2321,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
                                         const res = await api.post('/documents/upload', uploadData, {
                                           headers: { 'Content-Type': 'multipart/form-data' }
                                         });
-                                        setFormData({ ...formData, receiptUrl: res.data.fileUrl });
+                                        setFormData({ ...formData, receiptUrl: res.data.url });
                                         toast.success('Receipt uploaded successfully');
                                       } catch (err: any) {
                                         toast.error('Failed to upload receipt');

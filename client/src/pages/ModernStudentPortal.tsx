@@ -21,11 +21,13 @@ import {
   MapPin,
   ExternalLink,
   PlayCircle,
-  UserCheck
+  UserCheck,
+  Star
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { ModernStaffPortal } from './ModernStaffPortal';
@@ -61,6 +63,33 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paying, setPaying] = useState(false);
   const [markingAttendance, setMarkingAttendance] = useState<string | null>(null);
+
+  const [ratingSessionId, setRatingSessionId] = useState<string | null>(null);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
+
+  const handleSubmitRating = async () => {
+    if (!ratingSessionId || ratingValue === 0) return;
+    setSubmittingRating(true);
+    try {
+      const res = await api.post(`/student-portal/sessions/${ratingSessionId}/rate`, {
+        rating: ratingValue,
+        review: reviewText
+      });
+      if (res.data.success) {
+        toast.success('Thank you for your review!');
+        setRatingSessionId(null);
+        setRatingValue(0);
+        setReviewText('');
+        fetchStudentData(); // Refresh to get the updated myRating
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to submit rating');
+    } finally {
+      setSubmittingRating(false);
+    }
+  };
 
   const handleRegisterAttendance = async (classId: string) => {
     setMarkingAttendance(classId);
@@ -332,7 +361,7 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
   // Nav tabs definition
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <User className="w-4 h-4" /> },
-    { id: 'classes', label: 'Live Classes', icon: <Video className="w-4 h-4" />, count: upcomingClasses.length },
+    // { id: 'classes', label: 'Live Classes', icon: <Video className="w-4 h-4" />, count: upcomingClasses.length },
     { id: 'materials', label: 'Classes & E-Books', icon: <BookOpen className="w-4 h-4" />, count: materials.length },
     { id: 'fees', label: 'Fee details', icon: <CreditCard className="w-4 h-4" />, count: pendingSchedules.length },
     { id: 'notifications', label: 'Notifications', icon: <Bell className="w-4 h-4" />, count: notifications.length + announcements.length },
@@ -1098,7 +1127,55 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                                             ) : (
                                               <p className="text-xs text-muted-foreground italic mt-2">No materials uploaded for this lesson.</p>
                                             )
-                                          ) : (
+                                          ) : null}
+
+                                          {/* Lesson Rating Sub-section */}
+                                          {lesson.isCompleted && lesson.canRate && (
+                                            <div className="mt-4 pt-4 border-t border-border/50">
+                                              {lesson.myRating ? (
+                                                <div className="bg-muted/30 p-3 rounded-lg border border-border">
+                                                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">My Review</p>
+                                                  <div className="flex items-center gap-1 mb-2">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                      <Star key={star} className={cn("w-4 h-4", star <= lesson.myRating ? "fill-amber-400 text-amber-400" : "text-slate-300")} />
+                                                    ))}
+                                                  </div>
+                                                  {lesson.myReview && <p className="text-sm text-foreground">{lesson.myReview}</p>}
+                                                </div>
+                                              ) : (
+                                                ratingSessionId === lesson.sessionId ? (
+                                                  <div className="bg-muted/30 p-4 rounded-lg border border-border animate-in fade-in zoom-in-95">
+                                                    <h6 className="text-sm font-semibold mb-2">Rate this Lesson</h6>
+                                                    <div className="flex items-center gap-2 mb-4">
+                                                      {[1, 2, 3, 4, 5].map((star) => (
+                                                        <button key={star} onClick={() => setRatingValue(star)} className="focus:outline-none hover:scale-110 transition-transform">
+                                                          <Star className={cn("w-6 h-6", star <= ratingValue ? "fill-amber-400 text-amber-400" : "text-slate-300")} />
+                                                        </button>
+                                                      ))}
+                                                    </div>
+                                                    <Textarea 
+                                                      placeholder="Write a brief review (optional)" 
+                                                      value={reviewText} 
+                                                      onChange={(e) => setReviewText(e.target.value)}
+                                                      className="mb-3 text-sm"
+                                                    />
+                                                    <div className="flex gap-2 justify-end">
+                                                      <Button variant="ghost" size="sm" onClick={() => { setRatingSessionId(null); setRatingValue(0); setReviewText(''); }}>Cancel</Button>
+                                                      <Button size="sm" onClick={handleSubmitRating} disabled={ratingValue === 0 || submittingRating}>
+                                                        {submittingRating ? 'Submitting...' : 'Submit Review'}
+                                                      </Button>
+                                                    </div>
+                                                  </div>
+                                                ) : (
+                                                  <Button variant="outline" size="sm" className="gap-2" onClick={() => { setRatingSessionId(lesson.sessionId); setRatingValue(0); setReviewText(''); }}>
+                                                    <Star className="w-4 h-4" /> Rate Lesson
+                                                  </Button>
+                                                )
+                                              )}
+                                            </div>
+                                          )}
+
+                                          {!lesson.isCompleted && (
                                             <div className="flex items-center gap-2 p-2.5 rounded-md bg-slate-50 dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 mt-2">
                                               <AlertCircle className="w-4 h-4 text-slate-400" />
                                               <p className="text-xs text-slate-500">Materials are locked. Complete this lesson's live class to unlock its study materials.</p>

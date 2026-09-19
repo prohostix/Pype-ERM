@@ -284,3 +284,90 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
 
   res.json({ success: true, data: updatedEnrollment });
 });
+
+export const getProvisionalEnrollments = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const enrollments = await prisma.enrollment.findMany({
+    where: { organizationId: req.user.organizationId, isProvisional: true, status: 'provisional_finance_pending' },
+    include: { program: true, studyCenter: true, student: true },
+    orderBy: { createdAt: 'asc' }
+  });
+  res.json({ success: true, count: enrollments.length, data: enrollments });
+});
+
+export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const enrollmentId = req.params.id;
+
+  const enrollment = await prisma.enrollment.findUnique({
+    where: { id: enrollmentId, isProvisional: true, status: 'provisional_finance_pending' }
+  });
+
+  if (!enrollment) {
+    res.status(404);
+    throw new Error('Provisional enrollment not found or already verified');
+  }
+
+  // Create an invoice for the provisional amount (assuming passed in body or fixed)
+  const amountPaid = req.body.amount || 0;
+
+  if (amountPaid > 0) {
+    const invNo = `INV-PROV-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+    await prisma.invoice.create({
+      data: {
+        organizationId: enrollment.organizationId,
+        studentId: enrollment.studentId || undefined,
+        centerId: enrollment.studyCenterId || undefined,
+        invoiceNo: invNo,
+        amount: amountPaid,
+        tax: 0,
+        total: amountPaid,
+        status: 'paid',
+        dueDate: new Date(),
+        paidAt: new Date(),
+        notes: 'Provisional Admission Payment',
+        items: [{ description: 'Provisional Admission Fee', amount: amountPaid }],
+        payments: {
+          create: {
+            organizationId: enrollment.organizationId,
+            amount: amountPaid,
+            method: 'online', 
+            referenceNo: 'Provisional Admission',
+            receivedBy: req.user.id,
+            receivedAt: new Date(),
+            notes: 'Auto-generated during provisional receipt verification'
+          }
+        }
+      }
+    });
+    
+    await prisma.enrollmentPayment.create({
+      data: {
+        enrollmentId: enrollment.id,
+        amount: amountPaid,
+        ...(enrollment.studyCenterId ? { studyCenterId: enrollment.studyCenterId } : {}),
+        debitedAt: new Date()
+      }
+    });
+  }
+
+  const historyEntry = {
+    status: 'provisional_finance_verified',
+    changedAt: new Date().toISOString(),
+    changedBy: req.user.id,
+    remarks: 'Provisional receipt verified by Finance'
+  };
+
+  const updatedEnrollment = await prisma.enrollment.update({
+    where: { id: enrollment.id },
+    data: {
+      status: 'provisional_finance_verified',
+      receiptVerified: true,
+      receiptVerifiedAt: new Date(),
+      receiptVerifiedBy: req.user.id,
+      statusHistory: {
+        push: historyEntry
+      }
+    }
+  });
+
+  res.json({ success: true, data: updatedEnrollment });
+});
