@@ -25,9 +25,7 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [deleteReason, setDeleteReason] = useState('');
+
 
   // Allocation States
   const [allocateDialogOpen, setAllocateDialogOpen] = useState(false);
@@ -109,27 +107,14 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
     setDialogOpen(true);
   };
 
-  const handleDeleteClick = (id: string) => {
-    setDeleteId(id);
-    setDeleteReason('');
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!deleteId || !deleteReason.trim()) return;
+  const handleDeleteClick = async (id: string) => {
     try {
-      const res = await api.delete(`/academic-batches/${deleteId}`, { data: { reason: deleteReason } });
-      if (res.status === 202) {
-        toast.success('Delete request sent to CEO for approval');
-      } else {
-        toast.success('Academic batch deleted successfully');
-      }
-      setDeleteDialogOpen(false);
-      setDeleteId(null);
-      setDeleteReason('');
+      await api.delete(`/academic-batches/${id}`);
       fetchBatches();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to delete academic batch');
+      if (!err.isDeleteRequest) {
+        toast.error('Failed to delete academic batch');
+      }
     }
   };
 
@@ -605,43 +590,7 @@ export function AcademicBatchesPanel({ academicClass, onBack }: { academicClass:
         </DialogContent>
       </Dialog>
 
-      {/* Delete Reason Modal */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md border-none shadow-2xl rounded-xl">
-          <DialogHeader className="bg-rose-50 dark:bg-rose-950/20 p-6 border-b border-rose-100 dark:border-rose-900">
-            <DialogTitle className="text-xl font-bold flex items-center gap-2 text-rose-600 dark:text-rose-400">
-              <Trash2 className="w-5 h-5" />
-              Request Deletion
-            </DialogTitle>
-          </DialogHeader>
-          <div className="p-6 space-y-4">
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Reason for deletion <span className="text-rose-500">*</span></Label>
-              <Textarea 
-                value={deleteReason}
-                onChange={(e) => setDeleteReason(e.target.value)}
-                placeholder="Please explain why this batch needs to be deleted..."
-                className="resize-none h-24 focus-visible:ring-rose-500"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Deletions require executive approval.
-              </p>
-            </div>
-            <div className="flex justify-end gap-3 pt-4">
-              <Button variant="ghost" onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-              <Button 
-                variant="destructive" 
-                onClick={handleDeleteConfirm} 
-                disabled={!deleteReason.trim()}
-                className="bg-rose-600 hover:bg-rose-700 shadow-md"
-              >
-                Submit Request
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+
 
       {/* Transfer Dialog */}
       <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>

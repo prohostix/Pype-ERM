@@ -71,17 +71,41 @@ export const getEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: R
  * entityId is stored as a path like /api/v1/students/abc123
  * We parse it to determine which table and which record ID to delete.
  */
-async function executeApprovedDeletion(entityId: string, organizationId: string): Promise<{ success: boolean; error?: string }> {
+async function executeApprovedDeletion(entityId: string, organizationId: string, entityType?: string): Promise<{ success: boolean; error?: string }> {
   try {
     const parts = entityId.split('?')[0].split('/').filter(Boolean);
     // Strip /api/v1 prefix
     if (parts[0] === 'api' && parts[1] === 'v1') parts.splice(0, 2);
 
-    const id = parts[parts.length - 1];
-    const endpoint = parts[0];
-    const sub = parts[1];
+    // If entityId was just a UUID (no slashes), id is just the entityId
+    const isUrl = entityId.includes('/');
+    const id = isUrl ? parts[parts.length - 1] : entityId;
+    const endpoint = isUrl ? parts[0] : (entityType || '');
+    const sub = isUrl ? parts[1] : '';
 
-    if (!id) return { success: false, error: 'Cannot parse entity ID from URL' };
+    if (!id) return { success: false, error: 'Cannot parse entity ID' };
+
+    // Support new entityTypes directly
+    if (entityType === 'academic-batch' || endpoint === 'academic-batches') {
+      // Unlink students
+      await prisma.student.updateMany({
+        where: { academicBatchId: id },
+        data: { academicBatchId: null }
+      });
+      // Delete sessions
+      await prisma.academicSession.deleteMany({
+        where: { academicBatchId: id }
+      });
+      // Now delete the batch
+      await prisma.academicBatch.delete({ where: { id } });
+      return { success: true };
+    } else if (entityType === 'academic-center' || endpoint === 'academic-centers') {
+      await prisma.academicCenter.delete({ where: { id } });
+      return { success: true };
+    } else if (entityType === 'academic-class' || endpoint === 'academic-classes') {
+      await prisma.academicClass.delete({ where: { id } });
+      return { success: true };
+    }
 
     if (endpoint === 'students') {
       await prisma.student.delete({ where: { id } });
@@ -196,7 +220,7 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
     );
   } else if (newStatus === 'approved') {
     // Execute the actual deletion via Prisma (not fragile loopback fetch)
-    const deleteResult = await executeApprovedDeletion(request.entityId, request.organizationId);
+    const deleteResult = await executeApprovedDeletion(request.entityId, request.organizationId, request.entityType);
 
     if (deleteResult.success) {
       await createNotification(

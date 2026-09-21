@@ -89,6 +89,7 @@ export const deleteAcademicCenter = asyncHandler(async (req: Request, res: Respo
   const { id } = req.params;
   const user = (req as any).user;
   const organizationId = user.organizationId;
+  const reason = req.body.reason || req.headers['x-delete-reason'];
 
   const existingCenter = await prisma.academicCenter.findFirst({
     where: { id, organizationId }
@@ -96,6 +97,20 @@ export const deleteAcademicCenter = asyncHandler(async (req: Request, res: Respo
 
   if (!existingCenter) {
     return res.status(404).json({ success: false, message: 'Academic center not found' });
+  }
+
+  if (user.role !== 'ceo' && user.role !== 'superadmin' && reason) {
+    await prisma.editDeleteRequest.create({
+      data: {
+        organizationId,
+        userId: user.id,
+        entityType: 'academic-center',
+        entityId: id,
+        requestType: 'delete',
+        reason: reason as string
+      }
+    });
+    return res.status(202).json({ success: true, message: 'Delete request sent to CEO for approval' });
   }
 
   await prisma.academicCenter.delete({

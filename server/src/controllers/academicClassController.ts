@@ -107,6 +107,7 @@ export const deleteClass = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = (req as any).user;
   const organizationId = user.organizationId;
+  const reason = req.body.reason || req.headers['x-delete-reason'];
 
   const existingClass = await prisma.academicClass.findFirst({
     where: { id, organizationId }
@@ -114,6 +115,20 @@ export const deleteClass = asyncHandler(async (req: Request, res: Response) => {
 
   if (!existingClass) {
     return res.status(404).json({ success: false, message: 'Academic class not found' });
+  }
+
+  if (user.role !== 'ceo' && user.role !== 'superadmin' && reason) {
+    await prisma.editDeleteRequest.create({
+      data: {
+        organizationId,
+        userId: user.id,
+        entityType: 'academic-class',
+        entityId: id,
+        requestType: 'delete',
+        reason: reason as string
+      }
+    });
+    return res.status(202).json({ success: true, message: 'Delete request sent to CEO for approval' });
   }
 
   await prisma.academicClass.delete({
