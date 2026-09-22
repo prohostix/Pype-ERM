@@ -51,6 +51,8 @@ interface Summary {
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
+  provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
+  provisional_finance_verified: { label: 'Prov. Fin. Verified', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   document_review: { label: 'Ops Review', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
   finance_review: { label: 'Finance Review', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
   enrolled: { label: 'Enrolled', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
@@ -88,10 +90,7 @@ export function SalesStudentPipelinePanel() {
 
   const openVerifyDialog = (enrollment: Enrollment) => {
     setVerifyingStudent(enrollment);
-    const docs = enrollment.student?.documents || enrollment.documents || [];
-    const photo = enrollment.student?.photo || enrollment.photo || '';
-    setVerifyForm({ ...enrollment, documents: docs, photo, initialPaymentAmount: enrollment.initialPaymentAmount || '' });
-    setVerifyDialogOpen(true);
+    setEnrollDialogOpen(true);
   };
 
   const fetchPipeline = async () => {
@@ -149,24 +148,27 @@ export function SalesStudentPipelinePanel() {
             onOpenChange={(open) => {
               setEnrollDialogOpen(open);
               if (!open) {
+                setVerifyingStudent(null);
                 fetchPipeline();
               }
             }}
+            completingEnrollment={verifyingStudent}
           />
         </div>
       </div>
 
       {/* Summary cards */}
       {summary && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
           {[
             { key: 'total', label: 'Total', color: 'text-foreground' },
             { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
+            { key: 'provisional_finance_pending', label: 'Prov. Pending', color: 'text-yellow-600' },
+            { key: 'provisional_finance_verified', label: 'Prov. Verified', color: 'text-green-600' },
             { key: 'document_review', label: 'Ops Review', color: 'text-yellow-600' },
             { key: 'finance_review', label: 'Finance', color: 'text-blue-600' },
             { key: 'enrolled', label: 'Enrolled', color: 'text-green-600' },
-            { key: 'ops_rejected', label: 'Ops Rejected', color: 'text-red-600' },
-            { key: 'rejected', label: 'Fin. Rejected', color: 'text-red-600' },
+            { key: 'ops_rejected', label: 'Ops/Fin. Rejected', color: 'text-red-600' },
           ].map(({ key, label, color }) => (
             <button
               key={key}
@@ -177,7 +179,11 @@ export function SalesStudentPipelinePanel() {
               )}
             >
               <p className="text-xs text-muted-foreground">{label}</p>
-              <p className={cn('text-2xl font-bold mt-0.5', color)}>{(summary as any)[key]}</p>
+              <p className={cn('text-2xl font-bold mt-0.5', color)}>
+                {key === 'ops_rejected' 
+                  ? ((summary as any)['ops_rejected'] || 0) + ((summary as any)['rejected'] || 0)
+                  : ((summary as any)[key] || 0)}
+              </p>
             </button>
           ))}
         </div>
@@ -312,14 +318,20 @@ export function SalesStudentPipelinePanel() {
                         const photoStatus = e.student?.admissionProgress?.photoStatus;
                         const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || photoStatus === 'rejected';
 
-                        if (e.status === 'sales_verification_pending' || ((e.status === 'document_review' || e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected)) {
+                        if (e.status === 'sales_verification_pending' || ((e.status === 'document_review' || e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected) || e.status === 'provisional_finance_verified') {
                           return (
                             <div className="mt-4">
                               <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
                                 evt.stopPropagation();
-                                openVerifyDialog(e);
+                                if (e.status === 'provisional_finance_verified') {
+                                  // Open full wizard
+                                  setVerifyingStudent(e);
+                                  setEnrollDialogOpen(true);
+                                } else {
+                                  openVerifyDialog(e);
+                                }
                               }}>
-                                {hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
+                                {e.status === 'provisional_finance_verified' ? 'Complete Enrollment' : hasRejected ? 'Re-upload Rejected Documents & Resubmit' : 'Verify & Submit to Ops'}
                               </Button>
                             </div>
                           );

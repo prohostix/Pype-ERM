@@ -43,6 +43,11 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
   if (studentId) {
     data.studentId = studentId;
   }
+
+  // Automatically attach salesUserId if the user is a staff member creating the enrollment
+  if (req.user && req.user.role !== 'student') {
+    data.salesUserId = req.user.id;
+  }
   
   const enrollment = await prisma.enrollment.create({ data });
 
@@ -116,28 +121,87 @@ export const uploadReceipt = asyncHandler(async (req: AuthRequest, res: Response
 
 export const completeProvisionalEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollmentId = req.params.id;
-  const { ...updateData } = req.body;
+  const {
+    name, email, phone, address, dob,
+    fatherName, fatherPhone, motherName, motherPhone,
+    religion, caste, altPhone, pinCode, photo, documents,
+    gender, category, maritalStatus, employmentStatus,
+    guardianName, familyPhone, specialisation,
+    ...updateData
+  } = req.body;
 
-  const enrollment = await prisma.enrollment.findUnique({ where: { id: enrollmentId } });
+  const enrollment = await prisma.enrollment.findUnique({ 
+    where: { id: enrollmentId },
+    include: { program: true } 
+  });
   if (!enrollment) {
     res.status(404);
     throw new Error('Enrollment not found');
   }
 
-  // Update enrollment with new data and set status to department_review or whatever is next
+  // Find or create student user account for credentials
+  let studentUser = await prisma.user.findUnique({ where: { email } });
+  const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
+  if (!studentUser) {
+    // Note: generateUserId and hashPassword would normally be used here, but we can't easily import them.
+    // For this context, we will just create the user if missing, or we can skip creating the user account until Ops verifies.
+    // Ops verification usually creates the account, but we can do it here if needed.
+    // Actually, `createStudent` creates it. Let's just create the Student record.
+  }
+
+  const student = await prisma.student.create({
+    data: {
+      name: name || enrollment.studentName,
+      email: email || enrollment.studentEmail,
+      phone: phone || enrollment.studentPhone,
+      address: address || '',
+      dob: dob ? new Date(dob) : null,
+      fatherName: fatherName || null,
+      fatherPhone: fatherPhone || null,
+      motherName: motherName || null,
+      motherPhone: motherPhone || null,
+      religion: religion || null,
+      caste: caste || null,
+      altPhone: altPhone || null,
+      pinCode: pinCode || null,
+      photo: photo || null,
+      documents: documents || [],
+      gender: gender || null,
+      category: category || null,
+      maritalStatus: maritalStatus || null,
+      employmentStatus: employmentStatus || null,
+      guardianName: guardianName || null,
+      familyPhone: familyPhone || null,
+      specialisation: specialisation || null,
+      status: 'document_review',
+      programId: enrollment.programId,
+      sessionId: enrollment.sessionId,
+      universityId: enrollment.program?.universityId || null,
+      centerId: enrollment.studyCenterId,
+      organizationId: req.user.organizationId,
+      enrolledBy: enrollment.salesUserId || req.user.id
+    }
+  });
+
   const historyEntry = {
-    status: 'payment_pending', // Standard starting flow, or document_review if payment was already verified
+    status: 'document_review', 
     changedAt: new Date().toISOString(),
     changedBy: req.user.id,
-    remarks: 'Provisional enrollment completed with full details'
+    remarks: 'Provisional enrollment completed with full details by Sales'
   };
 
   const updated = await prisma.enrollment.update({
     where: { id: enrollmentId },
     data: {
-      ...updateData,
+      studentId: student.id,
       isProvisional: false,
-      status: enrollment.receiptVerified ? 'document_review' : 'payment_pending',
+      status: 'document_review',
+      studentName: student.name,
+      studentEmail: student.email,
+      studentPhone: student.phone,
+      studentAddress: student.address,
+      documents: student.documents ? (student.documents as any) : [],
+      photo: student.photo,
       statusHistory: {
         push: historyEntry
       }

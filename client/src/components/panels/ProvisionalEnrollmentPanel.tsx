@@ -18,7 +18,8 @@ export function ProvisionalEnrollmentPanel() {
     studentEmail: '', 
     studentPhone: '', 
     universityId: 'all',
-    programId: ''
+    programId: '',
+    initialPaymentAmount: ''
   });
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
@@ -39,8 +40,8 @@ export function ProvisionalEnrollmentPanel() {
   };
 
   const handleSubmit = async () => {
-    if (!form.studentName || !form.studentPhone || !form.studentEmail || !form.programId) {
-      toast.error('Please fill in all details');
+    if (!form.studentName || !form.studentPhone || !form.studentEmail || !form.programId || !form.initialPaymentAmount) {
+      toast.error('Please fill in all details including the initial payment amount');
       return;
     }
     if (!receiptFile) {
@@ -53,6 +54,8 @@ export function ProvisionalEnrollmentPanel() {
       // 1. Create Provisional Enrollment
       const res = await api.post('/enrollment/enroll', {
         ...form,
+        initialPaymentAmount: Number(form.initialPaymentAmount),
+        initialPaymentDate: new Date().toISOString(),
         isProvisional: true,
         status: 'provisional_finance_pending',
         studentAddress: 'To be filled', // placeholder
@@ -68,7 +71,7 @@ export function ProvisionalEnrollmentPanel() {
       });
 
       toast.success('Provisional Enrollment submitted to Finance');
-      setForm({ studentName: '', studentEmail: '', studentPhone: '', universityId: 'all', programId: '' });
+      setForm({ studentName: '', studentEmail: '', studentPhone: '', universityId: 'all', programId: '', initialPaymentAmount: '' });
       setReceiptFile(null);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Submission failed');
@@ -137,6 +140,11 @@ export function ProvisionalEnrollmentPanel() {
             <Input value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 9876543210" />
           </div>
 
+          <div className="space-y-1">
+            <Label>Initial Payment Amount</Label>
+            <Input type="number" value={form.initialPaymentAmount} onChange={e => setForm(f => ({ ...f, initialPaymentAmount: e.target.value }))} placeholder="0.00" min="0" step="0.01" />
+          </div>
+
           <div className="space-y-1 pt-2">
             <Label>Payment Receipt</Label>
             <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:bg-muted/50 transition-colors cursor-pointer"
@@ -159,7 +167,14 @@ export function ProvisionalEnrollmentPanel() {
                 </div>
                 <div className="text-sm">
                   {receiptFile ? (
-                    <span className="font-medium text-primary">{receiptFile.name}</span>
+                    <div className="flex flex-col items-center space-y-2">
+                      {receiptFile.type.startsWith('image/') ? (
+                        <img src={URL.createObjectURL(receiptFile)} alt="Preview" className="h-24 w-auto max-w-full object-contain border rounded shadow-sm" />
+                      ) : (
+                        <FileText className="w-10 h-10 text-primary" />
+                      )}
+                      <span className="font-medium text-primary truncate max-w-[200px]" title={receiptFile.name}>{receiptFile.name}</span>
+                    </div>
                   ) : (
                     <span className="text-muted-foreground">Click to upload receipt (JPG, PNG, PDF)</span>
                   )}
@@ -175,68 +190,7 @@ export function ProvisionalEnrollmentPanel() {
         </CardContent>
       </Card>
       
-      <ProvisionalEnrollmentsList />
     </div>
   );
 }
 
-export function ProvisionalEnrollmentsList() {
-  const [enrollments, setEnrollments] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetchEnrollments();
-  }, []);
-
-  const fetchEnrollments = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/enrollment/provisional');
-      setEnrollments(res.data.data || []);
-    } catch (e) {
-      toast.error('Failed to load your provisional enrollments');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  
-
-  return (
-    <Card className="mt-8">
-      <CardHeader>
-        <CardTitle>My Provisional Enrollments</CardTitle>
-        <CardDescription>View your provisional enrollments and complete the verified ones.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="space-y-2">{[1,2].map(i => <div key={i} className="h-16 bg-muted rounded-md animate-pulse" />)}</div>
-        ) : enrollments.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">You have no provisional enrollments.</p>
-        ) : (
-          <div className="space-y-4">
-            {enrollments.map((e) => (
-              <div key={e.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-muted/30 rounded-xl border">
-                <div className="space-y-1">
-                  <p className="font-bold text-sm">{e.studentName}</p>
-                  <p className="text-xs text-muted-foreground">{e.studentEmail} • {e.studentPhone}</p>
-                  <p className="text-xs font-medium bg-primary/10 text-primary w-fit px-2 py-0.5 rounded-full">{e.program?.name}</p>
-                </div>
-                
-                <div className="mt-4 md:mt-0 flex items-center gap-3">
-                  <span className={`text-xs font-bold px-2 py-1 rounded-full ${e.status === 'provisional_finance_verified' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                    {e.status === 'provisional_finance_verified' ? 'Finance Verified' : 'Pending Verification'}
-                  </span>
-                  
-                  {e.status === 'provisional_finance_verified' && (
-                    <span className="text-[10px] text-muted-foreground uppercase">Go to Direct Enrollment to complete</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}

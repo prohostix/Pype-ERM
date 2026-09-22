@@ -103,7 +103,7 @@ export function ProvisionalFinancePanel() {
                       className="bg-green-600 hover:bg-green-700 text-white"
                       disabled={verifying === e.id}
                       onClick={() => {
-                        const amount = window.prompt('Enter verified amount (₹):', '0');
+                        const amount = window.prompt('Enter verified amount (₹):', e.initialPaymentAmount ? String(e.initialPaymentAmount) : '0');
                         if (amount !== null && !isNaN(Number(amount))) {
                           handleVerify(e.id, Number(amount));
                         }

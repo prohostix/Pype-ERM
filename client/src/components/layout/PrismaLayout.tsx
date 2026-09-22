@@ -241,15 +241,15 @@ export function PrismaLayout({
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="h-16 flex items-center px-6 gap-3 border-b border-sidebar-border relative">
-          <div className="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center shadow-lg flex-shrink-0">
-            <Database className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center flex-shrink-0 shadow-sm">
+            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
           </div>
           <div className="flex flex-col overflow-hidden">
             <span className="font-bold text-sm tracking-tight text-sidebar-foreground truncate" title="PYPE ERM">
               PYPE ERM
             </span>
             <span className="text-[10px] text-sidebar-foreground/50 uppercase font-bold tracking-widest truncate">
-              PYPE ERM
+              Dashboard
             </span>
           </div>
           {/* Mobile Close Button */}

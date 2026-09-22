@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { StudentProfilePanel } from './StudentProfilePanel';
 
-export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean } = {}) {
+export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any } = {}) {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
   const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
@@ -326,6 +326,29 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
     fetchSalesUsers();
   }, [user]);
 
+  useEffect(() => {
+    if (completingEnrollment) {
+      setFormData(prev => ({
+        ...prev,
+        name: completingEnrollment.studentName || '',
+        email: completingEnrollment.studentEmail || '',
+        phone: completingEnrollment.studentPhone || '',
+        universityId: completingEnrollment.program?.universityId || completingEnrollment.universityId || '',
+        programId: completingEnrollment.programId || '',
+        sessionId: completingEnrollment.sessionId || '',
+        centerId: completingEnrollment.studyCenterId || '',
+        initialPaymentAmount: completingEnrollment.initialPaymentAmount?.toString() || '',
+        documents: completingEnrollment.documents || [],
+        photo: completingEnrollment.photo || '',
+        address: completingEnrollment.studentAddress !== 'To be filled' ? completingEnrollment.studentAddress : '',
+      }));
+      // Optionally pre-select the sales user if not in sales mode
+      if (completingEnrollment.salesUserId) {
+        setSelectedSalesUserId(completingEnrollment.salesUserId);
+      }
+    }
+  }, [completingEnrollment]);
+
   const fetchStudents = async () => {
     setLoading(true);
     try {
@@ -456,7 +479,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode }: { trig
       return;
     }
     try {
-      if (editingId) {
+      if (completingEnrollment) {
+        await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
+        toast.success('Provisional enrollment completed successfully');
+      } else if (editingId) {
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');
       } else {

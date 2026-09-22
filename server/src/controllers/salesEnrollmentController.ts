@@ -294,7 +294,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
       }
     },
     include: {
-      program: { select: { id: true, name: true, code: true, courseType: true, feeStructures: { select: { allowInitialFee: true } } } },
+      program: { select: { id: true, name: true, code: true, courseType: true, universityId: true, feeStructures: { select: { allowInitialFee: true } } } },
       studyCenter: { select: { id: true, name: true, code: true } },
       session: { select: { id: true, name: true } },
       departmentReviewer: { select: { id: true, name: true, email: true } },
@@ -308,6 +308,8 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   const summary = {
     total: enrollments.length,
     sales_verification_pending: enrollments.filter((e: any) => e.status === 'sales_verification_pending').length,
+    provisional_finance_pending: enrollments.filter((e: any) => e.status === 'provisional_finance_pending').length,
+    provisional_finance_verified: enrollments.filter((e: any) => e.status === 'provisional_finance_verified').length,
     document_review: enrollments.filter((e: any) => e.status === 'document_review').length,
     finance_review: enrollments.filter((e: any) => e.status === 'finance_review').length,
     enrolled: enrollments.filter((e: any) => e.status === 'enrolled').length,

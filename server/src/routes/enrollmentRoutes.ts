@@ -35,7 +35,7 @@ router.get('/wallet/topups', authorize('center_admin', 'sales_admin', 'sales_sub
 router.get('/programs', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getEnrollablePrograms);
 router.post('/enroll', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), createEnrollment);
 router.get('/enrollments', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getMyEnrollments);
-router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager'), getMyProvisionalEnrollments);
+router.get('/provisional', authorize('center_admin', 'sales_admin', 'sales_sub_admin', 'sub_department_manager', 'finance_admin', 'finance_sub_admin'), getMyProvisionalEnrollments);
 
 // Center onboarding status & payment (authenticated)
 router.get('/my-center-status', authorize('center_admin'), getMyCenterStatus);

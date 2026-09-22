@@ -11,6 +11,7 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,96 +29,131 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4 sm:p-8">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-        <div className="p-8 sm:p-10">
-          <button onClick={(e) => { e.preventDefault(); window.location.pathname = '/'; }} className="flex items-center text-sm text-slate-500 hover:text-slate-800 mb-4 transition-colors font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-            Back to Home
-          </button>
-          {/* Logo */}
-          <div className="flex flex-col items-center justify-center gap-4 mb-8">
-            <div className="h-20 w-20 bg-slate-50 rounded-2xl flex items-center justify-center shadow-sm border border-slate-100">
-              <img src="/pype-logo.png" alt="PYPE ERM" className="h-14 w-auto drop-shadow-sm" />
+    <div className="min-h-screen bg-[#F1F5F9] flex items-center justify-center p-4 sm:p-8 font-sans text-slate-900">
+      {/* Main Container Card */}
+      <div className="w-full max-w-[1100px] h-[750px] max-h-[90vh] bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden flex relative">
+        
+        {/* Left Panel - Login Form */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-between p-8 sm:p-12 h-full bg-white relative z-10">
+          
+          {/* Top Bar: Logo and Back Button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 bg-slate-900 rounded flex items-center justify-center">
+                <img src="/pype-logo.png" alt="Pype ERM" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+              </div>
+              <span className="font-bold text-lg tracking-tight">PYPE ERM</span>
             </div>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-[#0F172A] tracking-tight">PYPE ERM</h1>
-            </div>
+            <button 
+              onClick={(e) => { e.preventDefault(); window.location.pathname = '/'; }} 
+              className="flex items-center text-sm font-medium text-slate-400 hover:text-slate-800 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              Back
+            </button>
           </div>
 
-          <div className="mb-8 text-center">
-            <h2 className="text-xl font-semibold text-slate-800 mb-1">Welcome back</h2>
-            <p className="text-sm text-slate-500">Sign in to your account to continue</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
-                Email address
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-12 bg-slate-50/50 border-slate-200 focus:bg-white focus:border-[#0F172A] focus:ring-[#0F172A] transition-colors"
-                required
-              />
+          {/* Form Content */}
+          <div className="w-full max-w-[400px] mx-auto my-auto">
+            <div className="mb-8">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-2">Welcome back</h1>
+              <p className="text-slate-500 text-sm">Welcome back! Please enter your details.</p>
             </div>
 
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-                Password
-              </label>
-              <div className="relative">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-1.5">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+                  Email
+                </label>
                 <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 bg-slate-50/50 border-slate-200 focus:bg-white focus:border-[#0F172A] focus:ring-[#0F172A] transition-colors pr-10"
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-11 rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 shadow-sm transition-colors text-base"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                  Password
+                </label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-11 rounded-lg border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 shadow-sm transition-colors pr-10 text-base"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 pb-1">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/30 cursor-pointer" 
+                  />
+                  <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">Remember for 30 days</span>
+                </label>
+              </div>
+
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-lg font-medium">
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-3 pt-2">
+                <Button
+                  type="submit"
+                  className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium shadow-sm transition-all"
+                  disabled={isLoading}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+                  {isLoading ? 'Signing in...' : 'Sign in'}
+                </Button>
               </div>
-            </div>
 
-            {error && (
-              <div className="p-3.5 bg-red-50/80 border border-red-100 text-red-600 text-sm rounded-xl font-medium text-center">
-                {error}
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full h-12 bg-[#0F172A] hover:bg-[#1E293B] text-white rounded-xl font-medium shadow-md transition-all active:scale-[0.98]"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Signing in...' : 'Sign in to account'}
-            </Button>
-          </form>
-        </div>
-        
-        {/* Footer decoration */}
-        <div className="bg-slate-50 p-4 border-t border-slate-100 text-center">
-          <p className="text-xs text-slate-400 font-medium">
+            </form>
+          </div>
+          
+          {/* Footer Copyright */}
+          <div className="text-xs text-slate-400 font-medium">
             &copy; {new Date().getFullYear()} PYPE ERM. All rights reserved.
-          </p>
+          </div>
+        </div>
+
+        {/* Right Panel - Abstract CSS Graphic */}
+        <div className="hidden lg:flex lg:w-1/2 bg-[#F8FAFC] items-center justify-center relative overflow-hidden border-l border-slate-100">
+          <div className="relative">
+            {/* The top half-circle */}
+            <div className="w-[340px] h-[170px] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-t-full relative z-10 shadow-inner"></div>
+            
+            {/* The horizontal surface line */}
+            <div className="absolute top-[170px] left-1/2 -translate-x-1/2 w-[440px] h-[2px] bg-white z-20 shadow-[0_-1px_3px_rgba(255,255,255,0.8)]"></div>
+            
+            {/* The shadow/reflection below the line */}
+            <div className="w-[340px] h-[170px] bg-indigo-900/30 rounded-b-full filter blur-2xl relative z-0 mt-2 opacity-80 mix-blend-multiply"></div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+

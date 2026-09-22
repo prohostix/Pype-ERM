@@ -25,6 +25,8 @@ const STATUS_COLOR: Record<string, string> = {
   finance_review: 'bg-orange-100 text-orange-700',
   enrolled: 'bg-success/10 text-success',
   rejected: 'bg-destructive/10 text-destructive',
+  provisional_finance_pending: 'bg-yellow-100 text-yellow-700',
+  provisional_finance_verified: 'bg-green-100 text-green-700',
 };
 
 export function StudyCenterEnrollmentsPanel() {
@@ -54,7 +56,7 @@ export function StudyCenterEnrollmentsPanel() {
     return name + (e.specialisation ? ` - ${e.specialisation}` : '');
   };
 
-  const STATUSES = ['', 'document_review', 'dept_review', 'finance_review', 'enrolled', 'rejected'];
+  const STATUSES = ['', 'provisional_finance_pending', 'provisional_finance_verified', 'document_review', 'dept_review', 'finance_review', 'enrolled', 'rejected'];
 
   return (
     <div className="space-y-6">

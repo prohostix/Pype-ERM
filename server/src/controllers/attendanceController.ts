@@ -137,8 +137,10 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
   });
 
   if (existing) {
-    res.status(400).json({ success: false, message: 'You have already checked in today.' });
-    return;
+    if (existing.checkIn) {
+      res.status(400).json({ success: false, message: 'You have already checked in today.' });
+      return;
+    }
   }
 
   const today = todayStart; // Save exact normalized midnight date to respect unique constraint
@@ -181,19 +183,35 @@ export const punchIn = asyncHandler(async (req: AuthRequest, res: Response) => {
     }
   }
 
-  const attendance = await prisma.attendance.create({
-    data: {
-      employeeId: req.user.id,
-      organizationId: req.user.organizationId,
-      date: today,
-      checkIn: now,
-      checkInLocation: latitude ? { latitude, longitude, address } : undefined,
-      checkInPhoto,
-      status,
-      isLate,
-      lateMinutes
-    }
-  });
+  let attendance;
+  if (existing) {
+    attendance = await prisma.attendance.update({
+      where: { id: existing.id },
+      data: {
+        checkIn: now,
+        checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+        checkInPhoto,
+        status: existing.status === 'half_day' ? 'half_day' : status,
+        isLate,
+        lateMinutes
+      }
+    });
+  } else {
+    attendance = await prisma.attendance.create({
+      data: {
+        employeeId: req.user.id,
+        organizationId: req.user.organizationId,
+        date: today,
+        checkIn: now,
+        checkInLocation: latitude ? { latitude, longitude, address } : undefined,
+        checkInPhoto,
+        status,
+        isLate,
+        lateMinutes
+      }
+    });
+  }
+
 
   // Notify HRs about the punch in
   await broadcastNotification(
