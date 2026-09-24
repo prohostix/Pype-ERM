@@ -10,7 +10,7 @@ async function verifyDeletion() {
       license = await prisma.license.create({
         data: {
           name: 'Test License',
-          type: 'basic',
+          tag: 'BASIC',
           features: ['test'],
           maxUsers: 10,
           maxStorage: 1024,
