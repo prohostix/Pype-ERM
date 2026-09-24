@@ -112,6 +112,8 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
   if (['hr_admin', 'hr_sub_admin', 'ceo', 'org_admin'].includes(role)) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
 
     if (metrics.totalEmployees === undefined) {
       metrics.totalEmployees = await prisma.user.count({
@@ -119,8 +121,8 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
       });
     }
 
-    metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId as string, date: today, status: 'present' } });
-    metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId as string, date: today, status: 'leave' } });
+    metrics.presentToday = await prisma.attendance.count({ where: { organizationId: orgId as string, date: { gte: today, lte: endOfDay }, status: { in: ['present', 'late'] } } });
+    metrics.onLeave = await prisma.attendance.count({ where: { organizationId: orgId as string, date: { gte: today, lte: endOfDay }, status: 'leave' } });
     
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = days[today.getDay()];

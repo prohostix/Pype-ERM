@@ -138,12 +138,14 @@ exports.Prisma.OrganizationScalarFieldEnum = {
 exports.Prisma.LicenseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  type: 'type',
+  tag: 'tag',
   features: 'features',
   maxUsers: 'maxUsers',
   maxStorage: 'maxStorage',
   durationMonths: 'durationMonths',
   price: 'price',
+  perEnrollmentFee: 'perEnrollmentFee',
+  isSystem: 'isSystem',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1458,12 +1460,6 @@ exports.OrganizationStatus = exports.$Enums.OrganizationStatus = {
   active: 'active',
   inactive: 'inactive',
   suspended: 'suspended'
-};
-
-exports.LicenseType = exports.$Enums.LicenseType = {
-  basic: 'basic',
-  premium: 'premium',
-  enterprise: 'enterprise'
 };
 
 exports.DepartmentType = exports.$Enums.DepartmentType = {

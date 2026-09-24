@@ -100,12 +100,14 @@ model Organization {
 model License {
   id             String         @id @default(uuid())
   name           String
-  type           LicenseType
+  tag            String?
   features       Json           @default("[]")
   maxUsers       Int            @default(10)
   maxStorage     Int            @default(1024)
   durationMonths Int            @default(12)
   price          Float
+  perEnrollmentFee Float        @default(0)
+  isSystem       Boolean        @default(false)
   status         String         @default("active")
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -1680,11 +1682,7 @@ enum OrganizationStatus {
   suspended
 }
 
-enum LicenseType {
-  basic
-  premium
-  enterprise
-}
+
 
 enum DepartmentType {
   operations

@@ -54,7 +54,6 @@ const TABLE_TO_TAB: Record<string, string> = {
   branches: 'branches',
   settings: 'settings',
   enrollment_link_config: 'enrollment_link_config',
-  dsms_migration: 'dsms_migration',
   academic_centers: 'academic_centers',
   faculties: 'faculties',
 
@@ -447,7 +446,6 @@ function App() {
         { id: 'settings', label: 'Organisation Settings' },
         { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
         { id: 'meetings', label: 'Meetings' },
-        { id: 'dsms_migration', label: 'DSMS Migration' },
       ];
     }
 

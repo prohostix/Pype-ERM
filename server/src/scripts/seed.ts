@@ -15,15 +15,32 @@ const seedData = async () => {
     await prisma.license.deleteMany({});
 
     console.log('📝 Creating licenses...');
+    const proLicense = await prisma.license.create({
+      data: {
+        name: 'Pro Plan',
+        tag: 'PRO',
+        features: ['enrollment_flow', 'basic_modules'],
+        maxUsers: 50,
+        maxStorage: 10240,
+        durationMonths: 12,
+        price: 0,
+        perEnrollmentFee: 199,
+        isSystem: true,
+        status: 'active',
+      }
+    });
+
     const premiumLicense = await prisma.license.create({
       data: {
         name: 'Premium Plan',
-        type: 'premium',
-        features: ['all_basic', 'up_to_200_users', '50gb_storage', 'advanced_analytics'],
+        tag: 'PREMIUM',
+        features: ['academic_center', 'attendance_tracking', 'all_basic', 'up_to_200_users', '50gb_storage'],
         maxUsers: 200,
         maxStorage: 51200,
         durationMonths: 12,
         price: 29999,
+        perEnrollmentFee: 0,
+        isSystem: true,
         status: 'active',
       }
     });

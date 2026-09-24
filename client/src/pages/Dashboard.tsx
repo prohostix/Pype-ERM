@@ -188,7 +188,7 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
   }
 
   if (user?.role === 'center_admin') {
-    return <ModernStudyCenterDashboard onNavigate={onNavigateToTable} />;
+    return <ModernStudyCenterDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'employee') {

@@ -14,9 +14,10 @@ import { toast } from 'sonner';
 
 interface AttendancePanelProps {
   isMyPortal?: boolean;
+  initialFilter?: string;
 }
 
-export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
+export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: AttendancePanelProps) {
   const { user } = useAuth();
   const isHR = !isMyPortal && (user?.role === 'hr_admin' || user?.role === 'hr_sub_admin');
   const canViewAll = !isMyPortal && ['hr_admin', 'hr_sub_admin', 'org_admin', 'ceo'].includes(user?.role || '');
@@ -35,7 +36,7 @@ export function AttendancePanel({ isMyPortal = false }: AttendancePanelProps) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'late'>('desc');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>(initialFilter);
 
   const [formData, setFormData] = useState<any>({
     employeeId: '',

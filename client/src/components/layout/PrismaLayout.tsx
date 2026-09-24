@@ -33,6 +33,10 @@ import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { PunchWidget } from '@/components/attendance/PunchWidget';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/api';
+import { EnrollStudentPanel } from '../panels/EnrollStudentPanel';
+import { InternalMarksPanel } from '../panels/InternalMarksPanel';
+import { StudyCenterWalletPanel } from '../panels/StudyCenterWalletPanel';
+import { StudyCenterEnrollmentsPanel } from '../panels/StudyCenterEnrollmentsPanel';
 
 export interface TableItem {
   id: string;

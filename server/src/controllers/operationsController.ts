@@ -178,6 +178,18 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
   const targetEmail = email || `admin.${code}@example.com`;
   const generatedPassword = `Center@${Math.floor(100000 + Math.random() * 900000)}`;
 
+  const existingCenter = await prisma.studyCenter.findFirst({
+    where: {
+      organizationId: req.user.organizationId,
+      code: code
+    }
+  });
+
+  if (existingCenter) {
+    res.status(400).json({ success: false, message: 'A study center with this code already exists in your organization' });
+    return;
+  }
+
   const center = await prisma.studyCenter.create({ 
     data: { 
       ...rest,

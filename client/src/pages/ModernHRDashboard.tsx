@@ -46,8 +46,11 @@ import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: string, onNavigate?: (tab: string) => void }) {
   const [metrics, setMetrics] = useState<any>({});
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
-  const handleNavigate = (tab: string) => {
+  const [tabProps, setTabProps] = useState<any>({});
+  const handleNavigate = (tab: string, props?: any) => {
     setActiveTab(tab);
+    if (props) setTabProps(props);
+    else setTabProps({});
     if (onNavigate) onNavigate(tab);
   };
 
@@ -70,7 +73,7 @@ export function ModernHRDashboard({ initialTab, onNavigate }: { initialTab?: str
       case 'team_permissions': return <TeamPermissionsPanel />;
       case 'leaves': return <LeavesPanel />;
       case 'my_leaves': return <LeavesPanel isMyPortal />;
-      case 'attendance': return <AttendancePanel />;
+      case 'attendance': return <AttendancePanel initialFilter={tabProps.filter} />;
       case 'my_attendance': return <AttendancePanel isMyPortal />;
       case 'vacancies': return <VacanciesPanel />;
       case 'holidays': return <HolidaysPanel />;
@@ -137,7 +140,7 @@ export function getHRNavItems() {
   ];
 }
 
-function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; onNavigate: (tab: string) => void; punchWidget?: React.ReactNode }) {
+function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; onNavigate: (tab: string, props?: any) => void; punchWidget?: React.ReactNode }) {
   const [vacancies, setVacancies] = useState<any[]>([]);
   const [pendingLeaves, setPendingLeaves] = useState<any[]>([]);
   const [absentToday, setAbsentToday] = useState<any[]>([]);
@@ -194,7 +197,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
               icon={<Clock className="w-5 h-5" />}
               subtext={(metrics.absentToday ?? absentToday.length) > 0 ? `${metrics.absentToday ?? absentToday.length} not checked in` : 'All present'}
               color="warning"
-              onClick={() => onNavigate('attendance')}
+              onClick={() => onNavigate('attendance', { filter: 'absent' })}
             />
             <HRMetricCard
               title="Present Today"
@@ -202,7 +205,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
               icon={<Heart className="w-5 h-5" />}
               subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
               color="success"
-              onClick={() => onNavigate('attendance')}
+              onClick={() => onNavigate('attendance', { filter: 'present' })}
             />
           </div>
         </div>

@@ -265,6 +265,10 @@ const navItems: NavItem[] = [
       { id: 'center-students', label: 'My Students', icon: Users, roles: ['center_admin'] },
       { id: 'center-invoices', label: 'Invoices', icon: Receipt, roles: ['center_admin'] },
       { id: 'center-marks', label: 'Enter Marks', icon: FileText, roles: ['center_admin'] },
+      { id: 'my_enrollments', label: 'My Enrollments', icon: FileText, roles: ['center_admin'] },
+      { id: 'internal_marks', label: 'Internal Marks', icon: FileText, roles: ['center_admin'] },
+      { id: 'enroll_student', label: 'Enroll Students', icon: UserPlus, roles: ['center_admin'] },
+      { id: 'center_wallet', label: 'Wallet', icon: Wallet, roles: ['center_admin'] },
     ],
   },
   {

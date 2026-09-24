@@ -17,13 +17,12 @@ export function ModernStudyCenterDashboard({ initialTab, onNavigate }: { initial
   const [activeTab, setActiveTab] = useState(initialTab || 'overview');
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
-    if (onNavigate) onNavigate(tab);
   };
   const [metrics, setMetrics] = useState<any>({});
 
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
-    setActiveTab(initialTab || (typeof isSubDeptManager !== 'undefined' && isSubDeptManager ? 'my_subdept' : 'overview'));
+    setActiveTab(initialTab || 'overview');
   }, [initialTab]);
   useEffect(() => {
     api.get('/enrollment/wallet').then(r => setMetrics(r.data.data || {})).catch(() => {});
@@ -47,6 +46,7 @@ export function ModernStudyCenterDashboard({ initialTab, onNavigate }: { initial
           <TabsTrigger value="marks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Internal Marks</TabsTrigger>
           <TabsTrigger value="programs" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Programs & Materials</TabsTrigger>
           <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Tasks</TabsTrigger>
+          <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
         </TabsList>
           </div>
         </div>

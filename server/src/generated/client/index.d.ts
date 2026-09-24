@@ -427,15 +427,6 @@ export namespace $Enums {
 export type OrganizationStatus = (typeof OrganizationStatus)[keyof typeof OrganizationStatus]
 
 
-export const LicenseType: {
-  basic: 'basic',
-  premium: 'premium',
-  enterprise: 'enterprise'
-};
-
-export type LicenseType = (typeof LicenseType)[keyof typeof LicenseType]
-
-
 export const DepartmentType: {
   operations: 'operations',
   finance: 'finance',
@@ -711,10 +702,6 @@ export type AcademicAttendanceStatus = (typeof AcademicAttendanceStatus)[keyof t
 export type OrganizationStatus = $Enums.OrganizationStatus
 
 export const OrganizationStatus: typeof $Enums.OrganizationStatus
-
-export type LicenseType = $Enums.LicenseType
-
-export const LicenseType: typeof $Enums.LicenseType
 
 export type DepartmentType = $Enums.DepartmentType
 
@@ -14405,6 +14392,7 @@ export namespace Prisma {
     maxStorage: number | null
     durationMonths: number | null
     price: number | null
+    perEnrollmentFee: number | null
   }
 
   export type LicenseSumAggregateOutputType = {
@@ -14412,16 +14400,19 @@ export namespace Prisma {
     maxStorage: number | null
     durationMonths: number | null
     price: number | null
+    perEnrollmentFee: number | null
   }
 
   export type LicenseMinAggregateOutputType = {
     id: string | null
     name: string | null
-    type: $Enums.LicenseType | null
+    tag: string | null
     maxUsers: number | null
     maxStorage: number | null
     durationMonths: number | null
     price: number | null
+    perEnrollmentFee: number | null
+    isSystem: boolean | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14430,11 +14421,13 @@ export namespace Prisma {
   export type LicenseMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    type: $Enums.LicenseType | null
+    tag: string | null
     maxUsers: number | null
     maxStorage: number | null
     durationMonths: number | null
     price: number | null
+    perEnrollmentFee: number | null
+    isSystem: boolean | null
     status: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14443,12 +14436,14 @@ export namespace Prisma {
   export type LicenseCountAggregateOutputType = {
     id: number
     name: number
-    type: number
+    tag: number
     features: number
     maxUsers: number
     maxStorage: number
     durationMonths: number
     price: number
+    perEnrollmentFee: number
+    isSystem: number
     status: number
     createdAt: number
     updatedAt: number
@@ -14461,6 +14456,7 @@ export namespace Prisma {
     maxStorage?: true
     durationMonths?: true
     price?: true
+    perEnrollmentFee?: true
   }
 
   export type LicenseSumAggregateInputType = {
@@ -14468,16 +14464,19 @@ export namespace Prisma {
     maxStorage?: true
     durationMonths?: true
     price?: true
+    perEnrollmentFee?: true
   }
 
   export type LicenseMinAggregateInputType = {
     id?: true
     name?: true
-    type?: true
+    tag?: true
     maxUsers?: true
     maxStorage?: true
     durationMonths?: true
     price?: true
+    perEnrollmentFee?: true
+    isSystem?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -14486,11 +14485,13 @@ export namespace Prisma {
   export type LicenseMaxAggregateInputType = {
     id?: true
     name?: true
-    type?: true
+    tag?: true
     maxUsers?: true
     maxStorage?: true
     durationMonths?: true
     price?: true
+    perEnrollmentFee?: true
+    isSystem?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -14499,12 +14500,14 @@ export namespace Prisma {
   export type LicenseCountAggregateInputType = {
     id?: true
     name?: true
-    type?: true
+    tag?: true
     features?: true
     maxUsers?: true
     maxStorage?: true
     durationMonths?: true
     price?: true
+    perEnrollmentFee?: true
+    isSystem?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -14600,12 +14603,14 @@ export namespace Prisma {
   export type LicenseGroupByOutputType = {
     id: string
     name: string
-    type: $Enums.LicenseType
+    tag: string | null
     features: JsonValue
     maxUsers: number
     maxStorage: number
     durationMonths: number
     price: number
+    perEnrollmentFee: number
+    isSystem: boolean
     status: string
     createdAt: Date
     updatedAt: Date
@@ -14633,12 +14638,14 @@ export namespace Prisma {
   export type LicenseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    type?: boolean
+    tag?: boolean
     features?: boolean
     maxUsers?: boolean
     maxStorage?: boolean
     durationMonths?: boolean
     price?: boolean
+    perEnrollmentFee?: boolean
+    isSystem?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14649,12 +14656,14 @@ export namespace Prisma {
   export type LicenseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    type?: boolean
+    tag?: boolean
     features?: boolean
     maxUsers?: boolean
     maxStorage?: boolean
     durationMonths?: boolean
     price?: boolean
+    perEnrollmentFee?: boolean
+    isSystem?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14663,12 +14672,14 @@ export namespace Prisma {
   export type LicenseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    type?: boolean
+    tag?: boolean
     features?: boolean
     maxUsers?: boolean
     maxStorage?: boolean
     durationMonths?: boolean
     price?: boolean
+    perEnrollmentFee?: boolean
+    isSystem?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14677,18 +14688,20 @@ export namespace Prisma {
   export type LicenseSelectScalar = {
     id?: boolean
     name?: boolean
-    type?: boolean
+    tag?: boolean
     features?: boolean
     maxUsers?: boolean
     maxStorage?: boolean
     durationMonths?: boolean
     price?: boolean
+    perEnrollmentFee?: boolean
+    isSystem?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LicenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "features" | "maxUsers" | "maxStorage" | "durationMonths" | "price" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["license"]>
+  export type LicenseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "tag" | "features" | "maxUsers" | "maxStorage" | "durationMonths" | "price" | "perEnrollmentFee" | "isSystem" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["license"]>
   export type LicenseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizations?: boolean | License$organizationsArgs<ExtArgs>
     _count?: boolean | LicenseCountOutputTypeDefaultArgs<ExtArgs>
@@ -14704,12 +14717,14 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      type: $Enums.LicenseType
+      tag: string | null
       features: Prisma.JsonValue
       maxUsers: number
       maxStorage: number
       durationMonths: number
       price: number
+      perEnrollmentFee: number
+      isSystem: boolean
       status: string
       createdAt: Date
       updatedAt: Date
@@ -15139,12 +15154,14 @@ export namespace Prisma {
   interface LicenseFieldRefs {
     readonly id: FieldRef<"License", 'String'>
     readonly name: FieldRef<"License", 'String'>
-    readonly type: FieldRef<"License", 'LicenseType'>
+    readonly tag: FieldRef<"License", 'String'>
     readonly features: FieldRef<"License", 'Json'>
     readonly maxUsers: FieldRef<"License", 'Int'>
     readonly maxStorage: FieldRef<"License", 'Int'>
     readonly durationMonths: FieldRef<"License", 'Int'>
     readonly price: FieldRef<"License", 'Float'>
+    readonly perEnrollmentFee: FieldRef<"License", 'Float'>
+    readonly isSystem: FieldRef<"License", 'Boolean'>
     readonly status: FieldRef<"License", 'String'>
     readonly createdAt: FieldRef<"License", 'DateTime'>
     readonly updatedAt: FieldRef<"License", 'DateTime'>
@@ -116377,12 +116394,14 @@ export namespace Prisma {
   export const LicenseScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    type: 'type',
+    tag: 'tag',
     features: 'features',
     maxUsers: 'maxUsers',
     maxStorage: 'maxStorage',
     durationMonths: 'durationMonths',
     price: 'price',
+    perEnrollmentFee: 'perEnrollmentFee',
+    isSystem: 'isSystem',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -118011,20 +118030,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'LicenseType'
-   */
-  export type EnumLicenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicenseType'>
-    
-
-
-  /**
-   * Reference to a field of type 'LicenseType[]'
-   */
-  export type ListEnumLicenseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicenseType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -118049,6 +118054,13 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -118105,13 +118117,6 @@ export namespace Prisma {
    * Reference to a field of type 'UserStatus[]'
    */
   export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -118721,12 +118726,14 @@ export namespace Prisma {
     NOT?: LicenseWhereInput | LicenseWhereInput[]
     id?: StringFilter<"License"> | string
     name?: StringFilter<"License"> | string
-    type?: EnumLicenseTypeFilter<"License"> | $Enums.LicenseType
+    tag?: StringNullableFilter<"License"> | string | null
     features?: JsonFilter<"License">
     maxUsers?: IntFilter<"License"> | number
     maxStorage?: IntFilter<"License"> | number
     durationMonths?: IntFilter<"License"> | number
     price?: FloatFilter<"License"> | number
+    perEnrollmentFee?: FloatFilter<"License"> | number
+    isSystem?: BoolFilter<"License"> | boolean
     status?: StringFilter<"License"> | string
     createdAt?: DateTimeFilter<"License"> | Date | string
     updatedAt?: DateTimeFilter<"License"> | Date | string
@@ -118736,12 +118743,14 @@ export namespace Prisma {
   export type LicenseOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    type?: SortOrder
+    tag?: SortOrderInput | SortOrder
     features?: SortOrder
     maxUsers?: SortOrder
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
+    isSystem?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -118754,12 +118763,14 @@ export namespace Prisma {
     OR?: LicenseWhereInput[]
     NOT?: LicenseWhereInput | LicenseWhereInput[]
     name?: StringFilter<"License"> | string
-    type?: EnumLicenseTypeFilter<"License"> | $Enums.LicenseType
+    tag?: StringNullableFilter<"License"> | string | null
     features?: JsonFilter<"License">
     maxUsers?: IntFilter<"License"> | number
     maxStorage?: IntFilter<"License"> | number
     durationMonths?: IntFilter<"License"> | number
     price?: FloatFilter<"License"> | number
+    perEnrollmentFee?: FloatFilter<"License"> | number
+    isSystem?: BoolFilter<"License"> | boolean
     status?: StringFilter<"License"> | string
     createdAt?: DateTimeFilter<"License"> | Date | string
     updatedAt?: DateTimeFilter<"License"> | Date | string
@@ -118769,12 +118780,14 @@ export namespace Prisma {
   export type LicenseOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    type?: SortOrder
+    tag?: SortOrderInput | SortOrder
     features?: SortOrder
     maxUsers?: SortOrder
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
+    isSystem?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -118791,12 +118804,14 @@ export namespace Prisma {
     NOT?: LicenseScalarWhereWithAggregatesInput | LicenseScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"License"> | string
     name?: StringWithAggregatesFilter<"License"> | string
-    type?: EnumLicenseTypeWithAggregatesFilter<"License"> | $Enums.LicenseType
+    tag?: StringNullableWithAggregatesFilter<"License"> | string | null
     features?: JsonWithAggregatesFilter<"License">
     maxUsers?: IntWithAggregatesFilter<"License"> | number
     maxStorage?: IntWithAggregatesFilter<"License"> | number
     durationMonths?: IntWithAggregatesFilter<"License"> | number
     price?: FloatWithAggregatesFilter<"License"> | number
+    perEnrollmentFee?: FloatWithAggregatesFilter<"License"> | number
+    isSystem?: BoolWithAggregatesFilter<"License"> | boolean
     status?: StringWithAggregatesFilter<"License"> | string
     createdAt?: DateTimeWithAggregatesFilter<"License"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"License"> | Date | string
@@ -127898,12 +127913,14 @@ export namespace Prisma {
   export type LicenseCreateInput = {
     id?: string
     name: string
-    type: $Enums.LicenseType
+    tag?: string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: number
     maxStorage?: number
     durationMonths?: number
     price: number
+    perEnrollmentFee?: number
+    isSystem?: boolean
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -127913,12 +127930,14 @@ export namespace Prisma {
   export type LicenseUncheckedCreateInput = {
     id?: string
     name: string
-    type: $Enums.LicenseType
+    tag?: string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: number
     maxStorage?: number
     durationMonths?: number
     price: number
+    perEnrollmentFee?: number
+    isSystem?: boolean
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -127928,12 +127947,14 @@ export namespace Prisma {
   export type LicenseUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127943,12 +127964,14 @@ export namespace Prisma {
   export type LicenseUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127958,12 +127981,14 @@ export namespace Prisma {
   export type LicenseCreateManyInput = {
     id?: string
     name: string
-    type: $Enums.LicenseType
+    tag?: string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: number
     maxStorage?: number
     durationMonths?: number
     price: number
+    perEnrollmentFee?: number
+    isSystem?: boolean
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -127972,12 +127997,14 @@ export namespace Prisma {
   export type LicenseUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127986,12 +128013,14 @@ export namespace Prisma {
   export type LicenseUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -138383,13 +138412,6 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
-
-  export type EnumLicenseTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.LicenseType | EnumLicenseTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumLicenseTypeFilter<$PrismaModel> | $Enums.LicenseType
-  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -138436,6 +138458,11 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type OrganizationListRelationFilter = {
     every?: OrganizationWhereInput
     some?: OrganizationWhereInput
@@ -138449,12 +138476,14 @@ export namespace Prisma {
   export type LicenseCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    type?: SortOrder
+    tag?: SortOrder
     features?: SortOrder
     maxUsers?: SortOrder
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
+    isSystem?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -138465,16 +138494,19 @@ export namespace Prisma {
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
   }
 
   export type LicenseMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    type?: SortOrder
+    tag?: SortOrder
     maxUsers?: SortOrder
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
+    isSystem?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -138483,11 +138515,13 @@ export namespace Prisma {
   export type LicenseMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    type?: SortOrder
+    tag?: SortOrder
     maxUsers?: SortOrder
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
+    perEnrollmentFee?: SortOrder
+    isSystem?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -138498,16 +138532,7 @@ export namespace Prisma {
     maxStorage?: SortOrder
     durationMonths?: SortOrder
     price?: SortOrder
-  }
-
-  export type EnumLicenseTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LicenseType | EnumLicenseTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumLicenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.LicenseType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLicenseTypeFilter<$PrismaModel>
-    _max?: NestedEnumLicenseTypeFilter<$PrismaModel>
+    perEnrollmentFee?: SortOrder
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -138566,6 +138591,14 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumDepartmentTypeFilter<$PrismaModel = never> = {
@@ -138675,11 +138708,6 @@ export namespace Prisma {
     in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type StudentBatchTransferListRelationFilter = {
@@ -138880,14 +138908,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -146425,10 +146445,6 @@ export namespace Prisma {
     connect?: OrganizationWhereUniqueInput | OrganizationWhereUniqueInput[]
   }
 
-  export type EnumLicenseTypeFieldUpdateOperationsInput = {
-    set?: $Enums.LicenseType
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -146443,6 +146459,10 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type OrganizationUpdateManyWithoutLicenseNestedInput = {
@@ -148171,10 +148191,6 @@ export namespace Prisma {
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
     set?: $Enums.UserStatus
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type StudentBatchTransferUpdateManyWithoutTransferredByNestedInput = {
@@ -158290,13 +158306,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumLicenseTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.LicenseType | EnumLicenseTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumLicenseTypeFilter<$PrismaModel> | $Enums.LicenseType
-  }
-
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -158308,14 +158317,9 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumLicenseTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.LicenseType | EnumLicenseTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.LicenseType[] | ListEnumLicenseTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumLicenseTypeWithAggregatesFilter<$PrismaModel> | $Enums.LicenseType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumLicenseTypeFilter<$PrismaModel>
-    _max?: NestedEnumLicenseTypeFilter<$PrismaModel>
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -158373,6 +158377,14 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedEnumDepartmentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.DepartmentType | EnumDepartmentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.DepartmentType[] | ListEnumDepartmentTypeFieldRefInput<$PrismaModel>
@@ -158421,11 +158433,6 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
@@ -158444,14 +158451,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -160428,12 +160427,14 @@ export namespace Prisma {
   export type LicenseCreateWithoutOrganizationsInput = {
     id?: string
     name: string
-    type: $Enums.LicenseType
+    tag?: string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: number
     maxStorage?: number
     durationMonths?: number
     price: number
+    perEnrollmentFee?: number
+    isSystem?: boolean
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -160442,12 +160443,14 @@ export namespace Prisma {
   export type LicenseUncheckedCreateWithoutOrganizationsInput = {
     id?: string
     name: string
-    type: $Enums.LicenseType
+    tag?: string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: number
     maxStorage?: number
     durationMonths?: number
     price: number
+    perEnrollmentFee?: number
+    isSystem?: boolean
     status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -163499,12 +163502,14 @@ export namespace Prisma {
   export type LicenseUpdateWithoutOrganizationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -163513,12 +163518,14 @@ export namespace Prisma {
   export type LicenseUncheckedUpdateWithoutOrganizationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: EnumLicenseTypeFieldUpdateOperationsInput | $Enums.LicenseType
+    tag?: NullableStringFieldUpdateOperationsInput | string | null
     features?: JsonNullValueInput | InputJsonValue
     maxUsers?: IntFieldUpdateOperationsInput | number
     maxStorage?: IntFieldUpdateOperationsInput | number
     durationMonths?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
+    perEnrollmentFee?: FloatFieldUpdateOperationsInput | number
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
