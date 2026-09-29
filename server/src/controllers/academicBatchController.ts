@@ -100,15 +100,22 @@ export const deleteBatch = asyncHandler(async (req: Request, res: Response) => {
   }
 
   if (user.role !== 'ceo' && user.role !== 'superadmin' && reason) {
+    const requestData: any = {
+      organization: { connect: { id: organizationId } },
+      entityType: 'academic-batch',
+      entityId: id,
+      requestType: 'delete',
+      reason: reason as string
+    };
+    
+    if (user.role === 'faculty') {
+      requestData.faculty = { connect: { id: user.id } };
+    } else {
+      requestData.user = { connect: { id: user.id } };
+    }
+
     await prisma.editDeleteRequest.create({
-      data: {
-        organizationId,
-        userId: user.id,
-        entityType: 'academic-batch',
-        entityId: id,
-        requestType: 'delete',
-        reason: reason as string
-      }
+      data: requestData
     });
     return res.status(202).json({ success: true, message: 'Delete request sent to CEO for approval' });
   }

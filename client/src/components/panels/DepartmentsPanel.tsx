@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Building, Users } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -181,64 +182,67 @@ export function DepartmentsPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-gradient-to-r from-primary/10 via-background to-background rounded-2xl border border-primary/10 shadow-sm backdrop-blur-xl">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Departments</h2>
-          <p className="text-muted-foreground text-sm">
-            Manage departments across all organizations
+          <h2 className="text-2xl font-black tracking-tight text-foreground">Departments</h2>
+          <p className="text-muted-foreground text-sm mt-1 font-medium">
+            Manage organizational structure and departments
           </p>
         </div>
-        <Button onClick={handleCreate}>
+        <Button onClick={handleCreate} className="w-full sm:w-auto shadow-md hover:shadow-lg transition-all rounded-full px-6 bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-2" />
-          New Department
+          Create Department
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {departments.map((dept) => (
-          <Card key={dept.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-3">
+          <Card key={dept.id} className="group relative overflow-hidden bg-card/60 backdrop-blur-xl border-border/40 hover:border-primary/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(255,255,255,0.02)] transition-all duration-300 hover:-translate-y-1 rounded-2xl">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-150 duration-500 pointer-events-none">
+              <Building className="w-24 h-24 text-primary" />
+            </div>
+            <CardHeader className="p-6 pb-4 relative z-10">
               <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <Building className="w-5 h-5 text-primary" />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary shadow-sm border border-primary/10 group-hover:rotate-3 transition-transform duration-300">
+                    <Building className="w-6 h-6" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">{dept.name}</CardTitle>
-                    <Badge className={`mt-1 ${getTypeBadgeColor(dept.type)} text-white border-none`}>
+                    <CardTitle className="text-lg font-bold tracking-tight group-hover:text-primary transition-colors">{dept.name}</CardTitle>
+                    <Badge className={cn("mt-1.5 uppercase tracking-widest text-[9px] font-black shadow-sm", getTypeBadgeColor(dept.type), "text-white border-none")}>
                       {dept.type}
                     </Badge>
                   </div>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-2 text-sm">
+            <CardContent className="px-6 pb-6 space-y-4 relative z-10">
+              <div className="space-y-2.5 text-sm">
                 {dept.organizationId && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <span className="font-medium">Organization:</span>
-                    <span className="truncate">
+                  <div className="flex items-center gap-3 text-muted-foreground bg-muted/30 p-2 rounded-xl">
+                    <div className="p-1 bg-background rounded-md shadow-sm border border-border/50"><Building className="w-3.5 h-3.5 text-foreground/70" /></div>
+                    <span className="font-medium truncate text-xs">
                       {dept.organizationId.name || 'N/A'}
                     </span>
                   </div>
                 )}
                 {dept.managerId && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="w-3 h-3" />
-                    <span className="text-xs">
-                      Manager: {dept.managerId.name || 'Assigned'}
+                  <div className="flex items-center gap-3 text-muted-foreground bg-muted/30 p-2 rounded-xl">
+                    <div className="p-1 bg-background rounded-md shadow-sm border border-border/50"><Users className="w-3.5 h-3.5 text-foreground/70" /></div>
+                    <span className="text-xs font-medium truncate">
+                      Manager: <span className="text-foreground">{dept.managerId.name || 'Assigned'}</span>
                     </span>
                   </div>
                 )}
                 {dept.features && dept.features.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className="flex flex-wrap gap-1.5 mt-3">
                     {dept.features.slice(0, 3).map((feature, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
+                      <Badge key={idx} variant="outline" className="text-[10px] uppercase font-bold tracking-wider bg-background/50 backdrop-blur-sm shadow-sm">
                         {feature}
                       </Badge>
                     ))}
                     {dept.features.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-[10px] font-bold bg-background/50 shadow-sm">
                         +{dept.features.length - 3}
                       </Badge>
                     )}
@@ -246,24 +250,24 @@ export function DepartmentsPanel() {
                 )}
               </div>
 
-              <div className="flex gap-2 pt-3 border-t">
+              <div className="flex gap-3 pt-4 border-t border-border/40">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-1"
+                  className="flex-1 rounded-xl shadow-sm border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold transition-colors"
                   onClick={() => handleEdit(dept)}
                 >
-                  <Edit className="w-3 h-3 mr-2" />
+                  <Edit className="w-3.5 h-3.5 mr-2" />
                   Edit
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-1 text-destructive hover:text-destructive"
+                  className="flex-none px-3 rounded-xl shadow-sm border-red-100 hover:border-red-200 bg-red-50/50 hover:bg-red-50 dark:border-red-900/30 dark:bg-red-900/10 dark:hover:bg-red-900/20 text-red-600 transition-colors"
                   onClick={() => handleDelete(dept)}
+                  title="Delete"
                 >
-                  <Trash2 className="w-3 h-3 mr-2" />
-                  Delete
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
             </CardContent>
@@ -353,7 +357,7 @@ export function DepartmentsPanel() {
                     <SelectItem value="sales">Sales</SelectItem>
                     <SelectItem value="ceo">CEO</SelectItem>
                     <SelectItem value="org_admin">Org Admin</SelectItem>
-                    <SelectItem value="study_center">Study Center</SelectItem>
+                    <SelectItem value="study_center">Academic Partner</SelectItem>
                     <SelectItem value="employee">Staff</SelectItem>
                     <SelectItem value="custom">Custom</SelectItem>
                   </SelectContent>

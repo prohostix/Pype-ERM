@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { StudentProfilePanel } from './StudentProfilePanel';
 
-export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any } = {}) {
+export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completingEnrollment, hideList }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; isSalesMode?: boolean; completingEnrollment?: any; hideList?: boolean } = {}) {
   const { user } = useAuth();
   const canWrite = ['org_admin', 'superadmin', 'center_admin'].includes(user?.role || '');
   const canDelete = ['org_admin', 'superadmin'].includes(user?.role || '');
@@ -328,19 +328,31 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
 
   useEffect(() => {
     if (completingEnrollment) {
+      const student = completingEnrollment.student || {};
       setFormData(prev => ({
         ...prev,
-        name: completingEnrollment.studentName || '',
-        email: completingEnrollment.studentEmail || '',
-        phone: completingEnrollment.studentPhone || '',
-        universityId: completingEnrollment.program?.universityId || completingEnrollment.universityId || '',
-        programId: completingEnrollment.programId || '',
-        sessionId: completingEnrollment.sessionId || '',
-        centerId: completingEnrollment.studyCenterId || '',
-        initialPaymentAmount: completingEnrollment.initialPaymentAmount?.toString() || '',
-        documents: completingEnrollment.documents || [],
-        photo: completingEnrollment.photo || '',
-        address: completingEnrollment.studentAddress !== 'To be filled' ? completingEnrollment.studentAddress : '',
+        name: completingEnrollment.studentName || student.name || '',
+        email: completingEnrollment.studentEmail || student.email || '',
+        phone: completingEnrollment.studentPhone || student.phone || '',
+        universityId: completingEnrollment.program?.universityId || completingEnrollment.universityId || student.universityId || '',
+        programId: completingEnrollment.programId || student.programId || '',
+        specialisation: completingEnrollment.specialisation || student.specialisation || '',
+        sessionId: completingEnrollment.sessionId || student.sessionId || '',
+        centerId: completingEnrollment.studyCenterId || student.centerId || '',
+        initialPaymentAmount: completingEnrollment.initialPaymentAmount?.toString() || (student.admissionProgress as any)?.initialPaymentAmount || '',
+        documents: completingEnrollment.documents || student.documents || [],
+        photo: completingEnrollment.photo || student.photo || '',
+        address: completingEnrollment.studentAddress !== 'To be filled' && completingEnrollment.studentAddress ? completingEnrollment.studentAddress : (student.address || ''),
+        dob: student.dob ? new Date(student.dob).toISOString().split('T')[0] : '',
+        altPhone: student.altPhone || '',
+        pinCode: student.pinCode || '',
+        religion: student.religion || '',
+        caste: student.caste || '',
+        fatherName: student.fatherName || '',
+        fatherPhone: student.fatherPhone || '',
+        motherName: student.motherName || '',
+        motherPhone: student.motherPhone || '',
+        receiptUrl: completingEnrollment.receiptUrl || student.receiptUrl || '',
       }));
       // Optionally pre-select the sales user if not in sales mode
       if (completingEnrollment.salesUserId) {
@@ -421,7 +433,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   };
 
   const isDocReq = (d: string) => {
-    return getEnrollmentConfig().requiredDocuments.includes(d);
+    return getEnrollmentConfig().requiredDocuments.some((req: string) => req.toLowerCase() === d.toLowerCase());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -446,7 +458,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     }
     const requiredDocs = getEnrollmentConfig().requiredDocuments;
     const missingDocs = requiredDocs.filter((docType: string) => {
-      const doc = (formData.documents || []).find((d: any) => d.type === docType);
+      const doc = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
       return !doc || !doc.url;
     });
     if (missingDocs.length > 0) {
@@ -1634,7 +1646,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
                   {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                     const isOptional = !isDocReq(docType);
-                    const existing = (formData.documents || []).find((d: any) => d.type === docType);
+                    const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
                     const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}`;
                     return (
                       <div key={docType} className="space-y-2">
@@ -2215,7 +2227,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           <p className="text-sm text-amber-600 dark:text-amber-400 font-semibold">Please upload the required files directly. All files must be uploaded to save the student record.</p>
                           {['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate', 'Transfer Certificate', 'TC / Migration / Affidavit', 'Birth Certificate', 'Degree Certificate', 'Other'].map((docType) => {
                             const isOptional = !isDocReq(docType);
-                            const existing = (formData.documents || []).find((d: any) => d.type === docType);
+                            const existing = (formData.documents || []).find((d: any) => d.type.toLowerCase() === docType.toLowerCase());
                             const elementId = `doc-upload-${docType.replace(/\s+/g, '-')}-2`;
                             return (
                               <div key={docType} className="space-y-2">
@@ -2792,7 +2804,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   cursor-pointer"
               />
               <p className="text-[11px] text-muted-foreground">
-                Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>, <strong>dob</strong>, <strong>session</strong>. Study center is optional.
+                Supported: Excel (.xlsx, .xls) and CSV. Column order: <strong>name</strong>, <strong>email</strong>, <strong>phone</strong>, <strong>address</strong>, <strong>enrollmentNo</strong>, <strong>programs</strong>, <strong>university</strong>, <strong>dob</strong>, <strong>session</strong>. Academic partner is optional.
               </p>
             </div>
 

@@ -3,7 +3,7 @@ import { protect, authorize } from '../middleware/auth.js';
 import { getMyClasses, getClassBatches, getMyBatches, getMyStudents, getModulesForClass, createModule, updateModule, deleteModule, createLesson, updateLesson, deleteLesson, assignTeacherToLesson, getLessonHistory,
   getBatchSessions,
   uploadMaterial, deleteMaterial, getOrganizationFaculty, getMyAssignedLessons, startSession, getActiveSessions, getSessionStudents, submitSessionAttendance, endSession,
-  punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews } from '../controllers/facultyPortalController.js';
+  punchInSession, punchOutSession, getFacultyAttendancesByClass, approveFacultyPunch, getClassReviews, getVideoAnalytics, getLessonAssessment, upsertLessonAssessment } from '../controllers/facultyPortalController.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
@@ -25,6 +25,9 @@ router.route('/classes/:classId/modules')
 router.route('/classes/:classId/batches')
   .get(getClassBatches);
 
+router.route('/classes/:classId/video-analytics')
+  .get(getVideoAnalytics);
+
 router.route('/modules/:moduleId')
   .put(updateModule)
   .delete(deleteModule);
@@ -41,6 +44,10 @@ router.route('/lessons/:lessonId/assign')
   .put(assignTeacherToLesson);
 
 router.route('/lessons/:lessonId/history').get(getLessonHistory);
+
+router.route('/lessons/:lessonId/assessment')
+  .get(getLessonAssessment)
+  .post(upsertLessonAssessment);
 
 
 // Materials Management

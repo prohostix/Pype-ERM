@@ -218,7 +218,7 @@ export function SalesAdminReviewPanel() {
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1 bg-slate-50 rounded-xl p-4 border">
                   <DetailRow icon={GraduationCap} label="Program" value={e.program?.name} />
                   <DetailRow icon={GraduationCap} label="University" value={e.program?.university?.name} />
-                  <DetailRow icon={MapPin} label="Study Center" value={e.studyCenter?.name} />
+                  <DetailRow icon={MapPin} label="Academic Partner" value={e.studyCenter?.name} />
                   <DetailRow icon={GraduationCap} label="Specialisation" value={e.specialisation} />
                   <DetailRow icon={GraduationCap} label="Course Type" value={e.program?.courseType} />
                   <DetailRow icon={GraduationCap} label="Previous Qualification" value={e.previousQualification} />

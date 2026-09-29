@@ -41,12 +41,12 @@ export function getBranchManagerNavItems() {
     { id: 'targets', label: 'Targets' },
     { id: 'invite_links', label: 'Invite Links' },
     { id: 'my_team', label: 'My Team' },
-    { id: 'branch_centers_sales', label: 'Study Centers (Sales)' },
+    { id: 'branch_centers_sales', label: 'Academic Partners (Sales)' },
     { id: '__ops_section', label: 'Operations', isSection: true },
     { id: 'students', label: 'Students' },
     { id: 'universities', label: 'Universities' },
     { id: 'programs', label: 'Programs' },
-    { id: 'centers', label: 'Study Centers' },
+    { id: 'centers', label: 'Academic Partners' },
     { id: 'enrollment_review', label: 'Enrollment Review' },
     { id: 'sessions', label: 'Admission Sessions' },
     { id: '__shared_section', label: 'Management', isSection: true },
@@ -216,7 +216,7 @@ function BranchOverview({ branch, metrics, leads, targets, loading, onNavigate }
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 { label: 'Students', icon: <Users className="w-4 h-4" />, tab: 'students' },
-                { label: 'Study Centers', icon: <MapPin className="w-4 h-4" />, tab: 'centers' },
+                { label: 'Academic Partners', icon: <MapPin className="w-4 h-4" />, tab: 'centers' },
                 { label: 'Programs', icon: <BookOpen className="w-4 h-4" />, tab: 'programs' },
                 { label: 'Universities', icon: <Building2 className="w-4 h-4" />, tab: 'universities' },
               ].map(item => (

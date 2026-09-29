@@ -495,7 +495,9 @@ exports.Prisma.SalaryConfigScalarFieldEnum = {
   basicSalary: 'basicSalary',
   allowances: 'allowances',
   deductions: 'deductions',
+  unpaidLeaveRule: 'unpaidLeaveRule',
   lateDeductionPerMinute: 'lateDeductionPerMinute',
+  wfhDeductionPerDay: 'wfhDeductionPerDay',
   effectiveFrom: 'effectiveFrom',
   approvalStatus: 'approvalStatus',
   approvedBy: 'approvedBy',
@@ -843,6 +845,7 @@ exports.Prisma.EditDeleteRequestScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
   userId: 'userId',
+  facultyId: 'facultyId',
   entityType: 'entityType',
   entityId: 'entityId',
   requestType: 'requestType',
@@ -904,10 +907,12 @@ exports.Prisma.LeaveAllocationScalarFieldEnum = {
   organizationId: 'organizationId',
   userId: 'userId',
   year: 'year',
+  month: 'month',
   sickLeave: 'sickLeave',
   casualLeave: 'casualLeave',
   earnedLeave: 'earnedLeave',
   complementaryLeave: 'complementaryLeave',
+  wfh: 'wfh',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1330,7 +1335,49 @@ exports.Prisma.ModuleLessonScalarFieldEnum = {
   facultyId: 'facultyId',
   organizationId: 'organizationId',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  videoUrl: 'videoUrl'
+};
+
+exports.Prisma.AssessmentScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  description: 'description',
+  passingScore: 'passingScore',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssessmentQuestionScalarFieldEnum = {
+  id: 'id',
+  assessmentId: 'assessmentId',
+  questionText: 'questionText',
+  options: 'options',
+  correctIndex: 'correctIndex',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAssessmentAttemptScalarFieldEnum = {
+  id: 'id',
+  assessmentId: 'assessmentId',
+  studentId: 'studentId',
+  score: 'score',
+  passed: 'passed',
+  answers: 'answers',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.StudentVideoLogScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  moduleLessonId: 'moduleLessonId',
+  watchDuration: 'watchDuration',
+  viewCount: 'viewCount',
+  lastWatchedAt: 'lastWatchedAt',
+  organizationId: 'organizationId'
 };
 
 exports.Prisma.LessonFacultyHistoryScalarFieldEnum = {
@@ -1539,7 +1586,8 @@ exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
   absent: 'absent',
   half_day: 'half_day',
   leave: 'leave',
-  late: 'late'
+  late: 'late',
+  wfh: 'wfh'
 };
 
 exports.CourseType = exports.$Enums.CourseType = {
@@ -1581,7 +1629,8 @@ exports.LeaveType = exports.$Enums.LeaveType = {
   sick: 'sick',
   casual: 'casual',
   earned: 'earned',
-  unpaid: 'unpaid'
+  unpaid: 'unpaid',
+  wfh: 'wfh'
 };
 
 exports.LeaveStatus = exports.$Enums.LeaveStatus = {
@@ -1732,6 +1781,10 @@ exports.Prisma.ModelName = {
   AcademicClass: 'AcademicClass',
   ClassModule: 'ClassModule',
   ModuleLesson: 'ModuleLesson',
+  Assessment: 'Assessment',
+  AssessmentQuestion: 'AssessmentQuestion',
+  StudentAssessmentAttempt: 'StudentAssessmentAttempt',
+  StudentVideoLog: 'StudentVideoLog',
   LessonFacultyHistory: 'LessonFacultyHistory',
   ClassMaterial: 'ClassMaterial',
   AcademicBatch: 'AcademicBatch',

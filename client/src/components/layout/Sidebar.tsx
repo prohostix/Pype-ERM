@@ -105,29 +105,29 @@ const navItems: NavItem[] = [
     roles: ['ops_admin', 'ceo', 'general_manager'],
     children: [
       { id: 'dashboard', label: 'Dashboard', icon: Home, roles: ['ops_admin', 'ceo', 'general_manager'] },
-      { 
-        id: 'students-ops', 
-        label: 'Students', 
-        icon: Users, 
+      {
+        id: 'students-ops',
+        label: 'Students',
+        icon: Users,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'students', label: 'Student List' },
           { id: 'students-portal', label: 'Student Portal Management' }
         ]
       },
-      { 
-        id: 'admissions-ops', 
-        label: 'Admissions', 
-        icon: FileText, 
+      {
+        id: 'admissions-ops',
+        label: 'Admissions',
+        icon: FileText,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'admissions-review', label: 'Admission Review' }
         ]
       },
-      { 
-        id: 'universities-ops', 
-        label: 'Universities', 
-        icon: School, 
+      {
+        id: 'universities-ops',
+        label: 'Universities',
+        icon: School,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'universities', label: 'University List' },
@@ -137,21 +137,21 @@ const navItems: NavItem[] = [
           { id: 'exam-reg', label: 'Exam Registration' }
         ]
       },
-      { 
-        id: 'programs-ops', 
-        label: 'Programs', 
-        icon: BookOpen, 
+      {
+        id: 'programs-ops',
+        label: 'Programs',
+        icon: BookOpen,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'programs', label: 'Programs' },
           { id: 'program-alloc', label: 'Program Allocation' }
         ]
       },
-      { id: 'centers', label: 'Study Centers', icon: Building, roles: ['ops_admin', 'ceo', 'general_manager'] },
-      { 
-        id: 'documents-ops', 
-        label: 'Document Management', 
-        icon: FileText, 
+      { id: 'centers', label: 'Academic Partners', icon: Building, roles: ['ops_admin', 'ceo', 'general_manager'] },
+      {
+        id: 'documents-ops',
+        label: 'Document Management',
+        icon: FileText,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'doc-received', label: 'Document Received' },
@@ -160,10 +160,10 @@ const navItems: NavItem[] = [
           { id: 'delivery-conf', label: 'Delivery Confirmation' }
         ]
       },
-      { 
-        id: 'communication-ops', 
-        label: 'Communication', 
-        icon: Phone, 
+      {
+        id: 'communication-ops',
+        label: 'Communication',
+        icon: Phone,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'announcements', label: 'Announcements' },
@@ -172,19 +172,19 @@ const navItems: NavItem[] = [
           { id: 'email-notif', label: 'Email Notifications' }
         ]
       },
-      { 
-        id: 'tasks-ops', 
-        label: 'Tasks', 
-        icon: CheckSquare, 
+      {
+        id: 'tasks-ops',
+        label: 'Tasks',
+        icon: CheckSquare,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'my-tasks', label: 'My Tasks' }
         ]
       },
-      { 
-        id: 'reports-ops', 
-        label: 'Reports', 
-        icon: BarChart2, 
+      {
+        id: 'reports-ops',
+        label: 'Reports',
+        icon: BarChart2,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'report-student', label: 'Student Report' },
@@ -194,10 +194,10 @@ const navItems: NavItem[] = [
           { id: 'report-rereg', label: 'Re-registration Report' }
         ]
       },
-      { 
-        id: 'my-portal', 
-        label: 'My Portal', 
-        icon: User, 
+      {
+        id: 'my-portal',
+        label: 'My Portal',
+        icon: User,
         roles: ['ops_admin', 'ceo', 'general_manager'],
         children: [
           { id: 'attendance', label: 'Attendance' },
@@ -234,7 +234,8 @@ const navItems: NavItem[] = [
       { id: 'users', label: 'Users', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
       { id: 'employees', label: 'Employees', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
       { id: 'vacancies', label: 'Vacancies', icon: UserPlus, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'attendance', label: 'Attendance', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
+      { id: 'attendance', label: 'Attendance', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin'] },
+      { id: 'ceo_attendance', label: 'Attendance', icon: Calendar, roles: ['ceo', 'general_manager'] },
       { id: 'leaves', label: 'Leave Requests', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
       { id: 'complaints', label: 'Complaints', icon: MessageSquare, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
       { id: 'payroll', label: 'Payroll', icon: DollarSign, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
@@ -328,7 +329,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
 
   if (!user) return null;
 
-  const filteredNavItems = navItems.filter(item => 
+  const filteredNavItems = navItems.filter(item =>
     !item.roles || item.roles.includes(user.role)
   );
 
@@ -347,13 +348,13 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-800">
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
-            <img 
-              src="/pype-logo.png" 
-              alt="PYPE ERM" 
-              className="w-8 h-8 object-contain flex-shrink-0" 
+            <img
+              src="/pype-logo.png"
+              alt="PYPE ERM"
+              className="w-8 h-8 object-contain flex-shrink-0"
             />
-            <span 
-              className="font-bold text-lg truncate" 
+            <span
+              className="font-bold text-lg truncate"
               title="PYPE ERM"
             >
               PYPE ERM
@@ -361,10 +362,10 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
           </div>
         )}
         {isCollapsed && (
-          <img 
-            src="/pype-logo.png" 
-            alt="PYPE ERM" 
-            className="w-8 h-8 object-contain mx-auto" 
+          <img
+            src="/pype-logo.png"
+            alt="PYPE ERM"
+            className="w-8 h-8 object-contain mx-auto"
             title="PYPE ERM"
           />
         )}

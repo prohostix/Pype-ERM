@@ -61,7 +61,16 @@ export const createClass = asyncHandler(async (req: Request, res: Response) => {
       programIds: programIds || [],
       status: status || 'active',
       inchargeId: inchargeId || null,
-      organizationId
+      organizationId,
+      ...(center.type === 'online' && {
+        batches: {
+          create: [{
+            name: 'Global Online Batch',
+            status: 'active',
+            organizationId
+          }]
+        }
+      })
     }
   });
 
@@ -118,15 +127,22 @@ export const deleteClass = asyncHandler(async (req: Request, res: Response) => {
   }
 
   if (user.role !== 'ceo' && user.role !== 'superadmin' && reason) {
+    const requestData: any = {
+      organization: { connect: { id: organizationId } },
+      entityType: 'academic-class',
+      entityId: id,
+      requestType: 'delete',
+      reason: reason as string
+    };
+    
+    if (user.role === 'faculty') {
+      requestData.faculty = { connect: { id: user.id } };
+    } else {
+      requestData.user = { connect: { id: user.id } };
+    }
+
     await prisma.editDeleteRequest.create({
-      data: {
-        organizationId,
-        userId: user.id,
-        entityType: 'academic-class',
-        entityId: id,
-        requestType: 'delete',
-        reason: reason as string
-      }
+      data: requestData
     });
     return res.status(202).json({ success: true, message: 'Delete request sent to CEO for approval' });
   }

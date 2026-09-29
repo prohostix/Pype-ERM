@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import {
   User, Mail, Phone, Briefcase, Building2, Calendar,
   DollarSign, Target, TrendingUp, Star, Plus, Trash2, Edit,
-  Save, RefreshCw, Award, AlertCircle,
+  Save, RefreshCw, Award, AlertCircle, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -42,8 +42,9 @@ interface KRA {
 interface SalaryConfig {
   basicSalary?: number;
   allowances?: { hra?: number; da?: number; ta?: number; medical?: number; other?: number };
-  deductions?: { pf?: number; esi?: number; tds?: number; other?: number };
   lateDeductionPerMinute?: number;
+  wfhDeductionPerDay?: number;
+  unpaidLeaveRule?: { type: string; dailyRate?: number; firstXDays?: number; firstXRate?: number; subsequentRate?: number };
 }
 
 interface ProfileData {
@@ -107,6 +108,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   const [documentsForm, setDocumentsForm] = useState<any>({});
   const [kpis, setKpis] = useState<KPI[]>([]);
   const [kras, setKras] = useState<KRA[]>([]);
+  const [payrolls, setPayrolls] = useState<any[]>([]);
   const [reviewForm, setReviewForm] = useState<any>({});
 
   // KPI/KRA dialog
@@ -167,6 +169,8 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         allowances: (sc as any).allowances || { hra: 0, da: 0, ta: 0, medical: 0, other: 0 },
         deductions: (sc as any).deductions || { pf: 0, esi: 0, tds: 0, other: 0 },
         lateDeductionPerMinute: (sc as any).lateDeductionPerMinute || 0,
+        wfhDeductionPerDay: (sc as any).wfhDeductionPerDay || 0,
+        unpaidLeaveRule: (sc as any).unpaidLeaveRule || { type: 'standard' },
       });
       setKpis(p.kpis || []);
       setKras(p.kras || []);
@@ -186,6 +190,20 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
   useEffect(() => {
     if (open && userId) { setTab('overview'); fetchProfile(); }
   }, [open, userId]);
+
+  useEffect(() => {
+    const fetchPayrolls = async () => {
+      try {
+        const pRes = await api.get(`/payroll?employeeId=${userId}`);
+        setPayrolls(pRes.data.data || []);
+      } catch (e) {
+        toast.error('Failed to load payroll history');
+      }
+    };
+    if (tab === 'payroll_history' && userId) {
+      fetchPayrolls();
+    }
+  }, [tab, userId]);
 
   // ─── Save handlers ────────────────────────────────────────────────────────
   const savePersonal = async () => {
@@ -368,9 +386,9 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
         ) : (
           <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
             <TabsList className="flex-wrap h-auto gap-1 mx-6 mt-4 justify-start bg-transparent border-b rounded-none pb-0">
-              {['overview', 'personal', 'employment', 'salary', 'kpi', 'kra', 'review', 'documents'].map(t => (
+              {['overview', 'personal', 'employment', 'salary', 'payroll_history', 'kpi', 'kra', 'review', 'documents'].map(t => (
                 <TabsTrigger key={t} value={t} className="capitalize rounded-t-lg rounded-b-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent">
-                  {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t === 'documents' ? 'Documents' : t.charAt(0).toUpperCase() + t.slice(1)}
+                  {t === 'kpi' ? 'KPI' : t === 'kra' ? 'KRA' : t === 'payroll_history' ? 'Payroll History' : t === 'documents' ? 'Documents' : t.charAt(0).toUpperCase() + t.slice(1)}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -592,6 +610,50 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <div><Label>ESI (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.esi || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, esi: Number(e.target.value) } })} /></div>
                   <div><Label>TDS (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.tds || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, tds: Number(e.target.value) } })} /></div>
                   <div><Label>Late Deduction (₹/min)</Label><Input type="number" step="0.01" value={salaryConfigForm.lateDeductionPerMinute || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, lateDeductionPerMinute: Number(e.target.value) })} /></div>
+                  <div><Label>WFH Deduction (₹/day)</Label><Input type="number" step="0.01" value={salaryConfigForm.wfhDeductionPerDay || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, wfhDeductionPerDay: Number(e.target.value) })} /></div>
+                </div>
+
+                <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border mt-4">
+                  <Label className="font-semibold text-base">Unpaid Leave Deduction Rule</Label>
+                  <Select 
+                    value={salaryConfigForm.unpaidLeaveRule?.type || 'standard'} 
+                    onValueChange={(val) => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, type: val } })}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Select rule type..." /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="standard">Standard: (Gross / 30) per day</SelectItem>
+                      <SelectItem value="fixed">Fixed: Custom amount per day</SelectItem>
+                      <SelectItem value="progressive">Progressive: First X days vs subsequent</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  {salaryConfigForm.unpaidLeaveRule?.type === 'fixed' && (
+                    <div className="mt-2">
+                      <Label>Daily Deduction Amount (₹)</Label>
+                      <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.dailyRate || ''}
+                        onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, dailyRate: Number(e.target.value) } })} />
+                    </div>
+                  )}
+
+                  {salaryConfigForm.unpaidLeaveRule?.type === 'progressive' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                      <div>
+                        <Label>First X Days</Label>
+                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.firstXDays || ''}
+                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, firstXDays: Number(e.target.value) } })} />
+                      </div>
+                      <div>
+                        <Label>First X Rate (₹)</Label>
+                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.firstXRate || ''}
+                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, firstXRate: Number(e.target.value) } })} />
+                      </div>
+                      <div>
+                        <Label>Subsequent Rate (₹)</Label>
+                        <Input type="number" min="0" value={salaryConfigForm.unpaidLeaveRule?.subsequentRate || ''}
+                          onChange={e => setSalaryConfigForm({ ...salaryConfigForm, unpaidLeaveRule: { ...salaryConfigForm.unpaidLeaveRule, subsequentRate: Number(e.target.value) } })} />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Gross / Net preview */}
@@ -607,6 +669,42 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                 })()}
 
                 <Button onClick={saveSalary} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />Save Salary Details</Button>
+              </TabsContent>
+
+                {/* ── PAYROLL HISTORY ── */}
+              <TabsContent value="payroll_history" className="space-y-4 mt-0">
+                <SectionTitle icon={FileText} title="Payslip & History" />
+                <div className="grid grid-cols-1 gap-3">
+                  {payrolls.length === 0 ? (
+                    <div className="text-center p-8 border rounded-xl bg-muted/20 text-muted-foreground">
+                      No payroll records found for this employee.
+                    </div>
+                  ) : (
+                    payrolls.map((p: any) => (
+                      <Card key={p.id}>
+                        <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-semibold text-lg">{p.month}</span>
+                              <Badge className={p.status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-secondary'}>{p.status.replace(/_/g, ' ')}</Badge>
+                            </div>
+                            <div className="text-sm text-muted-foreground flex gap-4 flex-wrap">
+                              <span>Basic: ₹{p.basicSalary?.toLocaleString()}</span>
+                              <span>Gross: ₹{p.grossSalary?.toLocaleString()}</span>
+                              <span className="font-bold text-foreground">Net: ₹{p.netSalary?.toLocaleString()}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            {/* Expand or Download Payslip button placeholder */}
+                            <Button size="sm" variant="outline">
+                              View Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
               </TabsContent>
 
               {/* ── KPI ── */}

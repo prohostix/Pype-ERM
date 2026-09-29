@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 
 interface SalaryConfig {
   id: string;
-  userId: { id: string; name: string; email: string; designation?: string; role: string; departmentId?: { name: string } };
+  user: { id: string; name: string; email: string; designation?: string; role: string; departmentId?: { name: string } };
   basicSalary: number;
   allowances: { hra: number; transport: number; medical: number; other: number };
   deductions: { pf: number; tax: number; insurance: number; other: number };
@@ -191,12 +191,12 @@ export function FinanceSalaryApprovalPanel() {
                         <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold', meta.color)}>
                           {meta.icon}{meta.label}
                         </span>
-                        <span className="font-semibold">{config.userId?.name}</span>
-                        <Badge variant="outline" className="text-xs capitalize">{config.userId?.role?.replace(/_/g, ' ')}</Badge>
-                        {config.userId?.designation && <Badge variant="outline" className="text-xs">{config.userId.designation}</Badge>}
-                        {config.userId?.departmentId && <span className="text-xs text-muted-foreground">{config.userId.departmentId.name}</span>}
+                        <span className="font-semibold">{config.user?.name}</span>
+                        <Badge variant="outline" className="text-xs capitalize">{config.user?.role?.replace(/_/g, ' ')}</Badge>
+                        {config.user?.designation && <Badge variant="outline" className="text-xs">{config.user.designation}</Badge>}
+                        {config.user?.departmentId && <span className="text-xs text-muted-foreground">{config.user.departmentId.name}</span>}
                       </div>
-                      <p className="text-xs text-muted-foreground mb-3">{config.userId?.email}</p>
+                      <p className="text-xs text-muted-foreground mb-3">{config.user?.email}</p>
 
                       {/* Salary breakdown */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-5 gap-4 text-sm">

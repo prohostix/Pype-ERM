@@ -240,54 +240,55 @@ export function PrismaLayout({
 
       {/* Premium Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 w-64 flex flex-col border-r shadow-xl z-50 transition-transform duration-300 lg:relative lg:translate-x-0",
-        "bg-sidebar border-sidebar-border text-sidebar-foreground",
-        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        "fixed inset-y-0 left-0 w-[250px] flex flex-col z-50 transition-all duration-300 lg:relative lg:translate-x-0 rounded-r-[40px]",
+        "bg-slate-950 text-slate-100",
+        isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
       )}>
-        <div className="h-16 flex items-center px-6 gap-3 border-b border-sidebar-border relative">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center flex-shrink-0 shadow-sm">
-            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+
+        <div className="h-[72px] flex items-center px-6 gap-4 relative z-10">
+          <div className="flex items-center justify-center flex-shrink-0">
+            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-8 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
           </div>
           <div className="flex flex-col overflow-hidden">
-            <span className="font-bold text-sm tracking-tight text-sidebar-foreground truncate" title="PYPE ERM">
+            <span className="font-bold text-sm tracking-tight text-slate-100 truncate" title="PYPE ERM">
               PYPE ERM
             </span>
-            <span className="text-[10px] text-sidebar-foreground/50 uppercase font-bold tracking-widest truncate">
-              Dashboard
+            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest truncate">
+              Workspace
             </span>
           </div>
           {/* Mobile Close Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden ml-auto h-8 w-8 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+            className="lg:hidden ml-auto h-8 w-8 text-slate-400 hover:text-slate-100 hover:bg-white/10 rounded-lg"
             onClick={() => setIsSidebarOpen(false)}
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
           </Button>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 relative z-10">
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-sidebar-foreground/30 group-focus-within:text-sidebar-primary transition-colors" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400/50 group-focus-within:text-indigo-400 transition-colors" />
             <input
               placeholder="Search features..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-9 pl-9 pr-4 bg-sidebar-accent/50 border border-transparent rounded-lg text-xs text-sidebar-foreground outline-none focus:border-sidebar-primary/30 transition-all placeholder:text-sidebar-foreground/30"
+              className="w-full h-10 pl-10 pr-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-slate-200 outline-none focus:border-indigo-500/50 transition-all placeholder:text-slate-400/50"
             />
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto premium-scrollbar px-2 space-y-1 pb-4">
-          <div className="px-3 mb-2">
-            <span className="text-[10px] font-bold text-sidebar-foreground/40 uppercase tracking-widest">Main Navigation</span>
+        <nav className="flex-1 overflow-y-auto pb-6 relative z-10 flex flex-col gap-1.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="px-6 mb-2 mt-4">
+            <span className="text-[10px] font-bold text-slate-400/70 uppercase tracking-[0.2em]">Main Navigation</span>
           </div>
           {filteredTables.map((table) => {
             if (table.isSection) {
               return (
-                <div key={table.id} className="px-3 pt-4 pb-1">
-                  <span className="text-[10px] font-bold text-sidebar-foreground/40 uppercase tracking-widest">{table.label}</span>
+                <div key={table.id} className="px-6 pt-5 pb-1">
+                  <span className="text-[10px] font-bold text-slate-400/70 uppercase tracking-[0.2em]">{table.label}</span>
                 </div>
               );
             }
@@ -297,97 +298,115 @@ export function PrismaLayout({
                 key={table.id}
                 onClick={() => { onTableChange(table.id); setIsSidebarOpen(false); }}
                 className={cn(
-                  'w-full px-4 py-2.5 rounded-lg text-left text-sm transition-all duration-200 flex items-center gap-3 group',
+                  'min-h-[60px] py-3 w-[calc(100%_-_24px)] ml-6 pl-6 flex items-center gap-3.5 group relative text-sm text-left rounded-l-full outline-none focus:outline-none focus-visible:ring-0',
                   isActive
-                    ? 'bg-sidebar-primary/20 text-sidebar-primary font-semibold shadow-sm'
-                    : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
+                    ? 'bg-background text-foreground font-semibold z-20'
+                    : 'bg-transparent text-slate-400 hover:bg-white/10 hover:text-slate-100 hover:z-20'
                 )}
               >
+                {/* Top Curve */}
+                <svg className={cn(
+                  "absolute right-0 -top-8 w-8 h-8 pointer-events-none",
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
+                  <path d="M 0 20 A 20 20 0 0 0 20 0 L 20 20 Z" />
+                </svg>
+                
                 <div className={cn(
-                  "p-1.5 rounded-md transition-colors shrink-0",
+                  "p-1.5 rounded-lg transition-all duration-300 shrink-0",
                   isActive
-                    ? "bg-sidebar-primary text-white"
-                    : "bg-sidebar-accent text-sidebar-foreground/60 group-hover:text-sidebar-foreground"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "bg-white/5 text-slate-400 group-hover:text-slate-100"
                 )}>
                   {table.icon}
                 </div>
                 <span className="truncate">{table.label}</span>
-                {isActive && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-sidebar-primary shrink-0" />
-                )}
+
+                {/* Bottom Curve */}
+                <svg className={cn(
+                  "absolute right-0 -bottom-8 w-8 h-8 pointer-events-none",
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
+                  <path d="M 0 0 A 20 20 0 0 1 20 20 L 20 0 Z" />
+                </svg>
               </button>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/20">
+        <div className="p-4 border-t border-white/10 relative z-10">
           <div className="flex items-center gap-3 px-2 py-2 mb-4">
-            <div className="w-9 h-9 rounded-full bg-sidebar-primary/20 border border-sidebar-primary/30 flex items-center justify-center text-sidebar-primary font-bold shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold shrink-0 shadow-sm">
               {userName?.charAt(0) || 'U'}
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold truncate text-sidebar-foreground">{userName || 'User'}</span>
-              <span className="text-[10px] text-sidebar-foreground/50 font-medium truncate capitalize">{(userRole === 'student' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
+              <span className="text-sm font-semibold truncate text-slate-200">{userName || 'User'}</span>
+              <span className="text-[10px] text-slate-400 font-medium truncate uppercase tracking-wider">{(userRole === 'student' ? 'student' : userRole)?.replace(/_/g, ' ')}</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <button
               onClick={toggleTheme}
-              className="flex items-center justify-center gap-2 h-8 rounded-lg bg-sidebar-accent/50 border border-sidebar-border text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors text-xs"
+              className="flex items-center justify-center gap-2 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-slate-200 transition-all text-xs font-medium"
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={onLogout}
-              className="flex items-center justify-center gap-2 h-8 rounded-lg text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors text-xs"
+              className="flex items-center justify-center gap-2 h-9 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 hover:text-rose-300 transition-all text-xs font-medium group"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0">
-        <header className="h-12 sm:h-16 flex items-center px-3 sm:px-4 lg:px-8 gap-2 sm:gap-4 bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-20">
+      <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-muted/20">
+        <header className="h-14 sm:h-[72px] flex items-center px-4 lg:px-8 gap-3 sm:gap-4 bg-background/60 backdrop-blur-xl border-b border-border/40 sticky top-0 z-20 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+          
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden hover:bg-muted/80 rounded-xl transition-all"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
           </Button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full h-10 w-10 shrink-0 mr-1"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl h-10 w-10 shrink-0 mr-1 transition-all group"
               onClick={() => window.history.back()}
               title="Go Back"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+              <ChevronRight className="w-5 h-5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
             </Button>
-            <div className="p-2 rounded-lg bg-primary/10 text-primary hidden sm:flex">
+            <div className="hidden sm:flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 text-primary shadow-sm">
               {activeTableItem?.icon}
             </div>
-            <span className="text-lg font-bold text-foreground truncate">{activeTableItem?.label}</span>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground tracking-tight leading-none truncate">{activeTableItem?.label}</span>
+              <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest mt-1 hidden sm:block">Current Module</span>
+            </div>
           </div>
 
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
             {user?.organization?.logo && (
-              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-24 object-contain drop-shadow-sm" />
+              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="max-h-12 w-auto max-w-[180px] object-contain drop-shadow-sm opacity-90" />
             )}
           </div>
 
-          <div className="ml-auto flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg border border-border">
-              <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{schema}</span>
+          <div className="ml-auto flex items-center gap-3 sm:gap-4">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-background/50 rounded-lg border border-border/50 shadow-sm backdrop-blur-md">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{schema}</span>
             </div>
 
-            <div className="h-8 w-px bg-border mx-1" />
+            <div className="h-8 w-px bg-border/50 mx-1 hidden sm:block" />
             {!['student', 'teacher'].includes(userRole || '') && (
               <PunchWidget compact={true} />
             )}
@@ -457,7 +476,7 @@ export function PrismaLayout({
         </header>
 
         <section className="flex-1 overflow-auto p-3 sm:p-4 lg:p-8 bg-background">
-          <div className="max-w-[1600px] mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+          <div key={activeTable} className="max-w-[1600px] mx-auto animate-in fade-in zoom-in-[0.98] slide-in-from-bottom-4 duration-500 ease-out fill-mode-both">
             {children}
           </div>
         </section>

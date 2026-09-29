@@ -368,7 +368,7 @@ export function SalesEnrolledStudentsPanel() {
                     <p className="text-xs text-muted-foreground mt-0.5">Code: {selectedStudent.program?.code || 'N/A'}</p>
                   </div>
                   <div className="border rounded-xl p-4">
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Assigned Study Center</p>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Assigned Academic Partner</p>
                     <p className="font-semibold text-sm">{selectedStudent.center?.name || 'N/A'}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">Code: {selectedStudent.center?.code || 'N/A'}</p>
                   </div>

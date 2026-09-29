@@ -73,7 +73,7 @@ export function FinanceAuthFeePanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">University Auth Fees</h2>
-          <p className="text-muted-foreground text-sm mt-1">Configure the authorisation fee required per university for study center onboarding.</p>
+          <p className="text-muted-foreground text-sm mt-1">Configure the authorisation fee required per university for academic partner onboarding.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={fetchFees} disabled={loading}>

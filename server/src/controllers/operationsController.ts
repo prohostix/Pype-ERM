@@ -190,6 +190,15 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     return;
   }
 
+  const existingUser = await prisma.user.findUnique({
+    where: { email: targetEmail }
+  });
+
+  if (existingUser) {
+    res.status(400).json({ success: false, message: 'An account with this email already exists. Please use a different email.' });
+    return;
+  }
+
   const center = await prisma.studyCenter.create({ 
     data: { 
       ...rest,
@@ -221,16 +230,15 @@ export const createStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  try {
-    await sendEmail(
-      targetEmail,
-      'Your Study Center Portal Credentials',
-      `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
-      `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
-    );
-  } catch (mailErr: any) {
+  // Send email asynchronously so it doesn't block the response
+  sendEmail(
+    targetEmail,
+    'Your Study Center Portal Credentials',
+    `Hello ${name} Admin,\n\nYour study center account has been created.\n\nLogin URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}\nEmail: ${targetEmail}\nPassword: ${generatedPassword}\n\nRegards,\nSchool Administration`,
+    `<p>Hello <strong>${name} Admin</strong>,</p><p>Your study center account has been created.</p><p><strong>Login URL:</strong> <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">${process.env.FRONTEND_URL || 'http://localhost:5173'}</a><br/><strong>Email:</strong> ${targetEmail}<br/><strong>Password:</strong> ${generatedPassword}</p><p>Regards,<br/>School Administration</p>`
+  ).catch((mailErr: any) => {
     console.error('Failed to send center credentials email:', mailErr.message);
-  }
+  });
 
   res.status(201).json({ success: true, data: center });
 });

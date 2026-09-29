@@ -134,7 +134,7 @@ export function InternalMarksPanel() {
           <h2 className="text-2xl font-bold">Internal Marks</h2>
           <p className="text-muted-foreground text-sm mt-1">
             {isReadOnly
-              ? 'View student assessment marks entered by study centers'
+              ? 'View student assessment marks entered by academic partners'
               : 'Enter and manage student internal assessment marks'}
           </p>
         </div>
@@ -225,7 +225,7 @@ export function InternalMarksPanel() {
         <CardHeader>
           <CardTitle>Marks Records</CardTitle>
           <CardDescription>
-            {isReadOnly ? 'Submitted by study centers' : 'Your entered marks'}
+            {isReadOnly ? 'Submitted by academic partners' : 'Your entered marks'}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -109,7 +109,9 @@ export function HRPanel({ activeModule }: HRPanelProps) {
       key: 'type', 
       header: 'Type',
       render: (row: LeaveRequest) => (
-        <Badge variant="outline" className="capitalize">{row.type}</Badge>
+        <Badge variant="outline" className={row.type === 'wfh' ? 'uppercase' : 'capitalize'}>
+          {row.type === 'wfh' ? 'WFH' : row.type}
+        </Badge>
       )
     },
     { 

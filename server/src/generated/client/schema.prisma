@@ -93,6 +93,7 @@ model Organization {
   moduleLessons              ModuleLesson[]
   lessonFacultyHistories     LessonFacultyHistory[]
   batchLessonAssignments     BatchLessonAssignment[]
+  studentVideoLogs           StudentVideoLog[]
 
   @@index([status])
 }
@@ -512,6 +513,7 @@ model Student {
   invoices              Invoice[]
   paymentLinks          PaymentLink[]
   paymentSchedules      PaymentSchedule[]
+  videoLogs             StudentVideoLog[]
   branch                Branch?                     @relation(fields: [branchId], references: [id])
   center                StudyCenter?                @relation(fields: [centerId], references: [id])
   user                  User                        @relation(fields: [email], references: [email])
@@ -524,6 +526,7 @@ model Student {
   commissions           UniversityCommission[]
   universityPayments    UniversityPayment[]
   examRegistrations     ExamRegistration[]
+  assessmentAttempts    StudentAssessmentAttempt[]
 
   @@index([organizationId, status])
   @@index([centerId])
@@ -679,7 +682,7 @@ model LeaveRequest {
   id               String       @id @default(uuid())
   employeeId       String
   organizationId   String
-  departmentId     String
+  departmentId     String?
   type             LeaveType
   startDate        DateTime
   endDate          DateTime
@@ -694,7 +697,7 @@ model LeaveRequest {
   appliedAt        DateTime     @default(now())
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
-  department       Department   @relation(fields: [departmentId], references: [id])
+  department       Department?  @relation(fields: [departmentId], references: [id])
   deptApprover     User?        @relation("DeptApprovedBy", fields: [deptApprovedBy], references: [id])
   user             User         @relation("EmployeeLeaves", fields: [employeeId], references: [id])
   hrApprover       User?        @relation("HrApprovedBy", fields: [hrApprovedBy], references: [id])
@@ -711,7 +714,9 @@ model SalaryConfig {
   basicSalary            Float
   allowances             Json?          @default("{}")
   deductions             Json?          @default("{}")
+  unpaidLeaveRule        Json?          @default("{\"type\":\"standard\"}")
   lateDeductionPerMinute Float?         @default(0)
+  wfhDeductionPerDay     Float?         @default(0)
   effectiveFrom          DateTime?
   approvalStatus         ApprovalStatus @default(pending_approval)
   approvedBy             String?
@@ -1180,7 +1185,8 @@ model CredentialRequest {
 model EditDeleteRequest {
   id              String       @id @default(uuid())
   organizationId  String
-  userId          String
+  userId          String?
+  facultyId       String?
   entityType      String
   entityId        String
   requestType     String
@@ -1193,7 +1199,8 @@ model EditDeleteRequest {
   updatedAt       DateTime     @updatedAt
   organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   responder       User?        @relation("EditDeleteResponder", fields: [respondedBy], references: [id])
-  user            User         @relation("EditDeleteRequester", fields: [userId], references: [id])
+  user            User?        @relation("EditDeleteRequester", fields: [userId], references: [id])
+  faculty         Faculty?     @relation("FacultyEditDeleteRequester", fields: [facultyId], references: [id])
 }
 
 model Escalation {
@@ -1260,10 +1267,12 @@ model LeaveAllocation {
   organizationId     String
   userId             String
   year               Int
+  month              Int          @default(1)
   sickLeave          Float        @default(12)
   casualLeave        Float        @default(12)
   earnedLeave        Float        @default(15)
   complementaryLeave Float        @default(0)
+  wfh                Float        @default(0)
   createdBy          String?
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
@@ -1271,8 +1280,8 @@ model LeaveAllocation {
   organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user               User         @relation(fields: [userId], references: [id])
 
-  @@unique([userId, year])
-  @@index([organizationId, year])
+  @@unique([userId, year, month])
+  @@index([organizationId, year, month])
 }
 
 model PayrollBatch {
@@ -1760,6 +1769,7 @@ enum AttendanceStatus {
   half_day
   leave
   late
+  wfh
 }
 
 enum CourseType {
@@ -1802,6 +1812,7 @@ enum LeaveType {
   casual
   earned
   unpaid
+  wfh
 }
 
 enum LeaveStatus {
@@ -1962,6 +1973,7 @@ model Faculty {
   changedFacultyHistories  LessonFacultyHistory[]  @relation("ChangedBy")
   batchLessonAssignments   BatchLessonAssignment[]
   studentBatchTransfers    StudentBatchTransfer[]
+  editDeleteRequests       EditDeleteRequest[]     @relation("FacultyEditDeleteRequester")
 
   @@index([organizationId])
 }
@@ -2037,9 +2049,67 @@ model ModuleLesson {
   materials        ClassMaterial[]
   facultyHistory   LessonFacultyHistory[]
   batchAssignments BatchLessonAssignment[]
+  videoUrl         String?
+  videoLogs        StudentVideoLog[]
+  assessment       Assessment?
 
   @@index([classModuleId])
   @@index([facultyId])
+  @@index([organizationId])
+}
+
+model Assessment {
+  id              String                     @id @default(uuid())
+  lessonId        String                     @unique
+  lesson          ModuleLesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  passingScore    Float                      @default(50)
+  questions       AssessmentQuestion[]
+  studentAttempts StudentAssessmentAttempt[]
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+}
+
+model AssessmentQuestion {
+  id           String     @id @default(uuid())
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  questionText String
+  options      Json
+  correctIndex Int
+  order        Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model StudentAssessmentAttempt {
+  id           String     @id @default(uuid())
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  score        Float
+  passed       Boolean
+  answers      Json
+  createdAt    DateTime   @default(now())
+}
+
+model StudentVideoLog {
+  id             String       @id @default(uuid())
+  studentId      String
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  moduleLessonId String
+  moduleLesson   ModuleLesson @relation(fields: [moduleLessonId], references: [id], onDelete: Cascade)
+  watchDuration  Int          @default(0) // in seconds
+  viewCount      Int          @default(1)
+  lastWatchedAt  DateTime     @default(now())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, moduleLessonId])
+  @@index([studentId])
+  @@index([moduleLessonId])
   @@index([organizationId])
 }
 

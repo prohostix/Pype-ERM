@@ -66,7 +66,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 <MetricCard title="Total Users" value={metrics.totalEmployees || 0} />
                 <MetricCard title="Students" value={metrics.totalStudents || 0} />
-                <MetricCard title="Study Centers" value={metrics.totalCenters || 0} />
+                <MetricCard title="Academic Partners" value={metrics.totalCenters || 0} />
                 <MetricCard title="Leads" value={metrics.totalLeads || 0} />
               </div>
             </div>

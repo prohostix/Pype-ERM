@@ -236,6 +236,7 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
       branchId: true,
       studyCenterId: true,
       ceoPanelId: true,
+      employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } },
       organization: true,
     }
   });

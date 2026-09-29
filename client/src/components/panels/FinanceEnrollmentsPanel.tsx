@@ -347,7 +347,7 @@ export function FinanceEnrollmentsPanel() {
                   <Field label="Univ. Code" value={(viewStudent as any).program?.university?.code} />
                   <Field label="Univ. Address" value={(viewStudent as any).program?.university?.address} />
                   <Field label="Session" value={(viewStudent as any).session?.name} />
-                  <Field label="Study Center" value={getCenterName(viewStudent)} />
+                  <Field label="Academic Partner" value={getCenterName(viewStudent)} />
                   <Field label="Status" value={STATUS_META[viewStudent.status]?.label || viewStudent.status} />
                 </div>
               </div>

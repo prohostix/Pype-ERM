@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, Users, Download, Camera, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Users, Download, Camera, X, CheckCircle2, XCircle, CalendarOff, Loader2, FileSpreadsheet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -30,7 +30,14 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  
+
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [exportPeriod, setExportPeriod] = useState<'date' | 'month'>('month');
+  const [exportDate, setExportDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [exportMonth, setExportMonth] = useState<string>(new Date().toISOString().slice(0, 7));
+  const [exportEmployeeId, setExportEmployeeId] = useState<string>('all');
+  const [exporting, setExporting] = useState(false);
+
   // HR admins default to list view (with date filter), others to calendar
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>(canViewAll ? 'list' : 'calendar');
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
@@ -88,36 +95,107 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
     fetchAttendance(dateFilter, newStatus);
   };
 
-  const handleExportExcel = async () => {
+  const executeExport = async () => {
+    setExporting(true);
     try {
-      const XLSX = await import('xlsx');
-      const exportData = attendance.map(rec => {
-        const empName = rec.employeeId?.name || rec.employee?.name || rec.user?.name || 'Unknown';
-        const empEmail = rec.employeeId?.email || rec.employee?.email || rec.user?.email || '';
-        return {
-          'Employee Name': empName,
-          'Email': empEmail,
-          'Date': rec.date ? new Date(rec.date).toLocaleDateString('en-IN') : '',
-          'Status': rec.status?.replace('_', ' ').toUpperCase() || 'PRESENT',
-          'Check-In': rec.checkIn ? new Date(rec.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
-          'Check-Out': rec.checkOut ? new Date(rec.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
-          'Late Check-In': rec.isLate ? 'YES' : 'NO',
-          'Late Minutes': rec.lateMinutes || 0,
-          'Working Hours': rec.workingHours || 0,
-          'Notes': rec.notes || ''
-        };
-      });
+      let startDate = exportDate;
+      let endDate = exportDate;
+      let reportName = 'Attendance_Report';
 
-      const worksheet = XLSX.utils.json_to_sheet(exportData);
-      worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 26].map(w => ({ wch: w }));
+      if (exportPeriod === 'month') {
+        const [year, month] = exportMonth.split('-');
+        startDate = `${year}-${month}-01`;
+        const lastDay = new Date(parseInt(year), parseInt(month), 0).getDate();
+        endDate = `${year}-${month}-${lastDay}`;
+        reportName = `Attendance_Report_${exportMonth}`;
+      } else {
+        reportName = `Attendance_Report_${exportDate}`;
+      }
+
+      if (exportEmployeeId !== 'all') {
+        const empName = employees.find(e => e.id.toString() === exportEmployeeId)?.name || 'Employee';
+        reportName = `${empName.replace(/\\s+/g, '_')}_${reportName}`;
+      }
+
+      const response = await api.get('/attendance/export', { 
+        params: { startDate, endDate, employeeId: exportEmployeeId } 
+      });
+      
+      const rawData = response.data.data || [];
+
+      if (rawData.length === 0) {
+        toast.warning('No attendance records found for the selected criteria.');
+        setExporting(false);
+        return;
+      }
+
+      const XLSX = await import('xlsx');
+      
+      let exportData: any[] = [];
+      let worksheet;
+      
+      if (exportEmployeeId === 'all') {
+        const aggregated: Record<string, { name: string, email: string, totalLate: number, present: number, absent: number, halfDay: number, leave: number }> = {};
+        
+        rawData.forEach((rec: any) => {
+          const empId = rec.user?.id || rec.employeeId?.id || rec.employeeId || 'Unknown';
+          const empName = rec.user?.name || rec.employeeId?.name || rec.employee?.name || 'Unknown';
+          const empEmail = rec.user?.email || rec.employeeId?.email || rec.employee?.email || '';
+          
+          if (!aggregated[empId]) {
+            aggregated[empId] = { name: empName, email: empEmail, totalLate: 0, present: 0, absent: 0, halfDay: 0, leave: 0 };
+          }
+          
+          aggregated[empId].totalLate += (rec.lateMinutes || 0);
+          if (rec.status === 'present' || rec.status === 'late') aggregated[empId].present++;
+          else if (rec.status === 'absent') aggregated[empId].absent++;
+          else if (rec.status === 'half_day') aggregated[empId].halfDay++;
+          else if (rec.status === 'leave') aggregated[empId].leave++;
+        });
+
+        exportData = Object.values(aggregated).map(emp => ({
+          'Employee Name': emp.name,
+          'Email': emp.email,
+          'Total Late Minutes': emp.totalLate,
+          'Days Present': emp.present,
+          'Days Absent': emp.absent,
+          'Half Days': emp.halfDay,
+          'Leaves': emp.leave
+        }));
+        
+        worksheet = XLSX.utils.json_to_sheet(exportData);
+        worksheet['!cols'] = [22, 28, 18, 14, 14, 12, 12].map(w => ({ wch: w }));
+      } else {
+        exportData = rawData.map((rec: any) => {
+          const empName = rec.employeeId?.name || rec.employee?.name || rec.user?.name || 'Unknown';
+          const empEmail = rec.employeeId?.email || rec.employee?.email || rec.user?.email || '';
+          return {
+            'Employee Name': empName,
+            'Email': empEmail,
+            'Date': rec.date ? new Date(rec.date).toLocaleDateString('en-IN') : '',
+            'Status': rec.status?.replace('_', ' ').toUpperCase() || 'PRESENT',
+            'Check-In': rec.checkIn ? new Date(rec.checkIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
+            'Check-Out': rec.checkOut ? new Date(rec.checkOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--',
+            'Late Check-In': rec.isLate ? 'YES' : 'NO',
+            'Late Minutes': rec.lateMinutes || 0,
+            'Working Hours': rec.workingHours || 0,
+            'Notes': rec.notes || ''
+          };
+        });
+        worksheet = XLSX.utils.json_to_sheet(exportData);
+        worksheet['!cols'] = [22, 28, 14, 14, 12, 12, 16, 14, 14, 26].map(w => ({ wch: w }));
+      }
       
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
-      XLSX.writeFile(workbook, 'employee_attendance_report.xlsx');
+      XLSX.writeFile(workbook, `${reportName}.xlsx`);
       toast.success('Attendance report exported successfully!');
+      setExportDialogOpen(false);
     } catch (error) {
       console.error('Failed to export excel:', error);
-      toast.error('Failed to export excel');
+      toast.error('Failed to export report. Please try again.');
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -279,11 +357,74 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             </div>
           )}
 
-          {canViewAll && (
-            <Button variant="outline" size="sm" onClick={handleExportExcel} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4 gap-2 text-xs font-semibold">
+          {canViewAll && user?.role !== 'ceo' && user?.role !== 'general_manager' && (
+            <Button variant="outline" size="sm" onClick={() => setExportDialogOpen(true)} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4 gap-2 text-xs font-semibold">
               <Download className="w-4 h-4 text-primary" /> Download Report
             </Button>
           )}
+
+          <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
+            <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0 max-h-[90vh] flex flex-col">
+              <div className="bg-primary/5 p-6 border-b border-primary/10 flex items-center gap-3 shrink-0">
+                <div className="p-2.5 bg-primary/10 rounded-2xl text-primary">
+                  <FileSpreadsheet className="w-5 h-5" />
+                </div>
+                <div>
+                  <DialogTitle className="text-xl">Download Report</DialogTitle>
+                  <p className="text-sm text-muted-foreground mt-0.5">Export attendance records to Excel.</p>
+                </div>
+              </div>
+              <div className="p-6 space-y-5 overflow-y-auto">
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Employee</Label>
+                  <Select value={exportEmployeeId} onValueChange={setExportEmployeeId}>
+                    <SelectTrigger className="rounded-xl h-11">
+                      <SelectValue placeholder="Select an employee" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="all">All Employees</SelectItem>
+                      {employees.map(emp => (
+                        <SelectItem key={emp.id} value={emp.id.toString()}>{emp.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Period Type</Label>
+                  <Select value={exportPeriod} onValueChange={(val: any) => setExportPeriod(val)}>
+                    <SelectTrigger className="rounded-xl h-11">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="month">Full Month</SelectItem>
+                      <SelectItem value="date">Specific Date</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {exportPeriod === 'date' ? (
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</Label>
+                    <Input type="date" className="rounded-xl h-11" value={exportDate} onChange={(e) => setExportDate(e.target.value)} />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Month</Label>
+                    <Input type="month" className="rounded-xl h-11" value={exportMonth} onChange={(e) => setExportMonth(e.target.value)} />
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <Button type="button" variant="ghost" className="rounded-xl" onClick={() => setExportDialogOpen(false)}>Cancel</Button>
+                  <Button onClick={executeExport} disabled={exporting} className="rounded-xl px-6 gap-2">
+                    {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} 
+                    Export Data
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {isHR && (
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
@@ -405,6 +546,59 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
               <Calendar className="w-4 h-4 text-primary" /> Calendar View
             </Button>
           </CardHeader>
+          
+          {canViewAll && dateFilter && (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 p-5 sm:p-6 pb-0 border-b border-border/40 bg-muted/10">
+              <Card className="relative overflow-hidden border border-primary/20 shadow-sm rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Users className="w-12 h-12 text-primary" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <Users className="w-3.5 h-3.5" /> Total Strength
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">{employees.length}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden border border-green-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-green-500/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <CheckCircle2 className="w-12 h-12 text-green-500" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-600" /> Present
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'present').length}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden border border-red-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-red-500/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <XCircle className="w-12 h-12 text-red-500" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <XCircle className="w-3.5 h-3.5 text-red-600" /> Absent
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'absent').length}</p>
+                </CardContent>
+              </Card>
+
+              <Card className="relative overflow-hidden border border-yellow-500/20 shadow-sm rounded-2xl bg-gradient-to-br from-yellow-500/10 via-background to-background group hover:shadow-md transition-all">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <CalendarOff className="w-12 h-12 text-yellow-500" />
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 flex items-center gap-2">
+                    <CalendarOff className="w-3.5 h-3.5 text-yellow-600" /> On Leave
+                  </p>
+                  <p className="text-3xl font-black text-foreground mt-2">{attendance.filter(r => r.status === 'leave').length}</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           <CardContent className="p-5 sm:p-6">
             {/* Filter bar */}
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 mb-6 p-4 rounded-2xl bg-muted/40 border border-slate-200/50 dark:border-slate-800/50 shadow-sm">

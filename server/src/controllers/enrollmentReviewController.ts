@@ -42,6 +42,7 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     include: {
       program: { include: { university: true } },
       studyCenter: true,
+      salesUser: { select: { name: true } },
       session: true,
       student: true,
       payment: true,

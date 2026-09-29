@@ -103,6 +103,7 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     return res.json({ success: true, data: [] });
   }
 
+  // 1. Fetch offline classes via explicit batches
   const batches = await prisma.academicBatch.findMany({
     where: { 
       OR: [
@@ -136,11 +137,35 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     }
   });
 
-  if (!batches || batches.length === 0) {
-    return res.json({ success: true, data: [] });
-  }
+  // 2. Fetch online classes via implicit program matching
+  const onlineClasses = await prisma.academicClass.findMany({
+    where: {
+      organizationId: student.organizationId,
+      programIds: { has: student.programId || '' },
+      academicCenter: { type: 'online' }
+    },
+    include: {
+      modules: {
+        orderBy: { order: 'asc' },
+        include: {
+          lessons: {
+            orderBy: { order: 'asc' },
+            include: {
+              materials: true
+            }
+          }
+        }
+      }
+    }
+  });
 
-  const resultData = batches.filter(b => b.academicClass).map(batch => {
+  // 3. Fetch Student Video Logs to mark online lessons as completed
+  const videoLogs = await prisma.studentVideoLog.findMany({
+    where: { studentId: student.id }
+  });
+
+  // Format Offline Classes
+  const offlineResultData = batches.filter(b => b.academicClass).map(batch => {
     const classData = batch.academicClass;
     const formattedModules = classData.modules.map((mod: any) => ({
       id: mod.id,
@@ -159,7 +184,8 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
           myRating: myAttendance?.rating || null,
           myReview: myAttendance?.review || null,
           canRate: isCompleted && myAttendance,
-          materials: isCompleted ? lesson.materials : []
+          materials: isCompleted ? lesson.materials : [],
+          videoUrl: lesson.videoUrl || null
         };
       })
     }));
@@ -167,11 +193,54 @@ export const getStudentClasses = asyncHandler(async (req: AuthRequest, res: Resp
     return {
       id: classData.id,
       name: classData.name,
-      modules: formattedModules
+      modules: formattedModules,
+      type: 'offline'
     };
   });
 
-  res.json({ success: true, data: resultData });
+  // Format Online Classes
+  const onlineResultData = onlineClasses.map(classData => {
+    const formattedModules = classData.modules.map((mod: any) => ({
+      id: mod.id,
+      title: mod.title,
+      description: mod.description,
+      lessons: mod.lessons.map((lesson: any) => {
+        const log = videoLogs.find(l => l.moduleLessonId === lesson.id);
+        const isCompleted = log && log.watchDuration > 0; // Consider completed if watched at all
+
+        return {
+          id: lesson.id,
+          title: lesson.title,
+          description: lesson.description,
+          isCompleted: isCompleted,
+          sessionId: null,
+          myRating: null,
+          myReview: null,
+          canRate: false,
+          materials: lesson.materials || [],
+          videoUrl: lesson.videoUrl || null
+        };
+      })
+    }));
+
+    return {
+      id: classData.id,
+      name: classData.name,
+      modules: formattedModules,
+      type: 'online'
+    };
+  });
+
+  // Combine and deduplicate
+  const allResultsMap = new Map();
+  offlineResultData.forEach(c => allResultsMap.set(c.id, c));
+  onlineResultData.forEach(c => {
+    if (!allResultsMap.has(c.id)) {
+      allResultsMap.set(c.id, c);
+    }
+  });
+
+  res.json({ success: true, data: Array.from(allResultsMap.values()) });
 });
 
 // POST /student-portal/classes/:classId/attendance
@@ -313,3 +382,141 @@ export const rateSession = asyncHandler(async (req: AuthRequest, res: Response) 
   res.json({ success: true, message: 'Thank you for rating this session!', data: updatedRecord });
 });
 
+export const videoHeartbeat = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
+  
+  const { moduleLessonId, watchDuration = 10 } = req.body;
+  
+  const existingLog = await prisma.studentVideoLog.findUnique({
+    where: { studentId_moduleLessonId: { studentId: student.id, moduleLessonId } }
+  });
+
+  if (existingLog) {
+    const log = await prisma.studentVideoLog.update({
+      where: { id: existingLog.id },
+      data: {
+        watchDuration: { increment: watchDuration },
+        lastWatchedAt: new Date()
+      }
+    });
+    res.status(200).json({ success: true, data: log });
+  } else {
+    const log = await prisma.studentVideoLog.create({
+      data: {
+        studentId: student.id,
+        moduleLessonId,
+        organizationId: req.user.organizationId,
+        watchDuration,
+        viewCount: 1
+      }
+    });
+    res.status(200).json({ success: true, data: log });
+  }
+});
+
+export const recordVideoView = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
+  
+  const { moduleLessonId } = req.body;
+  
+  const existingLog = await prisma.studentVideoLog.findUnique({
+    where: { studentId_moduleLessonId: { studentId: student.id, moduleLessonId } }
+  });
+
+  if (existingLog) {
+    const log = await prisma.studentVideoLog.update({
+      where: { id: existingLog.id },
+      data: {
+        viewCount: { increment: 1 },
+        lastWatchedAt: new Date()
+      }
+    });
+    res.status(200).json({ success: true, data: log });
+  } else {
+    const log = await prisma.studentVideoLog.create({
+      data: {
+        studentId: student.id,
+        moduleLessonId,
+        organizationId: req.user.organizationId,
+        watchDuration: 0,
+        viewCount: 1
+      }
+    });
+    res.status(200).json({ success: true, data: log });
+  }
+});
+export const getLessonAssessmentForStudent = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const { lessonId } = req.params;
+  const assessment = await prisma.assessment.findFirst({
+    where: { lessonId },
+    include: {
+      questions: { orderBy: { order: 'asc' } },
+      studentAttempts: {
+        where: { studentId: student.id },
+        orderBy: { createdAt: 'desc' }
+      }
+    }
+  });
+
+  if (!assessment) return res.status(404).json({ success: false, message: 'No assessment for this lesson' });
+
+  // Omit correctIndex from questions before sending to client
+  const safeAssessment = {
+    ...assessment,
+    questions: assessment.questions.map((q: any) => {
+      const { correctIndex, ...safeQ } = q;
+      return safeQ;
+    })
+  };
+
+  res.status(200).json({ success: true, data: safeAssessment });
+});
+
+export const submitLessonAssessment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const student = await getLinkedStudent(req.user.id);
+  if (!student) return res.status(404).json({ success: false, message: 'Student record not found' });
+
+  const { lessonId } = req.params;
+  const { answers } = req.body; // array of { questionId, selectedIndex }
+
+  const assessment = await prisma.assessment.findFirst({
+    where: { lessonId },
+    include: { questions: true }
+  });
+
+  if (!assessment) return res.status(404).json({ success: false, message: 'Assessment not found' });
+
+  let correctCount = 0;
+  
+  // Grade answers
+  assessment.questions.forEach((q: any) => {
+    const studentAnswer = answers.find((a: any) => a.questionId === q.id);
+    if (studentAnswer && studentAnswer.selectedIndex === q.correctIndex) {
+      correctCount++;
+    }
+  });
+
+  const score = (correctCount / assessment.questions.length) * 100;
+  const passed = score >= assessment.passingScore;
+
+  const attempt = await prisma.studentAssessmentAttempt.create({
+    data: {
+      assessmentId: assessment.id,
+      studentId: student.id,
+      score,
+      passed,
+      answers: answers || []
+    }
+  });
+
+  res.status(200).json({ 
+    success: true, 
+    data: attempt,
+    message: passed ? 'Congratulations! You passed the assessment.' : 'You did not pass. Try again.'
+  });
+});

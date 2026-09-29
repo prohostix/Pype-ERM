@@ -221,7 +221,7 @@ export default function PublicRegisterPage() {
             <CheckCircle className="w-12 h-12 mx-auto text-green-500" />
             <h2 className="text-xl font-bold">Registration Submitted</h2>
             <p className="text-muted-foreground text-sm">
-              Your study center registration has been submitted. Our operations team will review your documents.
+              Your academic partner registration has been submitted. Our operations team will review your documents.
             </p>
             {credentials && (
               <div className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/20 text-left space-y-3">
@@ -346,7 +346,7 @@ export default function PublicRegisterPage() {
         <div className="flex items-center gap-3 mb-8">
           <img src="/pype-logo.png" alt="PYPE ERM" className="w-10 h-10 object-contain" />
           <div>
-            <h1 className="text-2xl font-bold">Study Center Registration</h1>
+            <h1 className="text-2xl font-bold">Academic Partner Registration</h1>
             <p className="text-muted-foreground text-sm">Complete the form to register your center.</p>
           </div>
         </div>

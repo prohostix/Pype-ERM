@@ -7,8 +7,20 @@ import { NotificationType } from '../generated/client/index.js';
 import { resolveTargetName } from '../utils/resolveEntity.js';
 
 export const submitEditDeleteRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const requestData: any = {
+    ...req.body,
+    organization: { connect: { id: req.user.organizationId } },
+    status: 'pending_manager'
+  };
+
+  if (req.user.role === 'faculty') {
+    requestData.faculty = { connect: { id: req.user.id } };
+  } else {
+    requestData.user = { connect: { id: req.user.id } };
+  }
+
   const request = await prisma.editDeleteRequest.create({
-    data: { ...req.body, organizationId: req.user.organizationId, userId: req.user.id, status: 'pending_manager' }
+    data: requestData
   });
   res.status(201).json({ success: true, data: request });
 });
@@ -204,40 +216,48 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
   });
 
   // Send appropriate notifications
-  if (newStatus === 'rejected') {
-    await createNotification(
-      request.organizationId, request.userId, NotificationType.general,
-      'Delete Request Rejected',
-      `Your delete request was rejected. ${responseRemarks ? `Reason: ${responseRemarks}` : ''}`,
-      '/dashboard'
-    );
-  } else if (newStatus === 'pending_ceo') {
-    await createNotification(
-      request.organizationId, request.userId, NotificationType.general,
-      'Delete Request Advanced',
-      `Your delete request was approved by management and is now pending final approval.`,
-      '/dashboard'
-    );
-  } else if (newStatus === 'approved') {
-    // Execute the actual deletion via Prisma (not fragile loopback fetch)
-    const deleteResult = await executeApprovedDeletion(request.entityId, request.organizationId, request.entityType);
+  if (request.userId) {
+    if (newStatus === 'rejected') {
+      await createNotification(
+        request.organizationId, request.userId, NotificationType.general,
+        'Delete Request Rejected',
+        `Your delete request was rejected. ${responseRemarks ? `Reason: ${responseRemarks}` : ''}`,
+        '/dashboard'
+      );
+    } else if (newStatus === 'pending_ceo') {
+      await createNotification(
+        request.organizationId, request.userId, NotificationType.general,
+        'Delete Request Advanced',
+        `Your delete request was approved by management and is now pending final approval.`,
+        '/dashboard'
+      );
+    } else if (newStatus === 'approved') {
+      // Execute the actual deletion via Prisma (not fragile loopback fetch)
+      const deleteResult = await executeApprovedDeletion(request.entityId, request.organizationId, request.entityType);
 
-    if (deleteResult.success) {
-      await createNotification(
-        request.organizationId, request.userId, NotificationType.general,
-        'Delete Request Approved & Executed',
-        `Your delete request was approved and the record has been permanently deleted.`,
-        '/dashboard'
-      );
-    } else {
-      // Mark as approved but log the failure — record may already be deleted
+      if (deleteResult.success) {
+        await createNotification(
+          request.organizationId, request.userId, NotificationType.general,
+          'Delete Request Approved & Executed',
+          `Your delete request was approved and the record has been permanently deleted.`,
+          '/dashboard'
+        );
+      } else {
+        // Mark as approved but log the failure — record may already be deleted
+        console.error(`[DeleteRequest] Deletion failed for ${request.entityId}: ${deleteResult.error}`);
+        await createNotification(
+          request.organizationId, request.userId, NotificationType.general,
+          'Delete Request Approved',
+          `Your delete request was approved. Note: ${deleteResult.error || 'Record may already have been removed.'}`,
+          '/dashboard'
+        );
+      }
+    }
+  } else if (newStatus === 'approved') {
+    // Execute deletion even if there is no user to notify (e.g. faculty)
+    const deleteResult = await executeApprovedDeletion(request.entityId, request.organizationId, request.entityType);
+    if (!deleteResult.success) {
       console.error(`[DeleteRequest] Deletion failed for ${request.entityId}: ${deleteResult.error}`);
-      await createNotification(
-        request.organizationId, request.userId, NotificationType.general,
-        'Delete Request Approved',
-        `Your delete request was approved. Note: ${deleteResult.error || 'Record may already have been removed.'}`,
-        '/dashboard'
-      );
     }
   }
 

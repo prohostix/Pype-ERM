@@ -153,7 +153,7 @@ export function LeadsPanel() {
       await api.put(`/sales/leads/${leadId}`, { status: 'converted' });
       setConvertDialogOpen(false);
       fetchLeads();
-      toast.success('Lead converted to Study Center successfully');
+      toast.success('Lead converted to Academic Partner successfully');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to convert to center');
     }
@@ -365,7 +365,7 @@ export function LeadsPanel() {
                             variant="ghost" 
                             size="sm" 
                             onClick={() => openConvertToCenterDialog(lead)} 
-                            title="Convert to Study Center"
+                            title="Convert to Academic Partner"
                           >
                             <Building2 className="w-4 h-4 text-primary" />
                           </Button>
@@ -394,13 +394,13 @@ export function LeadsPanel() {
         </CardContent>
       </Card>
 
-      {/* Convert to Study Center Dialog */}
+      {/* Convert to Academic Partner Dialog */}
       <Dialog open={convertDialogOpen} onOpenChange={setConvertDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Convert Lead to Study Center</DialogTitle>
+            <DialogTitle>Convert Lead to Academic Partner</DialogTitle>
             <p className="text-sm text-muted-foreground mt-2">
-              Create a new study center from this lead
+              Create a new academic partner from this lead
             </p>
           </DialogHeader>
           <form onSubmit={handleConvertToCenter} className="space-y-4">
@@ -457,7 +457,7 @@ export function LeadsPanel() {
             <div className="flex gap-2">
               <Button type="submit" className="flex-1">
                 <Building2 className="w-4 h-4 mr-2" />
-                Create Study Center
+                Create Academic Partner
               </Button>
               <Button
                 type="button"

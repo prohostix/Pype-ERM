@@ -15,6 +15,36 @@ export function MyProfilePanel() {
     return role.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
 
+  const getProbationStatus = () => {
+    const profile = (user as any).employeeProfileDetail;
+    if (!profile?.joinDate) return null;
+    const joinDate = new Date(profile.joinDate);
+    const probationEnd = profile.probationEndDate ? new Date(profile.probationEndDate) : null;
+    const today = new Date();
+
+    if (!probationEnd) return { text: 'N/A', active: false, type: 'default' };
+
+    if (probationEnd > today) {
+      const diffTime = Math.abs(probationEnd.getTime() - today.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return { 
+        text: `Active (${diffDays} days left)`, 
+        active: true, 
+        type: 'warning',
+        dateStr: probationEnd.toLocaleDateString()
+      };
+    } else {
+      return { 
+        text: 'Completed', 
+        active: false, 
+        type: 'success',
+        dateStr: probationEnd.toLocaleDateString()
+      };
+    }
+  };
+
+  const probation = getProbationStatus();
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row items-center gap-4 justify-between">
@@ -105,6 +135,32 @@ export function MyProfilePanel() {
                     <MapPin className="w-4 h-4 text-muted-foreground" />
                     {user.organization?.address || 'Head Office'}
                   </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Join Date</p>
+                  <p className="font-medium flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    {(user as any).employeeProfileDetail?.joinDate ? new Date((user as any).employeeProfileDetail.joinDate).toLocaleDateString() : 'N/A'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Probation Status</p>
+                  {probation ? (
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                         <Badge variant={probation.type as any} className={probation.type === 'warning' ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : (probation.type === 'success' ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : '')}>
+                           {probation.text}
+                         </Badge>
+                      </div>
+                      {probation.dateStr && (
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {probation.active ? 'Ends on: ' : 'Ended on: '} {probation.dateStr}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="font-medium">N/A</p>
+                  )}
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Last Login</p>

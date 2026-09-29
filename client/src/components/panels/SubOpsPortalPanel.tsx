@@ -93,7 +93,7 @@ export function SubOpsPortalPanel() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard icon={<Building2 className="w-5 h-5" />} label="Universities" value={universities.length} color="primary" />
         <StatCard icon={<BookOpen className="w-5 h-5" />} label="Programs" value={programs.length} color="info" />
-        <StatCard icon={<MapPin className="w-5 h-5" />} label="Study Centers" value={centers.length} color="success" />
+        <StatCard icon={<MapPin className="w-5 h-5" />} label="Academic Partners" value={centers.length} color="success" />
         <StatCard icon={<GraduationCap className="w-5 h-5" />} label="Enrolled" value={totalEnrolled} color="warning" sub={`${totalPending} pending`} />
       </div>
 
@@ -102,7 +102,7 @@ export function SubOpsPortalPanel() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="universities">Universities ({universities.length})</TabsTrigger>
           <TabsTrigger value="programs">Programs ({programs.length})</TabsTrigger>
-          <TabsTrigger value="centers">Study Centers ({centers.length})</TabsTrigger>
+          <TabsTrigger value="centers">Academic Partners ({centers.length})</TabsTrigger>
           <TabsTrigger value="enrollments">Enrollments</TabsTrigger>
         </TabsList>
 
@@ -139,7 +139,7 @@ export function SubOpsPortalPanel() {
             <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
               <CardHeader>
                 <CardTitle>Center Breakdown</CardTitle>
-                <CardDescription>Enrollment status per study center</CardDescription>
+                <CardDescription>Enrollment status per academic partner</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 max-h-[220px] overflow-y-auto">
                 {centers.length === 0 ? (
@@ -167,7 +167,7 @@ export function SubOpsPortalPanel() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <QuickList title="Universities" items={universities} icon={<Building2 className="w-3.5 h-3.5" />} />
             <QuickList title="Programs" items={programs} icon={<BookOpen className="w-3.5 h-3.5" />} />
-            <QuickList title="Study Centers" items={centers} icon={<MapPin className="w-3.5 h-3.5" />} />
+            <QuickList title="Academic Partners" items={centers} icon={<MapPin className="w-3.5 h-3.5" />} />
           </div>
         </TabsContent>
 
@@ -181,11 +181,11 @@ export function SubOpsPortalPanel() {
           <ResourceGrid items={programs} type="program" />
         </TabsContent>
 
-        {/* Study Centers */}
+        {/* Academic Partners */}
         <TabsContent value="centers">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {centers.length === 0 ? (
-              <p className="text-muted-foreground col-span-3 text-center py-8">No study centers assigned</p>
+              <p className="text-muted-foreground col-span-3 text-center py-8">No academic partners assigned</p>
             ) : centers.map((c: any) => {
               const stats = centerEnrollMap[c.id?.toString()] || { total: 0, enrolled: 0, pending: 0 };
               return (

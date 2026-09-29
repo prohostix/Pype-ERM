@@ -127,10 +127,15 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
 
+  let resolvedCenterId = centerId;
+  if (req.user.role === 'center_admin' && req.user.studyCenterId) {
+    resolvedCenterId = req.user.studyCenterId;
+  }
+
   // Verify that the referenced center exists (if provided)
-  if (centerId && centerId.trim() !== '') {
+  if (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') {
     const centerExists = await prisma.studyCenter.findFirst({
-      where: { id: centerId, organizationId: req.user.organizationId }
+      where: { id: resolvedCenterId, organizationId: req.user.organizationId }
     });
     if (!centerExists) {
       res.status(400).json({ success: false, message: 'Selected Study Center does not exist' });
@@ -216,7 +221,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
       programId,
       sessionId: (sessionId && sessionId.trim() !== '') ? sessionId : null,
       universityId: universityId || null,
-      centerId: (centerId && centerId.trim() !== '') ? centerId : null,
+      centerId: (resolvedCenterId && typeof resolvedCenterId === 'string' && resolvedCenterId.trim() !== '') ? resolvedCenterId : null,
       branchId: (branchId && branchId.trim() !== '') ? branchId : null,
       organizationId: req.user.organizationId,
       credentials: { email, password: studentUser.password ? '(Existing Account)' : defaultPassword },
@@ -258,7 +263,7 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
         initialPaymentAmount: req.body.initialPaymentAmount !== undefined ? Number(req.body.initialPaymentAmount) : null,
         status: initialStatus,
         receiptUrl: req.body.receiptUrl || null,
-        salesUserId: req.user.id,
+        salesUserId: req.user.role === 'center_admin' ? null : req.user.id,
         gender: student.gender,
         category: student.category,
         religion: student.religion,

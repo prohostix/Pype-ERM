@@ -196,9 +196,11 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                   <h3 className="text-lg font-bold line-clamp-1 flex-1 pr-2">{c.name}</h3>
                   {canWrite && (
                     <div className="flex items-center gap-1">
-                      <Button variant="outline" size="sm" onClick={() => setActiveClass(c)} className="rounded-full text-xs h-7 border-border/60 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 transition-colors">
-                        Batches
-                      </Button>
+                      {center.type !== 'online' && (
+                        <Button variant="outline" size="sm" onClick={() => setActiveClass(c)} className="rounded-full text-xs h-7 border-border/60 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 transition-colors">
+                          Batches
+                        </Button>
+                      )}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -217,9 +219,14 @@ export function AcademicClassesPanel({ center, onBack }: { center: any; onBack: 
                     </div>
                   )}
                 </div>
-                <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className="mt-2 text-[10px] uppercase tracking-wider px-2 py-0.5">
-                  {c.status}
-                </Badge>
+                <div className="flex items-center gap-2 mt-2">
+                  <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className="text-[10px] uppercase tracking-wider px-2 py-0.5">
+                    {c.status}
+                  </Badge>
+                  <Badge variant="outline" className={`text-[10px] uppercase tracking-wider px-2 py-0.5 font-bold ${center.type === 'online' ? 'border-sky-500/30 text-sky-600 bg-sky-500/10' : 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10'}`}>
+                    {center.type === 'online' ? 'Online Class' : 'Offline Class'}
+                  </Badge>
+                </div>
               </div>
               <div className="p-5 flex-1 bg-muted/10 space-y-4">
                 {c.incharge && (

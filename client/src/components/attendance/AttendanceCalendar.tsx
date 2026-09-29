@@ -31,6 +31,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   absent:  { label: 'Absent', color: 'bg-rose-100 text-rose-700 border-rose-300' },
   half_day:{ label: 'Half Day', color: 'bg-orange-100 text-orange-700 border-orange-300' },
   leave:   { label: 'Paid Leave', color: 'bg-purple-100 text-purple-700 border-purple-300' },
+  wfh:     { label: 'Work From Home', color: 'bg-blue-100 text-blue-700 border-blue-300' },
 };
 
 function formatTime(isoString: string | null | undefined): string {
@@ -140,7 +141,7 @@ export function AttendanceCalendar({
   };
 
   // Statistics — count absent for days with no record, past, not weekend, not holiday
-  let presentCount = 0, lateCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0, holidayCount = 0;
+  let presentCount = 0, lateCount = 0, absentCount = 0, halfDayCount = 0, leaveCount = 0, weekOffCount = 0, holidayCount = 0, wfhCount = 0;
   for (let day = 1; day <= totalDays; day++) {
     const date = new Date(selectedYear, selectedMonth, day);
     const record = records.find(r => {
@@ -156,6 +157,7 @@ export function AttendanceCalendar({
       else if (record.status === 'absent') absentCount++;
       else if (record.status === 'half_day') halfDayCount++;
       else if (record.status === 'leave') leaveCount++;
+      else if (record.status === 'wfh') wfhCount++;
     } else if (isHolidayDate(date)) {
       holidayCount++;
     } else if (isWeekOff(date)) {
@@ -277,6 +279,7 @@ export function AttendanceCalendar({
         case 'absent': return 'bg-rose-500 text-white hover:bg-rose-600';
         case 'half_day': return 'bg-amber-500 text-white hover:bg-amber-600';
         case 'leave':  return 'bg-purple-500 text-white hover:bg-purple-600';
+        case 'wfh':    return 'bg-blue-500 text-white hover:bg-blue-600';
         default:       return 'bg-slate-500 text-white';
       }
     }
@@ -363,6 +366,7 @@ export function AttendanceCalendar({
             { label: 'Absent', count: absentCount, color: 'rose' },
             { label: 'Half Day', count: halfDayCount, color: 'amber' },
             { label: 'Paid Leave', count: leaveCount, color: 'purple' },
+            { label: 'WFH', count: wfhCount, color: 'blue' },
             { label: 'Holiday', count: holidayCount, color: 'orange' },
             { label: 'Week Off', count: weekOffCount, color: 'slate' },
           ].map(({ label, count, color }) => (
@@ -412,6 +416,7 @@ export function AttendanceCalendar({
           <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-rose-500 shadow-sm" />Absent</span>
           <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-amber-500 shadow-sm" />Half Day</span>
           <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-purple-500 shadow-sm" />Leave</span>
+          <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-blue-500 shadow-sm" />WFH</span>
           <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-orange-400 shadow-sm" />Holiday</span>
           <span className="flex items-center gap-1.5"><span className="w-3.5 h-3.5 rounded-md bg-slate-400 shadow-sm" />Week Off</span>
           <span className="flex items-center gap-1.5"><Camera className="w-3.5 h-3.5 text-muted-foreground" />Selfie attached</span>
@@ -663,6 +668,7 @@ export function AttendanceCalendar({
                     <SelectItem value="absent">Absent</SelectItem>
                     <SelectItem value="half_day">Half Day</SelectItem>
                     <SelectItem value="leave">Leave / Paid Leave</SelectItem>
+                    <SelectItem value="wfh">Work From Home</SelectItem>
                     <SelectItem value="late">Late Check-in</SelectItem>
                   </SelectContent>
                 </Select>

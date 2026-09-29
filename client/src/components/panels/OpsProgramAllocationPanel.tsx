@@ -79,13 +79,13 @@ export function OpsProgramAllocationPanel() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Program Allocations</h2>
-        <p className="text-muted-foreground text-sm mt-1">Manage which programs each active study center can enroll students into.</p>
+        <p className="text-muted-foreground text-sm mt-1">Manage which programs each active academic partner can enroll students into.</p>
       </div>
 
       <div className="flex items-center gap-3">
         <Select value={selectedCenter} onValueChange={handleCenterChange}>
           <SelectTrigger className="w-72">
-            <SelectValue placeholder="Select a study center" />
+            <SelectValue placeholder="Select a academic partner" />
           </SelectTrigger>
           <SelectContent>
             {centers.map(c => (

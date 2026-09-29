@@ -220,7 +220,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* My Leave Balances */}
       {/* My Leave Balances */}
-      {balances && (
+      {balances && user?.role !== 'ceo' && user?.role !== 'general_manager' && (
         <div className="mb-6">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold">My Leave Balances</h3>
@@ -281,6 +281,22 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Taken: {balances.earned.used.toFixed(1)}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* WFH */}
+            <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-purple-500/5 backdrop-blur-xl border-purple-500/20">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex justify-between items-start mb-2">
+                  <p className="font-medium text-purple-600">Work From Home</p>
+                  <Badge variant="outline" className="border-purple-200 text-purple-600 bg-purple-50">{balances.wfh?.available.toFixed(1) || 0} Available</Badge>
+                </div>
+                <div className="text-sm text-muted-foreground mb-1">
+                  Allocated: {balances.wfh?.accrued.toFixed(1) || 0}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Taken: {balances.wfh?.used.toFixed(1) || 0}
                 </div>
               </CardContent>
             </Card>
@@ -355,8 +371,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const cfg = STATUS_CONFIG[leave.status] || STATUS_CONFIG.pending;
                 const isExpanded = expanded === leave.id;
                 const isOwner = leave.employeeId === userId;
-                const canDeptAct = isDeptManager && leave.status === 'pending';
-                const canHRAct = isHR && leave.status === 'dept_approved';
+                const isExecutive = role === 'ceo' || role === 'general_manager';
+                const canDeptAct = (isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending');
+                const canHRAct = (isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved'));
 
                 return (
                   <Card key={leave.id} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-lg rounded-2xl hover:border-primary/30 transition-all duration-300 bg-card/60 backdrop-blur-xl group overflow-hidden">
@@ -368,7 +385,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                             <Badge className={cn('text-[11px] font-bold uppercase border px-2.5 py-0.5 rounded-full', cfg.color)}>
                               {cfg.label}
                             </Badge>
-                            <Badge variant="outline" className="text-[11px] capitalize rounded-full bg-background/50 backdrop-blur-sm">{leave.type} Leave</Badge>
+                            <Badge variant="outline" className="text-[11px] capitalize rounded-full bg-background/50 backdrop-blur-sm">
+                              {leave.type === 'wfh' ? 'WFH' : `${leave.type} Leave`}
+                            </Badge>
                             {leave.department && (
                               <Badge variant="outline" className="text-[11px] rounded-full bg-background/50 backdrop-blur-sm">{leave.department.name}</Badge>
                             )}
@@ -434,7 +453,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               {leave.hrRemarks && (
                                 <div className="space-y-1">
                                   <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">HR Admin</span>
+                                    <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
+                                      {leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.role === 'general_manager' ? 'General Manager' : 'HR Admin'}
+                                    </span>
                                     {leave.hrApprover && (
                                       <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
                                     )}
@@ -492,7 +513,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               active={leave.status === 'approved' || (leave.status === 'rejected' && !!leave.hrRemarks)}
                               done={leave.status === 'approved'}
                               rejected={leave.status === 'rejected' && !!leave.hrRemarks}
-                              label="HR Admin"
+                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.role === 'general_manager' ? 'Gen. Manager' : 'HR Admin'}
                             />
                           </div>
 
@@ -526,9 +547,10 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               <Select value={form.type} onValueChange={v => setForm(f => ({ ...f, type: v }))}>
                 <SelectTrigger className="rounded-xl h-11"><SelectValue /></SelectTrigger>
                 <SelectContent className="rounded-xl">
-                  <SelectItem value="sick">Sick Leave</SelectItem>
-                  <SelectItem value="casual">Casual Leave</SelectItem>
-                  <SelectItem value="earned">Earned Leave</SelectItem>
+                  <SelectItem value="sick" disabled={balances?.sick?.available <= 0}>Sick Leave {balances?.sick?.available <= 0 ? '(Empty)' : ''}</SelectItem>
+                  <SelectItem value="casual" disabled={balances?.casual?.available <= 0}>Casual Leave {balances?.casual?.available <= 0 ? '(Empty)' : ''}</SelectItem>
+                  <SelectItem value="earned" disabled={balances?.earned?.available <= 0}>Earned Leave {balances?.earned?.available <= 0 ? '(Empty)' : ''}</SelectItem>
+                  <SelectItem value="wfh">Work From Home {balances?.wfh?.available <= 0 ? '(Penalty applies)' : ''}</SelectItem>
                   <SelectItem value="unpaid">Unpaid Leave</SelectItem>
                 </SelectContent>
               </Select>

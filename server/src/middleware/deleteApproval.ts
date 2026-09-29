@@ -37,16 +37,23 @@ export const processDeleteRequest = async (req: Request, res: Response, next: Ne
       status = 'pending_ceo';
     }
 
+    const requestData: any = {
+      organization: { connect: { id: authReq.user.organizationId } },
+      entityType: 'api_delete',
+      entityId: req.originalUrl,
+      requestType: 'delete',
+      reason: reason,
+      status: status
+    };
+
+    if (role === 'faculty') {
+      requestData.faculty = { connect: { id: authReq.user.id } };
+    } else {
+      requestData.user = { connect: { id: authReq.user.id } };
+    }
+
     const request = await prisma.editDeleteRequest.create({
-      data: {
-        organizationId: authReq.user.organizationId,
-        userId: authReq.user.id,
-        entityType: 'api_delete',
-        entityId: req.originalUrl,
-        requestType: 'delete',
-        reason: reason,
-        status: status
-      }
+      data: requestData
     });
 
     return res.status(202).json({ 

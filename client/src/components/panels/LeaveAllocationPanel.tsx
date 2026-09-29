@@ -19,6 +19,7 @@ interface LeaveAllocation {
   casualLeave: number;
   earnedLeave: number;
   complementaryLeave: number;
+  wfh: number;
   usedSick?: number;
   usedCasual?: number;
   usedEarned?: number;
@@ -38,6 +39,7 @@ export function LeaveAllocationPanel() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
   const [editingUserId, setEditingUserId] = useState('');
@@ -45,19 +47,19 @@ export function LeaveAllocationPanel() {
   const [search, setSearch] = useState('');
 
   const [form, setForm] = useState({
-    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0,
+    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0
   });
   const [bulkForm, setBulkForm] = useState({
-    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0,
+    sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0
   });
 
-  useEffect(() => { fetchAll(); }, [year]);
+  useEffect(() => { fetchAll(); }, [year, month]);
 
   const fetchAll = async () => {
     setLoading(true);
     try {
       const [allocRes, usersRes] = await Promise.all([
-        api.get(`/hr/leave-allocations?year=${year}`),
+        api.get(`/hr/leave-allocations?year=${year}&month=${month}`),
         api.get('/users'),
       ]);
       setAllocations(allocRes.data.data || []);
@@ -78,10 +80,11 @@ export function LeaveAllocationPanel() {
         casualLeave: alloc.casualLeave,
         earnedLeave: alloc.earnedLeave,
         complementaryLeave: alloc.complementaryLeave,
+        wfh: (alloc as any).wfh || 0,
       });
     } else {
       setEditingUserId(userId || '');
-      setForm({ sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0 });
+      setForm({ sickLeave: 12, casualLeave: 12, earnedLeave: 15, complementaryLeave: 0, wfh: 0 });
     }
     setDialogOpen(true);
   };
@@ -90,7 +93,7 @@ export function LeaveAllocationPanel() {
     if (!editingUserId) { toast.error('Select an employee'); return; }
     setSaving(true);
     try {
-      await api.put(`/hr/leave-allocations/${editingUserId}`, { ...form, year });
+      await api.put(`/hr/leave-allocations/${editingUserId}`, { ...form, year, month });
       toast.success('Leave allocation saved');
       setDialogOpen(false);
       fetchAll();
@@ -104,7 +107,7 @@ export function LeaveAllocationPanel() {
   const handleBulkInit = async () => {
     setSaving(true);
     try {
-      const res = await api.post('/hr/leave-allocations/bulk-init', { ...bulkForm, year });
+      const res = await api.post('/hr/leave-allocations/bulk-init', { ...bulkForm, year, month });
       toast.success(res.data.message);
       setBulkDialogOpen(false);
       fetchAll();
@@ -133,6 +136,18 @@ export function LeaveAllocationPanel() {
           <p className="text-muted-foreground text-sm mt-1">Manage sick, casual, earned & complementary leave per employee</p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          <select
+            className="border rounded-md px-3 py-1.5 text-sm bg-background"
+            value={month}
+            onChange={e => setMonth(Number(e.target.value))}
+          >
+            {[
+              { m: 1, name: 'Jan' }, { m: 2, name: 'Feb' }, { m: 3, name: 'Mar' },
+              { m: 4, name: 'Apr' }, { m: 5, name: 'May' }, { m: 6, name: 'Jun' },
+              { m: 7, name: 'Jul' }, { m: 8, name: 'Aug' }, { m: 9, name: 'Sep' },
+              { m: 10, name: 'Oct' }, { m: 11, name: 'Nov' }, { m: 12, name: 'Dec' },
+            ].map(m => <option key={m.m} value={m.m}>{m.name}</option>)}
+          </select>
           <select
             className="border rounded-md px-3 py-1.5 text-sm bg-background"
             value={year}
@@ -169,6 +184,27 @@ export function LeaveAllocationPanel() {
           {filtered.map(alloc => {
             const user = alloc.user || null;
             const uid = alloc.userId;
+
+            // Probation calculation
+            let probationBadge = <Badge variant="outline" className="text-xs">Probation Info Missing</Badge>;
+            if (user && (user as any).employeeProfileDetail) {
+              const profile = (user as any).employeeProfileDetail;
+              if (profile.probationEndDate) {
+                const today = new Date();
+                const probationEnd = new Date(profile.probationEndDate);
+                if (probationEnd > today) {
+                  const diffTime = Math.abs(probationEnd.getTime() - today.getTime());
+                  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                  probationBadge = <Badge variant="warning" className="bg-amber-100 text-amber-700 hover:bg-amber-200 text-xs">Probation ({diffDays} days left)</Badge>;
+                } else {
+                  probationBadge = <Badge variant="success" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-xs">Probation Completed</Badge>;
+                }
+              } else if (profile.joinDate) {
+                 // Has join date but no probation end date
+                 probationBadge = <Badge variant="outline" className="text-xs">No Probation End Date</Badge>;
+              }
+            }
+
             return (
               <Card key={uid} className="hover:border-primary/30 transition-colors">
                 <CardContent className="p-4">
@@ -178,6 +214,7 @@ export function LeaveAllocationPanel() {
                         <span className="font-semibold">{user?.name || 'Employee'}</span>
                         <Badge variant="outline" className="text-xs capitalize">{user?.role?.replace(/_/g, ' ')}</Badge>
                         {user?.designation && <Badge variant="outline" className="text-xs">{user.designation}</Badge>}
+                        {probationBadge}
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm">
                         {[
@@ -185,6 +222,7 @@ export function LeaveAllocationPanel() {
                           { label: 'Casual', total: alloc.casualLeave, used: alloc.usedCasual, color: 'text-blue-500' },
                           { label: 'Earned', total: alloc.earnedLeave, used: alloc.usedEarned, color: 'text-green-500' },
                           { label: 'Comp.', total: alloc.complementaryLeave, used: alloc.usedComplementary, color: 'text-purple-500' },
+                          { label: 'WFH', total: (alloc as any).wfh || 0, used: (alloc as any).usedWfh || 0, color: 'text-pink-500' },
                         ].map(({ label, total, used, color }) => (
                           <div key={label}>
                             <p className="text-xs text-muted-foreground">{label}</p>
@@ -208,7 +246,7 @@ export function LeaveAllocationPanel() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Leave Allocation — {year}</DialogTitle>
+            <DialogTitle>Leave Allocation — {month}/{year}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-2">
             {!allocations.find(a => a.userId === editingUserId) && (
@@ -230,6 +268,7 @@ export function LeaveAllocationPanel() {
                 { key: 'casualLeave', label: 'Casual Leave (days)' },
                 { key: 'earnedLeave', label: 'Earned Leave (days)' },
                 { key: 'complementaryLeave', label: 'Complementary Leave (days)' },
+                { key: 'wfh', label: 'Work From Home (days)' },
               ] as const).map(({ key, label }) => (
                 <div key={key} className="space-y-1">
                   <Label>{label}</Label>
@@ -252,15 +291,16 @@ export function LeaveAllocationPanel() {
       <Dialog open={bulkDialogOpen} onOpenChange={setBulkDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Bulk Initialize Leave — {year}</DialogTitle>
+            <DialogTitle>Bulk Initialize Leave — {month}/{year}</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">Sets default leave balances for all active employees who don't have an allocation yet for {year}.</p>
+          <p className="text-sm text-muted-foreground">Sets default leave balances for all active employees who don't have an allocation yet for {month}/{year}.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             {([
               { key: 'sickLeave', label: 'Sick Leave' },
               { key: 'casualLeave', label: 'Casual Leave' },
               { key: 'earnedLeave', label: 'Earned Leave' },
               { key: 'complementaryLeave', label: 'Complementary Leave' },
+              { key: 'wfh', label: 'Work From Home' },
             ] as const).map(({ key, label }) => (
               <div key={key} className="space-y-1">
                 <Label>{label}</Label>

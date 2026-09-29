@@ -112,7 +112,7 @@ export function Header({ onMenuToggle, title }: HeaderProps) {
       {/* Centered Organization Logo */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
         {user?.organization?.logo && (
-          <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-10 object-contain drop-shadow-sm" />
+          <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="h-10 w-auto max-w-[150px] sm:max-w-[200px] object-contain drop-shadow-sm" />
         )}
       </div>
 

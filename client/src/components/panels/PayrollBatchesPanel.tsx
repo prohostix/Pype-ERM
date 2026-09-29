@@ -22,9 +22,9 @@ interface PayrollBatch {
   totalAmount: number;
   employeeCount: number;
   status: string;
-  transferredBy?: { name: string };
-  approvedBy?: { name: string };
-  rejectedBy?: { name: string };
+  transferer?: { name: string };
+  approver?: { name: string };
+  rejector?: { name: string };
   rejectionReason?: string;
   remarks?: string;
   createdAt: string;
@@ -38,6 +38,7 @@ export function PayrollBatchesPanel() {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState<PayrollBatch | null>(null);
+  const [expandedBatch, setExpandedBatch] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [paymentData, setPaymentData] = useState({
@@ -171,10 +172,8 @@ export function PayrollBatchesPanel() {
                   {filteredBatches.map((batch) => {
                     const bid = batch.id || batch.id || '';
                     return (
-                      <div
-                        key={bid}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                      >
+                      <div key={bid} className="border rounded-lg hover:border-primary/30 transition-colors overflow-hidden">
+                        <div className="flex items-center justify-between p-4 bg-card hover:bg-muted/30 transition-colors">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-1">
                             <span className="font-semibold">Month: {batch.month}</span>
@@ -187,8 +186,8 @@ export function PayrollBatchesPanel() {
                             <span className="font-medium text-foreground">
                               Total: ₹{batch.totalAmount?.toLocaleString()}
                             </span>
-                            {batch.transferredBy && (
-                              <span>Transferred by: {batch.transferredBy.name}</span>
+                            {batch.transferer && (
+                              <span>Transferred by: {batch.transferer.name}</span>
                             )}
                           </div>
                           {batch.rejectionReason && (
@@ -250,7 +249,45 @@ export function PayrollBatchesPanel() {
                               Complete Payment
                             </Button>
                           )}
+                          <Button size="sm" variant="ghost" onClick={() => setExpandedBatch(expandedBatch === bid ? null : bid)}>
+                            {expandedBatch === bid ? 'Hide Details' : 'View Details'}
+                          </Button>
                         </div>
+                      </div>
+                      
+                      {expandedBatch === bid && (batch as any).payrolls && (
+                        <div className="p-4 bg-muted/20 border-t space-y-3">
+                          <h4 className="font-semibold text-sm mb-2 border-b pb-2">Employee Breakdown</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[400px] overflow-y-auto pr-2">
+                            {(batch as any).payrolls.map((p: any) => (
+                              <div key={p.id} className="bg-background p-3 rounded-md border text-xs">
+                                <div className="flex justify-between font-semibold mb-2">
+                                  <span>{p.user?.name || 'Employee'} ({p.user?.employeeProfile?.employeeId || p.employeeId})</span>
+                                  <span className="text-primary">Net: ₹{p.netSalary?.toLocaleString()}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <p className="text-emerald-600 font-medium border-b mb-1 pb-0.5">Earnings</p>
+                                    <div className="flex justify-between"><span>Basic:</span><span>₹{p.basicSalary?.toLocaleString()}</span></div>
+                                    {Object.entries(p.allowances || {}).map(([k, v]) => (
+                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>₹{Number(v).toLocaleString()}</span></div>
+                                    ))}
+                                    {p.bonus > 0 && <div className="flex justify-between"><span>Bonus:</span><span>₹{p.bonus.toLocaleString()}</span></div>}
+                                    {p.overtime > 0 && <div className="flex justify-between"><span>Overtime:</span><span>₹{p.overtime.toLocaleString()}</span></div>}
+                                  </div>
+                                  <div>
+                                    <p className="text-rose-600 font-medium border-b mb-1 pb-0.5">Deductions</p>
+                                    {Object.entries(p.deductions || {}).map(([k, v]) => (
+                                      <div key={k} className="flex justify-between"><span className="capitalize">{k}:</span><span>₹{Number(v).toLocaleString()}</span></div>
+                                    ))}
+                                    {Object.keys(p.deductions || {}).length === 0 && <div className="text-muted-foreground">None</div>}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       </div>
                     );
                   })}

@@ -134,7 +134,7 @@ export function SubSalesPortalPanel() {
       {/* Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard icon={<Building2 className="w-5 h-5" />} label="Universities" value={universities.length} color="primary" />
-        <StatCard icon={<MapPin className="w-5 h-5" />} label="Study Centers" value={centers.length} color="info" />
+        <StatCard icon={<MapPin className="w-5 h-5" />} label="Academic Partners" value={centers.length} color="info" />
         <StatCard icon={<GraduationCap className="w-5 h-5" />} label="Enrolled" value={totalEnrolled} color="success" sub={`${totalPending} pending`} />
         <StatCard icon={<Link className="w-5 h-5" />} label="Active Invites" value={activeInvites.length} color="warning" />
       </div>
@@ -144,7 +144,7 @@ export function SubSalesPortalPanel() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="invite_links">Invite Links</TabsTrigger>
           <TabsTrigger value="universities">Universities ({universities.length})</TabsTrigger>
-          <TabsTrigger value="centers">Study Centers ({centers.length})</TabsTrigger>
+          <TabsTrigger value="centers">Academic Partners ({centers.length})</TabsTrigger>
           <TabsTrigger value="enrollments">Enrollments</TabsTrigger>
         </TabsList>
 
@@ -224,7 +224,7 @@ export function SubSalesPortalPanel() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><MapPin className="w-3.5 h-3.5" />Assigned Study Centers</CardTitle></CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><MapPin className="w-3.5 h-3.5" />Assigned Academic Partners</CardTitle></CardHeader>
               <CardContent className="space-y-1.5 max-h-40 overflow-y-auto">
                 {centers.length === 0 ? <p className="text-xs text-muted-foreground">None assigned</p> :
                   centers.map((c: any) => {
@@ -306,11 +306,11 @@ export function SubSalesPortalPanel() {
           </div>
         </TabsContent>
 
-        {/* Study Centers */}
+        {/* Academic Partners */}
         <TabsContent value="centers">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {centers.length === 0 ? (
-              <p className="text-muted-foreground col-span-3 text-center py-8">No study centers assigned</p>
+              <p className="text-muted-foreground col-span-3 text-center py-8">No academic partners assigned</p>
             ) : centers.map((c: any) => {
               const stats = centerEnrollMap[c.id?.toString()] || { total: 0, enrolled: 0, pending: 0 };
               return (

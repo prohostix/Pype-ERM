@@ -112,7 +112,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
           description="Active partnerships"
         />
         <MetricCard
-          title="Study Centers"
+          title="Academic Partners"
           value={centerList.length}
           icon={Building}
           badge={{ label: `${pendingCenters.length} pending`, variant: 'secondary' }}
@@ -244,7 +244,7 @@ export function OperationsPanel({ activeModule }: OperationsPanelProps) {
   const renderCenters = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Study Centers</h2>
+        <h2 className="text-2xl font-bold">Academic Partners</h2>
         <div className="flex gap-2">
           <Button variant="outline">
             <Filter className="w-4 h-4 mr-2" />

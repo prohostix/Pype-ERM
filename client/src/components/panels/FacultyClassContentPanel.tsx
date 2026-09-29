@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Folder, FileText, Upload, Loader2, Download, BookOpen, ChevronDown, ChevronUp, User, UserPlus, Clock, Play, Users, CheckSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -27,7 +27,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
-  const [lessonForm, setLessonForm] = useState({ title: '', description: '', order: '' });
+  const [lessonForm, setLessonForm] = useState({ title: '', description: '', order: '', videoUrl: '' });
 
   // Assign Teacher Modal
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
@@ -65,6 +65,16 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
   const [materialForm, setMaterialForm] = useState({ title: '', description: '' });
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Assessment Modal
+  const [assessmentDialogOpen, setAssessmentDialogOpen] = useState(false);
+  const [loadingAssessment, setLoadingAssessment] = useState(false);
+  const [assessmentForm, setAssessmentForm] = useState({
+    title: 'Lesson Assessment',
+    description: '',
+    passingScore: '50',
+    questions: [] as any[]
+  });
 
   useEffect(() => {
     fetchModules();
@@ -134,8 +144,10 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       await api.delete(`/faculty-portal/modules/${moduleId}`);
       toast.success('Module deleted');
       fetchModules();
-    } catch (err) {
-      toast.error('Failed to delete module');
+    } catch (err: any) {
+      if (!err.isDeleteRequest) {
+        toast.error('Failed to delete module');
+      }
     }
   };
 
@@ -169,7 +181,9 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       fetchModules();
       toast.success('Lesson deleted successfully');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to delete lesson');
+      if (!err.isDeleteRequest) {
+        toast.error(err.response?.data?.message || 'Failed to delete lesson');
+      }
     }
   };
 
@@ -204,8 +218,10 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
       await api.delete(`/faculty-portal/materials/${materialId}`);
       toast.success('Material deleted');
       fetchModules();
-    } catch (err) {
-      toast.error('Failed to delete material');
+    } catch (err: any) {
+      if (!err.isDeleteRequest) {
+        toast.error('Failed to delete material');
+      }
     }
   };
 
@@ -218,6 +234,47 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  };
+
+  const openAssessmentDialog = async (lesson: any) => {
+    setActiveLessonId(lesson.id);
+    setAssessmentForm({ title: 'Lesson Assessment', description: '', passingScore: '50', questions: [] });
+    setAssessmentDialogOpen(true);
+    try {
+      setLoadingAssessment(true);
+      const res = await api.get(`/faculty-portal/lessons/${lesson.id}/assessment`);
+      if (res.data?.data) {
+        setAssessmentForm({
+          title: res.data.data.title,
+          description: res.data.data.description || '',
+          passingScore: String(res.data.data.passingScore),
+          questions: res.data.data.questions.map((q: any) => ({
+            questionText: q.questionText,
+            options: q.options,
+            correctIndex: q.correctIndex
+          }))
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingAssessment(false);
+    }
+  };
+
+  const handleAssessmentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeLessonId) return;
+    try {
+      setLoadingAssessment(true);
+      await api.post(`/faculty-portal/lessons/${activeLessonId}/assessment`, assessmentForm);
+      toast.success('Assessment configured successfully');
+      setAssessmentDialogOpen(false);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to configure assessment');
+    } finally {
+      setLoadingAssessment(false);
+    }
   };
 
   return (
@@ -259,7 +316,7 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                   </div>
                 </div>
                 <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
-                  <Button variant="outline" size="sm" onClick={() => { setActiveModuleId(mod.id); setEditingLessonId(null); setLessonForm({ title: '', description: '', order: '' }); setLessonDialogOpen(true); }}>
+                  <Button variant="outline" size="sm" onClick={() => { setActiveModuleId(mod.id); setEditingLessonId(null); setLessonForm({ title: '', description: '', order: '', videoUrl: '' }); setLessonDialogOpen(true); }}>
                     <Plus className="w-4 h-4 mr-1" /> Add Lesson
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => { setEditingModuleId(mod.id); setModuleForm({ title: mod.title, description: mod.description || '', order: String(mod.order) }); setModuleDialogOpen(true); }}>
@@ -283,10 +340,13 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
                               <h4 className="font-semibold text-sm">{lesson.title}</h4>
                             </div>
                             <div className="flex items-center gap-1">
+                              <Button variant="ghost" size="sm" onClick={() => openAssessmentDialog(lesson)} className="h-7 text-xs">
+                                <CheckSquare className="w-3 h-3 mr-1" /> Assessment
+                              </Button>
                               <Button variant="ghost" size="sm" onClick={() => { setActiveLessonId(lesson.id); setMaterialForm({ title: '', description: '' }); setUploadFile(null); setMaterialDialogOpen(true); }} className="h-7 text-xs">
                                 <Upload className="w-3 h-3 mr-1" /> Material
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => { setEditingLessonId(lesson.id); setLessonForm({ title: lesson.title, description: lesson.description || '', order: String(lesson.order) }); setLessonDialogOpen(true); }} className="h-7 w-7">
+                              <Button variant="ghost" size="icon" onClick={() => { setEditingLessonId(lesson.id); setLessonForm({ title: lesson.title, description: lesson.description || '', order: String(lesson.order), videoUrl: lesson.videoUrl || '' }); setLessonDialogOpen(true); }} className="h-7 w-7">
                                 <Edit className="w-3 h-3" />
                               </Button>
                               <Button variant="ghost" size="icon" onClick={() => handleDeleteLesson(lesson.id)} className="h-7 w-7 text-red-500">
@@ -372,6 +432,15 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
               <Textarea value={lessonForm.description} onChange={e => setLessonForm({ ...lessonForm, description: e.target.value })} />
             </div>
             <div className="space-y-2">
+              <Label>Video URL {academicClass?.academicCenter?.type !== 'online' && '(Optional)'}</Label>
+              <Input 
+                placeholder="e.g. YouTube or Vimeo link" 
+                value={lessonForm.videoUrl} 
+                onChange={e => setLessonForm({ ...lessonForm, videoUrl: e.target.value })} 
+                required={academicClass?.academicCenter?.type === 'online'}
+              />
+            </div>
+            <div className="space-y-2">
               <Label>Order</Label>
               <Input type="number" value={lessonForm.order} onChange={e => setLessonForm({ ...lessonForm, order: e.target.value })} />
             </div>
@@ -399,6 +468,86 @@ export function FacultyClassContentPanel({ academicClass, onBack }: { academicCl
             <Button type="submit" className="w-full" disabled={uploading}>
               {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
               {uploading ? 'Uploading...' : 'Upload File'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assessment Modal */}
+      <Dialog open={assessmentDialogOpen} onOpenChange={setAssessmentDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>Configure Lesson Assessment</DialogTitle></DialogHeader>
+          <form onSubmit={handleAssessmentSubmit} className="space-y-6 pt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Assessment Title</Label>
+                <Input value={assessmentForm.title} onChange={e => setAssessmentForm({ ...assessmentForm, title: e.target.value })} required />
+              </div>
+              <div className="space-y-2">
+                <Label>Passing Score (%)</Label>
+                <Input type="number" min="0" max="100" value={assessmentForm.passingScore} onChange={e => setAssessmentForm({ ...assessmentForm, passingScore: e.target.value })} required />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Description</Label>
+              <Textarea value={assessmentForm.description} onChange={e => setAssessmentForm({ ...assessmentForm, description: e.target.value })} />
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold">Questions ({assessmentForm.questions.length})</h3>
+                <Button type="button" variant="outline" size="sm" onClick={() => {
+                  setAssessmentForm({
+                    ...assessmentForm,
+                    questions: [...assessmentForm.questions, { questionText: '', options: ['', '', '', ''], correctIndex: 0 }]
+                  });
+                }}>
+                  <Plus className="w-4 h-4 mr-2" /> Add Question
+                </Button>
+              </div>
+
+              {assessmentForm.questions.map((q, qIndex) => (
+                <Card key={qIndex} className="relative">
+                  <CardContent className="p-4 space-y-4">
+                    <Button type="button" variant="ghost" size="icon" className="absolute top-2 right-2 text-red-500" onClick={() => {
+                      const newQs = [...assessmentForm.questions];
+                      newQs.splice(qIndex, 1);
+                      setAssessmentForm({ ...assessmentForm, questions: newQs });
+                    }}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                    <div className="space-y-2">
+                      <Label>Question {qIndex + 1}</Label>
+                      <Textarea value={q.questionText} onChange={e => {
+                        const newQs = [...assessmentForm.questions];
+                        newQs[qIndex].questionText = e.target.value;
+                        setAssessmentForm({ ...assessmentForm, questions: newQs });
+                      }} required className="mr-8" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {q.options.map((opt: string, oIndex: number) => (
+                        <div key={oIndex} className="flex items-center gap-2">
+                          <input type="radio" name={`correct-${qIndex}`} checked={q.correctIndex === oIndex} onChange={() => {
+                            const newQs = [...assessmentForm.questions];
+                            newQs[qIndex].correctIndex = oIndex;
+                            setAssessmentForm({ ...assessmentForm, questions: newQs });
+                          }} className="w-4 h-4 text-primary" required />
+                          <Input value={opt} onChange={e => {
+                            const newQs = [...assessmentForm.questions];
+                            newQs[qIndex].options[oIndex] = e.target.value;
+                            setAssessmentForm({ ...assessmentForm, questions: newQs });
+                          }} placeholder={`Option ${oIndex + 1}`} required />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <Button type="submit" className="w-full" disabled={loadingAssessment}>
+              {loadingAssessment ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckSquare className="w-4 h-4 mr-2" />}
+              {loadingAssessment ? 'Saving...' : 'Save Assessment'}
             </Button>
           </form>
         </DialogContent>

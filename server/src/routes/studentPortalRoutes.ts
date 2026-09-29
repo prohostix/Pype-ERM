@@ -8,7 +8,11 @@ import {
   getStudentFees,
   getStudentInvoices,
   submitReferral,
-  rateSession
+  rateSession,
+  videoHeartbeat,
+  recordVideoView,
+  getLessonAssessmentForStudent,
+  submitLessonAssessment
 } from '../controllers/studentPortalController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
@@ -23,8 +27,13 @@ router.get('/materials', getStudentMaterials);
 router.get('/classes', getStudentClasses);
 router.post('/classes/:classId/attendance', registerClassAttendance);
 router.post('/sessions/:sessionId/rate', rateSession);
+router.post('/video-heartbeat', videoHeartbeat);
+router.post('/video-view', recordVideoView);
 router.get('/fees', getStudentFees);
 router.get('/invoices', getStudentInvoices);
 router.post('/refer', submitReferral);
+
+router.get('/lessons/:lessonId/assessment', getLessonAssessmentForStudent);
+router.post('/lessons/:lessonId/assessment', submitLessonAssessment);
 
 export default router;

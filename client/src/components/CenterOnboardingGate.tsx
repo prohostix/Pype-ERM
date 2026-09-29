@@ -85,7 +85,7 @@ export function CenterOnboardingGate({ children }: Props) {
       <div className="w-full max-w-2xl space-y-6">
         <div className="text-center space-y-2">
           <Building2 className="w-12 h-12 text-primary mx-auto" />
-          <h1 className="text-2xl font-bold">{data?.centerName || 'Study Center Portal'}</h1>
+          <h1 className="text-2xl font-bold">{data?.centerName || 'Academic Partner Portal'}</h1>
           <p className="text-muted-foreground">Complete your onboarding to access the portal</p>
         </div>
 

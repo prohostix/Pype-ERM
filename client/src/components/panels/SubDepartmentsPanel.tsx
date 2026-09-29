@@ -218,7 +218,7 @@ export function SubDepartmentsPanel() {
                   <TabsList className="h-auto flex-wrap gap-1">
                     <TabsTrigger value="universities">Universities ({formData.assignedUniversities.length})</TabsTrigger>
                     <TabsTrigger value="programs">Programs ({formData.assignedPrograms.length})</TabsTrigger>
-                    <TabsTrigger value="centers">Study Centers ({formData.assignedCenters.length})</TabsTrigger>
+                    <TabsTrigger value="centers">Academic Partners ({formData.assignedCenters.length})</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="universities">
@@ -255,7 +255,7 @@ export function SubDepartmentsPanel() {
 
                   <TabsContent value="centers">
                     <div className="border rounded-lg p-3 max-h-48 overflow-y-auto space-y-2">
-                      {centers.length === 0 ? <p className="text-sm text-muted-foreground">No study centers found</p> :
+                      {centers.length === 0 ? <p className="text-sm text-muted-foreground">No academic partners found</p> :
                         centers.map((c: any) => (
                           <div key={c.id} className="flex items-center gap-2">
                             <Checkbox

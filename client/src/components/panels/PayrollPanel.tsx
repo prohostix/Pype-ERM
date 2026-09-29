@@ -209,11 +209,50 @@ export function PayrollPanel() {
                               {p.status.replace(/_/g, ' ')}
                             </Badge>
                           </div>
-                          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground">
+                          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground mb-2">
                             <span>Basic: ₹{p.basicSalary?.toLocaleString()}</span>
                             <span>Gross: ₹{p.grossSalary?.toLocaleString()}</span>
                             <span className="font-semibold text-foreground">Net: ₹{p.netSalary?.toLocaleString()}</span>
                             {p.remarks && <span className="text-orange-600">{p.remarks}</span>}
+                          </div>
+                          
+                          {/* Full Breakdown */}
+                          <div className="grid grid-cols-2 gap-4 text-xs bg-muted/20 p-2.5 rounded-lg border border-border/40">
+                            <div>
+                              <p className="font-semibold text-emerald-600 mb-1">Earnings</p>
+                              <div className="space-y-0.5 opacity-80">
+                                {Object.entries(p.allowances || {}).map(([key, val]) => (
+                                  <div key={key} className="flex justify-between">
+                                    <span className="capitalize">{key}:</span>
+                                    <span>₹{Number(val).toLocaleString()}</span>
+                                  </div>
+                                ))}
+                                {p.bonus > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Bonus:</span>
+                                    <span>₹{p.bonus.toLocaleString()}</span>
+                                  </div>
+                                )}
+                                {p.overtime > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Overtime:</span>
+                                    <span>₹{p.overtime.toLocaleString()}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div>
+                              <p className="font-semibold text-rose-600 mb-1">Deductions</p>
+                              <div className="space-y-0.5 opacity-80">
+                                {Object.entries(p.deductions || {}).map(([key, val]) => (
+                                  <div key={key} className="flex justify-between">
+                                    <span className="capitalize">{key === 'wfh' ? 'WFH Penalty' : key}:</span>
+                                    <span>₹{Number(val).toLocaleString()}</span>
+                                  </div>
+                                ))}
+                                {Object.keys(p.deductions || {}).length === 0 && <span className="text-muted-foreground">None</span>}
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex gap-2 shrink-0">

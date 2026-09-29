@@ -87,7 +87,7 @@ export function FinanceCenterVerificationPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Pending Payment Verification</h2>
-          <p className="text-muted-foreground text-sm mt-1">Verify authorisation fee payment for study centers.</p>
+          <p className="text-muted-foreground text-sm mt-1">Verify authorisation fee payment for academic partners.</p>
         </div>
         <Button variant="outline" size="sm" onClick={loadCenters} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
@@ -182,7 +182,7 @@ export function FinanceCenterVerificationPanel() {
           </DialogHeader>
           {dialog?.action === 'approve' && (
             <p className="text-sm text-muted-foreground">
-              Approving will activate the study center and generate login credentials.
+              Approving will activate the academic partner and generate login credentials.
             </p>
           )}
           <div className="space-y-3 py-2">
@@ -212,7 +212,7 @@ export function FinanceCenterVerificationPanel() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Key className="w-5 h-5 text-primary" /> Study Center Login Credentials
+              <Key className="w-5 h-5 text-primary" /> Academic Partner Login Credentials
             </DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">

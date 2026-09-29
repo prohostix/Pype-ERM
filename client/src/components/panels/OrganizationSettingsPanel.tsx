@@ -51,19 +51,46 @@ export function OrganizationSettingsPanel() {
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const toastId = toast.loading('Uploading logo...');
-    try {
-      const uploadData = new FormData();
-      uploadData.append('file', file);
-      const res = await api.post('/auth/upload', uploadData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      setFormData(prev => ({ ...prev, logo: res.data.url }));
-      toast.success('Logo uploaded successfully!', { id: toastId });
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to upload logo', { id: toastId });
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File size must be less than 2MB');
+      return;
     }
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.src = url;
+
+    img.onload = async () => {
+      URL.revokeObjectURL(url);
+      
+      const MAX_WIDTH = 600;
+      const MAX_HEIGHT = 150;
+
+      if (img.width > MAX_WIDTH || img.height > MAX_HEIGHT) {
+        toast.error(`Image is too large (${img.width}x${img.height}px). Maximum allowed dimensions are ${MAX_WIDTH}x${MAX_HEIGHT}px.`);
+        return;
+      }
+
+      const toastId = toast.loading('Uploading logo...');
+      try {
+        const uploadData = new FormData();
+        uploadData.append('file', file);
+        const res = await api.post('/auth/upload', uploadData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        setFormData(prev => ({ ...prev, logo: res.data.url }));
+        toast.success('Logo uploaded successfully!', { id: toastId });
+      } catch (err) {
+        console.error(err);
+        toast.error('Failed to upload logo', { id: toastId });
+      }
+    };
+    
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      toast.error('Invalid image file');
+    };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,87 +112,105 @@ export function OrganizationSettingsPanel() {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading settings...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-600 rounded-full animate-spin" />
+        <p className="text-muted-foreground font-medium">Loading settings...</p>
+      </div>
+    );
   }
 
   const logoUrl = api.getFileUrl(formData.logo);
 
   return (
-    <Card className="max-w-2xl mx-auto shadow-md">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600">
-            <Building2 className="w-6 h-6" />
+    <div className="p-4 sm:p-6 lg:p-8 w-full">
+      <Card className="max-w-3xl mx-auto shadow-sm">
+        <CardHeader className="border-b px-6 py-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+              <Building2 className="w-6 h-6" />
+            </div>
+            <div>
+              <CardTitle className="text-xl">Organisation Settings</CardTitle>
+              <CardDescription className="mt-1">
+                Configure your institution's profile branding and logo settings
+              </CardDescription>
+            </div>
           </div>
-          <div>
-            <CardTitle>Organisation Settings</CardTitle>
-            <CardDescription>Configure your institution's profile branding and logo settings</CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-center gap-6 pb-4 border-b">
-            <div className="w-24 h-24 rounded-xl border bg-slate-50 dark:bg-slate-900 flex items-center justify-center overflow-hidden shrink-0 relative group">
+        </CardHeader>
+        
+        <CardContent className="p-6 pt-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Logo Section */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div className="w-28 h-28 rounded-xl border border-dashed border-border bg-muted/50 flex items-center justify-center overflow-hidden shrink-0 relative group transition-colors hover:border-primary/50">
               {logoUrl ? (
-                <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                <img src={logoUrl} alt="Logo" className="w-full h-full object-contain p-2" />
               ) : (
-                <Globe className="w-10 h-10 text-slate-300" />
+                <Globe className="w-10 h-10 text-muted-foreground group-hover:text-primary/70 transition-colors" />
               )}
             </div>
-            <div className="space-y-2 text-center sm:text-left">
+            <div className="space-y-2 text-center sm:text-left flex-1 pt-2">
+              <h3 className="text-sm font-medium">Institution Logo</h3>
+              <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                Supported formats: PNG, JPG or WebP (max 2MB).<br />
+                <span className="text-xs">Recommended: Fits top navbar (Max {600}x{150}px)</span>
+              </p>
               <Label htmlFor="logo-input" className="cursor-pointer">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium hover:bg-muted transition-colors">
-                  <Upload className="w-4 h-4" /> Upload New Logo
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium hover:bg-muted transition-colors">
+                  <Upload className="w-4 h-4" /> {logoUrl ? 'Change Logo' : 'Upload Logo'}
                 </div>
               </Label>
               <input id="logo-input" type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} />
-              <p className="text-xs text-muted-foreground">Supported formats: PNG, JPG or WebP (max 2MB)</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Institution / Organisation Name</Label>
-              <Input
-                required
-                value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. Pype ERM Institute"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Billing Email Address</Label>
-              <Input
-                type="email"
-                required
-                value={formData.email}
-                onChange={e => setFormData({ ...formData, email: e.target.value })}
-                placeholder="e.g. accounts@pype.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Contact Number</Label>
-              <Input
-                required
-                value={formData.phone}
-                onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="e.g. +91 9876543210"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Registered Address</Label>
-              <Input
-                required
-                value={formData.address}
-                onChange={e => setFormData({ ...formData, address: e.target.value })}
-                placeholder="e.g. 1st Floor, Building Block 4"
-              />
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">General Details</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="space-y-2">
+                <Label>Institution / Organisation Name</Label>
+                <Input
+                  required
+                  value={formData.name}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g. Pype ERM Institute"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Billing Email Address</Label>
+                <Input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={e => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="e.g. accounts@pype.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Contact Number</Label>
+                <Input
+                  required
+                  value={formData.phone}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="e.g. +91 9876543210"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Registered Address</Label>
+                <Input
+                  required
+                  value={formData.address}
+                  onChange={e => setFormData({ ...formData, address: e.target.value })}
+                  placeholder="e.g. 1st Floor, Building Block 4"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t">
-            <div className="space-y-2">
+          <div className="space-y-4 pt-6 border-t">
+            <h3 className="text-sm font-medium">Preferences</h3>
+            <div className="space-y-2 max-w-lg">
               <Label>Enrollment Approval Flow</Label>
               <select
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -175,13 +220,13 @@ export function OrganizationSettingsPanel() {
                 <option value="direct">Direct to Operations (Default)</option>
                 <option value="sales_admin_approval">Require Sales Admin Approval</option>
               </select>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1.5">
                 Determine if sales enrollments go directly to operations or if they require a sales admin's approval first.
               </p>
             </div>
           </div>
 
-          <div className="flex justify-end pt-4">
+          <div className="flex justify-end pt-6 border-t">
             <Button type="submit" disabled={saving}>
               <Save className="w-4 h-4 mr-2" />
               {saving ? 'Saving...' : 'Save Settings'}
@@ -190,5 +235,6 @@ export function OrganizationSettingsPanel() {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }

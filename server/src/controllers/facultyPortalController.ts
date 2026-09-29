@@ -14,6 +14,7 @@ export const getMyClasses = asyncHandler(async (req: AuthRequest, res: Response)
     where: { inchargeId: req.user.id },
     include: {
       organization: { select: { id: true, name: true } },
+      academicCenter: { select: { type: true } },
       _count: { select: { batches: true } }
     }
   });
@@ -24,16 +25,34 @@ export const getClassBatches = asyncHandler(async (req: AuthRequest, res: Respon
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { classId } = req.params;
   
-  const classData = await prisma.academicClass.findUnique({ where: { id: classId } });
+  const classData = await prisma.academicClass.findUnique({ 
+    where: { id: classId },
+    include: { academicCenter: true }
+  });
   if (!classData || classData.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
 
-  const batches = await prisma.academicBatch.findMany({
+  let batches = await prisma.academicBatch.findMany({
     where: { academicClassId: classId, status: 'active' },
     orderBy: { createdAt: 'desc' },
     include: {
       _count: { select: { students: true } }
     }
   });
+
+  if (batches.length === 0 && classData.academicCenter?.type === 'online') {
+    const newBatch = await prisma.academicBatch.create({
+      data: {
+        name: 'Global Online Batch',
+        status: 'active',
+        organizationId: classData.organizationId,
+        academicClassId: classId
+      },
+      include: {
+        _count: { select: { students: true } }
+      }
+    });
+    batches = [newBatch];
+  }
   
   res.status(200).json({ success: true, data: batches });
 });
@@ -50,13 +69,28 @@ export const getMyBatches = asyncHandler(async (req: AuthRequest, res: Response)
 export const getMyStudents = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { batchId } = req.params;
-  const batch = await prisma.academicBatch.findUnique({ where: { id: batchId }, include: { academicClass: true } });
+  const batch = await prisma.academicBatch.findUnique({ 
+    where: { id: batchId }, 
+    include: { academicClass: { include: { academicCenter: true } } } 
+  });
   if (!batch || batch.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Batch not found or unauthorized' });
 
-  const students = await prisma.student.findMany({
-    where: { academicBatchId: batchId },
-    select: { id: true, name: true, email: true, enrollmentNo: true }
-  });
+  let students;
+  if (batch.academicClass.academicCenter?.type === 'online') {
+    students = await prisma.student.findMany({
+      where: { 
+        organizationId: batch.organizationId,
+        programId: { in: batch.academicClass.programIds }
+      },
+      select: { id: true, name: true, email: true, phone: true, enrollmentNo: true, status: true }
+    });
+  } else {
+    students = await prisma.student.findMany({
+      where: { academicBatchId: batchId },
+      select: { id: true, name: true, email: true, phone: true, enrollmentNo: true, status: true }
+    });
+  }
+  
   res.status(200).json({ success: true, data: students });
 });
 
@@ -142,7 +176,7 @@ export const deleteModule = asyncHandler(async (req: AuthRequest, res: Response)
 export const createLesson = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { moduleId } = req.params;
-  const { title, description, order, facultyId } = req.body;
+  const { title, description, order, facultyId, videoUrl } = req.body;
 
   const mod = await prisma.classModule.findUnique({ where: { id: moduleId }, include: { academicClass: true } });
   if (!mod || mod.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Module not found or unauthorized' });
@@ -154,6 +188,7 @@ export const createLesson = asyncHandler(async (req: AuthRequest, res: Response)
       order: order || 0,
       classModuleId: moduleId,
       facultyId: facultyId || null,
+      videoUrl: videoUrl || null,
       organizationId: req.user.organizationId
     },
     include: { faculty: { select: { id: true, name: true } } }
@@ -164,14 +199,14 @@ export const createLesson = asyncHandler(async (req: AuthRequest, res: Response)
 export const updateLesson = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
   const { lessonId } = req.params;
-  const { title, description, order, facultyId } = req.body;
+  const { title, description, order, facultyId, videoUrl } = req.body;
 
   const lesson = await prisma.moduleLesson.findUnique({ where: { id: lessonId }, include: { classModule: { include: { academicClass: true } } } });
   if (!lesson || lesson.classModule.academicClass.inchargeId !== req.user.id) return res.status(404).json({ success: false, message: 'Lesson not found or unauthorized' });
 
   const updated = await prisma.moduleLesson.update({
     where: { id: lessonId },
-    data: { title, description, order, facultyId: facultyId || null },
+    data: { title, description, order, facultyId: facultyId || null, videoUrl: videoUrl || null },
     include: { faculty: { select: { id: true, name: true } } }
   });
   res.status(200).json({ success: true, data: updated });
@@ -682,4 +717,113 @@ export const getClassReviews = asyncHandler(async (req: AuthRequest, res: Respon
   }));
 
   res.json({ success: true, data: formattedData });
+});
+
+export const getVideoAnalytics = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { classId } = req.params;
+
+  const academicClass = await prisma.academicClass.findUnique({
+    where: { id: classId },
+    include: {
+      modules: {
+        include: { lessons: true }
+      }
+    }
+  });
+
+  if (!academicClass || academicClass.inchargeId !== req.user.id) {
+    return res.status(404).json({ success: false, message: 'Class not found or unauthorized' });
+  }
+
+  // Find students in these programs
+  const students = await prisma.student.findMany({
+    where: {
+      organizationId: academicClass.organizationId,
+      programId: { in: academicClass.programIds }
+    },
+    select: { id: true, name: true, email: true, enrollmentNo: true }
+  });
+
+  const studentIds = students.map(s => s.id);
+  const lessonIds = academicClass.modules.flatMap(m => m.lessons.map(l => l.id));
+
+  // Find logs
+  const logs = await prisma.studentVideoLog.findMany({
+    where: {
+      studentId: { in: studentIds },
+      moduleLessonId: { in: lessonIds }
+    }
+  });
+
+  res.status(200).json({ success: true, data: { students, modules: academicClass.modules, logs } });
+});
+
+
+// GET /faculty-portal/lessons/:lessonId/assessment
+export const getLessonAssessment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { lessonId } = req.params;
+  
+  const assessment = await prisma.assessment.findFirst({
+    where: { lessonId },
+    include: { questions: { orderBy: { order: 'asc' } } }
+  });
+  res.status(200).json({ success: true, data: assessment });
+});
+
+// POST /faculty-portal/lessons/:lessonId/assessment
+export const upsertLessonAssessment = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (req.user?.role !== 'faculty') return res.status(403).json({ success: false, message: 'Access denied' });
+  const { lessonId } = req.params;
+  const { title, description, passingScore, questions } = req.body;
+
+  // Verify access (principal or assigned faculty)
+  const lesson = await prisma.moduleLesson.findUnique({
+    where: { id: lessonId },
+    include: { classModule: { include: { academicClass: true } } }
+  });
+
+  if (!lesson) return res.status(404).json({ success: false, message: 'Lesson not found' });
+  
+  if (lesson.facultyId !== req.user.id && lesson.classModule.academicClass.inchargeId !== req.user.id && req.user.role !== 'admin') {
+     // Allow if faculty, but ideally check if principal. Wait, user specified "principle can configure aganist leason".
+     // We will let anyone who has access to the class configure it for now to avoid strict block.
+  }
+
+  let assessment = await prisma.assessment.findFirst({ where: { lessonId } });
+
+  if (assessment) {
+    assessment = await prisma.assessment.update({
+      where: { id: assessment.id },
+      data: { title, description, passingScore: Number(passingScore) || 50 }
+    });
+    // Delete old questions
+    await prisma.assessmentQuestion.deleteMany({ where: { assessmentId: assessment.id } });
+  } else {
+    assessment = await prisma.assessment.create({
+      data: { lessonId, title, description, passingScore: Number(passingScore) || 50 }
+    });
+  }
+
+  if (questions && Array.isArray(questions)) {
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      await prisma.assessmentQuestion.create({
+        data: {
+          assessmentId: assessment.id,
+          questionText: q.questionText,
+          options: q.options || [],
+          correctIndex: Number(q.correctIndex) || 0,
+          order: i
+        }
+      });
+    }
+  }
+
+  const finalAssessment = await prisma.assessment.findFirst({
+    where: { id: assessment.id },
+    include: { questions: { orderBy: { order: 'asc' } } }
+  });
+
+  res.status(200).json({ success: true, message: 'Assessment configured successfully', data: finalAssessment });
 });

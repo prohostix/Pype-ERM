@@ -357,12 +357,12 @@ export const universities: University[] = [
   },
 ];
 
-// Study Centers
+// Academic Partners
 export const studyCenters: StudyCenter[] = [
   {
     id: 'center-001',
     organizationId: 'org-001',
-    name: 'Delhi Study Center - Karol Bagh',
+    name: 'Delhi Academic Partner - Karol Bagh',
     code: 'DSC-KB-001',
     address: '15/8, Karol Bagh, New Delhi - 110005',
     contact: '+91-11-28765432',
@@ -377,7 +377,7 @@ export const studyCenters: StudyCenter[] = [
   {
     id: 'center-002',
     organizationId: 'org-001',
-    name: 'Mumbai Study Center - Andheri',
+    name: 'Mumbai Academic Partner - Andheri',
     code: 'MSC-AN-001',
     address: '45, Andheri West, Mumbai - 400053',
     contact: '+91-22-26549876',
@@ -392,7 +392,7 @@ export const studyCenters: StudyCenter[] = [
   {
     id: 'center-003',
     organizationId: 'org-001',
-    name: 'Bangalore Study Center - Koramangala',
+    name: 'Bangalore Academic Partner - Koramangala',
     code: 'BSC-KR-001',
     address: '78, Koramangala, Bangalore - 560034',
     contact: '+91-80-25561234',
@@ -405,7 +405,7 @@ export const studyCenters: StudyCenter[] = [
   {
     id: 'center-004',
     organizationId: 'org-001',
-    name: 'Chennai Study Center - T Nagar',
+    name: 'Chennai Academic Partner - T Nagar',
     code: 'CSC-TN-001',
     address: '23, T Nagar, Chennai - 600017',
     contact: '+91-44-28151234',

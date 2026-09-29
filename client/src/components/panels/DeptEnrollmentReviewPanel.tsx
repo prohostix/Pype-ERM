@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search, Download } from 'lucide-react';
+import { RefreshCw, CheckCircle, XCircle, Eye, FileText, User, Search, Download, School } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -348,7 +348,15 @@ export function DeptEnrollmentReviewPanel() {
                       <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
                         <span>{e.studentEmail}</span>
                         {e.program && <span>{e.program.name} ({e.program.code})</span>}
-                        {e.studyCenter && <span>{e.studyCenter.name}</span>}
+                        
+                        {e.studyCenter ? (
+                          <span className="font-medium text-amber-600 flex items-center gap-0.5 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50"><School className="w-3 h-3" /> Center: {e.studyCenter.name}</span>
+                        ) : e.salesUser ? (
+                          <span className="font-medium text-blue-600 flex items-center gap-0.5 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/50"><User className="w-3 h-3" /> Sales: {e.salesUser.name}</span>
+                        ) : (
+                          <span className="font-medium text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/50">Direct Enrollment</span>
+                        )}
+
                         <span>{new Date(e.createdAt).toLocaleDateString('en-IN')}</span>
                       </div>
                       {/* Show dept remarks on completed tab */}
@@ -471,7 +479,7 @@ export function DeptEnrollmentReviewPanel() {
                 <div className="grid grid-cols-2 gap-3">
                   <InfoField label="Program" value={viewStudent.program ? `${viewStudent.program.name} (${viewStudent.program.code})${viewStudent.specialisation ? ` - ${viewStudent.specialisation}` : ''}` : null} />
                   <InfoField label="University" value={viewStudent.program?.university?.name} />
-                  <InfoField label="Study Center" value={viewStudent.studyCenter?.name} />
+                  <InfoField label="Academic Partner" value={viewStudent.studyCenter?.name} />
                   <InfoField label="Session" value={viewStudent.session?.name} />
                 </div>
               </div>

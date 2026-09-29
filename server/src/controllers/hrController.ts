@@ -51,7 +51,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
       user: { select: { name: true, email: true, designation: true } },
       department: { select: { name: true } },
       deptApprover: { select: { name: true } },
-      hrApprover: { select: { name: true } }
+      hrApprover: { select: { name: true, role: true } }
     },
     orderBy: { createdAt: 'desc' }
   });
@@ -73,13 +73,14 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   }
 
   const allocation = await prisma.leaveAllocation.findFirst({
-    where: { userId: req.user.id, year: currentYear }
+    where: { userId: req.user.id, year: currentYear, month: currentMonth }
   });
 
   const defaultBalance = {
     sick: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
     casual: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
     earned: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
+    wfh: { yearlyLimit: 0, accrued: 0, used: 0, available: 0, carryForward: 0 },
     unpaid: { taken: 0 }
   };
 
@@ -133,6 +134,17 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   });
   const unpaidTaken = unpaidRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
 
+  // 5. WFH (Monthly)
+  const wfhMonthlyAccrual = allocation.wfh / 12;
+  const usedWfhRaw = await prisma.leaveRequest.findMany({
+    where: {
+      employeeId: req.user.id, type: 'wfh',
+      status: { in: ['approved', 'dept_approved'] },
+      startDate: { gte: new Date(currentYear, currentMonth - 1, 1), lt: new Date(currentYear, currentMonth, 1) }
+    }
+  });
+  const usedWfhThisMonth = usedWfhRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+
   const balance = {
     sick: {
       yearlyLimit: allocation.sickLeave,
@@ -153,6 +165,13 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
       accrued: accruedEarned,
       used: usedEarned,
       available: Math.max(0, accruedEarned - usedEarned),
+      carryForward: 0
+    },
+    wfh: {
+      yearlyLimit: allocation.wfh,
+      accrued: wfhMonthlyAccrual,
+      used: usedWfhThisMonth,
+      available: Math.max(0, wfhMonthlyAccrual - usedWfhThisMonth),
       carryForward: 0
     },
     unpaid: { taken: unpaidTaken }
@@ -183,49 +202,74 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
 
   let finalType = type;
 
-  if (type === 'sick' || type === 'casual') {
+  if (type === 'sick' || type === 'casual' || type === 'wfh') {
     const allocation = await prisma.leaveAllocation.findFirst({
-      where: { userId: req.user.id, year: currentYear }
+      where: { userId: req.user.id, year: currentYear, month: currentMonth }
     });
 
     if (!allocation) {
       finalType = 'unpaid';
     } else {
-      if (type === 'sick') {
-        const monthlyAccrual = allocation.sickLeave / 12;
+      const getUsedSick = async () => {
         const usedSickThisMonth = await prisma.leaveRequest.findMany({
           where: {
-            employeeId: req.user.id,
-            type: 'sick',
+            employeeId: req.user.id, type: 'sick',
             status: { in: ['approved', 'dept_approved', 'pending'] },
             startDate: { gte: new Date(currentYear, currentMonth - 1, 1), lt: new Date(currentYear, currentMonth, 1) }
           }
         });
-        
-        const usedDays = usedSickThisMonth.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+        return usedSickThisMonth.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+      };
 
-        if (requestedDays > (monthlyAccrual - usedDays)) {
-          finalType = 'unpaid';
-        }
-      } else if (type === 'casual') {
-        const monthlyAccrual = allocation.casualLeave / 12;
+      const getUsedCasual = async () => {
         const lookbackStart = new Date(currentYear, currentMonth - 3, 1);
-        
         const usedCasualRecent = await prisma.leaveRequest.findMany({
           where: {
-            employeeId: req.user.id,
-            type: 'casual',
+            employeeId: req.user.id, type: 'casual',
             status: { in: ['approved', 'dept_approved', 'pending'] },
             startDate: { gte: lookbackStart, lt: new Date(currentYear, currentMonth, 1) }
           }
         });
-        
-        const usedDays = usedCasualRecent.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
-        const availableBalance = (monthlyAccrual * 3) - usedDays;
-        
+        return usedCasualRecent.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+      };
+
+      if (type === 'sick') {
+        const monthlyAccrual = allocation.sickLeave / 12;
+        const usedDays = await getUsedSick();
+        const availableBalance = monthlyAccrual - usedDays;
+
         if (requestedDays > availableBalance) {
-          finalType = 'unpaid';
+          // Fallback to casual
+          const casualMonthlyAccrual = allocation.casualLeave / 12;
+          const usedCasual = await getUsedCasual();
+          const availableCasual = (casualMonthlyAccrual * 3) - usedCasual;
+
+          if (requestedDays <= availableCasual) {
+            finalType = 'casual';
+          } else {
+            finalType = 'unpaid';
+          }
         }
+      } else if (type === 'casual') {
+        const casualMonthlyAccrual = allocation.casualLeave / 12;
+        const usedCasual = await getUsedCasual();
+        const availableCasual = (casualMonthlyAccrual * 3) - usedCasual;
+        
+        if (requestedDays > availableCasual) {
+          // Fallback to sick
+          const sickMonthlyAccrual = allocation.sickLeave / 12;
+          const usedSick = await getUsedSick();
+          const availableSick = sickMonthlyAccrual - usedSick;
+
+          if (requestedDays <= availableSick) {
+            finalType = 'sick';
+          } else {
+            finalType = 'unpaid';
+          }
+        }
+      } else if (type === 'wfh') {
+        // WFH limits are handled strictly via salary deductions for exceeded days, 
+        // so we don't force a fallback to unpaid here.
       }
     }
   }
@@ -240,7 +284,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
       endDate: end,
       employeeId: req.user.id, 
       organizationId: req.user.organizationId,
-      departmentId: departmentId || req.user.departmentId || ''
+      departmentId: departmentId || req.user.departmentId || null
     }
   });
 
@@ -248,23 +292,32 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
     const me = await prisma.user.findUnique({ where: { id: req.user.id } });
     let notifyUserId = me?.reportingTo;
     
-    if (!notifyUserId && (departmentId || me?.departmentId)) {
-      const deptId = departmentId || me?.departmentId;
-      if (deptId) {
-        const dept = await prisma.department.findUnique({ where: { id: deptId } });
-        notifyUserId = dept?.managerId;
-      }
-    }
-
-    if (notifyUserId) {
-      sendPushNotification(notifyUserId, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+    if (me?.role === 'hr_admin') {
+      const executives = await prisma.user.findMany({
+        where: { role: { in: ['ceo', 'general_manager'] }, organizationId: req.user.organizationId }
+      });
+      executives.forEach(exec => {
+        sendPushNotification(exec.id, "New Leave Request from HR", `${me?.name || 'HR'} has requested leave. Pending your approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      });
     } else {
-      const hrAdmins = await prisma.user.findMany({
-        where: { role: 'hr_admin', organizationId: req.user.organizationId }
-      });
-      hrAdmins.forEach(hr => {
-        sendPushNotification(hr.id, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
-      });
+      if (!notifyUserId && (departmentId || me?.departmentId)) {
+        const deptId = departmentId || me?.departmentId;
+        if (deptId) {
+          const dept = await prisma.department.findUnique({ where: { id: deptId } });
+          notifyUserId = dept?.managerId;
+        }
+      }
+
+      if (notifyUserId) {
+        sendPushNotification(notifyUserId, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+      } else {
+        const hrAdmins = await prisma.user.findMany({
+          where: { role: 'hr_admin', organizationId: req.user.organizationId }
+        });
+        hrAdmins.forEach(hr => {
+          sendPushNotification(hr.id, "New Leave Request", `${me?.name || 'An employee'} has requested leave`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+        });
+      }
     }
   } catch (err) {
     console.error("Failed to send notification:", err);
@@ -322,12 +375,21 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
     }
     
     if (action === 'approve' && employee) {
-      const hrAdmins = await prisma.user.findMany({
-        where: { role: 'hr_admin', organizationId: employee.organizationId }
-      });
-      hrAdmins.forEach(hr => {
-        sendPushNotification(hr.id, "Pending HR Approval", `Department approved leave for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
-      });
+      if (req.user.role === 'hr_admin') {
+        const execs = await prisma.user.findMany({
+          where: { role: { in: ['ceo', 'general_manager'] }, organizationId: employee.organizationId }
+        });
+        execs.forEach(exec => {
+          sendPushNotification(exec.id, "Pending Final Approval", `HR approved leave for ${employee.name}. Pending your final approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+        });
+      } else {
+        const hrAdmins = await prisma.user.findMany({
+          where: { role: 'hr_admin', organizationId: employee.organizationId }
+        });
+        hrAdmins.forEach(hr => {
+          sendPushNotification(hr.id, "Pending HR Approval", `Department approved leave for ${employee.name}. Pending final HR approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
+        });
+      }
     }
   } catch (err) {
     console.error(err);
@@ -361,7 +423,7 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
     // Generate attendance records for the leave duration
     const startDate = new Date(leave.startDate);
     const endDate = new Date(leave.endDate);
-    const statusToSet = leave.isHalfDay ? 'half_day' : 'leave';
+    const statusToSet = leave.type === 'wfh' ? 'wfh' : (leave.isHalfDay ? 'half_day' : 'leave');
 
     // Loop through each day (inclusive)
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
@@ -419,7 +481,7 @@ export const getMyLeaves = asyncHandler(async (req: AuthRequest, res: Response) 
       user: { select: { name: true, email: true, designation: true } },
       department: { select: { name: true } },
       deptApprover: { select: { name: true } },
-      hrApprover: { select: { name: true } }
+      hrApprover: { select: { name: true, role: true } }
     },
     orderBy: { createdAt: 'desc' }
   });

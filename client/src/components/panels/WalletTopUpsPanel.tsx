@@ -77,7 +77,7 @@ export function WalletTopUpsPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Wallet Top-Up Requests</h2>
-          <p className="text-muted-foreground text-sm mt-1">Approve or reject study center wallet top-up requests.</p>
+          <p className="text-muted-foreground text-sm mt-1">Approve or reject academic partner wallet top-up requests.</p>
         </div>
         <Button variant="outline" size="sm" onClick={fetch} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh

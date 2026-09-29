@@ -157,6 +157,15 @@ export const getDashboardMetrics = asyncHandler(async (req: AuthRequest, res: Re
     
     metrics.pendingLeaves = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
     metrics.totalVacancies = await prisma.vacancy.count({ where: { organizationId: orgId, status: 'open' } });
+
+    metrics.probationEnded = await prisma.employeeProfile.count({
+      where: {
+        organizationId: orgId as string,
+        probationEndDate: { lte: today },
+        confirmationDate: null,
+        user: { status: 'active' }
+      }
+    });
   }
 
   if (['finance_admin', 'finance_sub_admin', 'ceo', 'org_admin'].includes(role)) {

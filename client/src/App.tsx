@@ -33,7 +33,6 @@ const EMPLOYEE_NAV_ITEMS: TableItem[] = [
 
 const STUDENT_NAV_ITEMS: TableItem[] = [
   { id: 'overview', label: 'Overview' },
-  { id: 'classes', label: 'Live Classes' },
   { id: 'materials', label: 'Classes & E-Books' },
   { id: 'fees', label: 'Fee details' },
   { id: 'notifications', label: 'Notifications' },
@@ -403,6 +402,8 @@ function App() {
         { id: 'escalations', label: 'Escalations' },
         { id: 'students', label: 'Students' },
         { id: 'enrollment_review', label: 'Enrollment Review' },
+        { id: 'leaves', label: 'Leave Requests' },
+        { id: 'attendance', label: 'Attendance' },
         { id: 'invoices', label: 'Invoices' },
         { id: 'collections', label: 'Collections' },
         { id: 'leads', label: 'Leads' },
@@ -432,7 +433,7 @@ function App() {
         { id: 'faculties', label: 'Faculties' },
         { id: 'academic_centers', label: 'Academic Centers' },
 
-        { id: 'study_centers', label: 'Study Centers' },
+        { id: 'study_centers', label: 'Academic Partners' },
         { id: 'invoices', label: 'Invoices' },
         { id: 'payments', label: 'Payments' },
         { id: 'expenses', label: 'Expenses' },
@@ -485,12 +486,9 @@ function App() {
     if (user.role === 'center_admin') {
       return [
         { id: 'dashboard', label: 'Dashboard' },
-        { id: 'center_wallet', label: 'Wallet' },
         { id: 'enroll_student', label: 'Enroll Student' },
         { id: 'center_enrollments', label: 'My Enrollments' },
         { id: 'center_programs', label: 'Programs & Materials' },
-        { id: 'tasks', label: 'Tasks' },
-        { id: 'meetings', label: 'Meetings' },
       ];
     }
 

@@ -12,11 +12,37 @@ export const getSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Respo
 });
 
 export const getFinanceSalaryConfigs = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { status } = req.query;
+  const whereClause: any = { organizationId: req.user.organizationId };
+  if (status) {
+    whereClause.approvalStatus = status;
+  }
+
   const configs = await prisma.salaryConfig.findMany({
-    where: { organizationId: req.user.organizationId, approvalStatus: 'pending_approval' },
-    include: { user: { select: { name: true, email: true, designation: true } } }
+    where: whereClause,
+    include: { user: { select: { name: true, email: true, designation: true, role: true, departmentId: true } } },
+    orderBy: { updatedAt: 'desc' }
   });
-  res.json({ success: true, count: configs.length, data: configs });
+
+  const allConfigs = await prisma.salaryConfig.groupBy({
+    by: ['approvalStatus'],
+    where: { organizationId: req.user.organizationId },
+    _count: { approvalStatus: true }
+  });
+
+  const summary = {
+    pending_approval: 0,
+    approved: 0,
+    rejected: 0
+  };
+
+  allConfigs.forEach(item => {
+    if (summary[item.approvalStatus as keyof typeof summary] !== undefined) {
+      summary[item.approvalStatus as keyof typeof summary] = item._count.approvalStatus;
+    }
+  });
+
+  res.json({ success: true, count: configs.length, data: configs, summary });
 });
 
 export const getSalaryConfig = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -54,40 +80,43 @@ export const deleteSalaryConfig = asyncHandler(async (req: AuthRequest, res: Res
 
 export const getLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.query.year) || new Date().getFullYear();
+  const month = Number(req.query.month) || (new Date().getMonth() + 1);
   const allocations = await prisma.leaveAllocation.findMany({
-    where: { organizationId: req.user.organizationId, year },
-    include: { user: { select: { name: true, email: true } } }
+    where: { organizationId: req.user.organizationId, year, month },
+    include: { user: { select: { name: true, email: true, role: true, designation: true, employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } } } } }
   });
   res.json({ success: true, count: allocations.length, data: allocations });
 });
 
 export const getLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.query.year) || new Date().getFullYear();
+  const month = Number(req.query.month) || (new Date().getMonth() + 1);
   const allocation = await prisma.leaveAllocation.findUnique({
-    where: { userId_year: { userId: req.params.userId, year } }
+    where: { userId_year_month: { userId: req.params.userId, year, month } }
   });
   res.json({ success: true, data: allocation });
 });
 
 export const upsertLeaveAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   const year = Number(req.body.year) || new Date().getFullYear();
+  const month = Number(req.body.month) || (new Date().getMonth() + 1);
   const allocation = await prisma.leaveAllocation.upsert({
-    where: { userId_year: { userId: req.params.userId, year } },
+    where: { userId_year_month: { userId: req.params.userId, year, month } },
     update: { ...req.body, createdBy: req.user.id },
-    create: { ...req.body, userId: req.params.userId, organizationId: req.user.organizationId, year, createdBy: req.user.id }
+    create: { ...req.body, userId: req.params.userId, organizationId: req.user.organizationId, year, month, createdBy: req.user.id }
   });
   res.json({ success: true, data: allocation });
 });
 
 export const bulkInitLeaveAllocations = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { year = new Date().getFullYear(), casual, sick, earned } = req.body;
+  const { year = new Date().getFullYear(), month = (new Date().getMonth() + 1), casual, sick, earned } = req.body;
   const users = await prisma.user.findMany({ where: { organizationId: req.user.organizationId, status: 'active', NOT: { role: { in: ['student', 'center_admin'] } } } });
   
   const results = await Promise.all(users.map(u => 
     prisma.leaveAllocation.upsert({
-      where: { userId_year: { userId: u.id, year } },
+      where: { userId_year_month: { userId: u.id, year, month } },
       update: { casualLeave: casual, sickLeave: sick, earnedLeave: earned },
-      create: { userId: u.id, organizationId: req.user.organizationId, year, casualLeave: casual, sickLeave: sick, earnedLeave: earned, createdBy: req.user.id }
+      create: { userId: u.id, organizationId: req.user.organizationId, year, month, casualLeave: casual, sickLeave: sick, earnedLeave: earned, createdBy: req.user.id }
     })
   ));
 
@@ -165,12 +194,51 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
     });
 
     const unpaidDays = unpaidLeaves.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
-    const leaveDeductionAmount = (grossSalary / 30) * unpaidDays;
+    
+    // WFH Deductions
+    const wfhLeaves = await prisma.leaveRequest.findMany({
+      where: {
+        employeeId: config.userId,
+        type: 'wfh',
+        status: { in: ['approved', 'dept_approved'] },
+        startDate: { gte: startDate, lt: endDate }
+      }
+    });
+
+    const wfhDays = wfhLeaves.reduce((acc: number, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
+    
+    // Fetch WFH limit to only deduct for exceeded days
+    const alloc = await prisma.leaveAllocation.findFirst({
+      where: { userId: config.userId, year: Number(yearStr), month: Number(monthStr) }
+    });
+    const wfhMonthlyLimit = alloc ? (alloc.wfh / 12) : 0;
+    const exceededWfhDays = Math.max(0, wfhDays - wfhMonthlyLimit);
+    
+    const wfhDeductionAmount = exceededWfhDays * (config.wfhDeductionPerDay || 0);
+
+    let leaveDeductionAmount = 0;
+    const rule = config.unpaidLeaveRule as any || { type: 'standard' };
+
+    if (rule.type === 'fixed') {
+        leaveDeductionAmount = unpaidDays * (Number(rule.dailyRate) || 0);
+    } else if (rule.type === 'progressive') {
+        const firstXDays = Number(rule.firstXDays) || 0;
+        const firstXRate = Number(rule.firstXRate) || 0;
+        const subsequentRate = Number(rule.subsequentRate) || 0;
+
+        if (unpaidDays <= firstXDays) {
+            leaveDeductionAmount = unpaidDays * firstXRate;
+        } else {
+            leaveDeductionAmount = (firstXDays * firstXRate) + ((unpaidDays - firstXDays) * subsequentRate);
+        }
+    } else {
+        leaveDeductionAmount = (grossSalary / 30) * unpaidDays;
+    }
 
     const standardDeductions = Object.values(deductions).reduce((acc: number, val: any) => acc + (Number(val) || 0), 0);
     
-    const finalDeductions = { ...deductions, lateDeduction: lateDeductionAmount, leaveDeduction: leaveDeductionAmount };
-    const totalDeductions = standardDeductions + lateDeductionAmount + leaveDeductionAmount;
+    const finalDeductions = { ...deductions, lateDeduction: lateDeductionAmount, leaveDeduction: leaveDeductionAmount, wfhDeduction: wfhDeductionAmount };
+    const totalDeductions = standardDeductions + lateDeductionAmount + leaveDeductionAmount + wfhDeductionAmount;
     
     const netSalary = grossSalary - totalDeductions;
 

@@ -66,6 +66,8 @@ import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { DeleteRequestsPanel } from '@/components/panels/DeleteRequestsPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
+import { LeavesPanel } from '@/components/panels/LeavesPanel';
+import { AttendancePanel } from '@/components/panels/AttendancePanel';
 
 const DEPT_COLORS: Record<string, string> = {
   hr: 'hsl(var(--info))', finance: 'hsl(var(--success))',
@@ -122,25 +124,27 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Executive Overview</h1>
-          <p className="text-muted-foreground mt-1">Real-time institutional performance and strategic metrics.</p>
+      {activeTab === 'overview' && (
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Executive Overview</h1>
+            <p className="text-muted-foreground mt-1">Real-time institutional performance and strategic metrics.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={fetchAll} disabled={loadingMetrics}>
+              <RefreshCw className={cn('w-4 h-4 mr-2', loadingMetrics && 'animate-spin')} />
+              Refresh
+            </Button>
+            <Button variant="default" onClick={() => handleNavigate('kpi-kra')}>
+              <Target className="w-4 h-4 mr-2" />
+              KPI / KRA Report
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={fetchAll} disabled={loadingMetrics}>
-            <RefreshCw className={cn('w-4 h-4 mr-2', loadingMetrics && 'animate-spin')} />
-            Refresh
-          </Button>
-          <Button variant="default" onClick={() => handleNavigate('kpi-kra')}>
-            <Target className="w-4 h-4 mr-2" />
-            KPI / KRA Report
-          </Button>
-        </div>
-      </div>
+      )}
 
       <Tabs value={activeTab} onValueChange={handleNavigate} className="space-y-6">
-        <div className="relative w-full max-w-full">
+        <div className="hidden">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
           <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
@@ -152,6 +156,8 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
           <TabsTrigger value="escalations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Escalations</TabsTrigger>
           <TabsTrigger value="students" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Students</TabsTrigger>
           <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Enrollment Review</TabsTrigger>
+          <TabsTrigger value="leaves" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leave Requests</TabsTrigger>
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Attendance</TabsTrigger>
           <TabsTrigger value="invoices" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Invoices</TabsTrigger>
           <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>
           <TabsTrigger value="leads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leads</TabsTrigger>
@@ -237,17 +243,19 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
           {/* Secondary metrics row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Total Employees', value: metrics.totalEmployees || 0, icon: <Users className="w-4 h-4" />, tab: 'users' },
-              { label: 'Active Leads', value: metrics.totalLeads || 0, icon: <TrendingUp className="w-4 h-4" />, tab: 'leads' },
-              { label: 'Departments', value: metrics.totalDepartments || 0, icon: <Building2 className="w-4 h-4" />, tab: 'departments' },
-              { label: 'Programs', value: metrics.totalPrograms || 0, icon: <BookOpen className="w-4 h-4" />, tab: 'students' },
+              { label: 'Total Employees', value: metrics.totalEmployees || 0, icon: <Users className="w-6 h-6" />, tab: 'users', color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
+              { label: 'Active Leads', value: metrics.totalLeads || 0, icon: <TrendingUp className="w-6 h-6" />, tab: 'leads', color: 'text-pink-500', bg: 'bg-pink-500/10' },
+              { label: 'Departments', value: metrics.totalDepartments || 0, icon: <Building2 className="w-6 h-6" />, tab: 'departments', color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+              { label: 'Programs', value: metrics.totalPrograms || 0, icon: <BookOpen className="w-6 h-6" />, tab: 'students', color: 'text-violet-500', bg: 'bg-violet-500/10' },
             ].map(item => (
-              <Card key={item.label} className="cursor-pointer hover:border-primary/40 transition-colors" onClick={() => handleNavigate(item.tab)}>
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="p-2 rounded-lg bg-muted text-muted-foreground">{item.icon}</div>
+              <Card key={item.label} className="group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-300 border-border/40 bg-card/40 backdrop-blur-sm" onClick={() => handleNavigate(item.tab)}>
+                <CardContent className="p-5 flex items-center gap-4">
+                  <div className={cn("p-3 rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3", item.bg, item.color)}>
+                    {item.icon}
+                  </div>
                   <div>
-                    <p className="text-xl font-bold">{item.value}</p>
-                    <p className="text-xs text-muted-foreground">{item.label}</p>
+                    <p className="text-2xl font-black">{item.value}</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{item.label}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -292,42 +300,53 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
 
             {/* Right column snapshots */}
             <div className="space-y-4">
-              <Card className="cursor-pointer hover:border-primary/40 transition-colors" onClick={() => handleNavigate('invoices')}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Finance Snapshot</p>
-                    <DollarSign className="w-4 h-4 text-primary" />
+              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-primary/5 via-background to-background border-primary/20" onClick={() => handleNavigate('invoices')}>
+                <div className="absolute right-0 top-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                <CardContent className="p-5 relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-primary/10 rounded-lg text-primary shadow-sm"><DollarSign className="w-4 h-4" /></div>
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Finance Snapshot</p>
+                    </div>
                   </div>
-                  <p className="text-2xl font-bold">₹{metrics.totalRevenue ? (metrics.totalRevenue / 1000).toFixed(1) + 'K' : '0'}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Total revenue collected</p>
-                  <div className="mt-3 flex items-center gap-2 text-xs text-primary font-medium">
-                    <span>View Invoices</span><ArrowUpRight className="w-3 h-3" />
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="cursor-pointer hover:border-success/40 transition-colors" onClick={() => handleNavigate('users')}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">People Snapshot</p>
-                    <UserCheck className="w-4 h-4 text-success" />
-                  </div>
-                  <p className="text-2xl font-bold">{metrics.totalEmployees || 0}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Active employees</p>
-                  <div className="mt-3 flex items-center gap-2 text-xs text-success font-medium">
-                    <span>View Users</span><ArrowUpRight className="w-3 h-3" />
+                  <p className="text-3xl font-black">₹{metrics.totalRevenue ? (metrics.totalRevenue / 1000).toFixed(1) + 'K' : '0'}</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Total revenue collected</p>
+                  <div className="mt-4 flex items-center gap-1.5 text-xs text-primary font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span>View Invoices</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
                 </CardContent>
               </Card>
-              <Card className="cursor-pointer hover:border-warning/40 transition-colors" onClick={() => handleNavigate('tasks')}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Tasks Snapshot</p>
-                    <Zap className="w-4 h-4 text-warning" />
+              
+              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-green-500/5 via-background to-background border-green-500/20" onClick={() => handleNavigate('users')}>
+                <div className="absolute right-0 top-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                <CardContent className="p-5 relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-green-500/10 rounded-lg text-green-500 shadow-sm"><UserCheck className="w-4 h-4" /></div>
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">People Snapshot</p>
+                    </div>
                   </div>
-                  <p className="text-2xl font-bold">{metrics.pendingTasks || 0}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Pending tasks</p>
-                  <div className="mt-3 flex items-center gap-2 text-xs text-warning font-medium">
-                    <span>View Tasks</span><ArrowUpRight className="w-3 h-3" />
+                  <p className="text-3xl font-black">{metrics.totalEmployees || 0}</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Active employees</p>
+                  <div className="mt-4 flex items-center gap-1.5 text-xs text-green-500 font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span>View Users</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-yellow-500/5 via-background to-background border-yellow-500/20" onClick={() => handleNavigate('tasks')}>
+                <div className="absolute right-0 top-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
+                <CardContent className="p-5 relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-yellow-500/10 rounded-lg text-yellow-500 shadow-sm"><Zap className="w-4 h-4" /></div>
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tasks Snapshot</p>
+                    </div>
+                  </div>
+                  <p className="text-3xl font-black">{metrics.pendingTasks || 0}</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground mt-1 uppercase tracking-wider">Pending tasks</p>
+                  <div className="mt-4 flex items-center gap-1.5 text-xs text-yellow-500 font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span>View Tasks</span><ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
                 </CardContent>
               </Card>
@@ -396,6 +415,14 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
           <DeptEnrollmentReviewPanel />
         </TabsContent>
 
+        <TabsContent value="leaves">
+          <LeavesPanel />
+        </TabsContent>
+
+        <TabsContent value="attendance">
+          <AttendancePanel />
+        </TabsContent>
+
         <TabsContent value="invoices">
           <InvoicesPanel />
         </TabsContent>
@@ -437,34 +464,48 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
 }
 
 function MetricCard({ title, value, trend, trendType, icon, color, onClick }: any) {
-  const colorMap: any = {
-    primary: "text-primary bg-primary/10",
-    success: "text-success bg-success/10",
-    warning: "text-warning bg-warning/10",
-    info: "text-info bg-info/10",
+  const colorStyles: any = {
+    primary: "from-primary/20 to-transparent border-primary/20 text-primary group-hover:border-primary/50 group-hover:shadow-[0_0_20px_-5px_rgba(var(--primary),0.3)]",
+    success: "from-green-500/20 to-transparent border-green-500/20 text-green-500 group-hover:border-green-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(34,197,94,0.3)]",
+    warning: "from-yellow-500/20 to-transparent border-yellow-500/20 text-yellow-500 group-hover:border-yellow-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(234,179,8,0.3)]",
+    info: "from-blue-500/20 to-transparent border-blue-500/20 text-blue-500 group-hover:border-blue-500/50 group-hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.3)]",
+  };
+
+  const bgStyles: any = {
+    primary: "bg-primary/10",
+    success: "bg-green-500/10",
+    warning: "bg-yellow-500/10",
+    info: "bg-blue-500/10",
   };
 
   return (
     <Card
-      className={cn("group transition-all duration-300 hover:border-primary/50", onClick && "cursor-pointer")}
+      className={cn(
+        "relative overflow-hidden group transition-all duration-500 bg-gradient-to-br bg-card/60 backdrop-blur-xl border",
+        colorStyles[color],
+        onClick && "cursor-pointer hover:-translate-y-1"
+      )}
       onClick={onClick}
     >
-      <CardContent className="p-6">
+      <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500 transform group-hover:scale-110 pointer-events-none">
+        <div className="w-24 h-24 [&>svg]:w-full [&>svg]:h-full">{icon}</div>
+      </div>
+      <CardContent className="p-6 relative z-10">
         <div className="flex items-center justify-between mb-4">
-          <div className={cn("p-2.5 rounded-xl transition-transform group-hover:scale-110", colorMap[color])}>
+          <div className={cn("p-2.5 rounded-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm", bgStyles[color], colorStyles[color].split(' ')[3])}>
             {icon}
           </div>
           <div className={cn(
-            "flex items-center text-xs font-bold px-2 py-1 rounded-full",
-            trendType === 'up' ? "bg-success/10 text-success" : "bg-error/10 text-error"
+            "flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm backdrop-blur-md border",
+            trendType === 'up' ? "bg-green-500/10 text-green-600 border-green-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"
           )}>
             {trendType === 'up' ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
             {trend}
           </div>
         </div>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-          <p className="text-3xl font-bold tracking-tight text-foreground">{value}</p>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{title}</p>
+          <p className="text-3xl font-black tracking-tight text-foreground">{value}</p>
         </div>
       </CardContent>
     </Card>

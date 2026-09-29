@@ -20,6 +20,8 @@ interface SalaryConfig {
   effectiveFrom?: string;
   approvalStatus?: 'pending_approval' | 'approved' | 'rejected';
   rejectedRemarks?: string;
+  unpaidLeaveRule?: { type: string; dailyRate?: number; firstXDays?: number; firstXRate?: number; subsequentRate?: number };
+  wfhDeductionPerDay?: number;
 }
 
 interface User {
@@ -36,6 +38,8 @@ const EMPTY_CONFIG = {
   allowances: { hra: 0, transport: 0, medical: 0, other: 0 },
   deductions: { pf: 0, tax: 0, insurance: 0, other: 0 },
   lateDeductionPerMinute: 0,
+  unpaidLeaveRule: { type: 'standard' },
+  wfhDeductionPerDay: 0,
   effectiveFrom: new Date().toISOString().split('T')[0],
 };
 
@@ -78,6 +82,8 @@ export function SalaryConfigPanel() {
         allowances: { ...config.allowances },
         deductions: { ...config.deductions },
         lateDeductionPerMinute: config.lateDeductionPerMinute || 0,
+        unpaidLeaveRule: config.unpaidLeaveRule || { type: 'standard' },
+        wfhDeductionPerDay: config.wfhDeductionPerDay || 0,
         effectiveFrom: config.effectiveFrom ? config.effectiveFrom.split('T')[0] : new Date().toISOString().split('T')[0],
       });
     } else {
@@ -287,11 +293,63 @@ export function SalaryConfigPanel() {
               </div>
             </div>
 
-            <div className="space-y-1">
-              <Label>Late Deduction per Minute (₹)</Label>
-              <Input type="number" min="0" step="0.01" value={form.lateDeductionPerMinute}
-                onChange={e => setForm((f: any) => ({ ...f, lateDeductionPerMinute: Number(e.target.value) }))} />
-              <p className="text-xs text-muted-foreground">Amount deducted per late minute from attendance records</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <Label>Late Deduction per Minute (₹)</Label>
+                <Input type="number" min="0" step="0.01" value={form.lateDeductionPerMinute}
+                  onChange={e => setForm((f: any) => ({ ...f, lateDeductionPerMinute: Number(e.target.value) }))} />
+                <p className="text-xs text-muted-foreground">Amount deducted per late minute</p>
+              </div>
+
+              <div className="space-y-1">
+                <Label>WFH Deduction per Day (₹)</Label>
+                <Input type="number" min="0" value={form.wfhDeductionPerDay}
+                  onChange={e => setForm((f: any) => ({ ...f, wfhDeductionPerDay: Number(e.target.value) }))} />
+                <p className="text-xs text-muted-foreground">Amount deducted for each WFH day</p>
+              </div>
+            </div>
+
+            <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border">
+              <Label className="font-semibold text-base">Unpaid Leave Deduction Rule</Label>
+              <Select 
+                value={form.unpaidLeaveRule?.type || 'standard'} 
+                onValueChange={(val) => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, type: val } }))}
+              >
+                <SelectTrigger><SelectValue placeholder="Select rule type..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="standard">Standard: (Gross Salary / 30) per day</SelectItem>
+                  <SelectItem value="fixed">Fixed: Custom amount per day</SelectItem>
+                  <SelectItem value="progressive">Progressive: First X days vs subsequent days</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {form.unpaidLeaveRule?.type === 'fixed' && (
+                <div className="space-y-1 mt-2">
+                  <Label>Daily Deduction Amount (₹)</Label>
+                  <Input type="number" min="0" value={form.unpaidLeaveRule?.dailyRate || ''}
+                    onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, dailyRate: Number(e.target.value) } }))} />
+                </div>
+              )}
+
+              {form.unpaidLeaveRule?.type === 'progressive' && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                  <div className="space-y-1">
+                    <Label>First X Days</Label>
+                    <Input type="number" min="0" value={form.unpaidLeaveRule?.firstXDays || ''}
+                      onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, firstXDays: Number(e.target.value) } }))} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>First X Rate (₹)</Label>
+                    <Input type="number" min="0" value={form.unpaidLeaveRule?.firstXRate || ''}
+                      onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, firstXRate: Number(e.target.value) } }))} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Subsequent Rate (₹)</Label>
+                    <Input type="number" min="0" value={form.unpaidLeaveRule?.subsequentRate || ''}
+                      onChange={e => setForm((f: any) => ({ ...f, unpaidLeaveRule: { ...f.unpaidLeaveRule, subsequentRate: Number(e.target.value) } }))} />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-1">

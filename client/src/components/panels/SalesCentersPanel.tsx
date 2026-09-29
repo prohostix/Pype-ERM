@@ -283,7 +283,7 @@ export function SalesCentersPanel() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold">Study Centers</h2>
+          <h2 className="text-xl font-bold">Academic Partners</h2>
           <p className="text-sm text-muted-foreground">Centers onboarded via your invite links and your team's links</p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
@@ -329,7 +329,7 @@ export function SalesCentersPanel() {
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
-          <TabsTrigger value="centers">Study Centers ({centers.length})</TabsTrigger>
+          <TabsTrigger value="centers">Academic Partners ({centers.length})</TabsTrigger>
           <TabsTrigger value="admissions">Admissions ({admissions.length})</TabsTrigger>
         </TabsList>
 
@@ -337,7 +337,7 @@ export function SalesCentersPanel() {
           <Card className="border-none shadow-xl bg-card/60 backdrop-blur-xl">
             <CardHeader>
               <CardTitle>Onboarded Centers</CardTitle>
-              <CardDescription>Study centers registered through your invite links or your team's links</CardDescription>
+              <CardDescription>Academic partners registered through your invite links or your team's links</CardDescription>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -348,7 +348,7 @@ export function SalesCentersPanel() {
                 <div className="py-12 text-center text-muted-foreground">
                   <Building2 className="w-10 h-10 mx-auto mb-3 opacity-20" />
                   <p className="font-medium">No centers yet</p>
-                  <p className="text-sm mt-1">Share invite links to onboard study centers.</p>
+                  <p className="text-sm mt-1">Share invite links to onboard academic partners.</p>
                 </div>
               ) : (
                 <div className="space-y-3">

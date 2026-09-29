@@ -150,8 +150,8 @@ export function getOpsNavItems() {
     { id: 'programs', label: 'Programs' },
     { id: 'program_allocations', label: 'Program Allocation' },
 
-    { id: '__study_centers', label: 'Study Centers', isSection: true },
-    { id: 'centers', label: 'Study Centers' },
+    { id: '__study_centers', label: 'Academic Partners', isSection: true },
+    { id: 'centers', label: 'Academic Partners' },
 
     { id: '__document_management', label: 'Document Management', isSection: true },
     { id: 'document_received', label: 'Document Received' },

@@ -8,6 +8,9 @@ export const getPayrolls = asyncHandler(async (req: AuthRequest, res: Response) 
   if (['hr_admin', 'hr_sub_admin'].includes(req.user.role)) {
     where.user = { role: { not: 'center_admin' } };
   }
+  if (req.query.employeeId) {
+    where.employeeId = req.query.employeeId as string;
+  }
   const payrolls = await prisma.payroll.findMany({
     where,
     include: { user: { select: { name: true, email: true } } },
@@ -91,14 +94,14 @@ export const generateMonthlyPayroll = asyncHandler(async (req: AuthRequest, res:
 });
 
 export const transferToFinance = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { payrollIds, month, year, remarks } = req.body;
+  const { payrollIds, month, remarks } = req.body;
   const payrolls = await prisma.payroll.findMany({ where: { id: { in: payrollIds } } });
   const totalAmount = payrolls.reduce((sum, p) => sum + p.netSalary, 0);
 
   const batch = await prisma.payrollBatch.create({
     data: {
       organizationId: req.user.organizationId,
-      month: `${year}-${month}`,
+      month,
       payrollIds,
       totalAmount,
       employeeCount: payrolls.length,
@@ -115,9 +118,25 @@ export const transferToFinance = asyncHandler(async (req: AuthRequest, res: Resp
 export const getPayrollBatches = asyncHandler(async (req: AuthRequest, res: Response) => {
   const batches = await prisma.payrollBatch.findMany({
     where: { organizationId: req.user.organizationId },
+    include: {
+      transferer: { select: { name: true } },
+      approver: { select: { name: true } },
+      rejector: { select: { name: true } }
+    },
     orderBy: { createdAt: 'desc' }
   });
-  res.status(200).json({ success: true, count: batches.length, data: batches });
+
+  const batchesWithPayrolls = await Promise.all(
+    batches.map(async (batch) => {
+      const payrolls = await prisma.payroll.findMany({
+        where: { id: { in: batch.payrollIds } },
+        include: { user: { select: { name: true, employeeProfile: { select: { employeeId: true } } } } }
+      });
+      return { ...batch, payrolls };
+    })
+  );
+
+  res.status(200).json({ success: true, count: batches.length, data: batchesWithPayrolls });
 });
 
 export const getPayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -130,13 +149,21 @@ export const financeApprovePayrollBatch = asyncHandler(async (req: AuthRequest, 
     where: { id: req.params.id },
     data: { status: 'approved_by_finance', approvedBy: req.user.id, approvedAt: new Date() }
   });
+  await prisma.payroll.updateMany({
+    where: { id: { in: batch.payrollIds } },
+    data: { financeApprovedBy: req.user.id, financeApprovedAt: new Date() }
+  });
   res.status(200).json({ success: true, data: batch });
 });
 
 export const financeRejectPayrollBatch = asyncHandler(async (req: AuthRequest, res: Response) => {
   const batch = await prisma.payrollBatch.update({
     where: { id: req.params.id },
-    data: { status: 'rejected', rejectionReason: req.body.remarks, rejectedBy: req.user.id, rejectedAt: new Date() }
+    data: { status: 'rejected', rejectionReason: req.body.rejectionReason || req.body.remarks, rejectedBy: req.user.id, rejectedAt: new Date() }
+  });
+  await prisma.payroll.updateMany({
+    where: { id: { in: batch.payrollIds } },
+    data: { status: 'confirmed' }
   });
   res.status(200).json({ success: true, data: batch });
 });
@@ -153,6 +180,14 @@ export const completeBatchPayment = asyncHandler(async (req: AuthRequest, res: R
   const batch = await prisma.payrollBatch.update({
     where: { id: req.params.id },
     data: { status: 'completed', completedAt: new Date() }
+  });
+  await prisma.payroll.updateMany({
+    where: { id: { in: batch.payrollIds } },
+    data: { 
+      status: 'paid', 
+      paymentDate: new Date(), 
+      paymentMethod: req.body.paymentMethod || 'bank_transfer' 
+    }
   });
   res.status(200).json({ success: true, data: batch });
 });

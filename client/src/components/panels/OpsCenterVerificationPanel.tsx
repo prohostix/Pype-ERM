@@ -74,7 +74,7 @@ export function OpsCenterVerificationPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Pending Verification</h2>
-          <p className="text-muted-foreground text-sm mt-1">Review and verify study center documents.</p>
+          <p className="text-muted-foreground text-sm mt-1">Review and verify academic partner documents.</p>
         </div>
         <Button variant="outline" size="sm" onClick={fetch} disabled={loading}>
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh

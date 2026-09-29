@@ -174,7 +174,7 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
       {/* Core Metrics & Attendance Widget Top Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-4">
         <div className="xl:col-span-4">
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             <HRMetricCard
               title="Total Headcount"
               value={metrics.totalEmployees ?? '—'}
@@ -206,6 +206,14 @@ function OverviewContent({ metrics, onNavigate, punchWidget }: { metrics: any; o
               subtext={metrics.onLeave != null ? `${metrics.onLeave} on leave` : 'Attendance today'}
               color="success"
               onClick={() => onNavigate('attendance', { filter: 'present' })}
+            />
+            <HRMetricCard
+              title="Probation Ended"
+              value={metrics.probationEnded ?? '0'}
+              icon={<Award className="w-5 h-5" />}
+              subtext="Action needed for Leave Allocation"
+              color="primary"
+              onClick={() => onNavigate('leave-alloc')}
             />
           </div>
         </div>

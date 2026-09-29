@@ -23,6 +23,7 @@ import { FeeStructuresPanel } from '@/components/panels/FeeStructuresPanel';
 import { UniversityCommissionsPanel } from '@/components/panels/UniversityCommissionsPanel';
 import { UniversityPaymentsPanel } from '@/components/panels/UniversityPaymentsPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
+import { PayrollBatchesPanel } from '@/components/panels/PayrollBatchesPanel';
 import TeamPermissionsPanel from '@/components/panels/TeamPermissionsPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
@@ -37,6 +38,7 @@ import { IncomeExpenditurePanel } from '@/components/panels/IncomeExpenditurePan
 import { ProfitLossPanel } from '@/components/panels/ProfitLossPanel';
 import { FinanceSalaryApprovalPanel } from '@/components/panels/FinanceSalaryApprovalPanel';
 import { FinanceSalesTargetsPanel } from '@/components/panels/FinanceSalesTargetsPanel';
+import { FinancePayrollHistoryPanel } from '@/components/panels/FinancePayrollHistoryPanel';
 import { BillReceiptPanel } from '@/components/panels/BillReceiptPanel';
 import { PaymentGatewayPanel } from '@/components/panels/PaymentGatewayPanel';
 import { AttendancePanel } from '@/components/panels/AttendancePanel';
@@ -88,7 +90,9 @@ export function ModernFinanceDashboard({ initialTab, onNavigate }: { initialTab?
       case 'university_fee': return <UniversityPaymentsPanel />;
       case 'university_commissions': return <UniversityCommissionsPanel />;
       case 'payroll': return <PayrollPanel />;
+      case 'payroll_batches': return <PayrollBatchesPanel />;
       case 'salary_approval': return <FinanceSalaryApprovalPanel />;
+      case 'payroll_history': return <FinancePayrollHistoryPanel />;
       case 'incentive_approval': return <div className="p-8 text-center text-muted-foreground border rounded-lg m-4">Incentive Approval Module Coming Soon</div>;
 
       case 'students': return <StudentsPanel />;
@@ -146,7 +150,9 @@ export function getFinanceNavItems() {
     { id: 'university_fee', label: 'University Fee' },
     { id: 'university_commissions', label: 'University Commissions' },
     { id: 'payroll', label: 'Payroll' },
+    { id: 'payroll_batches', label: 'Payroll Batches' },
     { id: 'salary_approval', label: 'Salary Approval' },
+    { id: 'payroll_history', label: 'Payroll History' },
     { id: 'incentive_approval', label: 'Incentive Approval' },
     
     { id: '__students_section', label: '🎓 Students', isSection: true },

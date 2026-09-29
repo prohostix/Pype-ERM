@@ -9,7 +9,8 @@ import {
   Loader2,
   Clock,
   CheckCircle2,
-  Star
+  Star,
+  BarChart2
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -22,6 +23,7 @@ import { FacultyBatchDashboardPanel } from './FacultyBatchDashboardPanel';
 import { AcademicBatchesPanel } from './AcademicBatchesPanel';
 import { FacultyAttendanceApproval } from './FacultyAttendanceApproval';
 import { FacultyClassReviews } from './FacultyClassReviews';
+import OnlineClassAnalyticsPanel from './OnlineClassAnalyticsPanel';
 
 export function FacultyClassesPanel() {
   const [view, setView] = useState<string>('classes');
@@ -89,11 +91,36 @@ export function FacultyClassesPanel() {
 
   // Sessions and Attendance logic has been moved to the Batch Dashboard.
 
+  const handleClassClick = async (c: any) => {
+    setSelectedClass(c);
+    if (c.academicCenter?.type === 'online') {
+      setLoading(true);
+      try {
+        const res = await api.get(`/faculty-portal/classes/${c.id}/batches`);
+        const fetchedBatches = res.data.data || [];
+        setBatches(fetchedBatches);
+        if (fetchedBatches.length > 0) {
+          setSelectedBatch(fetchedBatches[0]);
+          const studentsRes = await api.get(`/faculty-portal/batches/${fetchedBatches[0].id}/students`);
+          setStudents(studentsRes.data.data || []);
+          setView('students');
+        } else {
+          toast.error('No global batch found for this online class.');
+        }
+      } catch (err) {
+        toast.error('Failed to fetch online students');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      fetchBatches(c.id);
+    }
+  };
   if (view === 'students') {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setView('batches')}>
+          <Button variant="ghost" size="icon" onClick={() => setView(selectedClass?.academicCenter?.type === 'online' ? 'classes' : 'batches')}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -152,6 +179,10 @@ export function FacultyClassesPanel() {
 
   if (view === 'facultyAttendance' && selectedClass) {
     return <FacultyAttendanceApproval academicClass={selectedClass} onBack={() => setView('classes')} />;
+  }
+
+  if (view === 'onlineAnalytics' && selectedClass) {
+    return <OnlineClassAnalyticsPanel academicClass={selectedClass} onBack={() => setView('classes')} />;
   }
 
   if (view === 'reviews' && selectedClass) {
@@ -272,7 +303,7 @@ export function FacultyClassesPanel() {
           <div className="col-span-full p-8 text-center text-muted-foreground">Loading classes...</div>
         ) : classes.length > 0 ? (
           classes.map((c, i) => (
-            <Card key={i} className="group relative overflow-hidden cursor-pointer border-0 shadow-sm hover:shadow-xl transition-all duration-300" onClick={() => { setSelectedClass(c); fetchBatches(c.id); }}>
+            <Card key={i} className="group relative overflow-hidden cursor-pointer border-0 shadow-sm hover:shadow-xl transition-all duration-300" onClick={() => handleClassClick(c)}>
               {/* Background styling */}
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 to-blue-50/30 dark:from-indigo-950/40 dark:to-slate-900/40 opacity-100 transition-opacity duration-300" />
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -291,20 +322,27 @@ export function FacultyClassesPanel() {
                       {c.organization?.name || 'Organization'}
                     </p>
                   </div>
-                  <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className={`capitalize shrink-0 shadow-sm ${c.status === 'active' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700' : ''}`}>
-                    {c.status}
-                  </Badge>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex-1 bg-white/60 dark:bg-slate-950/60 backdrop-blur-sm rounded-xl p-3 border border-slate-200/50 dark:border-slate-800/50 flex items-center justify-center gap-2 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
-                    <BookOpen className="w-5 h-5 text-indigo-500" />
-                    <div className="flex flex-col">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Batches</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-200 leading-none">{c._count?.batches || 0}</span>
-                    </div>
+                  <div className="flex flex-col gap-1 items-end shrink-0">
+                    <Badge variant={c.status === 'active' ? 'default' : 'secondary'} className={`capitalize shadow-sm ${c.status === 'active' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700' : ''}`}>
+                      {c.status}
+                    </Badge>
+                    <Badge variant="outline" className={`text-[10px] uppercase tracking-wider px-2 py-0.5 font-bold ${c.academicCenter?.type === 'online' ? 'border-sky-500/30 text-sky-600 bg-sky-500/10' : 'border-emerald-500/30 text-emerald-600 bg-emerald-500/10'}`}>
+                      {c.academicCenter?.type === 'online' ? 'Online Class' : 'Offline Class'}
+                    </Badge>
                   </div>
                 </div>
+
+                {c.academicCenter?.type !== 'online' && (
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 bg-white/60 dark:bg-slate-950/60 backdrop-blur-sm rounded-xl p-3 border border-slate-200/50 dark:border-slate-800/50 flex items-center justify-center gap-2 shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5">
+                      <BookOpen className="w-5 h-5 text-indigo-500" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Batches</span>
+                        <span className="font-bold text-slate-700 dark:text-slate-200 leading-none">{c._count?.batches || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap items-center justify-between pt-4 gap-2 border-t border-slate-200/50 dark:border-slate-800/50">
                   <div className="flex flex-wrap gap-2">
@@ -317,24 +355,28 @@ export function FacultyClassesPanel() {
                       <Folder className="w-4 h-4 mr-2" /> 
                       <span className="font-semibold text-xs tracking-wide">Configure</span>
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-9 px-4 rounded-full text-teal-700 bg-teal-50 border-teal-200 hover:bg-teal-600 hover:text-white hover:border-teal-600 shadow-sm transition-all duration-300"
-                      onClick={(e) => { e.stopPropagation(); setView('allocations'); setSelectedClass(c); }}
-                    >
-                      <Users className="w-4 h-4 mr-2" /> 
-                      <span className="font-semibold text-xs tracking-wide">Allocate Students</span>
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-9 px-4 rounded-full text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 shadow-sm transition-all duration-300"
-                      onClick={(e) => { e.stopPropagation(); setView('facultyAttendance'); setSelectedClass(c); }}
-                    >
-                      <CheckCircle2 className="w-4 h-4 mr-2" /> 
-                      <span className="font-semibold text-xs tracking-wide">Approvals</span>
-                    </Button>
+                    {c.academicCenter?.type !== 'online' && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-9 px-4 rounded-full text-teal-700 bg-teal-50 border-teal-200 hover:bg-teal-600 hover:text-white hover:border-teal-600 shadow-sm transition-all duration-300"
+                        onClick={(e) => { e.stopPropagation(); setView('allocations'); setSelectedClass(c); }}
+                      >
+                        <Users className="w-4 h-4 mr-2" /> 
+                        <span className="font-semibold text-xs tracking-wide">Allocate Students</span>
+                      </Button>
+                    )}
+                    {c.academicCenter?.type !== 'online' && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-9 px-4 rounded-full text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 shadow-sm transition-all duration-300"
+                        onClick={(e) => { e.stopPropagation(); setView('facultyAttendance'); setSelectedClass(c); }}
+                      >
+                        <CheckCircle2 className="w-4 h-4 mr-2" /> 
+                        <span className="font-semibold text-xs tracking-wide">Approvals</span>
+                      </Button>
+                    )}
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -344,14 +386,25 @@ export function FacultyClassesPanel() {
                       <Star className="w-4 h-4 mr-2" /> 
                       <span className="font-semibold text-xs tracking-wide">Reviews</span>
                     </Button>
+                    {c.academicCenter?.type === 'online' && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-9 px-4 rounded-full text-pink-700 bg-pink-50 border-pink-200 hover:bg-pink-600 hover:text-white hover:border-pink-600 shadow-sm transition-all duration-300"
+                        onClick={(e) => { e.stopPropagation(); setView('onlineAnalytics'); setSelectedClass(c); }}
+                      >
+                        <BarChart2 className="w-4 h-4 mr-2" /> 
+                        <span className="font-semibold text-xs tracking-wide">Analytics</span>
+                      </Button>
+                    )}
                   </div>
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     className="h-9 px-4 rounded-full text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-300 group-hover:translate-x-1"
-                    onClick={(e) => { e.stopPropagation(); setSelectedClass(c); fetchBatches(c.id); }}
+                    onClick={(e) => { e.stopPropagation(); handleClassClick(c); }}
                   >
-                    <span className="font-semibold text-xs tracking-wide mr-1">View Batches</span>
+                    <span className="font-semibold text-xs tracking-wide mr-1">{c.academicCenter?.type === 'online' ? 'View Students' : 'View Batches'}</span>
                     <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>

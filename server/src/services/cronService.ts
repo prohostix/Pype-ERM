@@ -7,6 +7,7 @@ export const startAllCronJobs = () => {
   startEscalationCron();
   startAutoPunchOutCron();
   startAutoAbsentCron();
+  startLeaveAllocationCron();
   console.log('✅ All cron jobs started');
 };
 
@@ -164,3 +165,105 @@ const startAutoAbsentCron = () => {
   });
 };
 
+
+
+const startLeaveAllocationCron = () => {
+  // Run at 00:01 on the 1st of every month to rollover leaves to the new month
+  cron.schedule('1 0 1 * *', async () => {
+    console.log('🔄 Running monthly leave allocation rollover cron...');
+    try {
+      const today = new Date();
+      const currentMonth = today.getMonth() + 1; // 1-12
+      const currentYear = today.getFullYear();
+
+      // Determine previous month/year
+      let prevMonth = currentMonth - 1;
+      let prevYear = currentYear;
+      if (prevMonth === 0) {
+        prevMonth = 12;
+        prevYear = currentYear - 1;
+      }
+
+      const activeEmployees = await prisma.user.findMany({
+        where: {
+          role: { notIn: ['superadmin'] },
+          status: 'active'
+        },
+        include: { employeeProfileDetail: true }
+      });
+
+      let allocatedCount = 0;
+
+      for (const emp of activeEmployees) {
+        if (!emp.organizationId || !emp.employeeProfileDetail?.joinDate) continue;
+
+        const joinDate = new Date(emp.employeeProfileDetail.joinDate);
+        if (joinDate >= today) {
+          continue; // Future join date, skip
+        }
+
+        // Check if allocation already exists for the CURRENT month
+        const currentAllocation = await prisma.leaveAllocation.findUnique({
+          where: {
+            userId_year_month: {
+              userId: emp.id,
+              year: currentYear,
+              month: currentMonth
+            }
+          }
+        });
+
+        if (currentAllocation) {
+          // HR might have already set it in advance, don't overwrite
+          continue;
+        }
+
+        // Find PREVIOUS month's allocation
+        const prevAllocation = await prisma.leaveAllocation.findUnique({
+          where: {
+            userId_year_month: {
+              userId: emp.id,
+              year: prevYear,
+              month: prevMonth
+            }
+          }
+        });
+
+        // Determine defaults if no previous month found (e.g., new employee)
+        let sickLeave = 0;
+        let casualLeave = 0;
+        let earnedLeave = 0;
+        let complementaryLeave = 0;
+
+        if (prevAllocation) {
+          // Rollover from previous month
+          sickLeave = prevAllocation.sickLeave;
+          casualLeave = prevAllocation.casualLeave;
+          earnedLeave = prevAllocation.earnedLeave;
+          complementaryLeave = prevAllocation.complementaryLeave;
+        } else {
+          // Leave defaults as 0. HR will manually allocate leaves when employee joins.
+        }
+
+        await prisma.leaveAllocation.create({
+          data: {
+            userId: emp.id,
+            organizationId: emp.organizationId,
+            year: currentYear,
+            month: currentMonth,
+            sickLeave,
+            casualLeave,
+            earnedLeave,
+            complementaryLeave
+          }
+        });
+        
+        allocatedCount++;
+      }
+      
+      console.log(`✅ Rolled over monthly leaves for ${allocatedCount} employees`);
+    } catch (error) {
+      console.error('❌ Monthly leave allocation rollover error:', error);
+    }
+  });
+};

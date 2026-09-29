@@ -316,7 +316,7 @@ export function InvoicesPanel() {
                         : 'bg-background hover:bg-muted text-muted-foreground'
                     }`}
                   >
-                    Study Center
+                    Academic Partner
                   </button>
                   <button
                     type="button"
@@ -338,7 +338,7 @@ export function InvoicesPanel() {
               {/* Center Selector */}
               {billingTarget === 'center' ? (
                 <div>
-                  <Label>Study Center</Label>
+                  <Label>Academic Partner</Label>
                   <Select value={formData.centerId} onValueChange={(v) => setFormData({ ...formData, centerId: v })}>
                     <SelectTrigger><SelectValue placeholder="Select center" /></SelectTrigger>
                     <SelectContent>

@@ -16,6 +16,7 @@ export function StudyCentersPanel() {
   const canWrite = ['org_admin', 'superadmin'].includes(user?.role || '');
   const [centers, setCenters] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -76,6 +77,7 @@ export function StudyCentersPanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
       if (editingId) {
         await api.put(`/operations/centers/${editingId}`, formData);
@@ -87,6 +89,8 @@ export function StudyCentersPanel() {
       fetchCenters();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to save center');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -104,7 +108,7 @@ export function StudyCentersPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this study center?')) return;
+    if (!confirm('Delete this academic partner?')) return;
     try {
       await api.delete(`/operations/centers/${id}`);
       fetchCenters();
@@ -122,17 +126,17 @@ export function StudyCentersPanel() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Study Center Management</h2>
-          <p className="text-muted-foreground">Manage study centers and locations</p>
+          <h2 className="text-2xl font-bold">Academic Partner Management</h2>
+          <p className="text-muted-foreground">Manage academic partners and locations</p>
         </div>
         {canWrite && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
-              <Button><Plus className="w-4 h-4 mr-2" />Add Study Center</Button>
+              <Button><Plus className="w-4 h-4 mr-2" />Add Academic Partner</Button>
             </DialogTrigger>
           <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{editingId ? 'Edit Study Center' : 'Add New Study Center'}</DialogTitle>
+              <DialogTitle>{editingId ? 'Edit Academic Partner' : 'Add New Academic Partner'}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -172,7 +176,9 @@ export function StudyCentersPanel() {
                 </Select>
               </div>
               <div className="flex gap-2">
-                <Button type="submit" className="flex-1">Save</Button>
+                <Button type="submit" className="flex-1" disabled={submitting}>
+                  {submitting ? 'Saving...' : 'Save'}
+                </Button>
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
               </div>
             </form>
@@ -182,12 +188,12 @@ export function StudyCentersPanel() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Study Centers</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Academic Partners</CardTitle></CardHeader>
         <CardContent>
           {loading ? (
             <div className="text-center py-8">Loading...</div>
           ) : centers.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">No study centers found</div>
+            <div className="text-center py-8 text-muted-foreground">No academic partners found</div>
           ) : (
             <div className="space-y-2">
               {centers.filter(c => c && (c.id || c.id)).map((c) => {

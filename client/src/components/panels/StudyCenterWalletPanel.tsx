@@ -77,7 +77,7 @@ export function StudyCenterWalletPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Wallet</h2>
-          <p className="text-muted-foreground text-sm mt-1">Manage your study center wallet balance.</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage your academic partner wallet balance.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={fetchAll} disabled={loading}>
