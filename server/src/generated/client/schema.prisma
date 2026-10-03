@@ -1820,6 +1820,8 @@ enum LeaveStatus {
   dept_approved
   approved
   rejected
+  withdraw_pending
+  withdrawn
 }
 
 enum ApprovalStatus {

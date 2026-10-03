@@ -302,10 +302,10 @@ export function SalaryConfigPanel() {
               </div>
 
               <div className="space-y-1">
-                <Label>WFH Deduction per Day (₹)</Label>
-                <Input type="number" min="0" value={form.wfhDeductionPerDay}
+                <Label>WFH Deduction (% of daily salary)</Label>
+                <Input type="number" min="0" max="100" value={form.wfhDeductionPerDay}
                   onChange={e => setForm((f: any) => ({ ...f, wfhDeductionPerDay: Number(e.target.value) }))} />
-                <p className="text-xs text-muted-foreground">Amount deducted for each WFH day</p>
+                <p className="text-xs text-muted-foreground">% of daily salary deducted for each WFH day</p>
               </div>
             </div>
 

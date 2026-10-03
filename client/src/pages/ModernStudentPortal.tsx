@@ -48,6 +48,7 @@ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ReactPlayer from 'react-player';
 import { Slider } from '@/components/ui/slider';
+import { CustomYouTubePlayer } from '@/components/CustomYouTubePlayer';
 
 interface StudentPortalProps {
   onNavigate?: (tab: string) => void;
@@ -1397,19 +1398,8 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
                       <Card className="border-none shadow-xl overflow-hidden bg-card/60 backdrop-blur-xl rounded-3xl ring-1 ring-border/50">
                         {selectedCurriculumLesson.lesson.videoUrl ? (
                           <div ref={playerContainerRef} className="relative w-full aspect-video bg-black flex flex-col items-center justify-center group overflow-hidden rounded-xl">
-                            <div className="absolute inset-0">
-                              {getYouTubeEmbedUrl(selectedCurriculumLesson.lesson.videoUrl) ? (
-                                <iframe
-                                  src={getYouTubeEmbedUrl(selectedCurriculumLesson.lesson.videoUrl)}
-                                  className="w-full h-full border-0 absolute top-0 left-0"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                ></iframe>
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/20">
-                                  Invalid or unsupported video link format
-                                </div>
-                              )}
+                            <div className="absolute inset-0 w-full h-full">
+                              <CustomYouTubePlayer videoUrl={selectedCurriculumLesson.lesson.videoUrl} />
                             </div>
                             {/* Big Play Button Overlay Removed */}
                           </div>
@@ -2451,19 +2441,8 @@ export function ModernStudentPortal({ initialTab, onNavigate }: StudentPortalPro
           <div className="relative w-full aspect-video bg-black flex items-center justify-center">
             {activeVideoLesson?.videoUrl ? (
               <div ref={playerContainerRef} className="relative w-full aspect-video bg-black flex flex-col items-center justify-center group overflow-hidden">
-                <div className="absolute inset-0">
-                  {getYouTubeEmbedUrl(activeVideoLesson.videoUrl) ? (
-                    <iframe
-                      src={getYouTubeEmbedUrl(activeVideoLesson.videoUrl)}
-                      className="w-full h-full border-0 absolute top-0 left-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted/20">
-                      Invalid or unsupported video link format
-                    </div>
-                  )}
+                <div className="absolute inset-0 w-full h-full">
+                  <CustomYouTubePlayer videoUrl={activeVideoLesson.videoUrl} />
                 </div>
                 {/* Big Play Button Overlay Removed */}
               </div>

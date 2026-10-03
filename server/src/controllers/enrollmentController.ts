@@ -19,13 +19,26 @@ export const getTopUpHistory = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 export const getEnrollablePrograms = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const programs = await prisma.program.findMany({ 
-    where: { organizationId: req.user.organizationId, status: 'active' },
-    include: {
-      university: true,
-      feeStructures: true
+  let programs: any[] = [];
+
+  if (req.user.role === 'center_admin') {
+    if (req.user.studyCenterId) {
+      const allocations = await prisma.programAllocation.findMany({
+        where: { centerId: req.user.studyCenterId, organizationId: req.user.organizationId, isActive: true }
+      });
+      const allocatedProgramIds = allocations.map(a => a.programId);
+      programs = await prisma.program.findMany({ 
+        where: { organizationId: req.user.organizationId, status: 'active', id: { in: allocatedProgramIds } },
+        include: { university: true, feeStructures: true }
+      });
     }
-  });
+  } else {
+    programs = await prisma.program.findMany({ 
+      where: { organizationId: req.user.organizationId, status: 'active' },
+      include: { university: true, feeStructures: true }
+    });
+  }
+
   res.json({ success: true, count: programs.length, data: programs });
 });
 

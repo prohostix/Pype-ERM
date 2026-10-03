@@ -37,7 +37,7 @@ interface LeaveRequest {
   startDate: string;
   endDate: string;
   reason: string;
-  status: 'pending' | 'dept_approved' | 'approved' | 'rejected';
+  status: 'pending' | 'dept_approved' | 'approved' | 'rejected' | 'withdraw_pending' | 'withdrawn';
   deptAdminRemarks?: string;
   hrRemarks?: string;
   deptApprover?: { name: string } | null;
@@ -49,10 +49,12 @@ interface LeaveRequest {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  pending:      { label: 'Pending',          color: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' },
-  dept_approved:{ label: 'Dept Approved',    color: 'bg-blue-500/10 text-blue-600 border-blue-500/20' },
-  approved:     { label: 'Fully Approved',   color: 'bg-green-500/10 text-green-600 border-green-500/20' },
-  rejected:     { label: 'Rejected',         color: 'bg-red-500/10 text-red-600 border-red-500/20' },
+  pending: { label: 'Pending', color: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' },
+  dept_approved: { label: 'Dept Approved', color: 'bg-blue-500/10 text-blue-600 border-blue-500/20' },
+  approved: { label: 'Fully Approved', color: 'bg-green-500/10 text-green-600 border-green-500/20' },
+  rejected: { label: 'Rejected', color: 'bg-red-500/10 text-red-600 border-red-500/20' },
+  withdraw_pending: { label: 'Withdrawal Pending', color: 'bg-orange-500/10 text-orange-600 border-orange-500/20' },
+  withdrawn: { label: 'Withdrawn', color: 'bg-slate-500/10 text-slate-600 border-slate-500/20' },
 };
 
 const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
@@ -128,7 +130,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
     }
   };
 
-  const openAction = (leave: LeaveRequest, type: 'dept' | 'hr', mode: 'approve' | 'reject') => {
+  const openAction = (leave: LeaveRequest, type: 'dept' | 'hr' | 'employee', mode: 'approve' | 'reject' | 'withdraw') => {
     setActionLeave(leave);
     setActionType(type);
     setActionMode(mode);
@@ -144,11 +146,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
     }
     setActionSubmitting(true);
     try {
-      const endpoint = actionType === 'dept'
-        ? `/hr/leaves/${actionLeave.id}/dept-approve`
-        : `/hr/leaves/${actionLeave.id}/hr-approve`;
+      const endpoint = actionType === 'employee'
+        ? `/hr/leaves/${actionLeave.id}/withdraw`
+        : actionType === 'dept'
+          ? `/hr/leaves/${actionLeave.id}/dept-approve`
+          : `/hr/leaves/${actionLeave.id}/hr-approve`;
       await api.patch(endpoint, { action: actionMode, remarks });
-      toast.success(actionMode === 'approve' ? 'Leave approved' : 'Leave rejected');
+      toast.success(actionMode === 'approve' ? 'Leave approved' : actionMode === 'withdraw' ? 'Leave withdrawal requested' : 'Leave rejected');
       setActionDialog(false);
       fetchLeaves();
     } catch (err: any) {
@@ -183,6 +187,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
     dept_approved: leaves.filter(l => l.status === 'dept_approved').length,
     approved: leaves.filter(l => l.status === 'approved').length,
     rejected: leaves.filter(l => l.status === 'rejected').length,
+    withdraw_pending: leaves.filter(l => l.status === 'withdraw_pending').length,
   };
 
   return (
@@ -199,8 +204,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               {isDeptManager
                 ? 'Review and approve leave requests from your department.'
                 : isHR
-                ? 'Final approval for department-approved leave requests.'
-                : 'Submit and track your leave requests.'}
+                  ? 'Final approval for department-approved leave requests.'
+                  : 'Submit and track your leave requests.'}
             </p>
           </div>
         </div>
@@ -224,8 +229,8 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold">My Leave Balances</h3>
-            <Input 
-              type="month" 
+            <Input
+              type="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="w-48"
@@ -318,11 +323,12 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       )}
 
       {/* Summary KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {[
           { label: 'Pending', count: counts.pending, color: 'text-yellow-600', bg: 'bg-yellow-500/10' },
           { label: 'Dept Approved', count: counts.dept_approved, color: 'text-blue-600', bg: 'bg-blue-500/10' },
           { label: 'Approved', count: counts.approved, color: 'text-green-600', bg: 'bg-green-500/10' },
+          { label: 'Withdrawals', count: counts.withdraw_pending, color: 'text-orange-600', bg: 'bg-orange-500/10' },
           { label: 'Rejected', count: counts.rejected, color: 'text-red-600', bg: 'bg-red-500/10' },
         ].map(({ label, count, color, bg }) => (
           <Card key={label} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-md transition-shadow rounded-2xl bg-card/60 backdrop-blur-xl">
@@ -346,6 +352,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
           <TabsTrigger value="pending" className="rounded-xl data-[state=active]:shadow-sm">Pending ({counts.pending})</TabsTrigger>
           <TabsTrigger value="dept_approved" className="rounded-xl data-[state=active]:shadow-sm">Dept Approved ({counts.dept_approved})</TabsTrigger>
           <TabsTrigger value="approved" className="rounded-xl data-[state=active]:shadow-sm">Approved ({counts.approved})</TabsTrigger>
+          <TabsTrigger value="withdraw_pending" className="rounded-xl data-[state=active]:shadow-sm">Withdrawals ({counts.withdraw_pending})</TabsTrigger>
           <TabsTrigger value="rejected" className="rounded-xl data-[state=active]:shadow-sm">Rejected ({counts.rejected})</TabsTrigger>
           {!isEmployee && !isMyPortal && <TabsTrigger value="mine" className="rounded-xl data-[state=active]:shadow-sm">My Requests</TabsTrigger>}
         </TabsList>
@@ -353,7 +360,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
         <TabsContent value={activeTab} className="mt-6">
           {loading ? (
             <div className="space-y-4">
-              {[1,2,3].map(i => <div key={i} className="h-32 bg-muted/40 rounded-2xl animate-pulse" />)}
+              {[1, 2, 3].map(i => <div key={i} className="h-32 bg-muted/40 rounded-2xl animate-pulse" />)}
             </div>
           ) : filtered.length === 0 ? (
             <Card className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl bg-card/40 backdrop-blur-sm border-dashed">
@@ -372,8 +379,9 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const isExpanded = expanded === leave.id;
                 const isOwner = leave.employeeId === userId;
                 const isExecutive = role === 'ceo' || role === 'general_manager';
-                const canDeptAct = (isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending');
-                const canHRAct = (isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved'));
+                const canDeptAct = !isOwner && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
+                const canHRAct = !isOwner && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
+                const canWithdrawAct = !isOwner && leave.status === 'withdraw_pending' && (isHR || isExecutive);
 
                 return (
                   <Card key={leave.id} className="border border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-lg rounded-2xl hover:border-primary/30 transition-all duration-300 bg-card/60 backdrop-blur-xl group overflow-hidden">
@@ -426,10 +434,28 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                             </p>
                           </div>
 
+                          {/* Approvers */}
+                          {(leave.deptApprover || leave.hrApprover) && (
+                            <div className="flex items-center gap-2 mt-3 flex-wrap">
+                              {leave.deptApprover && (
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
+                                  <UserCircle2 className="w-3 h-3 opacity-70" />
+                                  <span>Dept: <span className="font-medium text-foreground/80">{leave.deptApprover.name}</span></span>
+                                </div>
+                              )}
+                              {leave.hrApprover && (
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/30 border border-border/50 px-2 py-1 rounded-md">
+                                  <UserCircle2 className="w-3 h-3 opacity-70" />
+                                  <span>Final: <span className="font-medium text-foreground/80">{leave.hrApprover.name}</span></span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
                           {/* Expandable remarks */}
                           {(leave.deptAdminRemarks || leave.hrRemarks) && (
                             <button
-                              className="flex items-center gap-1.5 mt-3 text-xs font-medium text-primary hover:text-primary/80 transition-colors bg-primary/5 px-2.5 py-1 rounded-full"
+                              className="flex items-center gap-1.5 mt-2 text-xs font-medium text-primary hover:text-primary/80 transition-colors bg-primary/5 px-2.5 py-1 rounded-full"
                               onClick={() => setExpanded(isExpanded ? null : leave.id)}
                             >
                               {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -469,7 +495,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
                         {/* Action buttons & Workflow */}
                         <div className="flex flex-col sm:items-end justify-between gap-6 shrink-0 w-full sm:w-auto">
-                          
+
                           <div className="flex sm:flex-col gap-2 w-full sm:w-auto md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                             {canDeptAct && (
                               <>
@@ -491,13 +517,23 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                 </Button>
                               </>
                             )}
-                            {isOwner && leave.status === 'pending' && (
-                              <Button size="sm" variant="ghost" className="rounded-xl h-9 text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto" onClick={() => { setDeleteLeave(leave); setDeleteOpen(true); }}>
+                            {canWithdrawAct && (
+                              <>
+                                <Button size="sm" className="rounded-xl shadow-sm h-9 bg-orange-500 hover:bg-orange-600 text-white w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'approve')}>
+                                  <CheckCircle className="w-4 h-4 mr-1.5" /> Approve Withdrawal
+                                </Button>
+                                <Button size="sm" variant="outline" className="rounded-xl border-red-200 shadow-sm h-9 text-red-600 hover:bg-red-50 hover:text-red-700 w-full sm:w-auto" onClick={() => openAction(leave, 'hr', 'reject')}>
+                                  <XCircle className="w-4 h-4 mr-1.5" /> Reject Withdrawal
+                                </Button>
+                              </>
+                            )}
+                            {isOwner && ['pending', 'approved', 'dept_approved'].includes(leave.status) && (
+                              <Button size="sm" variant="ghost" className="rounded-xl h-9 text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto" onClick={() => openAction(leave, 'employee', 'withdraw')}>
                                 <Trash2 className="w-4 h-4 mr-1.5" /> Withdraw Request
                               </Button>
                             )}
                           </div>
-                          
+
                           {/* Workflow progress bar */}
                           <div className="flex items-center gap-2 text-[10px] text-muted-foreground w-full sm:w-auto justify-center sm:justify-end">
                             <StepDot active={true} done={true} label="Submitted" />
@@ -540,7 +576,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               <p className="text-sm text-muted-foreground mt-0.5">Fill out the details below to request time off.</p>
             </div>
           </div>
-          
+
           <form onSubmit={handleCreate} className="p-6 space-y-5">
             <div className="space-y-2">
               <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Leave Type</Label>
@@ -572,10 +608,10 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                   id="isHalfDay"
                   checked={form.isHalfDay}
                   onCheckedChange={(checked) => {
-                    setForm(f => ({ 
-                      ...f, 
-                      isHalfDay: checked, 
-                      endDate: checked ? f.startDate : f.endDate 
+                    setForm(f => ({
+                      ...f,
+                      isHalfDay: checked,
+                      endDate: checked ? f.startDate : f.endDate
                     }));
                   }}
                 />
@@ -598,13 +634,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
             <div className="space-y-2">
               <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Reason</Label>
-              <Textarea 
+              <Textarea
                 className="rounded-xl resize-none"
-                value={form.reason} 
-                onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} 
-                placeholder="Explain the reason for your leave in detail..." 
-                rows={3} 
-                required 
+                value={form.reason}
+                onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
+                placeholder="Explain the reason for your leave in detail..."
+                rows={3}
+                required
               />
             </div>
             <div className="pt-2 flex justify-end gap-2">
@@ -618,20 +654,20 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
       {/* Approve/Reject Action Dialog */}
       <Dialog open={actionDialog} onOpenChange={setActionDialog}>
         <DialogContent className="max-w-md border-0 shadow-2xl rounded-3xl overflow-hidden p-0">
-          <div className={cn("p-6 border-b flex items-center gap-3", actionMode === 'approve' ? 'bg-green-500/10 border-green-500/10 text-green-700' : 'bg-red-500/10 border-red-500/10 text-red-700')}>
-            <div className={cn("p-2.5 rounded-2xl", actionMode === 'approve' ? 'bg-green-500/20' : 'bg-red-500/20')}>
-              <ShieldAlert className="w-5 h-5" />
+          <div className={cn("p-6 border-b flex items-center gap-3", actionMode === 'approve' ? 'bg-green-500/10 border-green-500/10 text-green-700' : actionMode === 'withdraw' ? 'bg-orange-500/10 border-orange-500/10 text-orange-700' : 'bg-red-500/10 border-red-500/10 text-red-700')}>
+            <div className={cn("p-2.5 rounded-2xl", actionMode === 'approve' ? 'bg-green-500/20' : actionMode === 'withdraw' ? 'bg-orange-500/20' : 'bg-red-500/20')}>
+              {actionMode === 'withdraw' ? <Trash2 className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
             </div>
             <div>
               <DialogTitle className="text-xl">
-                {actionMode === 'approve' ? 'Approve' : 'Reject'} Request
+                {actionMode === 'approve' ? 'Approve' : actionMode === 'withdraw' ? 'Withdraw' : 'Reject'} Request
               </DialogTitle>
               <p className="text-sm opacity-80 mt-0.5">
-                ({actionType === 'dept' ? 'Department' : 'HR'} Review)
+                ({actionType === 'dept' ? 'Department' : actionType === 'hr' ? 'HR' : 'Employee'} Review)
               </p>
             </div>
           </div>
-          
+
           <div className="p-6 space-y-5">
             {actionLeave && (
               <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-sm space-y-2">
@@ -660,13 +696,13 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
               />
             </div>
             <div className="pt-2 flex justify-end gap-2">
-              <Button variant="ghost" className="rounded-xl" onClick={() => setActionDialog(false)}>Cancel</Button>
+              <Button variant="ghost" className="rounded-xl" onClick={() => setActionDialog(false)} disabled={actionSubmitting}>Cancel</Button>
               <Button
                 onClick={handleAction}
-                disabled={actionSubmitting}
-                className={cn("rounded-xl px-6", actionMode === 'approve' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white')}
+                disabled={actionSubmitting || (actionMode === 'withdraw' && !remarks.trim())}
+                className={cn("rounded-xl px-6", actionMode === 'approve' ? 'bg-green-600 hover:bg-green-700 text-white' : actionMode === 'withdraw' ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-red-600 hover:bg-red-700 text-white')}
               >
-                {actionSubmitting ? 'Processing...' : actionMode === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
+                {actionSubmitting ? 'Processing...' : actionMode === 'approve' ? 'Confirm Approval' : actionMode === 'withdraw' ? 'Submit Withdrawal' : 'Confirm Rejection'}
               </Button>
             </div>
           </div>
@@ -703,9 +739,9 @@ function StepDot({ active, done, rejected, label }: { active: boolean; done: boo
       <div className={cn(
         'w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300',
         done ? 'bg-green-500 text-white shadow-md shadow-green-500/30' :
-        rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
-        active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
-        'bg-muted border border-border text-muted-foreground'
+          rejected ? 'bg-red-500 text-white shadow-md shadow-red-500/30' :
+            active ? 'bg-primary text-white shadow-md shadow-primary/30 ring-4 ring-primary/20' :
+              'bg-muted border border-border text-muted-foreground'
       )}>
         {done && <CheckCircle className="w-3.5 h-3.5" />}
         {rejected && <XCircle className="w-3.5 h-3.5" />}
@@ -713,11 +749,11 @@ function StepDot({ active, done, rejected, label }: { active: boolean; done: boo
         {!active && !done && !rejected && <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />}
       </div>
       <span className={cn(
-        "text-[10px] font-bold whitespace-nowrap transition-colors tracking-wide", 
+        "text-[10px] font-bold whitespace-nowrap transition-colors tracking-wide",
         done ? "text-green-600 dark:text-green-500" :
-        rejected ? "text-red-600 dark:text-red-500" :
-        active ? "text-primary" : 
-        "text-muted-foreground"
+          rejected ? "text-red-600 dark:text-red-500" :
+            active ? "text-primary" :
+              "text-muted-foreground"
       )}>
         {label}
       </span>

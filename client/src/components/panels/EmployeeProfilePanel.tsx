@@ -610,7 +610,7 @@ export function EmployeeProfilePanel({ userId, open, onClose }: Props) {
                   <div><Label>ESI (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.esi || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, esi: Number(e.target.value) } })} /></div>
                   <div><Label>TDS (₹)</Label><Input type="number" value={salaryConfigForm.deductions?.tds || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, deductions: { ...salaryConfigForm.deductions, tds: Number(e.target.value) } })} /></div>
                   <div><Label>Late Deduction (₹/min)</Label><Input type="number" step="0.01" value={salaryConfigForm.lateDeductionPerMinute || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, lateDeductionPerMinute: Number(e.target.value) })} /></div>
-                  <div><Label>WFH Deduction (₹/day)</Label><Input type="number" step="0.01" value={salaryConfigForm.wfhDeductionPerDay || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, wfhDeductionPerDay: Number(e.target.value) })} /></div>
+                  <div><Label>WFH Deduction (% of daily salary)</Label><Input type="number" step="0.01" value={salaryConfigForm.wfhDeductionPerDay || ''} onChange={e => setSalaryConfigForm({ ...salaryConfigForm, wfhDeductionPerDay: Number(e.target.value) })} /></div>
                 </div>
 
                 <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border mt-4">

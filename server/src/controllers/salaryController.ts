@@ -214,7 +214,7 @@ export const generateSmartPayroll = asyncHandler(async (req: AuthRequest, res: R
     const wfhMonthlyLimit = alloc ? (alloc.wfh / 12) : 0;
     const exceededWfhDays = Math.max(0, wfhDays - wfhMonthlyLimit);
     
-    const wfhDeductionAmount = exceededWfhDays * (config.wfhDeductionPerDay || 0);
+    const wfhDeductionAmount = exceededWfhDays * ((grossSalary / 30) * ((config.wfhDeductionPerDay || 0) / 100));
 
     let leaveDeductionAmount = 0;
     const rule = config.unpaidLeaveRule as any || { type: 'standard' };

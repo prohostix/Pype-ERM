@@ -7,10 +7,30 @@ import { sendEmail } from '../utils/emailService.js';
 
 // Universities
 export const getUniversities = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const universities = await prisma.university.findMany({
-    where: { organizationId: req.user.organizationId },
-    include: { allowedBranches: true }
-  });
+  let universities: any[] = [];
+  if (req.user.role === 'center_admin') {
+    if (!req.user.studyCenterId) {
+      console.log('Center admin without studyCenterId');
+      universities = [];
+    } else {
+      const allocations = await prisma.programAllocation.findMany({
+        where: { centerId: req.user.studyCenterId, organizationId: req.user.organizationId, isActive: true },
+        include: { program: { include: { university: true } } }
+      });
+      const allocatedUniversityIds = Array.from(new Set(allocations.map(a => a.program?.universityId).filter(Boolean)));
+      console.log('Center admin allocations:', allocations.length, 'Uni IDs:', allocatedUniversityIds);
+      universities = await prisma.university.findMany({
+        where: { organizationId: req.user.organizationId, id: { in: allocatedUniversityIds } },
+        include: { allowedBranches: true }
+      });
+    }
+  } else {
+    console.log('Non-center admin requesting universities, role:', req.user.role);
+    universities = await prisma.university.findMany({
+      where: { organizationId: req.user.organizationId },
+      include: { allowedBranches: true }
+    });
+  }
   const mapped = universities.map(u => ({
     ...u,
     allowedBranchIds: u.allowedBranches || []
@@ -69,7 +89,26 @@ export const activateUniversity = asyncHandler(async (req: AuthRequest, res: Res
 
 // Programs
 export const getPrograms = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const programs = await prisma.program.findMany({ where: { organizationId: req.user.organizationId }, include: { university: true, feeStructures: true } });
+  let programs: any[] = [];
+  if (req.user.role === 'center_admin') {
+    if (!req.user.studyCenterId) {
+      programs = [];
+    } else {
+      const allocations = await prisma.programAllocation.findMany({
+        where: { centerId: req.user.studyCenterId, organizationId: req.user.organizationId, isActive: true }
+      });
+      const allocatedProgramIds = allocations.map(a => a.programId);
+      programs = await prisma.program.findMany({ 
+        where: { organizationId: req.user.organizationId, id: { in: allocatedProgramIds } }, 
+        include: { university: true, feeStructures: true } 
+      });
+    }
+  } else {
+    programs = await prisma.program.findMany({ 
+      where: { organizationId: req.user.organizationId }, 
+      include: { university: true, feeStructures: true } 
+    });
+  }
   res.json({ success: true, count: programs.length, data: programs });
 });
 export const getProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -437,12 +476,52 @@ export const verifyCenter = asyncHandler(async (req: AuthRequest, res: Response)
 
 // Allocations
 export const getProgramAllocations = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const allocations = await prisma.programAllocation.findMany({ where: { centerId: req.params.id }, include: { program: true } });
+  const allocations = await prisma.programAllocation.findMany({ 
+    where: { centerId: req.params.id }, 
+    include: { program: { include: { university: true } } } 
+  });
   res.json({ success: true, data: allocations });
 });
 export const allocateProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const allocation = await prisma.programAllocation.create({ data: { ...req.body, centerId: req.params.id, organizationId: req.user.organizationId, allocatedBy: req.user.id } });
-  res.status(201).json({ success: true, data: allocation });
+  const { programId, programIds } = req.body;
+  const centerId = req.params.id;
+  
+  if (programIds && Array.isArray(programIds)) {
+    // Prevent duplicate allocations by checking existing ones
+    const existing = await prisma.programAllocation.findMany({
+      where: { centerId, programId: { in: programIds } }
+    });
+    const existingIds = existing.map(a => a.programId);
+    const newIds = programIds.filter(id => !existingIds.includes(id));
+    
+    if (newIds.length === 0) {
+      res.status(400).json({ success: false, message: 'All selected programs are already allocated' });
+      return;
+    }
+    
+    await prisma.programAllocation.createMany({
+      data: newIds.map(pid => ({
+        programId: pid,
+        centerId,
+        organizationId: req.user.organizationId,
+        allocatedBy: req.user.id
+      }))
+    });
+    
+    res.status(201).json({ success: true, message: 'Programs allocated successfully' });
+  } else if (programId) {
+    const existing = await prisma.programAllocation.findFirst({ where: { centerId, programId } });
+    if (existing) {
+      res.status(400).json({ success: false, message: 'Program already allocated' });
+      return;
+    }
+    const allocation = await prisma.programAllocation.create({ 
+      data: { programId, centerId, organizationId: req.user.organizationId, allocatedBy: req.user.id } 
+    });
+    res.status(201).json({ success: true, data: allocation });
+  } else {
+    res.status(400).json({ success: false, message: 'Please provide programId or programIds' });
+  }
 });
 export const removeAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   await prisma.programAllocation.delete({ where: { id: req.params.allocId } });

@@ -617,7 +617,9 @@ export const LeaveStatus: {
   pending: 'pending',
   dept_approved: 'dept_approved',
   approved: 'approved',
-  rejected: 'rejected'
+  rejected: 'rejected',
+  withdraw_pending: 'withdraw_pending',
+  withdrawn: 'withdrawn'
 };
 
 export type LeaveStatus = (typeof LeaveStatus)[keyof typeof LeaveStatus]

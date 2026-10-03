@@ -1637,7 +1637,9 @@ exports.LeaveStatus = exports.$Enums.LeaveStatus = {
   pending: 'pending',
   dept_approved: 'dept_approved',
   approved: 'approved',
-  rejected: 'rejected'
+  rejected: 'rejected',
+  withdraw_pending: 'withdraw_pending',
+  withdrawn: 'withdrawn'
 };
 
 exports.ApprovalStatus = exports.$Enums.ApprovalStatus = {

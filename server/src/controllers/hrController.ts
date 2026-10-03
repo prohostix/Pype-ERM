@@ -89,7 +89,7 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   }
 
   // 1. Sick Leave
-  const sickMonthlyAccrual = allocation.sickLeave / 12;
+  const sickMonthlyAccrual = allocation.sickLeave;
   const usedSickThisMonthRaw = await prisma.leaveRequest.findMany({
     where: {
       employeeId: req.user.id, type: 'sick',
@@ -100,7 +100,7 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   const usedSickThisMonth = usedSickThisMonthRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
 
   // 2. Casual Leave (3 month lookback)
-  const casualMonthlyAccrual = allocation.casualLeave / 12;
+  const casualMonthlyAccrual = allocation.casualLeave;
   const usedCasualRecentRaw = await prisma.leaveRequest.findMany({
     where: {
       employeeId: req.user.id, type: 'casual',
@@ -113,7 +113,7 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   const carryForwardCasual = Math.max(0, availableCasual - casualMonthlyAccrual);
 
   // 3. Earned Leave (YTD)
-  const earnedMonthlyAccrual = allocation.earnedLeave / 12;
+  const earnedMonthlyAccrual = allocation.earnedLeave;
   const accruedEarned = earnedMonthlyAccrual * currentMonth;
   const usedEarnedRaw = await prisma.leaveRequest.findMany({
     where: {
@@ -135,7 +135,7 @@ export const getMyLeaveBalance = asyncHandler(async (req: AuthRequest, res: Resp
   const unpaidTaken = unpaidRaw.reduce((acc, l: any) => acc + (l.isHalfDay ? 0.5 : (l.endDate.getTime() - l.startDate.getTime()) / 86400000 + 1), 0);
 
   // 5. WFH (Monthly)
-  const wfhMonthlyAccrual = allocation.wfh / 12;
+  const wfhMonthlyAccrual = allocation.wfh;
   const usedWfhRaw = await prisma.leaveRequest.findMany({
     where: {
       employeeId: req.user.id, type: 'wfh',
@@ -234,13 +234,13 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
       };
 
       if (type === 'sick') {
-        const monthlyAccrual = allocation.sickLeave / 12;
+        const monthlyAccrual = allocation.sickLeave;
         const usedDays = await getUsedSick();
         const availableBalance = monthlyAccrual - usedDays;
 
         if (requestedDays > availableBalance) {
           // Fallback to casual
-          const casualMonthlyAccrual = allocation.casualLeave / 12;
+          const casualMonthlyAccrual = allocation.casualLeave;
           const usedCasual = await getUsedCasual();
           const availableCasual = (casualMonthlyAccrual * 3) - usedCasual;
 
@@ -251,13 +251,13 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
           }
         }
       } else if (type === 'casual') {
-        const casualMonthlyAccrual = allocation.casualLeave / 12;
+        const casualMonthlyAccrual = allocation.casualLeave;
         const usedCasual = await getUsedCasual();
         const availableCasual = (casualMonthlyAccrual * 3) - usedCasual;
         
         if (requestedDays > availableCasual) {
           // Fallback to sick
-          const sickMonthlyAccrual = allocation.sickLeave / 12;
+          const sickMonthlyAccrual = allocation.sickLeave;
           const usedSick = await getUsedSick();
           const availableSick = sickMonthlyAccrual - usedSick;
 
@@ -400,11 +400,19 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
 
 export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { action, remarks } = req.body;
+  const currentLeave = await prisma.leaveRequest.findUnique({ where: { id: req.params.id } });
+  if (!currentLeave) return res.status(404).json({ success: false, message: 'Not found' });
+
+  let newStatus: any = action === 'approve' ? 'approved' : 'rejected';
+  if (currentLeave.status === 'withdraw_pending') {
+    newStatus = action === 'approve' ? 'withdrawn' : 'approved'; // if reject withdrawal, goes back to approved
+  }
+
   const leave = await prisma.leaveRequest.update({
     where: { id: req.params.id },
     data: { 
-      status: action === 'approve' ? 'approved' : 'rejected', 
-      hrRemarks: remarks,
+      status: newStatus, 
+      hrRemarks: remarks ? (currentLeave.hrRemarks ? currentLeave.hrRemarks + '\n' + remarks : remarks) : currentLeave.hrRemarks,
       hrApprovedBy: req.user.id
     }
   });
@@ -419,7 +427,18 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
     console.error(err);
   }
 
-  if (action === 'approve') {
+  if (newStatus === 'withdrawn') {
+    // Delete attendance records for this leave
+    const startDate = new Date(leave.startDate);
+    const endDate = new Date(leave.endDate);
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateOnly = new Date(d);
+      dateOnly.setHours(0, 0, 0, 0);
+      await prisma.attendance.deleteMany({
+        where: { employeeId: leave.employeeId, date: dateOnly, status: { in: ['leave', 'half_day', 'wfh'] } }
+      });
+    }
+  } else if (action === 'approve' && newStatus === 'approved') {
     // Generate attendance records for the leave duration
     const startDate = new Date(leave.startDate);
     const endDate = new Date(leave.endDate);
@@ -430,19 +449,33 @@ export const hrApproveLeave = asyncHandler(async (req: AuthRequest, res: Respons
       const dateOnly = new Date(d);
       dateOnly.setHours(0, 0, 0, 0);
 
+      const dayStart = new Date(dateOnly);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(dateOnly);
+      dayEnd.setHours(23, 59, 59, 999);
+
       // Check if an attendance record exists for this employee on this date
       const existing = await prisma.attendance.findFirst({
         where: {
           employeeId: leave.employeeId,
-          date: dateOnly
+          date: {
+            gte: dayStart,
+            lte: dayEnd
+          }
         }
       });
 
       if (existing) {
         // Update existing record
+        const updateData: any = { status: statusToSet as any };
+        if (leave.isHalfDay && leave.halfDayType === 'first_half') {
+          // Clear lateness penalty since they are excused for the first half
+          updateData.isLate = false;
+          updateData.lateMinutes = 0;
+        }
         await prisma.attendance.update({
           where: { id: existing.id },
-          data: { status: statusToSet as any }
+          data: updateData
         });
       } else {
         // Create new record
@@ -691,4 +724,27 @@ export const updateAnnouncement = asyncHandler(async (req: AuthRequest, res: Res
 export const deleteAnnouncement = asyncHandler(async (req: AuthRequest, res: Response) => {
   await prisma.announcement.delete({ where: { id: req.params.id } });
   res.json({ success: true, data: {} });
+});
+
+
+export const withdrawLeaveRequest = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { remarks } = req.body;
+  const leave = await prisma.leaveRequest.findFirst({ where: { id: req.params.id, employeeId: req.user.id } });
+  if (!leave) {
+    res.status(404).json({ success: false, message: 'Leave request not found' });
+    return;
+  }
+  
+  if (leave.status === 'pending') {
+    // If it's pending, just delete it directly since no one approved it yet
+    await prisma.leaveRequest.delete({ where: { id: req.params.id } });
+    res.json({ success: true, message: 'Leave request withdrawn and deleted' });
+  } else {
+    // If it's already approved, set it to withdraw_pending for CEO/HR to approve
+    await prisma.leaveRequest.update({
+      where: { id: req.params.id },
+      data: { status: 'withdraw_pending', hrRemarks: remarks ? ('Withdrawal Reason: ' + remarks) : undefined }
+    });
+    res.json({ success: true, message: 'Withdrawal requested' });
+  }
 });

@@ -6,6 +6,7 @@ import {
   createLeaveRequest,
   updateLeaveRequest,
   deleteLeaveRequest,
+  withdrawLeaveRequest,
   deptApproveLeave,
   hrApproveLeave,
   getLeaveStats,
@@ -86,6 +87,7 @@ router.route('/leaves/:id')
   .get(getLeaveRequest)
   .put(updateLeaveRequest)
   .delete(deleteLeaveRequest);
+router.patch('/leaves/:id/withdraw', withdrawLeaveRequest);
 router.put('/leaves/:id/approve', authorize('hr_admin', 'hr_sub_admin', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), hrApproveLeave);
 router.patch('/leaves/:id/dept-approve', authorize('ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin', 'hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), deptApproveLeave);
 router.patch('/leaves/:id/hr-approve', authorize('hr_admin', 'hr_sub_admin', 'superadmin', 'org_admin', 'ceo', 'general_manager'), hrApproveLeave);
