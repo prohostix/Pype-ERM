@@ -20,6 +20,7 @@ interface University {
   contact?: string; status: string; logo?: string;
   allowedBranchIds: Branch[];
   enrollmentFormConfig?: any;
+  isAcademicPartnerOnly?: boolean;
 }
 
 export function UniversitiesPanel() {
@@ -39,7 +40,7 @@ export function UniversitiesPanel() {
     }
   });
   const [selectedBranchIds, setSelectedBranchIds] = useState<string[]>([]);
-  const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi'>('all');
+  const [accessMode, setAccessMode] = useState<'all' | 'exclusive' | 'multi' | 'academic_partners'>('all');
 
   const [addProgramUniId, setAddProgramUniId] = useState<string | null>(null);
   const [addSessionUniId, setAddSessionUniId] = useState<string | null>(null);
@@ -53,7 +54,7 @@ export function UniversitiesPanel() {
   const fetchUniversities = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/operations/universities');
+      const res = await api.get('/operations/universities?all=true');
       setUniversities(res.data.data || []);
     } catch (err) {
       console.error('Failed to fetch universities:', err);
@@ -77,6 +78,7 @@ export function UniversitiesPanel() {
       const payload = {
         ...formData,
         allowedBranchIds: selectedBranchIds,
+        isAcademicPartnerOnly: accessMode === 'academic_partners',
       };
       if (editingId) {
         await api.put(`/operations/universities/${editingId}`, payload);
@@ -110,7 +112,8 @@ export function UniversitiesPanel() {
     });
     const ids = (u.allowedBranchIds || []).map(b => b.id);
     setSelectedBranchIds(ids);
-    if (ids.length === 0) setAccessMode('all');
+    if (u.isAcademicPartnerOnly) setAccessMode('academic_partners');
+    else if (ids.length === 0) setAccessMode('all');
     else if (ids.length === 1) setAccessMode('exclusive');
     else setAccessMode('multi');
     setDialogOpen(true);
@@ -325,7 +328,7 @@ export function UniversitiesPanel() {
                   </div>
 
                   {/* Mode cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <button type="button"
                       onClick={() => { setAccessMode('all'); setSelectedBranchIds([]); }}
                       className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'all'
@@ -361,6 +364,18 @@ export function UniversitiesPanel() {
                       </p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">Pick 2 or more</p>
                     </button>
+
+                    <button type="button"
+                      onClick={() => { setAccessMode('academic_partners'); setSelectedBranchIds([]); }}
+                      className={`rounded-lg border-2 p-3 text-left transition-all ${accessMode === 'academic_partners'
+                          ? 'border-purple-500 bg-purple-50'
+                          : 'border-slate-200 bg-white hover:border-purple-300'}`}>
+                      <Building2 className={`h-5 w-5 mb-1 ${accessMode === 'academic_partners' ? 'text-purple-600' : 'text-slate-400'}`} />
+                      <p className={`text-xs font-semibold ${accessMode === 'academic_partners' ? 'text-purple-700' : 'text-slate-600'}`}>
+                        Academic Partners
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Partner allocation only</p>
+                    </button>
                   </div>
 
                   {/* All branches — confirmation note */}
@@ -369,6 +384,16 @@ export function UniversitiesPanel() {
                       <Globe className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                       <p className="text-xs text-green-800">
                         This university will be visible and usable by <strong>all branches</strong> in your organisation.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Academic Partners — confirmation note */}
+                  {accessMode === 'academic_partners' && (
+                    <div className="flex items-start gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-2">
+                      <Building2 className="h-4 w-4 text-purple-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-purple-800">
+                        This university is reserved for <strong>Academic Partners</strong>. It won't appear in regular operations lists.
                       </p>
                     </div>
                   )}

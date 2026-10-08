@@ -10,11 +10,16 @@ import {
   updateOrgInquiryStatus,
   getEnrollmentLinkConfig,
   updateEnrollmentLinkConfig,
+  getLoginBrandingBySlug,
+  initLoginBranding,
+  updateLoginBranding,
 } from '../controllers/organizationController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { auditLog } from '../middleware/auditLog.js';
 
 const router = express.Router();
+
+router.get('/login-branding/:slug', getLoginBrandingBySlug);
 
 router.use(protect);
 
@@ -29,6 +34,10 @@ router
 // Enrollment link configuration (must be before /:id to avoid route conflict)
 router.get('/enrollment-link-config', authorize('superadmin', 'org_admin', 'sales_admin', 'sales_sub_admin'), getEnrollmentLinkConfig);
 router.put('/enrollment-link-config', authorize('superadmin', 'org_admin'), updateEnrollmentLinkConfig);
+
+// Login Branding
+router.post('/login-branding/init', authorize('org_admin', 'superadmin'), initLoginBranding);
+router.put('/login-branding', authorize('org_admin', 'superadmin'), updateLoginBranding);
 
 router
   .route('/:id')

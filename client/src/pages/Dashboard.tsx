@@ -137,6 +137,8 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
         case 'ceo':
         case 'general_manager':
           return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+        case 'branch_manager':
+          return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
         default:
           return <ModernEmployeeDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
       }
@@ -153,6 +155,10 @@ export function Dashboard({ onNavigateToTable, useDepartmentDashboard, initialTa
 
   if (user?.role === 'ceo' || user?.role === 'general_manager') {
     return <ModernCEODashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
+  }
+
+  if (user?.role === 'branch_manager') {
+    return <ModernBranchManagerDashboard initialTab={initialTab} onNavigate={onNavigateToTable} />;
   }
 
   if (user?.role === 'org_admin') {

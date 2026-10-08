@@ -31,11 +31,13 @@ import { HolidaysPanel } from '@/components/panels/HolidaysPanel';
 import { NoticeBoardPanel } from '@/components/panels/NoticeBoardPanel';
 import { PayrollPanel } from '@/components/panels/PayrollPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
+import { BranchHierarchyPanel } from '@/components/panels/BranchHierarchyPanel';
 
 export function getBranchManagerNavItems() {
   return [
     { id: '__branch_section', label: 'Branch Overview', isSection: true },
     { id: 'overview', label: 'Overview' },
+    { id: 'hierarchy', label: 'Organization Hierarchy' },
     { id: '__sales_section', label: 'Sales', isSection: true },
     { id: 'leads', label: 'Leads' },
     { id: 'targets', label: 'Targets' },
@@ -103,6 +105,7 @@ export function ModernBranchManagerDashboard({ initialTab, onNavigate }: { initi
   const renderContent = () => {
     switch (activeTab) {
       case 'meetings': return <MeetingsPanel />;
+      case 'hierarchy': return <BranchHierarchyPanel />;
       case 'overview': return <BranchOverview branch={branch} metrics={metrics} leads={leads} targets={targets} loading={loading} onNavigate={handleNavigate} />;
       // Sales
       case 'leads': return <LeadsPanel />;

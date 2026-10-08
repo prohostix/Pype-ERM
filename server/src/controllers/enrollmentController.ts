@@ -174,39 +174,60 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
     // Actually, `createStudent` creates it. Let's just create the Student record.
   }
 
-  const student = await prisma.student.create({
-    data: {
-      name: name || enrollment.studentName,
-      email: email || enrollment.studentEmail,
-      phone: phone || enrollment.studentPhone,
-      address: address || '',
-      dob: dob ? new Date(dob) : null,
-      fatherName: fatherName || null,
-      fatherPhone: fatherPhone || null,
-      motherName: motherName || null,
-      motherPhone: motherPhone || null,
-      religion: religion || null,
-      caste: caste || null,
-      altPhone: altPhone || null,
-      pinCode: pinCode || null,
-      photo: photo || null,
-      documents: documents || [],
-      gender: gender || null,
-      category: category || null,
-      maritalStatus: maritalStatus || null,
-      employmentStatus: employmentStatus || null,
-      guardianName: guardianName || null,
-      familyPhone: familyPhone || null,
-      specialisation: specialisation || null,
-      status: 'document_review',
-      programId: enrollment.programId,
-      sessionId: enrollment.sessionId,
-      universityId: enrollment.program?.universityId || null,
-      centerId: enrollment.studyCenterId,
-      organizationId: req.user.organizationId,
-      enrolledBy: enrollment.salesUserId || req.user.id
+  const studentData: any = {
+    name: name || enrollment.studentName,
+    email: email || enrollment.studentEmail,
+    phone: phone || enrollment.studentPhone,
+    address: address || '',
+    dob: dob ? new Date(dob) : null,
+    fatherName: fatherName || null,
+    fatherPhone: fatherPhone || null,
+    motherName: motherName || null,
+    motherPhone: motherPhone || null,
+    religion: religion || null,
+    caste: caste || null,
+    altPhone: altPhone || null,
+    pinCode: pinCode || null,
+    photo: photo || null,
+    documents: documents || [],
+    gender: gender || null,
+    category: category || null,
+    maritalStatus: maritalStatus || null,
+    employmentStatus: employmentStatus || null,
+    guardianName: guardianName || null,
+    familyPhone: familyPhone || null,
+    specialisation: specialisation || null,
+    status: 'document_review',
+    programId: enrollment.programId,
+    sessionId: enrollment.sessionId,
+    universityId: enrollment.program?.universityId || null,
+    centerId: enrollment.studyCenterId,
+    organizationId: req.user.organizationId,
+    enrolledBy: enrollment.salesUserId || req.user.id
+  };
+
+  let isPhotoUpdated = false;
+  let student;
+  if (enrollment.studentId) {
+    const existingStudent = await prisma.student.findUnique({
+      where: { id: enrollment.studentId }
+    });
+    let admissionProgress = (existingStudent?.admissionProgress as any) || {};
+    if (photo && photo !== existingStudent?.photo) {
+      admissionProgress = { ...admissionProgress, photoStatus: 'pending' };
+      isPhotoUpdated = true;
     }
-  });
+
+    student = await prisma.student.update({
+      where: { id: enrollment.studentId },
+      data: { ...studentData, admissionProgress }
+    });
+  } else {
+    isPhotoUpdated = !!photo;
+    student = await prisma.student.create({
+      data: studentData
+    });
+  }
 
   const historyEntry = {
     status: 'document_review', 
@@ -227,6 +248,7 @@ export const completeProvisionalEnrollment = asyncHandler(async (req: AuthReques
       studentAddress: student.address,
       documents: student.documents ? (student.documents as any) : [],
       photo: student.photo,
+      ...(isPhotoUpdated ? { photoStatus: 'pending' } : {}),
       statusHistory: {
         push: historyEntry
       }

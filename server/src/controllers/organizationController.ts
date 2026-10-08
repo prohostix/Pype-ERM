@@ -142,3 +142,81 @@ export const updateEnrollmentLinkConfig = asyncHandler(async (req: AuthRequest, 
 
   res.status(200).json({ success: true, data: newConfig, message: 'Enrollment link configuration updated' });
 });
+
+export const getLoginBrandingBySlug = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { slug } = req.params;
+  const organization = await prisma.organization.findUnique({
+    where: { customLoginSlug: slug },
+    select: { id: true, name: true, logo: true, customLoginSlug: true, loginBranding: true }
+  });
+
+  if (!organization) {
+    res.status(404).json({ success: false, message: 'Organization login page not found' });
+    return;
+  }
+
+  res.status(200).json({ success: true, data: organization });
+});
+
+export const initLoginBranding = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.role === 'superadmin' && req.body.organizationId ? req.body.organizationId : req.user.organizationId;
+  
+  const org = await prisma.organization.findUnique({ where: { id: orgId } });
+  if (!org) {
+    res.status(404).json({ success: false, message: 'Organization not found' });
+    return;
+  }
+
+  if (org.customLoginSlug) {
+    res.status(400).json({ success: false, message: 'Custom login page already initialized' });
+    return;
+  }
+
+  let uniqueSlug = '';
+  
+  while (true) {
+    // Generate a random 8-character string (e.g. "a9x2b4pz")
+    uniqueSlug = Math.random().toString(36).substring(2, 10);
+    const existing = await prisma.organization.findUnique({ where: { customLoginSlug: uniqueSlug } });
+    if (!existing) break;
+  }
+
+  const defaultBranding = {
+    primaryColor: '#0052CC',
+    welcomeText: `Welcome to ${org.name} Portal`,
+    logoUrl: org.logo || null,
+  };
+
+  const updatedOrg = await prisma.organization.update({
+    where: { id: orgId },
+    data: { customLoginSlug: uniqueSlug, loginBranding: defaultBranding }
+  });
+
+  res.status(200).json({ success: true, data: updatedOrg, message: 'Login page initialized' });
+});
+
+export const updateLoginBranding = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const orgId = req.user.role === 'superadmin' && req.body.organizationId ? req.body.organizationId : req.user.organizationId;
+  const { branding } = req.body;
+
+  const org = await prisma.organization.findUnique({ where: { id: orgId } });
+  if (!org) {
+    res.status(404).json({ success: false, message: 'Organization not found' });
+    return;
+  }
+
+  if (!org.customLoginSlug) {
+    res.status(400).json({ success: false, message: 'Custom login page must be initialized first' });
+    return;
+  }
+
+  const currentBranding = (org.loginBranding as any) || {};
+  const newBranding = { ...currentBranding, ...branding };
+
+  const updatedOrg = await prisma.organization.update({
+    where: { id: orgId },
+    data: { loginBranding: newBranding }
+  });
+
+  res.status(200).json({ success: true, data: updatedOrg, message: 'Login branding updated' });
+});

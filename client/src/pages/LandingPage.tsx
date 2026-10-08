@@ -52,7 +52,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 absolute left-1/2 -translate-x-1/2">
             <a href="#features" className="hover:text-slate-900 transition-colors min-h-0">Product</a>
             <a href="#solutions" className="hover:text-slate-900 transition-colors min-h-0">Solutions</a>
-            <a href="#pricing" className="hover:text-slate-900 transition-colors min-h-0">Pricing</a>
           </div>
 
           <div className="flex items-center gap-3">
@@ -313,54 +312,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-32 bg-slate-50 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6">Simple, transparent pricing</h2>
-            <p className="text-xl text-slate-500 font-medium">Choose the plan that best fits your institution's needs.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Pro Plan */}
-            <div className="bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col hover:-translate-y-1 transition-transform">
-              <div className="mb-8">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 font-bold text-sm mb-4 uppercase tracking-wider">Pro Plan</span>
-                <h3 className="text-4xl font-black text-slate-900 mb-2">₹199 <span className="text-xl text-slate-500 font-medium">/ enrollment</span></h3>
-                <p className="text-slate-500 font-medium mt-4">Perfect for growing institutions focused on enrollment management.</p>
-              </div>
-              <div className="space-y-4 flex-1 mb-8">
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-[#7b68ee]" /><span className="text-slate-700 font-medium">Up to 50 Active Users</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-[#7b68ee]" /><span className="text-slate-700 font-medium">10 GB Cloud Storage</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-[#7b68ee]" /><span className="text-slate-700 font-medium">Advanced Enrollment Flow</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-[#7b68ee]" /><span className="text-slate-700 font-medium">Basic ERM Modules</span></div>
-              </div>
-              <Button onClick={() => setOpenModal(true)} className="w-full h-14 bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-200 font-bold text-lg rounded-xl">Get Started</Button>
-            </div>
-
-            {/* Premium Plan */}
-            <div className="bg-[#1e1b4b] rounded-3xl p-8 md:p-10 shadow-2xl shadow-[#7b68ee]/20 border border-[#312e81] flex flex-col relative hover:-translate-y-1 transition-transform">
-              <div className="absolute top-0 right-8 transform -translate-y-1/2">
-                <span className="bg-gradient-to-r from-[#7b68ee] to-[#c084fc] text-white text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">Most Popular</span>
-              </div>
-              <div className="mb-8">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white font-bold text-sm mb-4 uppercase tracking-wider">Premium Plan</span>
-                <h3 className="text-4xl font-black text-white mb-2">₹29,999 <span className="text-xl text-indigo-200 font-medium">/ year</span></h3>
-                <p className="text-indigo-200 font-medium mt-4">The complete operating system for large academic centers.</p>
-              </div>
-              <div className="space-y-4 flex-1 mb-8">
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-indigo-400" /><span className="text-white font-medium">Up to 200 Active Users</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-indigo-400" /><span className="text-white font-medium">50 GB Cloud Storage</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-indigo-400" /><span className="text-white font-medium">Academic Center Management</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-indigo-400" /><span className="text-white font-medium">Advanced Attendance Tracking</span></div>
-                <div className="flex items-center gap-3"><Check className="w-5 h-5 text-indigo-400" /><span className="text-white font-medium">Zero per-enrollment fees</span></div>
-              </div>
-              <Button onClick={() => setOpenModal(true)} className="w-full h-14 bg-[#7b68ee] hover:bg-[#6a5acd] text-white font-bold text-lg rounded-xl shadow-lg shadow-[#7b68ee]/30">Upgrade to Premium</Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-32 bg-white text-center px-6">
         <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8">Ready to get started?</h2>
@@ -395,7 +346,6 @@ export function LandingPage({ onGoToLogin }: { onGoToLogin: () => void }) {
               <h4 className="font-bold text-slate-900 mb-4">Product</h4>
               <ul className="space-y-3 text-slate-500 font-medium">
                 <li><a href="#" className="hover:text-[#7b68ee]">Features</a></li>
-                <li><a href="#" className="hover:text-[#7b68ee]">Pricing</a></li>
                 <li><a href="#" className="hover:text-[#7b68ee]">Security</a></li>
               </ul>
             </div>

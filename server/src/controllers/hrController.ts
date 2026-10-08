@@ -13,7 +13,7 @@ export const getLeaveRequests = asyncHandler(async (req: AuthRequest, res: Respo
 
   const DEPT_MANAGER_ROLES = ['ops_admin', 'finance_admin', 'finance_sub_admin', 'sales_admin', 'sales_sub_admin', 'center_admin', 'ops_sub_admin'];
   const isHR = ['hr_admin', 'hr_sub_admin'].includes(role);
-  const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role);
+  const isGlobalAdmin = ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(role);
 
   if (isGlobalAdmin) {
     // Global admins see all leaves
@@ -294,7 +294,7 @@ export const createLeaveRequest = asyncHandler(async (req: AuthRequest, res: Res
     
     if (me?.role === 'hr_admin') {
       const executives = await prisma.user.findMany({
-        where: { role: { in: ['ceo', 'general_manager'] }, organizationId: req.user.organizationId }
+        where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: req.user.organizationId }
       });
       executives.forEach(exec => {
         sendPushNotification(exec.id, "New Leave Request from HR", `${me?.name || 'HR'} has requested leave. Pending your approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);
@@ -377,7 +377,7 @@ export const deptApproveLeave = asyncHandler(async (req: AuthRequest, res: Respo
     if (action === 'approve' && employee) {
       if (req.user.role === 'hr_admin') {
         const execs = await prisma.user.findMany({
-          where: { role: { in: ['ceo', 'general_manager'] }, organizationId: employee.organizationId }
+          where: { role: { in: ['ceo', 'general_manager', 'branch_manager'] }, organizationId: employee.organizationId }
         });
         execs.forEach(exec => {
           sendPushNotification(exec.id, "Pending Final Approval", `HR approved leave for ${employee.name}. Pending your final approval.`, { type: 'leave_request', leaveId: leave.id }).catch(console.error);

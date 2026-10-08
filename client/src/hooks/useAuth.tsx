@@ -59,8 +59,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
+    const customSlug = (user as any)?.organization?.customLoginSlug;
+    
+    if (customSlug) {
+      window.history.replaceState(null, '', `/login/${customSlug}`);
+    } else {
+      window.history.replaceState(null, '', '/login');
+    }
+    
     setUser(null);
-  }, []);
+  }, [user]);
 
   const hasRole = useCallback((roles: UserRole[]): boolean => {
     if (!user) return false;

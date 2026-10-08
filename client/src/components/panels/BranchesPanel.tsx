@@ -279,11 +279,11 @@ export function BranchesPanel() {
                 {b.branchManagerId ? (
                   <div className="flex items-center gap-2 mt-2">
                     <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
-                      {(b.branchManagerId.name || 'U').charAt(0)}
+                      {((b.branchManager as any)?.name || (b.branchManagerId as any)?.name || 'U').charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-medium">{b.branchManagerId.name || 'Unknown'}</p>
-                      <p className="text-xs text-muted-foreground">{b.branchManagerId.designation || (b.branchManagerId.role || '').replace(/_/g, ' ')}</p>
+                      <p className="text-sm font-medium">{(b.branchManager as any)?.name || (b.branchManagerId as any)?.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground">{(b.branchManager as any)?.designation || (b.branchManagerId as any)?.designation || ((b.branchManager as any)?.role || (b.branchManagerId as any)?.role || '').replace(/_/g, ' ')}</p>
                     </div>
                   </div>
                 ) : (
@@ -308,7 +308,7 @@ export function BranchesPanel() {
                       <TrendingUp className="h-4 w-4 shrink-0" style={{ color: DEPT_TYPE_COLORS.sales }} />
                       <div>
                         <p className="text-xs font-semibold" style={{ color: DEPT_TYPE_COLORS.sales }}>Sales</p>
-                        <p className="text-[10px] text-muted-foreground truncate">{b.salesDeptId.name}</p>
+                        <p className="text-[10px] text-muted-foreground truncate">{(b as any).salesDept?.name || (b.salesDeptId as any)?.name}</p>
                       </div>
                     </div>
                   )}
@@ -318,7 +318,7 @@ export function BranchesPanel() {
                       <Settings className="h-4 w-4 shrink-0" style={{ color: DEPT_TYPE_COLORS.operations }} />
                       <div>
                         <p className="text-xs font-semibold" style={{ color: DEPT_TYPE_COLORS.operations }}>Operations</p>
-                        <p className="text-[10px] text-muted-foreground truncate">{b.operationsDeptId.name}</p>
+                        <p className="text-[10px] text-muted-foreground truncate">{(b as any).operationsDept?.name || (b.operationsDeptId as any)?.name}</p>
                       </div>
                     </div>
                   )}

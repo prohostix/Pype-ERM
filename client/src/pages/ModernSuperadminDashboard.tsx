@@ -34,6 +34,7 @@ import { LicensesPanel } from '@/components/panels/LicensesPanel';
 import { InquiriesPanel } from '@/components/panels/InquiriesPanel';
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
+import { OrganizationSettingsPanel } from '@/components/panels/OrganizationSettingsPanel';
 
 const globalActivity = [
   { time: '00:00', requests: 120, latency: 45 },
@@ -143,6 +144,9 @@ export function ModernSuperadminDashboard({ initialTab, onNavigate }: { initialT
 
         <TabsContent value="biometric-devices">
           <BiometricDevicesPanel />
+        </TabsContent>
+        <TabsContent value="settings">
+          <OrganizationSettingsPanel />
         </TabsContent>
 </Tabs>
     </div>

@@ -76,7 +76,7 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
       departmentReviewedBy: req.user.id,
       departmentReviewedAt: new Date(),
       statusHistory: {
-        push: { status: 'finance_review', changedAt: new Date().toISOString(), changedBy: req.user.id }
+        push: { status: 'finance_review', changedAt: new Date().toISOString(), changedBy: req.user.id, actorName: req.user.name, actorRole: req.user.role }
       }
     }
   });
@@ -102,12 +102,12 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
     data: {
-      status: 'rejected',
+      status: 'ops_rejected',
       departmentReviewedBy: req.user.id,
       departmentReviewedAt: new Date(),
       departmentRemarks: req.body.remarks,
       statusHistory: {
-        push: { status: 'rejected', changedAt: new Date().toISOString(), changedBy: req.user.id, remarks: req.body.remarks }
+        push: { status: 'ops_rejected', changedAt: new Date().toISOString(), changedBy: req.user.id, actorName: req.user.name, actorRole: req.user.role, remarks: req.body.remarks }
       }
     }
   });

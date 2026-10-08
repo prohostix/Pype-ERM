@@ -8,6 +8,7 @@ import { TasksPanel } from '@/components/panels/TasksPanel';
 import { StudentsPanel } from '@/components/panels/StudentsPanel';
 import { UniversitiesPanel } from '@/components/panels/UniversitiesPanel';
 import { ProgramsPanel } from '@/components/panels/ProgramsPanel';
+import { OpsProgramAllocationPanel } from '@/components/panels/OpsProgramAllocationPanel';
 import { StudyCentersPanel } from '@/components/panels/StudyCentersPanel';
 import { InvoicesPanel } from '@/components/panels/InvoicesPanel';
 import { PaymentsPanel } from '@/components/panels/PaymentsPanel';
@@ -21,11 +22,13 @@ import { CollectionsPanel } from '@/components/panels/CollectionsPanel';
 import { AdmissionSessionsPanel } from '@/components/panels/AdmissionSessionsPanel';
 import { DeptEnrollmentReviewPanel } from '@/components/panels/DeptEnrollmentReviewPanel';
 import { OrganizationSettingsPanel } from '@/components/panels/OrganizationSettingsPanel';
+import { LoginCustomizationPanel } from '@/components/panels/LoginCustomizationPanel';
 import { ActivityLogPanel } from '@/components/panels/ActivityLogPanel';
 import { BiometricDevicesPanel } from '@/components/panels/BiometricDevicesPanel';
 import { EnrollmentLinkConfigPanel } from '@/components/panels/EnrollmentLinkConfigPanel';
 import { AcademicCentersPanel } from '@/components/panels/AcademicCentersPanel';
 import { FacultiesPanel } from '@/components/panels/FacultiesPanel';
+import { FlowSettingsPanel } from '@/components/panels/FlowSettingsPanel';
 
 import { MeetingsPanel } from '@/components/panels/MeetingsPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -63,11 +66,20 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <MetricCard title="Total Users" value={metrics.totalEmployees || 0} />
                 <MetricCard title="Students" value={metrics.totalStudents || 0} />
                 <MetricCard title="Academic Partners" value={metrics.totalCenters || 0} />
                 <MetricCard title="Leads" value={metrics.totalLeads || 0} />
+                
+                <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => handleNavigate('admission_review')}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-purple-600">Pending Reviews</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-3xl font-bold">{metrics.pendingReviews || 0}</p>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
@@ -82,6 +94,7 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="students"><StudentsPanel /></TabsContent>
         <TabsContent value="universities"><UniversitiesPanel /></TabsContent>
         <TabsContent value="programs"><ProgramsPanel /></TabsContent>
+        <TabsContent value="program_allocations"><OpsProgramAllocationPanel /></TabsContent>
         <TabsContent value="centers"><StudyCentersPanel /></TabsContent>
         <TabsContent value="invoices"><InvoicesPanel /></TabsContent>
         <TabsContent value="payments"><PaymentsPanel /></TabsContent>
@@ -91,8 +104,10 @@ export function ModernOrgAdminDashboard({ initialTab, onNavigate }: { initialTab
         <TabsContent value="leaves"><LeavesPanel /></TabsContent>
         <TabsContent value="leads"><LeadsPanel /></TabsContent>
         <TabsContent value="sessions"><AdmissionSessionsPanel /></TabsContent>
-        <TabsContent value="enrollment_review"><DeptEnrollmentReviewPanel /></TabsContent>
+        <TabsContent value="admission_review"><DeptEnrollmentReviewPanel /></TabsContent>
         <TabsContent value="settings"><OrganizationSettingsPanel /></TabsContent>
+        <TabsContent value="login_branding"><LoginCustomizationPanel /></TabsContent>
+        <TabsContent value="flow_settings"><FlowSettingsPanel /></TabsContent>
         <TabsContent value="enrollment_link_config"><EnrollmentLinkConfigPanel /></TabsContent>
         <TabsContent value="biometric-devices"><BiometricDevicesPanel /></TabsContent>
         <TabsContent value="meetings">

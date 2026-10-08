@@ -39,6 +39,7 @@ import {
   getProgramAllocations,
   allocateProgram,
   removeAllocation,
+  updateCenterOpsSubAdmin,
 } from '../controllers/operationsController.js';
 import {
   getProgramDetail,
@@ -106,9 +107,10 @@ router.route('/announcements/:id')
 
 // Onboarding — program allocation
 router.route('/centers/:id/allocations')
-  .get(authorize('ops_admin', 'ops_sub_admin', 'employee'), getProgramAllocations)
-  .post(authorize('ops_admin', 'ops_sub_admin', 'employee'), allocateProgram);
-router.delete('/centers/:id/allocations/:allocId', authorize('ops_admin', 'ops_sub_admin', 'employee'), removeAllocation);
+  .get(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), getProgramAllocations)
+  .post(authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), allocateProgram);
+router.put('/centers/:id/ops-sub-admin', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), updateCenterOpsSubAdmin);
+router.delete('/centers/:id/allocations/:allocId', authorize('ops_admin', 'ops_sub_admin', 'employee', 'org_admin', 'superadmin'), removeAllocation);
 
 // Program detail & materials
 router.get('/programs/:programId/detail', getProgramDetail);

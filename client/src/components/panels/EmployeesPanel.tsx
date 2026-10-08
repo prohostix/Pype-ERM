@@ -272,6 +272,7 @@ export function EmployeesPanel() {
                             <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
                             {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                             <SelectItem value="general_manager">General Manager</SelectItem>
+                            <SelectItem value="branch_manager">Branch Manager</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>

@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 interface Center { id: string; name: string; code: string; }
 interface University { id: string; name: string; code: string; }
 interface Program { id: string; name: string; code: string; courseType?: string; universityId: string; university?: University; }
-interface Allocation { id: string; programId: string; program: Program; allocatedAt: string; }
+interface Allocation { id: string; programId: string; program: Program; allocatedAt: string; opsSubAdminId?: string; }
 
 export function OpsProgramAllocationPanel() {
   const [centers, setCenters] = useState<Center[]>([]);
@@ -24,19 +24,34 @@ export function OpsProgramAllocationPanel() {
   
   const [universities, setUniversities] = useState<University[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [opsSubAdmins, setOpsSubAdmins] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   
   // Dialog State
   const [selectedUniversities, setSelectedUniversities] = useState<string[]>([]);
   const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+  const [selectedOpsSubAdmin, setSelectedOpsSubAdmin] = useState<string>('none');
+  const [originalOpsSubAdmin, setOriginalOpsSubAdmin] = useState<string>('none');
   
+  // Delete Request State
+  const [deleteRequestOpen, setDeleteRequestOpen] = useState(false);
+  const [deleteRequestAllocId, setDeleteRequestAllocId] = useState<string | null>(null);
+  const [deleteRequestReason, setDeleteRequestReason] = useState('');
+  const [submittingDelete, setSubmittingDelete] = useState(false);
+
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     api.get('/operations/centers?status=active').then(r => setCenters(r.data.data || [])).catch(() => {});
     api.get('/operations/programs').then(r => setPrograms(r.data.data || [])).catch(() => {});
-    api.get('/operations/universities').then(r => setUniversities(r.data.data || [])).catch(() => {});
+    api.get('/operations/universities?isAcademicPartnerOnly=true').then(r => setUniversities(r.data.data || [])).catch(() => {});
+    Promise.all([
+      api.get('/users?role=ops_admin'),
+      api.get('/users?role=org_admin')
+    ]).then(([opsRes, orgRes]) => {
+      setOpsSubAdmins([...(opsRes.data.data || []), ...(orgRes.data.data || [])]);
+    }).catch(() => {});
   }, []);
 
   const fetchAllocations = async (centerId: string) => {
@@ -44,7 +59,16 @@ export function OpsProgramAllocationPanel() {
     setLoading(true);
     try {
       const res = await api.get(`/operations/centers/${centerId}/allocations`);
-      setAllocations(res.data.data || []);
+      const data = res.data.data || [];
+      setAllocations(data);
+      if (data.length > 0) {
+        const adminId = data[0].opsSubAdminId || 'none';
+        setSelectedOpsSubAdmin(adminId);
+        setOriginalOpsSubAdmin(adminId);
+      } else {
+        setSelectedOpsSubAdmin('none');
+        setOriginalOpsSubAdmin('none');
+      }
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load allocations');
     } finally {
@@ -61,7 +85,10 @@ export function OpsProgramAllocationPanel() {
     if (selectedPrograms.length === 0) { toast.error('Select at least one program'); return; }
     setSubmitting(true);
     try {
-      await api.post(`/operations/centers/${selectedCenter}/allocations`, { programIds: selectedPrograms });
+      await api.post(`/operations/centers/${selectedCenter}/allocations`, { 
+        programIds: selectedPrograms,
+        opsSubAdminId: selectedOpsSubAdmin === 'none' ? null : selectedOpsSubAdmin
+      });
       toast.success('Programs allocated');
       setOpen(false);
       setSelectedUniversities([]);
@@ -74,13 +101,43 @@ export function OpsProgramAllocationPanel() {
     }
   };
 
-  const handleRemove = async (allocId: string) => {
+  const [savingOpsUser, setSavingOpsUser] = useState(false);
+
+  const handleUpdateSubAdmin = async () => {
+    setSavingOpsUser(true);
     try {
-      await api.delete(`/operations/centers/${selectedCenter}/allocations/${allocId}`);
-      toast.success('Allocation removed');
-      fetchAllocations(selectedCenter);
+      await api.put(`/operations/centers/${selectedCenter}/ops-sub-admin`, { opsSubAdminId: selectedOpsSubAdmin === 'none' ? null : selectedOpsSubAdmin });
+      toast.success('Assigned Ops User updated');
+      setOriginalOpsSubAdmin(selectedOpsSubAdmin);
     } catch (e: any) {
-      toast.error(e.response?.data?.message || 'Failed to remove');
+      toast.error('Failed to update Ops User');
+    } finally {
+      setSavingOpsUser(false);
+    }
+  };
+
+  const handleRequestRemove = (allocId: string) => {
+    setDeleteRequestAllocId(allocId);
+    setDeleteRequestReason('');
+    setDeleteRequestOpen(true);
+  };
+
+  const submitDeleteRequest = async () => {
+    if (!deleteRequestAllocId || !deleteRequestReason.trim()) return;
+    setSubmittingDelete(true);
+    try {
+      await api.post('/edit-delete/request', {
+        entityType: 'program_allocation',
+        entityId: deleteRequestAllocId,
+        requestType: 'delete',
+        reason: deleteRequestReason
+      });
+      toast.success('Delete request submitted for approval');
+      setDeleteRequestOpen(false);
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || 'Failed to submit delete request');
+    } finally {
+      setSubmittingDelete(false);
     }
   };
 
@@ -149,8 +206,34 @@ export function OpsProgramAllocationPanel() {
           </CardContent></Card>
         ) : (
           <Card>
-            <CardHeader><CardTitle className="text-base">Allocated Programs ({allocations.length})</CardTitle></CardHeader>
-            <CardContent className="space-y-6 pt-6">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 border-b mb-4">
+              <CardTitle className="text-base">Allocated Programs ({allocations.length})</CardTitle>
+              <div className="flex items-center gap-2">
+                <Label className="text-xs text-muted-foreground whitespace-nowrap">Ops User:</Label>
+                <Select value={selectedOpsSubAdmin} onValueChange={setSelectedOpsSubAdmin}>
+                  <SelectTrigger className="w-[200px] h-8 text-xs">
+                    <SelectValue placeholder="Select Ops User" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Default (Ops Team)</SelectItem>
+                    {opsSubAdmins.map(admin => (
+                      <SelectItem key={admin.id} value={admin.id}>{admin.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {selectedOpsSubAdmin !== originalOpsSubAdmin && (
+                  <Button 
+                    size="sm" 
+                    className="h-8 text-xs bg-green-600 hover:bg-green-700 text-white" 
+                    onClick={handleUpdateSubAdmin}
+                    disabled={savingOpsUser}
+                  >
+                    {savingOpsUser ? 'Saving...' : 'Save'}
+                  </Button>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-2">
               {Object.entries(groupedAllocations).map(([uni, allocs]) => (
                 <div key={uni} className="space-y-3">
                   <h3 className="font-semibold text-sm text-primary border-b pb-1">{uni}</h3>
@@ -164,7 +247,7 @@ export function OpsProgramAllocationPanel() {
                             <Badge variant="outline" className="ml-2 text-[10px]">{a.program?.courseType}</Badge>
                           )}
                         </div>
-                        <Button variant="ghost" size="sm" className="text-error hover:text-error" onClick={() => handleRemove(a.id)}>
+                        <Button variant="ghost" size="sm" className="text-error hover:text-error" onClick={() => handleRequestRemove(a.id)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -182,7 +265,12 @@ export function OpsProgramAllocationPanel() {
         if (!val) { 
           setSelectedUniversities([]); 
           setSelectedPrograms([]); 
-        } 
+        } else {
+          const pIds = allocations.map(a => a.programId);
+          const uIds = [...new Set(allocations.map(a => a.program?.universityId).filter(Boolean)) as string[]];
+          setSelectedPrograms(pIds);
+          setSelectedUniversities(uIds);
+        }
       }}>
         <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
           <DialogHeader>
@@ -226,10 +314,11 @@ export function OpsProgramAllocationPanel() {
                         id={`prog-${p.id}`} 
                         checked={selectedPrograms.includes(p.id)}
                         onCheckedChange={() => toggleProgram(p.id)}
+                        disabled={allocatedProgramIds.includes(p.id)}
                       />
                       <div className="grid gap-1.5 leading-none">
-                        <label htmlFor={`prog-${p.id}`} className="text-sm font-medium cursor-pointer">
-                          {p.name}
+                        <label htmlFor={`prog-${p.id}`} className={cn("text-sm font-medium cursor-pointer", allocatedProgramIds.includes(p.id) && "text-muted-foreground")}>
+                          {p.name} {allocatedProgramIds.includes(p.id) && <span className="text-xs font-normal text-muted-foreground ml-1">(Already allocated)</span>}
                         </label>
                         <p className="text-xs text-muted-foreground">Code: {p.code}</p>
                       </div>
@@ -246,10 +335,36 @@ export function OpsProgramAllocationPanel() {
             </div>
           </div>
           
-          <DialogFooter className="mt-4">
+          <DialogFooter className="mt-2">
             <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
             <Button onClick={handleAllocate} disabled={submitting || selectedPrograms.length === 0}>
               {submitting ? 'Allocating...' : `Allocate (${selectedPrograms.length})`}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteRequestOpen} onOpenChange={setDeleteRequestOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request Deletion</DialogTitle>
+            <DialogDescription>
+              Program allocations can only be removed after manager approval. Please provide a reason.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Label>Reason for deletion</Label>
+            <textarea
+              className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-1"
+              placeholder="E.g., Assigned by mistake, center no longer supports this program, etc."
+              value={deleteRequestReason}
+              onChange={e => setDeleteRequestReason(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteRequestOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={submitDeleteRequest} disabled={!deleteRequestReason.trim() || submittingDelete}>
+              {submittingDelete ? 'Submitting...' : 'Submit Request'}
             </Button>
           </DialogFooter>
         </DialogContent>

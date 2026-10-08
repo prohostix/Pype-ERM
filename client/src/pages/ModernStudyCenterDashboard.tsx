@@ -34,7 +34,7 @@ export function ModernStudyCenterDashboard({ initialTab, onNavigate }: { initial
   }, [initialTab]);
   
   useEffect(() => {
-    api.get('/enrollment/my-enrollments').then(r => setEnrollments(r.data.data || [])).catch(() => {});
+    api.get('/enrollment/enrollments').then(r => setEnrollments(r.data.data || [])).catch(() => {});
     api.get('/enrollment/my-center-status').then(r => setMetrics(r.data.data || {})).catch(() => {});
   }, []);
 

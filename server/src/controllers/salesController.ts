@@ -194,7 +194,7 @@ export const regenerateInvite = asyncHandler(async (req: AuthRequest, res: Respo
 export const getTeamPerformance = asyncHandler(async (req: AuthRequest, res: Response) => {
   let whereClause: any = { organizationId: req.user.organizationId };
 
-  if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(req.user.role)) {
+  if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(req.user.role)) {
     // See all users
   } else if (req.user.role === 'center_admin') {
     whereClause.OR = [];

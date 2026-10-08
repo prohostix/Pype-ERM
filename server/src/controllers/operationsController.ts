@@ -26,8 +26,16 @@ export const getUniversities = asyncHandler(async (req: AuthRequest, res: Respon
     }
   } else {
     console.log('Non-center admin requesting universities, role:', req.user.role);
+    const isAcademicPartnerOnly = req.query.isAcademicPartnerOnly === 'true';
+    const fetchAll = req.query.all === 'true';
+    
+    const whereClause: any = { organizationId: req.user.organizationId };
+    if (!fetchAll) {
+      whereClause.isAcademicPartnerOnly = isAcademicPartnerOnly;
+    }
+    
     universities = await prisma.university.findMany({
-      where: { organizationId: req.user.organizationId },
+      where: whereClause,
       include: { allowedBranches: true }
     });
   }
@@ -318,22 +326,29 @@ export const deleteStudyCenter = asyncHandler(async (req: AuthRequest, res: Resp
   const centerId = req.params.id;
 
   // Safely remove all related records before deleting
-  await prisma.$transaction([
+  await prisma.$transaction(async (tx) => {
+    // Delete the center admin user(s) associated with this center FIRST
+    await tx.user.deleteMany({ where: { studyCenterId: centerId, role: 'center_admin' } });
+    
     // Nullify optional references
-    prisma.student.updateMany({ where: { centerId }, data: { centerId: null } }),
-    prisma.invoice.updateMany({ where: { centerId }, data: { centerId: null } }),
-    prisma.enrollment.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
-    prisma.admissionSession.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
-    prisma.user.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } }),
+    await tx.student.updateMany({ where: { centerId }, data: { centerId: null } });
+    await tx.invoice.updateMany({ where: { centerId }, data: { centerId: null } });
+    await tx.enrollment.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+    await tx.admissionSession.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+    
+    // Unlink any OTHER users that might have been tied to it
+    await tx.user.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+    
     // Delete child records
-    prisma.walletTopUp.deleteMany({ where: { studyCenterId: centerId } }),
-    prisma.studyCenterWallet.deleteMany({ where: { studyCenterId: centerId } }),
-    prisma.programAllocation.deleteMany({ where: { centerId } }),
-    prisma.sessionRequest.deleteMany({ where: { centerId } }),
-    prisma.target.deleteMany({ where: { centerId } }),
+    await tx.walletTopUp.deleteMany({ where: { studyCenterId: centerId } });
+    await tx.studyCenterWallet.deleteMany({ where: { studyCenterId: centerId } });
+    await tx.programAllocation.deleteMany({ where: { centerId } });
+    await tx.sessionRequest.deleteMany({ where: { centerId } });
+    await tx.target.deleteMany({ where: { centerId } });
+    
     // Finally delete the center
-    prisma.studyCenter.delete({ where: { id: centerId } }),
-  ]);
+    await tx.studyCenter.delete({ where: { id: centerId } });
+  });
 
   res.json({ success: true, data: {} });
 });
@@ -483,30 +498,34 @@ export const getProgramAllocations = asyncHandler(async (req: AuthRequest, res: 
   res.json({ success: true, data: allocations });
 });
 export const allocateProgram = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { programId, programIds } = req.body;
+  const { programId, programIds, opsSubAdminId } = req.body;
   const centerId = req.params.id;
   
   if (programIds && Array.isArray(programIds)) {
-    // Prevent duplicate allocations by checking existing ones
+    // Sync allocations: delete ones not in programIds, add ones that are missing
     const existing = await prisma.programAllocation.findMany({
-      where: { centerId, programId: { in: programIds } }
+      where: { centerId }
     });
     const existingIds = existing.map(a => a.programId);
-    const newIds = programIds.filter(id => !existingIds.includes(id));
     
-    if (newIds.length === 0) {
-      res.status(400).json({ success: false, message: 'All selected programs are already allocated' });
-      return;
+    const toAddIds = programIds.filter(id => !existingIds.includes(id));
+    
+    
+    if (toAddIds.length > 0) {
+      // Find an existing opsSubAdminId to reuse if it wasn't provided, to keep it consistent
+      const firstExisting = existing.find(a => a.opsSubAdminId);
+      const assignedSubAdmin = opsSubAdminId || firstExisting?.opsSubAdminId || null;
+      
+      await prisma.programAllocation.createMany({
+        data: toAddIds.map(pid => ({
+          programId: pid,
+          centerId,
+          organizationId: req.user.organizationId,
+          allocatedBy: req.user.id,
+          opsSubAdminId: assignedSubAdmin
+        }))
+      });
     }
-    
-    await prisma.programAllocation.createMany({
-      data: newIds.map(pid => ({
-        programId: pid,
-        centerId,
-        organizationId: req.user.organizationId,
-        allocatedBy: req.user.id
-      }))
-    });
     
     res.status(201).json({ success: true, message: 'Programs allocated successfully' });
   } else if (programId) {
@@ -516,12 +535,21 @@ export const allocateProgram = asyncHandler(async (req: AuthRequest, res: Respon
       return;
     }
     const allocation = await prisma.programAllocation.create({ 
-      data: { programId, centerId, organizationId: req.user.organizationId, allocatedBy: req.user.id } 
+      data: { programId, centerId, organizationId: req.user.organizationId, allocatedBy: req.user.id, opsSubAdminId: opsSubAdminId || null } 
     });
     res.status(201).json({ success: true, data: allocation });
   } else {
     res.status(400).json({ success: false, message: 'Please provide programId or programIds' });
   }
+});
+
+export const updateCenterOpsSubAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { opsSubAdminId } = req.body;
+  await prisma.programAllocation.updateMany({ 
+    where: { centerId: req.params.id }, 
+    data: { opsSubAdminId: opsSubAdminId || null } 
+  });
+  res.json({ success: true, message: 'Ops Sub-Admin updated for all programs in this partner' });
 });
 export const removeAllocation = asyncHandler(async (req: AuthRequest, res: Response) => {
   await prisma.programAllocation.delete({ where: { id: req.params.allocId } });

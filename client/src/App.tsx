@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Login } from '@/pages/Login';
 import { LandingPage } from '@/pages/LandingPage';
+import { CustomOrgLogin } from '@/pages/CustomOrgLogin';
 import { Dashboard } from '@/pages/Dashboard';
 import { PrismaLayout, type TableItem } from '@/components/layout/PrismaLayout';
 import { DataGrid } from '@/components/ui/data-grid';
@@ -52,7 +53,9 @@ const TABLE_TO_TAB: Record<string, string> = {
   hierarchy: 'hierarchy',
   branches: 'branches',
   settings: 'settings',
+  login_branding: 'login_branding',
   enrollment_link_config: 'enrollment_link_config',
+  flow_settings: 'flow_settings',
   academic_centers: 'academic_centers',
   faculties: 'faculties',
 
@@ -93,6 +96,7 @@ const TABLE_TO_TAB: Record<string, string> = {
   pending_verification: 'pending_verification',
   program_allocations: 'program_allocations',
   enrollment_review: 'enrollment_review',
+  admission_review: 'admission_review',
   // Sales
   leads: 'leads',
   lead_management: 'lead_management',
@@ -157,6 +161,7 @@ function App() {
     switch (role) {
       case 'superadmin': return 'organizations';
       case 'ceo': return 'dashboard';
+      case 'branch_manager': return 'overview';
       case 'ops_admin':
       case 'ops_sub_admin':
       case 'finance_sub_admin':
@@ -391,6 +396,10 @@ function App() {
       ];
     }
 
+    if (user.role === 'branch_manager') {
+      return getBranchManagerNavItems();
+    }
+
     if (user.role === 'ceo' || user.role === 'general_manager') {
       return [
         { id: 'dashboard', label: 'Executive Overview' },
@@ -430,6 +439,7 @@ function App() {
         { id: 'students', label: 'Students' },
         { id: 'universities', label: 'Universities' },
         { id: 'programs', label: 'Programs' },
+        { id: 'program_allocations', label: 'Program Allocation' },
         { id: 'faculties', label: 'Faculties' },
         { id: 'academic_centers', label: 'Academic Centers' },
 
@@ -441,11 +451,13 @@ function App() {
         { id: 'leave_requests', label: 'Leave Requests' },
         { id: 'leads', label: 'Leads' },
         { id: 'sessions', label: 'Sessions' },
-        { id: 'enrollment_review', label: 'Enrollment Review' },
+        { id: 'admission_review', label: 'Admission Overview' },
         { id: 'collections', label: 'Collections' },
         { id: 'biometric_devices', label: 'Biometric Devices' },
         { id: 'settings', label: 'Organisation Settings' },
+        { id: 'login_branding', label: 'Login Branding' },
         { id: 'enrollment_link_config', label: 'Enrollment Link Config' },
+        { id: 'flow_settings', label: 'Flow Settings' },
         { id: 'meetings', label: 'Meetings' },
       ];
     }
@@ -1021,6 +1033,9 @@ function App() {
 
   // Redirect to login or landing page if not authenticated
   if (!user) {
+    if (window.location.pathname.startsWith('/login/')) {
+      return <CustomOrgLogin />;
+    }
     if (window.location.pathname === '/login') {
       return <Login />;
     }

@@ -48,6 +48,7 @@ interface Enrollment {
 
 const STATUS_META: Record<string, { label: string; color: string }> = {
   payment_pending: { label: 'Fee Pending', color: 'bg-orange-100 text-orange-700' },
+  receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border border-amber-200' },
   document_review: { label: 'Document Review', color: 'bg-blue-100 text-blue-700' },
   dept_review: { label: 'Dept Review', color: 'bg-purple-100 text-purple-700' },
   finance_review: { label: 'Finance Review', color: 'bg-yellow-100 text-yellow-700' },
@@ -130,8 +131,8 @@ export function DeptEnrollmentReviewPanel() {
     // Check if the enrollment can be approved
     const enrollmentData = enrollments.find(e => e.id === enrollmentId);
     if (enrollmentData) {
-      const docs = Array.isArray(enrollmentData.student?.documents) ? enrollmentData.student.documents 
-                   : Array.isArray(enrollmentData.documents) ? enrollmentData.documents : [];
+      const docs = Array.isArray(enrollmentData.student?.documents) ? enrollmentData.student.documents
+        : Array.isArray(enrollmentData.documents) ? enrollmentData.documents : [];
       const unapprovedDocs = docs.filter((d: any) => d && d.status !== 'approved');
       const photoStatus = enrollmentData.student?.admissionProgress?.photoStatus || enrollmentData.photoStatus || 'approved'; // if no student, photo doesn't block unless we track it
 
@@ -159,7 +160,7 @@ export function DeptEnrollmentReviewPanel() {
         await api.put(`/enrollment/review/${enrollmentId}/documents/${docIndex}/status`, { status });
       }
       toast.success(`Document marked as ${status}`);
-      
+
       // Refresh the viewStudent data
       if (viewStudent) {
         if (viewStudent.student) {
@@ -201,7 +202,7 @@ export function DeptEnrollmentReviewPanel() {
             student: { ...viewStudent.student, admissionProgress: { ...progress, photoStatus: status } }
           });
         } else {
-           setViewStudent({
+          setViewStudent({
             ...viewStudent,
             photoStatus: status
           });
@@ -248,7 +249,6 @@ export function DeptEnrollmentReviewPanel() {
           <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
         </Button>
       </div>
-
       {/* Search and Tabs */}
       <div className="flex flex-col gap-4">
         {/* Top Filters */}
@@ -348,7 +348,7 @@ export function DeptEnrollmentReviewPanel() {
                       <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground flex-wrap">
                         <span>{e.studentEmail}</span>
                         {e.program && <span>{e.program.name} ({e.program.code})</span>}
-                        
+
                         {e.studyCenter ? (
                           <span className="font-medium text-amber-600 flex items-center gap-0.5 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50"><School className="w-3 h-3" /> Center: {e.studyCenter.name}</span>
                         ) : e.salesUser ? (
@@ -444,24 +444,24 @@ export function DeptEnrollmentReviewPanel() {
                       </div>
                     )}
                   </div>
-                    {tab === 'pending' && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
-                      <div className="flex gap-1 w-full mt-1">
-                        <button
-                          onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'approved')}
-                          title="Approve Photo"
-                          className="flex-1 py-1 flex justify-center bg-success/10 text-success hover:bg-success hover:text-white rounded transition-colors"
-                        >
-                          <CheckCircle className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'rejected')}
-                          title="Reject Photo"
-                          className="flex-1 py-1 flex justify-center bg-destructive/10 text-destructive hover:bg-destructive hover:text-white rounded transition-colors"
-                        >
-                          <XCircle className="w-4 h-4" />
-                        </button>
-                      </div>
-                    )}
+                  {tab === 'pending' && (viewStudent.student?.photo || viewStudent.photo) && (!(viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) || (viewStudent.student?.admissionProgress?.photoStatus || viewStudent.photoStatus) === 'pending') && (
+                    <div className="flex gap-1 w-full mt-1">
+                      <button
+                        onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'approved')}
+                        title="Approve Photo"
+                        className="flex-1 py-1 flex justify-center bg-success/10 text-success hover:bg-success hover:text-white rounded transition-colors"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handlePhotoAction(viewStudent.student?.id, viewStudent.id, 'rejected')}
+                        title="Reject Photo"
+                        className="flex-1 py-1 flex justify-center bg-destructive/10 text-destructive hover:bg-destructive hover:text-white rounded transition-colors"
+                      >
+                        <XCircle className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 grid grid-cols-2 gap-3">
                   <InfoField label="Full Name" value={val(viewStudent, 'studentName', 'name')} />
@@ -575,8 +575,8 @@ export function DeptEnrollmentReviewPanel() {
                 {(() => {
                   const docs: any[] = Array.isArray(viewStudent.student?.documents)
                     ? viewStudent.student.documents.filter(Boolean)
-                    : Array.isArray(viewStudent.documents) 
-                      ? viewStudent.documents.filter(Boolean) 
+                    : Array.isArray(viewStudent.documents)
+                      ? viewStudent.documents.filter(Boolean)
                       : [];
                   return docs.length === 0 ? (
                     <p className="text-sm text-muted-foreground italic py-2">No documents uploaded.</p>

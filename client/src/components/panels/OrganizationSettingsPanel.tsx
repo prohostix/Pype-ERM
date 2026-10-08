@@ -67,24 +67,50 @@ export function OrganizationSettingsPanel() {
       const MAX_WIDTH = 600;
       const MAX_HEIGHT = 150;
 
-      if (img.width > MAX_WIDTH || img.height > MAX_HEIGHT) {
-        toast.error(`Image is too large (${img.width}x${img.height}px). Maximum allowed dimensions are ${MAX_WIDTH}x${MAX_HEIGHT}px.`);
-        return;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+        const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+        width = Math.floor(width * ratio);
+        height = Math.floor(height * ratio);
       }
 
-      const toastId = toast.loading('Uploading logo...');
-      try {
-        const uploadData = new FormData();
-        uploadData.append('file', file);
-        const res = await api.post('/auth/upload', uploadData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        setFormData(prev => ({ ...prev, logo: res.data.url }));
-        toast.success('Logo uploaded successfully!', { id: toastId });
-      } catch (err) {
-        console.error(err);
-        toast.error('Failed to upload logo', { id: toastId });
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        toast.error('Browser does not support image compression');
+        return;
       }
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          toast.error('Failed to compress image');
+          return;
+        }
+
+        const compressedFile = new File([blob], file.name, {
+          type: 'image/jpeg',
+          lastModified: Date.now(),
+        });
+
+        const toastId = toast.loading(width !== img.width ? 'Compressing and uploading logo...' : 'Uploading logo...');
+        try {
+          const uploadData = new FormData();
+          uploadData.append('file', compressedFile);
+          const res = await api.post('/auth/upload', uploadData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+          setFormData(prev => ({ ...prev, logo: res.data.url }));
+          toast.success('Logo uploaded successfully!', { id: toastId });
+        } catch (err) {
+          console.error(err);
+          toast.error('Failed to upload logo', { id: toastId });
+        }
+      }, 'image/jpeg', 0.9);
     };
     
     img.onerror = () => {

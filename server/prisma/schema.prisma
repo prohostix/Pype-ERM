@@ -15,6 +15,8 @@ model Organization {
   phone                      String
   address                    String
   logo                       String?
+  customLoginSlug            String?                     @unique
+  loginBranding              Json?
   status                     OrganizationStatus          @default(active)
   licenseId                  String?
   licenseExpiry              DateTime?
@@ -266,6 +268,7 @@ model User {
   communicationLogs             CommunicationLog[]
   assignedSalesUsers            Json?                  @default("[]")
   fcmTokens                     UserFCMToken[]
+  opsSubAdminAllocations        ProgramAllocation[]    @relation("OpsSubAdminAllocated")
 
   @@index([organizationId, role])
   @@index([departmentId])
@@ -358,6 +361,7 @@ model University {
   status               String                 @default("active")
   logo                 String?
   enrollmentFormConfig Json?                  @default("{}")
+  isAcademicPartnerOnly Boolean               @default(false)
   admissionSessions    AdmissionSession[]
   feeStructures        FeeStructure[]
   programs             Program[]
@@ -1335,6 +1339,8 @@ model ProgramAllocation {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   allocatedByMgr User         @relation("AllocatedBy", fields: [allocatedBy], references: [id])
+  opsSubAdminId  String?
+  opsSubAdmin    User?        @relation("OpsSubAdminAllocated", fields: [opsSubAdminId], references: [id])
   center         StudyCenter  @relation(fields: [centerId], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   program        Program      @relation(fields: [programId], references: [id])
@@ -1742,6 +1748,7 @@ enum UserRole {
   collections_admin
   collections
   general_manager
+  branch_manager
 }
 
 enum TaskPriority {

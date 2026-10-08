@@ -1,0 +1,105 @@
+--- client/src/components/panels/OpsProgramAllocationPanel.tsx
++++ client/src/components/panels/OpsProgramAllocationPanel.tsx
+@@ -16,7 +16,7 @@
+ interface Center { id: string; name: string; code: string; }
+ interface University { id: string; name: string; code: string; }
+ interface Program { id: string; name: string; code: string; courseType?: string; universityId: string; university?: University; }
+-interface Allocation { id: string; programId: string; program: Program; allocatedAt: string; }
++interface Allocation { id: string; programId: string; program: Program; allocatedAt: string; opsSubAdminId?: string; }
+ 
+ export function OpsProgramAllocationPanel() {
+   const [centers, setCenters] = useState<Center[]>([]);
+@@ -48,7 +48,9 @@
+     setLoading(true);
+     try {
+       const res = await api.get(`/operations/centers/${centerId}/allocations`);
+-      setAllocations(res.data.data || []);
++      const data = res.data.data || [];
++      setAllocations(data);
++      if (data.length > 0) setSelectedOpsSubAdmin(data[0].opsSubAdminId || 'none');
+     } catch (e: any) {
+       toast.error(e.response?.data?.message || 'Failed to load allocations');
+     } finally {
+@@ -75,6 +77,15 @@
+     }
+   };
+ 
++  const handleUpdateSubAdmin = async (val: string) => {
++    setSelectedOpsSubAdmin(val);
++    try {
++      await api.put(`/operations/centers/${selectedCenter}/ops-sub-admin`, { opsSubAdminId: val === 'none' ? null : val });
++      toast.success('Assigned Ops Sub-Admin updated');
++    } catch (e: any) {
++      toast.error('Failed to update Ops Sub-Admin');
++    }
++  };
++
+   const handleRemove = async (allocId: string) => {
+     try {
+       await api.delete(`/operations/centers/${selectedCenter}/allocations/${allocId}`);
+@@ -155,7 +166,24 @@
+           </CardContent></Card>
+         ) : (
+           <Card>
+-            <CardHeader><CardTitle className="text-base">Allocated Programs ({allocations.length})</CardTitle></CardHeader>
++            <CardHeader className="flex flex-row items-center justify-between pb-2 border-b mb-4">
++              <CardTitle className="text-base">Allocated Programs ({allocations.length})</CardTitle>
++              <div className="flex items-center gap-2">
++                <Label className="text-xs text-muted-foreground whitespace-nowrap">Ops Sub-Admin:</Label>
++                <Select value={selectedOpsSubAdmin} onValueChange={handleUpdateSubAdmin}>
++                  <SelectTrigger className="w-[200px] h-8 text-xs">
++                    <SelectValue placeholder="Select Ops Sub-Admin" />
++                  </SelectTrigger>
++                  <SelectContent>
++                    <SelectItem value="none">Default (Ops Admins)</SelectItem>
++                    {opsSubAdmins.map(admin => (
++                      <SelectItem key={admin.id} value={admin.id}>{admin.name}</SelectItem>
++                    ))}
++                  </SelectContent>
++                </Select>
++              </div>
++            </CardHeader>
+             <CardContent className="space-y-6 pt-6">
+               {Object.entries(groupedAllocations).map(([uni, allocs]) => (
+                 <div key={uni} className="space-y-3">
+@@ -185,11 +213,20 @@
+       <Dialog open={open} onOpenChange={(val) => { 
+         setOpen(val); 
+         if (!val) { 
+           setSelectedUniversities([]); 
+           setSelectedPrograms([]); 
+         }
++        if (val) {
++          const pIds = allocations.map(a => a.programId);
++          const uIds = [...new Set(allocations.map(a => a.program?.universityId).filter(Boolean))];
++          setSelectedPrograms(pIds);
++          setSelectedUniversities(uIds);
++        }
+       }}>
+         <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
+@@ -242,26 +279,6 @@
+             </div>
+           </div>
+ 
+-          <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 rounded-lg p-4 mt-2 mb-2">
+-            <Label className="text-sm font-semibold text-blue-900 dark:text-blue-300">Assign Operations Sub-Admin (Optional)</Label>
+-            <p className="text-xs text-blue-700/80 dark:text-blue-400/80 mb-3 mt-1">
+-              Note: If no sub-admin is assigned, the enrollment review will automatically go to the main Operations Admins.
+-            </p>
+-            <Select value={selectedOpsSubAdmin} onValueChange={setSelectedOpsSubAdmin}>
+-              <SelectTrigger className="w-full bg-white dark:bg-slate-950">
+-                <SelectValue placeholder="Select Ops Sub-Admin" />
+-              </SelectTrigger>
+-              <SelectContent>
+-                <SelectItem value="none">No Sub-Admin (Default to Ops Admins)</SelectItem>
+-                {opsSubAdmins.map(admin => (
+-                  <SelectItem key={admin.id} value={admin.id}>
+-                    {admin.name} ({admin.email})
+-                  </SelectItem>
+-                ))}
+-              </SelectContent>
+-            </Select>
+-          </div>
+-          
+           <DialogFooter className="mt-2">
+             <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>

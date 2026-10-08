@@ -357,7 +357,7 @@ export function AttendancePanel({ isMyPortal = false, initialFilter = 'all' }: A
             </div>
           )}
 
-          {canViewAll && user?.role !== 'ceo' && user?.role !== 'general_manager' && (
+          {canViewAll && user?.role !== 'ceo' && user?.role !== 'general_manager' && user?.role !== 'branch_manager' && (
             <Button variant="outline" size="sm" onClick={() => setExportDialogOpen(true)} className="rounded-xl border-slate-200/60 shadow-sm h-10 px-4 gap-2 text-xs font-semibold">
               <Download className="w-4 h-4 text-primary" /> Download Report
             </Button>

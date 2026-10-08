@@ -225,7 +225,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
 
       {/* My Leave Balances */}
       {/* My Leave Balances */}
-      {balances && user?.role !== 'ceo' && user?.role !== 'general_manager' && (
+      {balances && user?.role !== 'ceo' && user?.role !== 'general_manager' && user?.role !== 'branch_manager' && (
         <div className="mb-6">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-lg font-semibold">My Leave Balances</h3>
@@ -378,7 +378,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                 const cfg = STATUS_CONFIG[leave.status] || STATUS_CONFIG.pending;
                 const isExpanded = expanded === leave.id;
                 const isOwner = leave.employeeId === userId;
-                const isExecutive = role === 'ceo' || role === 'general_manager';
+                const isExecutive = role === 'ceo' || (role === 'general_manager' || role === 'branch_manager');
                 const canDeptAct = !isOwner && ((isDeptManager && leave.status === 'pending') || (isHR && leave.status === 'pending'));
                 const canHRAct = !isOwner && ((isHR && leave.status === 'dept_approved') || (isExecutive && (leave.status === 'pending' || leave.status === 'dept_approved')));
                 const canWithdrawAct = !isOwner && leave.status === 'withdraw_pending' && (isHR || isExecutive);
@@ -480,7 +480,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                                 <div className="space-y-1">
                                   <div className="flex items-center gap-2">
                                     <span className="font-semibold text-foreground/80 text-xs uppercase tracking-wider">
-                                      {leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.role === 'general_manager' ? 'General Manager' : 'HR Admin'}
+                                      {leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.(role === 'general_manager' || role === 'branch_manager') ? 'General Manager' : 'HR Admin'}
                                     </span>
                                     {leave.hrApprover && (
                                       <span className="text-xs text-muted-foreground">— {leave.hrApprover.name}</span>
@@ -549,7 +549,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               active={leave.status === 'approved' || (leave.status === 'rejected' && !!leave.hrRemarks)}
                               done={leave.status === 'approved'}
                               rejected={leave.status === 'rejected' && !!leave.hrRemarks}
-                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.role === 'general_manager' ? 'Gen. Manager' : 'HR Admin'}
+                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.(role === 'general_manager' || role === 'branch_manager') ? 'Gen. Manager' : 'HR Admin'}
                             />
                           </div>
 

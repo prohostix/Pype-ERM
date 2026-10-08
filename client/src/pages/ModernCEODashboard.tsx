@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { 
-  ArrowUpRight, 
+import {
+  ArrowUpRight,
   ArrowDownRight,
   Target,
   Zap,
@@ -19,10 +19,10 @@ import {
   BarChart2,
   Trash2,
 } from 'lucide-react';
-import { 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
+import {
+  XAxis,
+  YAxis,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -147,37 +147,37 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
         <div className="hidden">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
-          <TabsTrigger value="performance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Performance</TabsTrigger>
-          <TabsTrigger value="kpi-kra" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">KPI / KRA</TabsTrigger>
-          <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Users</TabsTrigger>
-          <TabsTrigger value="departments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Departments</TabsTrigger>
-          <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Tasks</TabsTrigger>
-          <TabsTrigger value="escalations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Escalations</TabsTrigger>
-          <TabsTrigger value="students" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Students</TabsTrigger>
-          <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Enrollment Review</TabsTrigger>
-          <TabsTrigger value="leaves" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leave Requests</TabsTrigger>
-          <TabsTrigger value="attendance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Attendance</TabsTrigger>
-          <TabsTrigger value="invoices" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Invoices</TabsTrigger>
-          <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>
-          <TabsTrigger value="leads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leads</TabsTrigger>
-          <TabsTrigger value="university_commissions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Commissions</TabsTrigger>
-          <TabsTrigger value="activity_report" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Report</TabsTrigger>
-          {user?.role === 'ceo' && (
-            <>
-              <TabsTrigger value="delete_approvals" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5">
-                <span>Delete Approvals</span>
-                {pendingDeletes > 0 && (
-                  <Badge variant="destructive" className="ml-1 h-5 min-w-[20px] px-1.5 text-[10px] font-bold rounded-full">
-                    {pendingDeletes}
-                  </Badge>
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
-              <TabsTrigger value="activity-logs" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Logs</TabsTrigger>
-            </>
-          )}
-        </TabsList>
+              <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Overview</TabsTrigger>
+              <TabsTrigger value="performance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Performance</TabsTrigger>
+              <TabsTrigger value="kpi-kra" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">KPI / KRA</TabsTrigger>
+              <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Users</TabsTrigger>
+              <TabsTrigger value="departments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Departments</TabsTrigger>
+              <TabsTrigger value="tasks" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Tasks</TabsTrigger>
+              <TabsTrigger value="escalations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Escalations</TabsTrigger>
+              <TabsTrigger value="students" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Students</TabsTrigger>
+              <TabsTrigger value="enrollment_review" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Enrollment Review</TabsTrigger>
+              <TabsTrigger value="leaves" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leave Requests</TabsTrigger>
+              <TabsTrigger value="attendance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Attendance</TabsTrigger>
+              <TabsTrigger value="invoices" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Invoices</TabsTrigger>
+              <TabsTrigger value="collections" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Collections</TabsTrigger>
+              <TabsTrigger value="leads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Leads</TabsTrigger>
+              <TabsTrigger value="university_commissions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Commissions</TabsTrigger>
+              <TabsTrigger value="activity_report" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Report</TabsTrigger>
+              {user?.role === 'ceo' && (
+                <>
+                  <TabsTrigger value="delete_approvals" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5">
+                    <span>Delete Approvals</span>
+                    {pendingDeletes > 0 && (
+                      <Badge variant="destructive" className="ml-1 h-5 min-w-[20px] px-1.5 text-[10px] font-bold rounded-full">
+                        {pendingDeletes}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                  <TabsTrigger value="meetings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Meetings</TabsTrigger>
+                  <TabsTrigger value="activity-logs" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Activity Logs</TabsTrigger>
+                </>
+              )}
+            </TabsList>
           </div>
         </div>
 
@@ -280,8 +280,8 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={deptPerformanceData} layout="vertical" margin={{ left: 0, right: 40 }}>
                       <XAxis type="number" hide domain={[0, 100]} />
-                      <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={90} tick={{fill: 'hsl(var(--foreground))', fontSize: 12, fontWeight: 500}} />
-                      <Tooltip cursor={{fill: 'hsl(var(--muted))'}} contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} formatter={(v: any) => [`${v}%`, 'Score']} />
+                      <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={90} tick={{ fill: 'hsl(var(--foreground))', fontSize: 12, fontWeight: 500 }} />
+                      <Tooltip cursor={{ fill: 'hsl(var(--muted))' }} contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '12px' }} formatter={(v: any) => [`${v}%`, 'Score']} />
                       <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={18}>
                         {deptPerformanceData.map((entry: any, index: number) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
@@ -316,7 +316,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-green-500/5 via-background to-background border-green-500/20" onClick={() => handleNavigate('users')}>
                 <div className="absolute right-0 top-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
                 <CardContent className="p-5 relative z-10">
@@ -333,7 +333,7 @@ export function ModernCEODashboard({ initialTab, onNavigate }: { initialTab?: st
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="relative overflow-hidden group cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all duration-500 bg-gradient-to-br from-yellow-500/5 via-background to-background border-yellow-500/20" onClick={() => handleNavigate('tasks')}>
                 <div className="absolute right-0 top-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-700"></div>
                 <CardContent className="p-5 relative z-10">
@@ -521,7 +521,7 @@ function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
   useEffect(() => {
     api.get('/ceo/escalations')
       .then(r => setItems((r.data.data || []).filter((e: any) => e.status === 'pending').slice(0, 3)))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
@@ -538,7 +538,7 @@ function EscalationPreview({ onViewAll }: { onViewAll: () => void }) {
       </CardHeader>
       <CardContent className="space-y-3">
         {loading ? (
-          [1,2,3].map(i => <div key={i} className="h-14 bg-muted rounded-lg animate-pulse" />)
+          [1, 2, 3].map(i => <div key={i} className="h-14 bg-muted rounded-lg animate-pulse" />)
         ) : items.length === 0 ? (
           <div className="py-8 text-center text-muted-foreground">
             <CheckCircle className="w-8 h-8 mx-auto mb-2 opacity-30" />
@@ -582,18 +582,18 @@ interface Escalation {
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  pending:    'bg-warning/10 text-warning',
-  resolved:   'bg-success/10 text-success',
+  pending: 'bg-warning/10 text-warning',
+  resolved: 'bg-success/10 text-success',
   reassigned: 'bg-info/10 text-info',
-  extended:   'bg-primary/10 text-primary',
-  justified:  'bg-muted text-muted-foreground',
+  extended: 'bg-primary/10 text-primary',
+  justified: 'bg-muted text-muted-foreground',
 };
 
 const PRIORITY_COLOR: Record<string, string> = {
   critical: 'bg-red-500/10 text-red-500',
-  high:     'bg-orange-500/10 text-orange-500',
-  medium:   'bg-yellow-500/10 text-yellow-500',
-  low:      'bg-blue-500/10 text-blue-500',
+  high: 'bg-orange-500/10 text-orange-500',
+  medium: 'bg-yellow-500/10 text-yellow-500',
+  low: 'bg-blue-500/10 text-blue-500',
 };
 
 function timeAgo(iso: string) {
@@ -655,8 +655,8 @@ function EscalationsPanel() {
   };
 
   const counts = {
-    all:      escalations.length,
-    pending:  escalations.filter(e => e.status === 'pending').length,
+    all: escalations.length,
+    pending: escalations.filter(e => e.status === 'pending').length,
     resolved: escalations.filter(e => e.status === 'resolved').length,
   };
 
@@ -707,10 +707,10 @@ function EscalationsPanel() {
         <div className="relative w-full max-w-full">
           <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             <TabsList className="flex w-max space-x-1.5 bg-transparent p-1 h-auto border-b border-border/30">
-          <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">All ({counts.all})</TabsTrigger>
-          <TabsTrigger value="pending" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Pending ({counts.pending})</TabsTrigger>
-          <TabsTrigger value="resolved" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Resolved ({counts.resolved})</TabsTrigger>
-        </TabsList>
+              <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">All ({counts.all})</TabsTrigger>
+              <TabsTrigger value="pending" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Pending ({counts.pending})</TabsTrigger>
+              <TabsTrigger value="resolved" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-full px-5 py-2 transition-all duration-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Resolved ({counts.resolved})</TabsTrigger>
+            </TabsList>
           </div>
         </div>
 

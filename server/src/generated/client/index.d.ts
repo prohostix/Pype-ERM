@@ -504,7 +504,8 @@ export const UserRole: {
   student: 'student',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager'
+  general_manager: 'general_manager',
+  branch_manager: 'branch_manager'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -9690,6 +9691,7 @@ export namespace Prisma {
     designations: number
     communicationLogs: number
     fcmTokens: number
+    opsSubAdminAllocations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9767,6 +9769,7 @@ export namespace Prisma {
     designations?: boolean | UserCountOutputTypeCountDesignationsArgs
     communicationLogs?: boolean | UserCountOutputTypeCountCommunicationLogsArgs
     fcmTokens?: boolean | UserCountOutputTypeCountFcmTokensArgs
+    opsSubAdminAllocations?: boolean | UserCountOutputTypeCountOpsSubAdminAllocationsArgs
   }
 
   // Custom InputTypes
@@ -10296,6 +10299,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFcmTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserFCMTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOpsSubAdminAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramAllocationWhereInput
   }
 
 
@@ -11691,6 +11701,7 @@ export namespace Prisma {
     phone: string | null
     address: string | null
     logo: string | null
+    customLoginSlug: string | null
     status: $Enums.OrganizationStatus | null
     licenseId: string | null
     licenseExpiry: Date | null
@@ -11705,6 +11716,7 @@ export namespace Prisma {
     phone: string | null
     address: string | null
     logo: string | null
+    customLoginSlug: string | null
     status: $Enums.OrganizationStatus | null
     licenseId: string | null
     licenseExpiry: Date | null
@@ -11719,6 +11731,8 @@ export namespace Prisma {
     phone: number
     address: number
     logo: number
+    customLoginSlug: number
+    loginBranding: number
     status: number
     licenseId: number
     licenseExpiry: number
@@ -11736,6 +11750,7 @@ export namespace Prisma {
     phone?: true
     address?: true
     logo?: true
+    customLoginSlug?: true
     status?: true
     licenseId?: true
     licenseExpiry?: true
@@ -11750,6 +11765,7 @@ export namespace Prisma {
     phone?: true
     address?: true
     logo?: true
+    customLoginSlug?: true
     status?: true
     licenseId?: true
     licenseExpiry?: true
@@ -11764,6 +11780,8 @@ export namespace Prisma {
     phone?: true
     address?: true
     logo?: true
+    customLoginSlug?: true
+    loginBranding?: true
     status?: true
     licenseId?: true
     licenseExpiry?: true
@@ -11852,6 +11870,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo: string | null
+    customLoginSlug: string | null
+    loginBranding: JsonValue | null
     status: $Enums.OrganizationStatus
     licenseId: string | null
     licenseExpiry: Date | null
@@ -11884,6 +11904,8 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     logo?: boolean
+    customLoginSlug?: boolean
+    loginBranding?: boolean
     status?: boolean
     licenseId?: boolean
     licenseExpiry?: boolean
@@ -11973,6 +11995,8 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     logo?: boolean
+    customLoginSlug?: boolean
+    loginBranding?: boolean
     status?: boolean
     licenseId?: boolean
     licenseExpiry?: boolean
@@ -11989,6 +12013,8 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     logo?: boolean
+    customLoginSlug?: boolean
+    loginBranding?: boolean
     status?: boolean
     licenseId?: boolean
     licenseExpiry?: boolean
@@ -12005,6 +12031,8 @@ export namespace Prisma {
     phone?: boolean
     address?: boolean
     logo?: boolean
+    customLoginSlug?: boolean
+    loginBranding?: boolean
     status?: boolean
     licenseId?: boolean
     licenseExpiry?: boolean
@@ -12013,7 +12041,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "address" | "logo" | "status" | "licenseId" | "licenseExpiry" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "address" | "logo" | "customLoginSlug" | "loginBranding" | "status" | "licenseId" | "licenseExpiry" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     academicSessions?: boolean | Organization$academicSessionsArgs<ExtArgs>
     studentAcademicAttendances?: boolean | Organization$studentAcademicAttendancesArgs<ExtArgs>
@@ -12181,6 +12209,8 @@ export namespace Prisma {
       phone: string
       address: string
       logo: string | null
+      customLoginSlug: string | null
+      loginBranding: Prisma.JsonValue | null
       status: $Enums.OrganizationStatus
       licenseId: string | null
       licenseExpiry: Date | null
@@ -12689,6 +12719,8 @@ export namespace Prisma {
     readonly phone: FieldRef<"Organization", 'String'>
     readonly address: FieldRef<"Organization", 'String'>
     readonly logo: FieldRef<"Organization", 'String'>
+    readonly customLoginSlug: FieldRef<"Organization", 'String'>
+    readonly loginBranding: FieldRef<"Organization", 'Json'>
     readonly status: FieldRef<"Organization", 'OrganizationStatus'>
     readonly licenseId: FieldRef<"Organization", 'String'>
     readonly licenseExpiry: FieldRef<"Organization", 'DateTime'>
@@ -18041,6 +18073,7 @@ export namespace Prisma {
     designations?: boolean | User$designationsArgs<ExtArgs>
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
+    opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -18244,6 +18277,7 @@ export namespace Prisma {
     designations?: boolean | User$designationsArgs<ExtArgs>
     communicationLogs?: boolean | User$communicationLogsArgs<ExtArgs>
     fcmTokens?: boolean | User$fcmTokensArgs<ExtArgs>
+    opsSubAdminAllocations?: boolean | User$opsSubAdminAllocationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18356,6 +18390,7 @@ export namespace Prisma {
       designations: Prisma.$DesignationPayload<ExtArgs>[]
       communicationLogs: Prisma.$CommunicationLogPayload<ExtArgs>[]
       fcmTokens: Prisma.$UserFCMTokenPayload<ExtArgs>[]
+      opsSubAdminAllocations: Prisma.$ProgramAllocationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18869,6 +18904,7 @@ export namespace Prisma {
     designations<T extends User$designationsArgs<ExtArgs> = {}>(args?: Subset<T, User$designationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DesignationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     communicationLogs<T extends User$communicationLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$communicationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommunicationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fcmTokens<T extends User$fcmTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$fcmTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserFCMTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    opsSubAdminAllocations<T extends User$opsSubAdminAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, User$opsSubAdminAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21367,6 +21403,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserFCMTokenScalarFieldEnum | UserFCMTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.opsSubAdminAllocations
+   */
+  export type User$opsSubAdminAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramAllocation
+     */
+    select?: ProgramAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramAllocation
+     */
+    omit?: ProgramAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramAllocationInclude<ExtArgs> | null
+    where?: ProgramAllocationWhereInput
+    orderBy?: ProgramAllocationOrderByWithRelationInput | ProgramAllocationOrderByWithRelationInput[]
+    cursor?: ProgramAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramAllocationScalarFieldEnum | ProgramAllocationScalarFieldEnum[]
   }
 
   /**
@@ -25177,6 +25237,7 @@ export namespace Prisma {
     country: string | null
     status: string | null
     logo: string | null
+    isAcademicPartnerOnly: boolean | null
   }
 
   export type UniversityMaxAggregateOutputType = {
@@ -25190,6 +25251,7 @@ export namespace Prisma {
     country: string | null
     status: string | null
     logo: string | null
+    isAcademicPartnerOnly: boolean | null
   }
 
   export type UniversityCountAggregateOutputType = {
@@ -25204,6 +25266,7 @@ export namespace Prisma {
     status: number
     logo: number
     enrollmentFormConfig: number
+    isAcademicPartnerOnly: number
     _all: number
   }
 
@@ -25219,6 +25282,7 @@ export namespace Prisma {
     country?: true
     status?: true
     logo?: true
+    isAcademicPartnerOnly?: true
   }
 
   export type UniversityMaxAggregateInputType = {
@@ -25232,6 +25296,7 @@ export namespace Prisma {
     country?: true
     status?: true
     logo?: true
+    isAcademicPartnerOnly?: true
   }
 
   export type UniversityCountAggregateInputType = {
@@ -25246,6 +25311,7 @@ export namespace Prisma {
     status?: true
     logo?: true
     enrollmentFormConfig?: true
+    isAcademicPartnerOnly?: true
     _all?: true
   }
 
@@ -25333,6 +25399,7 @@ export namespace Prisma {
     status: string
     logo: string | null
     enrollmentFormConfig: JsonValue | null
+    isAcademicPartnerOnly: boolean
     _count: UniversityCountAggregateOutputType | null
     _min: UniversityMinAggregateOutputType | null
     _max: UniversityMaxAggregateOutputType | null
@@ -25364,6 +25431,7 @@ export namespace Prisma {
     status?: boolean
     logo?: boolean
     enrollmentFormConfig?: boolean
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
     programs?: boolean | University$programsArgs<ExtArgs>
@@ -25391,6 +25459,7 @@ export namespace Prisma {
     status?: boolean
     logo?: boolean
     enrollmentFormConfig?: boolean
+    isAcademicPartnerOnly?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -25406,6 +25475,7 @@ export namespace Prisma {
     status?: boolean
     logo?: boolean
     enrollmentFormConfig?: boolean
+    isAcademicPartnerOnly?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["university"]>
 
@@ -25421,9 +25491,10 @@ export namespace Prisma {
     status?: boolean
     logo?: boolean
     enrollmentFormConfig?: boolean
+    isAcademicPartnerOnly?: boolean
   }
 
-  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo" | "enrollmentFormConfig", ExtArgs["result"]["university"]>
+  export type UniversityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "subDepartmentId" | "name" | "code" | "address" | "contact" | "country" | "status" | "logo" | "enrollmentFormConfig" | "isAcademicPartnerOnly", ExtArgs["result"]["university"]>
   export type UniversityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admissionSessions?: boolean | University$admissionSessionsArgs<ExtArgs>
     feeStructures?: boolean | University$feeStructuresArgs<ExtArgs>
@@ -25474,6 +25545,7 @@ export namespace Prisma {
       status: string
       logo: string | null
       enrollmentFormConfig: Prisma.JsonValue | null
+      isAcademicPartnerOnly: boolean
     }, ExtArgs["result"]["university"]>
     composites: {}
   }
@@ -25920,6 +25992,7 @@ export namespace Prisma {
     readonly status: FieldRef<"University", 'String'>
     readonly logo: FieldRef<"University", 'String'>
     readonly enrollmentFormConfig: FieldRef<"University", 'Json'>
+    readonly isAcademicPartnerOnly: FieldRef<"University", 'Boolean'>
   }
     
 
@@ -74115,6 +74188,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    opsSubAdminId: string | null
   }
 
   export type ProgramAllocationMaxAggregateOutputType = {
@@ -74127,6 +74201,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    opsSubAdminId: string | null
   }
 
   export type ProgramAllocationCountAggregateOutputType = {
@@ -74139,6 +74214,7 @@ export namespace Prisma {
     isActive: number
     createdAt: number
     updatedAt: number
+    opsSubAdminId: number
     _all: number
   }
 
@@ -74153,6 +74229,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    opsSubAdminId?: true
   }
 
   export type ProgramAllocationMaxAggregateInputType = {
@@ -74165,6 +74242,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    opsSubAdminId?: true
   }
 
   export type ProgramAllocationCountAggregateInputType = {
@@ -74177,6 +74255,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    opsSubAdminId?: true
     _all?: true
   }
 
@@ -74262,6 +74341,7 @@ export namespace Prisma {
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    opsSubAdminId: string | null
     _count: ProgramAllocationCountAggregateOutputType | null
     _min: ProgramAllocationMinAggregateOutputType | null
     _max: ProgramAllocationMaxAggregateOutputType | null
@@ -74291,7 +74371,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    opsSubAdminId?: boolean
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -74307,7 +74389,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    opsSubAdminId?: boolean
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -74323,7 +74407,9 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    opsSubAdminId?: boolean
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -74339,23 +74425,27 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    opsSubAdminId?: boolean
   }
 
-  export type ProgramAllocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "centerId" | "programId" | "allocatedBy" | "allocatedAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["programAllocation"]>
+  export type ProgramAllocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "centerId" | "programId" | "allocatedBy" | "allocatedAt" | "isActive" | "createdAt" | "updatedAt" | "opsSubAdminId", ExtArgs["result"]["programAllocation"]>
   export type ProgramAllocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
   }
   export type ProgramAllocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
   }
   export type ProgramAllocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     allocatedByMgr?: boolean | UserDefaultArgs<ExtArgs>
+    opsSubAdmin?: boolean | ProgramAllocation$opsSubAdminArgs<ExtArgs>
     center?: boolean | StudyCenterDefaultArgs<ExtArgs>
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     program?: boolean | ProgramDefaultArgs<ExtArgs>
@@ -74365,6 +74455,7 @@ export namespace Prisma {
     name: "ProgramAllocation"
     objects: {
       allocatedByMgr: Prisma.$UserPayload<ExtArgs>
+      opsSubAdmin: Prisma.$UserPayload<ExtArgs> | null
       center: Prisma.$StudyCenterPayload<ExtArgs>
       organization: Prisma.$OrganizationPayload<ExtArgs>
       program: Prisma.$ProgramPayload<ExtArgs>
@@ -74379,6 +74470,7 @@ export namespace Prisma {
       isActive: boolean
       createdAt: Date
       updatedAt: Date
+      opsSubAdminId: string | null
     }, ExtArgs["result"]["programAllocation"]>
     composites: {}
   }
@@ -74774,6 +74866,7 @@ export namespace Prisma {
   export interface Prisma__ProgramAllocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     allocatedByMgr<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    opsSubAdmin<T extends ProgramAllocation$opsSubAdminArgs<ExtArgs> = {}>(args?: Subset<T, ProgramAllocation$opsSubAdminArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     center<T extends StudyCenterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudyCenterDefaultArgs<ExtArgs>>): Prisma__StudyCenterClient<$Result.GetResult<Prisma.$StudyCenterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     program<T extends ProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramDefaultArgs<ExtArgs>>): Prisma__ProgramClient<$Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -74815,6 +74908,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"ProgramAllocation", 'Boolean'>
     readonly createdAt: FieldRef<"ProgramAllocation", 'DateTime'>
     readonly updatedAt: FieldRef<"ProgramAllocation", 'DateTime'>
+    readonly opsSubAdminId: FieldRef<"ProgramAllocation", 'String'>
   }
     
 
@@ -75213,6 +75307,25 @@ export namespace Prisma {
      * Limit how many ProgramAllocations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ProgramAllocation.opsSubAdmin
+   */
+  export type ProgramAllocation$opsSubAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -121734,6 +121847,8 @@ export namespace Prisma {
     phone: 'phone',
     address: 'address',
     logo: 'logo',
+    customLoginSlug: 'customLoginSlug',
+    loginBranding: 'loginBranding',
     status: 'status',
     licenseId: 'licenseId',
     licenseExpiry: 'licenseExpiry',
@@ -121892,7 +122007,8 @@ export namespace Prisma {
     country: 'country',
     status: 'status',
     logo: 'logo',
-    enrollmentFormConfig: 'enrollmentFormConfig'
+    enrollmentFormConfig: 'enrollmentFormConfig',
+    isAcademicPartnerOnly: 'isAcademicPartnerOnly'
   };
 
   export type UniversityScalarFieldEnum = (typeof UniversityScalarFieldEnum)[keyof typeof UniversityScalarFieldEnum]
@@ -122698,7 +122814,8 @@ export namespace Prisma {
     allocatedAt: 'allocatedAt',
     isActive: 'isActive',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    opsSubAdminId: 'opsSubAdminId'
   };
 
   export type ProgramAllocationScalarFieldEnum = (typeof ProgramAllocationScalarFieldEnum)[keyof typeof ProgramAllocationScalarFieldEnum]
@@ -123401,6 +123518,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'OrganizationStatus'
    */
   export type EnumOrganizationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationStatus'>
@@ -123425,20 +123556,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -123840,6 +123957,8 @@ export namespace Prisma {
     phone?: StringFilter<"Organization"> | string
     address?: StringFilter<"Organization"> | string
     logo?: StringNullableFilter<"Organization"> | string | null
+    customLoginSlug?: StringNullableFilter<"Organization"> | string | null
+    loginBranding?: JsonNullableFilter<"Organization">
     status?: EnumOrganizationStatusFilter<"Organization"> | $Enums.OrganizationStatus
     licenseId?: StringNullableFilter<"Organization"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Organization"> | Date | string | null
@@ -123928,6 +124047,8 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     logo?: SortOrderInput | SortOrder
+    customLoginSlug?: SortOrderInput | SortOrder
+    loginBranding?: SortOrderInput | SortOrder
     status?: SortOrder
     licenseId?: SortOrderInput | SortOrder
     licenseExpiry?: SortOrderInput | SortOrder
@@ -124012,6 +124133,7 @@ export namespace Prisma {
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    customLoginSlug?: string
     AND?: OrganizationWhereInput | OrganizationWhereInput[]
     OR?: OrganizationWhereInput[]
     NOT?: OrganizationWhereInput | OrganizationWhereInput[]
@@ -124019,6 +124141,7 @@ export namespace Prisma {
     phone?: StringFilter<"Organization"> | string
     address?: StringFilter<"Organization"> | string
     logo?: StringNullableFilter<"Organization"> | string | null
+    loginBranding?: JsonNullableFilter<"Organization">
     status?: EnumOrganizationStatusFilter<"Organization"> | $Enums.OrganizationStatus
     licenseId?: StringNullableFilter<"Organization"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Organization"> | Date | string | null
@@ -124098,7 +124221,7 @@ export namespace Prisma {
     lessonFacultyHistories?: LessonFacultyHistoryListRelationFilter
     batchLessonAssignments?: BatchLessonAssignmentListRelationFilter
     studentVideoLogs?: StudentVideoLogListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "customLoginSlug">
 
   export type OrganizationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -124107,6 +124230,8 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     logo?: SortOrderInput | SortOrder
+    customLoginSlug?: SortOrderInput | SortOrder
+    loginBranding?: SortOrderInput | SortOrder
     status?: SortOrder
     licenseId?: SortOrderInput | SortOrder
     licenseExpiry?: SortOrderInput | SortOrder
@@ -124128,6 +124253,8 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"Organization"> | string
     address?: StringWithAggregatesFilter<"Organization"> | string
     logo?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    customLoginSlug?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    loginBranding?: JsonNullableWithAggregatesFilter<"Organization">
     status?: EnumOrganizationStatusWithAggregatesFilter<"Organization"> | $Enums.OrganizationStatus
     licenseId?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     licenseExpiry?: DateTimeNullableWithAggregatesFilter<"Organization"> | Date | string | null
@@ -124486,6 +124613,7 @@ export namespace Prisma {
     designations?: DesignationListRelationFilter
     communicationLogs?: CommunicationLogListRelationFilter
     fcmTokens?: UserFCMTokenListRelationFilter
+    opsSubAdminAllocations?: ProgramAllocationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -124606,6 +124734,7 @@ export namespace Prisma {
     designations?: DesignationOrderByRelationAggregateInput
     communicationLogs?: CommunicationLogOrderByRelationAggregateInput
     fcmTokens?: UserFCMTokenOrderByRelationAggregateInput
+    opsSubAdminAllocations?: ProgramAllocationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -124729,6 +124858,7 @@ export namespace Prisma {
     designations?: DesignationListRelationFilter
     communicationLogs?: CommunicationLogListRelationFilter
     fcmTokens?: UserFCMTokenListRelationFilter
+    opsSubAdminAllocations?: ProgramAllocationListRelationFilter
   }, "id" | "userId" | "email" | "biometricId">
 
   export type UserOrderByWithAggregationInput = {
@@ -125162,6 +125292,7 @@ export namespace Prisma {
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
     enrollmentFormConfig?: JsonNullableFilter<"University">
+    isAcademicPartnerOnly?: BoolFilter<"University"> | boolean
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -125188,6 +125319,7 @@ export namespace Prisma {
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
     enrollmentFormConfig?: SortOrderInput | SortOrder
+    isAcademicPartnerOnly?: SortOrder
     admissionSessions?: AdmissionSessionOrderByRelationAggregateInput
     feeStructures?: FeeStructureOrderByRelationAggregateInput
     programs?: ProgramOrderByRelationAggregateInput
@@ -125218,6 +125350,7 @@ export namespace Prisma {
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
     enrollmentFormConfig?: JsonNullableFilter<"University">
+    isAcademicPartnerOnly?: BoolFilter<"University"> | boolean
     admissionSessions?: AdmissionSessionListRelationFilter
     feeStructures?: FeeStructureListRelationFilter
     programs?: ProgramListRelationFilter
@@ -125244,6 +125377,7 @@ export namespace Prisma {
     status?: SortOrder
     logo?: SortOrderInput | SortOrder
     enrollmentFormConfig?: SortOrderInput | SortOrder
+    isAcademicPartnerOnly?: SortOrder
     _count?: UniversityCountOrderByAggregateInput
     _max?: UniversityMaxOrderByAggregateInput
     _min?: UniversityMinOrderByAggregateInput
@@ -125264,6 +125398,7 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"University"> | string
     logo?: StringNullableWithAggregatesFilter<"University"> | string | null
     enrollmentFormConfig?: JsonNullableWithAggregatesFilter<"University">
+    isAcademicPartnerOnly?: BoolWithAggregatesFilter<"University"> | boolean
   }
 
   export type ProgramWhereInput = {
@@ -129723,7 +129858,9 @@ export namespace Prisma {
     isActive?: BoolFilter<"ProgramAllocation"> | boolean
     createdAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
+    opsSubAdminId?: StringNullableFilter<"ProgramAllocation"> | string | null
     allocatedByMgr?: XOR<UserScalarRelationFilter, UserWhereInput>
+    opsSubAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     center?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -129739,7 +129876,9 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    opsSubAdminId?: SortOrderInput | SortOrder
     allocatedByMgr?: UserOrderByWithRelationInput
+    opsSubAdmin?: UserOrderByWithRelationInput
     center?: StudyCenterOrderByWithRelationInput
     organization?: OrganizationOrderByWithRelationInput
     program?: ProgramOrderByWithRelationInput
@@ -129759,7 +129898,9 @@ export namespace Prisma {
     isActive?: BoolFilter<"ProgramAllocation"> | boolean
     createdAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
+    opsSubAdminId?: StringNullableFilter<"ProgramAllocation"> | string | null
     allocatedByMgr?: XOR<UserScalarRelationFilter, UserWhereInput>
+    opsSubAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     center?: XOR<StudyCenterScalarRelationFilter, StudyCenterWhereInput>
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     program?: XOR<ProgramScalarRelationFilter, ProgramWhereInput>
@@ -129775,6 +129916,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    opsSubAdminId?: SortOrderInput | SortOrder
     _count?: ProgramAllocationCountOrderByAggregateInput
     _max?: ProgramAllocationMaxOrderByAggregateInput
     _min?: ProgramAllocationMinOrderByAggregateInput
@@ -129793,6 +129935,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"ProgramAllocation"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ProgramAllocation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProgramAllocation"> | Date | string
+    opsSubAdminId?: StringNullableWithAggregatesFilter<"ProgramAllocation"> | string | null
   }
 
   export type ReferralLinkWhereInput = {
@@ -133282,6 +133425,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -133369,6 +133514,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -133456,6 +133603,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -133543,6 +133692,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -133630,6 +133781,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -133645,6 +133798,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -133659,6 +133814,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134044,6 +134201,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -134157,6 +134315,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUpdateInput = {
@@ -134270,6 +134429,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -134383,6 +134543,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -134865,6 +135026,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -134891,6 +135053,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -134915,6 +135078,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -134941,6 +135105,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -134966,6 +135131,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
   }
 
   export type UniversityUpdateManyMutationInput = {
@@ -134979,6 +135145,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UniversityUncheckedUpdateManyInput = {
@@ -134993,6 +135160,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProgramCreateInput = {
@@ -139889,6 +140057,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocatedByMgr: UserCreateNestedOneWithoutProgramAllocationsInput
+    opsSubAdmin?: UserCreateNestedOneWithoutOpsSubAdminAllocationsInput
     center: StudyCenterCreateNestedOneWithoutProgramAllocationsInput
     organization: OrganizationCreateNestedOneWithoutProgramAllocationsInput
     program: ProgramCreateNestedOneWithoutProgramAllocationsInput
@@ -139904,6 +140073,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationUpdateInput = {
@@ -139913,6 +140083,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocatedByMgr?: UserUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    opsSubAdmin?: UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramAllocationsNestedInput
     program?: ProgramUpdateOneRequiredWithoutProgramAllocationsNestedInput
@@ -139928,6 +140099,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramAllocationCreateManyInput = {
@@ -139940,6 +140112,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationUpdateManyMutationInput = {
@@ -139960,6 +140133,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReferralLinkCreateInput = {
@@ -143608,24 +143782,6 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
-
-  export type EnumOrganizationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.OrganizationStatus | EnumOrganizationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -143648,6 +143804,24 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumOrganizationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizationStatus | EnumOrganizationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -144393,6 +144567,8 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     logo?: SortOrder
+    customLoginSlug?: SortOrder
+    loginBranding?: SortOrder
     status?: SortOrder
     licenseId?: SortOrder
     licenseExpiry?: SortOrder
@@ -144408,6 +144584,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     logo?: SortOrder
+    customLoginSlug?: SortOrder
     status?: SortOrder
     licenseId?: SortOrder
     licenseExpiry?: SortOrder
@@ -144422,6 +144599,7 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     logo?: SortOrder
+    customLoginSlug?: SortOrder
     status?: SortOrder
     licenseId?: SortOrder
     licenseExpiry?: SortOrder
@@ -144464,30 +144642,6 @@ export namespace Prisma {
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
-
-  export type EnumOrganizationStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.OrganizationStatus | EnumOrganizationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumOrganizationStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrganizationStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumOrganizationStatusFilter<$PrismaModel>
-    _max?: NestedEnumOrganizationStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -144513,6 +144667,30 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumOrganizationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizationStatus | EnumOrganizationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizationStatus[] | ListEnumOrganizationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizationStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrganizationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrganizationStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrganizationStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -145325,6 +145503,7 @@ export namespace Prisma {
     status?: SortOrder
     logo?: SortOrder
     enrollmentFormConfig?: SortOrder
+    isAcademicPartnerOnly?: SortOrder
   }
 
   export type UniversityMaxOrderByAggregateInput = {
@@ -145338,6 +145517,7 @@ export namespace Prisma {
     country?: SortOrder
     status?: SortOrder
     logo?: SortOrder
+    isAcademicPartnerOnly?: SortOrder
   }
 
   export type UniversityMinOrderByAggregateInput = {
@@ -145351,6 +145531,7 @@ export namespace Prisma {
     country?: SortOrder
     status?: SortOrder
     logo?: SortOrder
+    isAcademicPartnerOnly?: SortOrder
   }
 
   export type EnumCourseTypeFilter<$PrismaModel = never> = {
@@ -147909,6 +148090,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    opsSubAdminId?: SortOrder
   }
 
   export type ProgramAllocationMaxOrderByAggregateInput = {
@@ -147921,6 +148103,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    opsSubAdminId?: SortOrder
   }
 
   export type ProgramAllocationMinOrderByAggregateInput = {
@@ -147933,6 +148116,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    opsSubAdminId?: SortOrder
   }
 
   export type ReferralLinkCountOrderByAggregateInput = {
@@ -153998,6 +154182,13 @@ export namespace Prisma {
     connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
   }
 
+  export type ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput = {
+    create?: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput> | ProgramAllocationCreateWithoutOpsSubAdminInput[] | ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput[]
+    connectOrCreate?: ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput | ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput[]
+    createMany?: ProgramAllocationCreateManyOpsSubAdminInputEnvelope
+    connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+  }
+
   export type StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -154554,6 +154745,13 @@ export namespace Prisma {
     connectOrCreate?: UserFCMTokenCreateOrConnectWithoutUserInput | UserFCMTokenCreateOrConnectWithoutUserInput[]
     createMany?: UserFCMTokenCreateManyUserInputEnvelope
     connect?: UserFCMTokenWhereUniqueInput | UserFCMTokenWhereUniqueInput[]
+  }
+
+  export type ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput = {
+    create?: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput> | ProgramAllocationCreateWithoutOpsSubAdminInput[] | ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput[]
+    connectOrCreate?: ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput | ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput[]
+    createMany?: ProgramAllocationCreateManyOpsSubAdminInputEnvelope
+    connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -155738,6 +155936,20 @@ export namespace Prisma {
     deleteMany?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
   }
 
+  export type ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput = {
+    create?: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput> | ProgramAllocationCreateWithoutOpsSubAdminInput[] | ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput[]
+    connectOrCreate?: ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput | ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput[]
+    upsert?: ProgramAllocationUpsertWithWhereUniqueWithoutOpsSubAdminInput | ProgramAllocationUpsertWithWhereUniqueWithoutOpsSubAdminInput[]
+    createMany?: ProgramAllocationCreateManyOpsSubAdminInputEnvelope
+    set?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    disconnect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    delete?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    update?: ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput | ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput[]
+    updateMany?: ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput | ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput[]
+    deleteMany?: ProgramAllocationScalarWhereInput | ProgramAllocationScalarWhereInput[]
+  }
+
   export type StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput = {
     create?: XOR<StudentBatchTransferCreateWithoutTransferredByInput, StudentBatchTransferUncheckedCreateWithoutTransferredByInput> | StudentBatchTransferCreateWithoutTransferredByInput[] | StudentBatchTransferUncheckedCreateWithoutTransferredByInput[]
     connectOrCreate?: StudentBatchTransferCreateOrConnectWithoutTransferredByInput | StudentBatchTransferCreateOrConnectWithoutTransferredByInput[]
@@ -156840,6 +157052,20 @@ export namespace Prisma {
     update?: UserFCMTokenUpdateWithWhereUniqueWithoutUserInput | UserFCMTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserFCMTokenUpdateManyWithWhereWithoutUserInput | UserFCMTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserFCMTokenScalarWhereInput | UserFCMTokenScalarWhereInput[]
+  }
+
+  export type ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput = {
+    create?: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput> | ProgramAllocationCreateWithoutOpsSubAdminInput[] | ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput[]
+    connectOrCreate?: ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput | ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput[]
+    upsert?: ProgramAllocationUpsertWithWhereUniqueWithoutOpsSubAdminInput | ProgramAllocationUpsertWithWhereUniqueWithoutOpsSubAdminInput[]
+    createMany?: ProgramAllocationCreateManyOpsSubAdminInputEnvelope
+    set?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    disconnect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    delete?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    connect?: ProgramAllocationWhereUniqueInput | ProgramAllocationWhereUniqueInput[]
+    update?: ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput | ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput[]
+    updateMany?: ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput | ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput[]
+    deleteMany?: ProgramAllocationScalarWhereInput | ProgramAllocationScalarWhereInput[]
   }
 
   export type OrganizationCreateNestedOneWithoutEmployeesInput = {
@@ -161884,6 +162110,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutOpsSubAdminAllocationsInput = {
+    create?: XOR<UserCreateWithoutOpsSubAdminAllocationsInput, UserUncheckedCreateWithoutOpsSubAdminAllocationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpsSubAdminAllocationsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type StudyCenterCreateNestedOneWithoutProgramAllocationsInput = {
     create?: XOR<StudyCenterCreateWithoutProgramAllocationsInput, StudyCenterUncheckedCreateWithoutProgramAllocationsInput>
     connectOrCreate?: StudyCenterCreateOrConnectWithoutProgramAllocationsInput
@@ -161908,6 +162140,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutProgramAllocationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProgramAllocationsInput, UserUpdateWithoutProgramAllocationsInput>, UserUncheckedUpdateWithoutProgramAllocationsInput>
+  }
+
+  export type UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput = {
+    create?: XOR<UserCreateWithoutOpsSubAdminAllocationsInput, UserUncheckedCreateWithoutOpsSubAdminAllocationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOpsSubAdminAllocationsInput
+    upsert?: UserUpsertWithoutOpsSubAdminAllocationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOpsSubAdminAllocationsInput, UserUpdateWithoutOpsSubAdminAllocationsInput>, UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput>
   }
 
   export type StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput = {
@@ -165017,6 +165259,29 @@ export namespace Prisma {
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumOrganizationStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrganizationStatus | EnumOrganizationStatusFieldRefInput<$PrismaModel>
@@ -165040,29 +165305,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -167573,6 +167815,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocatedByMgr: UserCreateNestedOneWithoutProgramAllocationsInput
+    opsSubAdmin?: UserCreateNestedOneWithoutOpsSubAdminAllocationsInput
     center: StudyCenterCreateNestedOneWithoutProgramAllocationsInput
     program: ProgramCreateNestedOneWithoutProgramAllocationsInput
   }
@@ -167586,6 +167829,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationCreateOrConnectWithoutOrganizationInput = {
@@ -168225,6 +168469,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -168249,6 +168494,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -168478,6 +168724,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -168590,6 +168837,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -170643,6 +170891,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"ProgramAllocation"> | boolean
     createdAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
     updatedAt?: DateTimeFilter<"ProgramAllocation"> | Date | string
+    opsSubAdminId?: StringNullableFilter<"ProgramAllocation"> | string | null
   }
 
   export type ProgramMaterialUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -171128,6 +171377,7 @@ export namespace Prisma {
     status?: StringFilter<"University"> | string
     logo?: StringNullableFilter<"University"> | string | null
     enrollmentFormConfig?: JsonNullableFilter<"University">
+    isAcademicPartnerOnly?: BoolFilter<"University"> | boolean
   }
 
   export type UniversityAuthFeeUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -171657,6 +171907,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -171743,6 +171995,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -171858,6 +172112,8 @@ export namespace Prisma {
     phone?: StringFilter<"Organization"> | string
     address?: StringFilter<"Organization"> | string
     logo?: StringNullableFilter<"Organization"> | string | null
+    customLoginSlug?: StringNullableFilter<"Organization"> | string | null
+    loginBranding?: JsonNullableFilter<"Organization">
     status?: EnumOrganizationStatusFilter<"Organization"> | $Enums.OrganizationStatus
     licenseId?: StringNullableFilter<"Organization"> | string | null
     licenseExpiry?: DateTimeNullableFilter<"Organization"> | Date | string | null
@@ -172112,6 +172368,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutManagedDepartmentsInput = {
@@ -172224,6 +172481,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutManagedDepartmentsInput = {
@@ -172238,6 +172496,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -172324,6 +172584,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -172877,6 +173139,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -172989,6 +173252,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -173143,6 +173407,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutAssistantManagedDepartmentsInput = {
@@ -173255,6 +173520,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutAssistantManagedDepartmentsInput = {
@@ -173509,6 +173775,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedDepartmentsInput = {
@@ -173621,6 +173888,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutDepartmentsInput = {
@@ -173641,6 +173909,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -173727,6 +173997,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -176913,6 +177185,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdmin?: UserCreateNestedOneWithoutOpsSubAdminAllocationsInput
     center: StudyCenterCreateNestedOneWithoutProgramAllocationsInput
     organization: OrganizationCreateNestedOneWithoutProgramAllocationsInput
     program: ProgramCreateNestedOneWithoutProgramAllocationsInput
@@ -176927,6 +177200,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationCreateOrConnectWithoutAllocatedByMgrInput = {
@@ -178327,6 +178601,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -178413,6 +178689,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -178607,6 +178885,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSubordinatesInput = {
@@ -178719,6 +178998,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSubordinatesInput = {
@@ -178836,6 +179116,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -178948,6 +179229,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -179103,6 +179385,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -179128,6 +179411,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -179338,6 +179622,40 @@ export namespace Prisma {
 
   export type UserFCMTokenCreateManyUserInputEnvelope = {
     data: UserFCMTokenCreateManyUserInput | UserFCMTokenCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramAllocationCreateWithoutOpsSubAdminInput = {
+    id?: string
+    allocatedAt?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    allocatedByMgr: UserCreateNestedOneWithoutProgramAllocationsInput
+    center: StudyCenterCreateNestedOneWithoutProgramAllocationsInput
+    organization: OrganizationCreateNestedOneWithoutProgramAllocationsInput
+    program: ProgramCreateNestedOneWithoutProgramAllocationsInput
+  }
+
+  export type ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput = {
+    id?: string
+    organizationId: string
+    centerId: string
+    programId: string
+    allocatedBy: string
+    allocatedAt?: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramAllocationCreateOrConnectWithoutOpsSubAdminInput = {
+    where: ProgramAllocationWhereUniqueInput
+    create: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput>
+  }
+
+  export type ProgramAllocationCreateManyOpsSubAdminInputEnvelope = {
+    data: ProgramAllocationCreateManyOpsSubAdminInput | ProgramAllocationCreateManyOpsSubAdminInput[]
     skipDuplicates?: boolean
   }
 
@@ -181038,6 +181356,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -181124,6 +181444,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -181324,6 +181646,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubordinatesInput = {
@@ -181436,6 +181759,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -181620,6 +181944,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -181645,6 +181970,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -181749,6 +182075,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserFCMToken"> | Date | string
   }
 
+  export type ProgramAllocationUpsertWithWhereUniqueWithoutOpsSubAdminInput = {
+    where: ProgramAllocationWhereUniqueInput
+    update: XOR<ProgramAllocationUpdateWithoutOpsSubAdminInput, ProgramAllocationUncheckedUpdateWithoutOpsSubAdminInput>
+    create: XOR<ProgramAllocationCreateWithoutOpsSubAdminInput, ProgramAllocationUncheckedCreateWithoutOpsSubAdminInput>
+  }
+
+  export type ProgramAllocationUpdateWithWhereUniqueWithoutOpsSubAdminInput = {
+    where: ProgramAllocationWhereUniqueInput
+    data: XOR<ProgramAllocationUpdateWithoutOpsSubAdminInput, ProgramAllocationUncheckedUpdateWithoutOpsSubAdminInput>
+  }
+
+  export type ProgramAllocationUpdateManyWithWhereWithoutOpsSubAdminInput = {
+    where: ProgramAllocationScalarWhereInput
+    data: XOR<ProgramAllocationUpdateManyMutationInput, ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminInput>
+  }
+
   export type OrganizationCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -181756,6 +182098,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -181842,6 +182186,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -182036,6 +182382,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileInput = {
@@ -182148,6 +182495,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileInput = {
@@ -182173,6 +182521,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -182259,6 +182609,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -182459,6 +182811,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileInput = {
@@ -182571,6 +182924,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type EscalationCreateWithoutTaskInput = {
@@ -182735,6 +183089,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -182847,6 +183202,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -182964,6 +183320,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -183076,6 +183433,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -183250,6 +183608,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEscalatedTasksInput = {
@@ -183362,6 +183721,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEscalatedTasksInput = {
@@ -183376,6 +183736,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -183462,6 +183824,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -183683,6 +184047,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -183795,6 +184160,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -183918,6 +184284,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -184030,6 +184397,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type DepartmentUpsertWithoutTasksInput = {
@@ -184216,6 +184584,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEscalatedTasksInput = {
@@ -184328,6 +184697,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutTasksInput = {
@@ -184348,6 +184718,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -184434,6 +184806,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -184623,6 +184997,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -184735,6 +185110,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -184749,6 +185125,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -184835,6 +185213,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -185040,6 +185420,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -185152,6 +185533,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutAttendancesInput = {
@@ -185172,6 +185554,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -185258,6 +185642,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -185656,6 +186042,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -185742,6 +186130,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -186032,6 +186422,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutUniversityInput = {
@@ -186144,6 +186535,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutUniversityInput = {
@@ -186419,6 +186811,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -186505,6 +186899,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -186947,6 +187343,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -187033,6 +187431,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -187128,6 +187528,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -187153,6 +187554,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -187177,6 +187579,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocatedByMgr: UserCreateNestedOneWithoutProgramAllocationsInput
+    opsSubAdmin?: UserCreateNestedOneWithoutOpsSubAdminAllocationsInput
     center: StudyCenterCreateNestedOneWithoutProgramAllocationsInput
     organization: OrganizationCreateNestedOneWithoutProgramAllocationsInput
   }
@@ -187190,6 +187593,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationCreateOrConnectWithoutProgramInput = {
@@ -187596,6 +188000,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -187682,6 +188088,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -187783,6 +188191,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -187808,6 +188217,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -188217,6 +188627,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     allocatedByMgr: UserCreateNestedOneWithoutProgramAllocationsInput
+    opsSubAdmin?: UserCreateNestedOneWithoutOpsSubAdminAllocationsInput
     organization: OrganizationCreateNestedOneWithoutProgramAllocationsInput
     program: ProgramCreateNestedOneWithoutProgramAllocationsInput
   }
@@ -188230,6 +188641,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramAllocationCreateOrConnectWithoutCenterInput = {
@@ -188520,6 +188932,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedCentersInput = {
@@ -188632,6 +189045,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedCentersInput = {
@@ -188646,6 +189060,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -188732,6 +189148,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -188926,6 +189344,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudyCentersInput = {
@@ -189038,6 +189457,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudyCentersInput = {
@@ -189155,6 +189575,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedStudyCentersInput = {
@@ -189267,6 +189688,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedStudyCentersInput = {
@@ -189449,6 +189871,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInput = {
@@ -189561,6 +189984,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInput = {
@@ -189718,6 +190142,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -189743,6 +190168,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -190023,6 +190449,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedCentersInput = {
@@ -190135,6 +190562,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutStudyCentersInput = {
@@ -190155,6 +190583,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -190241,6 +190671,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -190441,6 +190873,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudyCentersInput = {
@@ -190553,6 +190986,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutVerifiedStudyCentersInput = {
@@ -190676,6 +191110,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedStudyCentersInput = {
@@ -190788,6 +191223,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type StudyCenterWalletUpsertWithoutStudyCenterInput = {
@@ -191638,6 +192074,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutStudentProfileInput = {
@@ -191750,6 +192187,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutStudentProfileInput = {
@@ -191867,6 +192305,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEnrolledStudentsInput = {
@@ -191979,6 +192418,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEnrolledStudentsInput = {
@@ -191993,6 +192433,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -192079,6 +192521,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -192326,6 +192770,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutReferredStudentsInput = {
@@ -192438,6 +192883,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutReferredStudentsInput = {
@@ -192507,6 +192953,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -192532,6 +192979,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -193141,6 +193589,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentProfileInput = {
@@ -193253,6 +193702,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutEnrolledStudentsInput = {
@@ -193376,6 +193826,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrolledStudentsInput = {
@@ -193488,6 +193939,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutStudentsInput = {
@@ -193508,6 +193960,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -193594,6 +194048,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -193853,6 +194309,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredStudentsInput = {
@@ -193965,6 +194422,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutStudentsInput = {
@@ -194046,6 +194504,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -194071,6 +194530,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -194258,6 +194718,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -194344,6 +194806,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -194747,6 +195211,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -194833,6 +195299,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -195115,6 +195583,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -195201,6 +195671,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -195395,6 +195867,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutReferredLeadsInput = {
@@ -195507,6 +195980,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutReferredLeadsInput = {
@@ -195532,6 +196006,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -195618,6 +196094,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -195818,6 +196296,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferredLeadsInput = {
@@ -195930,6 +196409,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutComplaintsInput = {
@@ -196042,6 +196522,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutComplaintsInput = {
@@ -196154,6 +196635,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutComplaintsInput = {
@@ -196168,6 +196650,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -196254,6 +196738,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -196459,6 +196945,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutComplaintsInput = {
@@ -196571,6 +197058,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutComplaintsInput = {
@@ -196591,6 +197079,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -196677,6 +197167,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -196763,6 +197255,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -196849,6 +197343,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -197043,6 +197539,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -197155,6 +197652,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -197180,6 +197678,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -197266,6 +197766,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -197466,6 +197968,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -197578,6 +198081,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutAuditLogsInput = {
@@ -197587,6 +198091,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -197673,6 +198179,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -197867,6 +198375,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -197979,6 +198488,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -198004,6 +198514,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -198090,6 +198602,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -198290,6 +198804,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -198402,6 +198917,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type DepartmentCreateWithoutAnnouncementsInput = {
@@ -198468,6 +198984,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -198554,6 +199072,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -198748,6 +199268,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutPostedAnnouncementsInput = {
@@ -198860,6 +199381,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutPostedAnnouncementsInput = {
@@ -198948,6 +199470,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -199034,6 +199558,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199234,6 +199760,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostedAnnouncementsInput = {
@@ -199346,6 +199873,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutHolidaysInput = {
@@ -199355,6 +199883,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -199441,6 +199971,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -199543,6 +200075,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -199629,6 +200163,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199875,6 +200411,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDeptApprovedLeavesInput = {
@@ -199987,6 +200524,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDeptApprovedLeavesInput = {
@@ -200104,6 +200642,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutLeaveRequestsInput = {
@@ -200216,6 +200755,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutLeaveRequestsInput = {
@@ -200333,6 +200873,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutHrApprovedLeavesInput = {
@@ -200445,6 +200986,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutHrApprovedLeavesInput = {
@@ -200459,6 +201001,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -200545,6 +201089,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -200813,6 +201359,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptApprovedLeavesInput = {
@@ -200925,6 +201472,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutLeaveRequestsInput = {
@@ -201048,6 +201596,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -201160,6 +201709,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutHrApprovedLeavesInput = {
@@ -201283,6 +201833,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHrApprovedLeavesInput = {
@@ -201395,6 +201946,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveRequestsInput = {
@@ -201415,6 +201967,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -201501,6 +202055,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -201690,6 +202246,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSalaryApprovedInput = {
@@ -201802,6 +202359,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSalaryApprovedInput = {
@@ -201919,6 +202477,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSalaryCreatedInput = {
@@ -202031,6 +202590,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSalaryCreatedInput = {
@@ -202045,6 +202605,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -202131,6 +202693,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -202325,6 +202889,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSalaryConfigInput = {
@@ -202437,6 +203002,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSalaryConfigInput = {
@@ -202565,6 +203131,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryApprovedInput = {
@@ -202677,6 +203244,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutSalaryCreatedInput = {
@@ -202800,6 +203368,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryCreatedInput = {
@@ -202912,6 +203481,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutSalaryConfigsInput = {
@@ -202932,6 +203502,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -203018,6 +203590,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203218,6 +203792,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalaryConfigInput = {
@@ -203330,6 +203905,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutConfirmedPayrollsInput = {
@@ -203442,6 +204018,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutConfirmedPayrollsInput = {
@@ -203554,6 +204131,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutConfirmedPayrollsInput = {
@@ -203671,6 +204249,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutPayrollsInput = {
@@ -203783,6 +204362,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutPayrollsInput = {
@@ -203900,6 +204480,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutFinanceApprovedPayrollsInput = {
@@ -204012,6 +204593,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutFinanceApprovedPayrollsInput = {
@@ -204026,6 +204608,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -204112,6 +204696,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -204306,6 +204892,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutProcessedPayrollsInput = {
@@ -204418,6 +205005,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutProcessedPayrollsInput = {
@@ -204535,6 +205123,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutTransferredPayrollsInput = {
@@ -204647,6 +205236,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutTransferredPayrollsInput = {
@@ -204775,6 +205365,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfirmedPayrollsInput = {
@@ -204887,6 +205478,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutPayrollsInput = {
@@ -205010,6 +205602,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPayrollsInput = {
@@ -205122,6 +205715,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutFinanceApprovedPayrollsInput = {
@@ -205245,6 +205839,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceApprovedPayrollsInput = {
@@ -205357,6 +205952,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollsInput = {
@@ -205377,6 +205973,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -205463,6 +206061,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -205663,6 +206263,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProcessedPayrollsInput = {
@@ -205775,6 +206376,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutTransferredPayrollsInput = {
@@ -205898,6 +206500,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransferredPayrollsInput = {
@@ -206010,6 +206613,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutManagedBranchInput = {
@@ -206122,6 +206726,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutManagedBranchInput = {
@@ -206234,6 +206839,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutManagedBranchInput = {
@@ -206305,6 +206911,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -206391,6 +206999,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -206864,6 +207474,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutBranchInput = {
@@ -206976,6 +207587,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutBranchInput = {
@@ -206999,6 +207611,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -207024,6 +207637,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -207196,6 +207810,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedBranchInput = {
@@ -207308,6 +207923,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type DepartmentUpsertWithoutOpsBranchInput = {
@@ -207391,6 +208007,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -207477,6 +208095,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -207927,6 +208547,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutManagedSubDepartmentsInput = {
@@ -208039,6 +208660,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutManagedSubDepartmentsInput = {
@@ -208053,6 +208675,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -208139,6 +208763,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -208390,6 +209016,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSubDepartmentInput = {
@@ -208502,6 +209129,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSubDepartmentInput = {
@@ -208669,6 +209297,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -208694,6 +209323,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -208864,6 +209494,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSubDepartmentsInput = {
@@ -208976,6 +209607,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutSubDepartmentsInput = {
@@ -208996,6 +209628,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -209082,6 +209716,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -209401,6 +210037,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -209487,6 +210125,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -209809,6 +210449,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDesignationsInput = {
@@ -209921,6 +210562,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDesignationsInput = {
@@ -210064,6 +210706,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -210150,6 +210794,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -210465,6 +211111,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutHostedMeetingsInput = {
@@ -210577,6 +211224,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutHostedMeetingsInput = {
@@ -210591,6 +211239,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -210677,6 +211327,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -210882,6 +211534,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHostedMeetingsInput = {
@@ -210994,6 +211647,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutMeetingsInput = {
@@ -211014,6 +211668,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -211100,6 +211756,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -211243,6 +211901,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -211329,6 +211989,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -211494,6 +212156,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -211580,6 +212244,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -211769,6 +212435,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSessionsInput = {
@@ -211881,6 +212548,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSessionsInput = {
@@ -211998,6 +212666,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -212110,6 +212779,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -212124,6 +212794,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -212210,6 +212882,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -212490,6 +213164,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -212515,6 +213190,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -212975,6 +213651,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSessionsInput = {
@@ -213087,6 +213764,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutCreatedSessionsInput = {
@@ -213210,6 +213888,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -213322,6 +214001,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutSessionsInput = {
@@ -213342,6 +214022,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -213428,6 +214110,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -213732,6 +214416,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -213757,6 +214442,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -213927,6 +214613,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDeptReviewedEnrollmentsInput = {
@@ -214039,6 +214726,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDeptReviewedEnrollmentsInput = {
@@ -214156,6 +214844,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutFinanceReviewedEnrollmentsInput = {
@@ -214268,6 +214957,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutFinanceReviewedEnrollmentsInput = {
@@ -214282,6 +214972,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -214368,6 +215060,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -214615,6 +215309,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedReceiptsInput = {
@@ -214727,6 +215422,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedReceiptsInput = {
@@ -214844,6 +215540,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSalesLedEnrollmentsInput = {
@@ -214956,6 +215653,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSalesLedEnrollmentsInput = {
@@ -215344,6 +216042,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutUniversityReviewedEnrollmentsInput = {
@@ -215456,6 +216155,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutUniversityReviewedEnrollmentsInput = {
@@ -215609,6 +216309,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptReviewedEnrollmentsInput = {
@@ -215721,6 +216422,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutFinanceReviewedEnrollmentsInput = {
@@ -215844,6 +216546,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFinanceReviewedEnrollmentsInput = {
@@ -215956,6 +216659,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutEnrollmentsInput = {
@@ -215976,6 +216680,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -216062,6 +216768,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -216321,6 +217029,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedReceiptsInput = {
@@ -216433,6 +217142,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutSalesLedEnrollmentsInput = {
@@ -216556,6 +217266,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSalesLedEnrollmentsInput = {
@@ -216668,6 +217379,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type AdmissionSessionUpsertWithoutEnrollmentsInput = {
@@ -217080,6 +217792,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityReviewedEnrollmentsInput = {
@@ -217192,6 +217905,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type EnrollmentPaymentUpsertWithoutEnrollmentInput = {
@@ -217335,6 +218049,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutApprovedExpenseClaimsInput = {
@@ -217447,6 +218162,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutApprovedExpenseClaimsInput = {
@@ -217564,6 +218280,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutExpenseClaimsInput = {
@@ -217676,6 +218393,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutExpenseClaimsInput = {
@@ -217690,6 +218408,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -217776,6 +218496,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -217981,6 +218703,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedExpenseClaimsInput = {
@@ -218093,6 +218816,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutExpenseClaimsInput = {
@@ -218216,6 +218940,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExpenseClaimsInput = {
@@ -218328,6 +219053,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutExpenseClaimsInput = {
@@ -218348,6 +219074,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -218434,6 +219162,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -218550,6 +219280,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -218636,6 +219368,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -218845,6 +219579,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -218931,6 +219667,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -219114,6 +219852,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -219200,6 +219940,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -219485,6 +220227,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedWalletTopUpsInput = {
@@ -219597,6 +220340,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedWalletTopUpsInput = {
@@ -219622,6 +220366,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -219708,6 +220454,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -220005,6 +220753,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedWalletTopUpsInput = {
@@ -220117,6 +220866,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type InvoiceCreateWithoutPaymentsInput = {
@@ -220169,6 +220919,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -220255,6 +221007,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -220449,6 +221203,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutReceivedPaymentsInput = {
@@ -220561,6 +221316,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutReceivedPaymentsInput = {
@@ -220635,6 +221391,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -220721,6 +221479,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -220921,6 +221681,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedPaymentsInput = {
@@ -221033,6 +221794,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutCreatedGstSettingsInput = {
@@ -221145,6 +221907,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedGstSettingsInput = {
@@ -221257,6 +222020,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedGstSettingsInput = {
@@ -221271,6 +222035,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -221357,6 +222123,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -221562,6 +222330,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedGstSettingsInput = {
@@ -221674,6 +222443,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutGstSettingsInput = {
@@ -221694,6 +222464,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -221780,6 +222552,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -221866,6 +222640,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -221952,6 +222728,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -222146,6 +222924,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeProfileDetailInput = {
@@ -222258,6 +223037,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeProfileDetailInput = {
@@ -222283,6 +223063,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -222369,6 +223151,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -222569,6 +223353,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeProfileDetailInput = {
@@ -222681,6 +223466,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutHrSettingsInput = {
@@ -222690,6 +223476,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -222776,6 +223564,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -222878,6 +223668,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -222964,6 +223756,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -223050,6 +223844,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -223136,6 +223932,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -223330,6 +224128,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCeoPanelInput = {
@@ -223442,6 +224241,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCeoPanelInput = {
@@ -223467,6 +224267,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -223553,6 +224355,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -223753,6 +224557,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCeoPanelInput = {
@@ -223865,6 +224670,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutCredentialRequestsInput = {
@@ -223874,6 +224680,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -223960,6 +224768,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -224154,6 +224964,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCredentialResponderInput = {
@@ -224266,6 +225077,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCredentialResponderInput = {
@@ -224383,6 +225195,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCredentialRequesterInput = {
@@ -224495,6 +225308,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCredentialRequesterInput = {
@@ -224520,6 +225334,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -224606,6 +225422,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -224806,6 +225624,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialResponderInput = {
@@ -224918,6 +225737,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutCredentialRequesterInput = {
@@ -225041,6 +225861,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCredentialRequesterInput = {
@@ -225153,6 +225974,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutEditDeleteRequestsInput = {
@@ -225162,6 +225984,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -225248,6 +226072,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -225442,6 +226268,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteResponderInput = {
@@ -225554,6 +226381,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteResponderInput = {
@@ -225671,6 +226499,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEditDeleteRequesterInput = {
@@ -225783,6 +226612,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEditDeleteRequesterInput = {
@@ -225859,6 +226689,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -225945,6 +226777,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -226145,6 +226979,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteResponderInput = {
@@ -226257,6 +227092,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutEditDeleteRequesterInput = {
@@ -226380,6 +227216,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEditDeleteRequesterInput = {
@@ -226492,6 +227329,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type FacultyUpsertWithoutEditDeleteRequestsInput = {
@@ -226661,6 +227499,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDeptAdminEscalationsInput = {
@@ -226773,6 +227612,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDeptAdminEscalationsInput = {
@@ -226890,6 +227730,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEmployeeEscalationsInput = {
@@ -227002,6 +227843,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEmployeeEscalationsInput = {
@@ -227119,6 +227961,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutHandledEscalationsInput = {
@@ -227231,6 +228074,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutHandledEscalationsInput = {
@@ -227245,6 +228089,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -227331,6 +228177,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -227525,6 +228373,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutResolvedEscalationsInput = {
@@ -227637,6 +228486,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutResolvedEscalationsInput = {
@@ -227842,6 +228692,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDeptAdminEscalationsInput = {
@@ -227954,6 +228805,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutEmployeeEscalationsInput = {
@@ -228077,6 +228929,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmployeeEscalationsInput = {
@@ -228189,6 +229042,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutHandledEscalationsInput = {
@@ -228312,6 +229166,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutHandledEscalationsInput = {
@@ -228424,6 +229279,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutEscalationsInput = {
@@ -228444,6 +229300,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -228530,6 +229388,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -228730,6 +229590,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedEscalationsInput = {
@@ -228842,6 +229703,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type TaskUpsertWithoutEscalationsInput = {
@@ -228971,6 +229833,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -229057,6 +229921,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -229212,6 +230078,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -229298,6 +230166,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -229487,6 +230357,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutEnteredMarksInput = {
@@ -229599,6 +230470,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutEnteredMarksInput = {
@@ -229613,6 +230485,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -229699,6 +230573,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -230124,6 +231000,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnteredMarksInput = {
@@ -230236,6 +231113,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutInternalMarksInput = {
@@ -230256,6 +231134,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -230342,6 +231222,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -230763,6 +231645,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedLeaveAllocationsInput = {
@@ -230875,6 +231758,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedLeaveAllocationsInput = {
@@ -230889,6 +231773,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -230975,6 +231861,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -231169,6 +232057,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutLeaveAllocationsInput = {
@@ -231281,6 +232170,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutLeaveAllocationsInput = {
@@ -231409,6 +232299,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedLeaveAllocationsInput = {
@@ -231521,6 +232412,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutLeaveAllocationsInput = {
@@ -231541,6 +232433,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -231627,6 +232521,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -231827,6 +232723,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeaveAllocationsInput = {
@@ -231939,6 +232836,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutBatchApprovedInput = {
@@ -232051,6 +232949,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutBatchApprovedInput = {
@@ -232163,6 +233062,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutBatchApprovedInput = {
@@ -232177,6 +233077,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -232263,6 +233165,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -232457,6 +233361,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutBatchRejectedInput = {
@@ -232569,6 +233474,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutBatchRejectedInput = {
@@ -232686,6 +233592,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutBatchTransferredInput = {
@@ -232798,6 +233705,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutBatchTransferredInput = {
@@ -232926,6 +233834,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchApprovedInput = {
@@ -233038,6 +233947,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutPayrollBatchesInput = {
@@ -233058,6 +233968,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -233144,6 +234056,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -233344,6 +234258,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchRejectedInput = {
@@ -233456,6 +234371,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutBatchTransferredInput = {
@@ -233579,6 +234495,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchTransferredInput = {
@@ -233691,6 +234608,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutCreatedPollsInput = {
@@ -233803,6 +234721,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPollsInput = {
@@ -233915,6 +234834,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPollsInput = {
@@ -233929,6 +234849,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -234015,6 +234937,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -234220,6 +235144,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPollsInput = {
@@ -234332,6 +235257,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutPollsInput = {
@@ -234352,6 +235278,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -234438,6 +235366,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -234627,6 +235557,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutProgramAllocationsInput = {
@@ -234739,11 +235670,243 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutProgramAllocationsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutProgramAllocationsInput, UserUncheckedCreateWithoutProgramAllocationsInput>
+  }
+
+  export type UserCreateWithoutOpsSubAdminAllocationsInput = {
+    id?: string
+    userId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementCreateNestedManyWithoutAuthorInput
+    assets?: AssetCreateNestedManyWithoutUserInput
+    attendances?: AttendanceCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    managedBranch?: BranchCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerCreateNestedManyWithoutUserInput
+    complaints?: ComplaintCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingCreateNestedManyWithoutHostInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestCreateNestedManyWithoutUserInput
+    studentProfile?: StudentCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentCreateNestedManyWithoutManagerUserInput
+    targets?: TargetCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeCreateNestedManyWithoutConfiguredByUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+    organization?: OrganizationCreateNestedOneWithoutUsersInput
+    manager?: UserCreateNestedOneWithoutSubordinatesInput
+    subordinates?: UserCreateNestedManyWithoutManagerInput
+    studyCenter?: StudyCenterCreateNestedOneWithoutCenterAdminsInput
+    subDepartment?: SubDepartmentCreateNestedOneWithoutUsersInput
+    university?: UniversityCreateNestedOneWithoutAdminsInput
+    verifiedWalletTopUps?: WalletTopUpCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOpsSubAdminAllocationsInput = {
+    id?: string
+    userId?: string | null
+    organizationId?: string | null
+    departmentId?: string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: string | null
+    subDepartmentId?: string | null
+    ceoPanelId?: string | null
+    studyCenterId?: string | null
+    universityId?: string | null
+    email: string
+    password: string
+    name: string
+    role: $Enums.UserRole
+    avatar?: string | null
+    phone?: string | null
+    designation?: string | null
+    reportingTo?: string | null
+    status?: $Enums.UserStatus
+    lastLogin?: Date | string | null
+    biometricId?: string | null
+    allowSystemPunchIn?: boolean
+    requireSelfiePunchIn?: boolean
+    allowAnywherePunchIn?: boolean
+    requiresAttendance?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedCreateNestedManyWithoutTransferredByInput
+    approvedSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutApproverInput
+    createdSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutCreatorInput
+    postedAnnouncements?: AnnouncementUncheckedCreateNestedManyWithoutAuthorInput
+    assets?: AssetUncheckedCreateNestedManyWithoutUserInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    managedBranch?: BranchUncheckedCreateNestedOneWithoutBranchManagerInput
+    ceoPanel?: CeoPanelUncheckedCreateNestedOneWithoutUserInput
+    collectionOverseers?: CollectionOverseerUncheckedCreateNestedManyWithoutUserInput
+    complaints?: ComplaintUncheckedCreateNestedManyWithoutUserInput
+    credentialResponder?: CredentialRequestUncheckedCreateNestedManyWithoutResponderInput
+    credentialRequester?: CredentialRequestUncheckedCreateNestedManyWithoutUserInput
+    managedDepartments?: DepartmentUncheckedCreateNestedManyWithoutManagerInput
+    documentLogs?: DocumentLogUncheckedCreateNestedManyWithoutLoggedByUserInput
+    editDeleteResponder?: EditDeleteRequestUncheckedCreateNestedManyWithoutResponderInput
+    editDeleteRequester?: EditDeleteRequestUncheckedCreateNestedManyWithoutUserInput
+    employeeProfile?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeProfileDetail?: EmployeeProfileUncheckedCreateNestedOneWithoutUserInput
+    deptReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutDepartmentReviewerInput
+    financeReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutFinanceReviewerInput
+    verifiedReceipts?: EnrollmentUncheckedCreateNestedManyWithoutReceiptVerifierInput
+    salesLedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutSalesUserInput
+    universityReviewedEnrollments?: EnrollmentUncheckedCreateNestedManyWithoutUniversityReviewerInput
+    deptAdminEscalations?: EscalationUncheckedCreateNestedManyWithoutDeptAdminInput
+    employeeEscalations?: EscalationUncheckedCreateNestedManyWithoutEmployeeInput
+    handledEscalations?: EscalationUncheckedCreateNestedManyWithoutHandlerInput
+    resolvedEscalations?: EscalationUncheckedCreateNestedManyWithoutResolverInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutApproverInput
+    expenseClaims?: ExpenseClaimUncheckedCreateNestedManyWithoutUserInput
+    createdFees?: FeeStructureUncheckedCreateNestedManyWithoutCreatorInput
+    createdGstSettings?: GSTSettingUncheckedCreateNestedManyWithoutCreatorInput
+    approvedIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutApproverInput
+    createdIncentives?: IncentiveStructureUncheckedCreateNestedManyWithoutCreatorInput
+    enteredMarks?: InternalMarkUncheckedCreateNestedManyWithoutEnteredByUserInput
+    referredLeads?: LeadUncheckedCreateNestedManyWithoutReferrerInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutCreatorInput
+    leaveAllocations?: LeaveAllocationUncheckedCreateNestedManyWithoutUserInput
+    deptApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutDeptApproverInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutUserInput
+    hrApprovedLeaves?: LeaveRequestUncheckedCreateNestedManyWithoutHrApproverInput
+    hostedMeetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    receivedPayments?: PaymentEntryUncheckedCreateNestedManyWithoutReceiverInput
+    createdPaymentLinks?: PaymentLinkUncheckedCreateNestedManyWithoutCreatorInput
+    confirmedPayrolls?: PayrollUncheckedCreateNestedManyWithoutConfirmerInput
+    payrolls?: PayrollUncheckedCreateNestedManyWithoutUserInput
+    financeApprovedPayrolls?: PayrollUncheckedCreateNestedManyWithoutFinanceApproverInput
+    processedPayrolls?: PayrollUncheckedCreateNestedManyWithoutProcessorInput
+    transferredPayrolls?: PayrollUncheckedCreateNestedManyWithoutTransfererInput
+    batchApproved?: PayrollBatchUncheckedCreateNestedManyWithoutApproverInput
+    batchRejected?: PayrollBatchUncheckedCreateNestedManyWithoutRejectorInput
+    batchTransferred?: PayrollBatchUncheckedCreateNestedManyWithoutTransfererInput
+    createdPolls?: PollUncheckedCreateNestedManyWithoutCreatorInput
+    programAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutAllocatedByMgrInput
+    uploadedMaterials?: ProgramMaterialUncheckedCreateNestedManyWithoutUploaderInput
+    referralLink?: ReferralLinkUncheckedCreateNestedOneWithoutUserInput
+    salaryApproved?: SalaryConfigUncheckedCreateNestedManyWithoutApproverInput
+    salaryCreated?: SalaryConfigUncheckedCreateNestedManyWithoutCreatorInput
+    salaryConfig?: SalaryConfigUncheckedCreateNestedOneWithoutUserInput
+    approvedRequests?: SessionRequestUncheckedCreateNestedManyWithoutApproverInput
+    sessionRequests?: SessionRequestUncheckedCreateNestedManyWithoutUserInput
+    studentProfile?: StudentUncheckedCreateNestedOneWithoutUserInput
+    enrolledStudents?: StudentUncheckedCreateNestedManyWithoutEnrolledByUserInput
+    referredStudents?: StudentUncheckedCreateNestedManyWithoutReferrerInput
+    financeApprovedCenters?: StudyCenterUncheckedCreateNestedManyWithoutApproverInput
+    referredStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutReferrerInput
+    verifiedStudyCenters?: StudyCenterUncheckedCreateNestedManyWithoutVerifierInput
+    studyCenterInvites?: StudyCenterInviteUncheckedCreateNestedManyWithoutReferrerInput
+    managedSubDepartments?: SubDepartmentUncheckedCreateNestedManyWithoutManagerUserInput
+    targets?: TargetUncheckedCreateNestedManyWithoutEmployeeInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignerInput
+    escalatedTasks?: TaskUncheckedCreateNestedManyWithoutEscalatedUserInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedCreateNestedManyWithoutConfiguredByUserInput
+    subordinates?: UserUncheckedCreateNestedManyWithoutManagerInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedCreateNestedManyWithoutVerifierInput
+    assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
+    designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
+    communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOpsSubAdminAllocationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOpsSubAdminAllocationsInput, UserUncheckedCreateWithoutOpsSubAdminAllocationsInput>
   }
 
   export type StudyCenterCreateWithoutProgramAllocationsInput = {
@@ -234844,6 +236007,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -234930,6 +236095,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -235188,6 +236355,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgramAllocationsInput = {
@@ -235274,6 +236442,244 @@ export namespace Prisma {
     batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
     batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
     createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUncheckedUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUncheckedUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUncheckedUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUncheckedUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUncheckedUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUncheckedUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUncheckedUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUncheckedUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUncheckedUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUncheckedUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUncheckedUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUncheckedUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUncheckedUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUncheckedUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUncheckedUpdateManyWithoutConfiguredByUserNestedInput
+    subordinates?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    verifiedWalletTopUps?: WalletTopUpUncheckedUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
+  }
+
+  export type UserUpsertWithoutOpsSubAdminAllocationsInput = {
+    update: XOR<UserUpdateWithoutOpsSubAdminAllocationsInput, UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput>
+    create: XOR<UserCreateWithoutOpsSubAdminAllocationsInput, UserUncheckedCreateWithoutOpsSubAdminAllocationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOpsSubAdminAllocationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOpsSubAdminAllocationsInput, UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput>
+  }
+
+  export type UserUpdateWithoutOpsSubAdminAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUpdateManyWithoutAllocatedByMgrNestedInput
+    uploadedMaterials?: ProgramMaterialUpdateManyWithoutUploaderNestedInput
+    referralLink?: ReferralLinkUpdateOneWithoutUserNestedInput
+    salaryApproved?: SalaryConfigUpdateManyWithoutApproverNestedInput
+    salaryCreated?: SalaryConfigUpdateManyWithoutCreatorNestedInput
+    salaryConfig?: SalaryConfigUpdateOneWithoutUserNestedInput
+    approvedRequests?: SessionRequestUpdateManyWithoutApproverNestedInput
+    sessionRequests?: SessionRequestUpdateManyWithoutUserNestedInput
+    studentProfile?: StudentUpdateOneWithoutUserNestedInput
+    enrolledStudents?: StudentUpdateManyWithoutEnrolledByUserNestedInput
+    referredStudents?: StudentUpdateManyWithoutReferrerNestedInput
+    financeApprovedCenters?: StudyCenterUpdateManyWithoutApproverNestedInput
+    referredStudyCenters?: StudyCenterUpdateManyWithoutReferrerNestedInput
+    verifiedStudyCenters?: StudyCenterUpdateManyWithoutVerifierNestedInput
+    studyCenterInvites?: StudyCenterInviteUpdateManyWithoutReferrerNestedInput
+    managedSubDepartments?: SubDepartmentUpdateManyWithoutManagerUserNestedInput
+    targets?: TargetUpdateManyWithoutEmployeeNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignerNestedInput
+    escalatedTasks?: TaskUpdateManyWithoutEscalatedUserNestedInput
+    configuredAuthFees?: UniversityAuthFeeUpdateManyWithoutConfiguredByUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    organization?: OrganizationUpdateOneWithoutUsersNestedInput
+    manager?: UserUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: UserUpdateManyWithoutManagerNestedInput
+    studyCenter?: StudyCenterUpdateOneWithoutCenterAdminsNestedInput
+    subDepartment?: SubDepartmentUpdateOneWithoutUsersNestedInput
+    university?: UniversityUpdateOneWithoutAdminsNestedInput
+    verifiedWalletTopUps?: WalletTopUpUpdateManyWithoutVerifierNestedInput
+    assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
+    designations?: DesignationUpdateManyWithoutFilledByNestedInput
+    communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOpsSubAdminAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    additionalDepartmentIds?: NullableJsonNullValueInput | InputJsonValue
+    branchId?: NullableStringFieldUpdateOperationsInput | string | null
+    subDepartmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ceoPanelId?: NullableStringFieldUpdateOperationsInput | string | null
+    studyCenterId?: NullableStringFieldUpdateOperationsInput | string | null
+    universityId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    reportingTo?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricId?: NullableStringFieldUpdateOperationsInput | string | null
+    allowSystemPunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requireSelfiePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    allowAnywherePunchIn?: BoolFieldUpdateOperationsInput | boolean
+    requiresAttendance?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: NullableJsonNullValueInput | InputJsonValue
+    assignedSalesUsers?: NullableJsonNullValueInput | InputJsonValue
+    studentBatchTransfers?: StudentBatchTransferUncheckedUpdateManyWithoutTransferredByNestedInput
+    approvedSessions?: AdmissionSessionUncheckedUpdateManyWithoutApproverNestedInput
+    createdSessions?: AdmissionSessionUncheckedUpdateManyWithoutCreatorNestedInput
+    postedAnnouncements?: AnnouncementUncheckedUpdateManyWithoutAuthorNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutUserNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    managedBranch?: BranchUncheckedUpdateOneWithoutBranchManagerNestedInput
+    ceoPanel?: CeoPanelUncheckedUpdateOneWithoutUserNestedInput
+    collectionOverseers?: CollectionOverseerUncheckedUpdateManyWithoutUserNestedInput
+    complaints?: ComplaintUncheckedUpdateManyWithoutUserNestedInput
+    credentialResponder?: CredentialRequestUncheckedUpdateManyWithoutResponderNestedInput
+    credentialRequester?: CredentialRequestUncheckedUpdateManyWithoutUserNestedInput
+    managedDepartments?: DepartmentUncheckedUpdateManyWithoutManagerNestedInput
+    documentLogs?: DocumentLogUncheckedUpdateManyWithoutLoggedByUserNestedInput
+    editDeleteResponder?: EditDeleteRequestUncheckedUpdateManyWithoutResponderNestedInput
+    editDeleteRequester?: EditDeleteRequestUncheckedUpdateManyWithoutUserNestedInput
+    employeeProfile?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeProfileDetail?: EmployeeProfileUncheckedUpdateOneWithoutUserNestedInput
+    deptReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutDepartmentReviewerNestedInput
+    financeReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutFinanceReviewerNestedInput
+    verifiedReceipts?: EnrollmentUncheckedUpdateManyWithoutReceiptVerifierNestedInput
+    salesLedEnrollments?: EnrollmentUncheckedUpdateManyWithoutSalesUserNestedInput
+    universityReviewedEnrollments?: EnrollmentUncheckedUpdateManyWithoutUniversityReviewerNestedInput
+    deptAdminEscalations?: EscalationUncheckedUpdateManyWithoutDeptAdminNestedInput
+    employeeEscalations?: EscalationUncheckedUpdateManyWithoutEmployeeNestedInput
+    handledEscalations?: EscalationUncheckedUpdateManyWithoutHandlerNestedInput
+    resolvedEscalations?: EscalationUncheckedUpdateManyWithoutResolverNestedInput
+    approvedExpenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutApproverNestedInput
+    expenseClaims?: ExpenseClaimUncheckedUpdateManyWithoutUserNestedInput
+    createdFees?: FeeStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    createdGstSettings?: GSTSettingUncheckedUpdateManyWithoutCreatorNestedInput
+    approvedIncentives?: IncentiveStructureUncheckedUpdateManyWithoutApproverNestedInput
+    createdIncentives?: IncentiveStructureUncheckedUpdateManyWithoutCreatorNestedInput
+    enteredMarks?: InternalMarkUncheckedUpdateManyWithoutEnteredByUserNestedInput
+    referredLeads?: LeadUncheckedUpdateManyWithoutReferrerNestedInput
+    createdLeaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutCreatorNestedInput
+    leaveAllocations?: LeaveAllocationUncheckedUpdateManyWithoutUserNestedInput
+    deptApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutDeptApproverNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutUserNestedInput
+    hrApprovedLeaves?: LeaveRequestUncheckedUpdateManyWithoutHrApproverNestedInput
+    hostedMeetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    receivedPayments?: PaymentEntryUncheckedUpdateManyWithoutReceiverNestedInput
+    createdPaymentLinks?: PaymentLinkUncheckedUpdateManyWithoutCreatorNestedInput
+    confirmedPayrolls?: PayrollUncheckedUpdateManyWithoutConfirmerNestedInput
+    payrolls?: PayrollUncheckedUpdateManyWithoutUserNestedInput
+    financeApprovedPayrolls?: PayrollUncheckedUpdateManyWithoutFinanceApproverNestedInput
+    processedPayrolls?: PayrollUncheckedUpdateManyWithoutProcessorNestedInput
+    transferredPayrolls?: PayrollUncheckedUpdateManyWithoutTransfererNestedInput
+    batchApproved?: PayrollBatchUncheckedUpdateManyWithoutApproverNestedInput
+    batchRejected?: PayrollBatchUncheckedUpdateManyWithoutRejectorNestedInput
+    batchTransferred?: PayrollBatchUncheckedUpdateManyWithoutTransfererNestedInput
+    createdPolls?: PollUncheckedUpdateManyWithoutCreatorNestedInput
+    programAllocations?: ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrNestedInput
     uploadedMaterials?: ProgramMaterialUncheckedUpdateManyWithoutUploaderNestedInput
     referralLink?: ReferralLinkUncheckedUpdateOneWithoutUserNestedInput
     salaryApproved?: SalaryConfigUncheckedUpdateManyWithoutApproverNestedInput
@@ -235417,6 +236823,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -235503,6 +236911,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -235648,6 +237058,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -235734,6 +237146,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -235928,6 +237342,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutReferralLinkInput = {
@@ -236040,6 +237455,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutReferralLinkInput = {
@@ -236065,6 +237481,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -236151,6 +237569,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -236351,6 +237771,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralLinkInput = {
@@ -236463,6 +237884,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutReregRulesInput = {
@@ -236472,6 +237894,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -236558,6 +237982,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -236713,6 +238139,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -236799,6 +238227,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -237047,6 +238477,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutApprovedRequestsInput = {
@@ -237159,6 +238590,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutApprovedRequestsInput = {
@@ -237264,6 +238696,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -237350,6 +238784,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -237544,6 +238980,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutSessionRequestsInput = {
@@ -237656,6 +239093,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutSessionRequestsInput = {
@@ -237784,6 +239222,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedRequestsInput = {
@@ -237896,6 +239335,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type StudyCenterUpsertWithoutSessionRequestsInput = {
@@ -238013,6 +239453,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -238099,6 +239541,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -238299,6 +239743,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionRequestsInput = {
@@ -238411,6 +239856,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type BranchCreateWithoutInvitesInput = {
@@ -238469,6 +239915,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -238555,6 +240003,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -238749,6 +240199,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutStudyCenterInvitesInput = {
@@ -238861,6 +240312,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutStudyCenterInvitesInput = {
@@ -238941,6 +240393,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -239027,6 +240481,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -239227,6 +240683,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInvitesInput = {
@@ -239339,6 +240796,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type StudyCenterCreateWithoutTargetsInput = {
@@ -239599,6 +241057,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutTargetsInput = {
@@ -239711,6 +241170,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutTargetsInput = {
@@ -239725,6 +241185,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -239811,6 +241273,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -240176,6 +241640,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTargetsInput = {
@@ -240288,6 +241753,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutTargetsInput = {
@@ -240308,6 +241774,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -240394,6 +241862,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -240583,6 +242053,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutConfiguredAuthFeesInput = {
@@ -240695,6 +242166,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutConfiguredAuthFeesInput = {
@@ -240709,6 +242181,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -240795,6 +242269,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -240890,6 +242366,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -240915,6 +242392,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -241053,6 +242531,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConfiguredAuthFeesInput = {
@@ -241165,6 +242644,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutAuthFeesInput = {
@@ -241185,6 +242665,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -241271,6 +242753,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -241372,6 +242856,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -241397,6 +242882,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -241519,6 +243005,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFeesInput = {
@@ -241631,6 +243118,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFeesInput = {
@@ -241645,6 +243133,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -241731,6 +243221,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -241930,6 +243422,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
     students?: StudentCreateNestedManyWithoutUniversityInput
@@ -241955,6 +243448,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
     students?: StudentUncheckedCreateNestedManyWithoutUniversityInput
@@ -242093,6 +243587,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFeesInput = {
@@ -242205,6 +243700,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutFeeStructuresInput = {
@@ -242225,6 +243721,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -242311,6 +243809,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -242528,6 +244028,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
     students?: StudentUpdateManyWithoutUniversityNestedInput
@@ -242553,6 +244054,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
     students?: StudentUncheckedUpdateManyWithoutUniversityNestedInput
@@ -242572,6 +244074,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -242658,6 +244162,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -242882,6 +244388,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -242907,6 +244414,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -242942,6 +244450,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -243028,6 +244538,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -243264,6 +244776,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -243289,6 +244802,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -243895,6 +245409,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutApprovedIncentivesInput = {
@@ -244007,6 +245522,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutApprovedIncentivesInput = {
@@ -244124,6 +245640,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedIncentivesInput = {
@@ -244236,6 +245753,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedIncentivesInput = {
@@ -244250,6 +245768,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -244336,6 +245856,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -244541,6 +246063,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedIncentivesInput = {
@@ -244653,6 +246176,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUpsertWithoutCreatedIncentivesInput = {
@@ -244776,6 +246300,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedIncentivesInput = {
@@ -244888,6 +246413,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutIncentiveStructuresInput = {
@@ -244908,6 +246434,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -244994,6 +246522,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -245080,6 +246610,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -245166,6 +246698,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -245413,6 +246947,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutUploadedMaterialsInput = {
@@ -245525,6 +247060,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMaterialsInput = {
@@ -245550,6 +247086,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -245636,6 +247174,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -245895,6 +247435,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedMaterialsInput = {
@@ -246007,6 +247548,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type InvoiceCreateWithoutScheduleInput = {
@@ -246106,6 +247648,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -246192,6 +247736,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -246455,6 +248001,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -246541,6 +248089,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -246865,6 +248415,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCreatedPaymentLinksInput = {
@@ -246977,6 +248528,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCreatedPaymentLinksInput = {
@@ -246991,6 +248543,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -247077,6 +248631,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -247450,6 +249006,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedPaymentLinksInput = {
@@ -247562,6 +249119,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationUpsertWithoutPaymentLinksInput = {
@@ -247582,6 +249140,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -247668,6 +249228,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -247934,6 +249496,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -248020,6 +249584,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -248214,6 +249780,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCollectionOverseersInput = {
@@ -248326,6 +249893,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCollectionOverseersInput = {
@@ -248351,6 +249919,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -248437,6 +250007,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -248637,6 +250209,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionOverseersInput = {
@@ -248749,6 +250322,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutUniversityPaymentsInput = {
@@ -248758,6 +250332,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -248844,6 +250420,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -249068,6 +250646,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureCreateNestedManyWithoutUniversityInput
     programs?: ProgramCreateNestedManyWithoutUniversityInput
@@ -249093,6 +250672,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
     admissionSessions?: AdmissionSessionUncheckedCreateNestedManyWithoutUniversityInput
     feeStructures?: FeeStructureUncheckedCreateNestedManyWithoutUniversityInput
     programs?: ProgramUncheckedCreateNestedManyWithoutUniversityInput
@@ -249128,6 +250708,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -249214,6 +250796,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -249450,6 +251034,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -249475,6 +251060,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -249597,6 +251183,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutAssetsInput = {
@@ -249709,6 +251296,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutAssetsInput = {
@@ -249837,6 +251425,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -249949,6 +251538,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutDocumentLogsInput = {
@@ -250061,6 +251651,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutDocumentLogsInput = {
@@ -250173,6 +251764,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutDocumentLogsInput = {
@@ -250430,6 +252022,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentLogsInput = {
@@ -250542,6 +252135,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type StudentUpsertWithoutDocumentLogsInput = {
@@ -250686,6 +252280,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -250772,6 +252368,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -250923,6 +252521,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -251009,6 +252609,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -251150,6 +252752,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -251236,6 +252840,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -251467,6 +253073,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -251553,6 +253161,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -251774,6 +253384,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -251860,6 +253472,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -252054,6 +253668,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutCommunicationLogsInput = {
@@ -252166,6 +253781,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutCommunicationLogsInput = {
@@ -252191,6 +253807,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -252277,6 +253895,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -252477,6 +254097,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommunicationLogsInput = {
@@ -252589,6 +254210,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserCreateWithoutFcmTokensInput = {
@@ -252701,6 +254323,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutFcmTokensInput = {
@@ -252813,6 +254436,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedCreateNestedManyWithoutAssistantManagersInput
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutFcmTokensInput = {
@@ -252941,6 +254565,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFcmTokensInput = {
@@ -253053,6 +254678,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type OrganizationCreateWithoutFacultiesInput = {
@@ -253062,6 +254688,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -253148,6 +254776,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -253666,6 +255296,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -253752,6 +255384,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -254014,6 +255648,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -254100,6 +255736,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -254242,6 +255880,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -254328,6 +255968,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -254544,6 +256186,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -254630,6 +256274,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -254968,6 +256614,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -255054,6 +256702,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255223,6 +256873,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -255309,6 +256961,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -255548,6 +257202,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -255634,6 +257290,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -255832,6 +257490,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -255918,6 +257578,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -256311,6 +257973,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -256397,6 +258061,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -257342,6 +259008,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -257428,6 +259096,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -257712,6 +259382,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -257798,6 +259470,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -258078,6 +259752,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -258164,6 +259840,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -258484,6 +260162,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -258570,6 +260250,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -258748,6 +260430,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -258834,6 +260518,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -259040,6 +260726,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -259126,6 +260814,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -259315,6 +261005,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -259401,6 +261093,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -259788,6 +261482,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -259874,6 +261570,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -260353,6 +262051,7 @@ export namespace Prisma {
     designations?: DesignationCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserUncheckedCreateWithoutStudentBatchTransfersInput = {
@@ -260465,6 +262164,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedCreateNestedManyWithoutFilledByInput
     communicationLogs?: CommunicationLogUncheckedCreateNestedManyWithoutSenderInput
     fcmTokens?: UserFCMTokenUncheckedCreateNestedManyWithoutUserInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedCreateNestedManyWithoutOpsSubAdminInput
   }
 
   export type UserCreateOrConnectWithoutStudentBatchTransfersInput = {
@@ -260910,6 +262610,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudentBatchTransfersInput = {
@@ -261022,6 +262723,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type FacultyUpsertWithoutStudentBatchTransfersInput = {
@@ -261219,6 +262921,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -261305,6 +263009,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -261556,6 +263262,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -261642,6 +263350,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -261974,6 +263684,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -262060,6 +263772,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -262478,6 +264192,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -262564,6 +264280,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -262840,6 +264558,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -262926,6 +264646,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseId?: string | null
     licenseExpiry?: Date | string | null
@@ -263214,6 +264936,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -263300,6 +265024,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseId?: NullableStringFieldUpdateOperationsInput | string | null
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -264072,6 +265798,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramMaterialCreateManyOrganizationInput = {
@@ -264297,6 +266024,7 @@ export namespace Prisma {
     status?: string
     logo?: string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: boolean
   }
 
   export type UniversityAuthFeeCreateManyOrganizationInput = {
@@ -266654,6 +268382,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocatedByMgr?: UserUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    opsSubAdmin?: UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput
     program?: ProgramUpdateOneRequiredWithoutProgramAllocationsNestedInput
   }
@@ -266667,6 +268396,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramAllocationUncheckedUpdateManyWithoutOrganizationInput = {
@@ -266678,6 +268408,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramMaterialUpdateWithoutOrganizationInput = {
@@ -267399,6 +269130,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -267423,6 +269155,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -267447,6 +269180,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UniversityAuthFeeUpdateWithoutOrganizationInput = {
@@ -267658,6 +269392,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -267770,6 +269505,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -268256,6 +269992,8 @@ export namespace Prisma {
     phone: string
     address: string
     logo?: string | null
+    customLoginSlug?: string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.OrganizationStatus
     licenseExpiry?: Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -268270,6 +270008,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -268356,6 +270096,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -268442,6 +270184,8 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
+    customLoginSlug?: NullableStringFieldUpdateOperationsInput | string | null
+    loginBranding?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumOrganizationStatusFieldUpdateOperationsInput | $Enums.OrganizationStatus
     licenseExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
@@ -269099,6 +270843,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -269211,6 +270956,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -269387,6 +271133,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssistantManagedDepartmentsInput = {
@@ -269499,6 +271246,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutAssistantManagedDepartmentsInput = {
@@ -270623,6 +272371,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramMaterialCreateManyUploaderInput = {
@@ -271061,6 +272810,18 @@ export namespace Prisma {
     id?: string
     token: string
     deviceType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramAllocationCreateManyOpsSubAdminInput = {
+    id?: string
+    organizationId: string
+    centerId: string
+    programId: string
+    allocatedBy: string
+    allocatedAt?: Date | string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -274368,6 +276129,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdmin?: UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramAllocationsNestedInput
     program?: ProgramUpdateOneRequiredWithoutProgramAllocationsNestedInput
@@ -274382,6 +276144,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramAllocationUncheckedUpdateManyWithoutAllocatedByMgrInput = {
@@ -274393,6 +276156,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramMaterialUpdateWithoutUploaderInput = {
@@ -275790,6 +277554,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -275902,6 +277667,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -276153,6 +277919,42 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramAllocationUpdateWithoutOpsSubAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocatedByMgr?: UserUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    center?: StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    organization?: OrganizationUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    program?: ProgramUpdateOneRequiredWithoutProgramAllocationsNestedInput
+  }
+
+  export type ProgramAllocationUncheckedUpdateWithoutOpsSubAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    centerId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    allocatedBy?: StringFieldUpdateOperationsInput | string
+    allocatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    centerId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    allocatedBy?: StringFieldUpdateOperationsInput | string
+    allocatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -277006,6 +278808,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUniversityInput = {
@@ -277118,6 +278921,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUniversityInput = {
@@ -277488,6 +279292,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type ProgramMaterialCreateManyProgramInput = {
@@ -277884,6 +279689,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocatedByMgr?: UserUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    opsSubAdmin?: UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput
     center?: StudyCenterUpdateOneRequiredWithoutProgramAllocationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramAllocationsNestedInput
   }
@@ -277897,6 +279703,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramAllocationUncheckedUpdateManyWithoutProgramInput = {
@@ -277908,6 +279715,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramMaterialUpdateWithoutProgramInput = {
@@ -278436,6 +280244,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    opsSubAdminId?: string | null
   }
 
   export type SessionRequestCreateManyCenterInput = {
@@ -278929,6 +280738,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     allocatedByMgr?: UserUpdateOneRequiredWithoutProgramAllocationsNestedInput
+    opsSubAdmin?: UserUpdateOneWithoutOpsSubAdminAllocationsNestedInput
     organization?: OrganizationUpdateOneRequiredWithoutProgramAllocationsNestedInput
     program?: ProgramUpdateOneRequiredWithoutProgramAllocationsNestedInput
   }
@@ -278942,6 +280752,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProgramAllocationUncheckedUpdateManyWithoutCenterInput = {
@@ -278953,6 +280764,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    opsSubAdminId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SessionRequestUpdateWithoutCenterInput = {
@@ -279322,6 +281134,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStudyCenterInput = {
@@ -279434,6 +281247,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutStudyCenterInput = {
@@ -279636,6 +281450,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -279661,6 +281476,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -279685,6 +281501,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudentBatchTransferCreateManyStudentInput = {
@@ -281106,6 +282923,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBranchInput = {
@@ -281218,6 +283036,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -281262,6 +283081,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -281287,6 +283107,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -281311,6 +283132,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BiometricDeviceUpdateWithoutBranchInput = {
@@ -281644,6 +283466,7 @@ export namespace Prisma {
     designations?: DesignationUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubDepartmentInput = {
@@ -281756,6 +283579,7 @@ export namespace Prisma {
     designations?: DesignationUncheckedUpdateManyWithoutFilledByNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutSubDepartmentInput = {
@@ -281979,6 +283803,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUpdateManyWithoutUniversityNestedInput
@@ -282004,6 +283829,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
     admissionSessions?: AdmissionSessionUncheckedUpdateManyWithoutUniversityNestedInput
     feeStructures?: FeeStructureUncheckedUpdateManyWithoutUniversityNestedInput
     programs?: ProgramUncheckedUpdateManyWithoutUniversityNestedInput
@@ -282028,6 +283854,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     logo?: NullableStringFieldUpdateOperationsInput | string | null
     enrollmentFormConfig?: NullableJsonNullValueInput | InputJsonValue
+    isAcademicPartnerOnly?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type DesignationCreateManyParentDesignationInput = {
@@ -282208,6 +284035,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUpdateManyWithoutAssistantManagersNestedInput
     communicationLogs?: CommunicationLogUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDesignationsInput = {
@@ -282320,6 +284148,7 @@ export namespace Prisma {
     assistantManagedDepartments?: DepartmentUncheckedUpdateManyWithoutAssistantManagersNestedInput
     communicationLogs?: CommunicationLogUncheckedUpdateManyWithoutSenderNestedInput
     fcmTokens?: UserFCMTokenUncheckedUpdateManyWithoutUserNestedInput
+    opsSubAdminAllocations?: ProgramAllocationUncheckedUpdateManyWithoutOpsSubAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDesignationsInput = {

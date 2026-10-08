@@ -104,7 +104,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
   const [credTarget, setCredTarget] = useState<any>(null);
   const [credPassword, setCredPassword] = useState('');
   const [savingCred, setSavingCred] = useState(false);
-
+  const [savingStudent, setSavingStudent] = useState(false);
   // Enrollment History Dialog State
   const [enrollHistoryOpen, setEnrollHistoryOpen] = useState(false);
   const [enrollHistoryStudent, setEnrollHistoryStudent] = useState<any>(null);
@@ -201,7 +201,11 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
     department_rejected: 'bg-red-100 text-red-700',
   };
 
-  const statusLabel = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const statusLabel = (s: string) => {
+    if (s === 'receipt_submitted') return 'Receipt Submitted & Ops Pending';
+    if (s === 'document_review') return 'Ops Verification Pending';
+    return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  };
 
   const handleOpenEnrollHistory = async (student: any) => {
     setEnrollHistoryStudent(student);
@@ -339,9 +343,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         specialisation: completingEnrollment.specialisation || student.specialisation || '',
         sessionId: completingEnrollment.sessionId || student.sessionId || '',
         centerId: completingEnrollment.studyCenterId || student.centerId || '',
+        admissionDate: completingEnrollment.admissionDate ? new Date(completingEnrollment.admissionDate).toISOString().split('T')[0] : (student.admissionDate ? new Date(student.admissionDate).toISOString().split('T')[0] : ''),
         initialPaymentAmount: completingEnrollment.initialPaymentAmount?.toString() || (student.admissionProgress as any)?.initialPaymentAmount || '',
-        documents: completingEnrollment.documents || student.documents || [],
-        photo: completingEnrollment.photo || student.photo || '',
+        initialPaymentDate: completingEnrollment.initialPaymentDate ? new Date(completingEnrollment.initialPaymentDate).toISOString().split('T')[0] : ((student.admissionProgress as any)?.initialPaymentDate ? new Date((student.admissionProgress as any).initialPaymentDate).toISOString().split('T')[0] : ''),
+        paymentPlan: completingEnrollment.paymentPlan || (student.admissionProgress as any)?.paymentPlan || 'full',
+        documents: (student.documents?.length ? student.documents : completingEnrollment.documents) || [],
+        photo: student.photo || completingEnrollment.photo || '',
         address: completingEnrollment.studentAddress !== 'To be filled' && completingEnrollment.studentAddress ? completingEnrollment.studentAddress : (student.address || ''),
         dob: student.dob ? new Date(student.dob).toISOString().split('T')[0] : '',
         altPhone: student.altPhone || '',
@@ -490,10 +497,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       setFormStep(4);
       return;
     }
+    setSavingStudent(true);
     try {
       if (completingEnrollment) {
         await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, formData);
-        toast.success('Provisional enrollment completed successfully');
+        const isReupload = completingEnrollment.status === 'rejected' || completingEnrollment.status === 'ops_rejected';
+        toast.success(isReupload ? 'Documents re-uploaded successfully and submitted to Operations' : 'Provisional enrollment completed successfully');
       } else if (editingId) {
         await api.put(`/students/${editingId}`, formData);
         toast.success('Student updated successfully');
@@ -502,12 +511,14 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
         await api.post('/students', payload);
         toast.success('Student added successfully and sent to pipeline for review');
       }
-      setDialogOpen(false);
+      handleDialogOpenChange(false);
       resetForm();
       fetchStudents();
     } catch (error: any) {
       console.error('Failed to save student:', error);
       toast.error(error.response?.data?.message || 'Failed to save student');
+    } finally {
+      setSavingStudent(false);
     }
   };
 
@@ -1207,7 +1218,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
       <Dialog open={dialogOpen} onOpenChange={handleDialogOpenChange}>
         <DialogContent className="max-w-3xl max-h-[92vh] flex flex-col">
           <DialogHeader className="pb-2 border-b">
-            <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
+            <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
             {/* Step indicator */}
             <div className="flex items-center gap-1 pt-2">
               {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
@@ -1537,7 +1548,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   {/* Photo upload */}
                   <div className="p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo {isFieldReq('photo') && '*'}</Label>
+                      <Label className="font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                        <span>Student Photo {isFieldReq('photo') && '*'}</span>
+                        {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
+                      </Label>
                       {formData.photo ? (
                         <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                           ✓ Photo Uploaded: {formData.photo.split('/').pop()}
@@ -1652,8 +1666,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                       <div key={docType} className="space-y-2">
                         <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                              {docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                              <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
+                              {existing?.status === 'rejected' && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
                             </div>
                             {existing?.url ? (
                               <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
@@ -1805,8 +1820,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               ) : (
-                <Button type="submit" className="bg-primary">
-                  {editingId ? 'Update Student' : 'Save Student'}
+                <Button type="submit" className="bg-primary" disabled={savingStudent}>
+                  {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
                 </Button>
               )}
             </div>
@@ -1847,7 +1862,7 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                 </DialogTrigger>
                 <DialogContent className="max-w-3xl w-full sm:max-w-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-none sm:rounded-xl">
                   <DialogHeader className="pb-2 border-b">
-                    <DialogTitle className="text-lg">{editingId ? 'Edit Student Record' : 'Add New Student Record'}</DialogTitle>
+                    <DialogTitle className="text-lg">{editingId || completingEnrollment ? 'Update Student Enrollment' : 'Add New Student Record'}</DialogTitle>
                     {/* Step indicator */}
                     <div className="flex items-center gap-1 pt-2">
                       {['Admission Info', 'Personal Details', 'Family Info', 'Documents', 'Payment Receipt'].map((step, i) => (
@@ -2127,7 +2142,10 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           </div>
                           {/* Photo */}
                           <div>
-                            <Label className="font-medium font-semibold text-slate-800 dark:text-slate-200">Student Photo {isFieldReq('photo') && '*'}</Label>
+                            <Label className="font-medium font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                              <span>Student Photo {isFieldReq('photo') && '*'}</span>
+                              {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && formData.photo === (completingEnrollment?.student?.photo || completingEnrollment?.photo) && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
+                            </Label>
                             <div className="flex items-center gap-4 mt-2 p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/20">
                               {formData.photo ? (
                                 <div className="relative group cursor-pointer inline-block">
@@ -2233,8 +2251,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                               <div key={docType} className="space-y-2">
                                 <div className="flex items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
                                   <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                                      {docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}
+                                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                                      <span>{docType === 'Other' && customOtherName.trim() !== '' ? `Other (${customOtherName})` : docType} {isOptional ? <span className="text-xs text-muted-foreground font-normal">(optional)</span> : '*'}</span>
+                                      {existing?.status === 'rejected' && <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">Re-upload</span>}
                                     </div>
                                     {existing?.url ? (
                                       <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
@@ -2386,8 +2405,8 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                           Next <ChevronRight className="w-4 h-4 ml-1" />
                         </Button>
                       ) : (
-                        <Button type="submit" className="bg-primary">
-                          {editingId ? 'Update Student' : 'Save Student'}
+                        <Button type="submit" className="bg-primary" disabled={savingStudent}>
+                          {savingStudent ? 'Saving...' : (editingId ? 'Update Student' : 'Save Student')}
                         </Button>
                       )}
                     </div>
@@ -2556,7 +2575,9 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
-                      <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100">{student.status}</Badge>
+                      <Badge className={`hover:opacity-80 ${STATUS_COLORS[student.status] || 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 hover:bg-slate-100'}`}>
+                        {statusLabel(student.status)}
+                      </Badge>
 
                       {/* View Profile */}
                       <Button variant="default" size="icon" className="w-8 h-8" onClick={() => setViewingProfileStudent(student)} title="View Profile">
@@ -3124,7 +3145,12 @@ export function StudentsPanel({ triggerOpen, onOpenChange, isSalesMode, completi
                                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${STATUS_COLORS[h.status] || 'bg-muted text-muted-foreground'}`}>
                                     {statusLabel(h.status)}
                                   </span>
-                                  <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+                                  {h.actorName && (
+                                    <span className="text-[11px] text-muted-foreground">
+                                      by {h.actorName} {h.actorRole ? `(${h.actorRole.replace(/_/g, ' ')})` : ''}
+                                    </span>
+                                  )}
+                                  <span className="text-[11px] text-muted-foreground whitespace-nowrap ml-auto">
                                     {displayDate}
                                   </span>
                                 </div>

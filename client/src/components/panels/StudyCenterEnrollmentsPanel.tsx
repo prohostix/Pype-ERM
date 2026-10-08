@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { RefreshCw, Upload, AlertCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { StudentsPanel } from './StudentsPanel';
+import { EnrollStudentPanel } from './EnrollStudentPanel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -73,9 +73,8 @@ export function StudyCenterEnrollmentsPanel() {
             <RefreshCw className={cn('w-4 h-4 mr-2', loading && 'animate-spin')} />Refresh
           </Button>
 
-          <StudentsPanel
+          <EnrollStudentPanel
             triggerOpen={enrollDialogOpen}
-            isSalesMode={true}
             onOpenChange={(open) => {
               setEnrollDialogOpen(open);
               if (!open) {
@@ -143,7 +142,7 @@ export function StudyCenterEnrollmentsPanel() {
                         </div>
                       )}
 
-                      {(e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected && (
+                      {(e.status === 'rejected' || e.status === 'ops_rejected') && (
                         <div className="mt-4 pt-4 border-t">
                           <Button size="sm" className="bg-rose-600 hover:bg-rose-700 font-semibold" onClick={() => {
                             setVerifyingStudent(e);

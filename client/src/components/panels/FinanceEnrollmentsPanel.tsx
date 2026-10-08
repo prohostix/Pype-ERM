@@ -19,8 +19,10 @@ interface Enrollment {
   studentName: string;
   studentEmail: string;
   studentPhone: string;
-  programId: { name: string; code: string } | string;
-  studyCenterId: { name: string; code: string } | string;
+  programId: string;
+  studyCenterId: string;
+  program?: any;
+  studyCenter?: any;
   status: string;
   departmentRemarks?: string;
   financeRemarks?: string;
@@ -137,16 +139,16 @@ export function FinanceEnrollmentsPanel() {
   };
 
   const getProgramName = (e: Enrollment) => {
-    const name = (e.programId && typeof e.programId === 'object')
-      ? `${e.programId.name || 'Unknown'} (${e.programId.code || ''})`
-      : (e.programId as string) || 'N/A';
+    const name = e.program
+      ? `${e.program.name || 'Unknown'} (${e.program.code || ''})`
+      : e.programId || 'N/A';
     return name + (e.specialisation ? ` - ${e.specialisation}` : '');
   };
 
   const getCenterName = (e: Enrollment) =>
-    (e.studyCenterId && typeof e.studyCenterId === 'object')
-      ? `${e.studyCenterId.name || 'Unknown'}`
-      : (e.studyCenterId as string) || 'N/A';
+    e.studyCenter
+      ? `${e.studyCenter.name || 'Unknown'}`
+      : e.studyCenterId || 'N/A';
 
   return (
     <div className="space-y-6">
@@ -253,6 +255,8 @@ export function FinanceEnrollmentsPanel() {
                     <td className="p-3 hidden sm:table-cell">
                       {e.payment ? (
                         <span className="text-green-600 font-medium">₹{e.payment.amount.toLocaleString()}</span>
+                      ) : e.initialPaymentAmount ? (
+                        <span className="text-amber-600 font-medium">₹{e.initialPaymentAmount.toLocaleString()} <span className="text-[10px] text-amber-600/80 block mt-0.5">(Pending Approval)</span></span>
                       ) : (
                         <span className="text-muted-foreground text-xs">—</span>
                       )}
@@ -320,8 +324,8 @@ export function FinanceEnrollmentsPanel() {
               {/* Photo + Identity */}
               <div className="flex gap-5 items-start">
                 <div className="shrink-0">
-                  {viewStudent.student?.photo ? (
-                    <img src={viewStudent.student.photo} alt="Student" className="w-24 h-24 rounded-xl object-cover border shadow-sm" />
+                  {(viewStudent.student?.photo || viewStudent.photo) ? (
+                    <img src={getDocUrl((viewStudent.student?.photo || viewStudent.photo) as string)} alt="Student" className="w-24 h-24 rounded-xl object-cover border shadow-sm" />
                   ) : (
                     <div className="w-24 h-24 rounded-xl bg-muted flex items-center justify-center border">
                       <GraduationCap className="w-10 h-10 text-muted-foreground" />
@@ -403,7 +407,15 @@ export function FinanceEnrollmentsPanel() {
                       )}
                     </div>
                   )}
-                  {!viewStudent.payment && (
+                  {!viewStudent.payment && viewStudent.initialPaymentAmount ? (
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 border border-amber-100">
+                      <Clock className="w-4 h-4 text-amber-500 shrink-0" />
+                      <div>
+                        <p className="text-amber-700 font-medium text-xs">Initial Fee Claimed</p>
+                        <p className="font-semibold text-amber-700">₹{viewStudent.initialPaymentAmount.toLocaleString()}</p>
+                      </div>
+                    </div>
+                  ) : !viewStudent.payment && (
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100">
                       <Clock className="w-4 h-4 text-orange-500 shrink-0" />
                       <p className="text-orange-700 font-medium text-xs">Fee not yet received</p>

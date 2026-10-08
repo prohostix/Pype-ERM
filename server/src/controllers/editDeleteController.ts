@@ -117,6 +117,9 @@ async function executeApprovedDeletion(entityId: string, organizationId: string,
     } else if (entityType === 'academic-class' || endpoint === 'academic-classes') {
       await prisma.academicClass.delete({ where: { id } });
       return { success: true };
+    } else if (entityType === 'program_allocation' || endpoint === 'program_allocation') {
+      await prisma.programAllocation.delete({ where: { id } });
+      return { success: true };
     }
 
     if (endpoint === 'students') {
@@ -159,7 +162,24 @@ async function executeApprovedDeletion(entityId: string, organizationId: string,
       }
     } else if (endpoint === 'operations') {
       if (sub === 'centers') {
-        await prisma.studyCenter.delete({ where: { id } });
+        const centerId = id;
+        await prisma.$transaction(async (tx) => {
+          await tx.user.deleteMany({ where: { studyCenterId: centerId, role: 'center_admin' } });
+          
+          await tx.student.updateMany({ where: { centerId }, data: { centerId: null } });
+          await tx.invoice.updateMany({ where: { centerId }, data: { centerId: null } });
+          await tx.enrollment.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+          await tx.admissionSession.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+          
+          await tx.user.updateMany({ where: { studyCenterId: centerId }, data: { studyCenterId: null } });
+          
+          await tx.walletTopUp.deleteMany({ where: { studyCenterId: centerId } });
+          await tx.studyCenterWallet.deleteMany({ where: { studyCenterId: centerId } });
+          await tx.programAllocation.deleteMany({ where: { centerId } });
+          await tx.sessionRequest.deleteMany({ where: { centerId } });
+          await tx.target.deleteMany({ where: { centerId } });
+          await tx.studyCenter.delete({ where: { id: centerId } });
+        });
       } else if (sub === 'programs') {
         await prisma.program.delete({ where: { id } });
       } else if (sub === 'universities') {
@@ -200,7 +220,7 @@ export const respondToEditDeleteRequest = asyncHandler(async (req: AuthRequest, 
       newStatus = 'approved';
     }
     // If superadmin/org_admin/ceo/general_manager directly approves at any stage — fully approve
-    if (['superadmin', 'org_admin', 'ceo', 'general_manager'].includes(role)) {
+    if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(role)) {
       newStatus = 'approved';
     }
   }

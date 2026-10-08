@@ -41,6 +41,7 @@ import {
   Video,
   Activity,
   Trash2,
+  Workflow,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -66,7 +67,7 @@ const navItems: NavItem[] = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: LayoutDashboard,
-    roles: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'employee'],
+    roles: ['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager', 'ops_admin', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'sales_admin', 'sales_sub_admin', 'employee'],
   },
   {
     id: 'organizations',
@@ -82,17 +83,17 @@ const navItems: NavItem[] = [
     id: 'departments',
     label: 'Departments',
     icon: Building,
-    roles: ['org_admin', 'ceo', 'general_manager'],
+    roles: ['org_admin', 'ceo', 'general_manager', 'branch_manager'],
   },
   {
     id: 'ceo-dashboard',
     label: 'CEO / GM Dashboard',
     icon: UserCog,
-    roles: ['ceo', 'general_manager'],
+    roles: ['ceo', 'general_manager', 'branch_manager'],
     children: [
-      { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo', 'general_manager'], badge: 1 },
-      { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo', 'general_manager'] },
-      { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo', 'general_manager'] },
+      { id: 'escalations', label: 'Escalations', icon: AlertTriangle, roles: ['ceo', 'general_manager', 'branch_manager'], badge: 1 },
+      { id: 'reports', label: 'Reports', icon: FileText, roles: ['ceo', 'general_manager', 'branch_manager'] },
+      { id: 'performance', label: 'Performance', icon: Target, roles: ['ceo', 'general_manager', 'branch_manager'] },
       { id: 'delete_approvals', label: 'Delete Approvals', icon: Trash2, roles: ['ceo'] },
       { id: 'meetings', label: 'Meeting Report', icon: Video, roles: ['ceo'] },
       { id: 'activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ceo', 'org_admin'] },
@@ -102,14 +103,14 @@ const navItems: NavItem[] = [
     id: 'operations',
     label: 'Operations',
     icon: GraduationCap,
-    roles: ['ops_admin', 'ceo', 'general_manager'],
+    roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
     children: [
-      { id: 'dashboard', label: 'Dashboard', icon: Home, roles: ['ops_admin', 'ceo', 'general_manager'] },
+      { id: 'dashboard', label: 'Dashboard', icon: Home, roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'] },
       {
         id: 'students-ops',
         label: 'Students',
         icon: Users,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'students', label: 'Student List' },
           { id: 'students-portal', label: 'Student Portal Management' }
@@ -119,7 +120,7 @@ const navItems: NavItem[] = [
         id: 'admissions-ops',
         label: 'Admissions',
         icon: FileText,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'admissions-review', label: 'Admission Review' }
         ]
@@ -128,7 +129,7 @@ const navItems: NavItem[] = [
         id: 'universities-ops',
         label: 'Universities',
         icon: School,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'universities', label: 'University List' },
           { id: 'uni-submission', label: 'University Submission' },
@@ -141,18 +142,18 @@ const navItems: NavItem[] = [
         id: 'programs-ops',
         label: 'Programs',
         icon: BookOpen,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'programs', label: 'Programs' },
           { id: 'program-alloc', label: 'Program Allocation' }
         ]
       },
-      { id: 'centers', label: 'Academic Partners', icon: Building, roles: ['ops_admin', 'ceo', 'general_manager'] },
+      { id: 'centers', label: 'Academic Partners', icon: Building, roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'] },
       {
         id: 'documents-ops',
         label: 'Document Management',
         icon: FileText,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'doc-received', label: 'Document Received' },
           { id: 'doc-dispatch', label: 'Document Dispatch' },
@@ -164,7 +165,7 @@ const navItems: NavItem[] = [
         id: 'communication-ops',
         label: 'Communication',
         icon: Phone,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'announcements', label: 'Announcements' },
           { id: 'bulk-sms', label: 'Bulk SMS' },
@@ -176,7 +177,7 @@ const navItems: NavItem[] = [
         id: 'tasks-ops',
         label: 'Tasks',
         icon: CheckSquare,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'my-tasks', label: 'My Tasks' }
         ]
@@ -185,7 +186,7 @@ const navItems: NavItem[] = [
         id: 'reports-ops',
         label: 'Reports',
         icon: BarChart2,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'report-student', label: 'Student Report' },
           { id: 'report-admission', label: 'Admission Report' },
@@ -198,7 +199,7 @@ const navItems: NavItem[] = [
         id: 'my-portal',
         label: 'My Portal',
         icon: User,
-        roles: ['ops_admin', 'ceo', 'general_manager'],
+        roles: ['ops_admin', 'ceo', 'general_manager', 'branch_manager'],
         children: [
           { id: 'attendance', label: 'Attendance' },
           { id: 'leave-req', label: 'Leave Request' },
@@ -212,49 +213,49 @@ const navItems: NavItem[] = [
     id: 'finance',
     label: 'Finance',
     icon: DollarSign,
-    roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'],
+    roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'],
     children: [
-      { id: 'invoices', label: 'Invoices', icon: Receipt, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'payments', label: 'Payments', icon: Wallet, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'expenses', label: 'Expenses', icon: Receipt, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'collections', label: 'Collections', icon: FileText, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'targets', label: 'Targets', icon: Target, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'fees', label: 'Fee Structures', icon: Settings, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'salary_approval', label: 'Salary Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'approvals', label: 'Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager'] },
+      { id: 'invoices', label: 'Invoices', icon: Receipt, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'payments', label: 'Payments', icon: Wallet, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'expenses', label: 'Expenses', icon: Receipt, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'collections', label: 'Collections', icon: FileText, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'targets', label: 'Targets', icon: Target, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'fees', label: 'Fee Structures', icon: Settings, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'salary_approval', label: 'Salary Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'approvals', label: 'Approvals', icon: CheckSquare, roles: ['finance_admin', 'finance_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
     ],
   },
   {
     id: 'hr',
     label: 'Human Resources',
     icon: Briefcase,
-    roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'],
+    roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'],
     children: [
-      { id: 'users', label: 'Users', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'employees', label: 'Employees', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'vacancies', label: 'Vacancies', icon: UserPlus, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
+      { id: 'users', label: 'Users', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'employees', label: 'Employees', icon: Users, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'vacancies', label: 'Vacancies', icon: UserPlus, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
       { id: 'attendance', label: 'Attendance', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin'] },
-      { id: 'ceo_attendance', label: 'Attendance', icon: Calendar, roles: ['ceo', 'general_manager'] },
-      { id: 'leaves', label: 'Leave Requests', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'complaints', label: 'Complaints', icon: MessageSquare, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'payroll', label: 'Payroll', icon: DollarSign, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'salary-config', label: 'Salary Config', icon: Settings, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
-      { id: 'assets', label: 'Assets', icon: MonitorSmartphone, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager'] },
+      { id: 'ceo_attendance', label: 'Attendance', icon: Calendar, roles: ['ceo', 'general_manager', 'branch_manager'] },
+      { id: 'leaves', label: 'Leave Requests', icon: Calendar, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'complaints', label: 'Complaints', icon: MessageSquare, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'payroll', label: 'Payroll', icon: DollarSign, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'salary-config', label: 'Salary Config', icon: Settings, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'payroll-batches', label: 'Payroll Batches', icon: CheckSquare, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
+      { id: 'assets', label: 'Assets', icon: MonitorSmartphone, roles: ['hr_admin', 'hr_sub_admin', 'ceo', 'general_manager', 'branch_manager'] },
     ],
   },
   {
     id: 'sales',
     label: 'Sales & CRM',
     icon: TrendingUp,
-    roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'],
+    roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'branch_manager', 'employee'],
     department: 'sales',
     children: [
-      { id: 'leads', label: 'Leads', icon: Users, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
-      { id: 'deals', label: 'Deals', icon: CheckSquare, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
-      { id: 'referrals', label: 'Referrals', icon: UserPlus, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
-      { id: 'quotations', label: 'Quotations', icon: FileText, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'employee'] },
+      { id: 'leads', label: 'Leads', icon: Users, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'branch_manager', 'employee'] },
+      { id: 'deals', label: 'Deals', icon: CheckSquare, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'branch_manager', 'employee'] },
+      { id: 'referrals', label: 'Referrals', icon: UserPlus, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'branch_manager', 'employee'] },
+      { id: 'quotations', label: 'Quotations', icon: FileText, roles: ['sales_admin', 'sales_sub_admin', 'ceo', 'general_manager', 'branch_manager', 'employee'] },
     ],
   },
   {
@@ -317,9 +318,21 @@ const navItems: NavItem[] = [
     roles: ['superadmin', 'org_admin'],
   },
   {
+    id: 'login_branding',
+    label: 'Login Branding',
+    icon: Settings,
+    roles: ['org_admin'],
+  },
+  {
     id: 'enrollment_link_config',
     label: 'Enrollment Link Config',
     icon: Settings,
+    roles: ['org_admin'],
+  },
+  {
+    id: 'flow_settings',
+    label: 'Flow Settings',
+    icon: Workflow,
     roles: ['org_admin'],
   },
 ];
@@ -348,26 +361,7 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
       <div className="flex items-center justify-between h-16 px-4 border-b border-slate-800">
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
-            <img
-              src="/pype-logo.png"
-              alt="PYPE ERM"
-              className="w-8 h-8 object-contain flex-shrink-0"
-            />
-            <span
-              className="font-bold text-lg truncate"
-              title="PYPE ERM"
-            >
-              PYPE ERM
-            </span>
           </div>
-        )}
-        {isCollapsed && (
-          <img
-            src="/pype-logo.png"
-            alt="PYPE ERM"
-            className="w-8 h-8 object-contain mx-auto"
-            title="PYPE ERM"
-          />
         )}
         <Button
           variant="ghost"

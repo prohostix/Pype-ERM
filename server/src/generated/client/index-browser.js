@@ -127,6 +127,8 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   phone: 'phone',
   address: 'address',
   logo: 'logo',
+  customLoginSlug: 'customLoginSlug',
+  loginBranding: 'loginBranding',
   status: 'status',
   licenseId: 'licenseId',
   licenseExpiry: 'licenseExpiry',
@@ -264,7 +266,8 @@ exports.Prisma.UniversityScalarFieldEnum = {
   country: 'country',
   status: 'status',
   logo: 'logo',
-  enrollmentFormConfig: 'enrollmentFormConfig'
+  enrollmentFormConfig: 'enrollmentFormConfig',
+  isAcademicPartnerOnly: 'isAcademicPartnerOnly'
 };
 
 exports.Prisma.ProgramScalarFieldEnum = {
@@ -959,7 +962,8 @@ exports.Prisma.ProgramAllocationScalarFieldEnum = {
   allocatedAt: 'allocatedAt',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  opsSubAdminId: 'opsSubAdminId'
 };
 
 exports.Prisma.ReferralLinkScalarFieldEnum = {
@@ -1550,7 +1554,8 @@ exports.UserRole = exports.$Enums.UserRole = {
   student: 'student',
   collections_admin: 'collections_admin',
   collections: 'collections',
-  general_manager: 'general_manager'
+  general_manager: 'general_manager',
+  branch_manager: 'branch_manager'
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {

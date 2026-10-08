@@ -85,7 +85,7 @@ export function SessionFormDialog({
 
   const fetchUniversities = async () => {
     try {
-      const res = await api.get('/operations/universities');
+      const res = await api.get('/operations/universities?all=true');
       setUniversities(res.data.data || []);
     } catch (err) {
       console.error('Failed to fetch universities:', err);

@@ -274,13 +274,21 @@ export function UsersPanel() {
                   </div>
                 )}
               </div>
+              
+              {user.role === 'center_admin' && (
+                <div className="mt-4 px-3 py-2 bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold rounded-xl text-center shadow-sm">
+                  Must be managed via Academic Partners
+                </div>
+              )}
 
               <div className="flex gap-3 pt-4">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-1 rounded-xl shadow-sm border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold transition-colors"
+                  className="flex-1 rounded-xl shadow-sm border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => handleEdit(user)}
+                  disabled={user.role === 'center_admin'}
+                  title={user.role === 'center_admin' ? "Center Admins must be edited from Academic Partners" : "Edit User"}
                 >
                   <Edit className="w-3.5 h-3.5 mr-2" />
                   Edit User
@@ -288,9 +296,10 @@ export function UsersPanel() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-none px-3 rounded-xl shadow-sm border-red-100 hover:border-red-200 bg-red-50/50 hover:bg-red-50 dark:border-red-900/30 dark:bg-red-900/10 dark:hover:bg-red-900/20 text-red-600 transition-colors"
+                  className="flex-none px-3 rounded-xl shadow-sm border-red-100 hover:border-red-200 bg-red-50/50 hover:bg-red-50 dark:border-red-900/30 dark:bg-red-900/10 dark:hover:bg-red-900/20 text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => handleDelete(user)}
-                  title="Delete User"
+                  disabled={user.role === 'center_admin'}
+                  title={user.role === 'center_admin' ? "Center Admins must be deleted from Academic Partners" : "Delete User"}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -413,9 +422,10 @@ export function UsersPanel() {
                     <SelectItem value="ops_admin">Operations Admin</SelectItem>
                     <SelectItem value="sales_admin">Sales Admin</SelectItem>
                     <SelectItem value="sales_sub_admin">Sales Sub Admin</SelectItem>
-                    <SelectItem value="center_admin">Center Admin</SelectItem>
+                    <SelectItem value="center_admin" disabled className="text-muted-foreground italic">Center Admin (Create via Academic Partners)</SelectItem>
                     <SelectItem value="employee">Employee</SelectItem>
                     <SelectItem value="general_manager">General Manager</SelectItem>
+                    <SelectItem value="branch_manager">Branch Manager</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

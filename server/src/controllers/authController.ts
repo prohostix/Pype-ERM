@@ -43,7 +43,7 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
   const hashedPassword = await hashPassword(password);
 
   // Prevent privilege escalation — nobody can register themselves as superadmin
-  const assignedRole = (role === 'superadmin' || role === 'org_admin') ? 'student' : (role || 'student');
+  const assignedRole = (role === 'superadmin' || role === 'org_admin' || role === 'center_admin') ? 'student' : (role || 'student');
 
   // Create user
   const user = await prisma.user.create({
@@ -83,7 +83,7 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response) => 
 // @route   POST /api/v1/auth/login
 // @access  Public
 export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, organizationId } = req.body;
 
   if (!email || !password) {
     res.status(400).json({ 
@@ -132,6 +132,12 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         return;
       }
 
+      // If logging in from a custom org page, restrict to that org
+      if (organizationId && faculty.organizationId !== organizationId) {
+        res.status(403).json({ success: false, message: 'Your account is not registered with this organization.' });
+        return;
+      }
+
       const token = generateToken(faculty.id);
       const refreshToken = generateRefreshToken(faculty.id);
 
@@ -162,6 +168,12 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
 
   if (!isMatch) {
     res.status(401).json({ success: false, message: 'Invalid credentials' });
+    return;
+  }
+
+  // If logging in from a custom org page, restrict to that org (allow superadmin to bypass)
+  if (organizationId && user.organizationId !== organizationId && user.role !== 'superadmin') {
+    res.status(403).json({ success: false, message: 'Your account is not registered with this organization.' });
     return;
   }
 
@@ -208,6 +220,7 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
         allowAnywherePunchIn: user.allowAnywherePunchIn,
         requiresAttendance: user.requiresAttendance,
         isBranchManager: !!managedBranch,
+        organization: user.organization,
         ...(centerStatus !== null && { centerStatus }),
       },
       token,

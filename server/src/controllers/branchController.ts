@@ -109,6 +109,14 @@ export const assignBranchManager = asyncHandler(async (req: AuthRequest, res: Re
       additionalDeptIds: additionalDeptIds || []
     }
   });
+
+  if (userId) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { branchId: req.params.id }
+    });
+  }
+
   res.json({ success: true, data: { ...branch, additionalDeptIds: branch.additionalDeptIds || [], branchManagerId: branch.branchManagerId } });
 });
 

@@ -1,0 +1,88 @@
+--- server/src/controllers/dashboardController.ts
++++ server/src/controllers/dashboardController.ts
+@@ -582,34 +582,34 @@
+   const totalSales = payments.reduce((acc, p) => acc + (p._sum.amount || 0), 0);
+ 
+-  // Group by department logic
+-  const hierarchy = {
+-    hr: { head: null as any, team: [] as any[], attendance: [] as any[] },
+-    sales: { head: null as any, team: [] as any[], attendance: [] as any[], totalSales },
+-    operations: { head: null as any, team: [] as any[], attendance: [] as any[] },
+-    finance: { head: null as any, team: [] as any[], attendance: [] as any[] },
+-  };
++  // Get Organization Departments
++  const departments = await prisma.department.findMany({
++    where: { organizationId: req.user.organizationId },
++    select: { id: true, name: true, type: true, managerId: true }
++  });
++
++  // Dynamic Hierarchy Array
++  const hierarchyData: any[] = [];
++
++  departments.forEach(dept => {
++    const deptUsers = users.filter(u => u.departmentId === dept.id);
++    const manager = users.find(u => u.id === dept.managerId) || deptUsers.find(u => u.role.includes('admin') || u.designation?.toLowerCase().includes('manager'));
++    
++    // Find team members (excluding manager)
++    const team = deptUsers.filter(u => u.id !== manager?.id);
++    
++    if (!manager && team.length === 0) return; // Skip empty departments
++
++    // Map attendance
++    const mapAtt = (u: any) => {
++      const att = attendances.find(a => a.employeeId === u.id);
++      return { ...u, attendance: att ? att.status : 'Absent' };
++    };
++
++    hierarchyData.push({
++      id: dept.id,
++      name: dept.name,
++      type: dept.type,
++      head: manager ? mapAtt(manager) : null,
++      team: team.map(mapAtt),
++      totalSales: dept.type === 'sales' ? totalSales : undefined
++    });
++  });
++
++  // Handle Unassigned users
++  const unassigned = users.filter(u => !u.departmentId && u.id !== req.user.id);
++  if (unassigned.length > 0) {
++    hierarchyData.push({
++      id: 'unassigned',
++      name: 'Unassigned Staff',
++      type: 'general',
++      head: null,
++      team: unassigned.map(u => {
++        const att = attendances.find(a => a.employeeId === u.id);
++        return { ...u, attendance: att ? att.status : 'Absent' };
++      }),
++    });
++  }
+ 
+-  users.forEach(user => {
+-    const role = user.role;
+-    const att = attendances.find(a => a.employeeId === user.id);
+-    const userWithAtt = { ...user, attendance: att ? att.status : 'Absent' };
+-
+-    if (role.includes('hr')) {
+-      if (role === 'hr_admin') hierarchy.hr.head = userWithAtt;
+-      else hierarchy.hr.team.push(userWithAtt);
+-      hierarchy.hr.attendance.push(userWithAtt);
+-    } else if (role.includes('sales')) {
+-      if (role === 'sales_admin') hierarchy.sales.head = userWithAtt;
+-      else hierarchy.sales.team.push(userWithAtt);
+-      hierarchy.sales.attendance.push(userWithAtt);
+-    } else if (role.includes('ops') || role.includes('center_admin') || role.includes('university_admin')) {
+-      if (role === 'ops_admin') hierarchy.operations.head = userWithAtt;
+-      else hierarchy.operations.team.push(userWithAtt);
+-      hierarchy.operations.attendance.push(userWithAtt);
+-    } else if (role.includes('finance') || role.includes('collections')) {
+-      if (role === 'finance_admin') hierarchy.finance.head = userWithAtt;
+-      else hierarchy.finance.team.push(userWithAtt);
+-      hierarchy.finance.attendance.push(userWithAtt);
+-    }
+-  });
+-
+-  res.status(200).json({ success: true, data: hierarchy });
++  res.status(200).json({ success: true, data: hierarchyData });
+ });

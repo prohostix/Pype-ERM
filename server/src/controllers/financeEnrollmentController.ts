@@ -139,9 +139,15 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
 
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
-    data: { status: 'enrolled', financeReviewedBy: req.user.id, financeReviewedAt: new Date() }
+    data: { 
+      status: 'enrolled', 
+      financeReviewedBy: req.user.id, 
+      financeReviewedAt: new Date(),
+      statusHistory: {
+        push: { status: 'enrolled', changedAt: new Date().toISOString(), changedBy: req.user.id, actorName: req.user.name, actorRole: req.user.role }
+      }
+    }
   });
-  
   // Provision student/user account post-approval
   await provisionStudentAfterApproval(enrollment.id);
   
@@ -157,7 +163,15 @@ export const approveFinanceEnrollment = asyncHandler(async (req: AuthRequest, re
 export const rejectFinanceEnrollment = asyncHandler(async (req: AuthRequest, res: Response) => {
   const enrollment = await prisma.enrollment.update({
     where: { id: req.params.id },
-    data: { status: 'rejected', financeReviewedBy: req.user.id, financeReviewedAt: new Date(), financeRemarks: req.body.remarks }
+    data: { 
+      status: 'rejected', 
+      financeReviewedBy: req.user.id, 
+      financeReviewedAt: new Date(), 
+      financeRemarks: req.body.remarks,
+      statusHistory: {
+        push: { status: 'rejected', changedAt: new Date().toISOString(), changedBy: req.user.id, actorName: req.user.name, actorRole: req.user.role, remarks: req.body.remarks }
+      }
+    }
   });
   res.json({ success: true, data: enrollment });
 });
@@ -266,6 +280,8 @@ export const verifyReceipt = asyncHandler(async (req: AuthRequest, res: Response
     status: 'document_review',
     changedAt: new Date().toISOString(),
     changedBy: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
     remarks: 'Receipt verified by Finance'
   };
 
@@ -353,6 +369,8 @@ export const verifyProvisionalReceipt = asyncHandler(async (req: AuthRequest, re
     status: 'provisional_finance_verified',
     changedAt: new Date().toISOString(),
     changedBy: req.user.id,
+    actorName: req.user.name,
+    actorRole: req.user.role,
     remarks: 'Provisional receipt verified by Finance'
   };
 

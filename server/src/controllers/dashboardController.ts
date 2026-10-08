@@ -524,3 +524,147 @@ export const getSalesOverviewMetrics = asyncHandler(async (req: AuthRequest, res
     }
   });
 });
+
+export const getBranchHierarchy = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const branchId = req.user.branchId;
+  if (!branchId && req.user.role !== 'branch_manager' && req.user.role !== 'superadmin' && req.user.role !== 'org_admin' && req.user.role !== 'ceo' && req.user.role !== 'general_manager') {
+    return res.status(403).json({ success: false, message: 'Not authorized for branch view' });
+  }
+
+  // Fetch ALL active users in the organization to compute the reporting hierarchy
+  const allOrgUsers = await prisma.user.findMany({
+    where: { organizationId: req.user.organizationId, status: 'active' },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      designation: true,
+      reportingTo: true,
+      departmentId: true,
+      branchId: true,
+    }
+  });
+
+  // Recursively find everyone who reports to the logged-in user (or reports to someone who reports to them, etc.)
+  const hierarchyUserIds = new Set([req.user.id]);
+  let addedNew = true;
+  while (addedNew) {
+    addedNew = false;
+    for (const u of allOrgUsers) {
+      const isDirectReport = u.reportingTo && hierarchyUserIds.has(u.reportingTo);
+      const isSameBranch = req.user.role === 'branch_manager' && u.branchId === req.user.branchId;
+      
+      if ((isDirectReport || isSameBranch) && !hierarchyUserIds.has(u.id)) {
+        hierarchyUserIds.add(u.id);
+        addedNew = true;
+      }
+    }
+  }
+
+  // Filter the users to ONLY include those in the logged-in user's direct/indirect reporting hierarchy
+  const users = allOrgUsers.filter(u => hierarchyUserIds.has(u.id));
+
+  const userIds = users.map(u => u.id);
+
+  // Get today's attendance
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const attendances = await prisma.attendance.findMany({
+    where: {
+      employeeId: { in: userIds },
+      date: {
+        gte: today,
+        lt: tomorrow
+      }
+    }
+  });
+
+  // Get total sales for sales users
+  const salesUsers = users.filter(u => u.role.includes('sales'));
+  const salesUserIds = salesUsers.map(u => u.id);
+  
+  const payments = await prisma.paymentEntry.groupBy({
+    by: ['createdAt'], // Dummy group by
+    _sum: {
+      amount: true
+    },
+    where: {
+      invoice: {
+        student: {
+          OR: [
+            { referredBy: { in: salesUserIds } },
+            { enrolledBy: { in: salesUserIds } }
+          ]
+        }
+      }
+    }
+  });
+  const totalSales = payments.reduce((acc, p) => acc + (p._sum.amount || 0), 0);
+
+  // Dynamic department logic
+  const departments = await prisma.department.findMany({
+    where: { organizationId: req.user.organizationId },
+    select: { id: true, name: true, type: true, managerId: true }
+  });
+
+  const hierarchyData: any[] = [];
+  const assignedUserIds = new Set();
+
+  departments.forEach(dept => {
+    const deptUsers = users.filter(u => u.departmentId === dept.id);
+    
+    let manager = null;
+    if (dept.managerId) {
+      manager = users.find(u => u.id === dept.managerId);
+    }
+    if (!manager && deptUsers.length > 0) {
+      manager = deptUsers.find(u => u.role.includes('admin') || u.designation?.toLowerCase().includes('manager'));
+    }
+
+    const team = deptUsers.filter(u => u.id !== manager?.id);
+    
+    deptUsers.forEach(u => assignedUserIds.add(u.id));
+
+    if (!manager && team.length === 0) return;
+
+    const mapAtt = (u: any) => {
+      const att = attendances.find(a => a.employeeId === u.id);
+      return { ...u, attendance: att ? att.status : 'Absent' };
+    };
+
+    hierarchyData.push({
+      id: dept.id,
+      name: dept.name,
+      type: dept.type,
+      head: manager ? mapAtt(manager) : null,
+      team: team.map(mapAtt),
+      attendance: deptUsers.map(mapAtt),
+      totalSales: dept.type === 'sales' ? totalSales : undefined
+    });
+  });
+
+  // Handle Unassigned users (who don't belong to any department)
+  const unassigned = users.filter(u => !assignedUserIds.has(u.id) && u.id !== req.user.id && u.role !== 'branch_manager');
+  if (unassigned.length > 0) {
+    hierarchyData.push({
+      id: 'unassigned',
+      name: 'Unassigned Staff',
+      type: 'general',
+      head: null,
+      team: unassigned.map(u => {
+        const att = attendances.find(a => a.employeeId === u.id);
+        return { ...u, attendance: att ? att.status : 'Absent' };
+      }),
+      attendance: unassigned.map(u => {
+        const att = attendances.find(a => a.employeeId === u.id);
+        return { ...u, attendance: att ? att.status : 'Absent' };
+      })
+    });
+  }
+
+  res.status(200).json({ success: true, data: hierarchyData });
+});

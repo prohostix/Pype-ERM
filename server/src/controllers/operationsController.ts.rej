@@ -1,0 +1,10 @@
+@@ -533,3 +533,9 @@
+     res.status(400).json({ success: false, message: 'Please provide programId or programIds' });
+   }
+ });
++
++export const updateCenterOpsSubAdmin = asyncHandler(async (req: AuthRequest, res: Response) => {
++  const { opsSubAdminId } = req.body;
++  await prisma.programAllocation.updateMany({ where: { centerId: req.params.id }, data: { opsSubAdminId: opsSubAdminId || null } });
++  res.json({ success: true, message: 'Assigned Ops Sub-Admin updated' });
++});

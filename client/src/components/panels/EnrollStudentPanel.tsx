@@ -9,9 +9,12 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface University {
+  id: string;
   name: string;
+  enrollmentFormConfig?: any;
 }
 
 interface FeeStructure {
@@ -43,7 +46,7 @@ type FeeOption = {
   totalAmount: number;
 };
 
-export function EnrollStudentPanel() {
+export function EnrollStudentPanel({ triggerOpen, onOpenChange, completingEnrollment }: { triggerOpen?: boolean; onOpenChange?: (open: boolean) => void; completingEnrollment?: any } = {}) {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -55,8 +58,10 @@ export function EnrollStudentPanel() {
     dob: '', altPhone: '', pinCode: '', gender: '', religion: '', caste: '',
     fatherName: '', fatherPhone: '', motherName: '', motherPhone: '',
     photo: '', documents: [] as any[],
-    initialPaymentAmount: '', initialPaymentDate: '', receiptUrl: ''
+    initialPaymentAmount: '', initialPaymentDate: '', receiptUrl: '',
+    sessionId: '', enrollmentNo: '', admissionDate: '', isPrevious: false
   });
+  const [sessions, setSessions] = useState<any[]>([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [customOtherName, setCustomOtherName] = useState<string>('');
 
@@ -64,10 +69,12 @@ export function EnrollStudentPanel() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [progsRes] = await Promise.all([
-        api.get('/enrollment/programs')
+      const [progsRes, sessionsRes] = await Promise.all([
+        api.get('/enrollment/programs'),
+        api.get('/operations/sessions')
       ]);
       setPrograms(progsRes.data.data || []);
+      setSessions(sessionsRes.data.data || []);
     } catch (e: any) {
       toast.error(e.response?.data?.message || 'Failed to load');
     } finally {
@@ -77,10 +84,56 @@ export function EnrollStudentPanel() {
 
   useEffect(() => { fetchData(); }, []);
 
+  useEffect(() => {
+    if (triggerOpen !== undefined && triggerOpen && completingEnrollment) {
+      const student = completingEnrollment.student || {};
+      setForm(prev => ({
+        ...prev,
+        studentName: completingEnrollment.studentName || student.name || '',
+        studentEmail: completingEnrollment.studentEmail || student.email || '',
+        studentPhone: completingEnrollment.studentPhone || student.phone || '',
+        studentAddress: completingEnrollment.studentAddress !== 'To be filled' && completingEnrollment.studentAddress ? completingEnrollment.studentAddress : (student.address || ''),
+        specialisation: completingEnrollment.specialisation || student.specialisation || '',
+        dob: completingEnrollment.dob ? new Date(completingEnrollment.dob).toISOString().split('T')[0] : (student.dob ? new Date(student.dob).toISOString().split('T')[0] : ''),
+        altPhone: student.altPhone || '',
+        pinCode: student.pinCode || '',
+        gender: student.gender || '',
+        religion: student.religion || '',
+        caste: student.caste || '',
+        fatherName: completingEnrollment.fatherName || student.fatherName || '',
+        fatherPhone: student.fatherPhone || '',
+        motherName: student.motherName || '',
+        motherPhone: student.motherPhone || '',
+        photo: student.photo || completingEnrollment.photo || '',
+        documents: (student.documents?.length ? student.documents : completingEnrollment.documents) || [],
+        initialPaymentAmount: completingEnrollment.initialPaymentAmount?.toString() || (student.admissionProgress as any)?.initialPaymentAmount || '',
+        initialPaymentDate: completingEnrollment.initialPaymentDate ? new Date(completingEnrollment.initialPaymentDate).toISOString().split('T')[0] : ((student.admissionProgress as any)?.initialPaymentDate ? new Date((student.admissionProgress as any).initialPaymentDate).toISOString().split('T')[0] : ''),
+        receiptUrl: completingEnrollment.receiptUrl || student.receiptUrl || '',
+      }));
+    }
+  }, [triggerOpen, completingEnrollment]);
+
+  useEffect(() => {
+    if (completingEnrollment && programs.length > 0) {
+      const p = programs.find((x: any) => x.id === (completingEnrollment.programId || completingEnrollment.student?.programId));
+      if (p && !selectedProgram) {
+        setSelectedProgram(p);
+        setSelectedUniversityId(p.university?.id || 'all');
+        if (completingEnrollment.paymentPlan || completingEnrollment.student?.paymentPlan) {
+          setSelectedFeeModeId(completingEnrollment.paymentPlan || completingEnrollment.student?.paymentPlan);
+        } else {
+          // Fallback just in case
+          setSelectedFeeModeId('full');
+        }
+        setCurrentStep(3); // Jump to fill details
+      }
+    }
+  }, [completingEnrollment, programs, selectedProgram]);
+
   const getFeeOptions = (p: Program): FeeOption[] => {
     if (!p.feeStructures || p.feeStructures.length === 0) return [];
     
-    let studentSessionId: string | null = null;
+    let studentSessionId: string | null = form.sessionId || null;
     let studentSpecialisation: string | null = form.specialisation || null;
 
     let fs = p.feeStructures.find(f => {
@@ -172,22 +225,72 @@ export function EnrollStudentPanel() {
     return opts[0].totalAmount;
   };
 
+  const getEnrollmentConfig = () => {
+    const defaultConf = { requiredFields: ['email', 'dob', 'address', 'pinCode', 'fatherName', 'photo'], requiredDocuments: ['Aadhaar Card', 'SSLC Certificate', 'Plus Two Certificate'] };
+    if (!selectedProgram || !selectedProgram.university || !selectedProgram.university.enrollmentFormConfig) return defaultConf;
+    const conf = typeof selectedProgram.university.enrollmentFormConfig === 'string'
+      ? JSON.parse(selectedProgram.university.enrollmentFormConfig)
+      : selectedProgram.university.enrollmentFormConfig;
+    return {
+      requiredFields: conf.requiredFields || defaultConf.requiredFields,
+      requiredDocuments: conf.requiredDocuments || defaultConf.requiredDocuments
+    };
+  };
+
+  const isFieldReq = (f: string) => {
+    if (['name', 'phone'].includes(f)) return true;
+    return getEnrollmentConfig().requiredFields.includes(f);
+  };
+
+  const isDocReq = (d: string) => {
+    return getEnrollmentConfig().requiredDocuments.some((req: string) => req.toLowerCase() === d.toLowerCase());
+  };
+
   const handleEnroll = async () => {
     if (!selectedProgram) return;
-    const requiredFields = [
-      'studentName', 'studentEmail', 'studentPhone', 'studentAddress', 
-      'dob', 'gender', 'religion', 'caste', 'fatherName', 'fatherPhone', 
-      'motherName', 'motherPhone'
-    ];
+
+    // Map UI field names to config field names (which match StudentsPanel config)
+    const fieldMapping: Record<string, string> = {
+      'name': 'studentName',
+      'email': 'studentEmail',
+      'phone': 'studentPhone',
+      'dob': 'dob',
+      'address': 'studentAddress',
+      'pinCode': 'pinCode',
+      'fatherName': 'fatherName',
+      'photo': 'photo'
+    };
+
+    const requiredFields = ['name', 'phone']; // Always required
+    const configRequired = getEnrollmentConfig().requiredFields;
+    configRequired.forEach((f: string) => {
+      if (!requiredFields.includes(f)) requiredFields.push(f);
+    });
+
+    const missing = requiredFields.filter((f: string) => {
+      const stateKey = fieldMapping[f] || f;
+      return !(form as any)[stateKey]?.trim();
+    });
+
     if (selectedProgram.specialisations && selectedProgram.specialisations.length > 0) {
-      requiredFields.push('specialisation');
+      if (!form.specialisation?.trim()) {
+        missing.push('specialisation');
+      }
     }
-    const missing = requiredFields.filter(k => !(form as any)[k]?.trim());
     
     if (missing.length > 0) {
       toast.error(`Missing required fields: ${missing.join(', ')}`);
       return;
     }
+    
+    const requiredDocs = getEnrollmentConfig().requiredDocuments;
+    const uploadedDocTypes = form.documents.map((d: any) => d.type.toLowerCase());
+    const missingDocs = requiredDocs.filter((d: string) => !uploadedDocTypes.includes(d.toLowerCase()));
+    if (missingDocs.length > 0) {
+      toast.error(`Missing required documents: ${missingDocs.join(', ')}`);
+      return;
+    }
+    
     setSubmitting(true);
     try {
       const payload = {
@@ -210,21 +313,33 @@ export function EnrollStudentPanel() {
         specialisation: form.specialisation,
         programId: selectedProgram.id,
         universityId: selectedProgram.university?.id,
+        sessionId: form.sessionId || undefined,
+        enrollmentNo: form.enrollmentNo || undefined,
+        admissionDate: form.admissionDate || undefined,
+        isPrevious: form.isPrevious,
         paymentPlan: selectedFeeModeId,
         initialPaymentAmount: Number(form.initialPaymentAmount) || undefined,
         initialPaymentDate: form.initialPaymentDate || undefined,
         receiptUrl: form.receiptUrl || undefined,
         isPipelineApplication: true
       };
-      await api.post('/students', payload);
       
-      toast.success('Enrollment submitted successfully');
+      if (completingEnrollment) {
+        await api.put(`/enrollment/${completingEnrollment.id}/provisional-complete`, payload);
+        toast.success('Enrollment details updated successfully');
+        if (onOpenChange) onOpenChange(false);
+      } else {
+        await api.post('/students', payload);
+        toast.success('Enrollment submitted successfully');
+      }
+      
       setForm({ 
         studentName: '', studentEmail: '', studentPhone: '', studentAddress: '', specialisation: '',
         dob: '', altPhone: '', pinCode: '', gender: '', religion: '', caste: '',
         fatherName: '', fatherPhone: '', motherName: '', motherPhone: '',
         photo: '', documents: [],
-        initialPaymentAmount: '', initialPaymentDate: '', receiptUrl: ''
+        initialPaymentAmount: '', initialPaymentDate: '', receiptUrl: '',
+        sessionId: '', enrollmentNo: '', admissionDate: '', isPrevious: false
       });
       setSelectedProgram(null);
       setSelectedFeeModeId('');
@@ -240,10 +355,12 @@ export function EnrollStudentPanel() {
 
   const currentRequiredFee = selectedProgram ? getRequiredFee(selectedProgram, selectedFeeModeId) : 0;
 
-  return (
+  const content = (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between">
-        <div>
+      {!completingEnrollment && (
+        <>
+          <div className="flex items-center justify-between">
+            <div>
           <h2 className="text-2xl font-bold">Direct Enrollment</h2>
           <p className="text-muted-foreground text-sm mt-1">Select a university and program, then fill in student details to enroll.</p>
         </div>
@@ -281,6 +398,8 @@ export function EnrollStudentPanel() {
           </div>
         ))}
       </div>
+      </>
+      )}
 
       {/* Step 1: University Selection */}
       {currentStep === 1 && (
@@ -345,7 +464,7 @@ export function EnrollStudentPanel() {
 
       {/* Step 2: Program & Fee */}
       {currentStep === 2 && (
-      <div className="max-w-4xl mx-auto animate-in slide-in-from-right-8 duration-300">
+      <div className="w-full animate-in slide-in-from-right-8 duration-300">
         <div className="space-y-6">
           <Card className="border-none shadow-md h-full flex flex-col">
             <CardHeader className="border-b bg-muted/20 pb-4">
@@ -472,7 +591,7 @@ export function EnrollStudentPanel() {
 
       {/* Step 3: Student Details (Direct Enrollment Form style) */}
       {currentStep === 3 && (
-      <div className="max-w-5xl mx-auto animate-in slide-in-from-right-8 duration-300">
+      <div className="w-full animate-in slide-in-from-right-8 duration-300">
           <Card className="border-none shadow-md h-full">
             <CardHeader className="border-b bg-muted/20 pb-4">
               <div className="flex items-center justify-between">
@@ -498,26 +617,64 @@ export function EnrollStudentPanel() {
               </div>
 
               <div className={cn("transition-opacity duration-300", !selectedProgram ? "opacity-50 pointer-events-none" : "opacity-100")}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6 mb-8">
+                  <div className="col-span-1 sm:col-span-2 lg:col-span-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Admission Info</h4>
+                      <label className="flex items-center space-x-2 text-sm font-medium cursor-pointer">
+                        <input type="checkbox" className="rounded border-gray-300 text-primary focus:ring-primary" checked={form.isPrevious} onChange={e => setForm(f => ({ ...f, isPrevious: e.target.checked }))} />
+                        <span>Is Previous Student?</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label className="font-semibold text-sm">Session</Label>
+                    <Select value={form.sessionId} onValueChange={(val) => setForm(f => ({ ...f, sessionId: val }))}>
+                      <SelectTrigger className="h-12"><SelectValue placeholder="Select session (optional)..." /></SelectTrigger>
+                      <SelectContent>
+                        {sessions.map((s: any) => (
+                          <SelectItem key={s.id} value={s.id}>{s.name} ({s.year}) - {s.university?.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label className="font-semibold text-sm">Enrollment No.</Label>
+                    <Input className="h-12" value={form.enrollmentNo} onChange={e => setForm(f => ({ ...f, enrollmentNo: e.target.value }))} placeholder="Optional (if assigned)" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label className="font-semibold text-sm">Admission Date</Label>
+                    <Input className="h-12" type="date" value={form.admissionDate} onChange={e => setForm(f => ({ ...f, admissionDate: e.target.value }))} />
+                  </div>
+                </div>
+
+                <div className="col-span-1 sm:col-span-2 lg:col-span-3 mt-8 mb-2">
+                  <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Personal Details</h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
                   <div className="space-y-2 sm:col-span-2">
-                    <Label className="font-semibold text-sm">Full Name *</Label>
+                    <Label className="font-semibold text-sm">Full Name{isFieldReq('name') ? ' *' : ''}</Label>
                     <Input className="h-12" value={form.studentName} onChange={e => setForm(f => ({ ...f, studentName: e.target.value }))} placeholder="e.g. John Doe" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-semibold text-sm">Email *</Label>
+                    <Label className="font-semibold text-sm">Email{isFieldReq('email') ? ' *' : ''}</Label>
                     <Input className="h-12" type="email" value={form.studentEmail} onChange={e => setForm(f => ({ ...f, studentEmail: e.target.value }))} placeholder="john.doe@example.com" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-semibold text-sm">Phone Number *</Label>
+                    <Label className="font-semibold text-sm">Phone Number{isFieldReq('phone') ? ' *' : ''}</Label>
                     <Input className="h-12" value={form.studentPhone} onChange={e => setForm(f => ({ ...f, studentPhone: e.target.value }))} placeholder="+91 9876543210" />
                   </div>
                   
                   <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Date of Birth *</Label>
+                        <Label className="font-semibold text-sm">Date of Birth{isFieldReq('dob') ? ' *' : ''}</Label>
                         <Input className="h-12" type="date" value={form.dob} onChange={e => setForm(f => ({ ...f, dob: e.target.value }))} />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Gender *</Label>
+                        <Label className="font-semibold text-sm">Gender{isFieldReq('gender') ? ' *' : ''}</Label>
                         <Select value={form.gender} onValueChange={(val) => setForm(f => ({ ...f, gender: val }))}>
                           <SelectTrigger className="h-12"><SelectValue placeholder="Select gender..." /></SelectTrigger>
                           <SelectContent>
@@ -528,15 +685,15 @@ export function EnrollStudentPanel() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Alternate Phone</Label>
+                        <Label className="font-semibold text-sm">Alternate Phone{isFieldReq('altPhone') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.altPhone} onChange={e => setForm(f => ({ ...f, altPhone: e.target.value }))} placeholder="Optional" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Religion *</Label>
+                        <Label className="font-semibold text-sm">Religion{isFieldReq('religion') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.religion} onChange={e => setForm(f => ({ ...f, religion: e.target.value }))} placeholder="e.g. Hindu, Muslim, Christian" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Caste / Category *</Label>
+                        <Label className="font-semibold text-sm">Caste / Category{isFieldReq('caste') ? ' *' : ''}</Label>
                         <Select value={form.caste} onValueChange={(val) => setForm(f => ({ ...f, caste: val }))}>
                           <SelectTrigger className="h-12"><SelectValue placeholder="Select Category..." /></SelectTrigger>
                           <SelectContent>
@@ -570,19 +727,19 @@ export function EnrollStudentPanel() {
                         <h4 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Family Details</h4>
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Father's Name *</Label>
+                        <Label className="font-semibold text-sm">Father's Name{isFieldReq('fatherName') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.fatherName} onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))} placeholder="Father's full name" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Father's Phone *</Label>
+                        <Label className="font-semibold text-sm">Father's Phone{isFieldReq('fatherPhone') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.fatherPhone} onChange={e => setForm(f => ({ ...f, fatherPhone: e.target.value }))} placeholder="Father's phone number" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Mother's Name *</Label>
+                        <Label className="font-semibold text-sm">Mother's Name{isFieldReq('motherName') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.motherName} onChange={e => setForm(f => ({ ...f, motherName: e.target.value }))} placeholder="Mother's full name" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="font-semibold text-sm">Mother's Phone *</Label>
+                        <Label className="font-semibold text-sm">Mother's Phone{isFieldReq('motherPhone') ? ' *' : ''}</Label>
                         <Input className="h-12" value={form.motherPhone} onChange={e => setForm(f => ({ ...f, motherPhone: e.target.value }))} placeholder="Mother's phone number" />
                       </div>
                       
@@ -591,20 +748,22 @@ export function EnrollStudentPanel() {
                       </div>
 
                   <div className="space-y-2 sm:col-span-2 lg:col-span-2">
-                    <Label className="font-semibold text-sm">Full Address *</Label>
+                    <Label className="font-semibold text-sm">Full Address{isFieldReq('address') ? ' *' : ''}</Label>
                     <Input className="h-12" value={form.studentAddress} onChange={e => setForm(f => ({ ...f, studentAddress: e.target.value }))} placeholder="Street, City, State" />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label className="font-semibold text-sm">PIN Code</Label>
+                    <Label className="font-semibold text-sm">PIN Code{isFieldReq('pinCode') ? ' *' : ''}</Label>
                     <Input className="h-12" value={form.pinCode} onChange={e => setForm(f => ({ ...f, pinCode: e.target.value }))} placeholder="e.g. 110001" />
                   </div>
                 </div>
 
                 <div className="sticky bottom-0 bg-card pt-4 pb-2 border-t mt-8 flex items-center justify-between gap-4 z-10">
-                  <Button variant="outline" size="lg" onClick={() => setCurrentStep(2)}>
-                    Back
-                  </Button>
+                  {!completingEnrollment && (
+                    <Button variant="outline" size="lg" onClick={() => setCurrentStep(2)}>
+                      Back
+                    </Button>
+                  )}
                   <Button
                     size="lg"
                     className="flex-1 h-14 text-lg font-bold shadow-xl hover:-translate-y-0.5 transition-all bg-gradient-to-r from-primary to-blue-600 text-white"
@@ -621,7 +780,7 @@ export function EnrollStudentPanel() {
 
       {/* Step 4: Documents & Photo */}
       {currentStep === 4 && (
-        <div className="max-w-5xl mx-auto animate-in slide-in-from-right-8 duration-300">
+        <div className="w-full animate-in slide-in-from-right-8 duration-300">
           <Card className="border-none shadow-md h-full">
             <CardHeader className="border-b bg-muted/20 pb-4">
               <div className="flex items-center gap-2">
@@ -636,7 +795,7 @@ export function EnrollStudentPanel() {
               {/* Photo Upload */}
               <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-900/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo *</Label>
+                  <Label className="font-semibold text-slate-800 dark:text-slate-200">Student Photo{isFieldReq('photo') ? ' *' : ''}</Label>
                   <p className="text-xs text-muted-foreground mt-1">Clear, passport-sized photograph of the student.</p>
                   {form.photo && (
                     <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-2 truncate">
@@ -684,6 +843,11 @@ export function EnrollStudentPanel() {
                     {form.photo ? 'Change Photo' : 'Upload Photo'}
                   </Label>
                 </div>
+                {completingEnrollment?.student?.admissionProgress?.photoStatus === 'rejected' && form.photo === completingEnrollment?.student?.photo && (
+                  <p className="text-xs text-red-600 mt-2 font-medium bg-red-50 p-2 rounded inline-block border border-red-100">
+                    Photo was rejected. Please re-upload a clearer image.
+                  </p>
+                )}
               </div>
 
               {/* Documents Upload */}
@@ -699,7 +863,9 @@ export function EnrollStudentPanel() {
                     <div key={docType} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-xl border bg-slate-50 dark:bg-slate-900/10 gap-4">
                       <div className="flex-1 min-w-0 w-full">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{docType}</span>
+                          <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                            {docType}{isDocReq(docType) ? ' *' : ''}
+                          </span>
                         </div>
                         {docType === 'Other' && (
                            <Input 
@@ -709,9 +875,14 @@ export function EnrollStudentPanel() {
                              onChange={(e) => setCustomOtherName(e.target.value)} 
                            />
                         )}
-                        {existing?.url && (
+                        {existing?.url && existing?.status !== 'rejected' && (
                           <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 truncate">
                             ✓ Uploaded: {existing.url.split('/').pop()}
+                          </div>
+                        )}
+                        {existing?.status === 'rejected' && (
+                          <div className="text-xs text-red-600 font-medium mt-1 truncate bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
+                            ✕ Rejected: Please re-upload
                           </div>
                         )}
                       </div>
@@ -828,14 +999,16 @@ export function EnrollStudentPanel() {
               </div>
 
               <div className="sticky bottom-0 bg-card pt-4 pb-2 border-t mt-8 flex items-center justify-between gap-4 z-10">
-                <Button variant="outline" size="lg" onClick={() => setCurrentStep(3)}>
-                  Back
-                </Button>
+                {!completingEnrollment && (
+                  <Button variant="outline" size="lg" onClick={() => setCurrentStep(3)}>
+                    Back
+                  </Button>
+                )}
                 <Button
                   size="lg"
                   className="flex-1 h-14 text-lg font-bold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all bg-gradient-to-r from-primary to-blue-600"
                   onClick={handleEnroll}
-                  disabled={!selectedProgram || !selectedFeeModeId || submitting}
+                  disabled={(!selectedProgram || (!selectedFeeModeId && !completingEnrollment)) || submitting}
                 >
                   {submitting ? (
                     <><RefreshCw className="w-5 h-5 mr-3 animate-spin" /> Processing Enrollment...</>
@@ -850,4 +1023,19 @@ export function EnrollStudentPanel() {
       )}
     </div>
   );
+
+  if (triggerOpen !== undefined) {
+    return (
+      <Dialog open={triggerOpen} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-7xl w-[95vw] p-6 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl">
+          <DialogHeader>
+            <DialogTitle>{completingEnrollment ? 'Update Student Enrollment' : 'Direct Enrollment'}</DialogTitle>
+          </DialogHeader>
+          {content}
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return content;
 }

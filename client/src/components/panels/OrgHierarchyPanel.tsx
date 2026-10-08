@@ -41,14 +41,14 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 // ─── OrgNode ──────────────────────────────────────────────────────────────────
-function OrgNode({
+export function OrgNode({
   node, allNodes, allUsers, allDepts,
-  onEdit, onDelete, onAssign, onUnassign, onAddChild, depth = 0,
+  onEdit, onDelete, onAssign, onUnassign, onAddChild, depth = 0, isReadOnly = false
 }: {
   node: DesignationNode; allNodes: DesignationNode[]; allUsers: OrgUser[]; allDepts: Dept[];
-  onEdit: (n: DesignationNode) => void; onDelete: (n: DesignationNode) => void;
-  onAssign: (n: DesignationNode) => void; onUnassign: (n: DesignationNode, userId: string) => void;
-  onAddChild: (parent: DesignationNode) => void; depth?: number;
+  onEdit?: (n: DesignationNode) => void; onDelete?: (n: DesignationNode) => void;
+  onAssign?: (n: DesignationNode) => void; onUnassign?: (n: DesignationNode, userId: string) => void;
+  onAddChild?: (parent: DesignationNode) => void; depth?: number; isReadOnly?: boolean;
 }) {
   const [expanded, setExpanded] = useState(true);
   const children = allNodes.filter(n => {
@@ -116,37 +116,47 @@ function OrgNode({
                     {u.name.charAt(0)}
                   </div>
                   <span className="text-xs text-gray-700 truncate flex-1">{u.name}</span>
-                  <button onClick={() => onUnassign(node, u.id)}
-                    className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Trash2 className="h-3 w-3" />
-                  </button>
+                  {!isReadOnly && (
+                    <button onClick={() => onUnassign?.(node, u.id)}
+                      className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
           )}
 
-          {vacant > 0 && (
-            <button onClick={() => onAssign(node)}
+          {vacant > 0 && !isReadOnly && (
+            <button onClick={() => onAssign?.(node)}
               className="mt-2 w-full flex items-center justify-center gap-1 text-xs border border-dashed rounded-lg py-1 text-gray-400 hover:text-indigo-600 hover:border-indigo-400 transition-colors">
               <UserPlus className="h-3 w-3" />
               {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
             </button>
           )}
+          {vacant > 0 && isReadOnly && (
+            <div className="mt-2 w-full flex items-center justify-center gap-1 text-xs border border-dashed rounded-lg py-1 text-gray-400">
+              <UserPlus className="h-3 w-3" />
+              {vacant} vacant {vacant === 1 ? 'slot' : 'slots'}
+            </div>
+          )}
 
-          <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={() => onEdit(node)}
-              className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-indigo-50">
-              <Edit2 className="h-3 w-3 text-indigo-600" />
-            </button>
-            <button onClick={() => onAddChild(node)}
-              className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-green-50">
-              <Plus className="h-3 w-3 text-green-600" />
-            </button>
-            <button onClick={() => onDelete(node)}
-              className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-red-50">
-              <Trash2 className="h-3 w-3 text-red-500" />
-            </button>
-          </div>
+          {!isReadOnly && (
+            <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onClick={() => onEdit?.(node)}
+                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-indigo-50">
+                <Edit2 className="h-3 w-3 text-indigo-600" />
+              </button>
+              <button onClick={() => onAddChild?.(node)}
+                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-green-50">
+                <Plus className="h-3 w-3 text-green-600" />
+              </button>
+              <button onClick={() => onDelete?.(node)}
+                className="w-6 h-6 bg-white border rounded-full shadow flex items-center justify-center hover:bg-red-50">
+                <Trash2 className="h-3 w-3 text-red-500" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -222,11 +232,24 @@ function BranchSection({
 }) {
   const [expanded, setExpanded] = useState(true);
 
-  // Designation nodes scoped to this branch with no parent = roots of branch subtree
+  // Designation nodes scoped to this branch whose parent is outside the branch (or has no parent)
   const branchRoots = allNodes.filter(n => {
-    const bId = typeof n.branchId === 'object' ? (n.branchId as any)?.id : n.branchId;
-    const hasParent = typeof n.parentDesignationId === 'object' ? !!(n.parentDesignationId as any)?.id : !!n.parentDesignationId;
-    return bId === branch.id && !hasParent;
+    let bId = typeof n.branchId === 'object' ? (n.branchId as any)?.id : n.branchId;
+    if (!bId && n.allowedBranchIds && n.allowedBranchIds.length > 0) {
+      bId = n.allowedBranchIds[0];
+    }
+    if (bId !== branch.id) return false;
+
+    const pId = typeof n.parentDesignationId === 'object' ? (n.parentDesignationId as any)?.id : n.parentDesignationId;
+    if (!pId) return true;
+
+    const parentNode = allNodes.find(p => p.id === pId);
+    let parentBId = parentNode ? (typeof parentNode.branchId === 'object' ? (parentNode.branchId as any)?.id : parentNode.branchId) : null;
+    if (parentNode && !parentBId && parentNode.allowedBranchIds && parentNode.allowedBranchIds.length > 0) {
+      parentBId = parentNode.allowedBranchIds[0];
+    }
+    
+    return parentBId !== branch.id;
   });
 
   // Branch manager controls Sales and Operations only — Finance and HR are org-wide
@@ -465,7 +488,7 @@ export function OrgHierarchyPanel() {
       branchId: node.branch?.id || node.branchId || '',
       level: String(node.level),
       maxHeadcount: String(node.maxHeadcount),
-      parentDesignationId: node.parentDesignationId?.id || '',
+      parentDesignationId: (typeof node.parentDesignationId === 'object' ? (node.parentDesignationId as any)?.id : node.parentDesignationId) || '',
       allowedDeptIds: node.allowedDeptIds || [],
       allowedBranchIds: node.allowedBranchIds || [],
     });
@@ -552,7 +575,10 @@ export function OrgHierarchyPanel() {
   // Global (non-branch) root nodes
   const globalRoots = nodes.filter(n => {
     const hasParent = typeof n.parentDesignationId === 'object' ? !!(n.parentDesignationId as any)?.id : !!n.parentDesignationId;
-    const hasBranch = typeof n.branchId === 'object' ? !!(n.branchId as any)?.id : !!n.branchId;
+    let hasBranch = typeof n.branchId === 'object' ? !!(n.branchId as any)?.id : !!n.branchId;
+    if (!hasBranch && n.allowedBranchIds && n.allowedBranchIds.length > 0) {
+      hasBranch = true;
+    }
     return !hasParent && !hasBranch;
   });
   const assignedUserIds = new Set(nodes.flatMap(n => (n.filledBy || []).map(u => u.id)));

@@ -30,6 +30,8 @@ interface Department {
   type: string;
   organizationId?: any;
   managerId?: any;
+  organization?: any;
+  manager?: any;
   features?: string[];
   createdAt: string;
 }
@@ -222,7 +224,7 @@ export function DepartmentsPanel() {
                   <div className="flex items-center gap-3 text-muted-foreground bg-muted/30 p-2 rounded-xl">
                     <div className="p-1 bg-background rounded-md shadow-sm border border-border/50"><Building className="w-3.5 h-3.5 text-foreground/70" /></div>
                     <span className="font-medium truncate text-xs">
-                      {dept.organizationId.name || 'N/A'}
+                      {dept.organization?.name || 'N/A'}
                     </span>
                   </div>
                 )}
@@ -230,7 +232,7 @@ export function DepartmentsPanel() {
                   <div className="flex items-center gap-3 text-muted-foreground bg-muted/30 p-2 rounded-xl">
                     <div className="p-1 bg-background rounded-md shadow-sm border border-border/50"><Users className="w-3.5 h-3.5 text-foreground/70" /></div>
                     <span className="text-xs font-medium truncate">
-                      Manager: <span className="text-foreground">{dept.managerId.name || 'Assigned'}</span>
+                      Manager: <span className="text-foreground">{dept.manager?.name || 'Assigned'}</span>
                     </span>
                   </div>
                 )}

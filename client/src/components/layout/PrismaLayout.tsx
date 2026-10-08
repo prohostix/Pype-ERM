@@ -132,7 +132,7 @@ export function PrismaLayout({
       case 'program_fees':
       case 'fees':
       case 'fee_structures':
-      case 'enrollment_review':
+      case 'admission_review':
       case 'bill_receipts':
       case 'committed_payments':
       case 'discounts':
@@ -245,17 +245,28 @@ export function PrismaLayout({
         isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
       )}>
 
-        <div className="h-[72px] flex items-center px-6 gap-4 relative z-10">
-          <div className="flex items-center justify-center flex-shrink-0">
-            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-8 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+        <div className="h-[80px] flex items-center px-5 gap-3 relative z-10 border-b border-white/5">
+          {/* Platform Branding */}
+          <div className="flex flex-col items-center justify-center flex-shrink-0 min-w-[50px]">
+            <img src="/pype-logo.png" alt="Pype ERM Logo" className="h-10 w-auto opacity-90" style={{ filter: 'brightness(0) invert(1)' }} />
+            {/* <span className="text-[8px] font-black tracking-[0.15em] text-slate-400 mt-1 uppercase">Pype ERM</span> */}
           </div>
-          <div className="flex flex-col overflow-hidden">
-            <span className="font-bold text-sm tracking-tight text-slate-100 truncate" title="PYPE ERM">
-              PYPE ERM
-            </span>
-            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest truncate">
-              Workspace
-            </span>
+
+          {/* Divider */}
+          <div className="w-px h-10 bg-white/10 shrink-0" />
+
+          {/* Organization Branding */}
+          <div className="flex flex-col overflow-hidden justify-center flex-1 pl-1">
+            {user?.organization?.logo ? (
+              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="max-h-10 w-auto object-contain drop-shadow-sm self-start" />
+            ) : (
+              <div className="flex flex-col">
+                <span className="text-[9px] text-slate-400 uppercase font-bold tracking-widest truncate mb-0.5">Workspace</span>
+                <span className="font-bold text-[13px] leading-tight tracking-tight text-slate-100 truncate" title={user?.organization?.name || "Organization"}>
+                  {user?.organization?.name || "Organization"}
+                </span>
+              </div>
+            )}
           </div>
           {/* Mobile Close Button */}
           <Button
@@ -311,7 +322,7 @@ export function PrismaLayout({
                 )} style={{ fill: isActive ? 'hsl(var(--background))' : 'rgba(255,255,255,0.1)' }} viewBox="0 0 20 20">
                   <path d="M 0 20 A 20 20 0 0 0 20 0 L 20 20 Z" />
                 </svg>
-                
+
                 <div className={cn(
                   "p-1.5 rounded-lg transition-all duration-300 shrink-0",
                   isActive
@@ -365,7 +376,7 @@ export function PrismaLayout({
       <main className="flex-1 flex flex-col overflow-hidden relative min-w-0 bg-muted/20">
         <header className="h-14 sm:h-[72px] flex items-center px-4 lg:px-8 gap-3 sm:gap-4 bg-background/60 backdrop-blur-xl border-b border-border/40 sticky top-0 z-20 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-          
+
           <Button
             variant="ghost"
             size="icon"
@@ -392,12 +403,6 @@ export function PrismaLayout({
               <span className="text-lg font-bold text-foreground tracking-tight leading-none truncate">{activeTableItem?.label}</span>
               <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest mt-1 hidden sm:block">Current Module</span>
             </div>
-          </div>
-
-          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center justify-center pointer-events-none">
-            {user?.organization?.logo && (
-              <img src={api.getFileUrl(user.organization.logo)} alt={user.organization.name || "Organization Logo"} className="max-h-12 w-auto max-w-[180px] object-contain drop-shadow-sm opacity-90" />
-            )}
           </div>
 
           <div className="ml-auto flex items-center gap-3 sm:gap-4">

@@ -643,6 +643,7 @@ export function HRUsersPanel() {
                       <SelectItem value="collections_admin">Collections Admin</SelectItem>
                       {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                       <SelectItem value="general_manager">General Manager</SelectItem>
+                      <SelectItem value="branch_manager">Branch Manager</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1224,6 +1225,7 @@ export function HRUsersPanel() {
                   <SelectItem value="collections_admin">Collections Admin</SelectItem>
                   {isOrgAdmin && <SelectItem value="center_admin">Center Admin</SelectItem>}
                   <SelectItem value="general_manager">General Manager</SelectItem>
+                  <SelectItem value="branch_manager">Branch Manager</SelectItem>
                 </SelectContent>
               </Select>
             </div>

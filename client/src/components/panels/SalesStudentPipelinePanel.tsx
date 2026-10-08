@@ -51,6 +51,7 @@ interface Summary {
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
+  receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: <Clock className="w-3 h-3" /> },
   provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
   provisional_finance_verified: { label: 'Prov. Fin. Verified', color: 'bg-green-100 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   document_review: { label: 'Ops Review', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
@@ -318,7 +319,7 @@ export function SalesStudentPipelinePanel() {
                         const photoStatus = e.student?.admissionProgress?.photoStatus;
                         const hasRejected = docs.some((d: any) => d && d.status === 'rejected') || photoStatus === 'rejected';
 
-                        if (e.status === 'sales_verification_pending' || ((e.status === 'document_review' || e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected) || e.status === 'provisional_finance_verified') {
+                        if (e.status === 'sales_verification_pending' || ((e.status === 'rejected' || e.status === 'ops_rejected') && hasRejected) || e.status === 'provisional_finance_verified') {
                           return (
                             <div className="mt-4">
                               <Button variant="default" size="sm" className={cn("bg-purple-600 hover:bg-purple-700", hasRejected && "bg-rose-600 hover:bg-rose-700")} onClick={(evt) => {
