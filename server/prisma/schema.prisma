@@ -1967,6 +1967,7 @@ model Faculty {
   email          String
   phone          String?
   password       String?
+  avatar         String?
   specialization String?
 
   status                   String                  @default("active")

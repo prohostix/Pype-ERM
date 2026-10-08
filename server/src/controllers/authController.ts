@@ -234,21 +234,27 @@ export const login = asyncHandler(async (req: AuthRequest, res: Response) => {
 // @access  Private
 export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
 
-  let user = await prisma.user.findUnique({
+  let user: any = await prisma.user.findUnique({
     where: { id: req.user.id },
     select: {
       id: true,
+      userId: true,
       name: true,
       email: true,
+      phone: true,
       role: true,
+      status: true,
       avatar: true,
       designation: true,
+      lastLogin: true,
       organizationId: true,
       departmentId: true,
       subDepartmentId: true,
       branchId: true,
       studyCenterId: true,
       ceoPanelId: true,
+      department: { select: { id: true, name: true, type: true } },
+      subDepartment: { select: { id: true, name: true } },
       employeeProfileDetail: { select: { joinDate: true, probationEndDate: true } },
       organization: true,
     }
@@ -256,16 +262,22 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
 
   if (!user) {
     const faculty = await prisma.faculty.findUnique({
-      where: { id: req.user.id }
+      where: { id: req.user.id },
+      include: { organization: true }
     });
     if (faculty) {
       user = {
         id: faculty.id,
         name: faculty.name,
         email: faculty.email,
+        phone: faculty.phone,
         role: 'faculty',
+        status: faculty.status,
+        avatar: faculty.avatar,
+        designation: faculty.specialization,
         organizationId: faculty.organizationId,
-      } as any;
+        organization: faculty.organization,
+      };
     }
   }
 
@@ -288,17 +300,91 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
 // @desc    Update user details
 // @route   PUT /api/v1/auth/updatedetails
 // @access  Private
-export const updateDetails = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const { name, email, phone } = req.body;
+// Profile pictures are uploaded through POST /auth/upload first, which answers
+// with `/uploads/<key>`; only that kind of value (or an https link) is accepted.
+const AVATAR_PATH = /^\/uploads\/[A-Za-z0-9._-]+$/;
+const isValidAvatar = (v: string) => AVATAR_PATH.test(v) || /^https:\/\/[^\s]+$/i.test(v);
 
-  const user = await prisma.user.update({
-    where: { id: req.user.id },
-    data: { name, email, phone }
-  });
+export const updateDetails = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { name, email, phone, avatar } = req.body;
+  const isFaculty = req.user.role === 'faculty';
+
+  const data: Record<string, any> = {};
+
+  if (name !== undefined) {
+    const trimmed = typeof name === 'string' ? name.trim() : '';
+    if (!trimmed) {
+      res.status(400).json({ success: false, message: 'Name cannot be empty' });
+      return;
+    }
+    data.name = trimmed;
+  }
+
+  if (phone !== undefined) {
+    if (phone !== null && typeof phone !== 'string') {
+      res.status(400).json({ success: false, message: 'Invalid phone number' });
+      return;
+    }
+    data.phone = phone ? phone.trim() : null;
+  }
+
+  // Faculty sign in with their email, so only staff accounts may change it here.
+  if (email !== undefined && !isFaculty) {
+    const normalized = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!normalized || !normalized.includes('@')) {
+      res.status(400).json({ success: false, message: 'Enter a valid email address' });
+      return;
+    }
+    const clash = await prisma.user.findFirst({
+      where: { email: { equals: normalized, mode: 'insensitive' }, NOT: { id: req.user.id } },
+      select: { id: true },
+    });
+    if (clash) {
+      res.status(409).json({ success: false, message: 'That email is already in use' });
+      return;
+    }
+    data.email = normalized;
+  }
+
+  if (avatar !== undefined) {
+    if (avatar === null || avatar === '') {
+      data.avatar = null; // remove the picture
+    } else if (typeof avatar === 'string' && isValidAvatar(avatar)) {
+      data.avatar = avatar;
+    } else {
+      res.status(400).json({ success: false, message: 'Invalid profile picture' });
+      return;
+    }
+  }
+
+  if (Object.keys(data).length === 0) {
+    res.status(400).json({ success: false, message: 'Nothing to update' });
+    return;
+  }
+
+  let updated: any;
+  if (isFaculty) {
+    updated = await prisma.faculty.update({
+      where: { id: req.user.id },
+      data,
+      select: { id: true, name: true, email: true, phone: true, avatar: true, status: true, organizationId: true },
+    });
+    updated = { ...updated, role: 'faculty' };
+  } else {
+    updated = await prisma.user.update({
+      where: { id: req.user.id },
+      data,
+      // Never send the password hash back.
+      select: {
+        id: true, userId: true, name: true, email: true, phone: true, role: true,
+        status: true, avatar: true, designation: true, organizationId: true,
+      },
+    });
+  }
 
   res.status(200).json({
     success: true,
-    data: user,
+    data: updated,
   });
 });
 

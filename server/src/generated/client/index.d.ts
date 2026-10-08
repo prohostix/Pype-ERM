@@ -102398,6 +102398,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     password: string | null
+    avatar: string | null
     specialization: string | null
     status: string | null
     organizationId: string | null
@@ -102411,6 +102412,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     password: string | null
+    avatar: string | null
     specialization: string | null
     status: string | null
     organizationId: string | null
@@ -102424,6 +102426,7 @@ export namespace Prisma {
     email: number
     phone: number
     password: number
+    avatar: number
     specialization: number
     status: number
     organizationId: number
@@ -102439,6 +102442,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     password?: true
+    avatar?: true
     specialization?: true
     status?: true
     organizationId?: true
@@ -102452,6 +102456,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     password?: true
+    avatar?: true
     specialization?: true
     status?: true
     organizationId?: true
@@ -102465,6 +102470,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     password?: true
+    avatar?: true
     specialization?: true
     status?: true
     organizationId?: true
@@ -102551,6 +102557,7 @@ export namespace Prisma {
     email: string
     phone: string | null
     password: string | null
+    avatar: string | null
     specialization: string | null
     status: string
     organizationId: string
@@ -102581,6 +102588,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     password?: boolean
+    avatar?: boolean
     specialization?: boolean
     status?: boolean
     organizationId?: boolean
@@ -102607,6 +102615,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     password?: boolean
+    avatar?: boolean
     specialization?: boolean
     status?: boolean
     organizationId?: boolean
@@ -102621,6 +102630,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     password?: boolean
+    avatar?: boolean
     specialization?: boolean
     status?: boolean
     organizationId?: boolean
@@ -102635,6 +102645,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     password?: boolean
+    avatar?: boolean
     specialization?: boolean
     status?: boolean
     organizationId?: boolean
@@ -102642,7 +102653,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FacultyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "specialization" | "status" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["faculty"]>
+  export type FacultyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "avatar" | "specialization" | "status" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["faculty"]>
   export type FacultyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     inchargedClasses?: boolean | Faculty$inchargedClassesArgs<ExtArgs>
@@ -102687,6 +102698,7 @@ export namespace Prisma {
       email: string
       phone: string | null
       password: string | null
+      avatar: string | null
       specialization: string | null
       status: string
       organizationId: string
@@ -103132,6 +103144,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Faculty", 'String'>
     readonly phone: FieldRef<"Faculty", 'String'>
     readonly password: FieldRef<"Faculty", 'String'>
+    readonly avatar: FieldRef<"Faculty", 'String'>
     readonly specialization: FieldRef<"Faculty", 'String'>
     readonly status: FieldRef<"Faculty", 'String'>
     readonly organizationId: FieldRef<"Faculty", 'String'>
@@ -123212,6 +123225,7 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     password: 'password',
+    avatar: 'avatar',
     specialization: 'specialization',
     status: 'status',
     organizationId: 'organizationId',
@@ -131999,6 +132013,7 @@ export namespace Prisma {
     email?: StringFilter<"Faculty"> | string
     phone?: StringNullableFilter<"Faculty"> | string | null
     password?: StringNullableFilter<"Faculty"> | string | null
+    avatar?: StringNullableFilter<"Faculty"> | string | null
     specialization?: StringNullableFilter<"Faculty"> | string | null
     status?: StringFilter<"Faculty"> | string
     organizationId?: StringFilter<"Faculty"> | string
@@ -132024,6 +132039,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     specialization?: SortOrderInput | SortOrder
     status?: SortOrder
     organizationId?: SortOrder
@@ -132052,6 +132068,7 @@ export namespace Prisma {
     email?: StringFilter<"Faculty"> | string
     phone?: StringNullableFilter<"Faculty"> | string | null
     password?: StringNullableFilter<"Faculty"> | string | null
+    avatar?: StringNullableFilter<"Faculty"> | string | null
     specialization?: StringNullableFilter<"Faculty"> | string | null
     status?: StringFilter<"Faculty"> | string
     organizationId?: StringFilter<"Faculty"> | string
@@ -132077,6 +132094,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     specialization?: SortOrderInput | SortOrder
     status?: SortOrder
     organizationId?: SortOrder
@@ -132096,6 +132114,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Faculty"> | string
     phone?: StringNullableWithAggregatesFilter<"Faculty"> | string | null
     password?: StringNullableWithAggregatesFilter<"Faculty"> | string | null
+    avatar?: StringNullableWithAggregatesFilter<"Faculty"> | string | null
     specialization?: StringNullableWithAggregatesFilter<"Faculty"> | string | null
     status?: StringWithAggregatesFilter<"Faculty"> | string
     organizationId?: StringWithAggregatesFilter<"Faculty"> | string
@@ -142306,6 +142325,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -142330,6 +142350,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -142354,6 +142375,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142378,6 +142400,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -142402,6 +142425,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -142415,6 +142439,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142427,6 +142452,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -149190,6 +149216,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     specialization?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
@@ -149203,6 +149230,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     specialization?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
@@ -149216,6 +149244,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     specialization?: SortOrder
     status?: SortOrder
     organizationId?: SortOrder
@@ -169028,6 +169057,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -169051,6 +169081,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -171710,6 +171741,7 @@ export namespace Prisma {
     email?: StringFilter<"Faculty"> | string
     phone?: StringNullableFilter<"Faculty"> | string | null
     password?: StringNullableFilter<"Faculty"> | string | null
+    avatar?: StringNullableFilter<"Faculty"> | string | null
     specialization?: StringNullableFilter<"Faculty"> | string | null
     status?: StringFilter<"Faculty"> | string
     organizationId?: StringFilter<"Faculty"> | string
@@ -226626,6 +226658,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -226649,6 +226682,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -227349,6 +227383,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -227372,6 +227407,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -256134,6 +256170,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -256157,6 +256194,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -256556,6 +256594,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -256579,6 +256618,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -257438,6 +257478,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -257461,6 +257502,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -257915,6 +257957,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -257938,6 +257981,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -259598,6 +259642,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -259621,6 +259666,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -259649,6 +259695,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -259672,6 +259719,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -259700,6 +259748,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -259723,6 +259772,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -259990,6 +260040,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -260013,6 +260064,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -260047,6 +260099,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -260070,6 +260123,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -260104,6 +260158,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -260127,6 +260182,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -260378,6 +260434,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -260401,6 +260458,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -260668,6 +260726,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -260691,6 +260750,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -262178,6 +262238,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -262201,6 +262262,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -262743,6 +262805,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -262766,6 +262829,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -262869,6 +262933,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -262892,6 +262957,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -263204,6 +263270,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -263227,6 +263294,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -263581,6 +263649,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -263604,6 +263673,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -263632,6 +263702,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -263655,6 +263726,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     organizationId: string
@@ -264077,6 +264149,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -264100,6 +264173,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -264134,6 +264208,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -264157,6 +264232,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     organizationId?: StringFieldUpdateOperationsInput | string
@@ -266158,6 +266234,7 @@ export namespace Prisma {
     email: string
     phone?: string | null
     password?: string | null
+    avatar?: string | null
     specialization?: string | null
     status?: string
     createdAt?: Date | string
@@ -269728,6 +269805,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269751,6 +269829,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -269774,6 +269853,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     specialization?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
