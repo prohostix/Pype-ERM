@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { StudentsPanel } from './StudentsPanel';
+import { useAuth } from '@/hooks/useAuth';
 
 interface StatusHistoryEntry {
   status: string;
@@ -41,6 +42,7 @@ interface Enrollment {
 
 interface Summary {
   total: number;
+  sales_admin_review: number;
   sales_verification_pending: number;
   document_review: number;
   finance_review: number;
@@ -50,6 +52,7 @@ interface Summary {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  sales_admin_review: { label: 'Admin Review', color: 'bg-indigo-100 text-indigo-700 border-indigo-200', icon: <Clock className="w-3 h-3" /> },
   sales_verification_pending: { label: 'Pending Verification', color: 'bg-purple-100 text-purple-700 border-purple-200', icon: <Clock className="w-3 h-3" /> },
   receipt_submitted: { label: 'Receipt Submitted & Ops Pending', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: <Clock className="w-3 h-3" /> },
   provisional_finance_pending: { label: 'Prov. Fin. Pending', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', icon: <Clock className="w-3 h-3" /> },
@@ -78,7 +81,9 @@ export function SalesStudentPipelinePanel() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [salesSubFilter, setSalesSubFilter] = useState('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const { user } = useAuth();
 
   // Direct Enrollment Trigger State
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
@@ -109,14 +114,37 @@ export function SalesStudentPipelinePanel() {
 
   useEffect(() => { fetchPipeline(); }, []);
 
-  const filtered = enrollments.filter(e => {
+  const baseFiltered = enrollments.filter(e => {
     const matchesSearch = !search ||
       e.studentName?.toLowerCase().includes(search.toLowerCase()) ||
       e.studentEmail?.toLowerCase().includes(search.toLowerCase()) ||
       (e.program?.name || '').toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || e.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesSub = salesSubFilter === 'all' || e.salesUserId === salesSubFilter;
+    return matchesSearch && matchesSub;
   });
+
+  const filtered = baseFiltered.filter(e => statusFilter === 'all' || e.status === statusFilter);
+
+  const computedSummary = {
+    total: baseFiltered.length,
+    sales_admin_review: baseFiltered.filter(e => e.status === 'sales_admin_review').length,
+    sales_verification_pending: baseFiltered.filter(e => e.status === 'sales_verification_pending').length,
+    provisional_finance_pending: baseFiltered.filter(e => e.status === 'provisional_finance_pending').length,
+    provisional_finance_verified: baseFiltered.filter(e => e.status === 'provisional_finance_verified').length,
+    document_review: baseFiltered.filter(e => e.status === 'document_review').length,
+    finance_review: baseFiltered.filter(e => e.status === 'finance_review').length,
+    enrolled: baseFiltered.filter(e => e.status === 'enrolled').length,
+    ops_rejected: baseFiltered.filter(e => e.status === 'ops_rejected').length,
+    rejected: baseFiltered.filter(e => e.status === 'rejected').length,
+  };
+
+  const uniqueSalesUsers = Array.from(
+    new Map(
+      enrollments
+        .filter(e => e.salesUser)
+        .map(e => [e.salesUser.id, { id: e.salesUser.id, name: e.salesUser.name }])
+    ).values()
+  );
 
   const statusCfg = (status: string) => STATUS_CONFIG[status] || { label: status.replace(/_/g, ' '), color: 'bg-muted text-muted-foreground', icon: <Clock className="w-3 h-3" /> };
 
@@ -159,10 +187,11 @@ export function SalesStudentPipelinePanel() {
       </div>
 
       {/* Summary cards */}
-      {summary && (
+      {computedSummary && (
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
           {[
             { key: 'total', label: 'Total', color: 'text-foreground' },
+            { key: 'sales_admin_review', label: 'Admin Review', color: 'text-indigo-600' },
             { key: 'sales_verification_pending', label: 'To Verify', color: 'text-purple-600' },
             { key: 'provisional_finance_pending', label: 'Prov. Pending', color: 'text-yellow-600' },
             { key: 'provisional_finance_verified', label: 'Prov. Verified', color: 'text-green-600' },
@@ -182,8 +211,8 @@ export function SalesStudentPipelinePanel() {
               <p className="text-xs text-muted-foreground">{label}</p>
               <p className={cn('text-2xl font-bold mt-0.5', color)}>
                 {key === 'ops_rejected' 
-                  ? ((summary as any)['ops_rejected'] || 0) + ((summary as any)['rejected'] || 0)
-                  : ((summary as any)[key] || 0)}
+                  ? ((computedSummary as any)['ops_rejected'] || 0) + ((computedSummary as any)['rejected'] || 0)
+                  : ((computedSummary as any)[key] || 0)}
               </p>
             </button>
           ))}
@@ -201,6 +230,32 @@ export function SalesStudentPipelinePanel() {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
+        
+        <select
+          className="h-10 px-3 border rounded-md text-sm bg-background w-[180px]"
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value)}
+        >
+          <option value="all">All Statuses</option>
+          {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+            <option key={key} value={key}>{cfg.label}</option>
+          ))}
+        </select>
+
+        {['sales_admin', 'sales_sub_admin'].includes(user?.role || '') && (
+          <select
+            className="h-10 px-3 border rounded-md text-sm bg-background w-[200px]"
+            value={salesSubFilter}
+            onChange={e => setSalesSubFilter(e.target.value)}
+          >
+            <option value="all">All Sales Users</option>
+            {uniqueSalesUsers.map((su: any) => (
+              <option key={su.id} value={su.id}>
+                {su.name} {su.id === user?.id ? '(Me)' : ''}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Enrollment list */}

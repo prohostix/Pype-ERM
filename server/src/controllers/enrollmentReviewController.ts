@@ -29,11 +29,8 @@ export const getDeptReviewEnrollments = asyncHandler(async (req: AuthRequest, re
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
 
-    baseWhere.OR = [
-      { salesUserId: null }, // Unassigned records all operations can see
-    ];
     if (assignedIds.length > 0) {
-      baseWhere.OR.push({ salesUserId: { in: assignedIds } });
+      baseWhere.salesUserId = { in: assignedIds };
     }
   }
 
@@ -58,10 +55,10 @@ export const approveDeptEnrollment = asyncHandler(async (req: AuthRequest, res: 
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
-    whereClause.OR = [
-      { salesUserId: null },
-      { salesUserId: { in: assignedIds } }
-    ];
+    
+    if (assignedIds.length > 0) {
+      whereClause.salesUserId = { in: assignedIds };
+    }
   }
   const existing = await prisma.enrollment.findFirst({ where: whereClause });
   if (!existing) {
@@ -88,10 +85,10 @@ export const rejectDeptEnrollment = asyncHandler(async (req: AuthRequest, res: R
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
-    whereClause.OR = [
-      { salesUserId: null },
-      { salesUserId: { in: assignedIds } }
-    ];
+    
+    if (assignedIds.length > 0) {
+      whereClause.salesUserId = { in: assignedIds };
+    }
   }
   const existing = await prisma.enrollment.findFirst({ where: whereClause });
   if (!existing) {
@@ -122,10 +119,9 @@ export const updateEnrollmentDocumentStatus = asyncHandler(async (req: AuthReque
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
-    whereClause.OR = [
-      { salesUserId: null },
-      { salesUserId: { in: assignedIds } }
-    ];
+    if (assignedIds.length > 0) {
+      whereClause.salesUserId = { in: assignedIds };
+    }
   }
   
   const enrollment = await prisma.enrollment.findFirst({
@@ -168,10 +164,9 @@ export const updateEnrollmentPhotoStatus = asyncHandler(async (req: AuthRequest,
   if (req.user.role === 'ops_sub_admin') {
     const opsSubAdmin = await prisma.user.findUnique({ where: { id: req.user.id }, select: { assignedSalesUsers: true } });
     const assignedIds = Array.isArray(opsSubAdmin?.assignedSalesUsers) ? opsSubAdmin.assignedSalesUsers : [];
-    whereClause.OR = [
-      { salesUserId: null },
-      { salesUserId: { in: assignedIds } }
-    ];
+    if (assignedIds.length > 0) {
+      whereClause.salesUserId = { in: assignedIds };
+    }
   }
   
   const enrollment = await prisma.enrollment.findFirst({

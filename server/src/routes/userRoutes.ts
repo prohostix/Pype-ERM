@@ -22,7 +22,7 @@ router
 
 router
   .route('/subordinates/team')
-  .get(authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'ops_sub_admin'), getSubordinates);
+  .get(authorize('finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'ops_sub_admin', 'sales_admin', 'sales_sub_admin', 'collections_admin'), getSubordinates);
 
 router
   .route('/:id')

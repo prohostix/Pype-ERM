@@ -1,0 +1,14 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Horizontal Black Bar connecting left and right circles -->
+  <rect x="35" y="85" width="130" height="30" fill="black" />
+  
+  <!-- Left Circle -->
+  <circle cx="35" cy="100" r="35" fill="#009B66" />
+  <!-- Right Circle -->
+  <circle cx="165" cy="100" r="35" fill="#009B66" />
+  
+  <!-- Top Circle -->
+  <circle cx="100" cy="25" r="35" fill="#009B66" />
+  <!-- Bottom Circle -->
+  <circle cx="100" cy="175" r="35" fill="#009B66" />
+</svg>

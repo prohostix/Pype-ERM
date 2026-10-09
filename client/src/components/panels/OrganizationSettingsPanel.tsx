@@ -86,14 +86,19 @@ export function OrganizationSettingsPanel() {
       }
       ctx.drawImage(img, 0, 0, width, height);
 
+      // Use webp to preserve transparency while allowing compression, or fallback to png
+      const mimeType = file.type === 'image/png' ? 'image/webp' : (file.type || 'image/jpeg');
+      
       canvas.toBlob(async (blob) => {
         if (!blob) {
           toast.error('Failed to compress image');
           return;
         }
 
-        const compressedFile = new File([blob], file.name, {
-          type: 'image/jpeg',
+        const newFileName = file.type === 'image/png' ? file.name.replace(/\.[^/.]+$/, ".webp") : file.name;
+
+        const compressedFile = new File([blob], newFileName, {
+          type: mimeType,
           lastModified: Date.now(),
         });
 
@@ -110,7 +115,7 @@ export function OrganizationSettingsPanel() {
           console.error(err);
           toast.error('Failed to upload logo', { id: toastId });
         }
-      }, 'image/jpeg', 0.9);
+      }, mimeType, 0.9);
     };
     
     img.onerror = () => {

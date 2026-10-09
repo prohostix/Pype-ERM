@@ -103,7 +103,7 @@ export function CustomOrgLogin() {
         if (passInput) passInput.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [orgData, login]);
+  }, [orgData, login, loggingIn]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

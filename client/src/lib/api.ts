@@ -32,7 +32,10 @@ class ApiService {
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          window.location.href = '/login';
+          // Don't redirect if we just failed a login attempt or are already on a login page
+          if (!error.config?.url?.includes('/auth/login') && !window.location.pathname.startsWith('/login')) {
+            window.location.href = '/login';
+          }
         }
         return Promise.reject(error);
       }

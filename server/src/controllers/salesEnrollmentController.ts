@@ -282,12 +282,21 @@ export const submitStudentApplication = asyncHandler(async (req: Request, res: R
 
 export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, res: Response) => {
   const orgId = req.user.organizationId;
-  const salesUserId = req.user.id;
+  let allowedIds = [req.user.id];
+
+  if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
+    const targetRoles = req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee'];
+    const subordinates = await prisma.user.findMany({
+      where: { role: { in: targetRoles }, organizationId: orgId },
+      select: { id: true }
+    });
+    allowedIds = [...allowedIds, ...subordinates.map(s => s.id)];
+  }
 
   const enrollments = await prisma.enrollment.findMany({
     where: {
       organizationId: orgId,
-      salesUserId,
+      salesUserId: { in: allowedIds },
       NOT: {
         status: 'enrolled',
         studentId: null
@@ -300,6 +309,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
       departmentReviewer: { select: { id: true, name: true, email: true } },
       financeReviewer: { select: { id: true, name: true, email: true } },
       student: true,
+      salesUser: { select: { id: true, name: true } },
     } as any,
     orderBy: { createdAt: 'desc' },
   });
@@ -307,6 +317,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   // Build pipeline summary
   const summary = {
     total: enrollments.length,
+    sales_admin_review: enrollments.filter((e: any) => e.status === 'sales_admin_review').length,
     sales_verification_pending: enrollments.filter((e: any) => e.status === 'sales_verification_pending').length,
     provisional_finance_pending: enrollments.filter((e: any) => e.status === 'provisional_finance_pending').length,
     provisional_finance_verified: enrollments.filter((e: any) => e.status === 'provisional_finance_verified').length,

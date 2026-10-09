@@ -549,7 +549,7 @@ export function LeavesPanel({ isMyPortal = false }: { isMyPortal?: boolean }) {
                               active={leave.status === 'approved' || (leave.status === 'rejected' && !!leave.hrRemarks)}
                               done={leave.status === 'approved'}
                               rejected={leave.status === 'rejected' && !!leave.hrRemarks}
-                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : leave.hrApprover?.(role === 'general_manager' || role === 'branch_manager') ? 'Gen. Manager' : 'HR Admin'}
+                              label={leave.hrApprover?.role === 'ceo' ? 'CEO' : (leave.hrApprover?.role === 'general_manager' || leave.hrApprover?.role === 'branch_manager') ? 'Gen. Manager' : 'HR Admin'}
                             />
                           </div>
 

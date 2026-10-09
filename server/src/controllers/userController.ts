@@ -268,8 +268,10 @@ export const getSubordinates = asyncHandler(async (req: AuthRequest, res: Respon
     targetRoles = ['employee', 'student'];
   } else if (adminRole === 'ops_admin' || adminRole === 'ops_sub_admin') {
     targetRoles = ['ops_sub_admin', 'center_admin', 'student', 'employee'];
+  } else if (['sales_admin', 'sales_sub_admin'].includes(adminRole)) {
+    targetRoles = ['sales_sub_admin', 'sales', 'student'];
   } else if (['superadmin', 'org_admin', 'ceo', 'general_manager', 'branch_manager'].includes(adminRole)) {
-    targetRoles = ['employee', 'student', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin'];
+    targetRoles = ['employee', 'student', 'finance', 'ops_sub_admin', 'center_admin', 'collections', 'finance_admin', 'finance_sub_admin', 'hr_admin', 'hr_sub_admin', 'ops_admin', 'sales_admin', 'sales_sub_admin', 'sales'];
   }
 
   const where: any = {
