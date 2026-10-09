@@ -1288,6 +1288,7 @@ exports.Prisma.FacultyScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   password: 'password',
+  avatar: 'avatar',
   specialization: 'specialization',
   status: 'status',
   organizationId: 'organizationId',

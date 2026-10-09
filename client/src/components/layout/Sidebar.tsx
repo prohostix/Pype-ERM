@@ -6,6 +6,9 @@ import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { MyProfilePanel } from '@/components/panels/MyProfilePanel';
+import { UserCircle2 } from 'lucide-react';
 import {
   Building2,
   Users,
@@ -339,6 +342,7 @@ const navItems: NavItem[] = [
 
 export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }: SidebarProps) {
   const { user, logout } = useAuth();
+  const [profileOpen, setProfileOpen] = React.useState(false);
 
   if (!user) return null;
 
@@ -391,13 +395,36 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
 
       {/* User Info & Logout */}
       <div className="border-t border-slate-800 p-4">
-        {!isCollapsed && (
-          <div className="mb-4 px-2">
-            <p className="text-sm font-medium text-white">{user.name}</p>
-            <p className="text-xs text-slate-400 capitalize">
-              {(user?.role === 'student' ? 'student' : (user?.role || '')).replace('_', ' ')}
-            </p>
-          </div>
+        {!isCollapsed ? (
+          <button
+            type="button"
+            onClick={() => setProfileOpen(true)}
+            title="View and edit my profile"
+            className="mb-4 w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left hover:bg-slate-800 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-full bg-slate-700 overflow-hidden flex items-center justify-center shrink-0">
+              {user.avatar ? (
+                <img src={api.getFileUrl(user.avatar)} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <UserCircle2 className="w-6 h-6 text-slate-300" />
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 capitalize">
+                {(user?.role === 'student' ? 'student' : (user?.role || '')).replace('_', ' ')}
+              </p>
+            </div>
+          </button>
+        ) : (
+          <Button
+            variant="ghost"
+            className="w-full px-2 mb-2 text-slate-400 hover:text-white hover:bg-slate-800"
+            onClick={() => setProfileOpen(true)}
+            title="My profile"
+          >
+            <UserCircle2 className="w-5 h-5" />
+          </Button>
         )}
         <Button
           variant="ghost"
@@ -411,6 +438,16 @@ export function Sidebar({ isCollapsed, onToggle, activeModule, onModuleChange }:
           {!isCollapsed && <span className="ml-2">Logout</span>}
         </Button>
       </div>
+
+      <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="sr-only">
+            <DialogTitle>My Profile</DialogTitle>
+            <DialogDescription>View and update your profile</DialogDescription>
+          </DialogHeader>
+          <MyProfilePanel />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

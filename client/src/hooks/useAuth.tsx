@@ -10,6 +10,8 @@ interface AuthContextType {
   hasPermission: (module: string, action: string) => boolean;
   switchRole: (role: UserRole) => void;
   loading: boolean;
+  /** Re-read the signed-in user from the server (after a profile edit). */
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -70,6 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, [user]);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const response = await api.get('/auth/me');
+      if (response.data.success) setUser(response.data.data);
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+    }
+  }, []);
+
   const hasRole = useCallback((roles: UserRole[]): boolean => {
     if (!user) return false;
     return roles.includes(user.role);
@@ -122,7 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, hasRole, hasPermission, switchRole, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, hasRole, hasPermission, switchRole, loading, refreshUser }}>
       {loading ? (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
