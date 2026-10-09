@@ -65,7 +65,16 @@ export const errorHandler = (
 
   // Prisma foreign key constraint violation
   if ((err as any).code === 'P2003') {
-    const message = `Invalid reference provided for a related record.`;
+    // meta.field_name looks like "Student_sessionId_fkey (index)"; surface the
+    // field so the user (and the logs) can tell which selection was invalid.
+    const meta = (err as any).meta || {};
+    console.error('[P2003] Foreign key violation:', JSON.stringify(meta));
+    const raw = String(meta.field_name || meta.constraint || '');
+    const match = raw.match(/^([A-Za-z0-9]+)_([A-Za-z0-9]+)_fkey/);
+    const field = match ? match[2] : '';
+    const message = field
+      ? `Invalid reference provided for a related record (${field}).`
+      : `Invalid reference provided for a related record.`;
     error = { name: 'PrismaForeignKeyError', message, statusCode: 400 } as ErrorResponse;
   }
 

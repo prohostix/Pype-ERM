@@ -48,6 +48,46 @@ export const createEnrollment = asyncHandler(async (req: AuthRequest, res: Respo
     ...rest,
     organizationId: req.user.organizationId
   };
+
+  // Mobile and web forms send text fields; the database wants real types.
+  if (data.initialPaymentAmount !== undefined) {
+    const amount = Number(data.initialPaymentAmount);
+    if (data.initialPaymentAmount === '' || data.initialPaymentAmount === null || Number.isNaN(amount)) {
+      delete data.initialPaymentAmount;
+    } else {
+      data.initialPaymentAmount = amount;
+    }
+  }
+  if (data.initialPaymentDate !== undefined) {
+    const when = data.initialPaymentDate ? new Date(data.initialPaymentDate) : null;
+    if (!when || Number.isNaN(when.getTime())) delete data.initialPaymentDate;
+    else data.initialPaymentDate = when;
+  }
+  // Blank selections must be absent, not empty strings (which break foreign keys).
+  for (const key of ['sessionId', 'studentId']) {
+    if (typeof data[key] === 'string' && data[key].trim() === '') delete data[key];
+  }
+
+  if (!data.programId || typeof data.programId !== 'string') {
+    res.status(400).json({ success: false, message: 'Program is required' });
+    return;
+  }
+  const programExists = await prisma.program.findFirst({
+    where: { id: data.programId, organizationId: req.user.organizationId }
+  });
+  if (!programExists) {
+    res.status(400).json({ success: false, message: 'Selected Program does not exist' });
+    return;
+  }
+  if (data.sessionId) {
+    const sessionExists = await prisma.admissionSession.findFirst({
+      where: { id: data.sessionId, organizationId: req.user.organizationId }
+    });
+    if (!sessionExists) {
+      res.status(400).json({ success: false, message: 'Selected Admission Session does not exist' });
+      return;
+    }
+  }
   
   if (req.user.studyCenterId) {
     data.studyCenterId = req.user.studyCenterId;

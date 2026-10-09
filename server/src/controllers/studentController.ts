@@ -169,6 +169,27 @@ export const createStudent = asyncHandler(async (req: AuthRequest, res: Response
     return;
   }
 
+  // Verify the university and admission session too (previously an unknown id
+  // only surfaced as a generic foreign-key error from the database).
+  if (universityId && typeof universityId === 'string' && universityId.trim() !== '') {
+    const universityExists = await prisma.university.findFirst({
+      where: { id: universityId, organizationId: req.user.organizationId }
+    });
+    if (!universityExists) {
+      res.status(400).json({ success: false, message: 'Selected University does not exist' });
+      return;
+    }
+  }
+  if (sessionId && typeof sessionId === 'string' && sessionId.trim() !== '') {
+    const sessionExists = await prisma.admissionSession.findFirst({
+      where: { id: sessionId, organizationId: req.user.organizationId }
+    });
+    if (!sessionExists) {
+      res.status(400).json({ success: false, message: 'Selected Admission Session does not exist' });
+      return;
+    }
+  }
+
   let studentUser = await prisma.user.findUnique({ where: { email } });
   const defaultPassword = `Student@${Math.floor(100000 + Math.random() * 900000)}`;
   if (!studentUser) {
