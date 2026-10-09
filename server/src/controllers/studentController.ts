@@ -39,7 +39,7 @@ export const getStudents = asyncHandler(async (req: AuthRequest, res: Response) 
     if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
       const targetRoles = req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee'];
       const subordinates = await prisma.user.findMany({
-        where: { role: { in: targetRoles }, organizationId: req.user.organizationId },
+        where: { role: { in: targetRoles as any }, organizationId: req.user.organizationId },
         select: { id: true }
       });
       allowedIds = [...allowedIds, ...subordinates.map(s => s.id)];

@@ -287,7 +287,7 @@ export const getSalesEnrollmentPipeline = asyncHandler(async (req: AuthRequest, 
   if (['sales_admin', 'sales_sub_admin'].includes(req.user.role)) {
     const targetRoles = req.user.role === 'sales_admin' ? ['sales_sub_admin', 'sales', 'employee'] : ['sales', 'employee'];
     const subordinates = await prisma.user.findMany({
-      where: { role: { in: targetRoles }, organizationId: orgId },
+      where: { role: { in: targetRoles as any }, organizationId: orgId },
       select: { id: true }
     });
     allowedIds = [...allowedIds, ...subordinates.map(s => s.id)];
