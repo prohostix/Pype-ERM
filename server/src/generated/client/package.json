@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "prisma-client-9c7da6271f3591cd15fd1fc186ac7e7de4d96457165719e93fad3478e0b1e7c4",
-=======
-  "name": "prisma-client-d4d53ba960fdff742f99a914accd348b97977ed8f5aa914c01ebc064b7fcfafc",
->>>>>>> aa7508a (feat: expand role permissions and update student enrollment workflows across client and server modules)
+  "name": "prisma-client-e0df7aed1b2595971f6b63d30a17e77b4e2d41d59ce561e5be8c3c5e24e4d505",
   "main": "index.js",
   "types": "index.d.ts",
   "browser": "default.js",
