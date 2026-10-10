@@ -408,6 +408,25 @@ export function SalesStudentPipelinePanel() {
                         </div>
                       )}
 
+                      {/* Sales Admin rejected it: the creating sales user can edit everything in the same form and re-request */}
+                      {isSalesAdminRejection(e) && !!user?.id && e.salesUserId === user.id && (
+                        <div className="mt-4">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="bg-rose-600 hover:bg-rose-700"
+                            onClick={(evt) => {
+                              evt.stopPropagation();
+                              setVerifyingStudent(e);
+                              setEnrollDialogOpen(true);
+                            }}
+                          >
+                            <UploadCloud className="w-4 h-4 mr-1.5" />
+                            Re-upload & Re-request Enrollment
+                          </Button>
+                        </div>
+                      )}
+
                       {/* Verification Action */}
                       {(() => {
                         const docs = e.student?.documents || e.documents || [];
